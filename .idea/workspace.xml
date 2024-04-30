@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Extenstions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Extenstions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/path_algorithm/FindPath.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/path_algorithm/FindPath.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/prefix/PrefixNode.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/prefix/PrefixNode.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/prefix/PrefixTree.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/prefix/PrefixTree.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/prefix/with_term_id/PrefixTreeWithTermId.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/prefix/with_term_id/PrefixTreeWithTermId.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/pos_table/GraphBuilderTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/pos_table/GraphBuilderTest.kt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit4 Test Class" />
+        <option value="Kotlin File" />
+        <option value="Kotlin Object" />
+        <option value="Kotlin Class" />
+        <option value="Kotlin Data Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2csnjHmPljR9JNvGXbcOdw9ktiG" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Gradle.Build tries.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ConnectionIdTest.Test load connection dat.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ConnectionIdTest.Test load connection index dat.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ConnectionIdTest.Test to build connection id binary file.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ConnectionIdTest.Test to build octree connection id range 0 - 16777215.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ConnectionIdTest.Test to build octree for connection id range 0 - 511 small.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ConnectionIdTest.Test to build octree for connection id range 0 - 511.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ConnectionIdTest.Test to build octree with connection_single_column_txt.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.DictionaryBuildTest.build dictionary files.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.GraphBuilderTest.Build Graph Test.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.POSTableTest.Build pos_table.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.POSTableTest.Load pos_table.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PrefixTreeTest.LOUDS test.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PrefixTreeTest.Test Junction Array.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PrefixTreeTest.Test Token Array.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PrefixTreeTest.Test find method.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PrefixTreeTest.Test write binary file 2.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PrefixTreeTest.Test write binary file.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PrefixTreeTest.create token array.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PrefixTreeTest.insert.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PrefixTreeTest.read text file from resources.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PrefixTreeWithTermIdTest.Test Common Prefix Search.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PrefixTreeWithTermIdTest.Test find method.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PrefixTreeWithTermIdTest.Test first child.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PrefixTreeWithTermIdTest.Test get child.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PrefixTreeWithTermIdTest.Test read text file from resources.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SingleKanjiTest.Test build single kanji.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.MainKt.executor&quot;: &quot;Run&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit4&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/kazuma/IdeaProjects/tries/src/test/resources&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;/Users/kazuma/IdeaProjects/tries/src/main/kotlin/Main.kt&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlite&quot;
+    ],
+    &quot;kotlin-gradle-user-dirs&quot;: [
+      &quot;/Users/kazuma/.gradle&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/resources" />
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/kotlin" />
+      <recent name="$PROJECT_DIR$/src/test/resources" />
+      <recent name="$PROJECT_DIR$/src/main/kotlin/prefix/other" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="dictionary.models" />
+      <recent name="prefix.model" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="prefix" />
+    </key>
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="prefix" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.GraphBuilderTest.Build Graph Test">
+    <configuration name="DictionaryBuildTest.build dictionary files" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;dictionary.DictionaryBuildTest.build dictionary files&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="GraphBuilderTest.Build Graph Test" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;pos_table.GraphBuilderTest.Build Graph Test&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" value="" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="POSTableTest.Load pos_table" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;pos_table.POSTableTest.Load pos_table&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="SingleKanjiTest.Test build single kanji" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;single_kanji.SingleKanjiTest.Test build single kanji&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kazumaproject.MainKt" />
+      <module name="tries.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Gradle.DictionaryBuildTest.build dictionary files" />
+      <item itemvalue="Gradle.GraphBuilderTest.Build Graph Test" />
+      <item itemvalue="Gradle.POSTableTest.Load pos_table" />
+      <item itemvalue="Gradle.SingleKanjiTest.Test build single kanji" />
+      <item itemvalue="Kotlin.MainKt" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.GraphBuilderTest.Build Graph Test" />
+        <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.DictionaryBuildTest.build dictionary files" />
+        <item itemvalue="Gradle.SingleKanjiTest.Test build single kanji" />
+        <item itemvalue="Gradle.POSTableTest.Load pos_table" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="" />
+      <created>1708909287274</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1708909287274</updated>
+      <workItem from="1710723869158" duration="671000" />
+      <workItem from="1710724788234" duration="89042000" />
+      <workItem from="1711500599234" duration="34701000" />
+      <workItem from="1712495682793" duration="170000" />
+      <workItem from="1712495883877" duration="401000" />
+      <workItem from="1712496290880" duration="47829000" />
+      <workItem from="1712852697808" duration="94529000" />
+      <workItem from="1713662576680" duration="19905000" />
+      <workItem from="1713747961748" duration="189000" />
+      <workItem from="1713748159039" duration="60000" />
+      <workItem from="1713748224080" duration="500000" />
+      <workItem from="1713748730308" duration="19000" />
+      <workItem from="1713748753437" duration="23757000" />
+      <workItem from="1713916380524" duration="13920000" />
+      <workItem from="1714006311057" duration="23000" />
+      <workItem from="1714006338917" duration="22000" />
+      <workItem from="1714006365189" duration="11164000" />
+      <workItem from="1714087849989" duration="2219000" />
+      <workItem from="1714090759072" duration="7731000" />
+      <workItem from="1714287011572" duration="573000" />
+      <workItem from="1714287590243" duration="113000" />
+      <workItem from="1714287712707" duration="7563000" />
+      <workItem from="1714295377176" duration="37148000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.StackOverflowError" package="java.lang" />
+          <option name="timeStamp" value="3" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NullPointerException" package="java.lang" />
+          <option name="timeStamp" value="5" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
