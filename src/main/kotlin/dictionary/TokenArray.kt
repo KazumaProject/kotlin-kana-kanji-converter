@@ -12,13 +12,13 @@ import java.io.*
 import java.util.*
 
 class TokenArray {
-    var posTableIndexList: MutableList<Short> = arrayListOf()
-    var wordCostList: MutableList<Short> = arrayListOf()
-    var nodeIdList: MutableList<Int> = arrayListOf()
-    var isSameYomiList: BitSet = BitSet()
-    var isSameYomiListTemp: MutableList<Boolean> = arrayListOf()
-    var bitListTemp: MutableList<Boolean> = arrayListOf()
-    var bitvector: BitSet = BitSet()
+    private var posTableIndexList: MutableList<Short> = arrayListOf()
+    private var wordCostList: MutableList<Short> = arrayListOf()
+    private var nodeIdList: MutableList<Int> = arrayListOf()
+    private var isSameYomiList: BitSet = BitSet()
+    private var isSameYomiListTemp: MutableList<Boolean> = arrayListOf()
+    private var bitListTemp: MutableList<Boolean> = arrayListOf()
+    private var bitvector: BitSet = BitSet()
     var posTable: List<Pair<Short, Short>> = listOf()
 
     fun getListDictionaryByYomiTermId(

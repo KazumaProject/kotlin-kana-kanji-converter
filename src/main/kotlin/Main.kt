@@ -20,7 +20,7 @@ import java.io.ObjectOutputStream
 import kotlin.time.measureTime
 
 fun main() {
-    //buildTriesAndTokenArray()
+    buildTriesAndTokenArray()
     //buildConnectionIdSparseArray()
     //loadBinaryFiles()
 }
@@ -70,16 +70,10 @@ private fun buildTriesAndTokenArray(){
             "/dictionary07.txt",
             "/dictionary08.txt",
             "/dictionary09.txt",
-            "/suffix.txt",
-            "/domain.txt",
-            "/era.txt"
         )
     }
 
-    val dictionaryList = dicUtils.getListDictionary(
-        list,
-        "/single_kanji.tsv"
-    )
+    val dictionaryList = dicUtils.getListDictionary(list)
 
     dictionaryList.forEach {
         tempList.add(it)
