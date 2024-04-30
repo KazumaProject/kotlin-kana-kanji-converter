@@ -26,7 +26,6 @@ class TokenArray {
     ): List<TokenEntry> {
         val b = bitvector.rank1(bitvector.select0(nodeId))
         val c = bitvector.rank1(bitvector.select0(nodeId + 1))
-        println("$nodeId $b $c")
         val tempList2 = mutableListOf<TokenEntry>()
         for (i in b..< c){
             tempList2.add(
