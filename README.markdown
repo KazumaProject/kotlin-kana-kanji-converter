@@ -36,13 +36,13 @@ fun main() {
     val result2NBest = kanaKanjiEngine.nBestPath(word2,5)
     val result3NBest = kanaKanjiEngine.nBestPath(word3,5)
 
-    println("Viterbi $word1 =>=> $result1BestPath")
-    println("Viterbi $word2 =>=> $result2BestPath")
-    println("Viterbi $word3 =>=> $result3BestPath")
+    println("Viterbi $word1 ==> $result1BestPath")
+    println("Viterbi $word2 ==> $result2BestPath")
+    println("Viterbi $word3 ==> $result3BestPath")
 
-    println("nBestPath $word1 =>=> $result1NBest")
-    println("nBestPath $word2 =>=> $result2NBest")
-    println("nBestPath $word3 =>=> $result3NBest")
+    println("nBestPath $word1 ==> $result1NBest")
+    println("nBestPath $word2 ==> $result2NBest")
+    println("nBestPath $word3 ==> $result3NBest")
 
 }
 ```
