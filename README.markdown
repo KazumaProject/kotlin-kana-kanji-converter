@@ -46,10 +46,6 @@ fun main() {
 
 }
 ```
-
-Please refer to `/test/kana_kanji_converter/KanaKanjiConverterTest.kt`
-
-
 <img width="1003" alt="best_paths" src="https://github.com/KazumaProject/kotlin-kana-kanji-converter/assets/59742125/e24d0338-90ef-4a57-a893-755bc00570a2">
 
-
+Please refer to `/test/kana_kanji_converter/KanaKanjiConverterTest.kt`
