@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.markdown" beforeDir="false" afterPath="$PROJECT_DIR$/README.markdown" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/engine/KanaKanjiEngine.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/engine/KanaKanjiEngine.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/kana_kanji_converter/KanaKanjiConverterTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/kana_kanji_converter/KanaKanjiConverterTest.kt" afterDir="false" />
-    </list>
+    <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -304,7 +296,7 @@
       <workItem from="1714287712707" duration="7563000" />
       <workItem from="1714295377176" duration="37148000" />
       <workItem from="1714437304434" duration="14584000" />
-      <workItem from="1714636065235" duration="1041000" />
+      <workItem from="1714636065235" duration="1388000" />
     </task>
     <servers />
   </component>
