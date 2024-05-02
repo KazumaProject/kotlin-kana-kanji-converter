@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="" />
+    <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.markdown" beforeDir="false" afterPath="$PROJECT_DIR$/README.markdown" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/engine/KanaKanjiEngine.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/engine/KanaKanjiEngine.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/kana_kanji_converter/KanaKanjiConverterTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/kana_kanji_converter/KanaKanjiConverterTest.kt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -92,6 +100,7 @@
     "Gradle.PrefixTreeWithTermIdTest.Test get child.executor": "Run",
     "Gradle.PrefixTreeWithTermIdTest.Test read text file from resources.executor": "Run",
     "Gradle.SingleKanjiTest.Test build single kanji.executor": "Run",
+    "Kotlin.MainKt (1).executor": "Run",
     "Kotlin.MainKt.executor": "Run",
     "Repository.Attach.Annotations": "false",
     "Repository.Attach.JavaDocs": "false",
@@ -151,31 +160,7 @@
       <recent name="prefix" />
     </key>
   </component>
-  <component name="RunManager" selected="Kotlin.MainKt">
-    <configuration name="DictionaryBuildTest.build dictionary files" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;dictionary.DictionaryBuildTest.build dictionary files&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Kotlin.MainKt (1)">
     <configuration name="GraphBuilderTest.Build Graph Test" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -248,6 +233,13 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="MainKt (1)" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kazumaproject.MainKt" />
+      <module name="kana-kanji-converter.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.kazumaproject.MainKt" />
       <module name="tries.main" />
@@ -257,17 +249,17 @@
     </configuration>
     <list>
       <item itemvalue="Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine" />
-      <item itemvalue="Gradle.DictionaryBuildTest.build dictionary files" />
       <item itemvalue="Gradle.GraphBuilderTest.Build Graph Test" />
       <item itemvalue="Gradle.SingleKanjiTest.Test build single kanji" />
+      <item itemvalue="Kotlin.MainKt (1)" />
       <item itemvalue="Kotlin.MainKt" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Kotlin.MainKt" />
-        <item itemvalue="Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine" />
+        <item itemvalue="Kotlin.MainKt (1)" />
         <item itemvalue="Gradle.GraphBuilderTest.Build Graph Test" />
-        <item itemvalue="Gradle.DictionaryBuildTest.build dictionary files" />
+        <item itemvalue="Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine" />
+        <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Gradle.SingleKanjiTest.Test build single kanji" />
       </list>
     </recent_temporary>
@@ -311,7 +303,8 @@
       <workItem from="1714287590243" duration="113000" />
       <workItem from="1714287712707" duration="7563000" />
       <workItem from="1714295377176" duration="37148000" />
-      <workItem from="1714437304434" duration="2894000" />
+      <workItem from="1714437304434" duration="14584000" />
+      <workItem from="1714636065235" duration="1041000" />
     </task>
     <servers />
   </component>

@@ -49,7 +49,7 @@ class KanaKanjiEngine {
         findPath = FindPath()
     }
 
-    fun aStarAlgorithm(
+    fun nBestPath(
         input: String,
         n: Int
     ): List<String>{

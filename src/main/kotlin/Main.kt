@@ -9,6 +9,7 @@ import com.kazumaproject.dictionary.DicUtils
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.dictionary.models.TokenEntryConverted
+import com.kazumaproject.engine.KanaKanjiEngine
 import com.kazumaproject.graph.GraphBuilder
 import com.kazumaproject.prefix.PrefixTree
 import com.kazumaproject.prefix.with_term_id.PrefixTreeWithTermId
@@ -20,9 +21,10 @@ import java.io.ObjectOutputStream
 import kotlin.time.measureTime
 
 fun main() {
-    buildTriesAndTokenArray()
-    //buildConnectionIdSparseArray()
-    //loadBinaryFiles()
+//    buildTriesAndTokenArray()
+//    buildConnectionIdSparseArray()
+//    buildPOSTable()
+    testBestPath()
 }
 
 private fun buildPOSTable(){
@@ -218,4 +220,40 @@ fun loadBinaryFiles(){
 
     println(findPath.backwardAStar(graph,query.length, connectionIds,1))
 
+}
+
+private fun testBestPath(){
+    val kanaKanjiEngine = KanaKanjiEngine()
+    kanaKanjiEngine.buildEngine()
+
+    val word1 = "とべないぶた"
+    val word2 = "わたしのなまえはなかのです"
+    val word3 = "ここではきものをぬぐ"
+
+    val time1 = measureTime {
+        kanaKanjiEngine.viterbiAlgorithm(word2)
+    }
+
+    val time2 = measureTime {
+        kanaKanjiEngine.nBestPath(word2,5)
+    }
+
+    val result1BestPath = kanaKanjiEngine.viterbiAlgorithm(word1)
+    val result2BestPath = kanaKanjiEngine.viterbiAlgorithm(word2)
+    val result3BestPath = kanaKanjiEngine.viterbiAlgorithm(word3)
+
+    val result1AStarAlgorithm = kanaKanjiEngine.nBestPath(word1,5)
+    val result2AStarAlgorithm = kanaKanjiEngine.nBestPath(word2,5)
+    val result3AStarAlgorithm = kanaKanjiEngine.nBestPath(word3,5)
+
+    println("Viterbi $word1 =>=> $result1BestPath")
+    println("Viterbi $word2 =>=> $result2BestPath")
+    println("Viterbi $word3 =>=> $result3BestPath")
+
+    println("nBestPath $word1 =>=> $result1AStarAlgorithm")
+    println("nBestPath $word2 =>=> $result2AStarAlgorithm")
+    println("nBestPath $word3 =>=> $result3AStarAlgorithm")
+
+    println("time to find shortest path $word2: $time1")
+    println("time to find nBest path $word2: $time2")
 }

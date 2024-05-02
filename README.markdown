@@ -2,6 +2,21 @@
 
 This is kana kanji converter using Mozc dictionaries in Kotlin.
 
+## Usage
+
+1. copy `dictionary00.txt` ~ `dictionary09.txt`,`connection_single_column.txt` and `single_kanji.tsv` from [mozc](https://github.com/google/mozc/tree/master/src/data/dictionary_oss) to `src/main/resources` directory
+2. build binary files for first time
+
+```kotlin
+fun main() {
+    buildTriesAndTokenArray()
+    buildConnectionIdSparseArray()
+    buildPOSTable()
+}
+```
+
+Please refer to `/src/main/Main.kt`
+
 ## Sample code:
 
 ```kotlin
