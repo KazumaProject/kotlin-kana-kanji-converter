@@ -20,33 +20,30 @@ Please refer to `/src/main/Main.kt`
 ## Sample code:
 
 ```kotlin
-class KanaKanjiConverterTest {
-    @Test
-    fun `Test KanaKanjiConverter Engine`() {
-        val kanaKanjiEngine = KanaKanjiEngine()
-        kanaKanjiEngine.buildEngineForTest()
+fun main() {
+    val kanaKanjiEngine = KanaKanjiEngine()
+    kanaKanjiEngine.buildEngine()
 
-        val word1 = "とべないぶた"
-        val word2 = "わたしのなまえはなかのです"
-        val word3 = "ここではきものをぬぐ"
+    val word1 = "とべないぶた"
+    val word2 = "わたしのなまえはなかのです"
+    val word3 = "ここではきものをぬぐ"
 
-        val result1BestPath = kanaKanjiEngine.viterbiAlgorithm(word1)
-        val result2BestPath = kanaKanjiEngine.viterbiAlgorithm(word2)
-        val result3BestPath = kanaKanjiEngine.viterbiAlgorithm(word3)
+    val result1BestPath = kanaKanjiEngine.viterbiAlgorithm(word1)
+    val result2BestPath = kanaKanjiEngine.viterbiAlgorithm(word2)
+    val result3BestPath = kanaKanjiEngine.viterbiAlgorithm(word3)
 
-        val result1AStarAlgorithm = kanaKanjiEngine.aStarAlgorithm(word1,5)
-        val result2AStarAlgorithm = kanaKanjiEngine.aStarAlgorithm(word2,5)
-        val result3AStarAlgorithm = kanaKanjiEngine.aStarAlgorithm(word3,5)
+    val result1AStarAlgorithm = kanaKanjiEngine.nBestPath(word1,5)
+    val result2AStarAlgorithm = kanaKanjiEngine.nBestPath(word2,5)
+    val result3AStarAlgorithm = kanaKanjiEngine.nBestPath(word3,5)
 
-        println("Best Path $word1 =>=> $result1BestPath")
-        println("Best Path $word2 =>=> $result2BestPath")
-        println("Best Path $word3 =>=> $result3BestPath")
+    println("Viterbi $word1 =>=> $result1BestPath")
+    println("Viterbi $word2 =>=> $result2BestPath")
+    println("Viterbi $word3 =>=> $result3BestPath")
 
-        println("A* Algorithm $word1 =>=> $result1AStarAlgorithm")
-        println("A* Algorithm $word2 =>=> $result2AStarAlgorithm")
-        println("A* Algorithm $word3 =>=> $result3AStarAlgorithm")
+    println("nBestPath $word1 =>=> $result1AStarAlgorithm")
+    println("nBestPath $word2 =>=> $result2AStarAlgorithm")
+    println("nBestPath $word3 =>=> $result3AStarAlgorithm")
 
-    }
 }
 ```
 
