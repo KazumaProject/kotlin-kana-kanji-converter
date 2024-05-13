@@ -48,7 +48,7 @@ class GraphBuilder {
                         score = it.wordCost.toInt(),
                         f = it.wordCost.toInt(),
                         g = it.wordCost.toInt(),
-                        tango = if (it.isSameYomi) yomiStr else tangoTrie.getLetter(it.nodeId),
+                        tango = if (it.nodeId == -1) yomiStr else tangoTrie.getLetter(it.nodeId),
                         len = yomiStr.length.toShort(),
                         sPos = i
                     )

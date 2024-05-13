@@ -264,6 +264,8 @@ class PrefixTreeTest {
                 if (entry.key != it.tango && entry.key.hiraToKata() != it.tango){
                     println("insert ${it.tango} ${it.yomi}")
                     tangoTree.insert(it.tango)
+                }else{
+                    println("not insert ${it.tango} ${it.yomi}")
                 }
             }
         }
@@ -295,7 +297,7 @@ class PrefixTreeTest {
 
         tokenArray.readPOSTable(0)
 
-        val word = "あいあんと"
+        val word = "あうとれんじ"
         val nodeId = loudsYomi.getTermId(loudsYomi.getNodeIndex(word))
 
         val a = tokenArrayTemp.getListDictionaryByYomiTermId(nodeId).map {
@@ -303,7 +305,7 @@ class PrefixTreeTest {
                 leftId = tokenArray.posTable[it.posTableIndex.toInt()].first,
                 rightId = tokenArray.posTable[it.posTableIndex.toInt()].second,
                 wordCost = it.wordCost,
-                tango = if (it.isSameYomi) "" else loudsTango.getLetter(it.nodeId),
+                tango = if (it.nodeId == -1) word.hiraToKata() else loudsTango.getLetter(it.nodeId),
                 yomiLength = word.length.toShort()
             )
         }

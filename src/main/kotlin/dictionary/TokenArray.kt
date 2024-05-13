@@ -11,30 +11,14 @@ import com.kazumaproject.dictionary.models.TokenEntry
 import java.io.*
 import java.util.*
 
-class TokenArray() {
+class TokenArray {
     private var posTableIndexList: MutableList<Short> = arrayListOf()
     private var wordCostList: MutableList<Short> = arrayListOf()
     private var nodeIdList: MutableList<Int> = arrayListOf()
-    private var isSameYomiList: BitSet = BitSet()
-    private var isSameYomiListTemp: MutableList<Boolean> = arrayListOf()
     private var bitListTemp: MutableList<Boolean> = arrayListOf()
     private var bitvector: BitSet = BitSet()
     var posTable: List<Pair<Short, Short>> = listOf()
-
-    constructor(
-        posTableIndexList: MutableList<Short>,
-        wordCostList: MutableList<Short>,
-        nodeIdList: MutableList<Int>,
-        bitList: BitSet,
-        bitvector: BitSet
-    ) : this() {
-        this.posTableIndexList = posTableIndexList
-        this.wordCostList = wordCostList
-        this.nodeIdList = nodeIdList
-        this.isSameYomiList = bitList
-        this.bitvector = bitvector
-    }
-
+    
     fun getListDictionaryByYomiTermId(
         nodeId: Int,
     ): List<TokenEntry> {
@@ -47,7 +31,6 @@ class TokenArray() {
                     posTableIndex = posTableIndexList[i],
                     wordCost = wordCostList[i],
                     nodeId = nodeIdList[i],
-                    isSameYomi = isSameYomiList.get(i)
                 )
             )
         }
@@ -74,7 +57,6 @@ class TokenArray() {
                     posTableIndexList.add(posTableIndex)
                     wordCostList.add(dictionary.cost)
                     nodeIdList.add(if (dictionary.yomi == dictionary.tango || entry.key.hiraToKata() == dictionary.tango) -1 else tangoTrie.getNodeIndex(dictionary.tango))
-                    isSameYomiListTemp.add(dictionary.yomi == dictionary.tango || dictionary.yomi.hiraToKata() == dictionary.tango)
                 }
             }
         }
@@ -93,25 +75,8 @@ class TokenArray() {
                 writeObject(posTableIndexList.toByteArrayFromListShort().deflate())
                 writeObject(wordCostList.toByteArrayFromListShort().deflate())
                 writeObject(nodeIdList.toByteArray().deflate())
-                writeObject(isSameYomiListTemp.toBitSet())
                 writeObject(bitListTemp.toBitSet())
 
-                flush()
-                close()
-            }
-        }catch (e: IOException){
-            println(e.stackTraceToString())
-        }
-    }
-
-    private fun writeExternalNotCompress(out: ObjectOutput){
-        try {
-            out.apply {
-                writeObject(posTableIndexList)
-                writeObject(wordCostList)
-                writeObject(nodeIdList)
-                writeObject(isSameYomiListTemp.toBitSet())
-                writeObject(bitListTemp.toBitSet())
                 flush()
                 close()
             }
@@ -126,10 +91,10 @@ class TokenArray() {
                 val posTableIndexListSize = readInt()
                 val wordCostListSize = readInt()
                 val nodeIdListSize = readInt()
+
                 posTableIndexList = (readObject() as ByteArray).inflate(posTableIndexListSize).byteArrayToShortList().toMutableList()
                 wordCostList = (readObject() as ByteArray).inflate(wordCostListSize).byteArrayToShortList().toMutableList()
                 nodeIdList = (readObject() as ByteArray).inflate(nodeIdListSize).toListInt().toMutableList()
-                isSameYomiList = readObject() as BitSet
                 bitvector = readObject() as BitSet
                 close()
             }catch (e: Exception){
@@ -137,22 +102,6 @@ class TokenArray() {
             }
         }
         return TokenArray()
-    }
-
-    fun readExternalNotCompressed(objectInput: ObjectInput): TokenArray {
-        objectInput.apply {
-            try {
-                posTableIndexList = readObject() as MutableList<Short>
-                wordCostList = readObject() as MutableList<Short>
-                nodeIdList = readObject() as MutableList<Int>
-                isSameYomiList = readObject() as BitSet
-                bitvector = readObject() as BitSet
-                close()
-            }catch (e: Exception){
-                println(e.stackTraceToString())
-            }
-        }
-        return TokenArray(posTableIndexList, wordCostList, nodeIdList, isSameYomiList, bitvector)
     }
 
     /**

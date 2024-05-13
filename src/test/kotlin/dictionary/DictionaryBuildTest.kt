@@ -115,7 +115,7 @@ class DictionaryBuildTest {
                 leftId = tokenArray.posTable[it.posTableIndex.toInt()].first,
                 rightId = tokenArray.posTable[it.posTableIndex.toInt()].second,
                 wordCost = it.wordCost,
-                tango = if (it.isSameYomi) "" else tangoLOUDS.getLetter(it.nodeId),
+                tango = if (it.nodeId == -1) "" else tangoLOUDS.getLetter(it.nodeId),
                 yomiLength = query.length.toShort()
             )
         }
