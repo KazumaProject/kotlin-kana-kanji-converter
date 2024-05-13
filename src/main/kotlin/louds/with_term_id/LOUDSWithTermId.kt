@@ -16,7 +16,6 @@ class LOUDSWithTermId {
 
     val LBSTemp: MutableList<Boolean> = arrayListOf()
     var LBS: BitSet = BitSet()
-    var nodeIds: MutableList<Int> = arrayListOf()
     var labels: MutableList<Char> = arrayListOf()
     var termIds: MutableList<Int> = arrayListOf()
     var isLeaf: BitSet = BitSet()
@@ -26,10 +25,6 @@ class LOUDSWithTermId {
         LBSTemp.apply {
             add(true)
             add(false)
-        }
-        nodeIds.apply {
-            add(0,0)
-            add(1,1)
         }
         labels.apply {
             add(0,' ')
@@ -45,19 +40,15 @@ class LOUDSWithTermId {
 
     constructor(
         LBS: BitSet,
-        nodeIds: MutableList<Int>,
         labels: MutableList<Char>,
         isLeaf: BitSet,
         termIds: MutableList<Int>,
     ){
         this.LBS = LBS
-        this.nodeIds = nodeIds
         this.labels = labels
         this.isLeaf = isLeaf
         this.termIds = termIds
     }
-
-    fun getNodeIdSize(): Int = nodeIds.size
 
     fun convertListToBitSet(){
         LBS = LBSTemp.toBitSet()
@@ -152,10 +143,6 @@ class LOUDSWithTermId {
         return result.toList()
     }
 
-    fun contain(str: String): Boolean{
-        return searchForContain(2,str.toCharArray(),0) == SearchStatus.LEAF_FOUND
-    }
-
     private fun search(index: Int, chars: CharArray, wordOffset: Int): Int {
         var index2 = index
         var wordOffset2 = wordOffset
@@ -191,16 +178,13 @@ class LOUDSWithTermId {
         return i + 1
     }
 
-
     fun writeExternal(out: ObjectOutput){
         try {
             out.apply {
-                writeObject(nodeIds.toByteArray().size)
-                writeObject(labels.toByteArrayFromListChar().size)
-                writeObject(termIds.toByteArray().size)
+                writeInt(labels.toByteArrayFromListChar().size)
+                writeInt(termIds.toByteArray().size)
 
                 writeObject(LBS)
-                writeObject(nodeIds.toByteArray().deflate())
                 writeObject(labels.toByteArrayFromListChar().deflate())
                 writeObject(isLeaf)
                 writeObject(termIds.toByteArray().deflate())
@@ -215,11 +199,9 @@ class LOUDSWithTermId {
     fun readExternal(objectInput: ObjectInput): LOUDSWithTermId {
         objectInput.apply {
             try {
-                val nodeIdSize = objectInput.readObject() as Int
-                val labelsSize = objectInput.readObject() as Int
-                val termIdSize = objectInput.readObject() as Int
+                val labelsSize = objectInput.readInt()
+                val termIdSize = objectInput.readInt()
                 LBS = objectInput.readObject() as BitSet
-                nodeIds = (objectInput.readObject() as ByteArray).inflate(nodeIdSize).toListInt().toMutableList()
                 labels = (objectInput.readObject() as ByteArray).inflate(labelsSize).toListChar()
                 isLeaf = objectInput.readObject() as BitSet
                 termIds = (objectInput.readObject() as ByteArray).inflate(termIdSize).toListInt().toMutableList()
@@ -228,34 +210,6 @@ class LOUDSWithTermId {
                 println(e.stackTraceToString())
             }
         }
-        return LOUDSWithTermId(LBS, nodeIds, labels, isLeaf, termIds)
+        return LOUDSWithTermId(LBS, labels, isLeaf, termIds)
     }
-
-    private fun searchForContain(index: Int, chars: CharArray, wordOffset: Int): SearchStatus {
-        var index2 = index
-        var wordOffset2 = wordOffset
-        var charIndex = countTrue(index)
-        while (LBS[index]) {
-            if (chars[wordOffset] == labels[charIndex]) {
-                if (isLeaf[index] && wordOffset + 1 == chars.size) return SearchStatus.LEAF_FOUND
-                else if (wordOffset + 1 == chars.size) return SearchStatus.PART_CONTAINS
-                return searchForContain(indexOfLabel(charIndex), chars, ++wordOffset2)
-            } else {
-                index2++
-            }
-            charIndex++
-        }
-        return SearchStatus.NOT_FOUND
-    }
-
-    private fun countTrue(to: Int): Int {
-        return LBS.toBooleanList().subList(0, to + 1).stream().filter { elm -> elm }.count().toInt()
-    }
-
-    enum class SearchStatus {
-        LEAF_FOUND,
-        PART_CONTAINS,
-        NOT_FOUND
-    }
-
 }

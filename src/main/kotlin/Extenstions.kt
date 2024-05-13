@@ -72,3 +72,31 @@ fun ByteArray.byteArrayToShortList(): List<Short> {
 fun  BitSet.toBooleanList():List<Boolean>{
     return (0 until this.size()).map { this[it] }
 }
+
+fun ByteArray.toBitSet(): BitSet {
+    val returnValue = BitSet(this.size * 8)
+    val byteBuffer = ByteBuffer.wrap(this)
+
+    for (i in indices) {
+        val thebyte = byteBuffer.get(i)
+        for (j in 0 until 8) {
+            returnValue.set(i * 8 + j, isBitSet(thebyte, j))
+        }
+    }
+    return returnValue
+}
+
+private fun isBitSet(b: Byte, bit: Int): Boolean {
+    return (b.toInt() and (1 shl bit)) != 0
+}
+
+fun ByteArray.toInt(): Int {
+    require(size <= 4) { "ByteArray size must be 4 or less to convert to Int" }
+    var result = 0
+    for (i in indices) {
+        result = (result shl 8) or (this[i].toInt() and 0xFF)
+    }
+    return result
+}
+
+fun Int.to2ByteArray(): ByteArray = byteArrayOf(toByte(), shr(8).toByte())

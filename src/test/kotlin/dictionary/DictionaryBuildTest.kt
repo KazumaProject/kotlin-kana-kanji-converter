@@ -1,5 +1,6 @@
 package dictionary
 
+
 import com.kazumaproject.Louds.LOUDS
 import com.kazumaproject.Louds.with_term_id.LOUDSWithTermId
 import com.kazumaproject.dictionary.TokenArray
@@ -120,8 +121,6 @@ class DictionaryBuildTest {
         }
         println("$result")
 
-        println("loading time of yomi.dat: $yomiLOUDSReadTime ${yomiLOUDS.getNodeIdSize()}")
-        println("loading time of tango.dat: $tangoLOUDSReadTime ${tangoLOUDS.getNodeIdSize()}")
         println("loading time of token.dat: $tokenArrayReadTime")
 
         println("${yomiTree.find(query)?.termId}")

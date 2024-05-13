@@ -9,6 +9,6 @@ class SingleKanjiTest {
         val list = listOf("/dictionary00.txt")
         val dicUtils = DicUtils()
         val a = dicUtils.getListDictionary(list,"/single_kanji.tsv")
-        println("${a.groupBy { it.yomi }["わたし"]}")
+        println("${a.groupBy { it.yomi }["しょうが"]}")
     }
 }

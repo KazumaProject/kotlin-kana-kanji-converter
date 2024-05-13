@@ -7,10 +7,10 @@ import com.kazumaproject.Louds.with_term_id.LOUDSWithTermId
 import com.kazumaproject.connection_id.ConnectionIdBuilder
 import com.kazumaproject.dictionary.DicUtils
 import com.kazumaproject.dictionary.TokenArray
-import com.kazumaproject.dictionary.models.Dictionary
-import com.kazumaproject.dictionary.models.TokenEntryConverted
 import com.kazumaproject.engine.KanaKanjiEngine
 import com.kazumaproject.graph.GraphBuilder
+
+
 import com.kazumaproject.prefix.PrefixTree
 import com.kazumaproject.prefix.with_term_id.PrefixTreeWithTermId
 import com.kazumaproject.viterbi.FindPath
@@ -21,10 +21,10 @@ import java.io.ObjectOutputStream
 import kotlin.time.measureTime
 
 fun main() {
-//    buildTriesAndTokenArray()
+    buildTriesAndTokenArray()
 //    buildConnectionIdSparseArray()
 //    buildPOSTable()
-    testBestPath()
+    //testBestPath()
 }
 
 private fun buildPOSTable(){
@@ -55,7 +55,6 @@ private fun buildTriesAndTokenArray(){
     val dicUtils = DicUtils()
 
     val mode = 3
-    val tempList: MutableList<Dictionary> = mutableListOf()
 
     val list = when(mode){
         0 -> listOf("/dictionary_small.txt")
@@ -75,13 +74,13 @@ private fun buildTriesAndTokenArray(){
         )
     }
 
-    val dictionaryList = dicUtils.getListDictionary(list)
+    val dictionaryList = dicUtils.getListDictionary(list,"/single_kanji.tsv")
 
-    dictionaryList.forEach {
-        tempList.add(it)
-    }
+    val dictionaryList2 = dicUtils.getListDictionary(list,)
 
-    tempList.sortedBy { it.yomi.length }.groupBy { it.yomi }.forEach { entry ->
+    println("${dictionaryList.size} ${dictionaryList2.size}")
+
+    dictionaryList.sortedBy { it.yomi.length }.groupBy { it.yomi }.forEach { entry ->
         yomiTree.insert(entry.key)
         println("insert to yomi tree: ${entry.key}")
         entry.value.forEach {
@@ -119,7 +118,10 @@ private fun buildTriesAndTokenArray(){
     val tokenArrayTemp = TokenArray()
 
     val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token.dat"))
-    tokenArrayTemp.buildJunctionArray(tempList,tangoLOUDS,objectOutput,0)
+
+    val timeBuildTokenArray = measureTime {
+        tokenArrayTemp.buildJunctionArray(dictionaryList.toMutableList(),tangoLOUDS,objectOutput,0)
+    }
 
     val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token.dat"))
     val tokenArray = TokenArray()
@@ -130,24 +132,8 @@ private fun buildTriesAndTokenArray(){
 
     tokenArray.readPOSTable(1)
 
-    val query = "わたし"
-
-    val result = tokenArray.getListDictionaryByYomiTermId(yomiLOUDS.getTermId(yomiLOUDS.getNodeIndex(query))).map {
-        TokenEntryConverted(
-            leftId = tokenArray.posTable[it.posTableIndex.toInt()].first,
-            rightId = tokenArray.posTable[it.posTableIndex.toInt()].second,
-            wordCost = it.wordCost,
-            tango = if (it.isSameYomi) "" else tangoLOUDS.getLetter(it.nodeId),
-            query.length.toShort(),
-
-        )
-    }
-    println("$result")
-    println("$query ${yomiLOUDS.commonPrefixSearch(query)}")
-
-    println("loading time of yomi.dat: $yomiLOUDSReadTime ${yomiLOUDS.getNodeIdSize()}")
-    println("loading time of tango.dat: $tangoLOUDSReadTime ${tangoLOUDS.getNodeIdSize()}")
     println("loading time of token.dat: $tokenArrayReadTime")
+    println("build time of Token.dat: $timeBuildTokenArray")
 }
 
 private fun buildConnectionIdSparseArray(){

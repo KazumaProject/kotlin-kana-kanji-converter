@@ -15,7 +15,6 @@ import java.util.*
 class LOUDS {
     val LBSTemp: MutableList<Boolean> = arrayListOf()
     var LBS: BitSet = BitSet()
-    var nodeIds: MutableList<Int> = arrayListOf()
     var labels: MutableList<Char> = arrayListOf()
     var isLeaf: BitSet = BitSet()
     val isLeafTemp: MutableList<Boolean> = arrayListOf()
@@ -24,10 +23,6 @@ class LOUDS {
         LBSTemp.apply {
             add(true)
             add(false)
-        }
-        nodeIds.apply {
-            add(0,0)
-            add(1,1)
         }
         labels.apply {
             add(0,' ')
@@ -43,17 +38,13 @@ class LOUDS {
 
     constructor(
         LBS: BitSet,
-        nodeIds: MutableList<Int>,
         labels: MutableList<Char>,
         isLeaf: BitSet,
     ){
         this.LBS = LBS
-        this.nodeIds = nodeIds
         this.labels = labels
         this.isLeaf = isLeaf
     }
-
-    fun getNodeIdSize(): Int = nodeIds.size
 
     private fun firstChild(pos: Int): Int {
         LBS.apply {
@@ -134,49 +125,25 @@ class LOUDS {
     }
 
     fun getNodeIndex(s: String): Int{
-        return search2(2, s.toCharArray(), 0)
+        return search(2, s.toCharArray(), 0)
     }
 
     fun getNodeId(s: String): Int{
         return LBS.rank0(getNodeIndex(s))
     }
 
-    fun match(s: String): SearchStatus {
-        return search(2, s.toCharArray(), 0)
-    }
-
-    private fun search(index: Int, chars: CharArray, wordOffset: Int): SearchStatus {
+    private fun search(index: Int, chars: CharArray, wordOffset: Int): Int {
         var index2 = index
         var wordOffset2 = wordOffset
         var charIndex = LBS.rank1(index2)
         while (LBS[index2]) {
             if (chars[wordOffset2] == labels[charIndex]) {
                 if (isLeaf[index2] && wordOffset2 + 1 == chars.size) {
-                    return SearchStatus.LEAF_FOUND
+                    return index2
                 } else if (wordOffset2 + 1 == chars.size) {
-                    return SearchStatus.PART_CONTAINS
+                    return index2
                 }
                 return search(indexOfLabel(charIndex), chars, ++wordOffset2)
-            } else {
-                index2++
-            }
-            charIndex++
-        }
-        return SearchStatus.NOT_FOUND
-    }
-
-    private fun search2(index: Int, chars: CharArray, wordOffset: Int): Int {
-        var index2 = index
-        var wordOffset2 = wordOffset
-        var charIndex = LBS.rank1(index2)
-        while (LBS[index2]) {
-            if (chars[wordOffset2] == labels[charIndex]) {
-                if (isLeaf[index2] && wordOffset2 + 1 == chars.size) {
-                    return index2
-                } else if (wordOffset2 + 1 == chars.size) {
-                    return index2
-                }
-                return search2(indexOfLabel(charIndex), chars, ++wordOffset2)
             } else {
                 index2++
             }
@@ -199,14 +166,12 @@ class LOUDS {
         return i + 1
     }
 
-
     fun writeExternal(out: ObjectOutput){
         try {
             out.apply {
-                writeObject(nodeIds.toByteArray().size)
-                writeObject(labels.toByteArrayFromListChar().size)
+                writeInt(labels.toByteArrayFromListChar().size)
+
                 writeObject(LBS)
-                writeObject(nodeIds.toByteArray().deflate())
                 writeObject(labels.toByteArrayFromListChar().deflate())
                 writeObject(isLeaf)
                 flush()
@@ -220,10 +185,8 @@ class LOUDS {
     fun readExternal(objectInput: ObjectInput): LOUDS {
         objectInput.apply {
             try {
-                val nodeIdSize = objectInput.readObject() as Int
-                val labelSize = objectInput.readObject() as Int
+                val labelSize = objectInput.readInt()
                 LBS = objectInput.readObject() as BitSet
-                nodeIds = (objectInput.readObject() as ByteArray).inflate(nodeIdSize).toListInt().toMutableList()
                 labels = (objectInput.readObject() as ByteArray).inflate(labelSize).toListChar()
                 isLeaf = objectInput.readObject() as BitSet
                 close()
@@ -231,13 +194,7 @@ class LOUDS {
                 println(e.stackTraceToString())
             }
         }
-        return LOUDS(LBS, nodeIds, labels, isLeaf)
-    }
-
-    enum class SearchStatus {
-        LEAF_FOUND,
-        PART_CONTAINS,
-        NOT_FOUND
+        return LOUDS(LBS, labels, isLeaf)
     }
 
 }

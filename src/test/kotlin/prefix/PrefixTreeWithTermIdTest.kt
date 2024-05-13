@@ -116,7 +116,6 @@ class PrefixTreeWithTermIdTest {
 
                 println("${isLeaf.toBooleanList().map { if (it) 1 else 0 }}")
                 println("$termIds")
-                println("$nodeIds")
             }
         }
 
@@ -162,7 +161,6 @@ class PrefixTreeWithTermIdTest {
 
             println("${isLeaf.toBooleanList().map { if (it) 1 else 0 }}")
             println("$termIds")
-            println("$nodeIds")
             println("${getNodeIndex("o")}")
             println("${LBS.select0(LBS.rank1(getNodeIndex("o"))) + 1}")
             println("${LBS.rank1(LBS.select0(LBS.rank1(getNodeIndex("o"))) + 1)}")

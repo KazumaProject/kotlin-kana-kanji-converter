@@ -2,7 +2,6 @@ package com.kazumaproject.Louds
 
 import com.kazumaproject.prefix.PrefixNode
 import java.util.*
-import java.util.concurrent.atomic.AtomicInteger
 
 
 class Converter {
@@ -18,8 +17,6 @@ class Converter {
         return louds
     }
 
-    private val atomicInteger = AtomicInteger(1)
-
     private fun processQueue(queue: Queue<PrefixNode>, louds: LOUDS) {
         val node: PrefixNode = queue.poll()
 
@@ -28,7 +25,6 @@ class Converter {
                 queue.add(entry.value.second)
                 louds.apply {
                     LBSTemp.add(true)
-                    nodeIds.add(atomicInteger.incrementAndGet())
                     labels.add(entry.key)
                     isLeafTemp.add(entry.value.second.isWord)
                 }

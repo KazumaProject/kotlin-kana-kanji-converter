@@ -1,5 +1,6 @@
 package com.kazumaproject.single_kanji
 
+import com.kazumaproject.Constants.DIC_LIST
 import com.kazumaproject.dictionary.models.Dictionary
 
 class SingleKanjiBuilder {
@@ -9,17 +10,30 @@ class SingleKanjiBuilder {
         val tempList = mutableListOf<Dictionary>()
         for (entry in singleKanjiInMap){
             for (singleKanji in entry.value){
-                tempList.add(
-                    Dictionary(
-                        yomi = entry.key,
-                        leftId = 1916,
-                        rightId = 1916,
-                        cost = 8000,
-                        tango = singleKanji.toString()
+                if (entry.key.length == 1){
+                    tempList.add(
+                        Dictionary(
+                            yomi = entry.key,
+                            leftId = 1916,
+                            rightId = 1916,
+                            cost = 4000,
+                            tango = singleKanji.toString()
+                        )
                     )
-                )
+                }else{
+                    tempList.add(
+                        Dictionary(
+                            yomi = entry.key,
+                            leftId = 1916,
+                            rightId = 1916,
+                            cost = 2000,
+                            tango = singleKanji.toString()
+                        )
+                    )
+                }
             }
         }
+        tempList.addAll(DIC_LIST)
         return tempList.toList()
     }
 

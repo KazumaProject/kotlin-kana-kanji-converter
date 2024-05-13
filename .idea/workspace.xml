@@ -5,7 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/README.markdown" beforeDir="false" afterPath="$PROJECT_DIR$/README.markdown" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/Constants.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Extenstions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Extenstions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/dictionary/TokenArray.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dictionary/TokenArray.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/engine/KanaKanjiEngine.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/engine/KanaKanjiEngine.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/louds/Converter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/louds/Converter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/louds/LOUDS.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/louds/LOUDS.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/louds/with_term_id/ConverterWithTermId.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/louds/with_term_id/ConverterWithTermId.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/louds/with_term_id/LOUDSWithTermId.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/louds/with_term_id/LOUDSWithTermId.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/single_kanji/SingleKanjiBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/single_kanji/SingleKanjiBuilder.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/dictionary/DictionaryBuildTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/dictionary/DictionaryBuildTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/prefix/PrefixTreeTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/prefix/PrefixTreeTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/prefix/PrefixTreeWithTermIdTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/prefix/PrefixTreeWithTermIdTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/single_kanji/SingleKanjiTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/single_kanji/SingleKanjiTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,9 +56,9 @@
       <list>
         <option value="JUnit4 Test Class" />
         <option value="Kotlin File" />
-        <option value="Kotlin Object" />
         <option value="Kotlin Data Class" />
         <option value="Kotlin Class" />
+        <option value="Kotlin Object" />
       </list>
     </option>
   </component>
@@ -61,73 +75,73 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;Gradle.Build kotlin-kana-kanji-converter.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build tries.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConnectionIdTest.Test load connection dat.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConnectionIdTest.Test load connection index dat.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConnectionIdTest.Test to build connection id binary file.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConnectionIdTest.Test to build octree connection id range 0 - 16777215.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConnectionIdTest.Test to build octree for connection id range 0 - 511 small.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConnectionIdTest.Test to build octree for connection id range 0 - 511.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConnectionIdTest.Test to build octree with connection_single_column_txt.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.DictionaryBuildTest.build dictionary files.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.GraphBuilderTest.Build Graph Test.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.POSTableTest.Build pos_table.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.POSTableTest.Load pos_table.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.LOUDS test.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.Test Junction Array.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.Test Token Array.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.Test find method.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.Test write binary file 2.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.Test write binary file.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.create token array.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.insert.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.read text file from resources.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeWithTermIdTest.Test Common Prefix Search.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeWithTermIdTest.Test find method.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeWithTermIdTest.Test first child.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeWithTermIdTest.Test get child.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeWithTermIdTest.Test read text file from resources.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SingleKanjiTest.Test build single kanji.executor&quot;: &quot;Run&quot;,
-    &quot;Kotlin.MainKt (1).executor&quot;: &quot;Run&quot;,
-    &quot;Kotlin.MainKt.executor&quot;: &quot;Run&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit4&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4&quot;: &quot;&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/kazuma/IdeaProjects/kotlin-kana-kanji-converter/src/main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;/Users/kazuma/IdeaProjects/tries/src/main/kotlin/Main.kt&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Downloaded.Files.Path.Enabled": "false",
+    "Gradle.Build kotlin-kana-kanji-converter.executor": "Run",
+    "Gradle.Build tries.executor": "Run",
+    "Gradle.ConnectionIdTest.Test load connection dat.executor": "Run",
+    "Gradle.ConnectionIdTest.Test load connection index dat.executor": "Run",
+    "Gradle.ConnectionIdTest.Test to build connection id binary file.executor": "Run",
+    "Gradle.ConnectionIdTest.Test to build octree connection id range 0 - 16777215.executor": "Run",
+    "Gradle.ConnectionIdTest.Test to build octree for connection id range 0 - 511 small.executor": "Run",
+    "Gradle.ConnectionIdTest.Test to build octree for connection id range 0 - 511.executor": "Run",
+    "Gradle.ConnectionIdTest.Test to build octree with connection_single_column_txt.executor": "Run",
+    "Gradle.DictionaryBuildTest.build dictionary files.executor": "Run",
+    "Gradle.GraphBuilderTest.Build Graph Test.executor": "Run",
+    "Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine.executor": "Run",
+    "Gradle.POSTableTest.Build pos_table.executor": "Run",
+    "Gradle.POSTableTest.Load pos_table.executor": "Run",
+    "Gradle.PrefixTreeTest.LOUDS test.executor": "Run",
+    "Gradle.PrefixTreeTest.Test Junction Array.executor": "Run",
+    "Gradle.PrefixTreeTest.Test Token Array.executor": "Run",
+    "Gradle.PrefixTreeTest.Test find method.executor": "Run",
+    "Gradle.PrefixTreeTest.Test write binary file 2.executor": "Run",
+    "Gradle.PrefixTreeTest.Test write binary file.executor": "Run",
+    "Gradle.PrefixTreeTest.create token array.executor": "Run",
+    "Gradle.PrefixTreeTest.insert.executor": "Run",
+    "Gradle.PrefixTreeTest.read text file from resources.executor": "Run",
+    "Gradle.PrefixTreeWithTermIdTest.Test Common Prefix Search.executor": "Run",
+    "Gradle.PrefixTreeWithTermIdTest.Test find method.executor": "Run",
+    "Gradle.PrefixTreeWithTermIdTest.Test first child.executor": "Run",
+    "Gradle.PrefixTreeWithTermIdTest.Test get child.executor": "Run",
+    "Gradle.PrefixTreeWithTermIdTest.Test read text file from resources.executor": "Run",
+    "Gradle.SingleKanjiTest.Test build single kanji.executor": "Run",
+    "Kotlin.MainKt (1).executor": "Run",
+    "Kotlin.MainKt.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit4",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/kazuma/IdeaProjects/kotlin-kana-kanji-converter",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "/Users/kazuma/IdeaProjects/tries/src/main/kotlin/Main.kt",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "project.propCompiler",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;sqlite&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlite"
     ],
-    &quot;kotlin-gradle-user-dirs&quot;: [
-      &quot;/Users/kazuma/.gradle&quot;
+    "kotlin-gradle-user-dirs": [
+      "/Users/kazuma/.gradle"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main" />
@@ -154,7 +168,7 @@
       <recent name="prefix" />
     </key>
   </component>
-  <component name="RunManager" selected="Kotlin.MainKt (1)">
+  <component name="RunManager" selected="Gradle.PrefixTreeTest.Test Token Array">
     <configuration name="GraphBuilderTest.Build Graph Test" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -203,6 +217,30 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="PrefixTreeTest.Test Token Array" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;prefix.PrefixTreeTest.Test Token Array&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="SingleKanjiTest.Test build single kanji" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -234,37 +272,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.kazumaproject.MainKt" />
-      <module name="tries.main" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <list>
+      <item itemvalue="Gradle.PrefixTreeTest.Test Token Array" />
       <item itemvalue="Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine" />
       <item itemvalue="Gradle.GraphBuilderTest.Build Graph Test" />
       <item itemvalue="Gradle.SingleKanjiTest.Test build single kanji" />
       <item itemvalue="Kotlin.MainKt (1)" />
-      <item itemvalue="Kotlin.MainKt" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.PrefixTreeTest.Test Token Array" />
         <item itemvalue="Kotlin.MainKt (1)" />
+        <item itemvalue="Gradle.SingleKanjiTest.Test build single kanji" />
         <item itemvalue="Gradle.GraphBuilderTest.Build Graph Test" />
         <item itemvalue="Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine" />
-        <item itemvalue="Kotlin.MainKt" />
-        <item itemvalue="Gradle.SingleKanjiTest.Test build single kanji" />
       </list>
     </recent_temporary>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
-        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
-      </set>
-    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -304,6 +327,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />

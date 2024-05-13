@@ -1,6 +1,8 @@
 package prefix
 
-import com.kazumaproject.Louds.*
+
+import com.kazumaproject.Louds.Converter
+import com.kazumaproject.Louds.LOUDS
 import com.kazumaproject.Louds.with_term_id.ConverterWithTermId
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.dictionary.TokenArray
@@ -144,7 +146,6 @@ class PrefixTreeTest {
         louds.convertListToBitSet()
 
         println("${louds.labels}")
-        println("${louds.nodeIds}")
         println("${louds.isLeaf}")
 
         val word = "one"
@@ -224,7 +225,7 @@ class PrefixTreeTest {
 
         val tempList: MutableList<Dictionary> = mutableListOf()
 
-        val mode = 2
+        val mode = 1
 
         val list = when(mode){
             0 -> listOf("/dictionary_small.txt")
@@ -257,7 +258,7 @@ class PrefixTreeTest {
             }
         }
 
-        tempList.groupBy { it.yomi }.forEach { entry ->
+        tempList.sortedBy { it.yomi.length }.groupBy { it.yomi }.forEach { entry ->
             yomiTree.insert(entry.key)
             entry.value.forEach {
                 if (entry.key != it.tango && entry.key.hiraToKata() != it.tango){
@@ -272,7 +273,11 @@ class PrefixTreeTest {
         loudsYomi.convertListToBitSet()
         loudsTango.convertListToBitSet()
 
-        println("common: ${loudsYomi.commonPrefixSearch("あいあんと").toList()}")
+        val bufferedOutputStream = ObjectOutputStream(FileOutputStream("./src/test/resources/yomi.dat"))
+        val bufferedOutputStream2 = ObjectOutputStream(FileOutputStream("./src/test/resources/tango.dat"))
+
+        loudsYomi.writeExternal(bufferedOutputStream)
+        loudsTango.writeExternal(bufferedOutputStream2)
 
         val tokenArray = TokenArray()
 
@@ -290,13 +295,16 @@ class PrefixTreeTest {
 
         tokenArray.readPOSTable(0)
 
-        val a = tokenArrayTemp.getListDictionaryByYomiTermId(1).map {
+        val word = "あいあんと"
+        val nodeId = loudsYomi.getTermId(loudsYomi.getNodeIndex(word))
+
+        val a = tokenArrayTemp.getListDictionaryByYomiTermId(nodeId).map {
             TokenEntryConverted(
                 leftId = tokenArray.posTable[it.posTableIndex.toInt()].first,
                 rightId = tokenArray.posTable[it.posTableIndex.toInt()].second,
                 wordCost = it.wordCost,
                 tango = if (it.isSameYomi) "" else loudsTango.getLetter(it.nodeId),
-                yomiLength = "あいあんと".length.toShort()
+                yomiLength = word.length.toShort()
             )
         }
         println("$a")
