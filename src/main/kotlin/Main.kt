@@ -14,6 +14,8 @@ import com.kazumaproject.graph.GraphBuilder
 import com.kazumaproject.prefix.PrefixTree
 import com.kazumaproject.prefix.with_term_id.PrefixTreeWithTermId
 import com.kazumaproject.viterbi.FindPath
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.ObjectInputStream
@@ -21,9 +23,9 @@ import java.io.ObjectOutputStream
 import kotlin.time.measureTime
 
 fun main() {
-    buildTriesAndTokenArray()
+    //buildTriesAndTokenArray()
 //    buildConnectionIdSparseArray()
-//    buildPOSTable()
+    buildPOSTable()
     //testBestPath()
 }
 
@@ -96,14 +98,14 @@ private fun buildTriesAndTokenArray(){
     yomiLOUDSTemp.convertListToBitSet()
     tangoLOUDSTemp.convertListToBitSet()
 
-    val objectOutputYomi = ObjectOutputStream(FileOutputStream("./src/main/resources/yomi.dat"))
-    val objectOutputTango = ObjectOutputStream(FileOutputStream("./src/main/resources/tango.dat"))
+    val objectOutputYomi = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/yomi.dat")))
+    val objectOutputTango = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/tango.dat")))
 
     yomiLOUDSTemp.writeExternal(objectOutputYomi)
     tangoLOUDSTemp.writeExternal(objectOutputTango)
 
-    val objectInputYomi = ObjectInputStream(FileInputStream("./src/main/resources/yomi.dat"))
-    val objectInputTango = ObjectInputStream(FileInputStream("./src/main/resources/tango.dat"))
+    val objectInputYomi = ObjectInputStream(BufferedInputStream(FileInputStream("./src/main/resources/yomi.dat")))
+    val objectInputTango = ObjectInputStream(BufferedInputStream(FileInputStream("./src/main/resources/tango.dat")))
 
     var yomiLOUDS: LOUDSWithTermId
     var tangoLOUDS: LOUDS
@@ -117,13 +119,13 @@ private fun buildTriesAndTokenArray(){
 
     val tokenArrayTemp = TokenArray()
 
-    val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token.dat"))
+    val objectOutput = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/token.dat")))
 
     val timeBuildTokenArray = measureTime {
         tokenArrayTemp.buildJunctionArray(dictionaryList.toMutableList(),tangoLOUDS,objectOutput,0)
     }
 
-    val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token.dat"))
+    val objectInput = ObjectInputStream(BufferedInputStream(FileInputStream("./src/main/resources/token.dat")))
     val tokenArray = TokenArray()
 
     val tokenArrayReadTime = measureTime {

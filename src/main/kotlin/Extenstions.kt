@@ -89,14 +89,3 @@ fun ByteArray.toBitSet(): BitSet {
 private fun isBitSet(b: Byte, bit: Int): Boolean {
     return (b.toInt() and (1 shl bit)) != 0
 }
-
-fun ByteArray.toInt(): Int {
-    require(size <= 4) { "ByteArray size must be 4 or less to convert to Int" }
-    var result = 0
-    for (i in indices) {
-        result = (result shl 8) or (this[i].toInt() and 0xFF)
-    }
-    return result
-}
-
-fun Int.to2ByteArray(): ByteArray = byteArrayOf(toByte(), shr(8).toByte())

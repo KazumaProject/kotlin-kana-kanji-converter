@@ -17,8 +17,10 @@ class TokenArray {
     private var nodeIdList: MutableList<Int> = arrayListOf()
     private var bitListTemp: MutableList<Boolean> = arrayListOf()
     private var bitvector: BitSet = BitSet()
-    var posTable: List<Pair<Short, Short>> = listOf()
-    
+    var posTable: List<Pair<Short,Short>> = listOf()
+    var leftIds: List<Short> = listOf()
+    var rightIds: List<Short> = listOf()
+
     fun getListDictionaryByYomiTermId(
         nodeId: Int,
     ): List<TokenEntry> {
@@ -133,15 +135,33 @@ class TokenArray {
         }
 
         val result = tempMap.toList().sortedByDescending { (_, value) -> value }.toMap()
+
+        val leftIds2 = mutableListOf<Short>()
+        val rightIds2 = mutableListOf<Short>()
+
+        result.forEach {
+            leftIds2.add(it.key.first)
+            rightIds2.add(it.key.second)
+        }
+
+        println("result: ${result.map { it.key }.subList(0,20)} ${result.size}")
+        println("left ids: ${leftIds2.subList(0,20)} ${leftIds2.size}")
+        println("right ids: ${rightIds2.subList(0,20)} ${rightIds2.size}")
+
+        val sizeL = leftIds2.toByteArrayFromListShort().size
+        val sizeR = rightIds2.toByteArrayFromListShort().size
+
         val objectOutput = if (mode == 0){
             ObjectOutputStream(FileOutputStream("./src/test/resources/pos_table.dat"))
         }else {
             ObjectOutputStream(FileOutputStream("./src/main/resources/pos_table.dat"))
         }
-        val objectToWrite = result.keys.toList()
         try {
             objectOutput.apply {
-                writeObject(objectToWrite)
+                writeInt(sizeL)
+                writeInt(sizeR)
+                writeObject(leftIds2.toByteArrayFromListShort().deflate())
+                writeObject(rightIds2.toByteArrayFromListShort().deflate())
                 flush()
                 close()
             }
@@ -207,11 +227,13 @@ class TokenArray {
         }else{
             ObjectInputStream(FileInputStream("./src/main/resources/pos_table.dat"))
         }
-        var a: List<Pair<Short,Short>>
         objectInput.apply {
-            a = (readObject() as List<Pair<Short,Short>>)
+            val sizeL = readInt()
+            val sizeR = readInt()
+
+            leftIds = (readObject() as ByteArray).inflate(sizeL).byteArrayToShortList()
+            rightIds = (readObject() as ByteArray).inflate(sizeR).byteArrayToShortList()
         }
-        posTable = a
     }
     /**
      *

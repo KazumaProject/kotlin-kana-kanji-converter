@@ -11,6 +11,7 @@ class SingleKanjiBuilder {
         for (entry in singleKanjiInMap){
             for (singleKanji in entry.value){
                 if (entry.key.length == 1){
+                    println("key1: $singleKanji")
                     tempList.add(
                         Dictionary(
                             yomi = entry.key,
@@ -21,12 +22,13 @@ class SingleKanjiBuilder {
                         )
                     )
                 }else{
+                    println("key else: $singleKanji")
                     tempList.add(
                         Dictionary(
                             yomi = entry.key,
                             leftId = 1916,
                             rightId = 1916,
-                            cost = 2000,
+                            cost = 1000,
                             tango = singleKanji.toString()
                         )
                     )
@@ -35,6 +37,10 @@ class SingleKanjiBuilder {
         }
         tempList.addAll(DIC_LIST)
         return tempList.toList()
+    }
+
+    fun getSingleKanjiInMap(fileName: String): Map<String, List<Char>>{
+        return getSingleKanjiList(fileName)
     }
 
     private fun getSingleKanjiList(fileName: String): Map<String, List<Char>> {
