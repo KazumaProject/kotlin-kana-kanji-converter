@@ -6,7 +6,9 @@ import com.kazumaproject.bitset.rank1
 import com.kazumaproject.bitset.select0
 import com.kazumaproject.bitset.select1
 import com.kazumaproject.connection_id.deflate
+import com.kazumaproject.connection_id.deflateSnappy
 import com.kazumaproject.connection_id.inflate
+import com.kazumaproject.connection_id.inflateSnappy
 import java.io.IOException
 import java.io.ObjectInput
 import java.io.ObjectOutput
@@ -212,4 +214,35 @@ class LOUDSWithTermId {
         }
         return LOUDSWithTermId(LBS, labels, isLeaf, termIds)
     }
+
+    fun writeExternalSnappy(out: ObjectOutput){
+        try {
+            out.apply {
+                writeObject(LBS)
+                writeObject(labels.toByteArrayFromListChar().deflateSnappy())
+                writeObject(isLeaf)
+                writeObject(termIds.toByteArray().deflateSnappy())
+                flush()
+                close()
+            }
+        }catch (e: IOException){
+            println(e.stackTraceToString())
+        }
+    }
+
+    fun readExternalSnappy(objectInput: ObjectInput): LOUDSWithTermId {
+        objectInput.apply {
+            try {
+                LBS = objectInput.readObject() as BitSet
+                labels = (objectInput.readObject() as ByteArray).inflateSnappy().toListChar()
+                isLeaf = objectInput.readObject() as BitSet
+                termIds = (objectInput.readObject() as ByteArray).inflateSnappy().toListInt().toMutableList()
+                close()
+            }catch (e: Exception){
+                println(e.stackTraceToString())
+            }
+        }
+        return LOUDSWithTermId(LBS, labels, isLeaf, termIds)
+    }
+
 }

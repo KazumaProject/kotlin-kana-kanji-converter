@@ -8,14 +8,14 @@ object Constants {
             yomi = "ようやく",
             leftId = 1916,
             rightId = 1916,
-            cost = 1000,
+            cost = 2000,
             tango = "要約"
         ),
         Dictionary(
             yomi = "しょうが",
             leftId = 1916,
             rightId = 1916,
-            cost = 1000,
+            cost = 2000,
             tango = "生姜"
         )
     )

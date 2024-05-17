@@ -5,7 +5,9 @@ import com.kazumaproject.Louds.LOUDS
 import com.kazumaproject.bitset.rank1
 import com.kazumaproject.bitset.select0
 import com.kazumaproject.connection_id.deflate
+import com.kazumaproject.connection_id.deflateSnappy
 import com.kazumaproject.connection_id.inflate
+import com.kazumaproject.connection_id.inflateSnappy
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.dictionary.models.TokenEntry
 import java.io.*
@@ -46,7 +48,11 @@ class TokenArray {
         mode: Int
     ){
         val posTableWithIndex = readPOSTableWithIndex(mode)
-        dictionaries.sortedBy { it.yomi.length } .groupBy { it.yomi }.onEachIndexed{ index, entry ->
+        dictionaries
+            .sortedBy { it.yomi }
+            .sortedBy { it.yomi.length }
+            .groupBy { it.yomi }
+            .onEachIndexed{ index, entry ->
             bitListTemp.add(false)
 
             entry.value.forEach { dictionary ->
@@ -58,11 +64,21 @@ class TokenArray {
                     bitListTemp.add(true)
                     posTableIndexList.add(posTableIndex)
                     wordCostList.add(dictionary.cost)
-                    nodeIdList.add(if (dictionary.yomi == dictionary.tango || entry.key.hiraToKata() == dictionary.tango) -1 else tangoTrie.getNodeIndex(dictionary.tango))
+                    when{
+                        dictionary.yomi == dictionary.tango ->{
+                            nodeIdList.add(-2)
+                        }
+                        entry.key.hiraToKata() == dictionary.tango ->{
+                            nodeIdList.add(-1)
+                        }
+                        else ->{
+                            nodeIdList.add(tangoTrie.getNodeIndex(dictionary.tango))
+                        }
+                    }
                 }
             }
         }
-        writeExternal(out)
+        writeExternalSnappy(out)
     }
 
     private fun writeExternal(
@@ -97,6 +113,39 @@ class TokenArray {
                 posTableIndexList = (readObject() as ByteArray).inflate(posTableIndexListSize).byteArrayToShortList().toMutableList()
                 wordCostList = (readObject() as ByteArray).inflate(wordCostListSize).byteArrayToShortList().toMutableList()
                 nodeIdList = (readObject() as ByteArray).inflate(nodeIdListSize).toListInt().toMutableList()
+                bitvector = readObject() as BitSet
+                close()
+            }catch (e: Exception){
+                println(e.stackTraceToString())
+            }
+        }
+        return TokenArray()
+    }
+
+    private fun writeExternalSnappy(
+        out: ObjectOutput
+    ){
+        try {
+            out.apply {
+                writeObject(posTableIndexList.toByteArrayFromListShort().deflateSnappy())
+                writeObject(wordCostList.toByteArrayFromListShort().deflateSnappy())
+                writeObject(nodeIdList.toByteArray().deflateSnappy())
+                writeObject(bitListTemp.toBitSet())
+
+                flush()
+                close()
+            }
+        }catch (e: IOException){
+            println(e.stackTraceToString())
+        }
+    }
+
+    fun readExternalSnappy(objectInput: ObjectInput): TokenArray {
+        objectInput.apply {
+            try {
+                posTableIndexList = (readObject() as ByteArray).inflateSnappy().byteArrayToShortList().toMutableList()
+                wordCostList = (readObject() as ByteArray).inflateSnappy().byteArrayToShortList().toMutableList()
+                nodeIdList = (readObject() as ByteArray).inflateSnappy().toListInt().toMutableList()
                 bitvector = readObject() as BitSet
                 close()
             }catch (e: Exception){

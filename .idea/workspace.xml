@@ -6,12 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Extenstions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Extenstions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Constants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Constants.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/connection_id/Extensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/connection_id/Extensions.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/dictionary/TokenArray.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dictionary/TokenArray.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/graph/GraphBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/graph/GraphBuilder.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/louds/LOUDS.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/louds/LOUDS.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/louds/with_term_id/LOUDSWithTermId.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/louds/with_term_id/LOUDSWithTermId.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/single_kanji/SingleKanjiBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/single_kanji/SingleKanjiBuilder.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/single_kanji/SingleKanjiTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/single_kanji/SingleKanjiTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/prefix/PrefixTreeTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/prefix/PrefixTreeTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,7 +116,7 @@
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/kazuma/IdeaProjects/kotlin-kana-kanji-converter",
+    "last_opened_file_path": "/Users/kazuma/IdeaProjects/kotlin-kana-kanji-converter/src/test/resources",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -136,9 +140,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/resources" />
       <recent name="$PROJECT_DIR$/src/main" />
       <recent name="$PROJECT_DIR$/src/test" />
-      <recent name="$PROJECT_DIR$/src/test/resources" />
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
@@ -274,8 +278,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.MainKt (1)" />
-        <item itemvalue="Gradle.SingleKanjiTest.Test build single kanji" />
         <item itemvalue="Gradle.PrefixTreeTest.Test Token Array" />
+        <item itemvalue="Gradle.SingleKanjiTest.Test build single kanji" />
         <item itemvalue="Gradle.GraphBuilderTest.Build Graph Test" />
         <item itemvalue="Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine" />
       </list>

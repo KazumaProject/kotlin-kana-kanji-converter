@@ -1,5 +1,7 @@
 package com.kazumaproject
 
+
+import com.kazumaproject.Constants.DIC_LIST
 import com.kazumaproject.Louds.Converter
 import com.kazumaproject.Louds.LOUDS
 import com.kazumaproject.Louds.with_term_id.ConverterWithTermId
@@ -8,24 +10,15 @@ import com.kazumaproject.connection_id.ConnectionIdBuilder
 import com.kazumaproject.dictionary.DicUtils
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.engine.KanaKanjiEngine
-import com.kazumaproject.graph.GraphBuilder
-
-
 import com.kazumaproject.prefix.PrefixTree
 import com.kazumaproject.prefix.with_term_id.PrefixTreeWithTermId
-import com.kazumaproject.viterbi.FindPath
-import java.io.BufferedInputStream
-import java.io.BufferedOutputStream
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.ObjectInputStream
-import java.io.ObjectOutputStream
+import java.io.*
 import kotlin.time.measureTime
 
 fun main() {
-    //buildTriesAndTokenArray()
+    buildTriesAndTokenArray()
 //    buildConnectionIdSparseArray()
-    buildPOSTable()
+    //buildPOSTable()
     //testBestPath()
 }
 
@@ -76,13 +69,14 @@ private fun buildTriesAndTokenArray(){
         )
     }
 
-    val dictionaryList = dicUtils.getListDictionary(list,"/single_kanji.tsv")
+    val dictionaryList = dicUtils.getListDictionary(list).toMutableList()
+    dictionaryList.addAll(DIC_LIST)
 
-    val dictionaryList2 = dicUtils.getListDictionary(list,)
-
-    println("${dictionaryList.size} ${dictionaryList2.size}")
-
-    dictionaryList.sortedBy { it.yomi.length }.groupBy { it.yomi }.forEach { entry ->
+    dictionaryList
+        .sortedBy { it.yomi }
+        .sortedBy{ it.yomi.length }
+        .groupBy { it.yomi }
+        .forEach { entry ->
         yomiTree.insert(entry.key)
         println("insert to yomi tree: ${entry.key}")
         entry.value.forEach {
@@ -136,6 +130,8 @@ private fun buildTriesAndTokenArray(){
 
     println("loading time of token.dat: $tokenArrayReadTime")
     println("build time of Token.dat: $timeBuildTokenArray")
+    println("load time of yomi.dat $yomiLOUDSReadTime")
+    println("load time of tango.dat $tangoLOUDSReadTime")
 }
 
 private fun buildConnectionIdSparseArray(){
@@ -156,58 +152,6 @@ private fun buildConnectionIdSparseArray(){
         println("${a.size}")
     }
     println("$time")
-}
-
-fun loadBinaryFiles(){
-    var yomiTrie: LOUDSWithTermId
-    var tangoTrie: LOUDS
-    val graphBuilder = GraphBuilder()
-    val connectionIds: List<Short>
-
-    val objectInputYomi = ObjectInputStream(FileInputStream("src/test/resources/yomi.dat"))
-    val objectInputTango = ObjectInputStream(FileInputStream("src/test/resources/tango.dat"))
-    val objectInputTokenArray = ObjectInputStream(FileInputStream("src/test/resources/token.dat"))
-    val objectInputConnectionId = ObjectInputStream(FileInputStream("src/test/resources/connectionIds.dat"))
-
-    val tokenArray = TokenArray()
-
-    val yomiLoadingTime = measureTime {
-        yomiTrie = LOUDSWithTermId().readExternal(objectInputYomi)
-    }
-    val tangoLoadingTime = measureTime {
-        tangoTrie = LOUDS().readExternal(objectInputTango)
-    }
-    val tokenArrayLoadingTime = measureTime {
-        tokenArray.readExternal(objectInputTokenArray)
-    }
-    tokenArray.readPOSTable(0)
-
-    val connectionIdsLoadingTime = measureTime {
-        connectionIds = ConnectionIdBuilder().read(objectInputConnectionId)
-    }
-
-    val query = "とべないぶた"
-
-    val graph = graphBuilder.constructGraph(
-        query,
-        yomiTrie,
-        tangoTrie,
-        tokenArray,
-    )
-
-    println("loading time yomi.dat: $yomiLoadingTime")
-    println("loading time tango.dat: $tangoLoadingTime")
-    println("loading token tango.dat: $tokenArrayLoadingTime")
-    println("loading connection ids: $connectionIdsLoadingTime")
-
-    println("${graph.map { it.map { l -> l.map { u -> u.tango } } }}")
-
-    val findPath = FindPath()
-
-    //println(findPath.viterbi(graph,query.length, connectionIds))
-
-    println(findPath.backwardAStar(graph,query.length, connectionIds,1))
-
 }
 
 private fun testBestPath(){

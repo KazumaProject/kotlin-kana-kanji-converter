@@ -258,7 +258,7 @@ class PrefixTreeTest {
             }
         }
 
-        tempList.sortedBy { it.yomi.length }.groupBy { it.yomi }.forEach { entry ->
+        tempList.sortedBy { it.yomi }.sortedBy { it.yomi.length }.groupBy { it.yomi }.forEach { entry ->
             yomiTree.insert(entry.key)
             entry.value.forEach {
                 if (entry.key != it.tango && entry.key.hiraToKata() != it.tango){
@@ -278,8 +278,8 @@ class PrefixTreeTest {
         val bufferedOutputStream = ObjectOutputStream(FileOutputStream("./src/test/resources/yomi.dat"))
         val bufferedOutputStream2 = ObjectOutputStream(FileOutputStream("./src/test/resources/tango.dat"))
 
-        loudsYomi.writeExternal(bufferedOutputStream)
-        loudsTango.writeExternal(bufferedOutputStream2)
+        loudsYomi.writeExternalSnappy(bufferedOutputStream)
+        loudsTango.writeExternalSnappy(bufferedOutputStream2)
 
         val tokenArray = TokenArray()
 
@@ -290,7 +290,7 @@ class PrefixTreeTest {
         val tokenArrayTemp = TokenArray()
 
         val readTime = measureTime {
-            tokenArrayTemp.readExternal(objectInput)
+            tokenArrayTemp.readExternalSnappy(objectInput)
         }
 
         println("time of reading token.dat: $readTime")
@@ -302,8 +302,8 @@ class PrefixTreeTest {
 
         val a = tokenArrayTemp.getListDictionaryByYomiTermId(nodeId).map {
             TokenEntryConverted(
-                leftId = tokenArray.posTable[it.posTableIndex.toInt()].first,
-                rightId = tokenArray.posTable[it.posTableIndex.toInt()].second,
+                leftId = tokenArray.leftIds[it.posTableIndex.toInt()],
+                rightId = tokenArray.rightIds[it.posTableIndex.toInt()],
                 wordCost = it.wordCost,
                 tango = if (it.nodeId == -1) word.hiraToKata() else loudsTango.getLetter(it.nodeId),
                 yomiLength = word.length.toShort()

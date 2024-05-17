@@ -6,7 +6,9 @@ import com.kazumaproject.bitset.rank1
 import com.kazumaproject.bitset.select0
 import com.kazumaproject.bitset.select1
 import com.kazumaproject.connection_id.deflate
+import com.kazumaproject.connection_id.deflateSnappy
 import com.kazumaproject.connection_id.inflate
+import com.kazumaproject.connection_id.inflateSnappy
 import java.io.IOException
 import java.io.ObjectInput
 import java.io.ObjectOutput
@@ -188,6 +190,34 @@ class LOUDS {
                 val labelSize = objectInput.readInt()
                 LBS = objectInput.readObject() as BitSet
                 labels = (objectInput.readObject() as ByteArray).inflate(labelSize).toListChar()
+                isLeaf = objectInput.readObject() as BitSet
+                close()
+            }catch (e: Exception){
+                println(e.stackTraceToString())
+            }
+        }
+        return LOUDS(LBS, labels, isLeaf)
+    }
+
+    fun writeExternalSnappy(out: ObjectOutput){
+        try {
+            out.apply {
+                writeObject(LBS)
+                writeObject(labels.toByteArrayFromListChar().deflateSnappy())
+                writeObject(isLeaf)
+                flush()
+                close()
+            }
+        }catch (e: IOException){
+            println(e.stackTraceToString())
+        }
+    }
+
+    fun readExternalSnappy(objectInput: ObjectInput): LOUDS {
+        objectInput.apply {
+            try {
+                LBS = objectInput.readObject() as BitSet
+                labels = (objectInput.readObject() as ByteArray).inflateSnappy().toListChar()
                 isLeaf = objectInput.readObject() as BitSet
                 close()
             }catch (e: Exception){

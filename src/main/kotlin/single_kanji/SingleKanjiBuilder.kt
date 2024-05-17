@@ -10,29 +10,15 @@ class SingleKanjiBuilder {
         val tempList = mutableListOf<Dictionary>()
         for (entry in singleKanjiInMap){
             for (singleKanji in entry.value){
-                if (entry.key.length == 1){
-                    println("key1: $singleKanji")
-                    tempList.add(
-                        Dictionary(
-                            yomi = entry.key,
-                            leftId = 1916,
-                            rightId = 1916,
-                            cost = 4000,
-                            tango = singleKanji.toString()
-                        )
+                tempList.add(
+                    Dictionary(
+                        yomi = entry.key,
+                        leftId = 1916,
+                        rightId = 1916,
+                        cost = 5000,
+                        tango = singleKanji.toString()
                     )
-                }else{
-                    println("key else: $singleKanji")
-                    tempList.add(
-                        Dictionary(
-                            yomi = entry.key,
-                            leftId = 1916,
-                            rightId = 1916,
-                            cost = 1000,
-                            tango = singleKanji.toString()
-                        )
-                    )
-                }
+                )
             }
         }
         tempList.addAll(DIC_LIST)

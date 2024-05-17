@@ -4,6 +4,7 @@ import com.kazumaproject.Louds.LOUDS
 import com.kazumaproject.Louds.with_term_id.LOUDSWithTermId
 import com.kazumaproject.Other.BOS
 import com.kazumaproject.dictionary.TokenArray
+import com.kazumaproject.hiraToKata
 
 class GraphBuilder {
 
@@ -48,7 +49,11 @@ class GraphBuilder {
                         score = it.wordCost.toInt(),
                         f = it.wordCost.toInt(),
                         g = it.wordCost.toInt(),
-                        tango = if (it.nodeId == -1) yomiStr else tangoTrie.getLetter(it.nodeId),
+                        tango = when (it.nodeId) {
+                            -2 -> yomiStr
+                            -1 -> yomiStr.hiraToKata()
+                            else -> tangoTrie.getLetter(it.nodeId)
+                        },
                         len = yomiStr.length.toShort(),
                         sPos = i
                     )
