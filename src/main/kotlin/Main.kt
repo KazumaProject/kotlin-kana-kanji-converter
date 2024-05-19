@@ -17,9 +17,10 @@ import kotlin.time.measureTime
 
 fun main() {
     buildTriesAndTokenArray()
-//    buildConnectionIdSparseArray()
+    //buildConnectionIdSparseArray()
     //buildPOSTable()
     //testBestPath()
+
 }
 
 private fun buildPOSTable(){
@@ -44,6 +45,7 @@ private fun buildPOSTable(){
 }
 
 private fun buildTriesAndTokenArray(){
+
     val yomiTree = PrefixTreeWithTermId()
     val tangoTree = PrefixTree()
 
@@ -96,7 +98,7 @@ private fun buildTriesAndTokenArray(){
     val objectOutputTango = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/tango.dat")))
 
     yomiLOUDSTemp.writeExternal(objectOutputYomi)
-    tangoLOUDSTemp.writeExternal(objectOutputTango)
+    tangoLOUDSTemp.writeExternalNotCompress(objectOutputTango)
 
     val objectInputYomi = ObjectInputStream(BufferedInputStream(FileInputStream("./src/main/resources/yomi.dat")))
     val objectInputTango = ObjectInputStream(BufferedInputStream(FileInputStream("./src/main/resources/tango.dat")))
@@ -108,18 +110,18 @@ private fun buildTriesAndTokenArray(){
         yomiLOUDS = LOUDSWithTermId().readExternal(objectInputYomi)
     }
     val tangoLOUDSReadTime = measureTime {
-        tangoLOUDS = LOUDS().readExternal(objectInputTango)
+        tangoLOUDS = LOUDS().readExternalNotCompress(objectInputTango)
     }
 
     val tokenArrayTemp = TokenArray()
 
-    val objectOutput = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/token.dat")))
+    val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token.dat"))
 
     val timeBuildTokenArray = measureTime {
         tokenArrayTemp.buildJunctionArray(dictionaryList.toMutableList(),tangoLOUDS,objectOutput,0)
     }
 
-    val objectInput = ObjectInputStream(BufferedInputStream(FileInputStream("./src/main/resources/token.dat")))
+    val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token.dat"))
     val tokenArray = TokenArray()
 
     val tokenArrayReadTime = measureTime {
@@ -141,15 +143,16 @@ private fun buildConnectionIdSparseArray(){
 
     val connectionIdBuilder = ConnectionIdBuilder()
 
-    val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/connectionIds.dat"))
+    val objectOutput = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/connectionIds.dat")))
     lines?.let { l ->
         connectionIdBuilder.build(objectOutput,l.map { it.toShort() })
     }
 
-    val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/connectionIds.dat"))
+    val objectInput = ObjectInputStream(BufferedInputStream(FileInputStream("./src/main/resources/connectionIds.dat")))
     val time = measureTime {
         val a = ConnectionIdBuilder().read(objectInput)
-        println("${a.size}")
+        println("a ${a.size}")
+
     }
     println("$time")
 }
@@ -188,4 +191,12 @@ private fun testBestPath(){
 
     println("time to find shortest path $word2: $time1")
     println("time to find nBest path $word2: $time2")
+}
+
+private fun loadTermIdsTxt(){
+    val time = measureTime {
+        val a = File("./src/main/resources/termIds.txt").bufferedReader().readLines().map { it.toInt() }
+        println("${a.size}")
+    }
+    println("$time")
 }

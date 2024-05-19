@@ -6,12 +6,8 @@ import com.kazumaproject.bitset.rank1
 import com.kazumaproject.bitset.select0
 import com.kazumaproject.bitset.select1
 import com.kazumaproject.connection_id.deflate
-import com.kazumaproject.connection_id.deflateSnappy
 import com.kazumaproject.connection_id.inflate
-import com.kazumaproject.connection_id.inflateSnappy
-import java.io.IOException
-import java.io.ObjectInput
-import java.io.ObjectOutput
+import java.io.*
 import java.util.*
 
 class LOUDSWithTermId {
@@ -20,6 +16,7 @@ class LOUDSWithTermId {
     var LBS: BitSet = BitSet()
     var labels: MutableList<Char> = arrayListOf()
     var termIds: MutableList<Int> = arrayListOf()
+    var termIdsDiff: List<Short> = arrayListOf()
     var isLeaf: BitSet = BitSet()
     val isLeafTemp: MutableList<Boolean> = arrayListOf()
 
@@ -40,16 +37,17 @@ class LOUDSWithTermId {
 
     constructor()
 
+
     constructor(
         LBS: BitSet,
         labels: MutableList<Char>,
         isLeaf: BitSet,
-        termIds: MutableList<Int>,
+        termIds: List<Short>,
     ){
         this.LBS = LBS
         this.labels = labels
         this.isLeaf = isLeaf
-        this.termIds = termIds
+        this.termIdsDiff = termIds
     }
 
     fun convertListToBitSet(){
@@ -98,7 +96,13 @@ class LOUDSWithTermId {
     fun getTermId(nodeIndex: Int): Int {
         val firstNodeId = isLeaf.rank1(nodeIndex) - 1
         if (firstNodeId < 0) return -1
-        val firstTermId = termIds[firstNodeId]
+
+        //val firstTermId = termIds[firstNodeId]
+        val firstTermId = if (termIdsDiff[firstNodeId].toInt() == 0){
+            firstNodeId
+        }else{
+            firstNodeId + termIdsDiff[firstNodeId]
+        }
         return firstTermId
     }
 
@@ -187,8 +191,8 @@ class LOUDSWithTermId {
                 writeInt(termIds.toByteArray().size)
 
                 writeObject(LBS)
-                writeObject(labels.toByteArrayFromListChar().deflate())
                 writeObject(isLeaf)
+                writeObject(labels.toByteArrayFromListChar().deflate())
                 writeObject(termIds.toByteArray().deflate())
                 flush()
                 close()
@@ -204,24 +208,26 @@ class LOUDSWithTermId {
                 val labelsSize = objectInput.readInt()
                 val termIdSize = objectInput.readInt()
                 LBS = objectInput.readObject() as BitSet
-                labels = (objectInput.readObject() as ByteArray).inflate(labelsSize).toListChar()
                 isLeaf = objectInput.readObject() as BitSet
+                labels = (objectInput.readObject() as ByteArray).inflate(labelsSize).toListChar()
                 termIds = (objectInput.readObject() as ByteArray).inflate(termIdSize).toListInt().toMutableList()
                 close()
             }catch (e: Exception){
                 println(e.stackTraceToString())
             }
         }
-        return LOUDSWithTermId(LBS, labels, isLeaf, termIds)
+        return LOUDSWithTermId()
     }
 
-    fun writeExternalSnappy(out: ObjectOutput){
+    fun writeExternalNotCompress(out: ObjectOutput){
+        val size = termIds.compressListInt().toByteArrayFromListShort().size
         try {
             out.apply {
+                writeInt(size)
                 writeObject(LBS)
-                writeObject(labels.toByteArrayFromListChar().deflateSnappy())
                 writeObject(isLeaf)
-                writeObject(termIds.toByteArray().deflateSnappy())
+                writeObject(labels.joinToString(""))
+                writeObject(termIds.compressListInt().toByteArrayFromListShort().deflate())
                 flush()
                 close()
             }
@@ -230,19 +236,20 @@ class LOUDSWithTermId {
         }
     }
 
-    fun readExternalSnappy(objectInput: ObjectInput): LOUDSWithTermId {
+    fun readExternalNotCompress(objectInput: ObjectInput): LOUDSWithTermId {
         objectInput.apply {
             try {
+                val size = readInt()
                 LBS = objectInput.readObject() as BitSet
-                labels = (objectInput.readObject() as ByteArray).inflateSnappy().toListChar()
                 isLeaf = objectInput.readObject() as BitSet
-                termIds = (objectInput.readObject() as ByteArray).inflateSnappy().toListInt().toMutableList()
+                labels = (objectInput.readObject() as String).toCharArray().toMutableList()
+                termIdsDiff = (objectInput.readObject() as ByteArray).inflate(size).byteArrayToShortList()
                 close()
             }catch (e: Exception){
                 println(e.stackTraceToString())
             }
         }
-        return LOUDSWithTermId(LBS, labels, isLeaf, termIds)
+        return LOUDSWithTermId(LBS, labels, isLeaf, termIdsDiff)
     }
 
 }

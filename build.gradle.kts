@@ -11,7 +11,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.xerial.snappy:snappy-java:1.1.10.5")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
 

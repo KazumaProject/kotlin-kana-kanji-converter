@@ -35,4 +35,33 @@ class ConnectionIdBuilder {
             return emptyList()
         }
     }
+
+    fun buildNotCompress(
+        out: ObjectOutput,
+        value: List<Short>,
+    ){
+        try {
+            out.apply {
+                writeObject(value.toByteArrayFromListShort())
+                flush()
+                close()
+            }
+        }catch (e: Exception){
+            println(e.message)
+        }
+    }
+
+    fun readNotCompress(objectInput: ObjectInput): List<Short>{
+        try {
+            objectInput.apply {
+                val a = (readObject() as ByteArray).byteArrayToShortList()
+                close()
+                return a
+            }
+        }catch (e: Exception){
+            println(e.message)
+            return emptyList()
+        }
+    }
+
 }

@@ -1,14 +1,14 @@
 package com.kazumaproject.Louds
 
-import com.kazumaproject.*
 import com.kazumaproject.bitset.rank0
 import com.kazumaproject.bitset.rank1
 import com.kazumaproject.bitset.select0
 import com.kazumaproject.bitset.select1
 import com.kazumaproject.connection_id.deflate
-import com.kazumaproject.connection_id.deflateSnappy
 import com.kazumaproject.connection_id.inflate
-import com.kazumaproject.connection_id.inflateSnappy
+import com.kazumaproject.toBitSet
+import com.kazumaproject.toByteArrayFromListChar
+import com.kazumaproject.toListChar
 import java.io.IOException
 import java.io.ObjectInput
 import java.io.ObjectOutput
@@ -174,8 +174,8 @@ class LOUDS {
                 writeInt(labels.toByteArrayFromListChar().size)
 
                 writeObject(LBS)
-                writeObject(labels.toByteArrayFromListChar().deflate())
                 writeObject(isLeaf)
+                writeObject(labels.toByteArrayFromListChar().deflate())
                 flush()
                 close()
             }
@@ -189,8 +189,8 @@ class LOUDS {
             try {
                 val labelSize = objectInput.readInt()
                 LBS = objectInput.readObject() as BitSet
-                labels = (objectInput.readObject() as ByteArray).inflate(labelSize).toListChar()
                 isLeaf = objectInput.readObject() as BitSet
+                labels = (objectInput.readObject() as ByteArray).inflate(labelSize).toListChar()
                 close()
             }catch (e: Exception){
                 println(e.stackTraceToString())
@@ -199,12 +199,12 @@ class LOUDS {
         return LOUDS(LBS, labels, isLeaf)
     }
 
-    fun writeExternalSnappy(out: ObjectOutput){
+    fun writeExternalNotCompress(out: ObjectOutput){
         try {
             out.apply {
                 writeObject(LBS)
-                writeObject(labels.toByteArrayFromListChar().deflateSnappy())
                 writeObject(isLeaf)
+                writeObject(labels.joinToString(""))
                 flush()
                 close()
             }
@@ -213,12 +213,12 @@ class LOUDS {
         }
     }
 
-    fun readExternalSnappy(objectInput: ObjectInput): LOUDS {
+    fun readExternalNotCompress(objectInput: ObjectInput): LOUDS {
         objectInput.apply {
             try {
                 LBS = objectInput.readObject() as BitSet
-                labels = (objectInput.readObject() as ByteArray).inflateSnappy().toListChar()
                 isLeaf = objectInput.readObject() as BitSet
+                labels = (objectInput.readObject() as String).toCharArray().toMutableList()
                 close()
             }catch (e: Exception){
                 println(e.stackTraceToString())

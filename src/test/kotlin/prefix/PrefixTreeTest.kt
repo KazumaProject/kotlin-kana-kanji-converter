@@ -4,13 +4,16 @@ package prefix
 import com.kazumaproject.Louds.Converter
 import com.kazumaproject.Louds.LOUDS
 import com.kazumaproject.Louds.with_term_id.ConverterWithTermId
-import com.kazumaproject.dictionary.models.Dictionary
+import com.kazumaproject.Louds.with_term_id.LOUDSWithTermId
 import com.kazumaproject.dictionary.TokenArray
+import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.dictionary.models.TokenEntryConverted
 import com.kazumaproject.hiraToKata
 import com.kazumaproject.prefix.PrefixTree
 import com.kazumaproject.prefix.with_term_id.PrefixTreeWithTermId
 import com.kazumaproject.toBooleanList
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.ObjectInputStream
@@ -275,30 +278,32 @@ class PrefixTreeTest {
         loudsYomi.convertListToBitSet()
         loudsTango.convertListToBitSet()
 
-        val bufferedOutputStream = ObjectOutputStream(FileOutputStream("./src/test/resources/yomi.dat"))
-        val bufferedOutputStream2 = ObjectOutputStream(FileOutputStream("./src/test/resources/tango.dat"))
+        val bufferedOutputStream = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/test/resources/yomi.dat")))
+        val bufferedOutputStream2 = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/test/resources/tango.dat")))
 
-        loudsYomi.writeExternalSnappy(bufferedOutputStream)
-        loudsTango.writeExternalSnappy(bufferedOutputStream2)
+        loudsYomi.writeExternalNotCompress(bufferedOutputStream)
+        loudsTango.writeExternalNotCompress(bufferedOutputStream2)
 
         val tokenArray = TokenArray()
 
-        val objectOutput = ObjectOutputStream(FileOutputStream("./src/test/resources/token.dat"))
+        val objectOutput = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/test/resources/token.dat")))
         tokenArray.buildJunctionArray(tempList,loudsTango,objectOutput,0)
 
-        val objectInput = ObjectInputStream(FileInputStream("./src/test/resources/token.dat"))
+        val objectInput = ObjectInputStream(BufferedInputStream(FileInputStream("./src/test/resources/token.dat")))
         val tokenArrayTemp = TokenArray()
 
         val readTime = measureTime {
-            tokenArrayTemp.readExternalSnappy(objectInput)
+            tokenArrayTemp.readExternal(objectInput)
         }
 
+        val objectInputYomi = ObjectInputStream(BufferedInputStream(FileInputStream("./src/test/resources/yomi.dat")))
+        val yomi = LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
         println("time of reading token.dat: $readTime")
 
         tokenArray.readPOSTable(0)
 
         val word = "あうとれんじ"
-        val nodeId = loudsYomi.getTermId(loudsYomi.getNodeIndex(word))
+        val nodeId = yomi.getTermId(loudsYomi.getNodeIndex(word))
 
         val a = tokenArrayTemp.getListDictionaryByYomiTermId(nodeId).map {
             TokenEntryConverted(

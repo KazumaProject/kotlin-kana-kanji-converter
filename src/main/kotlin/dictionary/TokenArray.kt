@@ -5,9 +5,7 @@ import com.kazumaproject.Louds.LOUDS
 import com.kazumaproject.bitset.rank1
 import com.kazumaproject.bitset.select0
 import com.kazumaproject.connection_id.deflate
-import com.kazumaproject.connection_id.deflateSnappy
 import com.kazumaproject.connection_id.inflate
-import com.kazumaproject.connection_id.inflateSnappy
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.dictionary.models.TokenEntry
 import java.io.*
@@ -45,7 +43,7 @@ class TokenArray {
         dictionaries: MutableList<Dictionary>,
         tangoTrie: LOUDS,
         out: ObjectOutput,
-        mode: Int
+        mode: Int,
     ){
         val posTableWithIndex = readPOSTableWithIndex(mode)
         dictionaries
@@ -78,7 +76,7 @@ class TokenArray {
                 }
             }
         }
-        writeExternalSnappy(out)
+        writeExternal(out)
     }
 
     private fun writeExternal(
@@ -119,19 +117,19 @@ class TokenArray {
                 println(e.stackTraceToString())
             }
         }
+        nodeIdList.writeToTxt("nodeIds.txt")
         return TokenArray()
     }
 
-    private fun writeExternalSnappy(
+    private fun writeExternalNotCompress(
         out: ObjectOutput
     ){
         try {
             out.apply {
-                writeObject(posTableIndexList.toByteArrayFromListShort().deflateSnappy())
-                writeObject(wordCostList.toByteArrayFromListShort().deflateSnappy())
-                writeObject(nodeIdList.toByteArray().deflateSnappy())
+                writeObject(posTableIndexList.toByteArrayFromListShort())
+                writeObject(wordCostList.toByteArrayFromListShort())
+                writeObject(nodeIdList.toByteArray())
                 writeObject(bitListTemp.toBitSet())
-
                 flush()
                 close()
             }
@@ -140,12 +138,12 @@ class TokenArray {
         }
     }
 
-    fun readExternalSnappy(objectInput: ObjectInput): TokenArray {
+    fun readExternalNotCompress(objectInput: ObjectInput): TokenArray {
         objectInput.apply {
             try {
-                posTableIndexList = (readObject() as ByteArray).inflateSnappy().byteArrayToShortList().toMutableList()
-                wordCostList = (readObject() as ByteArray).inflateSnappy().byteArrayToShortList().toMutableList()
-                nodeIdList = (readObject() as ByteArray).inflateSnappy().toListInt().toMutableList()
+                posTableIndexList = (readObject() as ByteArray).byteArrayToShortList().toMutableList()
+                wordCostList = (readObject() as ByteArray).byteArrayToShortList().toMutableList()
+                nodeIdList = (readObject() as ByteArray).toListInt().toMutableList()
                 bitvector = readObject() as BitSet
                 close()
             }catch (e: Exception){

@@ -1,7 +1,10 @@
 package com.kazumaproject
 
+import com.kazumaproject.bitset.rank0
+import java.io.File
 import java.nio.ByteBuffer
 import java.util.*
+import kotlin.time.measureTime
 
 fun List<Boolean>.toBitSet(): BitSet {
     val bitSet = BitSet(this.size)
@@ -88,4 +91,39 @@ fun ByteArray.toBitSet(): BitSet {
 
 private fun isBitSet(b: Byte, bit: Int): Boolean {
     return (b.toInt() and (1 shl bit)) != 0
+}
+
+fun List<Int>.toBitSetExtension(): BitSet {
+    val bitSet = BitSet()
+    this.forEach { bitSet.set(it) }
+    return bitSet
+}
+
+fun BitSet.toIntListExtension(): List<Int> {
+    val intList = mutableListOf<Int>()
+    for (index in 0 until this.size()) {
+        if (this.get(index)) {
+            intList.add(index)
+        }
+    }
+    return intList
+}
+
+fun List<Int>.compressListInt(): List<Short>{
+    val diffList: MutableList<Short> = mutableListOf()
+    this.forEachIndexed { index, i ->
+        if ((index + 1) != i ){
+            diffList.add((i - index).toShort())
+        }else{
+           diffList.add(0)
+        }
+    }
+    println("${diffList.size}")
+    return diffList
+}
+
+fun List<Int>.writeToTxt(fileName: String){
+    File("./src/main/resources/$fileName").bufferedWriter().use { out ->
+        out.write(this.toString())
+    }
 }
