@@ -293,12 +293,16 @@ class PrefixTreeTest {
         val tokenArrayTemp = TokenArray()
 
         val readTime = measureTime {
-            tokenArrayTemp.readExternal(objectInput)
+            tokenArrayTemp.readExternalNotCompress(objectInput)
         }
 
         val objectInputYomi = ObjectInputStream(BufferedInputStream(FileInputStream("./src/test/resources/yomi.dat")))
+        val objectInputTango = ObjectInputStream(BufferedInputStream(FileInputStream("./src/test/resources/yomi.dat")))
         val yomi = LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
+        val tango = LOUDS().readExternalNotCompress(objectInputTango)
         println("time of reading token.dat: $readTime")
+
+        println("yomi: ${yomi.LBS.size()} tango: ${tango.LBS.size()}")
 
         tokenArray.readPOSTable(0)
 

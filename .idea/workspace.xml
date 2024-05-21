@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/stream/ArraysStream.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Extenstions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Extenstions.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/connection_id/ConnectionIdBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/connection_id/ConnectionIdBuilder.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/connection_id/Extensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/connection_id/Extensions.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/dictionary/TokenArray.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dictionary/TokenArray.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/louds/LOUDS.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/louds/LOUDS.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/louds/with_term_id/LOUDSWithTermId.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/louds/with_term_id/LOUDSWithTermId.kt" afterDir="false" />

@@ -49,6 +49,8 @@ private fun buildTriesAndTokenArray(){
     val yomiTree = PrefixTreeWithTermId()
     val tangoTree = PrefixTree()
 
+
+
     val dicUtils = DicUtils()
 
     val mode = 3
@@ -97,17 +99,17 @@ private fun buildTriesAndTokenArray(){
     val objectOutputYomi = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/yomi.dat")))
     val objectOutputTango = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/tango.dat")))
 
-    yomiLOUDSTemp.writeExternal(objectOutputYomi)
+    yomiLOUDSTemp.writeExternalNotCompress(objectOutputYomi)
     tangoLOUDSTemp.writeExternalNotCompress(objectOutputTango)
 
-    val objectInputYomi = ObjectInputStream(BufferedInputStream(FileInputStream("./src/main/resources/yomi.dat")))
-    val objectInputTango = ObjectInputStream(BufferedInputStream(FileInputStream("./src/main/resources/tango.dat")))
+    val objectInputYomi = ObjectInputStream(FileInputStream("./src/main/resources/yomi.dat"))
+    val objectInputTango = ObjectInputStream(FileInputStream("./src/main/resources/tango.dat"))
 
     var yomiLOUDS: LOUDSWithTermId
     var tangoLOUDS: LOUDS
 
     val yomiLOUDSReadTime = measureTime {
-        yomiLOUDS = LOUDSWithTermId().readExternal(objectInputYomi)
+        yomiLOUDS = LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
     }
     val tangoLOUDSReadTime = measureTime {
         tangoLOUDS = LOUDS().readExternalNotCompress(objectInputTango)
@@ -125,7 +127,7 @@ private fun buildTriesAndTokenArray(){
     val tokenArray = TokenArray()
 
     val tokenArrayReadTime = measureTime {
-        tokenArray.readExternal(objectInput)
+        tokenArray.readExternalNotCompress(objectInput)
     }
 
     tokenArray.readPOSTable(1)

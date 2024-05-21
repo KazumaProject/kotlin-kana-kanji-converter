@@ -1,7 +1,10 @@
 package com.kazumaproject.connection_id
 
 import com.kazumaproject.byteArrayToShortList
+import com.kazumaproject.stream.ArraysStream
 import com.kazumaproject.toByteArrayFromListShort
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.ObjectInput
 import java.io.ObjectOutput
 
@@ -12,8 +15,7 @@ class ConnectionIdBuilder {
     ){
         try {
             out.apply {
-                writeObject(value.toByteArrayFromListShort().size)
-                writeObject(value.toByteArrayFromListShort().deflate())
+                writeObject(value.toShortArray())
                 flush()
                 close()
             }
@@ -25,10 +27,9 @@ class ConnectionIdBuilder {
     fun read(objectInput: ObjectInput): List<Short>{
         try {
             objectInput.apply {
-                val byteSize = readObject() as Int
-                val a = (readObject() as ByteArray).inflate(byteSize).byteArrayToShortList()
+                val a = (readObject() as ShortArray)
                 close()
-                return a
+                return a.toList()
             }
         }catch (e: Exception){
             println(e.message)
@@ -36,32 +37,20 @@ class ConnectionIdBuilder {
         }
     }
 
-    fun buildNotCompress(
-        out: ObjectOutput,
+    fun buildWithShortArray(
+        fileOutputStream: FileOutputStream,
         value: List<Short>,
     ){
-        try {
-            out.apply {
-                writeObject(value.toByteArrayFromListShort())
-                flush()
-                close()
-            }
-        }catch (e: Exception){
-            println(e.message)
-        }
+        ArraysStream.writeShortArray(
+            fileOutputStream,
+            value.toShortArray()
+        )
     }
 
-    fun readNotCompress(objectInput: ObjectInput): List<Short>{
-        try {
-            objectInput.apply {
-                val a = (readObject() as ByteArray).byteArrayToShortList()
-                close()
-                return a
-            }
-        }catch (e: Exception){
-            println(e.message)
-            return emptyList()
-        }
+    fun readWithShortArray(
+        fileInputStream: FileInputStream
+    ): ShortArray{
+        return ArraysStream.readShortArray(fileInputStream)
     }
 
 }

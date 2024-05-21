@@ -16,7 +16,7 @@ class LOUDSWithTermId {
     var LBS: BitSet = BitSet()
     var labels: MutableList<Char> = arrayListOf()
     var termIds: MutableList<Int> = arrayListOf()
-    var termIdsDiff: List<Short> = arrayListOf()
+    var termIdsList: List<Int> = arrayListOf()
     var isLeaf: BitSet = BitSet()
     val isLeafTemp: MutableList<Boolean> = arrayListOf()
 
@@ -42,12 +42,12 @@ class LOUDSWithTermId {
         LBS: BitSet,
         labels: MutableList<Char>,
         isLeaf: BitSet,
-        termIds: List<Short>,
+        termIds: List<Int>,
     ){
         this.LBS = LBS
         this.labels = labels
         this.isLeaf = isLeaf
-        this.termIdsDiff = termIds
+        this.termIdsList = termIds
     }
 
     fun convertListToBitSet(){
@@ -98,10 +98,10 @@ class LOUDSWithTermId {
         if (firstNodeId < 0) return -1
 
         //val firstTermId = termIds[firstNodeId]
-        val firstTermId = if (termIdsDiff[firstNodeId].toInt() == 0){
+        val firstTermId = if (termIdsList[firstNodeId] == 0){
             firstNodeId
         }else{
-            firstNodeId + termIdsDiff[firstNodeId]
+            firstNodeId + termIdsList[firstNodeId]
         }
         return firstTermId
     }
@@ -220,14 +220,12 @@ class LOUDSWithTermId {
     }
 
     fun writeExternalNotCompress(out: ObjectOutput){
-        val size = termIds.compressListInt().toByteArrayFromListShort().size
         try {
             out.apply {
-                writeInt(size)
                 writeObject(LBS)
                 writeObject(isLeaf)
-                writeObject(labels.joinToString(""))
-                writeObject(termIds.compressListInt().toByteArrayFromListShort().deflate())
+                writeObject(labels.toCharArray())
+                writeObject(termIds.toIntArray())
                 flush()
                 close()
             }
@@ -239,17 +237,16 @@ class LOUDSWithTermId {
     fun readExternalNotCompress(objectInput: ObjectInput): LOUDSWithTermId {
         objectInput.apply {
             try {
-                val size = readInt()
                 LBS = objectInput.readObject() as BitSet
                 isLeaf = objectInput.readObject() as BitSet
-                labels = (objectInput.readObject() as String).toCharArray().toMutableList()
-                termIdsDiff = (objectInput.readObject() as ByteArray).inflate(size).byteArrayToShortList()
+                labels = (objectInput.readObject() as CharArray).toMutableList()
+                termIdsList = (objectInput.readObject() as IntArray).toList()
                 close()
             }catch (e: Exception){
                 println(e.stackTraceToString())
             }
         }
-        return LOUDSWithTermId(LBS, labels, isLeaf, termIdsDiff)
+        return LOUDSWithTermId(LBS, labels, isLeaf, termIdsList)
     }
 
 }

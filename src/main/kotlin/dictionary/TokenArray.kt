@@ -76,7 +76,7 @@ class TokenArray {
                 }
             }
         }
-        writeExternal(out)
+        writeExternalNotCompress(out)
     }
 
     private fun writeExternal(
@@ -126,9 +126,9 @@ class TokenArray {
     ){
         try {
             out.apply {
-                writeObject(posTableIndexList.toByteArrayFromListShort())
-                writeObject(wordCostList.toByteArrayFromListShort())
-                writeObject(nodeIdList.toByteArray())
+                writeObject(posTableIndexList.toShortArray())
+                writeObject(wordCostList.toShortArray())
+                writeObject(nodeIdList.toIntArray())
                 writeObject(bitListTemp.toBitSet())
                 flush()
                 close()
@@ -141,9 +141,9 @@ class TokenArray {
     fun readExternalNotCompress(objectInput: ObjectInput): TokenArray {
         objectInput.apply {
             try {
-                posTableIndexList = (readObject() as ByteArray).byteArrayToShortList().toMutableList()
-                wordCostList = (readObject() as ByteArray).byteArrayToShortList().toMutableList()
-                nodeIdList = (readObject() as ByteArray).toListInt().toMutableList()
+                posTableIndexList = (readObject() as ShortArray).toMutableList()
+                wordCostList = (readObject() as ShortArray).toMutableList()
+                nodeIdList = (readObject() as IntArray).toMutableList()
                 bitvector = readObject() as BitSet
                 close()
             }catch (e: Exception){
@@ -195,9 +195,6 @@ class TokenArray {
         println("left ids: ${leftIds2.subList(0,20)} ${leftIds2.size}")
         println("right ids: ${rightIds2.subList(0,20)} ${rightIds2.size}")
 
-        val sizeL = leftIds2.toByteArrayFromListShort().size
-        val sizeR = rightIds2.toByteArrayFromListShort().size
-
         val objectOutput = if (mode == 0){
             ObjectOutputStream(FileOutputStream("./src/test/resources/pos_table.dat"))
         }else {
@@ -205,10 +202,8 @@ class TokenArray {
         }
         try {
             objectOutput.apply {
-                writeInt(sizeL)
-                writeInt(sizeR)
-                writeObject(leftIds2.toByteArrayFromListShort().deflate())
-                writeObject(rightIds2.toByteArrayFromListShort().deflate())
+                writeObject(leftIds2.toShortArray())
+                writeObject(rightIds2.toShortArray())
                 flush()
                 close()
             }
@@ -270,16 +265,13 @@ class TokenArray {
      **/
     fun readPOSTable(mode: Int) {
         val objectInput = if (mode == 0){
-            ObjectInputStream(FileInputStream("./src/test/resources/pos_table.dat"))
+            ObjectInputStream(BufferedInputStream(FileInputStream("./src/test/resources/pos_table.dat")))
         }else{
-            ObjectInputStream(FileInputStream("./src/main/resources/pos_table.dat"))
+            ObjectInputStream(BufferedInputStream(FileInputStream("./src/main/resources/pos_table.dat")))
         }
         objectInput.apply {
-            val sizeL = readInt()
-            val sizeR = readInt()
-
-            leftIds = (readObject() as ByteArray).inflate(sizeL).byteArrayToShortList()
-            rightIds = (readObject() as ByteArray).inflate(sizeR).byteArrayToShortList()
+            leftIds = (readObject() as ShortArray).toList()
+            rightIds = (readObject() as ShortArray).toList()
         }
     }
     /**
