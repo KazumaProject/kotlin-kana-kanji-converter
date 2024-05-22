@@ -16,7 +16,7 @@ class LOUDSWithTermId {
     var LBS: BitSet = BitSet()
     var labels: MutableList<Char> = arrayListOf()
     var termIds: MutableList<Int> = arrayListOf()
-    var termIdsList: List<Int> = arrayListOf()
+    var termIdsDiff: ShortArray = shortArrayOf()
     var isLeaf: BitSet = BitSet()
     val isLeafTemp: MutableList<Boolean> = arrayListOf()
 
@@ -42,12 +42,12 @@ class LOUDSWithTermId {
         LBS: BitSet,
         labels: MutableList<Char>,
         isLeaf: BitSet,
-        termIds: List<Int>,
+        termIds: ShortArray,
     ){
         this.LBS = LBS
         this.labels = labels
         this.isLeaf = isLeaf
-        this.termIdsList = termIds
+        this.termIdsDiff = termIds
     }
 
     fun convertListToBitSet(){
@@ -98,10 +98,10 @@ class LOUDSWithTermId {
         if (firstNodeId < 0) return -1
 
         //val firstTermId = termIds[firstNodeId]
-        val firstTermId = if (termIdsList[firstNodeId] == 0){
-            firstNodeId
+        val firstTermId = if (termIdsDiff[firstNodeId].toInt() == 0){
+            firstNodeId + 1
         }else{
-            firstNodeId + termIdsList[firstNodeId]
+            firstNodeId + termIdsDiff[firstNodeId]
         }
         return firstTermId
     }
@@ -225,7 +225,7 @@ class LOUDSWithTermId {
                 writeObject(LBS)
                 writeObject(isLeaf)
                 writeObject(labels.toCharArray())
-                writeObject(termIds.toIntArray())
+                writeObject(termIds.compressListInt().toShortArray())
                 flush()
                 close()
             }
@@ -240,13 +240,13 @@ class LOUDSWithTermId {
                 LBS = objectInput.readObject() as BitSet
                 isLeaf = objectInput.readObject() as BitSet
                 labels = (objectInput.readObject() as CharArray).toMutableList()
-                termIdsList = (objectInput.readObject() as IntArray).toList()
+                termIdsDiff = (objectInput.readObject() as ShortArray)
                 close()
             }catch (e: Exception){
                 println(e.stackTraceToString())
             }
         }
-        return LOUDSWithTermId(LBS, labels, isLeaf, termIdsList)
+        return LOUDSWithTermId(LBS, labels, isLeaf, termIdsDiff)
     }
 
 }
