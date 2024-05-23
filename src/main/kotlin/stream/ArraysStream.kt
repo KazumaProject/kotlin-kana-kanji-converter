@@ -6,79 +6,62 @@ import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.nio.ByteBuffer
+import java.nio.CharBuffer
+import java.nio.charset.StandardCharsets
 
 object ArraysStream {
-    fun writeShortArray(
-        fileOutputStream: FileOutputStream,
-        shortArray: ShortArray
-    ) {
-        DataOutputStream(BufferedOutputStream(fileOutputStream)).use { bos ->
-            println("write ${shortArray.size}")
-            bos.writeInt(shortArray.size)
-            shortArray.forEach {
-                bos.writeShort(it.toInt())
-            }
-        }
+    fun writeShortArrayAsBytes(shortArray: ShortArray, fileName: String) {
+        val byteBuffer = ByteBuffer.allocate(shortArray.size * 2)
+        shortArray.forEach { byteBuffer.putShort(it) }
+        FileOutputStream(fileName).use { it.write(byteBuffer.array()) }
     }
 
-    fun writeCharArray(
-        fileOutputStream: FileOutputStream,
-        charArray: CharArray
-    ) {
-        BufferedOutputStream(fileOutputStream).use { bos ->
-            bos.write(charArray.size)
-            charArray.forEach { bos.write(it.code) }
-        }
+
+    fun readShortArrayFromBytes(fileName: String): ShortArray {
+        val file = FileInputStream(fileName)
+        val byteArray = file.readBytes()
+        val byteBuffer = ByteBuffer.wrap(byteArray)
+        val shortArray = ShortArray(byteArray.size / 2)
+        byteBuffer.asShortBuffer().get(shortArray)
+        return shortArray
     }
 
-    fun writeIntArray(
-        fileOutputStream: FileOutputStream,
-        intArray: IntArray
-    ) {
-        BufferedOutputStream(fileOutputStream).use { bos ->
-            bos.write(intArray.size)
-            intArray.forEach { bos.write(it) }
-        }
+    fun writeIntArrayAsBytes(intArray: IntArray, fileName: String) {
+        val byteBuffer = ByteBuffer.allocate(intArray.size * 4)
+        intArray.forEach { byteBuffer.putInt(it) }
+        FileOutputStream(fileName).use { it.write(byteBuffer.array()) }
     }
 
-    fun writeBooleanArray(
-        fileOutputStream: FileOutputStream,
-        boolArray: BooleanArray
-    ) {
-        BufferedOutputStream(fileOutputStream).use { bos ->
-            bos.write(boolArray.size)
-            boolArray.forEach { bos.write(if (it) 1 else 0) }
-        }
+    fun readIntArrayFromBytes(fileName: String): IntArray {
+        val byteArray = FileInputStream(fileName).use { it.readBytes() }
+        val byteBuffer = ByteBuffer.wrap(byteArray)
+        val intArray = IntArray(byteArray.size / 4)
+        byteBuffer.asIntBuffer().get(intArray)
+        return intArray
     }
 
-    fun readShortArray(
-        fileInputStream: FileInputStream
-    ): ShortArray {
-        DataInputStream(BufferedInputStream(fileInputStream)).use { bis ->
-            val shortArraySize = bis.readInt()
-            println("read: $shortArraySize")
-            return ShortArray(shortArraySize) { bis.readShort() }
-        }
+    fun writeCharArrayAsBytes(charArray: CharArray, fileName: String) {
+        val byteArray = StandardCharsets.UTF_8.encode(CharBuffer.wrap(charArray)).array()
+        FileOutputStream(fileName).use { it.write(byteArray) }
     }
 
-    fun readCharArray(fileInputStream: FileInputStream): CharArray {
-        BufferedInputStream(fileInputStream).use { bis ->
-            val charArraySize = bis.read()
-            return CharArray(charArraySize) { bis.read().toChar() }
-        }
+    fun readCharArrayFromBytes(fileName: String): CharArray {
+        val byteArray = FileInputStream(fileName).use { it.readBytes() }
+        val charBuffer = StandardCharsets.UTF_8.decode(ByteBuffer.wrap(byteArray))
+        return charBuffer.array()
     }
 
-    fun readIntArray(fileInputStream: FileInputStream): IntArray {
-        BufferedInputStream(fileInputStream).use { bis ->
-            val intArraySize = bis.read()
-            return IntArray(intArraySize) { bis.read() }
-        }
+    fun writeBooleanArrayAsBytes(booleanArray: BooleanArray, fileName: String) {
+        val byteBuffer = ByteBuffer.allocate(booleanArray.size)
+        booleanArray.forEach { byteBuffer.put(if (it) 1.toByte() else 0.toByte()) }
+        FileOutputStream(fileName).use { it.write(byteBuffer.array()) }
     }
 
-    fun readBooleanArray(fileInputStream: FileInputStream): BooleanArray {
-        BufferedInputStream(fileInputStream).use { bis ->
-            val boolArraySize = bis.read()
-            return BooleanArray(boolArraySize) { bis.read() != 0 }
-        }
+    fun readBooleanArrayFromBytes(fileName: String): BooleanArray {
+        val byteArray = FileInputStream(fileName).use { it.readBytes() }
+        val booleanArray = BooleanArray(byteArray.size) { byteArray[it].toInt() != 0 }
+        return booleanArray
     }
+
 }

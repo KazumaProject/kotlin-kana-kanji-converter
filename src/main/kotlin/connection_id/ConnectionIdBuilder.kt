@@ -3,10 +3,9 @@ package com.kazumaproject.connection_id
 import com.kazumaproject.byteArrayToShortList
 import com.kazumaproject.stream.ArraysStream
 import com.kazumaproject.toByteArrayFromListShort
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.ObjectInput
-import java.io.ObjectOutput
+import java.io.*
+import java.nio.ByteBuffer
+import java.nio.channels.FileChannel
 
 class ConnectionIdBuilder {
     fun build(
@@ -37,20 +36,20 @@ class ConnectionIdBuilder {
         }
     }
 
-    fun buildWithShortArray(
-        fileOutputStream: FileOutputStream,
-        value: List<Short>,
-    ){
-        ArraysStream.writeShortArray(
-            fileOutputStream,
-            value.toShortArray()
-        )
+    fun writeShortArrayAsBytes(shortArray: ShortArray, fileName: String) {
+        val byteBuffer = ByteBuffer.allocate(shortArray.size * 2)
+        shortArray.forEach { byteBuffer.putShort(it) }
+        FileOutputStream(fileName).use { it.write(byteBuffer.array()) }
     }
 
-    fun readWithShortArray(
-        fileInputStream: FileInputStream
-    ): ShortArray{
-        return ArraysStream.readShortArray(fileInputStream)
+
+    fun readShortArrayFromBytes(fileName: String): ShortArray {
+        val file = FileInputStream(fileName)
+        val byteArray = file.readBytes()
+        val byteBuffer = ByteBuffer.wrap(byteArray)
+        val shortArray = ShortArray(byteArray.size / 2)
+        byteBuffer.asShortBuffer().get(shortArray)
+        return shortArray
     }
 
 }

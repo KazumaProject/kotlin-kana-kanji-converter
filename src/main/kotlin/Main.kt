@@ -16,11 +16,11 @@ import java.io.*
 import kotlin.time.measureTime
 
 fun main() {
-    buildTriesAndTokenArray()
+    //buildTriesAndTokenArray()
     //buildConnectionIdSparseArray()
     //buildPOSTable()
     //testBestPath()
-
+    buildConnectionIds()
 }
 
 private fun buildPOSTable(){
@@ -199,6 +199,27 @@ private fun loadTermIdsTxt(){
     val time = measureTime {
         val a = File("./src/main/resources/termIds.txt").bufferedReader().readLines().map { it.toInt() }
         println("${a.size}")
+    }
+    println("$time")
+}
+
+private fun buildConnectionIds(){
+
+    val lines = object {}::class.java.getResourceAsStream("/connection_single_column.txt")
+        ?.bufferedReader()
+        ?.readLines()
+
+    val connectionIdBuilder = ConnectionIdBuilder()
+    lines?.let { l ->
+        connectionIdBuilder.writeShortArrayAsBytes(
+            l.map { it.toShort() }.toShortArray(),
+            "./src/main/resources/connectionId.dat",
+        )
+    }
+
+    val time = measureTime {
+        val read = connectionIdBuilder.readShortArrayFromBytes("./src/main/resources/connectionId.dat")
+        println("${read.size}")
     }
     println("$time")
 }
