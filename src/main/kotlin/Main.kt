@@ -16,11 +16,11 @@ import java.io.*
 import kotlin.time.measureTime
 
 fun main() {
-    //buildTriesAndTokenArray()
+    buildTriesAndTokenArray()
     //buildConnectionIdSparseArray()
     //buildPOSTable()
     //testBestPath()
-    buildConnectionIds()
+    //buildConnectionIds()
 }
 
 private fun buildPOSTable(){
@@ -48,8 +48,6 @@ private fun buildTriesAndTokenArray(){
 
     val yomiTree = PrefixTreeWithTermId()
     val tangoTree = PrefixTree()
-
-
 
     val dicUtils = DicUtils()
 

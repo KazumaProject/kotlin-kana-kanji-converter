@@ -12,6 +12,7 @@ import com.kazumaproject.toListChar
 import java.io.IOException
 import java.io.ObjectInput
 import java.io.ObjectOutput
+import java.io.OutputStream
 import java.util.*
 
 class LOUDS {

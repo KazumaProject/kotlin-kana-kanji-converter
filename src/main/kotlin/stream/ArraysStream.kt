@@ -1,16 +1,61 @@
 package com.kazumaproject.stream
 
-import java.io.BufferedInputStream
-import java.io.BufferedOutputStream
-import java.io.DataInputStream
-import java.io.DataOutputStream
+import com.kazumaproject.Louds.LOUDS
+import com.kazumaproject.boolArrayToBitSet
+import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
 import java.nio.ByteBuffer
 import java.nio.CharBuffer
 import java.nio.charset.StandardCharsets
 
 object ArraysStream {
+
+    fun writeLOUDS(
+        LBS: BooleanArray,
+        isLeaf: BooleanArray,
+        labels: CharArray,
+        fileName: String
+    ){
+        val booleanArray1Size = LBS.size
+        val booleanArray2Size = isLeaf.size
+        val charArraySize = labels.size
+
+        val totalSize = 4 + booleanArray1Size + 4 + booleanArray2Size + 4 + charArraySize * 2
+        val byteBuffer = ByteBuffer.allocate(totalSize)
+
+        byteBuffer.putInt(booleanArray1Size)
+        byteBuffer.putInt(booleanArray2Size)
+        byteBuffer.putInt(charArraySize)
+
+        LBS.forEach { byteBuffer.put(if (it) 1.toByte() else 0.toByte()) }
+        isLeaf.forEach { byteBuffer.put(if (it) 1.toByte() else 0.toByte()) }
+        labels.forEach { byteBuffer.putChar(it) }
+        FileOutputStream(fileName).use { it.write(byteBuffer.array()) }
+    }
+
+    fun readLOUDS(
+        fileName: String,
+    ): LOUDS{
+        val byteArray = FileInputStream(fileName).use { it.readBytes() }
+        val byteBuffer = ByteBuffer.wrap(byteArray)
+
+        val booleanArray1Size = byteBuffer.int
+        val booleanArray2Size = byteBuffer.int
+        val charArraySize = byteBuffer.int
+
+        val LBS = BooleanArray(booleanArray1Size) { byteBuffer.get().toInt() != 0 }
+        val isLeaf = BooleanArray(booleanArray2Size) { byteBuffer.get().toInt() != 0 }
+        val labels = CharArray(charArraySize) { byteBuffer.char }
+        return LOUDS(
+            LBS.boolArrayToBitSet(),
+            labels.toMutableList(),
+            isLeaf.boolArrayToBitSet()
+        )
+    }
+
     fun writeShortArrayAsBytes(shortArray: ShortArray, fileName: String) {
         val byteBuffer = ByteBuffer.allocate(shortArray.size * 2)
         shortArray.forEach { byteBuffer.putShort(it) }
@@ -41,13 +86,13 @@ object ArraysStream {
         return intArray
     }
 
-    fun writeCharArrayAsBytes(charArray: CharArray, fileName: String) {
+    fun writeCharArrayAsBytes(charArray: CharArray, outputStream: OutputStream) {
         val byteArray = StandardCharsets.UTF_8.encode(CharBuffer.wrap(charArray)).array()
-        FileOutputStream(fileName).use { it.write(byteArray) }
+        outputStream.use { it.write(byteArray) }
     }
 
-    fun readCharArrayFromBytes(fileName: String): CharArray {
-        val byteArray = FileInputStream(fileName).use { it.readBytes() }
+    fun readCharArrayFromBytes(inputStream: InputStream): CharArray {
+        val byteArray = inputStream.use { it.readBytes() }
         val charBuffer = StandardCharsets.UTF_8.decode(ByteBuffer.wrap(byteArray))
         return charBuffer.array()
     }

@@ -2,7 +2,10 @@ package com.kazumaproject
 
 import com.kazumaproject.bitset.rank0
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.util.*
 import kotlin.time.measureTime
 
@@ -126,4 +129,89 @@ fun List<Int>.writeToTxt(fileName: String){
     File("./src/main/resources/$fileName").bufferedWriter().use { out ->
         out.write(this.toString())
     }
+}
+
+fun BitSet.toBooleanArray(): BooleanArray {
+    return BooleanArray(this.length()) { this[it] }
+}
+
+fun BooleanArray.boolArrayToBitSet(): BitSet {
+    val bitSet = BitSet(this.size)
+    this.forEachIndexed { index, value ->
+        if (value) {
+            bitSet.set(index)
+        }
+    }
+    return bitSet
+}
+
+fun ByteArray.toShortArray(): ShortArray {
+    val shortBuffer = ByteBuffer.wrap(this).order(ByteOrder.BIG_ENDIAN).asShortBuffer()
+    val shortArray = ShortArray(shortBuffer.remaining())
+    shortBuffer.get(shortArray)
+    return shortArray
+}
+
+fun ShortArray.toByteArray(): ByteArray {
+    val byteBuffer = ByteBuffer.allocate(this.size * 2).order(ByteOrder.BIG_ENDIAN)
+    for (short in this) {
+        byteBuffer.putShort(short)
+    }
+    return byteBuffer.array()
+}
+
+fun IntArray.toByteArray(): ByteArray {
+    val byteBuffer = ByteBuffer.allocate(this.size * 4).order(ByteOrder.BIG_ENDIAN)
+    for (int in this) {
+        byteBuffer.putInt(int)
+    }
+    return byteBuffer.array()
+}
+
+fun CharArray.toByteArray(): ByteArray {
+    val byteBuffer = ByteBuffer.allocate(this.size * 2).order(ByteOrder.BIG_ENDIAN)
+    for (char in this) {
+        byteBuffer.putChar(char)
+    }
+    return byteBuffer.array()
+}
+
+fun BooleanArray.toByteArray(): ByteArray {
+    val byteArray = ByteArray(this.size)
+    for (i in this.indices) {
+        byteArray[i] = if (this[i]) 1.toByte() else 0.toByte()
+    }
+    return byteArray
+}
+
+fun writeIntArrayAsBytes(intArray: IntArray, fileName: String) {
+    val byteBuffer = ByteBuffer.allocate(intArray.size * 4)
+    intArray.forEach { byteBuffer.putInt(it) }
+    FileOutputStream(fileName).use { it.write(byteBuffer.array()) }
+}
+
+
+fun readIntArrayFromBytes(fileName: String): IntArray {
+    val file = FileInputStream(fileName)
+    val byteArray = file.readBytes()
+    val byteBuffer = ByteBuffer.wrap(byteArray)
+    val intArray = IntArray(byteArray.size / 4)
+    byteBuffer.asIntBuffer().get(intArray)
+    return intArray
+}
+
+fun writeCharArrayAsBytes(charArray: CharArray, fileName: String) {
+    val byteBuffer = ByteBuffer.allocate(charArray.size * 2)
+    charArray.forEach { byteBuffer.putChar(it) }
+    FileOutputStream(fileName).use { it.write(byteBuffer.array()) }
+}
+
+
+fun readCharArrayFromBytes(fileName: String): CharArray {
+    val file = FileInputStream(fileName)
+    val byteArray = file.readBytes()
+    val byteBuffer = ByteBuffer.wrap(byteArray)
+    val charArray = CharArray(byteArray.size / 2)
+    byteBuffer.asCharBuffer().get(charArray)
+    return charArray
 }

@@ -1,6 +1,7 @@
 package prefix
 
 
+import com.kazumaproject.Constants.DIC_LIST
 import com.kazumaproject.Louds.Converter
 import com.kazumaproject.Louds.LOUDS
 import com.kazumaproject.Louds.with_term_id.ConverterWithTermId
@@ -228,6 +229,8 @@ class PrefixTreeTest {
 
         val tempList: MutableList<Dictionary> = mutableListOf()
 
+        tempList.addAll(DIC_LIST)
+
         val mode = 1
 
         val list = when(mode){
@@ -297,7 +300,7 @@ class PrefixTreeTest {
         }
 
         val objectInputYomi = ObjectInputStream(BufferedInputStream(FileInputStream("./src/test/resources/yomi.dat")))
-        val objectInputTango = ObjectInputStream(BufferedInputStream(FileInputStream("./src/test/resources/yomi.dat")))
+        val objectInputTango = ObjectInputStream(BufferedInputStream(FileInputStream("./src/test/resources/tango.dat")))
         val yomi = LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
         val tango = LOUDS().readExternalNotCompress(objectInputTango)
         println("time of reading token.dat: $readTime")
@@ -306,7 +309,7 @@ class PrefixTreeTest {
 
         tokenArray.readPOSTable(0)
 
-        val word = "あうとれんじ"
+        val word = "？"
         val nodeId = yomi.getTermId(loudsYomi.getNodeIndex(word))
 
         val a = tokenArrayTemp.getListDictionaryByYomiTermId(nodeId).map {
@@ -314,7 +317,7 @@ class PrefixTreeTest {
                 leftId = tokenArray.leftIds[it.posTableIndex.toInt()],
                 rightId = tokenArray.rightIds[it.posTableIndex.toInt()],
                 wordCost = it.wordCost,
-                tango = if (it.nodeId == -1) word.hiraToKata() else loudsTango.getLetter(it.nodeId),
+                tango = if (it.nodeId < 0) word.hiraToKata() else loudsTango.getLetter(it.nodeId),
                 yomiLength = word.length.toShort()
             )
         }
