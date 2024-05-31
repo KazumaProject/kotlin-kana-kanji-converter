@@ -5,14 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/fid/FullyIndexedDictionary.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/kotlin/fid/FullyIndexedDictionaryTest.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Constants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Constants.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Extenstions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Extenstions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/connection_id/ConnectionIdBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/connection_id/ConnectionIdBuilder.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/louds/LOUDS.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/louds/LOUDS.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/stream/ArraysStream.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/stream/ArraysStream.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/prefix/PrefixTreeTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/prefix/PrefixTreeTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,11 +45,11 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JUnit4 Test Class" />
         <option value="Kotlin File" />
         <option value="Kotlin Data Class" />
-        <option value="Kotlin Class" />
         <option value="Kotlin Object" />
+        <option value="Kotlin Class" />
+        <option value="JUnit4 Test Class" />
       </list>
     </option>
   </component>
@@ -83,6 +81,9 @@
     "Gradle.ConnectionIdTest.Test to build octree for connection id range 0 - 511.executor": "Run",
     "Gradle.ConnectionIdTest.Test to build octree with connection_single_column_txt.executor": "Run",
     "Gradle.DictionaryBuildTest.build dictionary files.executor": "Run",
+    "Gradle.FullyIndexedDictionaryTest.createAuxData.executor": "Run",
+    "Gradle.FullyIndexedDictionaryTest.test fully indexed dictionary (1).executor": "Run",
+    "Gradle.FullyIndexedDictionaryTest.test fully indexed dictionary.executor": "Run",
     "Gradle.GraphBuilderTest.Build Graph Test.executor": "Run",
     "Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine.executor": "Run",
     "Gradle.POSTableTest.Build pos_table.executor": "Run",
@@ -156,6 +157,7 @@
       <recent name="prefix.model" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="fid" />
       <recent name="prefix" />
     </key>
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
@@ -163,7 +165,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Kotlin.MainKt (1)">
-    <configuration name="ConnectionIdTest.Test to build connection ids" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FullyIndexedDictionaryTest.createAuxData" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -176,7 +178,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;connection_id.ConnectionIdTest.Test to build connection ids&quot;" />
+            <option value="&quot;fid.FullyIndexedDictionaryTest.createAuxData&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -187,7 +189,7 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="ConnectionIdTest.Test to build octree with connection_single_column_txt" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FullyIndexedDictionaryTest.test fully indexed dictionary (1)" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -200,7 +202,31 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;connection_id.ConnectionIdTest.Test to build octree with connection_single_column_txt&quot;" />
+            <option value="&quot;fid.FullyIndexedDictionaryTest.test fully indexed dictionary&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="FullyIndexedDictionaryTest.test fully indexed dictionary" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;FullyIndexedDictionary.FullyIndexedDictionaryTest.test fully indexed dictionary&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -235,30 +261,6 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="SingleKanjiTest.Test build single kanji" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;single_kanji.SingleKanjiTest.Test build single kanji&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
     <configuration name="MainKt (1)" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.kazumaproject.MainKt" />
       <module name="kana-kanji-converter.main" />
@@ -267,19 +269,19 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Gradle.ConnectionIdTest.Test to build connection ids" />
-      <item itemvalue="Gradle.ConnectionIdTest.Test to build octree with connection_single_column_txt" />
+      <item itemvalue="Gradle.FullyIndexedDictionaryTest.createAuxData" />
+      <item itemvalue="Gradle.FullyIndexedDictionaryTest.test fully indexed dictionary" />
+      <item itemvalue="Gradle.FullyIndexedDictionaryTest.test fully indexed dictionary (1)" />
       <item itemvalue="Gradle.PrefixTreeTest.Test Token Array" />
-      <item itemvalue="Gradle.SingleKanjiTest.Test build single kanji" />
       <item itemvalue="Kotlin.MainKt (1)" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.MainKt (1)" />
+        <item itemvalue="Gradle.FullyIndexedDictionaryTest.test fully indexed dictionary (1)" />
+        <item itemvalue="Gradle.FullyIndexedDictionaryTest.createAuxData" />
+        <item itemvalue="Gradle.FullyIndexedDictionaryTest.test fully indexed dictionary" />
         <item itemvalue="Gradle.PrefixTreeTest.Test Token Array" />
-        <item itemvalue="Gradle.ConnectionIdTest.Test to build connection ids" />
-        <item itemvalue="Gradle.ConnectionIdTest.Test to build octree with connection_single_column_txt" />
-        <item itemvalue="Gradle.SingleKanjiTest.Test build single kanji" />
       </list>
     </recent_temporary>
   </component>
@@ -353,5 +355,8 @@
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
     <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/kana_kanji_converter$FullyIndexedDictionaryTest_test_fully_indexed_dictionary.ic" NAME="FullyIndexedDictionaryTest.test fully indexed dictionary Coverage Results" MODIFIED="1716759755412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>

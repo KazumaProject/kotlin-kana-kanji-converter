@@ -51,4 +51,21 @@ class ConnectionIdBuilder {
         return shortArray
     }
 
+    fun writeBitSet(shortArray: ShortArray, fileName: String) {
+        val a = shortArray.map { Integer.toBinaryString(it.toInt()) }.map { it == "1" }.toBooleanArray()
+        val byteBuffer = ByteBuffer.allocate(shortArray.size * 2)
+        shortArray.forEach { byteBuffer.putShort(it) }
+        FileOutputStream(fileName).use { it.write(byteBuffer.array()) }
+    }
+
+
+    fun readBitSet(fileName: String): ShortArray {
+        val file = FileInputStream(fileName)
+        val byteArray = file.readBytes()
+        val byteBuffer = ByteBuffer.wrap(byteArray)
+        val shortArray = ShortArray(byteArray.size / 2)
+        byteBuffer.asShortBuffer().get(shortArray)
+        return shortArray
+    }
+
 }

@@ -1,13 +1,11 @@
 package com.kazumaproject
 
-import com.kazumaproject.bitset.rank0
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.*
-import kotlin.time.measureTime
 
 fun List<Boolean>.toBitSet(): BitSet {
     val bitSet = BitSet(this.size)
@@ -214,4 +212,29 @@ fun readCharArrayFromBytes(fileName: String): CharArray {
     val charArray = CharArray(byteArray.size / 2)
     byteBuffer.asCharBuffer().get(charArray)
     return charArray
+}
+
+fun cumulativeSum(input: List<Int>): List<Int> {
+    val result = mutableListOf<Int>()
+    var sum = 0
+    for (value in input) {
+        sum += value
+        result.add(sum)
+    }
+    return result
+}
+
+fun addToPrevious(list: List<Int>, desiredNumber: Int): List<Int> {
+    val result = mutableListOf<Int>()
+    var currentSum = 0
+    for (element in list) {
+        if (element == desiredNumber) {
+            currentSum += element
+        }
+        result.add(currentSum + element)
+        if (element == desiredNumber) {
+            currentSum = element
+        }
+    }
+    return result
 }
