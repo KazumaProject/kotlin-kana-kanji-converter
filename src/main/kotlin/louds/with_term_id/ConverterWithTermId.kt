@@ -13,7 +13,6 @@ class ConverterWithTermId {
         val queue: Queue<PrefixNodeWithTermId> = ArrayDeque()
         queue.add(rootNode)
 
-
         while (!queue.isEmpty()) {
             processQueue(queue, louds)
         }

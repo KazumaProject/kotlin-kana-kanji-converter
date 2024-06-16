@@ -238,7 +238,7 @@ class PrefixTreeTest {
             1 -> listOf("/dictionary_medium.txt")
             2 -> listOf("/dictionary00.txt")
             else -> listOf("/dictionary00.txt","/dictionary01.txt")
-        }
+        }.toMutableList()
 
         list.forEach {
             val line = this::class.java.getResourceAsStream(it)
@@ -290,7 +290,7 @@ class PrefixTreeTest {
         val tokenArray = TokenArray()
 
         val objectOutput = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/test/resources/token.dat")))
-        tokenArray.buildJunctionArray(tempList,loudsTango,objectOutput,0)
+        tokenArray.buildTokenArray(tempList,loudsTango,objectOutput,0)
 
         val objectInput = ObjectInputStream(BufferedInputStream(FileInputStream("./src/test/resources/token.dat")))
         val tokenArrayTemp = TokenArray()
@@ -309,7 +309,7 @@ class PrefixTreeTest {
 
         tokenArray.readPOSTable(0)
 
-        val word = "？"
+        val word = "づ"
         val nodeId = yomi.getTermId(loudsYomi.getNodeIndex(word))
 
         val a = tokenArrayTemp.getListDictionaryByYomiTermId(nodeId).map {
@@ -317,7 +317,11 @@ class PrefixTreeTest {
                 leftId = tokenArray.leftIds[it.posTableIndex.toInt()],
                 rightId = tokenArray.rightIds[it.posTableIndex.toInt()],
                 wordCost = it.wordCost,
-                tango = if (it.nodeId < 0) word.hiraToKata() else loudsTango.getLetter(it.nodeId),
+                tango = when(it.nodeId){
+                    -2 -> word
+                    -1 -> word.hiraToKata()
+                    else -> loudsTango.getLetter(it.nodeId)
+                },
                 yomiLength = word.length.toShort()
             )
         }

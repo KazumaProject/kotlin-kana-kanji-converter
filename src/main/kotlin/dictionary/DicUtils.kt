@@ -65,4 +65,11 @@ class DicUtils {
         return tempList
     }
 
+    fun getSingleKanjiListDictionary(
+        singleKanjiFileName: String
+    ): List<Dictionary>{
+        val singleKanjiBuilder = SingleKanjiBuilder()
+        return singleKanjiBuilder.build(singleKanjiFileName)
+    }
+
 }

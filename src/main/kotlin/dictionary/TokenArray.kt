@@ -39,7 +39,7 @@ class TokenArray {
         return tempList2
     }
 
-    fun buildJunctionArray(
+    fun buildTokenArray(
         dictionaries: MutableList<Dictionary>,
         tangoTrie: LOUDS,
         out: ObjectOutput,
@@ -51,6 +51,7 @@ class TokenArray {
             .sortedBy { it.yomi.length }
             .groupBy { it.yomi }
             .onEachIndexed{ index, entry ->
+
             bitListTemp.add(false)
 
             entry.value.forEach { dictionary ->
@@ -279,7 +280,7 @@ class TokenArray {
      * @param mode 0:test else:main
      *
      **/
-    fun readPOSTableWithIndex(mode: Int): Map<Pair<Short, Short>, Int> {
+    private fun readPOSTableWithIndex(mode: Int): Map<Pair<Short, Short>, Int> {
         val objectInput = if (mode == 0){
             ObjectInputStream(FileInputStream("./src/test/resources/pos_table_for_build.dat"))
         }else{

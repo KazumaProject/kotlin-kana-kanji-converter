@@ -25,10 +25,6 @@ class SingleKanjiBuilder {
         return tempList.toList()
     }
 
-    fun getSingleKanjiInMap(fileName: String): Map<String, List<Char>>{
-        return getSingleKanjiList(fileName)
-    }
-
     private fun getSingleKanjiList(fileName: String): Map<String, List<Char>> {
         val lines = this::class.java.getResourceAsStream(fileName)
             ?.bufferedReader()
