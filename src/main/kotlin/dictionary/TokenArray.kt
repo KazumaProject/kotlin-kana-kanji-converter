@@ -40,20 +40,15 @@ class TokenArray {
     }
 
     fun buildTokenArray(
-        dictionaries: MutableList<Dictionary>,
+        dictionaries: Map<String, List<Dictionary>>,
         tangoTrie: LOUDS,
         out: ObjectOutput,
         mode: Int,
     ){
         val posTableWithIndex = readPOSTableWithIndex(mode)
         dictionaries
-            .sortedBy { it.yomi }
-            .sortedBy { it.yomi.length }
-            .groupBy { it.yomi }
             .onEachIndexed{ index, entry ->
-
             bitListTemp.add(false)
-
             entry.value.forEach { dictionary ->
                 val key = Pair(dictionary.leftId, dictionary.rightId)
                 val posIndex = posTableWithIndex[key]

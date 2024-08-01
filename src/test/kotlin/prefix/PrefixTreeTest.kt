@@ -264,7 +264,11 @@ class PrefixTreeTest {
             }
         }
 
-        tempList.sortedBy { it.yomi }.sortedBy { it.yomi.length }.groupBy { it.yomi }.forEach { entry ->
+        tempList
+            .sortedBy { it.yomi }
+            .sortedBy { it.yomi.length }
+            .groupBy { it.yomi }
+            .forEach { entry ->
             yomiTree.insert(entry.key)
             entry.value.forEach {
                 if (entry.key != it.tango && entry.key.hiraToKata() != it.tango){
@@ -290,7 +294,10 @@ class PrefixTreeTest {
         val tokenArray = TokenArray()
 
         val objectOutput = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/test/resources/token.dat")))
-        tokenArray.buildTokenArray(tempList,loudsTango,objectOutput,0)
+        tokenArray.buildTokenArray(tempList
+            .sortedBy { it.yomi }
+            .sortedBy { it.yomi.length }
+            .groupBy { it.yomi },loudsTango,objectOutput,0)
 
         val objectInput = ObjectInputStream(BufferedInputStream(FileInputStream("./src/test/resources/token.dat")))
         val tokenArrayTemp = TokenArray()
@@ -309,7 +316,7 @@ class PrefixTreeTest {
 
         tokenArray.readPOSTable(0)
 
-        val word = "づ"
+        val word = "いったら"
         val nodeId = yomi.getTermId(loudsYomi.getNodeIndex(word))
 
         val a = tokenArrayTemp.getListDictionaryByYomiTermId(nodeId).map {

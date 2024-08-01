@@ -3,6 +3,9 @@ package com.kazumaproject
 
 import com.kazumaproject.Constants.CUSTOM_LIST
 import com.kazumaproject.Constants.DIC_LIST
+import com.kazumaproject.Constants.DIFFICULT_LIST
+import com.kazumaproject.Constants.FIXED_LIST
+import com.kazumaproject.Constants.NAME_LIST
 import com.kazumaproject.Louds.Converter
 import com.kazumaproject.Louds.LOUDS
 import com.kazumaproject.Louds.with_term_id.ConverterWithTermId
@@ -78,24 +81,27 @@ private fun buildTriesAndTokenArray(){
     val finalList = dictionaryList.apply {
         addAll(DIC_LIST)
         addAll(CUSTOM_LIST)
+        addAll(NAME_LIST)
+        addAll(FIXED_LIST)
+        addAll(DIFFICULT_LIST)
     }
+        .sortedBy { it.yomi }
+        .sortedBy { it.yomi.length }
+        .groupBy { it.yomi }
 
     finalList
-        .sortedBy { it.yomi }
-        .sortedBy{ it.yomi.length }
-        .groupBy { it.yomi }
         .forEach { entry ->
-        yomiTree.insert(entry.key)
-        if (entry.key.length == 1){
-            println("insert to yomi tree: ${entry.key}")
-        }
-        entry.value.forEach {
-            if (it.yomi != it.tango && it.yomi.hiraToKata() != it.tango){
-                tangoTree.insert(it.tango)
-                println("insert to tango tree: ${it.tango}")
+            yomiTree.insert(entry.key)
+            if (entry.key.length == 1) {
+                println("insert to yomi tree: ${entry.key}")
+            }
+            entry.value.forEach {
+                if (it.yomi != it.tango && it.yomi.hiraToKata() != it.tango) {
+                    tangoTree.insert(it.tango)
+                    println("insert to tango tree: ${it.tango}")
+                }
             }
         }
-    }
 
     val yomiLOUDSTemp = ConverterWithTermId().convert(yomiTree.root)
     val tangoLOUDSTemp = Converter().convert(tangoTree.root)
@@ -236,12 +242,12 @@ private fun buildDictionaryForSingleKanji(){
 
     val dicUtils = DicUtils()
 
-    val dictionaryList = dicUtils.getSingleKanjiListDictionary("/single_kanji.tsv").toMutableList()
-
-    dictionaryList
+    val dictionaryList = dicUtils.getSingleKanjiListDictionary("/single_kanji.tsv")
         .sortedBy { it.yomi }
         .sortedBy{ it.yomi.length }
         .groupBy { it.yomi }
+
+    dictionaryList
         .forEach { entry ->
             yomiTree.insert(entry.key)
             println("insert to yomi tree: ${entry.key}")
@@ -280,7 +286,7 @@ private fun buildDictionaryForSingleKanji(){
     val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_singleKanji.dat"))
 
     val timeBuildTokenArray = measureTime {
-        tokenArrayTemp.buildTokenArray(dictionaryList.toMutableList(),tangoLOUDS,objectOutput,1)
+        tokenArrayTemp.buildTokenArray(dictionaryList,tangoLOUDS,objectOutput,1)
     }
 
     val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_singleKanji.dat"))

@@ -518,5 +518,64 @@ object Constants {
             cost = 4000,
             tango = "鬼滅"
         ),
+        Dictionary(
+            yomi = "みくる",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 4000,
+            tango = "未来"
+        ),
+        Dictionary(
+            yomi = "るきや",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 4000,
+            tango = "瑠輝也"
+        ),
     )
+
+    val NAME_LIST = listOf(
+        Dictionary(
+            yomi = "みくる",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 4000,
+            tango = "未来"
+        ),
+        Dictionary(
+            yomi = "るきや",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 4000,
+            tango = "瑠輝也"
+        ),
+    )
+
+    val FIXED_LIST = listOf(
+        Dictionary(
+            yomi = "かたがこる",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 4000,
+            tango = "肩が凝る"
+        ),
+    )
+
+    val DIFFICULT_LIST = listOf(
+        Dictionary(
+            yomi = "にわにはにわ",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 4000,
+            tango = "庭には二羽"
+        ),
+        Dictionary(
+            yomi = "にわにはにわ",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 4001,
+            tango = "庭には２羽"
+        ),
+    )
+
 }
