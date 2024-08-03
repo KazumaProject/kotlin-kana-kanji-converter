@@ -231,12 +231,12 @@ class PrefixTreeTest {
 
         tempList.addAll(DIC_LIST)
 
-        val mode = 1
+        val mode = 2
 
         val list = when(mode){
             0 -> listOf("/dictionary_small.txt")
             1 -> listOf("/dictionary_medium.txt")
-            2 -> listOf("/dictionary00.txt")
+            2 -> listOf("/dictionary01.txt")
             else -> listOf("/dictionary00.txt","/dictionary01.txt")
         }.toMutableList()
 
@@ -264,10 +264,11 @@ class PrefixTreeTest {
             }
         }
 
-        tempList
-            .sortedBy { it.yomi }
-            .sortedBy { it.yomi.length }
+        val finalList = tempList
             .groupBy { it.yomi }
+            .toSortedMap(compareBy({ it.length }, { it }))
+
+        finalList
             .forEach { entry ->
             yomiTree.insert(entry.key)
             entry.value.forEach {
@@ -294,10 +295,10 @@ class PrefixTreeTest {
         val tokenArray = TokenArray()
 
         val objectOutput = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/test/resources/token.dat")))
-        tokenArray.buildTokenArray(tempList
-            .sortedBy { it.yomi }
-            .sortedBy { it.yomi.length }
-            .groupBy { it.yomi },loudsTango,objectOutput,0)
+        tokenArray.buildTokenArray(
+           finalList,
+            loudsTango,objectOutput,0
+        )
 
         val objectInput = ObjectInputStream(BufferedInputStream(FileInputStream("./src/test/resources/token.dat")))
         val tokenArrayTemp = TokenArray()
@@ -316,7 +317,7 @@ class PrefixTreeTest {
 
         tokenArray.readPOSTable(0)
 
-        val word = "いったら"
+        val word = "ろうどうくみあい"
         val nodeId = yomi.getTermId(loudsYomi.getNodeIndex(word))
 
         val a = tokenArrayTemp.getListDictionaryByYomiTermId(nodeId).map {

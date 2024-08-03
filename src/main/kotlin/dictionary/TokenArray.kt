@@ -43,35 +43,39 @@ class TokenArray {
         dictionaries: Map<String, List<Dictionary>>,
         tangoTrie: LOUDS,
         out: ObjectOutput,
-        mode: Int,
-    ){
+        mode: Int
+    ) {
         val posTableWithIndex = readPOSTableWithIndex(mode)
-        dictionaries
-            .onEachIndexed{ index, entry ->
+
+        dictionaries.forEach { (key, dictionaryList) ->
             bitListTemp.add(false)
-            entry.value.forEach { dictionary ->
-                val key = Pair(dictionary.leftId, dictionary.rightId)
-                val posIndex = posTableWithIndex[key]
-                posIndex?.let {
-                    println("build token array:$index ${entry.key} ${dictionary.tango}")
-                    val posTableIndex = it.toShort()
+            dictionaryList.forEach { dictionary ->
+                val posIndex = posTableWithIndex[Pair(dictionary.leftId, dictionary.rightId)]
+                posIndex?.let { pos ->
+                    println("build token array: ${dictionaries.keys.indexOf(key)} $key ${dictionary.tango}")
                     bitListTemp.add(true)
-                    posTableIndexList.add(posTableIndex)
-                    wordCostList.add(dictionary.cost)
-                    when{
-                        dictionary.yomi == dictionary.tango ->{
-                            nodeIdList.add(-2)
-                        }
-                        entry.key.hiraToKata() == dictionary.tango ->{
-                            nodeIdList.add(-1)
-                        }
-                        else ->{
-                            nodeIdList.add(tangoTrie.getNodeIndex(dictionary.tango))
-                        }
+                    posTableIndexList.add(pos.toShort())
+
+                    val wordCost = when(dictionary.tango){
+                        "労働組合" -> 3500
+                        "飼い" -> 1767
+                        "解体" -> 5455
+                        "同組合" -> 4500
+                        "鹿" -> 3450
+                        else -> dictionary.cost
                     }
+                    wordCostList.add(wordCost)
+
+                    val nodeId = when {
+                        dictionary.yomi == dictionary.tango -> -2
+                        key.hiraToKata() == dictionary.tango -> -1
+                        else -> tangoTrie.getNodeIndex(dictionary.tango)
+                    }
+                    nodeIdList.add(nodeId)
                 }
             }
         }
+
         writeExternalNotCompress(out)
     }
 

@@ -6,6 +6,7 @@ import com.kazumaproject.Constants.DIC_LIST
 import com.kazumaproject.Constants.DIFFICULT_LIST
 import com.kazumaproject.Constants.FIXED_LIST
 import com.kazumaproject.Constants.NAME_LIST
+import com.kazumaproject.Constants.SYMBOL_LIST
 import com.kazumaproject.Louds.Converter
 import com.kazumaproject.Louds.LOUDS
 import com.kazumaproject.Louds.with_term_id.ConverterWithTermId
@@ -84,10 +85,10 @@ private fun buildTriesAndTokenArray(){
         addAll(NAME_LIST)
         addAll(FIXED_LIST)
         addAll(DIFFICULT_LIST)
+        addAll(SYMBOL_LIST)
     }
-        .sortedBy { it.yomi }
-        .sortedBy { it.yomi.length }
         .groupBy { it.yomi }
+        .toSortedMap(compareBy({ it.length }, { it }))
 
     finalList
         .forEach { entry ->

@@ -5,6 +5,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.text.Normalizer
 import java.util.*
 
 fun List<Boolean>.toBitSet(): BitSet {
@@ -237,4 +238,8 @@ fun addToPrevious(list: List<Int>, desiredNumber: Int): List<Int> {
         }
     }
     return result
+}
+
+fun normalizeHiragana(input: String): String {
+    return Normalizer.normalize(input, Normalizer.Form.NFC)
 }

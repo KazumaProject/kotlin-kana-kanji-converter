@@ -519,18 +519,46 @@ object Constants {
             tango = "鬼滅"
         ),
         Dictionary(
-            yomi = "みくる",
+            yomi = "ふぃよるどぶーときゃんぷ",
             leftId = 1847,
             rightId = 1847,
             cost = 4000,
-            tango = "未来"
+            tango = "フィヨルドブートキャンプ"
         ),
         Dictionary(
-            yomi = "るきや",
+            yomi = "ちゃっとじーぴーてぃー",
             leftId = 1847,
             rightId = 1847,
             cost = 4000,
-            tango = "瑠輝也"
+            tango = "ChatGPT"
+        ),
+        Dictionary(
+            yomi = "うーばー",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 4000,
+            tango = "Uber"
+        ),
+        Dictionary(
+            yomi = "らいん",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 6000,
+            tango = "LINE"
+        ),
+        Dictionary(
+            yomi = "あいふぉん",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 6000,
+            tango = "iPhone"
+        ),
+        Dictionary(
+            yomi = "あんどろいど",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 6900,
+            tango = "Android"
         ),
     )
 
@@ -551,6 +579,79 @@ object Constants {
         ),
     )
 
+    val SYMBOL_LIST = listOf(
+        Dictionary(
+            yomi = "はてな",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 7000,
+            tango = "？"
+        ),
+        Dictionary(
+            yomi = "はてな",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 7001,
+            tango = "?"
+        ),
+        Dictionary(
+            yomi = "びっくりまーく",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 6600,
+            tango = "！"
+        ),
+        Dictionary(
+            yomi = "びっくりまーく",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 6601,
+            tango = "!"
+        ),
+        Dictionary(
+            yomi = "かっこ",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 6000,
+            tango = "()"
+        ),
+        Dictionary(
+            yomi = "かっこ",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 6001,
+            tango = "（）"
+        ),
+        Dictionary(
+            yomi = "ぷらす",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 7000,
+            tango = "+"
+        ),
+        Dictionary(
+            yomi = "ぷらす",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 7001,
+            tango = "＋"
+        ),
+        Dictionary(
+            yomi = "まいなす",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 7000,
+            tango = "-"
+        ),
+        Dictionary(
+            yomi = "ー",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 4000,
+            tango = "〜"
+        ),
+    )
+
     val FIXED_LIST = listOf(
         Dictionary(
             yomi = "かたがこる",
@@ -558,6 +659,13 @@ object Constants {
             rightId = 1847,
             cost = 4000,
             tango = "肩が凝る"
+        ),
+        Dictionary(
+            yomi = "かたがこる",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 4001,
+            tango = "肩がこる"
         ),
     )
 
@@ -575,6 +683,20 @@ object Constants {
             rightId = 1847,
             cost = 4001,
             tango = "庭には２羽"
+        ),
+        Dictionary(
+            yomi = "かきくう",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 4001,
+            tango = "柿食う"
+        ),
+        Dictionary(
+            yomi = "よくかき",
+            leftId = 1847,
+            rightId = 1847,
+            cost = 7000,
+            tango = "よく柿"
         ),
     )
 
