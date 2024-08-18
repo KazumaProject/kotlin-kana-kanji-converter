@@ -884,15 +884,15 @@ object Constants {
     val DIFFICULT_LIST = listOf(
         Dictionary(
             yomi = "にわにはにわ",
-            leftId = 2040,
-            rightId = 2040,
+            leftId = 1851,
+            rightId = 1851,
             cost = 4000,
             tango = "庭には二羽"
         ),
         Dictionary(
             yomi = "にわにはにわ",
-            leftId = 2040,
-            rightId = 2040,
+            leftId = 1851,
+            rightId = 1851,
             cost = 4001,
             tango = "庭には２羽"
         ),
@@ -905,9 +905,9 @@ object Constants {
         ),
         Dictionary(
             yomi = "よくかき",
-            leftId = 1847,
-            rightId = 1847,
-            cost = 7000,
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
             tango = "よく柿"
         ),
         Dictionary(
