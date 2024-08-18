@@ -616,6 +616,13 @@ object Constants {
             tango = "未来"
         ),
         Dictionary(
+            yomi = "かい",
+            leftId = 1922,
+            rightId = 1922,
+            cost = 2000,
+            tango = "海"
+        ),
+        Dictionary(
             yomi = "るきや",
             leftId = 1922,
             rightId = 1922,
