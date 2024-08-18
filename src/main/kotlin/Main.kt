@@ -25,10 +25,10 @@ import kotlin.math.sqrt
 import kotlin.time.measureTime
 
 fun main() {
-    //buildTriesAndTokenArray()
+    buildTriesAndTokenArray()
     //buildPOSTable()
     //buildConnectionIds()
-    buildDictionaryForSingleKanji()
+    //buildDictionaryForSingleKanji()
 }
 
 private fun buildPOSTable(){

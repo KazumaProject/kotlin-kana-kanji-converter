@@ -8,13 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Constants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Constants.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Other.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Other.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/connection_id/ConnectionIdBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/connection_id/ConnectionIdBuilder.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/dictionary/TokenArray.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dictionary/TokenArray.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/engine/KanaKanjiEngine.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/engine/KanaKanjiEngine.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/path_algorithm/FindPath.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/path_algorithm/FindPath.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/pos_table/GraphBuilderTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/pos_table/GraphBuilderTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/pos_table/POSTableTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/pos_table/POSTableTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
