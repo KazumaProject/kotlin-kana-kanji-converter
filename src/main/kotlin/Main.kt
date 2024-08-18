@@ -5,7 +5,10 @@ import com.kazumaproject.Constants.CUSTOM_LIST
 import com.kazumaproject.Constants.DIC_LIST
 import com.kazumaproject.Constants.DIFFICULT_LIST
 import com.kazumaproject.Constants.FIXED_LIST
+import com.kazumaproject.Constants.NAME_IT_LIST
 import com.kazumaproject.Constants.NAME_LIST
+import com.kazumaproject.Constants.NAME_MUSIC_LIST
+import com.kazumaproject.Constants.PROVERB_LIST
 import com.kazumaproject.Constants.SYMBOL_LIST
 import com.kazumaproject.Louds.Converter
 import com.kazumaproject.Louds.LOUDS
@@ -18,15 +21,14 @@ import com.kazumaproject.engine.KanaKanjiEngine
 import com.kazumaproject.prefix.PrefixTree
 import com.kazumaproject.prefix.with_term_id.PrefixTreeWithTermId
 import java.io.*
+import kotlin.math.sqrt
 import kotlin.time.measureTime
 
 fun main() {
-    buildTriesAndTokenArray()
-    //buildConnectionIdSparseArray()
+    //buildTriesAndTokenArray()
     //buildPOSTable()
-    //testBestPath()
     //buildConnectionIds()
-    //buildDictionaryForSingleKanji()
+    buildDictionaryForSingleKanji()
 }
 
 private fun buildPOSTable(){
@@ -86,6 +88,9 @@ private fun buildTriesAndTokenArray(){
         addAll(FIXED_LIST)
         addAll(DIFFICULT_LIST)
         addAll(SYMBOL_LIST)
+        addAll(NAME_MUSIC_LIST)
+        addAll(NAME_IT_LIST)
+        addAll(PROVERB_LIST)
     }
         .groupBy { it.yomi }
         .toSortedMap(compareBy({ it.length }, { it }))
@@ -93,9 +98,6 @@ private fun buildTriesAndTokenArray(){
     finalList
         .forEach { entry ->
             yomiTree.insert(entry.key)
-            if (entry.key.length == 1) {
-                println("insert to yomi tree: ${entry.key}")
-            }
             entry.value.forEach {
                 if (it.yomi != it.tango && it.yomi.hiraToKata() != it.tango) {
                     tangoTree.insert(it.tango)
@@ -151,63 +153,6 @@ private fun buildTriesAndTokenArray(){
     println("load time of tango.dat $tangoLOUDSReadTime")
 }
 
-private fun buildConnectionIdSparseArray(){
-    val lines = object {}::class.java.getResourceAsStream("/connection_single_column.txt")
-        ?.bufferedReader()
-        ?.readLines()
-
-    val connectionIdBuilder = ConnectionIdBuilder()
-
-    val objectOutput = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/connectionIds.dat")))
-    lines?.let { l ->
-        connectionIdBuilder.build(objectOutput,l.map { it.toShort() })
-    }
-
-    val objectInput = ObjectInputStream(BufferedInputStream(FileInputStream("./src/main/resources/connectionIds.dat")))
-    val time = measureTime {
-        val a = ConnectionIdBuilder().read(objectInput)
-        println("a ${a.size}")
-
-    }
-    println("$time")
-}
-
-private fun testBestPath(){
-    val kanaKanjiEngine = KanaKanjiEngine()
-    kanaKanjiEngine.buildEngine()
-
-    val word1 = "とべないぶた"
-    val word2 = "わたしのなまえはなかのです"
-    val word3 = "ここではきものをぬぐ"
-
-    val time1 = measureTime {
-        kanaKanjiEngine.viterbiAlgorithm(word2)
-    }
-
-    val time2 = measureTime {
-        kanaKanjiEngine.nBestPath(word2,5)
-    }
-
-    val result1BestPath = kanaKanjiEngine.viterbiAlgorithm(word1)
-    val result2BestPath = kanaKanjiEngine.viterbiAlgorithm(word2)
-    val result3BestPath = kanaKanjiEngine.viterbiAlgorithm(word3)
-
-    val result1NBest = kanaKanjiEngine.nBestPath(word1,5)
-    val result2NBest = kanaKanjiEngine.nBestPath(word2,5)
-    val result3NBest = kanaKanjiEngine.nBestPath(word3,5)
-
-    println("Viterbi $word1 =>=> $result1BestPath")
-    println("Viterbi $word2 =>=> $result2BestPath")
-    println("Viterbi $word3 =>=> $result3BestPath")
-
-    println("nBestPath $word1 =>=> $result1NBest")
-    println("nBestPath $word2 =>=> $result2NBest")
-    println("nBestPath $word3 =>=> $result3NBest")
-
-    println("time to find shortest path $word2: $time1")
-    println("time to find nBest path $word2: $time2")
-}
-
 private fun loadTermIdsTxt(){
     val time = measureTime {
         val a = File("./src/main/resources/termIds.txt").bufferedReader().readLines().map { it.toInt() }
@@ -232,7 +177,7 @@ private fun buildConnectionIds(){
 
     val time = measureTime {
         val read = connectionIdBuilder.readShortArrayFromBytes("./src/main/resources/connectionId.dat")
-        println("${read.size}")
+        println("${read.size} ${sqrt(read.size.toDouble())}")
     }
     println("$time")
 }

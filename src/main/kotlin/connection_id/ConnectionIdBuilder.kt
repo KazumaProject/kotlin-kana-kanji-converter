@@ -1,38 +1,30 @@
 package com.kazumaproject.connection_id
 
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.ObjectInput
-import java.io.ObjectOutput
+import java.io.*
 import java.nio.ByteBuffer
 
 class ConnectionIdBuilder {
     fun build(
         out: ObjectOutput,
         value: List<Short>
-    ){
+    ) {
         try {
             out.apply {
                 writeObject(value.toShortArray())
                 flush()
                 close()
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             println(e.message)
         }
     }
 
-    fun read(objectInput: ObjectInput): List<Short>{
-        try {
-            objectInput.apply {
-                val a = (readObject() as ShortArray)
-                close()
-                return a.toList()
-            }
-        }catch (e: Exception){
-            println(e.message)
-            return emptyList()
-        }
+    fun read(inputStream: InputStream): ShortArray {
+        val byteArray = inputStream.readBytes()
+        val byteBuffer = ByteBuffer.wrap(byteArray)
+        val shortArray = ShortArray(byteArray.size / 2)
+        byteBuffer.asShortBuffer().get(shortArray)
+        return shortArray
     }
 
     fun writeShortArrayAsBytes(shortArray: ShortArray, fileName: String) {

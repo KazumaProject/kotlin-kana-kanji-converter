@@ -55,16 +55,7 @@ class TokenArray {
                     println("build token array: ${dictionaries.keys.indexOf(key)} $key ${dictionary.tango}")
                     bitListTemp.add(true)
                     posTableIndexList.add(pos.toShort())
-
-                    val wordCost = when(dictionary.tango){
-                        "労働組合" -> 3500
-                        "飼い" -> 1767
-                        "解体" -> 5455
-                        "同組合" -> 4500
-                        "鹿" -> 3450
-                        else -> dictionary.cost
-                    }
-                    wordCostList.add(wordCost)
+                    wordCostList.add(dictionary.cost)
 
                     val nodeId = when {
                         dictionary.yomi == dictionary.tango -> -2

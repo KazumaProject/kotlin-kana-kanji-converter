@@ -43,7 +43,8 @@ class POSTableTest {
     @Test
     fun `Load pos_table`(){
         val objectInput = ObjectInputStream(FileInputStream("./src/test/resources/pos_table.dat"))
-        val pos_table = objectInput.readObject() as List<Pair<Short, Short>>
-        println("$pos_table")
+        val leftIds = objectInput.readObject() as ShortArray
+        val rightIds = objectInput.readObject() as ShortArray
+        println("${leftIds.size} ${rightIds.size}")
     }
 }

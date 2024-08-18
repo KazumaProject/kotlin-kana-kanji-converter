@@ -6,6 +6,7 @@ import com.kazumaproject.connection_id.ConnectionIdBuilder
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.graph.GraphBuilder
 import com.kazumaproject.viterbi.FindPath
+import java.io.BufferedInputStream
 import java.io.FileInputStream
 import java.io.ObjectInputStream
 import kotlin.test.BeforeTest
@@ -17,7 +18,7 @@ class GraphBuilderTest {
     private lateinit var graphBuilder: GraphBuilder
     private lateinit var yomiTrie: LOUDSWithTermId
     private lateinit var tangoTrie: LOUDS
-    private lateinit var connectionIds: List<Short>
+    private lateinit var connectionIds: ShortArray
     private lateinit var findPath: FindPath
 
     @BeforeTest
@@ -31,7 +32,7 @@ class GraphBuilderTest {
         val objectInputYomi = ObjectInputStream(FileInputStream("src/test/resources/yomi.dat"))
         val objectInputTango = ObjectInputStream(FileInputStream("src/test/resources/tango.dat"))
         val objectInputTokenArray = ObjectInputStream(FileInputStream("src/test/resources/token.dat"))
-        val objectInputConnectionId = ObjectInputStream(FileInputStream("src/test/resources/connectionIds.dat"))
+        val objectInputConnectionId = BufferedInputStream(FileInputStream("src/test/resources/connectionId.dat"))
 
         val tokenArray = TokenArray()
 
