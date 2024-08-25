@@ -30,7 +30,7 @@ fun main() {
     //buildDictionaryForSingleKanji()
 }
 
-private fun buildPOSTable(){
+private fun buildPOSTable() {
     val fileList: List<String> = listOf(
         "/dictionary00.txt",
         "/dictionary01.txt",
@@ -47,11 +47,11 @@ private fun buildPOSTable(){
         "/era.txt"
     )
     val tokenArray = TokenArray()
-    tokenArray.buildPOSTable(fileList,1)
-    tokenArray.buildPOSTableWithIndex(fileList,1)
+    tokenArray.buildPOSTable(fileList, 1)
+    tokenArray.buildPOSTableWithIndex(fileList, 1)
 }
 
-private fun buildTriesAndTokenArray(){
+private fun buildTriesAndTokenArray() {
 
     val yomiTree = PrefixTreeWithTermId()
     val tangoTree = PrefixTree()
@@ -60,7 +60,7 @@ private fun buildTriesAndTokenArray(){
 
     val mode = 3
 
-    val list = when(mode){
+    val list = when (mode) {
         0 -> listOf("/dictionary_small.txt")
         1 -> listOf("/dictionary_medium.txt")
         2 -> listOf("/dictionary00.txt")
@@ -78,7 +78,7 @@ private fun buildTriesAndTokenArray(){
         )
     }
 
-    val dictionaryList = dicUtils.getListDictionary(list,).toMutableList()
+    val dictionaryList = dicUtils.getListDictionary(list).toMutableList()
 
     val finalList = dictionaryList.apply {
         addAll(DIC_LIST)
@@ -134,7 +134,7 @@ private fun buildTriesAndTokenArray(){
     val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token.dat"))
 
     val timeBuildTokenArray = measureTime {
-        tokenArrayTemp.buildTokenArray(finalList,tangoLOUDS,objectOutput,1)
+        tokenArrayTemp.buildTokenArray(finalList, tangoLOUDS, objectOutput, 1)
     }
 
     val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token.dat"))
@@ -152,7 +152,7 @@ private fun buildTriesAndTokenArray(){
     println("load time of tango.dat $tangoLOUDSReadTime")
 }
 
-private fun loadTermIdsTxt(){
+private fun loadTermIdsTxt() {
     val time = measureTime {
         val a = File("./src/main/resources/termIds.txt").bufferedReader().readLines().map { it.toInt() }
         println("${a.size}")
@@ -160,7 +160,7 @@ private fun loadTermIdsTxt(){
     println("$time")
 }
 
-private fun buildConnectionIds(){
+private fun buildConnectionIds() {
 
     val lines = object {}::class.java.getResourceAsStream("/connection_single_column.txt")
         ?.bufferedReader()
@@ -181,7 +181,7 @@ private fun buildConnectionIds(){
     println("$time")
 }
 
-private fun buildDictionaryForSingleKanji(){
+private fun buildDictionaryForSingleKanji() {
     val yomiTree = PrefixTreeWithTermId()
     val tangoTree = PrefixTree()
 
@@ -189,7 +189,7 @@ private fun buildDictionaryForSingleKanji(){
 
     val dictionaryList = dicUtils.getSingleKanjiListDictionary("/single_kanji.tsv")
         .sortedBy { it.yomi }
-        .sortedBy{ it.yomi.length }
+        .sortedBy { it.yomi.length }
         .groupBy { it.yomi }
 
     dictionaryList
@@ -207,8 +207,10 @@ private fun buildDictionaryForSingleKanji(){
     yomiLOUDSTemp.convertListToBitSet()
     tangoLOUDSTemp.convertListToBitSet()
 
-    val objectOutputYomi = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/yomi_singleKanji.dat")))
-    val objectOutputTango = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/tango_singleKanji.dat")))
+    val objectOutputYomi =
+        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/yomi_singleKanji.dat")))
+    val objectOutputTango =
+        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/tango_singleKanji.dat")))
 
     yomiLOUDSTemp.writeExternalNotCompress(objectOutputYomi)
     tangoLOUDSTemp.writeExternalNotCompress(objectOutputTango)
@@ -231,7 +233,7 @@ private fun buildDictionaryForSingleKanji(){
     val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_singleKanji.dat"))
 
     val timeBuildTokenArray = measureTime {
-        tokenArrayTemp.buildTokenArray(dictionaryList,tangoLOUDS,objectOutput,1)
+        tokenArrayTemp.buildTokenArray(dictionaryList, tangoLOUDS, objectOutput, 1)
     }
 
     val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_singleKanji.dat"))
