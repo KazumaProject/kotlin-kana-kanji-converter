@@ -17,7 +17,7 @@ class TokenArray {
     private var nodeIdList: MutableList<Int> = arrayListOf()
     private var bitListTemp: MutableList<Boolean> = arrayListOf()
     private var bitvector: BitSet = BitSet()
-    var posTable: List<Pair<Short,Short>> = listOf()
+    var posTable: List<Pair<Short, Short>> = listOf()
     var leftIds: List<Short> = listOf()
     var rightIds: List<Short> = listOf()
 
@@ -27,7 +27,7 @@ class TokenArray {
         val b = bitvector.rank1(bitvector.select0(nodeId))
         val c = bitvector.rank1(bitvector.select0(nodeId + 1))
         val tempList2 = mutableListOf<TokenEntry>()
-        for (i in b..< c){
+        for (i in b..<c) {
             tempList2.add(
                 TokenEntry(
                     posTableIndex = posTableIndexList[i],
@@ -46,33 +46,28 @@ class TokenArray {
         mode: Int
     ) {
         val posTableWithIndex = readPOSTableWithIndex(mode)
-
         dictionaries.forEach { (key, dictionaryList) ->
             bitListTemp.add(false)
             dictionaryList.forEach { dictionary ->
-                val posIndex = posTableWithIndex[Pair(dictionary.leftId, dictionary.rightId)]
-                posIndex?.let { pos ->
-                    println("build token array: ${dictionaries.keys.indexOf(key)} $key ${dictionary.tango}")
-                    bitListTemp.add(true)
-                    posTableIndexList.add(pos.toShort())
-                    wordCostList.add(dictionary.cost)
-
-                    val nodeId = when {
-                        dictionary.yomi == dictionary.tango -> -2
-                        key.hiraToKata() == dictionary.tango -> -1
-                        else -> tangoTrie.getNodeIndex(dictionary.tango)
-                    }
-                    nodeIdList.add(nodeId)
+                val posIndex = posTableWithIndex.getValue(Pair(dictionary.leftId, dictionary.rightId))
+                bitListTemp.add(true)
+                posTableIndexList.add(posIndex.toShort())
+                wordCostList.add(dictionary.cost)
+                val nodeId = when {
+                    dictionary.tango.isHiraganaOnly() -> -502
+                    dictionary.tango.isKatakanaOnly() -> -501
+                    else -> tangoTrie.getNodeIndex(dictionary.tango)
                 }
+                println("build token array: ${dictionaries.keys.indexOf(key)} $key ${dictionary.tango} $nodeId")
+                nodeIdList.add(nodeId)
             }
         }
-
         writeExternalNotCompress(out)
     }
 
     private fun writeExternal(
         out: ObjectOutput
-    ){
+    ) {
         try {
             out.apply {
                 writeInt(posTableIndexList.toByteArrayFromListShort().size)
@@ -87,7 +82,7 @@ class TokenArray {
                 flush()
                 close()
             }
-        }catch (e: IOException){
+        } catch (e: IOException) {
             println(e.stackTraceToString())
         }
     }
@@ -99,12 +94,14 @@ class TokenArray {
                 val wordCostListSize = readInt()
                 val nodeIdListSize = readInt()
 
-                posTableIndexList = (readObject() as ByteArray).inflate(posTableIndexListSize).byteArrayToShortList().toMutableList()
-                wordCostList = (readObject() as ByteArray).inflate(wordCostListSize).byteArrayToShortList().toMutableList()
+                posTableIndexList =
+                    (readObject() as ByteArray).inflate(posTableIndexListSize).byteArrayToShortList().toMutableList()
+                wordCostList =
+                    (readObject() as ByteArray).inflate(wordCostListSize).byteArrayToShortList().toMutableList()
                 nodeIdList = (readObject() as ByteArray).inflate(nodeIdListSize).toListInt().toMutableList()
                 bitvector = readObject() as BitSet
                 close()
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 println(e.stackTraceToString())
             }
         }
@@ -114,7 +111,7 @@ class TokenArray {
 
     private fun writeExternalNotCompress(
         out: ObjectOutput
-    ){
+    ) {
         try {
             out.apply {
                 writeObject(posTableIndexList.toShortArray())
@@ -124,7 +121,7 @@ class TokenArray {
                 flush()
                 close()
             }
-        }catch (e: IOException){
+        } catch (e: IOException) {
             println(e.stackTraceToString())
         }
     }
@@ -137,7 +134,7 @@ class TokenArray {
                 nodeIdList = (readObject() as IntArray).toMutableList()
                 bitvector = readObject() as BitSet
                 close()
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 println(e.stackTraceToString())
             }
         }
@@ -153,8 +150,8 @@ class TokenArray {
     fun buildPOSTable(
         fileList: List<String>,
         mode: Int
-    ){
-        val tempMap: MutableMap<Pair<Short,Short>,Int> = mutableMapOf()
+    ) {
+        val tempMap: MutableMap<Pair<Short, Short>, Int> = mutableMapOf()
         fileList.forEach {
             val line = this::class.java.getResourceAsStream(it)
                 ?.bufferedReader()
@@ -163,10 +160,11 @@ class TokenArray {
                 str.apply {
                     val leftId = split("\\t".toRegex())[1]
                     val rightId = split("\\t".toRegex())[2]
-                    if (tempMap[Pair(leftId.toShort(),rightId.toShort())] == null){
-                        tempMap[Pair(leftId.toShort(),rightId.toShort())] = 0
-                    }else{
-                        tempMap[Pair(leftId.toShort(),rightId.toShort())] = (tempMap[Pair(leftId.toShort(),rightId.toShort())]!!) + 1
+                    if (tempMap[Pair(leftId.toShort(), rightId.toShort())] == null) {
+                        tempMap[Pair(leftId.toShort(), rightId.toShort())] = 0
+                    } else {
+                        tempMap[Pair(leftId.toShort(), rightId.toShort())] =
+                            (tempMap[Pair(leftId.toShort(), rightId.toShort())]!!) + 1
                     }
                 }
             }
@@ -182,13 +180,13 @@ class TokenArray {
             rightIds2.add(it.key.second)
         }
 
-        println("result: ${result.map { it.key }.subList(0,20)} ${result.size}")
-        println("left ids: ${leftIds2.subList(0,20)} ${leftIds2.size}")
-        println("right ids: ${rightIds2.subList(0,20)} ${rightIds2.size}")
+        println("result: ${result.map { it.key }.subList(0, 20)} ${result.size}")
+        println("left ids: ${leftIds2.subList(0, 20)} ${leftIds2.size}")
+        println("right ids: ${rightIds2.subList(0, 20)} ${rightIds2.size}")
 
-        val objectOutput = if (mode == 0){
+        val objectOutput = if (mode == 0) {
             ObjectOutputStream(FileOutputStream("./src/test/resources/pos_table.dat"))
-        }else {
+        } else {
             ObjectOutputStream(FileOutputStream("./src/main/resources/pos_table.dat"))
         }
         try {
@@ -198,7 +196,7 @@ class TokenArray {
                 flush()
                 close()
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             println(e.stackTraceToString())
         }
     }
@@ -212,8 +210,8 @@ class TokenArray {
     fun buildPOSTableWithIndex(
         fileList: List<String>,
         mode: Int
-    ){
-        val tempMap: MutableMap<Pair<Short,Short>,Int> = mutableMapOf()
+    ) {
+        val tempMap: MutableMap<Pair<Short, Short>, Int> = mutableMapOf()
         fileList.forEach {
             val line = this::class.java.getResourceAsStream(it)
                 ?.bufferedReader()
@@ -222,29 +220,30 @@ class TokenArray {
                 str.apply {
                     val leftId = split("\\t".toRegex())[1]
                     val rightId = split("\\t".toRegex())[2]
-                    if (tempMap[Pair(leftId.toShort(),rightId.toShort())] == null){
-                        tempMap[Pair(leftId.toShort(),rightId.toShort())] = 0
-                    }else{
-                        tempMap[Pair(leftId.toShort(),rightId.toShort())] = (tempMap[Pair(leftId.toShort(),rightId.toShort())]!!) + 1
+                    if (tempMap[Pair(leftId.toShort(), rightId.toShort())] == null) {
+                        tempMap[Pair(leftId.toShort(), rightId.toShort())] = 0
+                    } else {
+                        tempMap[Pair(leftId.toShort(), rightId.toShort())] =
+                            (tempMap[Pair(leftId.toShort(), rightId.toShort())]!!) + 1
                     }
                 }
             }
         }
 
         val result = tempMap.toList().sortedByDescending { (_, value) -> value }.toMap()
-        val objectOutput = if (mode == 0){
+        val objectOutput = if (mode == 0) {
             ObjectOutputStream(FileOutputStream("./src/test/resources/pos_table_for_build.dat"))
-        }else{
+        } else {
             ObjectOutputStream(FileOutputStream("./src/main/resources/pos_table_for_build.dat"))
         }
-        val mapToSave = result.keys.toList().mapIndexed { index, pair -> pair to index  }.toMap()
+        val mapToSave = result.keys.toList().mapIndexed { index, pair -> pair to index }.toMap()
         try {
             objectOutput.apply {
                 writeObject(mapToSave)
                 flush()
                 close()
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             println(e.stackTraceToString())
         }
     }
@@ -255,9 +254,9 @@ class TokenArray {
      *
      **/
     fun readPOSTable(mode: Int) {
-        val objectInput = if (mode == 0){
+        val objectInput = if (mode == 0) {
             ObjectInputStream(BufferedInputStream(FileInputStream("./src/test/resources/pos_table.dat")))
-        }else{
+        } else {
             ObjectInputStream(BufferedInputStream(FileInputStream("./src/main/resources/pos_table.dat")))
         }
         objectInput.apply {
@@ -265,18 +264,19 @@ class TokenArray {
             rightIds = (readObject() as ShortArray).toList()
         }
     }
+
     /**
      *
      * @param mode 0:test else:main
      *
      **/
     private fun readPOSTableWithIndex(mode: Int): Map<Pair<Short, Short>, Int> {
-        val objectInput = if (mode == 0){
+        val objectInput = if (mode == 0) {
             ObjectInputStream(FileInputStream("./src/test/resources/pos_table_for_build.dat"))
-        }else{
+        } else {
             ObjectInputStream(FileInputStream("./src/main/resources/pos_table_for_build.dat"))
         }
-        var a:  Map<Pair<Short, Short>, Int>
+        var a: Map<Pair<Short, Short>, Int>
         objectInput.apply {
             a = (readObject() as Map<Pair<Short, Short>, Int>)
         }

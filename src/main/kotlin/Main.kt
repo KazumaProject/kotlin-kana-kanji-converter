@@ -1,6 +1,5 @@
 package com.kazumaproject
 
-
 import com.kazumaproject.Constants.CUSTOM_LIST
 import com.kazumaproject.Constants.DIC_LIST
 import com.kazumaproject.Constants.DIFFICULT_LIST
@@ -80,25 +79,16 @@ private fun buildTriesAndTokenArray() {
 
     val dictionaryList = dicUtils.getListDictionary(list).toMutableList()
 
-    val finalList = dictionaryList.apply {
-        addAll(DIC_LIST)
-        addAll(CUSTOM_LIST)
-        addAll(NAME_LIST)
-        addAll(FIXED_LIST)
-        addAll(DIFFICULT_LIST)
-        addAll(SYMBOL_LIST)
-        addAll(NAME_MUSIC_LIST)
-        addAll(NAME_IT_LIST)
-        addAll(PROVERB_LIST)
-    }
-        .groupBy { it.yomi }
-        .toSortedMap(compareBy({ it.length }, { it }))
+    val finalList =
+        (dictionaryList + DIC_LIST + CUSTOM_LIST + NAME_LIST + FIXED_LIST + DIFFICULT_LIST + SYMBOL_LIST + NAME_MUSIC_LIST + NAME_IT_LIST + PROVERB_LIST)
+            .groupBy { it.yomi }
+            .toSortedMap(compareBy({ it.length }, { it }))
 
     finalList
         .forEach { entry ->
             yomiTree.insert(entry.key)
             entry.value.forEach {
-                if (it.yomi != it.tango && it.yomi.hiraToKata() != it.tango) {
+                if (!it.tango.isHiraganaOrKatakana()) {
                     tangoTree.insert(it.tango)
                     println("insert to tango tree: ${it.tango}")
                 }

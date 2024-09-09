@@ -12,7 +12,7 @@ fun List<Boolean>.toBitSet(): BitSet {
     val bitSet = BitSet(this.size)
     this.forEachIndexed { index, value ->
         if (value) {
-            bitSet.set(index,true)
+            bitSet.set(index, true)
         }
     }
     return bitSet
@@ -74,7 +74,7 @@ fun ByteArray.byteArrayToShortList(): List<Short> {
     return shortList
 }
 
-fun  BitSet.toBooleanList():List<Boolean>{
+fun BitSet.toBooleanList(): List<Boolean> {
     return (0 until this.size()).map { this[it] }
 }
 
@@ -111,20 +111,20 @@ fun BitSet.toIntListExtension(): List<Int> {
     return intList
 }
 
-fun List<Int>.compressListInt(): List<Short>{
+fun List<Int>.compressListInt(): List<Short> {
     val diffList: MutableList<Short> = mutableListOf()
     this.forEachIndexed { index, i ->
-        if ((index + 1) != i ){
+        if ((index + 1) != i) {
             diffList.add((i - index).toShort())
-        }else{
-           diffList.add(0)
+        } else {
+            diffList.add(0)
         }
     }
     println("${diffList.size}")
     return diffList
 }
 
-fun List<Int>.writeToTxt(fileName: String){
+fun List<Int>.writeToTxt(fileName: String) {
     File("./src/main/resources/$fileName").bufferedWriter().use { out ->
         out.write(this.toString())
     }
@@ -243,3 +243,27 @@ fun addToPrevious(list: List<Int>, desiredNumber: Int): List<Int> {
 fun normalizeHiragana(input: String): String {
     return Normalizer.normalize(input, Normalizer.Form.NFC)
 }
+
+fun String.isHiraganaOrKatakana(): Boolean {
+    // ひらがなのUnicode範囲: \u3040-\u309F
+    // カタカナのUnicode範囲: \u30A0-\u30FF
+    val hiraganaRegex = Regex("^[\\u3040-\\u309F]+$")
+    val katakanaRegex = Regex("^[\\u30A0-\\u30FF]+$")
+    // ひらがなだけまたはカタカナだけの場合にTrue
+    return hiraganaRegex.matches(this) || katakanaRegex.matches(this)
+}
+
+// ひらがなのみの判定
+fun String.isHiraganaOnly(): Boolean {
+    // ひらがな: \u3040-\u309F
+    val regex = Regex("^[\\u3040-\\u309F]+$")
+    return regex.matches(this)
+}
+
+// カタカナのみの判定
+fun String.isKatakanaOnly(): Boolean {
+    // カタカナ: \u30A0-\u30FF
+    val regex = Regex("^[\\u30A0-\\u30FF]+$")
+    return regex.matches(this)
+}
+

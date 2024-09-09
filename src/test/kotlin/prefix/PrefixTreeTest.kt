@@ -10,6 +10,7 @@ import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.dictionary.models.TokenEntryConverted
 import com.kazumaproject.hiraToKata
+import com.kazumaproject.isHiraganaOrKatakana
 import com.kazumaproject.prefix.PrefixTree
 import com.kazumaproject.prefix.with_term_id.PrefixTreeWithTermId
 import com.kazumaproject.toBooleanList
@@ -272,7 +273,7 @@ class PrefixTreeTest {
             .forEach { entry ->
             yomiTree.insert(entry.key)
             entry.value.forEach {
-                if (entry.key != it.tango && entry.key.hiraToKata() != it.tango){
+                if (!it.tango.isHiraganaOrKatakana()){
                     println("insert ${it.tango} ${it.yomi}")
                     tangoTree.insert(it.tango)
                 }else{
@@ -326,8 +327,8 @@ class PrefixTreeTest {
                 rightId = tokenArray.rightIds[it.posTableIndex.toInt()],
                 wordCost = it.wordCost,
                 tango = when(it.nodeId){
-                    -2 -> word
-                    -1 -> word.hiraToKata()
+                    -502 -> word
+                    -501 -> word.hiraToKata()
                     else -> loudsTango.getLetter(it.nodeId)
                 },
                 yomiLength = word.length.toShort()
