@@ -29,13 +29,14 @@ import kotlin.time.measureTime
 class PrefixTreeTest {
 
     private lateinit var tree: PrefixTree
+
     @BeforeTest
     fun setUp() {
         tree = PrefixTree()
     }
 
     @AfterTest
-    fun after(){
+    fun after() {
 
     }
 
@@ -47,56 +48,34 @@ class PrefixTreeTest {
 
         println("${tree.root}")
 
-        val result1 = tree.root.
-        getChildren('c')?.
-        getChildren('a')?.
-        getChildren('t')?.
-        isWord
+        val result1 = tree.root.getChildren('c')?.getChildren('a')?.getChildren('t')?.isWord
 
-        assertEquals(true,result1)
+        assertEquals(true, result1)
 
-        val result2 = tree.root.
-        getChildren('c')?.c
+        val result2 = tree.root.getChildren('c')?.c
         assertEquals('c', result2)
 
-        val result3 = tree.root.
-        getChildren('c')?.id
-        assertEquals(0,result3)
+        val result3 = tree.root.getChildren('c')?.id
+        assertEquals(0, result3)
 
-        val result4 = tree.root.
-        getChildren('c')?.
-        getChildren('a')?.id
-        assertEquals(1,result4)
+        val result4 = tree.root.getChildren('c')?.getChildren('a')?.id
+        assertEquals(1, result4)
 
-        val result5 = tree.root.
-        getChildren('c')?.
-        getChildren('a')?.
-        getChildren('t')?.id
-        assertEquals(2,result5)
+        val result5 = tree.root.getChildren('c')?.getChildren('a')?.getChildren('t')?.id
+        assertEquals(2, result5)
 
-        val result6 = tree.root.
-        getChildren('c')?.
-        getChildren('a')?.c
-        assertEquals('a',result6)
+        val result6 = tree.root.getChildren('c')?.getChildren('a')?.c
+        assertEquals('a', result6)
 
-        val result7 = tree.root.
-        getChildren('c')?.
-        getChildren('a')?.
-        getChildren('t')?.
-        getChildren('s')?.c
-        assertEquals('s',result7)
+        val result7 = tree.root.getChildren('c')?.getChildren('a')?.getChildren('t')?.getChildren('s')?.c
+        assertEquals('s', result7)
 
-        val result8 = tree.root.
-        getChildren('c')?.
-        getChildren('a')?.
-        getChildren('t')?.
-        getChildren('s')?.
-        getChildren('a')
-        assertEquals(null,result8)
+        val result8 = tree.root.getChildren('c')?.getChildren('a')?.getChildren('t')?.getChildren('s')?.getChildren('a')
+        assertEquals(null, result8)
     }
 
     @Test
-    fun `Test find method`(){
+    fun `Test find method`() {
         tree.apply {
             insert("相変わらず")
             insert("愛である")
@@ -141,8 +120,8 @@ class PrefixTreeTest {
     }
 
     @Test
-    fun `LOUDS test`(){
-        val list = listOf("an","i","of","one","our","out",)
+    fun `LOUDS test`() {
+        val list = listOf("an", "i", "of", "one", "our", "out")
         list.forEach {
             tree.insert(it)
         }
@@ -160,8 +139,8 @@ class PrefixTreeTest {
     }
 
     @Test
-    fun `Test write binary file`(){
-        val list = listOf("an","i","of","one","our","out")
+    fun `Test write binary file`() {
+        val list = listOf("an", "i", "of", "one", "our", "out")
         list.forEach {
             tree.insert(it)
         }
@@ -179,7 +158,7 @@ class PrefixTreeTest {
     }
 
     @Test
-    fun `Test write binary file 2`(){
+    fun `Test write binary file 2`() {
 
         val list = listOf(
             "/dictionary_small.txt",
@@ -193,7 +172,7 @@ class PrefixTreeTest {
             line?.forEach { str ->
                 val yomi = str.split("\\s".toRegex())[0]
                 val tango = str.split("\\s".toRegex())[4]
-                if (yomi != tango || yomi.hiraToKata() != tango){
+                if (yomi != tango || yomi.hiraToKata() != tango) {
                     println("$it $tango")
                     tree.insert(tango)
                 }
@@ -223,7 +202,7 @@ class PrefixTreeTest {
     }
 
     @Test
-    fun `Test Token Array`(){
+    fun `Test Token Array`() {
 
         val yomiTree = PrefixTreeWithTermId()
         val tangoTree = PrefixTree()
@@ -232,13 +211,13 @@ class PrefixTreeTest {
 
         tempList.addAll(DIC_LIST)
 
-        val mode = 2
+        val mode = 3
 
-        val list = when(mode){
+        val list = when (mode) {
             0 -> listOf("/dictionary_small.txt")
             1 -> listOf("/dictionary_medium.txt")
-            2 -> listOf("/dictionary01.txt")
-            else -> listOf("/dictionary00.txt","/dictionary01.txt")
+            2 -> listOf("/dictionary05.txt")
+            else -> listOf("/dictionary04.txt", "/dictionary05.txt")
         }.toMutableList()
 
         list.forEach {
@@ -269,15 +248,12 @@ class PrefixTreeTest {
             .groupBy { it.yomi }
             .toSortedMap(compareBy({ it.length }, { it }))
 
-        finalList
-            .forEach { entry ->
+        for (entry in finalList) {
             yomiTree.insert(entry.key)
-            entry.value.forEach {
-                if (!it.tango.isHiraganaOrKatakana()){
-                    println("insert ${it.tango} ${it.yomi}")
-                    tangoTree.insert(it.tango)
-                }else{
-                    println("not insert ${it.tango} ${it.yomi}")
+            for (dictionary in entry.value) {
+                if (!dictionary.tango.isHiraganaOrKatakana()) {
+                    println("insert ${dictionary.tango} ${dictionary.yomi}")
+                    tangoTree.insert(dictionary.tango)
                 }
             }
         }
@@ -287,8 +263,10 @@ class PrefixTreeTest {
         loudsYomi.convertListToBitSet()
         loudsTango.convertListToBitSet()
 
-        val bufferedOutputStream = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/test/resources/yomi.dat")))
-        val bufferedOutputStream2 = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/test/resources/tango.dat")))
+        val bufferedOutputStream =
+            ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/test/resources/yomi.dat")))
+        val bufferedOutputStream2 =
+            ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/test/resources/tango.dat")))
 
         loudsYomi.writeExternalNotCompress(bufferedOutputStream)
         loudsTango.writeExternalNotCompress(bufferedOutputStream2)
@@ -297,8 +275,8 @@ class PrefixTreeTest {
 
         val objectOutput = ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/test/resources/token.dat")))
         tokenArray.buildTokenArray(
-           finalList,
-            loudsTango,objectOutput,0
+            finalList,
+            loudsTango, objectOutput, 0
         )
 
         val objectInput = ObjectInputStream(BufferedInputStream(FileInputStream("./src/test/resources/token.dat")))
@@ -318,7 +296,7 @@ class PrefixTreeTest {
 
         tokenArray.readPOSTable(0)
 
-        val word = "ろうどうくみあい"
+        val word = "かぶきちょう"
         val nodeId = yomi.getTermId(loudsYomi.getNodeIndex(word))
 
         val a = tokenArrayTemp.getListDictionaryByYomiTermId(nodeId).map {
@@ -326,7 +304,7 @@ class PrefixTreeTest {
                 leftId = tokenArray.leftIds[it.posTableIndex.toInt()],
                 rightId = tokenArray.rightIds[it.posTableIndex.toInt()],
                 wordCost = it.wordCost,
-                tango = when(it.nodeId){
+                tango = when (it.nodeId) {
                     -502 -> word
                     -501 -> word.hiraToKata()
                     else -> loudsTango.getLetter(it.nodeId)
@@ -338,9 +316,9 @@ class PrefixTreeTest {
     }
 
     @Test
-    fun `create token array`(){
+    fun `create token array`() {
         val tempList: MutableList<Dictionary> = mutableListOf()
-        val tempMap: MutableMap<Pair<Short,Short>,Int> = mutableMapOf()
+        val tempMap: MutableMap<Pair<Short, Short>, Int> = mutableMapOf()
 
         val list = listOf(
             "/dictionary00.txt",
@@ -367,17 +345,18 @@ class PrefixTreeTest {
                     val rightId = split("\\t".toRegex())[2]
                     val cost = split("\\t".toRegex())[3]
                     val tango = split("\\t".toRegex())[4]
-                    if (tempMap[Pair(leftId.toShort(),rightId.toShort())] == null){
-                        tempMap[Pair(leftId.toShort(),rightId.toShort())] = 0
-                    }else{
-                        tempMap[Pair(leftId.toShort(),rightId.toShort())] = (tempMap[Pair(leftId.toShort(),rightId.toShort())]!!) + 1
+                    if (tempMap[Pair(leftId.toShort(), rightId.toShort())] == null) {
+                        tempMap[Pair(leftId.toShort(), rightId.toShort())] = 0
+                    } else {
+                        tempMap[Pair(leftId.toShort(), rightId.toShort())] =
+                            (tempMap[Pair(leftId.toShort(), rightId.toShort())]!!) + 1
                     }
                 }
             }
         }
 
         val result = tempMap.toList().sortedByDescending { (_, value) -> value }.toMap()
-        val result2 = tempMap.toList().sortedByDescending { (_, value) -> value }.subList(0,6187) .toMap()
+        val result2 = tempMap.toList().sortedByDescending { (_, value) -> value }.subList(0, 6187).toMap()
 
 
         val objectOutput = ObjectOutputStream(FileOutputStream("./src/test/resources/pos_table.dat"))
@@ -388,7 +367,7 @@ class PrefixTreeTest {
         }
 
         val objectOutput2 = ObjectOutputStream(FileOutputStream("./src/test/resources/pos_table_for_build.dat"))
-        val mapToSave = result.keys.toList().mapIndexed { index, pair -> pair to index  }.toMap()
+        val mapToSave = result.keys.toList().mapIndexed { index, pair -> pair to index }.toMap()
         objectOutput2.apply {
             writeObject(mapToSave)
             flush()
@@ -396,20 +375,20 @@ class PrefixTreeTest {
         }
 
         val objectInput = ObjectInputStream(FileInputStream("./src/test/resources/pos_table.dat"))
-        var a: List<Pair<Short,Short>> = listOf()
+        var a: List<Pair<Short, Short>> = listOf()
         val time = measureTime {
             objectInput.apply {
-                a = (readObject() as List<Pair<Short,Short>>)
+                a = (readObject() as List<Pair<Short, Short>>)
             }
             println("${a}")
         }
         println("loading time: $time")
 
         val objectInput2 = ObjectInputStream(FileInputStream("./src/test/resources/pos_table_for_build.dat"))
-        var b:  Map<Pair<Short, Short>, Int> = mapOf()
+        var b: Map<Pair<Short, Short>, Int> = mapOf()
         val time2 = measureTime {
             objectInput2.apply {
-                b = (readObject() as  Map<Pair<Short, Short>, Int>)
+                b = (readObject() as Map<Pair<Short, Short>, Int>)
             }
             //println("$b")
         }
@@ -417,7 +396,7 @@ class PrefixTreeTest {
     }
 
     @Test
-    fun `Test Token Entry With POS Table`(){
+    fun `Test Token Entry With POS Table`() {
 
         val list = listOf(
             "/dictionary_small.txt",
@@ -431,7 +410,7 @@ class PrefixTreeTest {
             line?.forEach { str ->
                 val yomi = str.split("\\s".toRegex())[0]
                 val tango = str.split("\\s".toRegex())[4]
-                if (yomi != tango || yomi.hiraToKata() != tango){
+                if (yomi != tango || yomi.hiraToKata() != tango) {
                     println("$it $tango")
                     tree.insert(tango)
                 }

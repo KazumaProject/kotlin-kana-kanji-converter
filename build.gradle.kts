@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC.2")
 }
 
 tasks.test {

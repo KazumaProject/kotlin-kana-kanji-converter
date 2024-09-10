@@ -84,16 +84,14 @@ private fun buildTriesAndTokenArray() {
             .groupBy { it.yomi }
             .toSortedMap(compareBy({ it.length }, { it }))
 
-    finalList
-        .forEach { entry ->
-            yomiTree.insert(entry.key)
-            entry.value.forEach {
-                if (!it.tango.isHiraganaOrKatakana()) {
-                    tangoTree.insert(it.tango)
-                    println("insert to tango tree: ${it.tango}")
-                }
+    for (entry in finalList) {
+        yomiTree.insert(entry.key)
+        for (dictionary in entry.value) {
+            if (!dictionary.tango.isHiraganaOrKatakana()) {
+                tangoTree.insert(dictionary.tango)
             }
         }
+    }
 
     val yomiLOUDSTemp = ConverterWithTermId().convert(yomiTree.root)
     val tangoLOUDSTemp = Converter().convert(tangoTree.root)

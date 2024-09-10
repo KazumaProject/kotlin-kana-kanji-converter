@@ -46,23 +46,34 @@ class TokenArray {
         mode: Int
     ) {
         val posTableWithIndex = readPOSTableWithIndex(mode)
-        dictionaries.forEach { (key, dictionaryList) ->
+        var index = 0
+        for ((key, dictionaryList) in dictionaries) {
             bitListTemp.add(false)
-            dictionaryList.forEach { dictionary ->
+            for (dictionary in dictionaryList) {
                 val posIndex = posTableWithIndex.getValue(Pair(dictionary.leftId, dictionary.rightId))
                 bitListTemp.add(true)
                 posTableIndexList.add(posIndex.toShort())
                 wordCostList.add(dictionary.cost)
-                val nodeId = when {
-                    dictionary.tango.isHiraganaOnly() -> -502
-                    dictionary.tango.isKatakanaOnly() -> -501
-                    else -> tangoTrie.getNodeIndex(dictionary.tango)
+                val nodeId = getNodeIdForDictionary(dictionary, tangoTrie, key)
+                if (index % 10000 == 0) {
+                    println("build token array: $index $key ${dictionary.tango} $nodeId")
+                } else if (key == "かぶきちょう") {
+                    println("build token array: $index $key ${dictionary.tango} $nodeId")
                 }
-                println("build token array: ${dictionaries.keys.indexOf(key)} $key ${dictionary.tango} $nodeId")
                 nodeIdList.add(nodeId)
             }
+            index++
         }
         writeExternalNotCompress(out)
+    }
+
+    // Helper function to clean up nodeId determination
+    private fun getNodeIdForDictionary(dictionary: Dictionary, tangoTrie: LOUDS, key: String): Int {
+        return when {
+            dictionary.tango.isHiraganaOnly() || dictionary.tango == key-> -2
+            dictionary.tango.isKatakanaOnly() -> -1
+            else -> tangoTrie.getNodeIndex(dictionary.tango)
+        }
     }
 
     private fun writeExternal(
