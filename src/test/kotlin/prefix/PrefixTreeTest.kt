@@ -211,13 +211,13 @@ class PrefixTreeTest {
 
         tempList.addAll(DIC_LIST)
 
-        val mode = 3
+        val mode = 2
 
         val list = when (mode) {
             0 -> listOf("/dictionary_small.txt")
             1 -> listOf("/dictionary_medium.txt")
             2 -> listOf("/dictionary05.txt")
-            else -> listOf("/dictionary04.txt", "/dictionary05.txt")
+            else -> listOf("/dictionary05.txt", "/dictionary07.txt")
         }.toMutableList()
 
         list.forEach {
@@ -248,11 +248,10 @@ class PrefixTreeTest {
             .groupBy { it.yomi }
             .toSortedMap(compareBy({ it.length }, { it }))
 
-        for (entry in finalList) {
+        for (entry in finalList.entries) {
             yomiTree.insert(entry.key)
             for (dictionary in entry.value) {
                 if (!dictionary.tango.isHiraganaOrKatakana()) {
-                    println("insert ${dictionary.tango} ${dictionary.yomi}")
                     tangoTree.insert(dictionary.tango)
                 }
             }
@@ -305,8 +304,8 @@ class PrefixTreeTest {
                 rightId = tokenArray.rightIds[it.posTableIndex.toInt()],
                 wordCost = it.wordCost,
                 tango = when (it.nodeId) {
-                    -502 -> word
-                    -501 -> word.hiraToKata()
+                    -2 -> word
+                    -1 -> word.hiraToKata()
                     else -> loudsTango.getLetter(it.nodeId)
                 },
                 yomiLength = word.length.toShort()

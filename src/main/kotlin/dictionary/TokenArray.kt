@@ -8,6 +8,9 @@ import com.kazumaproject.connection_id.deflate
 import com.kazumaproject.connection_id.inflate
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.dictionary.models.TokenEntry
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.*
 import java.util.*
 
@@ -45,19 +48,26 @@ class TokenArray {
         out: ObjectOutput,
         mode: Int
     ) {
+
         val posTableWithIndex = readPOSTableWithIndex(mode)
         var index = 0
         for ((key, dictionaryList) in dictionaries) {
             bitListTemp.add(false)
             for (dictionary in dictionaryList) {
-                val posIndex = posTableWithIndex.getValue(Pair(dictionary.leftId, dictionary.rightId))
                 bitListTemp.add(true)
+                val posIndex = posTableWithIndex.getValue(Pair(dictionary.leftId, dictionary.rightId))
                 posTableIndexList.add(posIndex.toShort())
                 wordCostList.add(dictionary.cost)
                 val nodeId = getNodeIdForDictionary(dictionary, tangoTrie, key)
                 if (index % 10000 == 0) {
                     println("build token array: $index $key ${dictionary.tango} $nodeId")
                 } else if (key == "かぶきちょう") {
+                    println("build token array: $index $key ${dictionary.tango} $nodeId")
+                } else if (nodeId == -3) {
+                    println("build token array: $index $key ${dictionary.tango} $nodeId")
+                } else if (index <= 200) {
+                    println("build token array: $index $key ${dictionary.tango} $nodeId")
+                } else if (index in 395300..395500) {
                     println("build token array: $index $key ${dictionary.tango} $nodeId")
                 }
                 nodeIdList.add(nodeId)
@@ -70,9 +80,21 @@ class TokenArray {
     // Helper function to clean up nodeId determination
     private fun getNodeIdForDictionary(dictionary: Dictionary, tangoTrie: LOUDS, key: String): Int {
         return when {
-            dictionary.tango.isHiraganaOnly() || dictionary.tango == key-> -2
-            dictionary.tango.isKatakanaOnly() -> -1
-            else -> tangoTrie.getNodeIndex(dictionary.tango)
+            dictionary.tango.isHiraganaOrKatakana() -> {
+                if (dictionary.tango.isHiraganaOnly()) {
+                    -2
+                } else if (dictionary.tango.isKatakanaOnly()) {
+                    -1
+                } else if (dictionary.tango == key) {
+                    -2
+                } else {
+                    -3
+                }
+            }
+
+            else -> {
+                tangoTrie.getNodeIndex(dictionary.tango)
+            }
         }
     }
 

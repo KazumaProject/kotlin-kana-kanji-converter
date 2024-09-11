@@ -112,12 +112,11 @@ fun BitSet.toIntListExtension(): List<Int> {
 }
 
 fun List<Int>.compressListInt(): List<Short> {
-    val diffList: MutableList<Short> = mutableListOf()
-    this.forEachIndexed { index, i ->
+    val diffList = MutableList(this.size) { 0.toShort() }
+    for (index in this.indices) {
+        val i = this[index]
         if ((index + 1) != i) {
-            diffList.add((i - index).toShort())
-        } else {
-            diffList.add(0)
+            diffList[index] = (i - index).toShort()
         }
     }
     println("${diffList.size}")
@@ -265,5 +264,16 @@ fun String.isKatakanaOnly(): Boolean {
     // カタカナ: \u30A0-\u30FF
     val regex = Regex("^[\\u30A0-\\u30FF]+$")
     return regex.matches(this)
+}
+
+fun String.isSymbolsOrAlphabet(): Boolean {
+    // アルファベット（小文字、大文字）: a-z, A-Z
+    // 記号は Unicode の \p{Punct} または特定の範囲を指定
+
+    //val alphabetRegex = Regex("^[a-zA-Z]+$")
+    val symbolRegex = Regex("\\p{Punct}")
+
+    // アルファベット、記号のいずれかが含まれている場合にTrue
+    return symbolRegex.matches(this)
 }
 
