@@ -23,10 +23,10 @@ import kotlin.math.sqrt
 import kotlin.time.measureTime
 
 fun main() {
-    buildTriesAndTokenArray()
+    //buildTriesAndTokenArray()
     //buildPOSTable()
     //buildConnectionIds()
-    //buildDictionaryForSingleKanji()
+    buildDictionaryForSingleKanji()
 }
 
 private fun buildPOSTable() {
@@ -169,72 +169,72 @@ private fun buildConnectionIds() {
     println("$time")
 }
 
-//private fun buildDictionaryForSingleKanji() {
-//    val yomiTree = PrefixTreeWithTermId()
-//    val tangoTree = PrefixTree()
-//
-//    val dicUtils = DicUtils()
-//
-//    val dictionaryList = dicUtils.getSingleKanjiListDictionary("/single_kanji.tsv")
-//        .sortedBy { it.yomi }
-//        .sortedBy { it.yomi.length }
-//        .groupBy { it.yomi }
-//
-//    dictionaryList
-//        .forEach { entry ->
-//            yomiTree.insert(entry.key)
-//            println("insert to yomi tree: ${entry.key}")
-//            entry.value.forEach {
-//                tangoTree.insert(it.tango)
-//                println("insert to tango tree: ${it.tango}")
-//            }
-//        }
-//
-//    val yomiLOUDSTemp = ConverterWithTermId().convert(yomiTree.root)
-//    val tangoLOUDSTemp = Converter().convert(tangoTree.root)
-//    yomiLOUDSTemp.convertListToBitSet()
-//    tangoLOUDSTemp.convertListToBitSet()
-//
-//    val objectOutputYomi =
-//        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/yomi_singleKanji.dat")))
-//    val objectOutputTango =
-//        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/tango_singleKanji.dat")))
-//
-//    yomiLOUDSTemp.writeExternalNotCompress(objectOutputYomi)
-//    tangoLOUDSTemp.writeExternalNotCompress(objectOutputTango)
-//
-//    val objectInputYomi = ObjectInputStream(FileInputStream("./src/main/resources/yomi_singleKanji.dat"))
-//    val objectInputTango = ObjectInputStream(FileInputStream("./src/main/resources/tango_singleKanji.dat"))
-//
-//    var yomiLOUDS: LOUDSWithTermId
-//    var tangoLOUDS: LOUDS
-//
-//    val yomiLOUDSReadTime = measureTime {
-//        yomiLOUDS = LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
-//    }
-//    val tangoLOUDSReadTime = measureTime {
-//        tangoLOUDS = LOUDS().readExternalNotCompress(objectInputTango)
-//    }
-//
-//    val tokenArrayTemp = TokenArray()
-//
-//    val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_singleKanji.dat"))
-//
-//    val timeBuildTokenArray = measureTime {
-//        tokenArrayTemp.buildTokenArray(dictionaryList, tangoLOUDS, objectOutput, 1)
-//    }
-//
-//    val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_singleKanji.dat"))
-//    val tokenArray = TokenArray()
-//
-//    val tokenArrayReadTime = measureTime {
-//        tokenArray.readExternalNotCompress(objectInput)
-//    }
-//
-//    tokenArray.readPOSTable(1)
-//
-//    println("loading time of token.dat: $tokenArrayReadTime")
-//    println("build time of Token.dat: $timeBuildTokenArray")
-//    println("load time of yomi.dat $yomiLOUDSReadTime")
-//    println("load time of tango.dat $tangoLOUDSReadTime")
-//}
+private fun buildDictionaryForSingleKanji() {
+    val yomiTree = PrefixTreeWithTermId()
+    val tangoTree = PrefixTree()
+
+    val dicUtils = DicUtils()
+
+    val dictionaryList = dicUtils.getSingleKanjiListDictionary("/single_kanji.tsv")
+        .sortedBy { it.yomi }
+        .sortedBy { it.yomi.length }
+        .groupBy { it.yomi }
+
+    dictionaryList
+        .forEach { entry ->
+            yomiTree.insert(entry.key)
+            println("insert to yomi tree: ${entry.key}")
+            entry.value.forEach {
+                tangoTree.insert(it.tango)
+                println("insert to tango tree: ${it.tango}")
+            }
+        }
+
+    val yomiLOUDSTemp = ConverterWithTermId().convert(yomiTree.root)
+    val tangoLOUDSTemp = Converter().convert(tangoTree.root)
+    yomiLOUDSTemp.convertListToBitSet()
+    tangoLOUDSTemp.convertListToBitSet()
+
+    val objectOutputYomi =
+        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/yomi_singleKanji.dat")))
+    val objectOutputTango =
+        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/tango_singleKanji.dat")))
+
+    yomiLOUDSTemp.writeExternalNotCompress(objectOutputYomi)
+    tangoLOUDSTemp.writeExternalNotCompress(objectOutputTango)
+
+    val objectInputYomi = ObjectInputStream(FileInputStream("./src/main/resources/yomi_singleKanji.dat"))
+    val objectInputTango = ObjectInputStream(FileInputStream("./src/main/resources/tango_singleKanji.dat"))
+
+    var yomiLOUDS: LOUDSWithTermId
+    var tangoLOUDS: LOUDS
+
+    val yomiLOUDSReadTime = measureTime {
+        yomiLOUDS = LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
+    }
+    val tangoLOUDSReadTime = measureTime {
+        tangoLOUDS = LOUDS().readExternalNotCompress(objectInputTango)
+    }
+
+    val tokenArrayTemp = TokenArray()
+
+    val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_singleKanji.dat"))
+
+    val timeBuildTokenArray = measureTime {
+        tokenArrayTemp.buildTokenArray(dictionaryList, tangoLOUDS, objectOutput, 1)
+    }
+
+    val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_singleKanji.dat"))
+    val tokenArray = TokenArray()
+
+    val tokenArrayReadTime = measureTime {
+        tokenArray.readExternalNotCompress(objectInput)
+    }
+
+    tokenArray.readPOSTable(1)
+
+    println("loading time of token.dat: $tokenArrayReadTime")
+    println("build time of Token.dat: $timeBuildTokenArray")
+    println("load time of yomi.dat $yomiLOUDSReadTime")
+    println("load time of tango.dat $tangoLOUDSReadTime")
+}

@@ -16,7 +16,7 @@ class LOUDSWithTermId {
     var LBS: BitSet = BitSet()
     var labels: MutableList<Char> = arrayListOf()
     var termIds: MutableList<Int> = arrayListOf()
-    var termIdsDiff: ShortArray = shortArrayOf()
+    var termIdsSave: IntArray = intArrayOf()
     var isLeaf: BitSet = BitSet()
     val isLeafTemp: MutableList<Boolean> = arrayListOf()
 
@@ -42,12 +42,12 @@ class LOUDSWithTermId {
         LBS: BitSet,
         labels: MutableList<Char>,
         isLeaf: BitSet,
-        termIds: ShortArray,
+        termIds: IntArray,
     ){
         this.LBS = LBS
         this.labels = labels
         this.isLeaf = isLeaf
-        this.termIdsDiff = termIds
+        this.termIdsSave = termIds
     }
 
     fun convertListToBitSet(){
@@ -98,11 +98,7 @@ class LOUDSWithTermId {
         if (firstNodeId < 0) return -1
 
         //val firstTermId = termIds[firstNodeId]
-        val firstTermId = if (termIdsDiff[firstNodeId].toInt() == 0){
-            firstNodeId + 1
-        }else{
-            firstNodeId + termIdsDiff[firstNodeId]
-        }
+        val firstTermId = termIdsSave[firstNodeId]
         return firstTermId
     }
 
@@ -225,7 +221,7 @@ class LOUDSWithTermId {
                 writeObject(LBS)
                 writeObject(isLeaf)
                 writeObject(labels.toCharArray())
-                writeObject(termIds.compressListInt().toShortArray())
+                writeObject(termIds.toIntArray())
                 flush()
                 close()
             }
@@ -240,13 +236,13 @@ class LOUDSWithTermId {
                 LBS = objectInput.readObject() as BitSet
                 isLeaf = objectInput.readObject() as BitSet
                 labels = (objectInput.readObject() as CharArray).toMutableList()
-                termIdsDiff = (objectInput.readObject() as ShortArray)
+                termIdsSave = (objectInput.readObject() as IntArray)
                 close()
             }catch (e: Exception){
                 println(e.stackTraceToString())
             }
         }
-        return LOUDSWithTermId(LBS, labels, isLeaf, termIdsDiff)
+        return LOUDSWithTermId(LBS, labels, isLeaf, termIdsSave)
     }
 
 }
