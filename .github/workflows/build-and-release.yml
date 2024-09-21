@@ -2,8 +2,10 @@ name: Build and Release
 
 on:
   push:
+    branches:
+      - main
     tags:
-      - 'v*'  # Runs only when a version tag is pushed
+      - 'v*'  # Also run when a version tag is pushed
 
 jobs:
   build:
@@ -21,13 +23,21 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # Build the project with Gradle or Maven
+      # Download multiple dictionary files
+      - name: Download dictionary files
+        run: |
+          mkdir -p ./src/main/resources
+          for i in $(seq -w 00 09); do
+            wget https://raw.githubusercontent.com/google/mozc/master/src/data/dictionary_oss/dictionary${i}.txt -O ./src/main/resources/dictionary${i}.txt
+          done
+
+      # Build the project with Gradle
       - name: Build with Gradle
-        run: ./gradlew build # Adjust this to your actual build command
+        run: ./gradlew build
 
       # Run the Kotlin application
       - name: Run main.kt
-        run: ./gradlew run # Adjust this if necessary
+        run: ./gradlew run
 
       # Upload binary files as artifacts
       - name: Upload binary artifacts
@@ -46,7 +56,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Create a release and upload artifacts
+      # Create GitHub Release and upload artifacts
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
