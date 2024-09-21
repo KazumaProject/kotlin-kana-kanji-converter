@@ -5,10 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/build-and-release.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Constants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Constants.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/connection_id/ConnectionIdTest.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/dictionary/DictionaryBuildTest.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/fid/FullyIndexedDictionaryTest.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/kana_kanji_converter/KanaKanjiConverterTest.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/pos_table/GraphBuilderTest.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/pos_table/POSTableTest.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/prefix/PrefixTreeTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/prefix/PrefixTreeTest.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,6 +97,7 @@
     "Gradle.PrefixTreeTest.Test write binary file 2.executor": "Run",
     "Gradle.PrefixTreeTest.Test write binary file.executor": "Run",
     "Gradle.PrefixTreeTest.create token array.executor": "Run",
+    "Gradle.PrefixTreeTest.executor": "Run",
     "Gradle.PrefixTreeTest.insert.executor": "Run",
     "Gradle.PrefixTreeTest.read text file from resources.executor": "Run",
     "Gradle.PrefixTreeWithTermIdTest.Test Common Prefix Search.executor": "Run",
@@ -100,6 +105,7 @@
     "Gradle.PrefixTreeWithTermIdTest.Test first child.executor": "Run",
     "Gradle.PrefixTreeWithTermIdTest.Test get child.executor": "Run",
     "Gradle.PrefixTreeWithTermIdTest.Test read text file from resources.executor": "Run",
+    "Gradle.PrefixTreeWithTermIdTest.executor": "Run",
     "Gradle.SingleKanjiTest.Test build single kanji.executor": "Run",
     "Kotlin.MainKt (1).executor": "Run",
     "Kotlin.MainKt.executor": "Run",
@@ -163,8 +169,8 @@
       <recent name="prefix" />
     </key>
   </component>
-  <component name="RunManager" selected="Kotlin.MainKt">
-    <configuration name="GraphBuilderTest.Build Graph Test" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.PrefixTreeTest">
+    <configuration name="ConnectionIdTest.Test to build octree with connection_single_column_txt" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -177,7 +183,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;pos_table.GraphBuilderTest.Build Graph Test&quot;" />
+            <option value="&quot;connection_id.ConnectionIdTest.Test to build octree with connection_single_column_txt&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -188,7 +194,7 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="POSTableTest.Build pos_table" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="KanaKanjiConverterTest.Test KanaKanjiConverter Engine" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -201,7 +207,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;pos_table.POSTableTest.Build pos_table&quot;" />
+            <option value="&quot;kana_kanji_converter.KanaKanjiConverterTest.Test KanaKanjiConverter Engine&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -212,7 +218,7 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="POSTableTest.Load pos_table" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="PrefixTreeTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -225,7 +231,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;pos_table.POSTableTest.Load pos_table&quot;" />
+            <option value="&quot;prefix.PrefixTreeTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -260,27 +266,44 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.kazumaproject.MainKt" />
-      <module name="kana-kanji-converter.main" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+    <configuration name="PrefixTreeWithTermIdTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;prefix.PrefixTreeWithTermIdTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Gradle.GraphBuilderTest.Build Graph Test" />
-      <item itemvalue="Gradle.POSTableTest.Build pos_table" />
-      <item itemvalue="Gradle.POSTableTest.Load pos_table" />
+      <item itemvalue="Gradle.ConnectionIdTest.Test to build octree with connection_single_column_txt" />
+      <item itemvalue="Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine" />
+      <item itemvalue="Gradle.PrefixTreeTest" />
+      <item itemvalue="Gradle.PrefixTreeWithTermIdTest" />
       <item itemvalue="Gradle.PrefixTreeTest.Test Token Array" />
-      <item itemvalue="Kotlin.MainKt" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.PrefixTreeTest" />
         <item itemvalue="Gradle.PrefixTreeTest.Test Token Array" />
-        <item itemvalue="Gradle.GraphBuilderTest.Build Graph Test" />
-        <item itemvalue="Gradle.POSTableTest.Load pos_table" />
-        <item itemvalue="Gradle.POSTableTest.Build pos_table" />
+        <item itemvalue="Gradle.PrefixTreeWithTermIdTest" />
+        <item itemvalue="Gradle.ConnectionIdTest.Test to build octree with connection_single_column_txt" />
+        <item itemvalue="Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine" />
       </list>
     </recent_temporary>
   </component>
