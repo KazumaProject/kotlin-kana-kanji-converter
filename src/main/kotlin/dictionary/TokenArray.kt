@@ -61,14 +61,6 @@ class TokenArray {
                 val nodeId = getNodeIdForDictionary(dictionary, tangoTrie, key)
                 if (index % 10000 == 0) {
                     println("build token array: $index $key ${dictionary.tango} $nodeId")
-                } else if (key == "かぶきちょう") {
-                    println("build token array: $index $key ${dictionary.tango} $nodeId")
-                } else if (nodeId == -3) {
-                    println("build token array: $index $key ${dictionary.tango} $nodeId")
-                } else if (index <= 200) {
-                    println("build token array: $index $key ${dictionary.tango} $nodeId")
-                } else if (index in 395300..395500) {
-                    println("build token array: $index $key ${dictionary.tango} $nodeId")
                 }
                 nodeIdList.add(nodeId)
             }

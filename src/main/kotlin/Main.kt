@@ -23,10 +23,10 @@ import kotlin.math.sqrt
 import kotlin.time.measureTime
 
 fun main() {
+    buildConnectionIds()
+    buildPOSTable()
     buildTriesAndTokenArray()
-    //buildPOSTable()
-    //buildConnectionIds()
-    //buildDictionaryForSingleKanji()
+    buildDictionaryForSingleKanji()
 }
 
 private fun buildPOSTable() {
@@ -42,8 +42,6 @@ private fun buildPOSTable() {
         "/dictionary08.txt",
         "/dictionary09.txt",
         "/suffix.txt",
-        "/domain.txt",
-        "/era.txt"
     )
     val tokenArray = TokenArray()
     tokenArray.buildPOSTable(fileList, 1)
