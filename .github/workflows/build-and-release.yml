@@ -3,7 +3,7 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v*'  # Also run when a version tag is pushed
+      - 'v*'  # Trigger only when a tag starting with "v" is pushed
 
 jobs:
   build:
@@ -43,12 +43,17 @@ jobs:
       - name: Run main.kt
         run: ./gradlew run
 
-      # Upload binary files as artifacts
-      - name: Upload binary artifacts
-        uses: actions/upload-artifact@v3
+      # Upload artifacts to GitHub Actions
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
         with:
-          name: yomi-tango-token
+          name: build-artifacts
           path: |
+            ./src/main/resources/connectionId.dat
+            ./src/main/resources/pos_table.dat
+            ./src/main/resources/yomi_singleKanji.dat
+            ./src/main/resources/tango_singleKanji.dat
+            ./src/main/resources/token_singleKanji.dat
             ./src/main/resources/yomi.dat
             ./src/main/resources/tango.dat
             ./src/main/resources/token.dat
@@ -60,7 +65,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Create GitHub Release and upload artifacts
+      # Create a release and upload artifacts
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
@@ -68,6 +73,11 @@ jobs:
           tag: ${{ github.ref }}
           name: Release ${{ github.ref }}
           files: |
+            ./src/main/resources/connectionId.dat
+            ./src/main/resources/pos_table.dat
+            ./src/main/resources/yomi_singleKanji.dat
+            ./src/main/resources/tango_singleKanji.dat
+            ./src/main/resources/token_singleKanji.dat
             ./src/main/resources/yomi.dat
             ./src/main/resources/tango.dat
             ./src/main/resources/token.dat
