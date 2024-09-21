@@ -72,7 +72,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
           name: Release ${{ github.ref }}
-          files: |
+          artifacts: |
             ./src/main/resources/connectionId.dat
             ./src/main/resources/pos_table.dat
             ./src/main/resources/yomi_singleKanji.dat
