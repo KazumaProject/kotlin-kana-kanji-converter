@@ -952,5 +952,54 @@ object Constants {
             cost = 3000,
             tango = "一品"
         ),
+        Dictionary(
+            yomi = "しゅはり",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "守破離"
+        ),
+        Dictionary(
+            yomi = "つめもの",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "詰め物"
+        ),
+        Dictionary(
+            yomi = "すいらいけん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "酔来軒"
+        ),
+        Dictionary(
+            yomi = "びーきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "B級"
+        ),
+        Dictionary(
+            yomi = "だんしゃり",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "断捨離"
+        ),
+        Dictionary(
+            yomi = "しゃぎょう",
+            leftId = 846,
+            rightId = 846,
+            cost = 4000,
+            tango = "捨行"
+        ),
+        Dictionary(
+            yomi = "りぎょう",
+            leftId = 643,
+            rightId = 643,
+            cost = 4000,
+            tango = "離行"
+        ),
     )
 }
