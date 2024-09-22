@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/Emoji.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/Symbol.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Constants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Constants.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Emoji.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Emoji.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Symbol.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Symbol.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
