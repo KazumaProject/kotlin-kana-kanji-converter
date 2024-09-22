@@ -289,7 +289,7 @@ class TokenArray {
         val objectInput = if (mode == 0) {
             ObjectInputStream(FileInputStream("./src/test/resources/pos_table_for_build.dat"))
         } else {
-            ObjectInputStream(FileInputStream("./src/main/bin/pos_table_for_build.dat"))
+            ObjectInputStream(FileInputStream("./src/main/resources/pos_table_for_build.dat"))
         }
         var a: Map<Pair<Short, Short>, Int>
         objectInput.apply {
