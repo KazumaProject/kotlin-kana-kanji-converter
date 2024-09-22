@@ -8,9 +8,6 @@ import com.kazumaproject.connection_id.deflate
 import com.kazumaproject.connection_id.inflate
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.dictionary.models.TokenEntry
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.*
 import java.util.*
 

@@ -121,8 +121,13 @@ private fun buildConnectionIds() {
 
     val connectionIdBuilder = ConnectionIdBuilder()
     lines?.let { l ->
+        // Skip the first line and convert the remaining lines to Short
+        val connectionIds = l.drop(1).mapNotNull { line ->
+            line.toShortOrNull() // Safely converts to Short, returns null if conversion fails
+        }.toShortArray()
+
         connectionIdBuilder.writeShortArrayAsBytes(
-            l.map { it.toShort() }.toShortArray(),
+            connectionIds,
             "./src/main/resources/connectionId.dat",
         )
     }

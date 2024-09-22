@@ -114,7 +114,7 @@
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/kazuma/IdeaProjects/kotlin-kana-kanji-converter/src/main/bin",
+    "last_opened_file_path": "/Users/kazuma/IdeaProjects/kotlin-kana-kanji-converter/src/main/resources",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -139,9 +139,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$/src/main/bin" />
       <recent name="$PROJECT_DIR$/src/test/resources" />
-      <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$/src/main" />
       <recent name="$PROJECT_DIR$/src/test" />
     </key>
@@ -165,7 +165,7 @@
       <recent name="prefix" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.PrefixTreeTest">
+  <component name="RunManager" selected="Kotlin.MainKt">
     <configuration name="ConnectionIdTest.Test to build octree with connection_single_column_txt" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -180,30 +180,6 @@
             <option value=":test" />
             <option value="--tests" />
             <option value="&quot;connection_id.ConnectionIdTest.Test to build octree with connection_single_column_txt&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="KanaKanjiConverterTest.Test KanaKanjiConverter Engine" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;kana_kanji_converter.KanaKanjiConverterTest.Test KanaKanjiConverter Engine&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -286,20 +262,27 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kazumaproject.MainKt" />
+      <module name="kana-kanji-converter.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Gradle.ConnectionIdTest.Test to build octree with connection_single_column_txt" />
-      <item itemvalue="Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine" />
       <item itemvalue="Gradle.PrefixTreeTest" />
       <item itemvalue="Gradle.PrefixTreeWithTermIdTest" />
       <item itemvalue="Gradle.PrefixTreeTest.Test Token Array" />
+      <item itemvalue="Kotlin.MainKt" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Gradle.PrefixTreeTest" />
         <item itemvalue="Gradle.PrefixTreeTest.Test Token Array" />
         <item itemvalue="Gradle.PrefixTreeWithTermIdTest" />
         <item itemvalue="Gradle.ConnectionIdTest.Test to build octree with connection_single_column_txt" />
-        <item itemvalue="Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine" />
       </list>
     </recent_temporary>
   </component>
