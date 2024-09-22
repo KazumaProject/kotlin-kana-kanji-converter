@@ -205,10 +205,6 @@ class TokenArray {
             rightIds2.add(it.key.second)
         }
 
-        println("result: ${result.map { it.key }.subList(0, 20)} ${result.size}")
-        println("left ids: ${leftIds2.subList(0, 20)} ${leftIds2.size}")
-        println("right ids: ${rightIds2.subList(0, 20)} ${rightIds2.size}")
-
         val objectOutput = if (mode == 0) {
             ObjectOutputStream(FileOutputStream("./src/test/resources/pos_table.dat"))
         } else {
