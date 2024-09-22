@@ -3,6 +3,8 @@ package com.kazumaproject
 import com.kazumaproject.Constants.CUSTOM_LIST
 import com.kazumaproject.Constants.DIC_LIST
 import com.kazumaproject.Constants.DIFFICULT_LIST
+import com.kazumaproject.Constants.DOMAIN
+import com.kazumaproject.Constants.ERA
 import com.kazumaproject.Constants.FIXED_LIST
 import com.kazumaproject.Constants.NAME_IT_LIST
 import com.kazumaproject.Constants.NAME_LIST
@@ -16,18 +18,13 @@ import com.kazumaproject.Louds.with_term_id.LOUDSWithTermId
 import com.kazumaproject.connection_id.ConnectionIdBuilder
 import com.kazumaproject.dictionary.DicUtils
 import com.kazumaproject.dictionary.TokenArray
+import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.prefix.PrefixTree
 import com.kazumaproject.prefix.with_term_id.PrefixTreeWithTermId
 import java.io.*
+import java.util.*
 
 fun main() {
-    buildConnectionIds()
-    buildPOSTable()
-    buildTriesAndTokenArray()
-    buildDictionaryForSingleKanji()
-}
-
-private fun buildPOSTable() {
     val fileList: List<String> = listOf(
         "/dictionary00.txt",
         "/dictionary01.txt",
@@ -41,44 +38,29 @@ private fun buildPOSTable() {
         "/dictionary09.txt",
         "/suffix.txt",
     )
-    val tokenArray = TokenArray()
-    tokenArray.buildPOSTable(fileList, 1)
-    tokenArray.buildPOSTableWithIndex(fileList, 1)
+    val dicUtils = DicUtils()
+    val dictionaryList = dicUtils.getListDictionary(fileList).toMutableList()
+    val finalList =
+        (dictionaryList + DIC_LIST + CUSTOM_LIST + NAME_LIST + FIXED_LIST + DIFFICULT_LIST + SYMBOL_LIST + NAME_MUSIC_LIST + NAME_IT_LIST + PROVERB_LIST + DOMAIN + ERA)
+            .groupBy { it.yomi }
+            .toSortedMap(compareBy({ it.length }, { it }))
+
+    buildConnectionIds()
+    buildPOSTable(finalList)
+    buildTriesAndTokenArray(finalList)
+    buildDictionaryForSingleKanji()
 }
 
-private fun buildTriesAndTokenArray() {
+private fun buildPOSTable(finalList: SortedMap<String, List<Dictionary>>) {
+    val tokenArray = TokenArray()
+    tokenArray.buildPOSTable(finalList, 1)
+    tokenArray.buildPOSTableWithIndex(finalList, 1)
+}
+
+private fun buildTriesAndTokenArray(finalList: SortedMap<String, List<Dictionary>>) {
 
     val yomiTree = PrefixTreeWithTermId()
     val tangoTree = PrefixTree()
-
-    val dicUtils = DicUtils()
-
-    val mode = 3
-
-    val list = when (mode) {
-        0 -> listOf("/dictionary_small.txt")
-        1 -> listOf("/dictionary_medium.txt")
-        2 -> listOf("/dictionary00.txt")
-        else -> listOf(
-            "/dictionary00.txt",
-            "/dictionary01.txt",
-            "/dictionary02.txt",
-            "/dictionary03.txt",
-            "/dictionary04.txt",
-            "/dictionary05.txt",
-            "/dictionary06.txt",
-            "/dictionary07.txt",
-            "/dictionary08.txt",
-            "/dictionary09.txt",
-        )
-    }
-
-    val dictionaryList = dicUtils.getListDictionary(list).toMutableList()
-
-    val finalList =
-        (dictionaryList + DIC_LIST + CUSTOM_LIST + NAME_LIST + FIXED_LIST + DIFFICULT_LIST + SYMBOL_LIST + NAME_MUSIC_LIST + NAME_IT_LIST + PROVERB_LIST)
-            .groupBy { it.yomi }
-            .toSortedMap(compareBy({ it.length }, { it }))
 
     for (entry in finalList.entries) {
         yomiTree.insert(entry.key)

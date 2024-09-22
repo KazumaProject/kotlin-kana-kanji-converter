@@ -165,54 +165,49 @@ class TokenArray {
 
     /**
      *
-     * @param fileList dictionary00 ~ dictionary09
+     * @param fileMap dictionary00 ~ dictionary09
      * @param mode file out dist 0:test else:main
      *
      **/
     fun buildPOSTable(
-        fileList: List<String>,
+        fileMap: SortedMap<String, List<Dictionary>>,
         mode: Int
     ) {
         val tempMap: MutableMap<Pair<Short, Short>, Int> = mutableMapOf()
-        fileList.forEach {
-            val line = this::class.java.getResourceAsStream(it)
-                ?.bufferedReader()
-                ?.readLines()
-            line?.forEach { str ->
-                str.apply {
-                    val leftId = split("\\t".toRegex())[1]
-                    val rightId = split("\\t".toRegex())[2]
-                    if (tempMap[Pair(leftId.toShort(), rightId.toShort())] == null) {
-                        tempMap[Pair(leftId.toShort(), rightId.toShort())] = 0
-                    } else {
-                        tempMap[Pair(leftId.toShort(), rightId.toShort())] =
-                            (tempMap[Pair(leftId.toShort(), rightId.toShort())]!!) + 1
-                    }
+        var counter = 0 // This will track the incremented values for new pairs
+
+        // Iterate through the map
+        fileMap.forEach { (_, dictionaryList) ->
+            dictionaryList.forEach { dictionary ->
+                val key = Pair(dictionary.leftId, dictionary.rightId)
+
+                // Only assign a value if the key is not already present
+                if (key !in tempMap) {
+                    tempMap[key] = counter
+                    counter++ // Increment the counter only for new pairs
                 }
             }
         }
 
+        // Sort the result by value in descending order (optional)
         val result = tempMap.toList().sortedByDescending { (_, value) -> value }.toMap()
 
-        val leftIds2 = mutableListOf<Short>()
-        val rightIds2 = mutableListOf<Short>()
+        // Separate the left and right IDs into two lists
+        val leftIds2 = result.keys.map { it.first }.toShortArray()
+        val rightIds2 = result.keys.map { it.second }.toShortArray()
 
-        result.forEach {
-            leftIds2.add(it.key.first)
-            rightIds2.add(it.key.second)
-        }
-
-        val objectOutput = if (mode == 0) {
-            ObjectOutputStream(FileOutputStream("./src/test/resources/pos_table.dat"))
+        // Define the output file path based on mode
+        val outputPath = if (mode == 0) {
+            "./src/test/resources/pos_table.dat"
         } else {
-            ObjectOutputStream(FileOutputStream("./src/main/resources/pos_table.dat"))
+            "./src/main/resources/pos_table.dat"
         }
+
+        // Write the results to the appropriate file using try-with-resources
         try {
-            objectOutput.apply {
-                writeObject(leftIds2.toShortArray())
-                writeObject(rightIds2.toShortArray())
-                flush()
-                close()
+            ObjectOutputStream(FileOutputStream(outputPath)).use { objectOutput ->
+                objectOutput.writeObject(leftIds2)
+                objectOutput.writeObject(rightIds2)
             }
         } catch (e: Exception) {
             println(e.stackTraceToString())
@@ -221,45 +216,47 @@ class TokenArray {
 
     /**
      *
-     * @param fileList dictionary00 ~ dictionary09
+     * @param fileMap dictionary00 ~ dictionary09
      * @param mode file out dist 0:test else:main
      *
      **/
     fun buildPOSTableWithIndex(
-        fileList: List<String>,
+        fileMap: SortedMap<String, List<Dictionary>>,
         mode: Int
     ) {
         val tempMap: MutableMap<Pair<Short, Short>, Int> = mutableMapOf()
-        fileList.forEach {
-            val line = this::class.java.getResourceAsStream(it)
-                ?.bufferedReader()
-                ?.readLines()
-            line?.forEach { str ->
-                str.apply {
-                    val leftId = split("\\t".toRegex())[1]
-                    val rightId = split("\\t".toRegex())[2]
-                    if (tempMap[Pair(leftId.toShort(), rightId.toShort())] == null) {
-                        tempMap[Pair(leftId.toShort(), rightId.toShort())] = 0
-                    } else {
-                        tempMap[Pair(leftId.toShort(), rightId.toShort())] =
-                            (tempMap[Pair(leftId.toShort(), rightId.toShort())]!!) + 1
-                    }
+        var counter = 0 // Initialize a counter to track unique indices
+
+        // Iterate through the map
+        fileMap.forEach { (_, dictionaryList) ->
+            dictionaryList.forEach { dictionary ->
+                val key = Pair(dictionary.leftId, dictionary.rightId)
+
+                // Assign a unique value only if the key is not already present
+                if (key !in tempMap) {
+                    tempMap[key] = counter
+                    counter++ // Increment the counter for new pairs
                 }
             }
         }
 
+        // Sort the result by value in descending order (optional)
         val result = tempMap.toList().sortedByDescending { (_, value) -> value }.toMap()
-        val objectOutput = if (mode == 0) {
-            ObjectOutputStream(FileOutputStream("./src/test/resources/pos_table_for_build.dat"))
+
+        // Define the output file path based on mode
+        val outputPath = if (mode == 0) {
+            "./src/test/resources/pos_table_for_build.dat"
         } else {
-            ObjectOutputStream(FileOutputStream("./src/main/resources/pos_table_for_build.dat"))
+            "./src/main/resources/pos_table_for_build.dat"
         }
+
+        // Create a map with index for each pair
         val mapToSave = result.keys.toList().mapIndexed { index, pair -> pair to index }.toMap()
+
+        // Use try-with-resources to ensure file is closed automatically
         try {
-            objectOutput.apply {
-                writeObject(mapToSave)
-                flush()
-                close()
+            ObjectOutputStream(FileOutputStream(outputPath)).use { objectOutput ->
+                objectOutput.writeObject(mapToSave)
             }
         } catch (e: Exception) {
             println(e.stackTraceToString())

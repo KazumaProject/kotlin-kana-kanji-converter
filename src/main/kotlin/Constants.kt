@@ -607,6 +607,68 @@ object Constants {
         ),
     )
 
+    val ERA = listOf(
+        Dictionary(
+            yomi = "れいわ",
+            leftId = 1916,
+            rightId = 1916,
+            cost = 1685,
+            tango = "令和"
+        ),
+        Dictionary(
+            yomi = "あたらしいげんごう",
+            leftId = 1916,
+            rightId = 1916,
+            cost = 1685,
+            tango = "令和"
+        ),
+    )
+
+    val DOMAIN = listOf(
+        Dictionary(
+            yomi = "@gmail.com",
+            leftId = 0,
+            rightId = 0,
+            cost = 8000,
+            tango = "@gmail.com"
+        ),
+        Dictionary(
+            yomi = "@docomo.ne.jp",
+            leftId = 0,
+            rightId = 0,
+            cost = 9000,
+            tango = "@docomo.ne.jp"
+        ),
+        Dictionary(
+            yomi = "@i.softbank.jp",
+            leftId = 0,
+            rightId = 0,
+            cost = 9001,
+            tango = "@i.softbank.jp"
+        ),
+        Dictionary(
+            yomi = "@softbank.ne.jp",
+            leftId = 0,
+            rightId = 0,
+            cost = 9002,
+            tango = "@softbank.ne.jp"
+        ),
+        Dictionary(
+            yomi = "@ezweb.ne.jp",
+            leftId = 0,
+            rightId = 0,
+            cost = 9003,
+            tango = "@gmail.com"
+        ),
+        Dictionary(
+            yomi = "@au.com",
+            leftId = 0,
+            rightId = 0,
+            cost = 9004,
+            tango = "@gmail.com"
+        ),
+    )
+
     val NAME_LIST = listOf(
         Dictionary(
             yomi = "みくる",
