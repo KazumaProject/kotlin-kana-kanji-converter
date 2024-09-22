@@ -6,7 +6,7 @@ on:
       - 'v*'  # Trigger only when a tag starting with "v" is pushed
 
 jobs:
-  build:
+  build-and-release:
     runs-on: ubuntu-latest
 
     steps:
@@ -58,14 +58,7 @@ jobs:
             ./src/main/resources/tango.dat
             ./src/main/resources/token.dat
 
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # Create a release and upload artifacts
+      # Create a GitHub Release and upload artifacts
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
