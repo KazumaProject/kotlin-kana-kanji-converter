@@ -1,51 +1,71 @@
-# Kana Kanji Converter in Kotlin
+# かな漢字変換プログラム
 
-This is kana kanji converter using Mozc dictionaries in Kotlin.
+## 概要
+
+このプログラムは、Kotlin を使用して実装されたかな漢字変換システムです。ひらがなを入力すると、トライ構造とトークン配列を使用して効率的に漢字に変換されます。ビタビアルゴリズムを活用し、最適な変換結果を提供します。また、辞書ファイルはカスタマイズ可能で、さまざまな用途に応じた設定が可能です。
+
+## 特徴
+
+- ひらがなから漢字への迅速な変換
+- カスタマイズ可能な辞書ファイル
+- トライ構造による柔軟なデータ処理
+- ビタビアルゴリズムを使用した最適な経路選択
+
+## 自動ビルドとリリース
+
+GitHub Actions を使用して、プッシュされたタグに基づいてビルドとリリースを自動化しています。このプロセスには、辞書ファイルのダウンロード、Kotlin アプリケーションのビルド、アーティファクトの生成、および GitHub Release へのアップロードが含まれます。
+
+## インストール
+
+```bash
+git clone https://github.com/your-repo/kana-kanji-conversion.git
+cd kana-kanji-conversion
+./gradlew build
+```
+
+## 使い方
+
+1. 辞書ファイルを準備し、プログラムを実行します。
+2. ひらがな文字列を入力すると漢字に変換されます。
+
+## ライセンス
+
+このプロジェクトは [MIT ライセンス](LICENSE) のもとで提供されています。
+
+---
+
+### English README
+
+# Kana-Kanji Conversion Program
+
+## Overview
+
+This program is a kana-kanji conversion system implemented in Kotlin. It efficiently converts hiragana input to kanji by leveraging trie structures and token arrays. The program uses the Viterbi algorithm to calculate the shortest path for selecting the most suitable kanji from multiple candidates. Customizable dictionary files are supported to allow for various uses.
+
+## Features
+
+- Fast conversion from hiragana to kanji
+- Customizable dictionary files
+- Flexible trie-based data processing
+- Optimal path selection using the Viterbi algorithm
+
+## Automated Build and Release
+
+This project uses GitHub Actions to automate the build and release process based on pushed tags. The process includes downloading dictionary files, building the Kotlin application, generating artifacts, and uploading them to GitHub Releases.
+
+## Installation
+
+```bash
+git clone https://github.com/your-repo/kana-kanji-conversion.git
+cd kana-kanji-conversion
+./gradlew build
+```
 
 ## Usage
 
-1. copy `dictionary00.txt` ~ `dictionary09.txt`,`connection_single_column.txt` and `single_kanji.tsv` from [mozc](https://github.com/google/mozc/tree/master/src/data/dictionary_oss) to `src/main/resources` directory
-2. build binary files for first time
+1. Prepare the dictionary files and run the program.
+2. Input a hiragana string to convert it to kanji.
 
-```kotlin
-fun main() {
-    buildTriesAndTokenArray()
-    buildConnectionIdSparseArray()
-    buildPOSTable()
-}
-```
+## License
 
-Please refer to `/src/main/Main.kt`
-
-## Sample code:
-
-```kotlin
-fun main() {
-    val kanaKanjiEngine = KanaKanjiEngine()
-    kanaKanjiEngine.buildEngine()
-
-    val word1 = "とべないぶた"
-    val word2 = "わたしのなまえはなかのです"
-    val word3 = "ここではきものをぬぐ"
-
-    val result1BestPath = kanaKanjiEngine.viterbiAlgorithm(word1)
-    val result2BestPath = kanaKanjiEngine.viterbiAlgorithm(word2)
-    val result3BestPath = kanaKanjiEngine.viterbiAlgorithm(word3)
-
-    val result1NBest = kanaKanjiEngine.nBestPath(word1,5)
-    val result2NBest = kanaKanjiEngine.nBestPath(word2,5)
-    val result3NBest = kanaKanjiEngine.nBestPath(word3,5)
-
-    println("Viterbi $word1 ==> $result1BestPath")
-    println("Viterbi $word2 ==> $result2BestPath")
-    println("Viterbi $word3 ==> $result3BestPath")
-
-    println("nBestPath $word1 ==> $result1NBest")
-    println("nBestPath $word2 ==> $result2NBest")
-    println("nBestPath $word3 ==> $result3NBest")
-
-}
-```
-<img width="1003" alt="best_paths" src="https://github.com/KazumaProject/kotlin-kana-kanji-converter/assets/59742125/e24d0338-90ef-4a57-a893-755bc00570a2">
-
-Please refer to `/test/kana_kanji_converter/KanaKanjiConverterTest.kt`
+This project is licensed under the [MIT License](LICENSE).
