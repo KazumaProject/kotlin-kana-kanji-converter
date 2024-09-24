@@ -619,6 +619,34 @@ object Constants {
             cost = 4000,
             tango = "二本指"
         ),
+        Dictionary(
+            yomi = "たけい",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5500,
+            tango = "たけ井"
+        ),
+        Dictionary(
+            yomi = "とみた",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5500,
+            tango = "とみ田"
+        ),
+        Dictionary(
+            yomi = "めんやたけい",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5500,
+            tango = "麺屋たけ井"
+        ),
+        Dictionary(
+            yomi = "とみた",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5500,
+            tango = "中華蕎麦とみ田"
+        ),
     )
 
     val ERA = listOf(
@@ -872,22 +900,8 @@ object Constants {
             yomi = "はてな",
             leftId = 2645,
             rightId = 2645,
-            cost = 4000,
-            tango = "？"
-        ),
-        Dictionary(
-            yomi = "はてな",
-            leftId = 2645,
-            rightId = 2645,
             cost = 4001,
             tango = "?"
-        ),
-        Dictionary(
-            yomi = "びっくりまーく",
-            leftId = 2642,
-            rightId = 2642,
-            cost = 4600,
-            tango = "！"
         ),
         Dictionary(
             yomi = "びっくりまーく",
@@ -900,13 +914,6 @@ object Constants {
             yomi = "かっこ",
             leftId = 2641,
             rightId = 2641,
-            cost = 4000,
-            tango = "()"
-        ),
-        Dictionary(
-            yomi = "かっこ",
-            leftId = 2641,
-            rightId = 2641,
             cost = 4001,
             tango = "（）"
         ),
@@ -914,22 +921,53 @@ object Constants {
             yomi = "ぷらす",
             leftId = 2641,
             rightId = 2641,
-            cost = 4000,
-            tango = "+"
-        ),
-        Dictionary(
-            yomi = "ぷらす",
-            leftId = 2641,
-            rightId = 2641,
             cost = 4001,
-            tango = "＋"
+            tango = "+"
         ),
         Dictionary(
             yomi = "まいなす",
             leftId = 2641,
             rightId = 2641,
-            cost = 4000,
+            cost = 4001,
             tango = "-"
+        ),
+        Dictionary(
+            yomi = "ー",
+            leftId = 2651,
+            rightId = 2651,
+            cost = 4001,
+            tango = "~"
+        ),
+    )
+
+    val ZENKANKU_LIST = listOf(
+        Dictionary(
+            yomi = "はてな",
+            leftId = 2645,
+            rightId = 2645,
+            cost = 4000,
+            tango = "？"
+        ),
+        Dictionary(
+            yomi = "びっくりまーく",
+            leftId = 2642,
+            rightId = 2642,
+            cost = 4600,
+            tango = "！"
+        ),
+        Dictionary(
+            yomi = "かっこ",
+            leftId = 2641,
+            rightId = 2641,
+            cost = 4000,
+            tango = "()"
+        ),
+        Dictionary(
+            yomi = "ぷらす",
+            leftId = 2641,
+            rightId = 2641,
+            cost = 4000,
+            tango = "＋"
         ),
         Dictionary(
             yomi = "ー",
@@ -1944,7 +1982,7 @@ object Constants {
         Dictionary(yomi = "さらっと", leftId = 12, rightId = 12, cost = 4000, tango = "さらっと"),
         Dictionary(yomi = "さらっと", leftId = 12, rightId = 12, cost = 4001, tango = "サラッと"),
         Dictionary(yomi = "あごだし", leftId = 1851, rightId = 1851, cost = 4000, tango = "あご出汁"),
-        Dictionary(yomi = "あさごはん", leftId = 1851, rightId = 1851, cost = 4000, tango = "朝ごはん"),
+        Dictionary(yomi = "あさごはん", leftId = 1851, rightId = 1851, cost = 4001, tango = "朝ごはん"),
         Dictionary(yomi = "あさごはん", leftId = 1851, rightId = 1851, cost = 4000, tango = "朝ご飯"),
         Dictionary(yomi = "いけいざい", leftId = 1851, rightId = 1851, cost = 4000, tango = "違警罪"),
         Dictionary(yomi = "いただきもの", leftId = 1851, rightId = 1851, cost = 4000, tango = "頂き物"),
