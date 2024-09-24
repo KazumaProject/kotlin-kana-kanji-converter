@@ -623,28 +623,28 @@ object Constants {
             yomi = "たけい",
             leftId = 1920,
             rightId = 1920,
-            cost = 5500,
+            cost = 4000,
             tango = "たけ井"
         ),
         Dictionary(
             yomi = "とみた",
             leftId = 1920,
             rightId = 1920,
-            cost = 5500,
+            cost = 4000,
             tango = "とみ田"
         ),
         Dictionary(
             yomi = "めんやたけい",
             leftId = 1920,
             rightId = 1920,
-            cost = 5500,
+            cost = 4000,
             tango = "麺屋たけ井"
         ),
         Dictionary(
-            yomi = "とみた",
+            yomi = "ちゅうかそばとみた",
             leftId = 1920,
             rightId = 1920,
-            cost = 5500,
+            cost = 4000,
             tango = "中華蕎麦とみ田"
         ),
     )
