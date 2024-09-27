@@ -55,10 +55,8 @@ class TokenArray {
                 val posIndex = posTableWithIndex.getValue(Pair(dictionary.leftId, dictionary.rightId))
                 posTableIndexList.add(posIndex.toShort())
                 wordCostList.add(dictionary.cost)
+                println("build token array: $index $key ${dictionary.tango} ")
                 val nodeId = getNodeIdForDictionary(dictionary, tangoTrie, key)
-                if (index % 10000 == 0) {
-                    println("build token array: $index $key ${dictionary.tango} $nodeId")
-                }
                 nodeIdList.add(nodeId)
             }
             index++

@@ -57,6 +57,15 @@ jobs:
             ./src/main/resources/yomi.dat
             ./src/main/resources/tango.dat
             ./src/main/resources/token.dat
+            ./src/main/resources/yomi_emoji.dat
+            ./src/main/resources/tango_emoji.dat
+            ./src/main/resources/token_emoji.dat
+            ./src/main/resources/yomi_emoticon.dat
+            ./src/main/resources/tango_emoticon.dat
+            ./src/main/resources/token_emoticon.dat
+            ./src/main/resources/yomi_symbol.dat
+            ./src/main/resources/tango_symbol.dat
+            ./src/main/resources/token_symbol.dat
 
       # Create a GitHub Release and upload artifacts
       - name: Create GitHub Release
@@ -74,3 +83,12 @@ jobs:
             ./src/main/resources/yomi.dat
             ./src/main/resources/tango.dat
             ./src/main/resources/token.dat
+            ./src/main/resources/yomi_emoji.dat
+            ./src/main/resources/tango_emoji.dat
+            ./src/main/resources/token_emoji.dat
+            ./src/main/resources/yomi_emoticon.dat
+            ./src/main/resources/tango_emoticon.dat
+            ./src/main/resources/token_emoticon.dat
+            ./src/main/resources/yomi_symbol.dat
+            ./src/main/resources/tango_symbol.dat
+            ./src/main/resources/token_symbol.dat

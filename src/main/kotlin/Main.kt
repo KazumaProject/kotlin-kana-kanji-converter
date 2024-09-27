@@ -22,8 +22,11 @@ import com.kazumaproject.connection_id.ConnectionIdBuilder
 import com.kazumaproject.dictionary.DicUtils
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
+import com.kazumaproject.emoji.EmojiDictionaryBuilder
+import com.kazumaproject.emoticon.EmoticonDictionaryBuilder
 import com.kazumaproject.prefix.PrefixTree
 import com.kazumaproject.prefix.with_term_id.PrefixTreeWithTermId
+import com.kazumaproject.symbol.SymbolDictionaryBuilder
 import java.io.*
 import java.util.*
 
@@ -52,6 +55,9 @@ fun main() {
     buildPOSTable(finalList)
     buildTriesAndTokenArray(finalList)
     buildDictionaryForSingleKanji()
+    buildDictionaryForEmoji()
+    buildDictionaryForEmoticon()
+    buildDictionaryForSymbol()
 }
 
 private fun buildPOSTable(finalList: SortedMap<String, List<Dictionary>>) {
@@ -159,6 +165,141 @@ private fun buildDictionaryForSingleKanji() {
     val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_singleKanji.dat"))
     tokenArrayTemp.buildTokenArray(dictionaryList, tangoLOUDS, objectOutput, 1)
     val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_singleKanji.dat"))
+    val tokenArray = TokenArray()
+    tokenArray.readExternalNotCompress(objectInput)
+    tokenArray.readPOSTable(1)
+}
+
+private fun buildDictionaryForEmoji() {
+    val yomiTree = PrefixTreeWithTermId()
+    val tangoTree = PrefixTree()
+
+    val emojiDictionaryBuilder = EmojiDictionaryBuilder()
+
+    val dictionaryList = emojiDictionaryBuilder.convertEmojiDataToDictionaryList("src/main/bin/emoji_data.tsv")
+        .groupBy { it.yomi }
+        .toSortedMap(compareBy({ it.length }, { it }))
+
+    dictionaryList
+        .forEach { entry ->
+            yomiTree.insert(entry.key)
+            entry.value.forEach {
+                tangoTree.insert(it.tango)
+            }
+        }
+
+    val yomiLOUDSTemp = ConverterWithTermId().convert(yomiTree.root)
+    val tangoLOUDSTemp = Converter().convert(tangoTree.root)
+    yomiLOUDSTemp.convertListToBitSet()
+    tangoLOUDSTemp.convertListToBitSet()
+
+    val objectOutputYomi =
+        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/yomi_emoji.dat")))
+    val objectOutputTango =
+        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/tango_emoji.dat")))
+
+    yomiLOUDSTemp.writeExternalNotCompress(objectOutputYomi)
+    tangoLOUDSTemp.writeExternalNotCompress(objectOutputTango)
+
+    val objectInputYomi = ObjectInputStream(FileInputStream("./src/main/resources/yomi_emoji.dat"))
+    val objectInputTango = ObjectInputStream(FileInputStream("./src/main/resources/tango_emoji.dat"))
+
+    LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
+    val tangoLOUDS: LOUDS = LOUDS().readExternalNotCompress(objectInputTango)
+    val tokenArrayTemp = TokenArray()
+    val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_emoji.dat"))
+    tokenArrayTemp.buildTokenArray(dictionaryList, tangoLOUDS, objectOutput, 1)
+    val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_emoji.dat"))
+    val tokenArray = TokenArray()
+    tokenArray.readExternalNotCompress(objectInput)
+    tokenArray.readPOSTable(1)
+}
+
+private fun buildDictionaryForEmoticon() {
+    val yomiTree = PrefixTreeWithTermId()
+    val tangoTree = PrefixTree()
+
+    val emoticonDictionaryBuilder = EmoticonDictionaryBuilder()
+
+    val dictionaryList = emoticonDictionaryBuilder.convertEmoticonDataToDictionaryList("src/main/bin/emoticon.tsv")
+        .groupBy { it.yomi }
+        .toSortedMap(compareBy({ it.length }, { it }))
+
+    dictionaryList
+        .forEach { entry ->
+            yomiTree.insert(entry.key)
+            entry.value.forEach {
+                tangoTree.insert(it.tango)
+            }
+        }
+
+    val yomiLOUDSTemp = ConverterWithTermId().convert(yomiTree.root)
+    val tangoLOUDSTemp = Converter().convert(tangoTree.root)
+    yomiLOUDSTemp.convertListToBitSet()
+    tangoLOUDSTemp.convertListToBitSet()
+
+    val objectOutputYomi =
+        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/yomi_emoticon.dat")))
+    val objectOutputTango =
+        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/tango_emoticon.dat")))
+
+    yomiLOUDSTemp.writeExternalNotCompress(objectOutputYomi)
+    tangoLOUDSTemp.writeExternalNotCompress(objectOutputTango)
+
+    val objectInputYomi = ObjectInputStream(FileInputStream("./src/main/resources/yomi_emoticon.dat"))
+    val objectInputTango = ObjectInputStream(FileInputStream("./src/main/resources/tango_emoticon.dat"))
+
+    LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
+    val tangoLOUDS: LOUDS = LOUDS().readExternalNotCompress(objectInputTango)
+    val tokenArrayTemp = TokenArray()
+    val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_emoticon.dat"))
+    tokenArrayTemp.buildTokenArray(dictionaryList, tangoLOUDS, objectOutput, 1)
+    val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_emoticon.dat"))
+    val tokenArray = TokenArray()
+    tokenArray.readExternalNotCompress(objectInput)
+    tokenArray.readPOSTable(1)
+}
+
+private fun buildDictionaryForSymbol() {
+    val yomiTree = PrefixTreeWithTermId()
+    val tangoTree = PrefixTree()
+
+    val symbolDictionaryBuilder = SymbolDictionaryBuilder()
+
+    val dictionaryList = symbolDictionaryBuilder.convertSymbolDataToDictionaryList("src/main/bin/symbol.tsv")
+        .groupBy { it.yomi }
+        .toSortedMap(compareBy({ it.length }, { it }))
+
+    dictionaryList
+        .forEach { entry ->
+            yomiTree.insert(entry.key)
+            entry.value.forEach {
+                tangoTree.insert(it.tango)
+            }
+        }
+
+    val yomiLOUDSTemp = ConverterWithTermId().convert(yomiTree.root)
+    val tangoLOUDSTemp = Converter().convert(tangoTree.root)
+    yomiLOUDSTemp.convertListToBitSet()
+    tangoLOUDSTemp.convertListToBitSet()
+
+    val objectOutputYomi =
+        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/yomi_symbol.dat")))
+    val objectOutputTango =
+        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/tango_symbol.dat")))
+
+    yomiLOUDSTemp.writeExternalNotCompress(objectOutputYomi)
+    tangoLOUDSTemp.writeExternalNotCompress(objectOutputTango)
+
+    val objectInputYomi = ObjectInputStream(FileInputStream("./src/main/resources/yomi_symbol.dat"))
+    val objectInputTango = ObjectInputStream(FileInputStream("./src/main/resources/tango_symbol.dat"))
+
+    LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
+    val tangoLOUDS: LOUDS = LOUDS().readExternalNotCompress(objectInputTango)
+    val tokenArrayTemp = TokenArray()
+    val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_symbol.dat"))
+    tokenArrayTemp.buildTokenArray(dictionaryList, tangoLOUDS, objectOutput, 1)
+    val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_symbol.dat"))
     val tokenArray = TokenArray()
     tokenArray.readExternalNotCompress(objectInput)
     tokenArray.readPOSTable(1)

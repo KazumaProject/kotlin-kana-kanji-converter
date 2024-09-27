@@ -2141,4 +2141,28 @@ object Constants {
         Dictionary(yomi = "たちあらい", leftId = 1923, rightId = 1923, cost = 4000, tango = "太刀洗")
     )
 
+    val EMOJI = listOf(
+        Dictionary(
+            yomi = "#",
+            leftId = 2641,
+            rightId = 2641,
+            cost = 4000,
+            tango = "\uFE0F⃣"
+        ),
+        Dictionary(
+            yomi = "かこみすうじ",
+            leftId = 2641,
+            rightId = 2641,
+            cost = 4000,
+            tango = "\uFE0F"
+        ),
+        Dictionary(
+            yomi = "しゃーぷ",
+            leftId = 2641,
+            rightId = 2641,
+            cost = 4000,
+            tango = "\uFE0F"
+        ),
+    )
+
 }
