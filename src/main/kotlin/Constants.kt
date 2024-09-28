@@ -508,6 +508,13 @@ object Constants {
             cost = 8000,
             tango = "）"
         ),
+        Dictionary(
+            yomi = "ど",
+            leftId = 2641,
+            rightId = 2641,
+            cost = 6000,
+            tango = "°"
+        ),
     )
 
     val PROVERB_LIST = listOf(
@@ -2139,30 +2146,6 @@ object Constants {
         Dictionary(yomi = "わせだあかでみー", leftId = 1920, rightId = 1920, cost = 4000, tango = "早稲田アカデミー"),
         Dictionary(yomi = "あいしんかくら", leftId = 1923, rightId = 1923, cost = 4000, tango = "愛新覚羅"),
         Dictionary(yomi = "たちあらい", leftId = 1923, rightId = 1923, cost = 4000, tango = "太刀洗")
-    )
-
-    val EMOJI = listOf(
-        Dictionary(
-            yomi = "#",
-            leftId = 2641,
-            rightId = 2641,
-            cost = 4000,
-            tango = "\uFE0F⃣"
-        ),
-        Dictionary(
-            yomi = "かこみすうじ",
-            leftId = 2641,
-            rightId = 2641,
-            cost = 4000,
-            tango = "\uFE0F"
-        ),
-        Dictionary(
-            yomi = "しゃーぷ",
-            leftId = 2641,
-            rightId = 2641,
-            cost = 4000,
-            tango = "\uFE0F"
-        ),
     )
 
 }
