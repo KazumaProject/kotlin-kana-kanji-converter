@@ -508,13 +508,6 @@ object Constants {
             cost = 8000,
             tango = "）"
         ),
-        Dictionary(
-            yomi = "ど",
-            leftId = 2641,
-            rightId = 2641,
-            cost = 6000,
-            tango = "°"
-        ),
     )
 
     val PROVERB_LIST = listOf(
