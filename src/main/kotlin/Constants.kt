@@ -510,6 +510,16 @@ object Constants {
         ),
     )
 
+    val VERB_LIST = listOf(
+        Dictionary(
+            yomi = "かいたい",
+            leftId = 727,
+            rightId = 727,
+            cost = 3000,
+            tango = "飼いたい"
+        ),
+    )
+
     val PROVERB_LIST = listOf(
         Dictionary(
             yomi = "あんずるよりうむがやすい",

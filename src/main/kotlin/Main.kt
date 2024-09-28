@@ -12,6 +12,7 @@ import com.kazumaproject.Constants.NAME_MUSIC_LIST
 import com.kazumaproject.Constants.PLACE
 import com.kazumaproject.Constants.PROVERB_LIST
 import com.kazumaproject.Constants.SYMBOL_LIST
+import com.kazumaproject.Constants.VERB_LIST
 import com.kazumaproject.Constants.WORD
 import com.kazumaproject.Constants.ZENKANKU_LIST
 import com.kazumaproject.Louds.Converter
@@ -47,7 +48,7 @@ fun main() {
     val dicUtils = DicUtils()
     val dictionaryList = dicUtils.getListDictionary(fileList).toMutableList()
     val finalList =
-        (dictionaryList + DIC_LIST + CUSTOM_LIST + NAME_LIST + FIXED_LIST + DIFFICULT_LIST + SYMBOL_LIST + NAME_MUSIC_LIST + NAME_IT_LIST + PROVERB_LIST + DOMAIN + ERA + PLACE + WORD + ZENKANKU_LIST)
+        (dictionaryList + DIC_LIST + CUSTOM_LIST + NAME_LIST + FIXED_LIST + DIFFICULT_LIST + SYMBOL_LIST + NAME_MUSIC_LIST + NAME_IT_LIST + PROVERB_LIST + VERB_LIST + DOMAIN + ERA + PLACE + WORD + ZENKANKU_LIST)
             .groupBy { it.yomi }
             .toSortedMap(compareBy({ it.length }, { it }))
 
