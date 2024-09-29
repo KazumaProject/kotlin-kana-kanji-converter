@@ -893,22 +893,43 @@ object Constants {
             yomi = "いんすたぐらむ",
             leftId = 1920,
             rightId = 1920,
-            cost = 3000,
+            cost = 4000,
             tango = "Instagram"
         ),
         Dictionary(
             yomi = "てぃっくとっく",
             leftId = 1920,
             rightId = 1920,
-            cost = 3000,
+            cost = 4000,
             tango = "TikTok"
         ),
         Dictionary(
             yomi = "ゆーちゅーぶ",
             leftId = 1920,
             rightId = 1920,
-            cost = 3000,
+            cost = 4000,
             tango = "YouTube"
+        ),
+        Dictionary(
+            yomi = "ぐーぐる",
+            leftId = 1929,
+            rightId = 1929,
+            cost = 4000,
+            tango = "Google"
+        ),
+        Dictionary(
+            yomi = "ぐーぐるまっぷ",
+            leftId = 1929,
+            rightId = 1929,
+            cost = 4000,
+            tango = "Google Map"
+        ),
+        Dictionary(
+            yomi = "あまぞん",
+            leftId = 1929,
+            rightId = 1929,
+            cost = 4000,
+            tango = "Amazon"
         ),
     )
 
@@ -1072,6 +1093,13 @@ object Constants {
             rightId = 780,
             cost = 2500,
             tango = "手を振っ"
+        ),
+        Dictionary(
+            yomi = "をふって",
+            leftId = 779,
+            rightId = 779,
+            cost = 1800,
+            tango = "を振って"
         ),
         Dictionary(
             yomi = "てをふる",
