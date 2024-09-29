@@ -515,8 +515,15 @@ object Constants {
             yomi = "かいたい",
             leftId = 727,
             rightId = 727,
-            cost = 3000,
+            cost = 2100,
             tango = "飼いたい"
+        ),
+        Dictionary(
+            yomi = "かいたい",
+            leftId = 734,
+            rightId = 734,
+            cost = 2500,
+            tango = "買いたい"
         ),
     )
 
@@ -993,15 +1000,176 @@ object Constants {
             yomi = "かたがこる",
             leftId = 765,
             rightId = 765,
-            cost = 4000,
+            cost = 3000,
             tango = "肩が凝る"
         ),
         Dictionary(
             yomi = "かたがこる",
             leftId = 765,
             rightId = 765,
-            cost = 4001,
+            cost = 3001,
             tango = "肩がこる"
+        ),
+        Dictionary(
+            yomi = "きかいがとまる",
+            leftId = 763,
+            rightId = 763,
+            cost = 3000,
+            tango = "機械が止まる"
+        ),
+        Dictionary(
+            yomi = "せいどがひくい",
+            leftId = 2422,
+            rightId = 2422,
+            cost = 3000,
+            tango = "精度が低い"
+        ),
+        Dictionary(
+            yomi = "かのように",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "かのように"
+        ),
+        Dictionary(
+            yomi = "をしたにも",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "をしたにも"
+        ),
+        Dictionary(
+            yomi = "こうざのかいせつ",
+            leftId = 1841,
+            rightId = 1841,
+            cost = 3000,
+            tango = "口座の開設"
+        ),
+        Dictionary(
+            yomi = "へんしんまち",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "返信待ち"
+        ),
+        Dictionary(
+            yomi = "しんちょうにはこぶ",
+            leftId = 837,
+            rightId = 837,
+            cost = 3000,
+            tango = "慎重に運ぶ"
+        ),
+        Dictionary(
+            yomi = "おんどをおどる",
+            leftId = 763,
+            rightId = 763,
+            cost = 3000,
+            tango = "音頭を踊る"
+        ),
+        Dictionary(
+            yomi = "てをふっ",
+            leftId = 780,
+            rightId = 780,
+            cost = 3000,
+            tango = "手を振っ"
+        ),
+        Dictionary(
+            yomi = "てをふる",
+            leftId = 763,
+            rightId = 763,
+            cost = 3000,
+            tango = "手を振る"
+        ),
+        Dictionary(
+            yomi = "てをふり",
+            leftId = 783,
+            rightId = 783,
+            cost = 3000,
+            tango = "手を振り"
+        ),
+        Dictionary(
+            yomi = "にくいじ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "にくい字"
+        ),
+        Dictionary(
+            yomi = "やすいじ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "やすい字"
+        ),
+        Dictionary(
+            yomi = "かぜをひく",
+            leftId = 731,
+            rightId = 731,
+            cost = 3000,
+            tango = "風邪をひく"
+        ),
+        Dictionary(
+            yomi = "こっちにこい",
+            leftId = 871,
+            rightId = 871,
+            cost = 3000,
+            tango = "こっちに来い"
+        ),
+        Dictionary(
+            yomi = "おれかかった",
+            leftId = 701,
+            rightId = 701,
+            cost = 3000,
+            tango = "折れかかった"
+        ),
+        Dictionary(
+            yomi = "きりがない",
+            leftId = 2525,
+            rightId = 2525,
+            cost = 3000,
+            tango = "きりがない"
+        ),
+        Dictionary(
+            yomi = "としをとる",
+            leftId = 783,
+            rightId = 783,
+            cost = 3000,
+            tango = "歳をとる"
+        ),
+        Dictionary(
+            yomi = "じしんにみち",
+            leftId = 701,
+            rightId = 701,
+            cost = 3000,
+            tango = "自信に満ち"
+        ),
+        Dictionary(
+            yomi = "よくえいぎょうび",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "翌営業日"
+        ),
+        Dictionary(
+            yomi = "そけんのらんよう",
+            leftId = 1841,
+            rightId = 1841,
+            cost = 3000,
+            tango = "訴権の濫用"
+        ),
+        Dictionary(
+            yomi = "そけん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "訴権"
+        ),
+        Dictionary(
+            yomi = "こうそけん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "公訴権"
         ),
     )
 
