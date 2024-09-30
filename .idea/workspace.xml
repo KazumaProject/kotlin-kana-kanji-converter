@@ -5,7 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/bin/reading_correction.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/reading_correction/ReadingCorrectionBuilder.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/kotlin/reading_correction/ReadingCorrectionBuilderTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/build-and-release.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/build-and-release.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Constants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Constants.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,8 +49,8 @@
         <option value="Kotlin File" />
         <option value="Kotlin Data Class" />
         <option value="Kotlin Object" />
-        <option value="Kotlin Class" />
         <option value="JUnit4 Test Class" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -102,6 +108,7 @@
     "Gradle.PrefixTreeWithTermIdTest.Test get child.executor": "Run",
     "Gradle.PrefixTreeWithTermIdTest.Test read text file from resources.executor": "Run",
     "Gradle.PrefixTreeWithTermIdTest.executor": "Run",
+    "Gradle.ReadingCorrectionBuilderTest.executor": "Run",
     "Gradle.SingleKanjiTest.Test build single kanji.executor": "Run",
     "Gradle.SymbolDictionaryBuilderTest.executor": "Run",
     "Kotlin.MainKt (1).executor": "Run",
@@ -151,8 +158,8 @@
       <recent name="" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/test/resources" />
       <recent name="$PROJECT_DIR$/src/main/bin" />
+      <recent name="$PROJECT_DIR$/src/test/resources" />
       <recent name="$PROJECT_DIR$/src/main/kotlin" />
       <recent name="$PROJECT_DIR$/src/main/kotlin/prefix/other" />
     </key>
@@ -172,30 +179,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Kotlin.MainKt">
-    <configuration name="EmojiDictionaryBuilderTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;emoji.EmojiDictionaryBuilderTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
     <configuration name="EmojiDictionaryBuilderTest.convertEmojiDataToDictionaryList" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -244,6 +227,30 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="ReadingCorrectionBuilderTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;reading_correction.ReadingCorrectionBuilderTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="SymbolDictionaryBuilderTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -276,19 +283,19 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Gradle.EmojiDictionaryBuilderTest" />
       <item itemvalue="Gradle.EmojiDictionaryBuilderTest.convertEmojiDataToDictionaryList" />
       <item itemvalue="Gradle.EmoticonDictionaryBuilderTest" />
+      <item itemvalue="Gradle.ReadingCorrectionBuilderTest" />
       <item itemvalue="Gradle.SymbolDictionaryBuilderTest" />
       <item itemvalue="Kotlin.MainKt" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.ReadingCorrectionBuilderTest" />
         <item itemvalue="Gradle.SymbolDictionaryBuilderTest" />
         <item itemvalue="Gradle.EmojiDictionaryBuilderTest.convertEmojiDataToDictionaryList" />
         <item itemvalue="Gradle.EmoticonDictionaryBuilderTest" />
-        <item itemvalue="Gradle.EmojiDictionaryBuilderTest" />
       </list>
     </recent_temporary>
   </component>

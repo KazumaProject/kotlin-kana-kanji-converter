@@ -27,6 +27,7 @@ import com.kazumaproject.emoji.EmojiDictionaryBuilder
 import com.kazumaproject.emoticon.EmoticonDictionaryBuilder
 import com.kazumaproject.prefix.PrefixTree
 import com.kazumaproject.prefix.with_term_id.PrefixTreeWithTermId
+import com.kazumaproject.reading_correction.ReadingCorrectionBuilder
 import com.kazumaproject.symbol.SymbolDictionaryBuilder
 import java.io.*
 import java.util.*
@@ -59,6 +60,7 @@ fun main() {
     buildDictionaryForEmoji()
     buildDictionaryForEmoticon()
     buildDictionaryForSymbol()
+    buildDictionaryForReadingCorrection()
 }
 
 private fun buildPOSTable(finalList: SortedMap<String, List<Dictionary>>) {
@@ -301,6 +303,51 @@ private fun buildDictionaryForSymbol() {
     val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_symbol.dat"))
     tokenArrayTemp.buildTokenArray(dictionaryList, tangoLOUDS, objectOutput, 1)
     val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_symbol.dat"))
+    val tokenArray = TokenArray()
+    tokenArray.readExternalNotCompress(objectInput)
+    tokenArray.readPOSTable(1)
+}
+
+private fun buildDictionaryForReadingCorrection() {
+    val yomiTree = PrefixTreeWithTermId()
+    val tangoTree = PrefixTree()
+
+    val readingCorrectionBuilder = ReadingCorrectionBuilder()
+
+    val dictionaryList = readingCorrectionBuilder.parseReadingCorrectionTSV("src/main/bin/reading_correction.tsv")
+        .groupBy { it.yomi }
+        .toSortedMap(compareBy({ it.length }, { it }))
+
+    dictionaryList
+        .forEach { entry ->
+            yomiTree.insert(entry.key)
+            entry.value.forEach {
+                tangoTree.insert(it.tango)
+            }
+        }
+
+    val yomiLOUDSTemp = ConverterWithTermId().convert(yomiTree.root)
+    val tangoLOUDSTemp = Converter().convert(tangoTree.root)
+    yomiLOUDSTemp.convertListToBitSet()
+    tangoLOUDSTemp.convertListToBitSet()
+
+    val objectOutputYomi =
+        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/yomi_reading_correction.dat")))
+    val objectOutputTango =
+        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/tango_reading_correction.dat")))
+
+    yomiLOUDSTemp.writeExternalNotCompress(objectOutputYomi)
+    tangoLOUDSTemp.writeExternalNotCompress(objectOutputTango)
+
+    val objectInputYomi = ObjectInputStream(FileInputStream("./src/main/resources/yomi_reading_correction.dat"))
+    val objectInputTango = ObjectInputStream(FileInputStream("./src/main/resources/tango_reading_correction.dat"))
+
+    LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
+    val tangoLOUDS: LOUDS = LOUDS().readExternalNotCompress(objectInputTango)
+    val tokenArrayTemp = TokenArray()
+    val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_reading_correction.dat"))
+    tokenArrayTemp.buildTokenArray(dictionaryList, tangoLOUDS, objectOutput, 1)
+    val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_reading_correction.dat"))
     val tokenArray = TokenArray()
     tokenArray.readExternalNotCompress(objectInput)
     tokenArray.readPOSTable(1)

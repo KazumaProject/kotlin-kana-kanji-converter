@@ -92,3 +92,6 @@ jobs:
             ./src/main/resources/yomi_symbol.dat
             ./src/main/resources/tango_symbol.dat
             ./src/main/resources/token_symbol.dat
+            ./src/main/resources/yomi_reading_correction.dat
+            ./src/main/resources/tango_reading_correction.dat
+            ./src/main/resources/token_reading_correction.dat
