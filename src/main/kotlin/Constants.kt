@@ -1335,6 +1335,13 @@ object Constants {
             cost = 4000,
             tango = "離行"
         ),
+        Dictionary(
+            yomi = "しかのこ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "鹿の子"
+        ),
     )
 
     val PLACE = listOf(
