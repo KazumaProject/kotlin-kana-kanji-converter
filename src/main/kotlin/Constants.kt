@@ -1088,11 +1088,25 @@ object Constants {
             tango = "音頭を踊る"
         ),
         Dictionary(
-            yomi = "てをふっ",
-            leftId = 779,
-            rightId = 779,
+            yomi = "をふっ",
+            leftId = 841,
+            rightId = 841,
             cost = 3000,
-            tango = "手を振っ"
+            tango = "を振っ"
+        ),
+        Dictionary(
+            yomi = "をふる",
+            leftId = 837,
+            rightId = 837,
+            cost = 3000,
+            tango = "を振る"
+        ),
+        Dictionary(
+            yomi = "がふり",
+            leftId = 842,
+            rightId = 842,
+            cost = 3000,
+            tango = "が降り"
         ),
         Dictionary(
             yomi = "にくいじ",
