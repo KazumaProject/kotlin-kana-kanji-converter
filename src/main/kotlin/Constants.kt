@@ -591,6 +591,20 @@ object Constants {
             cost = 3000,
             tango = "襷に長し"
         ),
+        Dictionary(
+            yomi = "たいま",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "大麻"
+        ),
+        Dictionary(
+            yomi = "すう",
+            leftId = 813,
+            rightId = 813,
+            cost = 2850,
+            tango = "吸う"
+        ),
     )
 
     val CUSTOM_LIST = listOf(
