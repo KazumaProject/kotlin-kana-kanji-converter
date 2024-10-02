@@ -1241,6 +1241,27 @@ object Constants {
             cost = 3000,
             tango = "公訴権の濫用"
         ),
+        Dictionary(
+            yomi = "きのこ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3500,
+            tango = "きのこ"
+        ),
+        Dictionary(
+            yomi = "きのこ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3600,
+            tango = "キノコ"
+        ),
+        Dictionary(
+            yomi = "きのこ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3700,
+            tango = "茸"
+        ),
     )
 
     val DIFFICULT_LIST = listOf(
