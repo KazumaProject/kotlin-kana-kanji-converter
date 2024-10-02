@@ -602,7 +602,7 @@ object Constants {
             yomi = "すう",
             leftId = 813,
             rightId = 813,
-            cost = 2850,
+            cost = 2500,
             tango = "吸う"
         ),
     )
