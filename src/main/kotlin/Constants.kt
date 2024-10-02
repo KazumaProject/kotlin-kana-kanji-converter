@@ -945,6 +945,20 @@ object Constants {
             cost = 4000,
             tango = "Amazon"
         ),
+        Dictionary(
+            yomi = "ぎっと",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 3000,
+            tango = "Git"
+        ),
+        Dictionary(
+            yomi = "ぎっとはぶ",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 3000,
+            tango = "GitHub"
+        ),
     )
 
     val SYMBOL_LIST = listOf(
@@ -1123,20 +1137,6 @@ object Constants {
             tango = "雨が降る"
         ),
         Dictionary(
-            yomi = "にくいじ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 3000,
-            tango = "にくい字"
-        ),
-        Dictionary(
-            yomi = "やすいじ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 3000,
-            tango = "やすい字"
-        ),
-        Dictionary(
             yomi = "みにくいじ",
             leftId = 1851,
             rightId = 1851,
@@ -1144,11 +1144,25 @@ object Constants {
             tango = "見にくい字"
         ),
         Dictionary(
+            yomi = "みにくいもじ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "見にくい文字"
+        ),
+        Dictionary(
             yomi = "みやすいじ",
             leftId = 1851,
             rightId = 1851,
             cost = 3000,
             tango = "見やすい字"
+        ),
+        Dictionary(
+            yomi = "よみにくいじ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "読みにくい字"
         ),
         Dictionary(
             yomi = "かぜをひく",
