@@ -1,5 +1,6 @@
 package com.kazumaproject
 
+import com.kazumaproject.Constants.ADDS_NEW_WORDS
 import com.kazumaproject.Constants.CUSTOM_LIST
 import com.kazumaproject.Constants.DIC_LIST
 import com.kazumaproject.Constants.DIFFICULT_LIST
@@ -49,7 +50,7 @@ fun main() {
     val dicUtils = DicUtils()
     val dictionaryList = dicUtils.getListDictionary(fileList).toMutableList()
     val finalList =
-        (dictionaryList + DIC_LIST + CUSTOM_LIST + NAME_LIST + FIXED_LIST + DIFFICULT_LIST + SYMBOL_LIST + NAME_MUSIC_LIST + NAME_IT_LIST + PROVERB_LIST + VERB_LIST + DOMAIN + ERA + PLACE + WORD + ZENKANKU_LIST)
+        (dictionaryList + DIC_LIST + CUSTOM_LIST + NAME_LIST + FIXED_LIST + DIFFICULT_LIST + SYMBOL_LIST + NAME_MUSIC_LIST + NAME_IT_LIST + PROVERB_LIST + VERB_LIST + DOMAIN + ERA + PLACE + WORD + ZENKANKU_LIST + ADDS_NEW_WORDS)
             .groupBy { it.yomi }
             .toSortedMap(compareBy({ it.length }, { it }))
 
