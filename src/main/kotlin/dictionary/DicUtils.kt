@@ -48,16 +48,10 @@ class DicUtils {
                     val tango = split("\\t".toRegex())[4]
                     when {
                         yomi == "では" && tango == "デは" -> {
-                            println("$yomi $leftId $rightId $cost $tango")
-                            tempList.add(
-                                Dictionary(
-                                    yomi = yomi,
-                                    leftId = leftId.toShort(),
-                                    rightId = rightId.toShort(),
-                                    cost = (5000).toShort(),
-                                    tango = tango
-                                )
-                            )
+                            println("skip $yomi $tango")
+                        }
+                        yomi == "での" && tango == "デの" -> {
+                            println("skip $yomi $tango")
                         }
 
                         else -> {
