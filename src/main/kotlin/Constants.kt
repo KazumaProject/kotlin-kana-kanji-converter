@@ -1430,18 +1430,18 @@ object Constants {
             tango = "の位置"
         ),
         Dictionary(
-            yomi = "をふる",
+            yomi = "なた",
             leftId = 1851,
-            rightId = 379,
-            cost = 3800,
-            tango = "を振る"
+            rightId = 1851,
+            cost = 3500,
+            tango = "鉈"
         ),
         Dictionary(
-            yomi = "をふっ",
-            leftId = 779,
-            rightId = 379,
-            cost = 3800,
-            tango = "を振っ"
+            yomi = "なた",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3600,
+            tango = "なた"
         ),
     )
 
