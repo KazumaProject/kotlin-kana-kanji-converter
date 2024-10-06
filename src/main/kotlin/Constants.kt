@@ -1385,7 +1385,7 @@ object Constants {
             yomi = "えびでたいをつる",
             leftId = 1851,
             rightId = 1851,
-            cost = 2500,
+            cost = 1000,
             tango = "海老で鯛を釣る"
         ),
     )
