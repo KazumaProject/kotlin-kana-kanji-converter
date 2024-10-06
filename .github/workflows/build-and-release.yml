@@ -66,6 +66,12 @@ jobs:
             ./src/main/resources/yomi_symbol.dat
             ./src/main/resources/tango_symbol.dat
             ./src/main/resources/token_symbol.dat
+            ./src/main/resources/yomi_reading_correction.dat
+            ./src/main/resources/tango_reading_correction.dat
+            ./src/main/resources/token_reading_correction.dat
+            ./src/main/resources/yomi_kotowaza.dat
+            ./src/main/resources/tango_kotowaza.dat
+            ./src/main/resources/token_kotowaza.dat
 
       # Create a GitHub Release and upload artifacts
       - name: Create GitHub Release
@@ -95,3 +101,6 @@ jobs:
             ./src/main/resources/yomi_reading_correction.dat
             ./src/main/resources/tango_reading_correction.dat
             ./src/main/resources/token_reading_correction.dat
+            ./src/main/resources/yomi_kotowaza.dat
+            ./src/main/resources/tango_kotowaza.dat
+            ./src/main/resources/token_kotowaza.dat

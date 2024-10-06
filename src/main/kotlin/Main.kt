@@ -11,7 +11,6 @@ import com.kazumaproject.Constants.NAME_IT_LIST
 import com.kazumaproject.Constants.NAME_LIST
 import com.kazumaproject.Constants.NAME_MUSIC_LIST
 import com.kazumaproject.Constants.PLACE
-import com.kazumaproject.Constants.PROVERB_LIST
 import com.kazumaproject.Constants.SYMBOL_LIST
 import com.kazumaproject.Constants.VERB_LIST
 import com.kazumaproject.Constants.WORD
@@ -50,7 +49,7 @@ fun main() {
     val dicUtils = DicUtils()
     val dictionaryList = dicUtils.getListDictionary(fileList).toMutableList()
     val finalList =
-        (dictionaryList + DIC_LIST + CUSTOM_LIST + NAME_LIST + FIXED_LIST + DIFFICULT_LIST + SYMBOL_LIST + NAME_MUSIC_LIST + NAME_IT_LIST + PROVERB_LIST + VERB_LIST + DOMAIN + ERA + PLACE + WORD + ZENKANKU_LIST + ADDS_NEW_WORDS)
+        (dictionaryList + DIC_LIST + CUSTOM_LIST + NAME_LIST + FIXED_LIST + DIFFICULT_LIST + SYMBOL_LIST + NAME_MUSIC_LIST + NAME_IT_LIST + VERB_LIST + DOMAIN + ERA + PLACE + WORD + ZENKANKU_LIST + ADDS_NEW_WORDS)
             .groupBy { it.yomi }
             .toSortedMap(compareBy({ it.length }, { it }))
 
@@ -62,6 +61,7 @@ fun main() {
     buildDictionaryForEmoticon()
     buildDictionaryForSymbol()
     buildDictionaryForReadingCorrection()
+    buildDictionaryForKotowaza()
 }
 
 private fun buildPOSTable(finalList: SortedMap<String, List<Dictionary>>) {
@@ -349,6 +349,51 @@ private fun buildDictionaryForReadingCorrection() {
     val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_reading_correction.dat"))
     tokenArrayTemp.buildTokenArray(dictionaryList, tangoLOUDS, objectOutput, 1)
     val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_reading_correction.dat"))
+    val tokenArray = TokenArray()
+    tokenArray.readExternalNotCompress(objectInput)
+    tokenArray.readPOSTable(1)
+}
+
+private fun buildDictionaryForKotowaza() {
+    val yomiTree = PrefixTreeWithTermId()
+    val tangoTree = PrefixTree()
+
+    val readingCorrectionBuilder = ReadingCorrectionBuilder()
+
+    val dictionaryList = readingCorrectionBuilder.parseReadingCorrectionTSV("src/main/bin/kotowaza.tsv")
+        .groupBy { it.yomi }
+        .toSortedMap(compareBy({ it.length }, { it }))
+
+    dictionaryList
+        .forEach { entry ->
+            yomiTree.insert(entry.key)
+            entry.value.forEach {
+                tangoTree.insert(it.tango)
+            }
+        }
+
+    val yomiLOUDSTemp = ConverterWithTermId().convert(yomiTree.root)
+    val tangoLOUDSTemp = Converter().convert(tangoTree.root)
+    yomiLOUDSTemp.convertListToBitSet()
+    tangoLOUDSTemp.convertListToBitSet()
+
+    val objectOutputYomi =
+        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/yomi_kotowaza.dat")))
+    val objectOutputTango =
+        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/tango_kotowaza.dat")))
+
+    yomiLOUDSTemp.writeExternalNotCompress(objectOutputYomi)
+    tangoLOUDSTemp.writeExternalNotCompress(objectOutputTango)
+
+    val objectInputYomi = ObjectInputStream(FileInputStream("./src/main/resources/yomi_kotowaza.dat"))
+    val objectInputTango = ObjectInputStream(FileInputStream("./src/main/resources/tango_kotowaza.dat"))
+
+    LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
+    val tangoLOUDS: LOUDS = LOUDS().readExternalNotCompress(objectInputTango)
+    val tokenArrayTemp = TokenArray()
+    val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_kotowaza.dat"))
+    tokenArrayTemp.buildTokenArray(dictionaryList, tangoLOUDS, objectOutput, 1)
+    val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_kotowaza.dat"))
     val tokenArray = TokenArray()
     tokenArray.readExternalNotCompress(objectInput)
     tokenArray.readPOSTable(1)

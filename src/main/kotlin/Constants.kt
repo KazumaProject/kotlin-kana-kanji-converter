@@ -525,71 +525,12 @@ object Constants {
             cost = 2150,
             tango = "買いたい"
         ),
-    )
-
-    val PROVERB_LIST = listOf(
-        Dictionary(
-            yomi = "あんずるよりうむがやすい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 8000,
-            tango = "案ずるより産むが易い"
-        ),
-        Dictionary(
-            yomi = "いしのうえにもさんねん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 8000,
-            tango = "石の上にも三年"
-        ),
-        Dictionary(
-            yomi = "いそがばまわれ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 3000,
-            tango = "急がば回れ"
-        ),
-        Dictionary(
-            yomi = "いちふじ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 3000,
-            tango = "一富士"
-        ),
-        Dictionary(
-            yomi = "にたか",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 3000,
-            tango = "二鷹"
-        ),
-        Dictionary(
-            yomi = "さんなすび",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 3000,
-            tango = "三茄子"
-        ),
-        Dictionary(
-            yomi = "いのちあってのものだね",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 5000,
-            tango = "命あっての物種"
-        ),
         Dictionary(
             yomi = "おうた",
             leftId = 803,
             rightId = 803,
             cost = 3000,
             tango = "負うた"
-        ),
-        Dictionary(
-            yomi = "たすきにながし",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 3000,
-            tango = "襷に長し"
         ),
         Dictionary(
             yomi = "たいま",
