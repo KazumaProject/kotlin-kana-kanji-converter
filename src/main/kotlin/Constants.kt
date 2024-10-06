@@ -1332,6 +1332,55 @@ object Constants {
             cost = 4000,
             tango = "鹿の子"
         ),
+        Dictionary(
+            yomi = "いちふじ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "一富士"
+        ),
+        Dictionary(
+            yomi = "にたか",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "二鷹"
+        ),
+        Dictionary(
+            yomi = "さんなすび",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "三茄子"
+        ),
+        Dictionary(
+            yomi = "しせん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5200,
+            tango = "四扇"
+        ),
+        Dictionary(
+            yomi = "ごたばこ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "五煙草"
+        ),
+        Dictionary(
+            yomi = "ろくざとう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "六座頭"
+        ),
+        Dictionary(
+            yomi = "しせんごたばころくざとう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "四扇五煙草六座頭"
+        ),
     )
 
     val ADDS_NEW_WORDS = listOf(
