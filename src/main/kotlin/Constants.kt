@@ -1381,6 +1381,13 @@ object Constants {
             cost = 4000,
             tango = "四扇五煙草六座頭"
         ),
+        Dictionary(
+            yomi = "えびでたいをつる",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2500,
+            tango = "海老で鯛を釣る"
+        ),
     )
 
     val ADDS_NEW_WORDS = listOf(
