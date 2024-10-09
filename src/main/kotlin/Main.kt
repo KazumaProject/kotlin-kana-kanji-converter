@@ -360,7 +360,7 @@ private fun buildDictionaryForKotowaza() {
 
     val readingCorrectionBuilder = ReadingCorrectionBuilder()
 
-    val dictionaryList = readingCorrectionBuilder.parseReadingCorrectionTSV("src/main/bin/kotowaza.tsv")
+    val dictionaryList = readingCorrectionBuilder.parseKotowazaTSV("src/main/bin/kotowaza.tsv")
         .groupBy { it.yomi }
         .toSortedMap(compareBy({ it.length }, { it }))
 
