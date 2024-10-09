@@ -30,7 +30,7 @@ class ReadingCorrectionBuilder {
     fun parseReadingCorrectionTSV(filePath: String): List<Dictionary> {
         val leftId = (1851).toShort()
         val rightId = (1851).toShort()
-        val cost = (3000).toShort()
+        val cost = (4000).toShort()
 
         return File(filePath).useLines { lines ->
             lines.map { line ->
@@ -41,7 +41,7 @@ class ReadingCorrectionBuilder {
                         leftId = leftId,
                         rightId = rightId,
                         cost = cost,
-                        tango = parts[0] + "\t".repeat(5) + parts[2]
+                        tango = parts[0] + "\t" + parts[2]
                     )
                 } else {
                     null
