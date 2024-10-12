@@ -53,15 +53,15 @@ fun main() {
             .groupBy { it.yomi }
             .toSortedMap(compareBy({ it.length }, { it }))
 
-//    buildConnectionIds()
-//    buildPOSTable(finalList)
-//    buildTriesAndTokenArray(finalList)
-//    buildDictionaryForSingleKanji()
-//    buildDictionaryForEmoji()
-//    buildDictionaryForEmoticon()
-//    buildDictionaryForSymbol()
+    buildConnectionIds()
+    buildPOSTable(finalList)
+    buildTriesAndTokenArray(finalList)
+    buildDictionaryForSingleKanji()
+    buildDictionaryForEmoji()
+    buildDictionaryForEmoticon()
+    buildDictionaryForSymbol()
     buildDictionaryForReadingCorrection()
-    buildDictionaryForKotowaza()//
+    buildDictionaryForKotowaza()
 }
 
 private fun buildPOSTable(finalList: SortedMap<String, List<Dictionary>>) {
