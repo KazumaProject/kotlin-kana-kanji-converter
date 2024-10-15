@@ -425,6 +425,13 @@ object Constants {
             tango = "ゔ"
         ),
         Dictionary(
+            yomi = "ヴ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 8000,
+            tango = "ヴ"
+        ),
+        Dictionary(
             yomi = "ゔ",
             leftId = 1851,
             rightId = 1851,
@@ -432,11 +439,18 @@ object Constants {
             tango = "ヴ"
         ),
         Dictionary(
+            yomi = "ヴ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 8001,
+            tango = "ゔ"
+        ),
+        Dictionary(
             yomi = "ゔ",
             leftId = 1851,
             rightId = 1851,
             cost = 8002,
-            tango = "ぅ"
+            tango = "ｳﾞ"
         ),
         Dictionary(
             yomi = "%",
@@ -588,7 +602,7 @@ object Constants {
             yomi = "あいふぉん",
             leftId = 1920,
             rightId = 1920,
-            cost = 3000,
+            cost = 5000,
             tango = "iPhone"
         ),
         Dictionary(
@@ -639,6 +653,41 @@ object Constants {
             rightId = 1920,
             cost = 4000,
             tango = "中華蕎麦とみ田"
+        ),
+        Dictionary(
+            yomi = "まーくだうん",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5000,
+            tango = "MarkDown"
+        ),
+        Dictionary(
+            yomi = "じゃば",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5000,
+            tango = "Java"
+        ),
+        Dictionary(
+            yomi = "じゃばすくりぷと",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5000,
+            tango = "JavaScript"
+        ),
+        Dictionary(
+            yomi = "ぱいそん",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5000,
+            tango = "Python"
+        ),
+        Dictionary(
+            yomi = "きんどる",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5000,
+            tango = "Kindle"
         ),
     )
 
