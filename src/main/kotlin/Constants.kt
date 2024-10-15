@@ -425,25 +425,11 @@ object Constants {
             tango = "ゔ"
         ),
         Dictionary(
-            yomi = "ヴ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 8000,
-            tango = "ヴ"
-        ),
-        Dictionary(
             yomi = "ゔ",
             leftId = 1851,
             rightId = 1851,
             cost = 8001,
-            tango = "ヴ"
-        ),
-        Dictionary(
-            yomi = "ヴ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 8001,
-            tango = "ゔ"
+            tango = "\u30F4"
         ),
         Dictionary(
             yomi = "ゔ",
@@ -676,6 +662,13 @@ object Constants {
             tango = "JavaScript"
         ),
         Dictionary(
+            yomi = "たいぷすくりぷと",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5000,
+            tango = "TypeScript"
+        ),
+        Dictionary(
             yomi = "ぱいそん",
             leftId = 1920,
             rightId = 1920,
@@ -683,11 +676,60 @@ object Constants {
             tango = "Python"
         ),
         Dictionary(
+            yomi = "るびー",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5000,
+            tango = "Ruby"
+        ),
+        Dictionary(
+            yomi = "ぴーえいちぴー",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5000,
+            tango = "PHP"
+        ),
+        Dictionary(
+            yomi = "しーげんご",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5000,
+            tango = "C言語"
+        ),
+        Dictionary(
+            yomi = "しーぷらすぷらす",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5000,
+            tango = "C++"
+        ),
+        Dictionary(
+            yomi = "すうぃふと",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5000,
+            tango = "Swift"
+        ),
+        Dictionary(
+            yomi = "ことりん",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5000,
+            tango = "Kotlin"
+        ),
+        Dictionary(
             yomi = "きんどる",
             leftId = 1920,
             rightId = 1920,
             cost = 5000,
             tango = "Kindle"
+        ),
+        Dictionary(
+            yomi = "にしむく",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5000,
+            tango = "西向く"
         ),
     )
 
@@ -1306,7 +1348,7 @@ object Constants {
             leftId = 1851,
             rightId = 1851,
             cost = 3000,
-            tango = "ラヴィット"
+            tango = "ラ\u30F4ィット"
         ),
         Dictionary(
             yomi = "にしん",
