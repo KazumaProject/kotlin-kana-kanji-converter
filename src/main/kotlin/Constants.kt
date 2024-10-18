@@ -1434,6 +1434,27 @@ object Constants {
             cost = 2500,
             tango = "技術書"
         ),
+        Dictionary(
+            yomi = "ずかんしょ",
+            leftId = 1851,
+            rightId = 1969,
+            cost = 3500,
+            tango = "図鑑書"
+        ),
+        Dictionary(
+            yomi = "じれいしょ",
+            leftId = 1851,
+            rightId = 1969,
+            cost = 3500,
+            tango = "辞令書"
+        ),
+        Dictionary(
+            yomi = "でんぴょうしょ",
+            leftId = 1851,
+            rightId = 1969,
+            cost = 3500,
+            tango = "伝票書"
+        ),
     )
 
     val DIFFICULT_LIST = listOf(
