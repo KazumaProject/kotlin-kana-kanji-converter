@@ -244,24 +244,20 @@ fun normalizeHiragana(input: String): String {
 }
 
 fun String.isHiraganaOrKatakana(): Boolean {
-    // ひらがなのUnicode範囲 (除外: ゝゞ)
-    val hiraganaRegex = Regex("^\\u3040-\\u309F&&[^\\u309D\\u309E]+$")
-    // カタカナのUnicode範囲 (除外: ヽヾ)
-    val katakanaRegex = Regex("^\\u30A0-\\u30FF&&[^\\u30FD\\u30FE]+$")
-    // ひらがなだけまたはカタカナだけの場合にTrue
+    // Exclude ゝ (U+309D) and ゞ (U+309E) from Hiragana, and ヽ (U+30FD) and ヾ (U+30FE) from Katakana
+    val hiraganaRegex = Regex("^[\\u3040-\\u309F&&[^\\u309D\\u309E]]+$")
+    val katakanaRegex = Regex("^[\\u30A0-\\u30FF&&[^\\u30FD\\u30FE]]+$")
     return hiraganaRegex.matches(this) || katakanaRegex.matches(this)
 }
 
-// ひらがなのみの判定
 fun String.isHiraganaOnly(): Boolean {
-    // ひらがな: \u3040-\u309F
-    val regex = Regex("^[\\u3040-\\u309F]+$")
+    // Exclude ゝ (U+309D) and ゞ (U+309E) from Hiragana
+    val regex = Regex("^[\\u3040-\\u309F&&[^\\u309D\\u309E]]+$")
     return regex.matches(this)
 }
 
-// カタカナのみの判定
 fun String.isKatakanaOnly(): Boolean {
-    // カタカナ: \u30A0-\u30FF
-    val regex = Regex("^[\\u30A0-\\u30FF]+$")
+    // Exclude ヽ (U+30FD) and ヾ (U+30FE) from Katakana
+    val regex = Regex("^[\\u30A0-\\u30FF&&[^\\u30FD\\u30FE]]+$")
     return regex.matches(this)
 }
