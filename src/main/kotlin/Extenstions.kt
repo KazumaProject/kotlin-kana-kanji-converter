@@ -244,11 +244,11 @@ fun normalizeHiragana(input: String): String {
 }
 
 fun String.isHiraganaOrKatakana(): Boolean {
-    // ひらがなのUnicode範囲: \u3040-\u3096 (excluding ゝ \u309D, ゞ \u309E)
-    // カタカナのUnicode範囲: \u30A0-\u30F6 (excluding ヽ \u30FD, ヾ \u30FE)
-    val hiraganaRegex = Regex("^[\\u3040-\\u3096]+$")  // Pure Hiragana (exclude iteration marks)
-    val katakanaRegex = Regex("^[\\u30A0-\\u30F6]+$")  // Pure Katakana (exclude iteration marks)
-    // Return true only for pure hiragana or pure katakana
+    // ひらがなのUnicode範囲 (除外: ゝゞ)
+    val hiraganaRegex = Regex("^\\u3040-\\u309F&&[^\\u309D\\u309E]+$")
+    // カタカナのUnicode範囲 (除外: ヽヾ)
+    val katakanaRegex = Regex("^\\u30A0-\\u30FF&&[^\\u30FD\\u30FE]+$")
+    // ひらがなだけまたはカタカナだけの場合にTrue
     return hiraganaRegex.matches(this) || katakanaRegex.matches(this)
 }
 
@@ -265,15 +265,3 @@ fun String.isKatakanaOnly(): Boolean {
     val regex = Regex("^[\\u30A0-\\u30FF]+$")
     return regex.matches(this)
 }
-
-fun String.isSymbolsOrAlphabet(): Boolean {
-    // アルファベット（小文字、大文字）: a-z, A-Z
-    // 記号は Unicode の \p{Punct} または特定の範囲を指定
-
-    //val alphabetRegex = Regex("^[a-zA-Z]+$")
-    val symbolRegex = Regex("\\p{Punct}")
-
-    // アルファベット、記号のいずれかが含まれている場合にTrue
-    return symbolRegex.matches(this)
-}
-
