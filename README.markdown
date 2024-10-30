@@ -1,9 +1,11 @@
 # かな漢字変換プログラム
+
 [![Build and Release](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/workflows/build-and-release.yml)
 
 ## 概要
 
-このプログラムは、Kotlin を使用して実装されたかな漢字変換システムです。ひらがなを入力すると、トライ構造とトークン配列を使用して効率的に漢字に変換されます。ビタビアルゴリズムを活用し、最適な変換結果を提供します。また、辞書ファイルはカスタマイズ可能で、さまざまな用途に応じた設定が可能です。
+このプログラムは、Kotlin
+を使用して実装されたかな漢字変換システムです。ひらがなを入力すると、トライ構造とトークン配列を使用して効率的に漢字に変換されます。ビタビアルゴリズムを活用し、最適な変換結果を提供します。また、辞書ファイルはカスタマイズ可能で、さまざまな用途に応じた設定が可能です。
 
 ## 特徴
 
@@ -14,13 +16,14 @@
 
 ## 自動ビルドとリリース
 
-GitHub Actions を使用して、プッシュされたタグに基づいてビルドとリリースを自動化しています。このプロセスには、辞書ファイルのダウンロード、Kotlin アプリケーションのビルド、アーティファクトの生成、および GitHub Release へのアップロードが含まれます。
+GitHub Actions を使用して、プッシュされたタグに基づいてビルドとリリースを自動化しています。このプロセスには、辞書ファイルのダウンロード、Kotlin
+アプリケーションのビルド、アーティファクトの生成、および GitHub Release へのアップロードが含まれます。
 
 ## インストール
 
 ```bash
-git clone https://github.com/your-repo/kana-kanji-conversion.git
-cd kana-kanji-conversion
+git clone https://github.com/KazumaProject/kotlin-kana-kanji-converter.git
+cd kotlin-kana-kanji-converter
 ./gradlew build
 ```
 
@@ -41,7 +44,10 @@ cd kana-kanji-conversion
 
 ## Overview
 
-This program is a kana-kanji conversion system implemented in Kotlin. It efficiently converts hiragana input to kanji by leveraging trie structures and token arrays. The program uses the Viterbi algorithm to calculate the shortest path for selecting the most suitable kanji from multiple candidates. Customizable dictionary files are supported to allow for various uses.
+This program is a kana-kanji conversion system implemented in Kotlin. It efficiently converts hiragana input to kanji by
+leveraging trie structures and token arrays. The program uses the Viterbi algorithm to calculate the shortest path for
+selecting the most suitable kanji from multiple candidates. Customizable dictionary files are supported to allow for
+various uses.
 
 ## Features
 
@@ -52,13 +58,15 @@ This program is a kana-kanji conversion system implemented in Kotlin. It efficie
 
 ## Automated Build and Release
 
-This project uses GitHub Actions to automate the build and release process based on pushed tags. The process includes downloading dictionary files, building the Kotlin application, generating artifacts, and uploading them to GitHub Releases.
+This project uses GitHub Actions to automate the build and release process based on pushed tags. The process includes
+downloading dictionary files, building the Kotlin application, generating artifacts, and uploading them to GitHub
+Releases.
 
 ## Installation
 
 ```bash
-git clone https://github.com/your-repo/kana-kanji-conversion.git
-cd kana-kanji-conversion
+git clone https://github.com/KazumaProject/kotlin-kana-kanji-converter.git
+cd kotlin-kana-kanji-converter
 ./gradlew build
 ```
 
