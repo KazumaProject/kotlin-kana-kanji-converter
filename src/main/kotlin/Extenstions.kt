@@ -244,11 +244,11 @@ fun normalizeHiragana(input: String): String {
 }
 
 fun String.isHiraganaOrKatakana(): Boolean {
-    // ひらがなのUnicode範囲: \u3040-\u309F
-    // カタカナのUnicode範囲: \u30A0-\u30FF
-    val hiraganaRegex = Regex("^[\\u3040-\\u309F]+$")
-    val katakanaRegex = Regex("^[\\u30A0-\\u30FF]+$")
-    // ひらがなだけまたはカタカナだけの場合にTrue
+    // ひらがなのUnicode範囲: \u3040-\u3096 (excluding ゝ \u309D, ゞ \u309E)
+    // カタカナのUnicode範囲: \u30A0-\u30F6 (excluding ヽ \u30FD, ヾ \u30FE)
+    val hiraganaRegex = Regex("^[\\u3040-\\u3096]+$")  // Pure Hiragana (exclude iteration marks)
+    val katakanaRegex = Regex("^[\\u30A0-\\u30F6]+$")  // Pure Katakana (exclude iteration marks)
+    // Return true only for pure hiragana or pure katakana
     return hiraganaRegex.matches(this) || katakanaRegex.matches(this)
 }
 

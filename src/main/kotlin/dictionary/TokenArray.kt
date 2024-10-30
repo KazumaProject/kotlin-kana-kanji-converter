@@ -70,9 +70,6 @@ class TokenArray {
     private fun getNodeIdForDictionary(dictionary: Dictionary, tangoTrie: LOUDS, key: String): Int {
         return when {
             dictionary.tango.isHiraganaOrKatakana() -> {
-                if (dictionary.tango == "ヽ" || dictionary.tango == "ヾ" || dictionary.tango == "ゝ" || dictionary.tango == "ゞ") {
-                    tangoTrie.getNodeIndex(dictionary.tango)
-                }
                 if (dictionary.tango.isHiraganaOnly() || dictionary.tango == key) {
                     -2
                 } else if (dictionary.tango.isKatakanaOnly()) {
