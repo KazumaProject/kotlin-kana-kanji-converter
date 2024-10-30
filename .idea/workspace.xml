@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/bin/reading_correction.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/bin/reading_correction.tsv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/bin/symbol.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/bin/symbol.tsv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Constants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Constants.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/dictionary/DicUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dictionary/DicUtils.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/dictionary/TokenArray.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/dictionary/TokenArray.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +33,7 @@
             <expand>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="tries" type="f1a62948:ProjectNode" />
+                <item name="kana-kanji-converter" type="f1a62948:ProjectNode" />
               </path>
             </expand>
             <select />
@@ -61,85 +66,86 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;Gradle.Build kotlin-kana-kanji-converter.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build tries.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConnectionIdTest.Test load connection dat.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConnectionIdTest.Test load connection index dat.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConnectionIdTest.Test to build connection id binary file.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConnectionIdTest.Test to build connection ids.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConnectionIdTest.Test to build octree connection id range 0 - 16777215.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConnectionIdTest.Test to build octree for connection id range 0 - 511 small.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConnectionIdTest.Test to build octree for connection id range 0 - 511.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConnectionIdTest.Test to build octree with connection_single_column_txt.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.DictionaryBuildTest.build dictionary files.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.EmojiDictionaryBuilderTest.convertEmojiDataToDictionaryList.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.EmojiDictionaryBuilderTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.EmoticonDictionaryBuilderTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.FullyIndexedDictionaryTest.createAuxData.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.FullyIndexedDictionaryTest.test fully indexed dictionary (1).executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.FullyIndexedDictionaryTest.test fully indexed dictionary.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.GraphBuilderTest.Build Graph Test.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.POSTableTest.Build pos_table.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.POSTableTest.Load pos_table.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.LOUDS test.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.Test Junction Array.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.Test Token Array.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.Test find method.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.Test write binary file 2.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.Test write binary file.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.create token array.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.insert.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeTest.read text file from resources.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeWithTermIdTest.Test Common Prefix Search.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeWithTermIdTest.Test find method.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeWithTermIdTest.Test first child.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeWithTermIdTest.Test get child.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeWithTermIdTest.Test read text file from resources.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.PrefixTreeWithTermIdTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ReadingCorrectionBuilderTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SingleKanjiTest.Test build single kanji.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SymbolDictionaryBuilderTest.executor&quot;: &quot;Run&quot;,
-    &quot;Kotlin.MainKt (1).executor&quot;: &quot;Run&quot;,
-    &quot;Kotlin.MainKt.executor&quot;: &quot;Run&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit4&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4&quot;: &quot;&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/kazuma/IdeaProjects/kotlin-kana-kanji-converter/src/main/bin&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;/Users/kazuma/IdeaProjects/tries/src/main/kotlin/Main.kt&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Downloaded.Files.Path.Enabled": "false",
+    "Gradle.Build kotlin-kana-kanji-converter.executor": "Run",
+    "Gradle.Build tries.executor": "Run",
+    "Gradle.ConnectionIdTest.Test load connection dat.executor": "Run",
+    "Gradle.ConnectionIdTest.Test load connection index dat.executor": "Run",
+    "Gradle.ConnectionIdTest.Test to build connection id binary file.executor": "Run",
+    "Gradle.ConnectionIdTest.Test to build connection ids.executor": "Run",
+    "Gradle.ConnectionIdTest.Test to build octree connection id range 0 - 16777215.executor": "Run",
+    "Gradle.ConnectionIdTest.Test to build octree for connection id range 0 - 511 small.executor": "Run",
+    "Gradle.ConnectionIdTest.Test to build octree for connection id range 0 - 511.executor": "Run",
+    "Gradle.ConnectionIdTest.Test to build octree with connection_single_column_txt.executor": "Run",
+    "Gradle.DictionaryBuildTest.build dictionary files.executor": "Run",
+    "Gradle.EmojiDictionaryBuilderTest.convertEmojiDataToDictionaryList.executor": "Run",
+    "Gradle.EmojiDictionaryBuilderTest.executor": "Run",
+    "Gradle.EmoticonDictionaryBuilderTest.executor": "Run",
+    "Gradle.FullyIndexedDictionaryTest.createAuxData.executor": "Run",
+    "Gradle.FullyIndexedDictionaryTest.test fully indexed dictionary (1).executor": "Run",
+    "Gradle.FullyIndexedDictionaryTest.test fully indexed dictionary.executor": "Run",
+    "Gradle.GraphBuilderTest.Build Graph Test.executor": "Run",
+    "Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine.executor": "Run",
+    "Gradle.POSTableTest.Build pos_table.executor": "Run",
+    "Gradle.POSTableTest.Load pos_table.executor": "Run",
+    "Gradle.PrefixTreeTest.LOUDS test.executor": "Run",
+    "Gradle.PrefixTreeTest.Test Junction Array.executor": "Run",
+    "Gradle.PrefixTreeTest.Test Token Array.executor": "Run",
+    "Gradle.PrefixTreeTest.Test find method.executor": "Run",
+    "Gradle.PrefixTreeTest.Test write binary file 2.executor": "Run",
+    "Gradle.PrefixTreeTest.Test write binary file.executor": "Run",
+    "Gradle.PrefixTreeTest.create token array.executor": "Run",
+    "Gradle.PrefixTreeTest.executor": "Run",
+    "Gradle.PrefixTreeTest.insert.executor": "Run",
+    "Gradle.PrefixTreeTest.read text file from resources.executor": "Run",
+    "Gradle.PrefixTreeWithTermIdTest.Test Common Prefix Search.executor": "Run",
+    "Gradle.PrefixTreeWithTermIdTest.Test find method.executor": "Run",
+    "Gradle.PrefixTreeWithTermIdTest.Test first child.executor": "Run",
+    "Gradle.PrefixTreeWithTermIdTest.Test get child.executor": "Run",
+    "Gradle.PrefixTreeWithTermIdTest.Test read text file from resources.executor": "Run",
+    "Gradle.PrefixTreeWithTermIdTest.executor": "Run",
+    "Gradle.ReadingCorrectionBuilderTest.executor": "Run",
+    "Gradle.SingleKanjiTest.Test build single kanji.executor": "Run",
+    "Gradle.SymbolDictionaryBuilderTest.executor": "Run",
+    "Kotlin script (Beta).build.gradle.kts.executor": "Run",
+    "Kotlin.MainKt (1).executor": "Run",
+    "Kotlin.MainKt.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit4",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/kazuma/IdeaProjects/kotlin-kana-kanji-converter/src/main/bin",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "/Users/kazuma/IdeaProjects/tries/src/main/kotlin/Main.kt",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "project.propCompiler",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;sqlite&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlite"
     ],
-    &quot;kotlin-gradle-user-dirs&quot;: [
-      &quot;/Users/kazuma/.gradle&quot;
+    "kotlin-gradle-user-dirs": [
+      "/Users/kazuma/.gradle"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/bin" />
@@ -187,30 +193,6 @@
             <option value=":test" />
             <option value="--tests" />
             <option value="&quot;emoji.EmojiDictionaryBuilderTest.convertEmojiDataToDictionaryList&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="EmoticonDictionaryBuilderTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;emoticon.EmoticonDictionaryBuilderTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -276,20 +258,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="build.gradle.kts" type="KotlinStandaloneScriptRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <module name="kana-kanji-converter" />
+      <option name="filePath" value="$PROJECT_DIR$/build.gradle.kts" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Gradle.EmojiDictionaryBuilderTest.convertEmojiDataToDictionaryList" />
-      <item itemvalue="Gradle.EmoticonDictionaryBuilderTest" />
       <item itemvalue="Gradle.ReadingCorrectionBuilderTest" />
       <item itemvalue="Gradle.SymbolDictionaryBuilderTest" />
       <item itemvalue="Kotlin.MainKt" />
+      <item itemvalue="Kotlin script (Beta).build.gradle.kts" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Kotlin script (Beta).build.gradle.kts" />
         <item itemvalue="Gradle.ReadingCorrectionBuilderTest" />
         <item itemvalue="Gradle.SymbolDictionaryBuilderTest" />
         <item itemvalue="Gradle.EmojiDictionaryBuilderTest.convertEmojiDataToDictionaryList" />
-        <item itemvalue="Gradle.EmoticonDictionaryBuilderTest" />
       </list>
     </recent_temporary>
   </component>
