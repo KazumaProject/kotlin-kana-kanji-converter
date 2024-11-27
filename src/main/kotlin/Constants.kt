@@ -1668,6 +1668,104 @@ object Constants {
             cost = 1000,
             tango = "海老で鯛を釣る"
         ),
+        Dictionary(
+            yomi = "はもの",
+            leftId = 433,
+            rightId = 1851,
+            cost = 3000,
+            tango = "鱧の"
+        ),
+        Dictionary(
+            yomi = "めんばん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "麺絆"
+        ),
+        Dictionary(
+            yomi = "さんねんざか",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "産寧坂"
+        ),
+        Dictionary(
+            yomi = "やさかのとう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "八坂の塔"
+        ),
+        Dictionary(
+            yomi = "せんた",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "仙太"
+        ),
+        Dictionary(
+            yomi = "わびさび",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "侘び寂び"
+        ),
+        Dictionary(
+            yomi = "かもん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "家紋"
+        ),
+        Dictionary(
+            yomi = "せっか",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "雪花"
+        ),
+        Dictionary(
+            yomi = "つきました",
+            leftId = 1851,
+            rightId = 701,
+            cost = 3000,
+            tango = "着きました"
+        ),
+        Dictionary(
+            yomi = "いきました",
+            leftId = 1851,
+            rightId = 701,
+            cost = 3000,
+            tango = "行きました"
+        ),
+        Dictionary(
+            yomi = "にほんご",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2500,
+            tango = "日本語"
+        ),
+        Dictionary(
+            yomi = "よる",
+            leftId = 1909,
+            rightId = 1909,
+            cost = 1700,
+            tango = "夜"
+        ),
+        Dictionary(
+            yomi = "しょうが",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2000,
+            tango = "生姜"
+        ),
+        Dictionary(
+            yomi = "しんかんせん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2500,
+            tango = "新幹線"
+        ),
     )
 
     val ADDS_NEW_WORDS = listOf(
