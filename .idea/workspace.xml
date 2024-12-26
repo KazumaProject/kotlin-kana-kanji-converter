@@ -9,6 +9,8 @@
       <change beforePath="$PROJECT_DIR$/src/main/bin/emoji_data.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/bin/emoji_data.tsv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/bin/reading_correction.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/bin/reading_correction.tsv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/bin/symbol.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/bin/symbol.tsv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/emoji/EmojiDictionaryBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/emoji/EmojiDictionaryBuilder.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/symbol/SymbolDictionaryBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/symbol/SymbolDictionaryBuilder.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,6 +109,7 @@
     "Gradle.PrefixTreeWithTermIdTest.executor": "Run",
     "Gradle.ReadingCorrectionBuilderTest.executor": "Run",
     "Gradle.SingleKanjiTest.Test build single kanji.executor": "Run",
+    "Gradle.SymbolDictionaryBuilderTest.convertSymbolDataToDictionaryList.executor": "Run",
     "Gradle.SymbolDictionaryBuilderTest.executor": "Run",
     "Kotlin script (Beta).build.gradle.kts.executor": "Run",
     "Kotlin.MainKt (1).executor": "Run",
@@ -176,7 +179,31 @@
       <recent name="prefix" />
     </key>
   </component>
-  <component name="RunManager" selected="Kotlin.MainKt">
+  <component name="RunManager" selected="Gradle.ReadingCorrectionBuilderTest">
+    <configuration name="EmojiDictionaryBuilderTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;emoji.EmojiDictionaryBuilderTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="EmojiDictionaryBuilderTest.convertEmojiDataToDictionaryList" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -249,32 +276,42 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.kazumaproject.MainKt" />
-      <module name="kana-kanji-converter.main" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="build.gradle.kts" type="KotlinStandaloneScriptRunConfigurationType" temporary="true" nameIsGenerated="true">
-      <module name="kana-kanji-converter" />
-      <option name="filePath" value="$PROJECT_DIR$/build.gradle.kts" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+    <configuration name="SymbolDictionaryBuilderTest.convertSymbolDataToDictionaryList" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;symbol.SymbolDictionaryBuilderTest.convertSymbolDataToDictionaryList&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Gradle.EmojiDictionaryBuilderTest" />
+      <item itemvalue="Gradle.SymbolDictionaryBuilderTest.convertSymbolDataToDictionaryList" />
       <item itemvalue="Gradle.EmojiDictionaryBuilderTest.convertEmojiDataToDictionaryList" />
       <item itemvalue="Gradle.ReadingCorrectionBuilderTest" />
       <item itemvalue="Gradle.SymbolDictionaryBuilderTest" />
-      <item itemvalue="Kotlin.MainKt" />
-      <item itemvalue="Kotlin script (Beta).build.gradle.kts" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Kotlin.MainKt" />
-        <item itemvalue="Kotlin script (Beta).build.gradle.kts" />
         <item itemvalue="Gradle.ReadingCorrectionBuilderTest" />
+        <item itemvalue="Gradle.EmojiDictionaryBuilderTest" />
+        <item itemvalue="Gradle.SymbolDictionaryBuilderTest.convertSymbolDataToDictionaryList" />
         <item itemvalue="Gradle.SymbolDictionaryBuilderTest" />
         <item itemvalue="Gradle.EmojiDictionaryBuilderTest.convertEmojiDataToDictionaryList" />
       </list>
