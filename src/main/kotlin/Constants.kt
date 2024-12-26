@@ -929,6 +929,20 @@ object Constants {
             cost = 2500,
             tango = "皇治"
         ),
+        Dictionary(
+            yomi = "にしい",
+            leftId = 1923,
+            rightId = 1923,
+            cost = 2500,
+            tango = "西居"
+        ),
+        Dictionary(
+            yomi = "なかた",
+            leftId = 1923,
+            rightId = 1923,
+            cost = 2500,
+            tango = "中田"
+        ),
     )
 
     val NAME_MUSIC_LIST = listOf(
@@ -1490,6 +1504,13 @@ object Constants {
             cost = 3000,
             tango = "魚頭"
         ),
+        Dictionary(
+            yomi = "ちゅうしょうか",
+            leftId = 1841,
+            rightId = 1941,
+            cost = 2300,
+            tango = "抽象化"
+        ),
     )
 
     val DIFFICULT_LIST = listOf(
@@ -1672,7 +1693,7 @@ object Constants {
             yomi = "はもの",
             leftId = 433,
             rightId = 1851,
-            cost = 3000,
+            cost = 4500,
             tango = "鱧の"
         ),
         Dictionary(
@@ -1735,7 +1756,7 @@ object Constants {
             yomi = "いきました",
             leftId = 1851,
             rightId = 701,
-            cost = 3000,
+            cost = 1500,
             tango = "行きました"
         ),
         Dictionary(
@@ -2871,5 +2892,4 @@ object Constants {
         Dictionary(yomi = "あいしんかくら", leftId = 1923, rightId = 1923, cost = 4000, tango = "愛新覚羅"),
         Dictionary(yomi = "たちあらい", leftId = 1923, rightId = 1923, cost = 4000, tango = "太刀洗")
     )
-
 }
