@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/bin/emoji_data.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/bin/emoji_data.tsv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/bin/reading_correction.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/bin/reading_correction.tsv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/bin/symbol.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/bin/symbol.tsv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/emoji/EmojiDictionaryBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/emoji/EmojiDictionaryBuilder.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/symbol/SymbolDictionaryBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/symbol/SymbolDictionaryBuilder.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Other.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Other.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,8 +44,8 @@
         <option value="Kotlin File" />
         <option value="Kotlin Data Class" />
         <option value="Kotlin Object" />
-        <option value="JUnit4 Test Class" />
         <option value="Kotlin Class" />
+        <option value="JUnit4 Test Class" />
       </list>
     </option>
   </component>
@@ -124,7 +120,7 @@
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/kazuma/IdeaProjects/kotlin-kana-kanji-converter/src/main/bin",
+    "last_opened_file_path": "/Users/kazuma/IdeaProjects/kotlin-kana-kanji-converter/src/main/resources",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -149,10 +145,10 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$/src/main/bin" />
       <recent name="$PROJECT_DIR$/src/test/resources" />
       <recent name="$PROJECT_DIR$/src/test/kotlin/emoji" />
-      <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$/src/main" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
@@ -169,11 +165,11 @@
       <recent name="prefix.model" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="" />
       <recent name="symbol" />
       <recent name="emoticon" />
       <recent name="emoji" />
       <recent name="fid" />
-      <recent name="prefix" />
     </key>
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
       <recent name="prefix" />
