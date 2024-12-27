@@ -118,6 +118,10 @@ class DicUtils {
                             println("skip $yomi $tango")
                         }
 
+                        yomi == "なかた" && tango == "中田" -> {
+                            println("skip $yomi $tango")
+                        }
+
                         else -> {
                             tempList.add(
                                 Dictionary(
