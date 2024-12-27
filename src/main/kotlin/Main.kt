@@ -53,6 +53,8 @@ fun main() {
             .groupBy { it.yomi }
             .toSortedMap(compareBy({ it.length }, { it }))
 
+    println("finalList size: ${finalList.size}")
+
     buildConnectionIds()
     buildPOSTable(finalList)
     buildTriesAndTokenArray(finalList)
@@ -117,10 +119,10 @@ private fun buildConnectionIds() {
     val connectionIdBuilder = ConnectionIdBuilder()
     lines?.let { l ->
         // Skip the first line and convert the remaining lines to Short
-        val connectionIds = l.drop(1).mapNotNull { line ->
-            line.toShortOrNull() // Safely converts to Short, returns null if conversion fails
+        val connectionIds = l.drop(1).map { line ->
+            line.toShort()
         }.toShortArray()
-
+        println("connectionID size: ${connectionIds.size}")
         connectionIdBuilder.writeShortArrayAsBytes(
             connectionIds,
             "./src/main/resources/connectionId.dat",
