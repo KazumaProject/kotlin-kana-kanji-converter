@@ -940,7 +940,7 @@ object Constants {
             yomi = "なかた",
             leftId = 1923,
             rightId = 1923,
-            cost = 2500,
+            cost = 1200,
             tango = "中田"
         ),
     )
@@ -1786,6 +1786,20 @@ object Constants {
             rightId = 1851,
             cost = 2500,
             tango = "新幹線"
+        ),
+        Dictionary(
+            yomi = "こくさいひ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2300,
+            tango = "国債費"
+        ),
+        Dictionary(
+            yomi = "あすぺ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2500,
+            tango = "アスペ"
         ),
     )
 
