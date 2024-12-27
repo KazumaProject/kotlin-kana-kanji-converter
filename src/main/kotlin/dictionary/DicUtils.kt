@@ -7,63 +7,130 @@ class DicUtils {
 
     fun getListDictionary(fileList: List<String>): List<Dictionary> {
         val tempList: MutableList<Dictionary> = mutableListOf()
-        val regex = """^([^\t]+)\t(\d+)\t(\d+)\t(\d+)\t([^\t]+)(\t.*)?$""".toRegex()
+        fileList.forEach {
+            val line = object {}::class.java.getResourceAsStream(it)?.bufferedReader()?.readLines()
 
-        // List of skip conditions
-        val skipConditions = listOf(
-            "では" to "デは",
-            "での" to "デの",
-            "ぽけれ" to "ぽけれ",
-            "ぽかっ" to "ぽかっ",
-            "ぽきゃ" to "ぽきゃ",
-            "ぽから" to "ぽから",
-            "ぽかれ" to "ぽかれ",
-            "ぽかろ" to "ぽかろ",
-            "おこる" to "怒る",
-            "りゆうしょ" to "理由書",
-            "しんせいにん" to "申請人",
-            "にしん" to "ニシン",
-            "にしん" to "にしん",
-            "ふいんき" to null,
-            "ぎじゅつしょ" to null,
-            "をは" to "ヲは",
-            "をも" to "ヲも",
-            "をら" to "ヲら",
-            "をしか" to "ヲしか",
-            "おこっ" to "怒っ",
-            "にほんご" to "日本語",
-            "よる" to "夜",
-            "しょうが" to "生姜",
-            "しんかんせん" to "新幹線",
-            "ちゅうしょうか" to "抽象化"
-        )
+            line?.forEach { str ->
+                str.apply {
+                    val yomi = split("\\t".toRegex())[0]
+                    val leftId = split("\\t".toRegex())[1]
+                    val rightId = split("\\t".toRegex())[2]
+                    val cost = split("\\t".toRegex())[3]
+                    val tango = split("\\t".toRegex())[4]
+                    when {
+                        yomi == "では" && tango == "デは" -> {
+                            println("skip $yomi $tango")
+                        }
 
-        fileList.forEach { fileName ->
-            val lines = object {}::class.java.getResourceAsStream(fileName)?.bufferedReader()?.readLines()
+                        yomi == "での" && tango == "デの" -> {
+                            println("skip $yomi $tango")
+                        }
 
-            lines?.forEach { line ->
-                val matchResult = regex.matchEntire(line)
-                if (matchResult != null) {
-                    val (yomi, leftId, rightId, cost, tango) = matchResult.destructured
+                        yomi == "ぽけれ" && tango == "ぽけれ" -> {
+                            println("skip $yomi $tango")
+                        }
 
-                    // Check against skip conditions
-                    if (skipConditions.any { it.first == yomi && (it.second == null || it.second == tango) }) {
-                        println("skip $yomi $tango")
-                    } else if (yomi == "にほんご" && tango == "日本語" && leftId == "1851") {
-                        println("skip $yomi $tango")
-                    } else {
-                        tempList.add(
-                            Dictionary(
-                                yomi = yomi,
-                                leftId = leftId.toShort(),
-                                rightId = rightId.toShort(),
-                                cost = cost.toShort(),
-                                tango = tango
+                        yomi == "ぽかっ" && tango == "ぽかっ" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "ぽきゃ" && tango == "ぽきゃ" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "ぽから" && tango == "ぽから" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "ぽかれ" && tango == "ぽかれ" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "ぽかろ" && tango == "ぽかろ" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "おこる" && tango == "怒る" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "りゆうしょ" && tango == "理由書" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "しんせいにん" && tango == "申請人" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "にしん" && tango == "ニシン" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "にしん" && tango == "にしん" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "ふいんき" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "ぎじゅつしょ" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "をは" && tango == "ヲは" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "をも" && tango == "ヲも" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "をら" && tango == "ヲら" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "をしか" && tango == "ヲしか" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "おこっ" && tango == "怒っ" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "にほんご" && tango == "日本語" && leftId == "1851" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "よる" && tango == "夜" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "しょうが" && tango == "生姜" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "しんかんせん" && tango == "新幹線" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "ちゅうしょうか" && tango == "抽象化" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        else -> {
+                            tempList.add(
+                                Dictionary(
+                                    yomi = yomi,
+                                    leftId = leftId.toShort(),
+                                    rightId = rightId.toShort(),
+                                    cost = cost.toShort(),
+                                    tango = tango
+                                )
                             )
-                        )
+                        }
+
                     }
-                } else {
-                    println("Invalid line format: $line")
                 }
             }
         }
