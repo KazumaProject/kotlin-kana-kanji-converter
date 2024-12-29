@@ -1511,6 +1511,79 @@ object Constants {
             cost = 2300,
             tango = "抽象化"
         ),
+        Dictionary(
+            yomi = "てっそん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2300,
+            tango = "姪孫"
+        ),
+        Dictionary(
+            yomi = "またおい",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2300,
+            tango = "又甥"
+        ),
+        Dictionary(
+            yomi = "まためい",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2300,
+            tango = "又姪"
+        ),
+        Dictionary(
+            yomi = "そうてっそん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2300,
+            tango = "曾姪孫"
+        ),
+        Dictionary(
+            yomi = "げんてっそん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2300,
+            tango = "玄姪孫"
+        ),
+        Dictionary(
+            yomi = "おいご",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2300,
+            tango = "甥御"
+        ),
+        Dictionary(
+            yomi = "おいめい",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2300,
+            tango = "甥姪"
+        ),
+        Dictionary(
+            yomi = "またどなり",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2300,
+            tango = "又隣"
+        ),
+    )
+
+    val PHISIC_NOUN_LIST = listOf(
+        Dictionary(
+            yomi = "てっそん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2301,
+            tango = "鉄損"
+        ),
+        Dictionary(
+            yomi = "てっそんしつ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 2000,
+            tango = "鉄損失"
+        ),
     )
 
     val DIFFICULT_LIST = listOf(
