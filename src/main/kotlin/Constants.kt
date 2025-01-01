@@ -945,6 +945,65 @@ object Constants {
         ),
     )
 
+    val FIGHT_NAME = listOf(
+        Dictionary(
+            yomi = "らいじん",
+            leftId = 1929,
+            rightId = 1929,
+            cost = 5000,
+            tango = "RIZIN"
+        ),
+        Dictionary(
+            yomi = "けーわん",
+            leftId = 1929,
+            rightId = 1929,
+            cost = 5000,
+            tango = "K-1"
+        ),
+        Dictionary(
+            yomi = "k-1",
+            leftId = 1929,
+            rightId = 1929,
+            cost = 5000,
+            tango = "K-1"
+        ),
+        Dictionary(
+            yomi = "K-1",
+            leftId = 1929,
+            rightId = 1929,
+            cost = 5000,
+            tango = "K-1"
+        ),
+        Dictionary(
+            yomi = "らいず",
+            leftId = 1929,
+            rightId = 1929,
+            cost = 5000,
+            tango = "RIZE"
+        ),
+        Dictionary(
+            yomi = "しゅーと",
+            leftId = 1929,
+            rightId = 1929,
+            cost = 4000,
+            tango = "修斗"
+        ),
+        Dictionary(
+            yomi = "やーまん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "ヤーマン"
+        ),
+        Dictionary(
+            yomi = "やーまん",
+            leftId = 1921,
+            rightId = 1921,
+            cost = 4001,
+            tango = "YA-MAN"
+        ),
+    )
+
     val NAME_MUSIC_LIST = listOf(
         Dictionary(
             yomi = "ぱんぴー",
