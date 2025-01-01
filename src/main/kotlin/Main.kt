@@ -8,6 +8,7 @@ import com.kazumaproject.Constants.DOMAIN
 import com.kazumaproject.Constants.ERA
 import com.kazumaproject.Constants.FIGHT_NAME
 import com.kazumaproject.Constants.FIXED_LIST
+import com.kazumaproject.Constants.FOOD_NAME
 import com.kazumaproject.Constants.NAME_IT_LIST
 import com.kazumaproject.Constants.NAME_LIST
 import com.kazumaproject.Constants.NAME_MUSIC_LIST
@@ -58,7 +59,7 @@ fun main() {
                 NAME_MUSIC_LIST + NAME_IT_LIST +
                 VERB_LIST + DOMAIN + ERA + PLACE +
                 WORD + ZENKANKU_LIST + ADDS_NEW_WORDS + PHISIC_NOUN_LIST
-                + FIGHT_NAME
+                + FIGHT_NAME + FOOD_NAME
                 )
             .groupBy { it.yomi }
             .toSortedMap(compareBy({ it.length }, { it }))
