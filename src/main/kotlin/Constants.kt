@@ -1172,6 +1172,13 @@ object Constants {
             cost = 4002,
             tango = "鰊蕎麦"
         ),
+        Dictionary(
+            yomi = "びゃんびゃんめん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 9400,
+            tango = "\uD882\uDFDE\uD882\uDFDE麺"
+        ),
     )
 
     val SYMBOL_LIST = listOf(
