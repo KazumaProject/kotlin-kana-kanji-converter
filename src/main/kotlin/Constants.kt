@@ -968,13 +968,6 @@ object Constants {
             tango = "RIZE"
         ),
         Dictionary(
-            yomi = "しゅーと",
-            leftId = 1929,
-            rightId = 1929,
-            cost = 4000,
-            tango = "修斗"
-        ),
-        Dictionary(
             yomi = "やーまん",
             leftId = 1851,
             rightId = 1851,
@@ -1177,7 +1170,7 @@ object Constants {
             leftId = 1851,
             rightId = 1851,
             cost = 9400,
-            tango = "\uD882\uDFDE\uD882\uDFDE麺"
+            tango = "\uD883\uDEDE\uD883\uDEDE麺"
         ),
     )
 
