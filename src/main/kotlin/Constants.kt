@@ -1655,38 +1655,45 @@ object Constants {
         ),
         Dictionary(
             yomi = "まずしそう",
-            leftId = 1841,
-            rightId = 1841,
+            leftId = 2459,
+            rightId = 2008,
             cost = 4000,
             tango = "貧しそう"
         ),
         Dictionary(
             yomi = "みたさ",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 2459,
+            rightId = 2031,
             cost = 5000,
             tango = "見たさ"
         ),
         Dictionary(
             yomi = "あいたさ",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 2459,
+            rightId = 2031,
             cost = 5001,
             tango = "逢いたさ"
         ),
         Dictionary(
             yomi = "あいたさ",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 2459,
+            rightId = 2031,
             cost = 5000,
             tango = "会いたさ"
         ),
         Dictionary(
             yomi = "あいたさ",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 2459,
+            rightId = 1949,
             cost = 5005,
             tango = "開いた差"
+        ),
+        Dictionary(
+            yomi = "なんしんとう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "何親等"
         ),
     )
 
