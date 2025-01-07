@@ -945,6 +945,23 @@ object Constants {
         ),
     )
 
+    val ENTERTAIMENT_NAME = listOf(
+        Dictionary(
+            yomi = "たかちゃんねるず",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "貴ちゃんねるず"
+        ),
+        Dictionary(
+            yomi = "たかちゃん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "貴ちゃん"
+        ),
+    )
+
     val FIGHT_NAME = listOf(
         Dictionary(
             yomi = "らいじん",
