@@ -1158,6 +1158,34 @@ object Constants {
             cost = 3000,
             tango = "GitHub"
         ),
+        Dictionary(
+            yomi = "ぺいぱる",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 4000,
+            tango = "PayPal"
+        ),
+        Dictionary(
+            yomi = "まいくろそふと",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 4000,
+            tango = "Microsoft"
+        ),
+        Dictionary(
+            yomi = "えっじ",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5000,
+            tango = "Edge"
+        ),
+        Dictionary(
+            yomi = "うぃんどうず",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 5000,
+            tango = "Windows"
+        ),
     )
 
     val FOOD_NAME = listOf(
@@ -1682,18 +1710,18 @@ object Constants {
             tango = "会いたさ"
         ),
         Dictionary(
-            yomi = "あいたさ",
-            leftId = 2459,
-            rightId = 1949,
-            cost = 4305,
-            tango = "開いた差"
-        ),
-        Dictionary(
             yomi = "なんしんとう",
             leftId = 1851,
             rightId = 1851,
             cost = 4000,
             tango = "何親等"
+        ),
+        Dictionary(
+            yomi = "とうしん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4200,
+            tango = "頭身"
         ),
     )
 
