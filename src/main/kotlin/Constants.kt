@@ -1671,21 +1671,21 @@ object Constants {
             yomi = "あいたさ",
             leftId = 2459,
             rightId = 2031,
-            cost = 5001,
+            cost = 4301,
             tango = "逢いたさ"
         ),
         Dictionary(
             yomi = "あいたさ",
             leftId = 2459,
             rightId = 2031,
-            cost = 5000,
+            cost = 4300,
             tango = "会いたさ"
         ),
         Dictionary(
             yomi = "あいたさ",
             leftId = 2459,
             rightId = 1949,
-            cost = 5005,
+            cost = 4305,
             tango = "開いた差"
         ),
         Dictionary(
