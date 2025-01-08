@@ -2032,6 +2032,37 @@ object Constants {
         ),
     )
 
+    val RESCORE_WORDS = listOf(
+        Dictionary(
+            yomi = "のも",
+            leftId = 382,
+            rightId = 274,
+            cost = 2300,
+            tango = "のも"
+        ),
+        Dictionary(
+            yomi = "のは",
+            leftId = 382,
+            rightId = 283,
+            cost = 1500,
+            tango = "のは"
+        ),
+        Dictionary(
+            yomi = "ころん",
+            leftId = 1841,
+            rightId = 1841,
+            cost = 3000,
+            tango = "コロン"
+        ),
+        Dictionary(
+            yomi = "せつぜんぶ",
+            leftId = 1841,
+            rightId = 1841,
+            cost = 8500,
+            tango = "楔前部"
+        ),
+    )
+
     val ADDS_NEW_WORDS = listOf(
         Dictionary(
             yomi = "たこわさ",

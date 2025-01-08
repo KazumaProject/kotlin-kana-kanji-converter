@@ -26,6 +26,54 @@ class DicUtils {
                             println("skip $yomi $tango")
                         }
 
+                        yomi == "でも" && tango == "デも" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "でこそ" && tango == "デこそ" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "でしか" && tango == "デしか" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "っとは" && tango == "ットは" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "っとも" && tango == "ットも" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "をは" && tango == "ヲは" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "をも" && tango == "ヲも" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "をら" && tango == "ヲら" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "をしか" && tango == "ヲしか" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "のも" && tango == "のも" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "のも" && tango == "ノも" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "のは" && tango == "ノは" -> {
+                            println("skip $yomi $tango")
+                        }
+
                         yomi == "ぽけれ" && tango == "ぽけれ" -> {
                             println("skip $yomi $tango")
                         }
@@ -78,22 +126,6 @@ class DicUtils {
                             println("skip $yomi $tango")
                         }
 
-                        yomi == "をは" && tango == "ヲは" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "をも" && tango == "ヲも" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "をら" && tango == "ヲら" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "をしか" && tango == "ヲしか" -> {
-                            println("skip $yomi $tango")
-                        }
-
                         yomi == "おこっ" && tango == "怒っ" -> {
                             println("skip $yomi $tango")
                         }
@@ -135,6 +167,10 @@ class DicUtils {
                         }
 
                         yomi == "たかちゃん" && tango == "タカチャン" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "ころん" && tango == "コロン" -> {
                             println("skip $yomi $tango")
                         }
 
