@@ -47,10 +47,14 @@ jobs:
 
       # Build the project with Gradle
       - name: Build with Gradle
+        env:
+          GRADLE_OPTS: -Xmx8G
         run: ./gradlew build
 
       # Run the Kotlin application
       - name: Run main.kt
+        env:
+          JAVA_OPTS: -Xmx8G
         run: ./gradlew run
 
       # Upload artifacts to GitHub Actions
