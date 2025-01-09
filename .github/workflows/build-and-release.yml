@@ -34,7 +34,14 @@ jobs:
           wget https://raw.githubusercontent.com/google/mozc/18b9c30/src/data/dictionary_oss/suffix.txt -O ./src/main/resources/suffix.txt
           # Download single_kanji.tsv from the single_kanji directory
           wget https://raw.githubusercontent.com/google/mozc/18b9c30/src/data/single_kanji/single_kanji.tsv -O ./src/main/resources/single_kanji.tsv
-
+          
+    # Clone merge-ut-dictionaries repository and generate mozcdic-ut.txt
+      - name: Generate mozcdic-ut.txt
+        run: |
+          git clone --depth 1 https://github.com/utuhiro78/merge-ut-dictionaries.git
+          cd merge-ut-dictionaries/src/merge
+          bash make.sh
+          cp mozcdic-ut.txt ../../../src/main/resources/
 
       # Build the project with Gradle
       - name: Build with Gradle
