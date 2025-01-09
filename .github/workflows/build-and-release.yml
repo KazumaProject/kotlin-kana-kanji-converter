@@ -42,7 +42,7 @@ jobs:
           cd merge-ut-dictionaries/src/merge
           sed -i "s|https://raw.githubusercontent.com/google/mozc/master/src/data/dictionary_oss/id.def|https://raw.githubusercontent.com/google/mozc/3733234/src/data/dictionary_oss/id.def|" merge_dictionaries.py
           sed -i 's/^\s*jawiki="true"/# jawiki="true"/' make.sh
-          sh make.sh
+          bash make.sh
           cp mozcdic-ut.txt ../../../src/main/resources/
 
       # Build the project with Gradle
