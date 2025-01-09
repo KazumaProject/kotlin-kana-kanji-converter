@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="" />
+    <list default="true" id="e0ea0d42-9a60-437e-be17-c87650dd12c8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/build-and-release.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/build-and-release.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -59,7 +62,6 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-<<<<<<< HEAD
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
@@ -131,79 +133,6 @@
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-=======
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Downloaded.Files.Path.Enabled": "false",
-    "Gradle.Build kotlin-kana-kanji-converter.executor": "Run",
-    "Gradle.Build tries.executor": "Run",
-    "Gradle.ConnectionIdTest.Test load connection dat.executor": "Run",
-    "Gradle.ConnectionIdTest.Test load connection index dat.executor": "Run",
-    "Gradle.ConnectionIdTest.Test to build connection id binary file.executor": "Run",
-    "Gradle.ConnectionIdTest.Test to build connection ids.executor": "Run",
-    "Gradle.ConnectionIdTest.Test to build octree connection id range 0 - 16777215.executor": "Run",
-    "Gradle.ConnectionIdTest.Test to build octree for connection id range 0 - 511 small.executor": "Run",
-    "Gradle.ConnectionIdTest.Test to build octree for connection id range 0 - 511.executor": "Run",
-    "Gradle.ConnectionIdTest.Test to build octree with connection_single_column_txt.executor": "Run",
-    "Gradle.DictionaryBuildTest.build dictionary files.executor": "Run",
-    "Gradle.EmojiDictionaryBuilderTest.convertEmojiDataToDictionaryList.executor": "Run",
-    "Gradle.EmojiDictionaryBuilderTest.executor": "Run",
-    "Gradle.EmoticonDictionaryBuilderTest.executor": "Run",
-    "Gradle.FullyIndexedDictionaryTest.createAuxData.executor": "Run",
-    "Gradle.FullyIndexedDictionaryTest.test fully indexed dictionary (1).executor": "Run",
-    "Gradle.FullyIndexedDictionaryTest.test fully indexed dictionary.executor": "Run",
-    "Gradle.GraphBuilderTest.Build Graph Test.executor": "Run",
-    "Gradle.KanaKanjiConverterTest.Test KanaKanjiConverter Engine.executor": "Run",
-    "Gradle.POSTableTest.Build pos_table.executor": "Run",
-    "Gradle.POSTableTest.Load pos_table.executor": "Run",
-    "Gradle.PrefixTreeTest.LOUDS test.executor": "Run",
-    "Gradle.PrefixTreeTest.Test Junction Array.executor": "Run",
-    "Gradle.PrefixTreeTest.Test Token Array.executor": "Run",
-    "Gradle.PrefixTreeTest.Test find method.executor": "Run",
-    "Gradle.PrefixTreeTest.Test write binary file 2.executor": "Run",
-    "Gradle.PrefixTreeTest.Test write binary file.executor": "Run",
-    "Gradle.PrefixTreeTest.create token array.executor": "Run",
-    "Gradle.PrefixTreeTest.executor": "Run",
-    "Gradle.PrefixTreeTest.insert.executor": "Run",
-    "Gradle.PrefixTreeTest.read text file from resources.executor": "Run",
-    "Gradle.PrefixTreeWithTermIdTest.Test Common Prefix Search.executor": "Run",
-    "Gradle.PrefixTreeWithTermIdTest.Test find method.executor": "Run",
-    "Gradle.PrefixTreeWithTermIdTest.Test first child.executor": "Run",
-    "Gradle.PrefixTreeWithTermIdTest.Test get child.executor": "Run",
-    "Gradle.PrefixTreeWithTermIdTest.Test read text file from resources.executor": "Run",
-    "Gradle.PrefixTreeWithTermIdTest.executor": "Run",
-    "Gradle.ReadingCorrectionBuilderTest.executor": "Run",
-    "Gradle.SingleKanjiTest.Test build single kanji.executor": "Run",
-    "Gradle.SymbolDictionaryBuilderTest.convertSymbolDataToDictionaryList.executor": "Run",
-    "Gradle.SymbolDictionaryBuilderTest.executor": "Run",
-    "Kotlin script (Beta).build.gradle.kts.executor": "Run",
-    "Kotlin.MainKt (1).executor": "Run",
-    "Kotlin.MainKt.executor": "Run",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit4",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
-    "git-widget-placeholder": "Rebasing master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/kazuma/IdeaProjects/kotlin-kana-kanji-converter/src/main/bin",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "onboarding.tips.debug.path": "/Users/kazuma/IdeaProjects/tries/src/main/kotlin/Main.kt",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.editor",
-    "vue.rearranger.settings.migration": "true"
->>>>>>> 4f44d2e (try to delete all dictionaries in history)
   },
   &quot;keyToStringList&quot;: {
     &quot;DatabaseDriversLRU&quot;: [
