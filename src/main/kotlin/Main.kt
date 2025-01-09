@@ -50,7 +50,6 @@ fun main() {
         "/dictionary08.txt",
         "/dictionary09.txt",
         "/suffix.txt",
-        "/mozcdic-ut.txt"
     )
     val dicUtils = DicUtils()
     val dictionaryList = dicUtils.getListDictionary(fileList).toMutableList()
