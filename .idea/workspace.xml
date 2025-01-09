@@ -12,6 +12,7 @@
 =======
       <change beforePath="$PROJECT_DIR$/.github/workflows/build-and-release.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/build-and-release.yml" afterDir="false" />
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       <change beforePath="$PROJECT_DIR$/.github/workflows/build-and-release.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/build-and-release.yml" afterDir="false" />
 >>>>>>> 8029f86 (added mozc ut wiki and neologd dictionaries and increase heap)
@@ -22,6 +23,8 @@
 =======
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
 >>>>>>> a477e59 (added mozc ut wiki and neologd dictionaries)
+=======
+>>>>>>> 296c3e9 (added mozc ut wiki and sudachi dictionaries)
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
