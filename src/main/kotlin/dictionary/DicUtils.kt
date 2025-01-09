@@ -3,6 +3,9 @@ package com.kazumaproject.dictionary
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.single_kanji.SingleKanjiBuilder
 import java.io.File
+import java.io.FileInputStream
+import java.io.InputStreamReader
+import java.util.zip.ZipInputStream
 
 class DicUtils {
 
@@ -195,6 +198,59 @@ class DicUtils {
                 }
             }
         }
+
+        val zipFilePath = "src/main/bin/mozcdic-ut.txt.zip"
+        val fileNameInZip = "mozcdic-ut.txt"
+        val skipConditions = setOf(
+            "では" to "デは", "での" to "デの", "でも" to "デも", "でこそ" to "デこそ",
+            "でしか" to "デしか", "っとは" to "ットは", "っとも" to "ットも", "をは" to "ヲは",
+            "をも" to "ヲも", "をら" to "ヲら", "をしか" to "ヲしか", "のも" to "のも",
+            "のも" to "ノも", "のは" to "ノは", "ぽけれ" to "ぽけれ", "ぽかっ" to "ぽかっ",
+            "ぽきゃ" to "ぽきゃ", "ぽから" to "ぽから", "ぽかれ" to "ぽかれ", "ぽかろ" to "ぽかろ",
+            "おこる" to "怒る", "りゆうしょ" to "理由書", "しんせいにん" to "申請人",
+            "にしん" to "ニシン", "にしん" to "にしん", "おこっ" to "怒っ",
+            "にほんご" to "日本語", "よる" to "夜", "しょうが" to "生姜",
+            "しんかんせん" to "新幹線", "ちゅうしょうか" to "抽象化", "なかた" to "中田",
+            "けんこうほう" to "健康法", "みやこ" to "京都", "きちゃんねる" to "貴ちゃんねる",
+            "たかちゃん" to "タカチャン", "ころん" to "コロン", "びゃんびゃんめん" to "1851"
+        )
+
+        ZipInputStream(FileInputStream(zipFilePath)).use { zipStream ->
+            var entry = zipStream.nextEntry
+            while (entry != null) {
+                if (entry.name == fileNameInZip) {
+                    // Process the file inside the zip
+                    InputStreamReader(zipStream).buffered().useLines { lines ->
+                        lines.forEach { line ->
+                            val parts = line.split("\t")
+                            if (parts.size < 5) return@forEach // Skip malformed lines
+                            val yomi = parts[0]
+                            val leftId = parts[1]
+                            val rightId = parts[2]
+                            val cost = parts[3]
+                            val tango = parts[4]
+
+                            // Skip based on conditions
+                            if (skipConditions.contains(yomi to tango)) {
+                                println("skip $yomi $tango")
+                            } else {
+                                tempList.add(
+                                    Dictionary(
+                                        yomi = yomi,
+                                        leftId = leftId.toShort(),
+                                        rightId = rightId.toShort(),
+                                        cost = cost.toShort(),
+                                        tango = tango
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+                entry = zipStream.nextEntry
+            }
+        }
+
         return tempList
     }
 
