@@ -178,7 +178,59 @@ class DicUtils {
                             println("skip $yomi $tango")
                         }
 
+                        yomi == "たなかまる" && tango == "田中" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "なるはや" && tango == "ナルハヤ!" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "ざぎん" && tango == "銀座" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "あいえす" && tango == "“IS”" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "あいえす" && tango == "”IS”" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "ここでは" && tango == "苦しみ" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "のさい" && tango == "野際" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "あいあむ" && tango == "I am xxx" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "あいあむ" && tango == "I am..." -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "あぁるぴぃひがしぷらかぶしきがいしゃ" && tango == "アァルピィ東プラ" -> {
+                            println("skip $yomi $tango")
+                        }
+
                         yomi == "かた" && tango == "カタ" && leftId == "2036" && rightId == "2036" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "こと" && tango == "事" && leftId == "1951" && rightId == "1951" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "なの" && tango == "なの" && leftId == "421" && rightId == "433" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "きょしんへいが" && tango == "巨神兵が?" && leftId == "1851" && rightId == "1851" -> {
                             println("skip $yomi $tango")
                         }
 
