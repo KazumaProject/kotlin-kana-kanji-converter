@@ -30,54 +30,6 @@ class DicUtils {
                             println("skip $yomi $tango")
                         }
 
-                        yomi == "でも" && tango == "デも" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "でこそ" && tango == "デこそ" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "でしか" && tango == "デしか" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "っとは" && tango == "ットは" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "っとも" && tango == "ットも" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "をは" && tango == "ヲは" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "をも" && tango == "ヲも" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "をら" && tango == "ヲら" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "をしか" && tango == "ヲしか" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "のも" && tango == "のも" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "のも" && tango == "ノも" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "のは" && tango == "ノは" -> {
-                            println("skip $yomi $tango")
-                        }
-
                         yomi == "ぽけれ" && tango == "ぽけれ" -> {
                             println("skip $yomi $tango")
                         }
@@ -130,11 +82,31 @@ class DicUtils {
                             println("skip $yomi $tango")
                         }
 
+                        yomi == "をは" && tango == "ヲは" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "をも" && tango == "ヲも" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "をら" && tango == "ヲら" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "をしか" && tango == "ヲしか" -> {
+                            println("skip $yomi $tango")
+                        }
+
                         yomi == "おこっ" && tango == "怒っ" -> {
                             println("skip $yomi $tango")
                         }
 
                         yomi == "にほんご" && tango == "日本語" && leftId == "1851" -> {
+                            println("skip $yomi $tango")
+                        }
+
+                        yomi == "にほんとう" && tango == "日本刀" -> {
                             println("skip $yomi $tango")
                         }
 
@@ -155,122 +127,6 @@ class DicUtils {
                         }
 
                         yomi == "なかた" && tango == "中田" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "けんこうほう" && tango == "健康法" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "みやこ" && tango == "京都" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "きちゃんねる" && tango == "貴ちゃんねる" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "たかちゃん" && tango == "タカチャン" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "ころん" && tango == "コロン" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "たなかまる" && tango == "田中" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "なるはや" && tango == "ナルハヤ!" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "ざぎん" && tango == "銀座" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "あいえす" && tango == "“IS”" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "あいえす" && tango == "”IS”" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "ここでは" && tango == "苦しみ" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "よろしくおねがいします" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "のさい" && tango == "野際" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "あいあむ" && tango == "I am xxx" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "にほんとう" && tango == "日本刀" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "あいあむ" && tango == "I am..." -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "できた" && tango == "できた" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "なんの" && tango == "なんの" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "ようけんどう" && tango == "明倫養賢堂" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "きたの" && tango == "北野" && leftId == "1851" && rightId == "1851" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "ほうこうせい" && tango == "方向性" && leftId == "1851" && rightId == "1969" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "ほうこうせい" && tango == "方向性" && leftId == "1851" && rightId == "1851" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "なんの" && tango == "南野" && leftId == "1851" && rightId == "1851" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "あぁるぴぃひがしぷらかぶしきがいしゃ" && tango == "アァルピィ東プラ" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "かた" && tango == "カタ" && leftId == "2036" && rightId == "2036" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "かさ" && tango == "化さ" && leftId == "839" && rightId == "839" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "こと" && tango == "事" && leftId == "1951" && rightId == "1951" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "なの" && tango == "なの" && leftId == "421" && rightId == "433" -> {
-                            println("skip $yomi $tango")
-                        }
-
-                        yomi == "きょしんへいが" && tango == "巨神兵が?" && leftId == "1851" && rightId == "1851" -> {
                             println("skip $yomi $tango")
                         }
 

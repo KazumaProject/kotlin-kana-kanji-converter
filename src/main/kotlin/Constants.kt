@@ -940,25 +940,8 @@ object Constants {
             yomi = "なかた",
             leftId = 1923,
             rightId = 1923,
-            cost = 500,
+            cost = 1200,
             tango = "中田"
-        ),
-    )
-
-    val ENTERTAIMENT_NAME = listOf(
-        Dictionary(
-            yomi = "たかちゃんねるず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 5000,
-            tango = "貴ちゃんねるず"
-        ),
-        Dictionary(
-            yomi = "たかちゃん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 5000,
-            tango = "貴ちゃん"
         ),
     )
 
@@ -978,11 +961,32 @@ object Constants {
             tango = "K-1"
         ),
         Dictionary(
+            yomi = "k-1",
+            leftId = 1929,
+            rightId = 1929,
+            cost = 5000,
+            tango = "K-1"
+        ),
+        Dictionary(
+            yomi = "K-1",
+            leftId = 1929,
+            rightId = 1929,
+            cost = 5000,
+            tango = "K-1"
+        ),
+        Dictionary(
             yomi = "らいず",
             leftId = 1929,
             rightId = 1929,
             cost = 5000,
             tango = "RIZE"
+        ),
+        Dictionary(
+            yomi = "しゅーと",
+            leftId = 1929,
+            rightId = 1929,
+            cost = 4000,
+            tango = "修斗"
         ),
         Dictionary(
             yomi = "やーまん",
@@ -1157,58 +1161,6 @@ object Constants {
             rightId = 1920,
             cost = 3000,
             tango = "GitHub"
-        ),
-        Dictionary(
-            yomi = "ぺいぱる",
-            leftId = 1920,
-            rightId = 1920,
-            cost = 4000,
-            tango = "PayPal"
-        ),
-        Dictionary(
-            yomi = "まいくろそふと",
-            leftId = 1920,
-            rightId = 1920,
-            cost = 4000,
-            tango = "Microsoft"
-        ),
-        Dictionary(
-            yomi = "えっじ",
-            leftId = 1920,
-            rightId = 1920,
-            cost = 5000,
-            tango = "Edge"
-        ),
-        Dictionary(
-            yomi = "うぃんどうず",
-            leftId = 1920,
-            rightId = 1920,
-            cost = 5000,
-            tango = "Windows"
-        ),
-    )
-
-    val FOOD_NAME = listOf(
-        Dictionary(
-            yomi = "にしんそば",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ニシンそば"
-        ),
-        Dictionary(
-            yomi = "にしんそば",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4001,
-            tango = "ニシン蕎麦"
-        ),
-        Dictionary(
-            yomi = "にしんそば",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4002,
-            tango = "鰊蕎麦"
         ),
     )
 
@@ -1674,167 +1626,6 @@ object Constants {
             cost = 2300,
             tango = "又隣"
         ),
-        Dictionary(
-            yomi = "けんこうほう",
-            leftId = 1931,
-            rightId = 1949,
-            cost = 2500,
-            tango = "健康法"
-        ),
-        Dictionary(
-            yomi = "まずしそう",
-            leftId = 2459,
-            rightId = 2008,
-            cost = 4000,
-            tango = "貧しそう"
-        ),
-        Dictionary(
-            yomi = "みたさ",
-            leftId = 2459,
-            rightId = 2031,
-            cost = 5000,
-            tango = "見たさ"
-        ),
-        Dictionary(
-            yomi = "あいたさ",
-            leftId = 2459,
-            rightId = 2031,
-            cost = 4301,
-            tango = "逢いたさ"
-        ),
-        Dictionary(
-            yomi = "あいたさ",
-            leftId = 2459,
-            rightId = 2031,
-            cost = 4300,
-            tango = "会いたさ"
-        ),
-        Dictionary(
-            yomi = "なんしんとう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "何親等"
-        ),
-        Dictionary(
-            yomi = "とうしん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4200,
-            tango = "頭身"
-        ),
-        Dictionary(
-            yomi = "もくしょく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 3500,
-            tango = "黙食"
-        ),
-        Dictionary(
-            yomi = "こと",
-            leftId = 1951,
-            rightId = 1951,
-            cost = 1900,
-            tango = "事"
-        ),
-        Dictionary(
-            yomi = "なの",
-            leftId = 421,
-            rightId = 433,
-            cost = 1900,
-            tango = "なの"
-        ),
-        Dictionary(
-            yomi = "みせぷ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 2000,
-            tango = "魅せプ"
-        ),
-        Dictionary(
-            yomi = "よろしくおねがいします",
-            leftId = 12,
-            rightId = 240,
-            cost = 3500,
-            tango = "よろしくお願いします"
-        ),
-        Dictionary(
-            yomi = "よろしくおねがいします",
-            leftId = 2470,
-            rightId = 240,
-            cost = 3550,
-            tango = "よろしくお願いします"
-        ),
-        Dictionary(
-            yomi = "よろしくおねがいします",
-            leftId = 12,
-            rightId = 240,
-            cost = 3800,
-            tango = "よろしくおねがいします"
-        ),
-        Dictionary(
-            yomi = "よろしくおねがいします",
-            leftId = 2470,
-            rightId = 240,
-            cost = 3850,
-            tango = "よろしくおねがいします"
-        ),
-        Dictionary(
-            yomi = "かさ",
-            leftId = 839,
-            rightId = 839,
-            cost = 6000,
-            tango = "化さ"
-        ),
-        Dictionary(
-            yomi = "にほんとう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 2500,
-            tango = "日本刀"
-        ),
-        Dictionary(
-            yomi = "なんのこと",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 3500,
-            tango = "なんのこと"
-        ),
-        Dictionary(
-            yomi = "できた",
-            leftId = 704,
-            rightId = 142,
-            cost = 620,
-            tango = "できた"
-        ),
-        Dictionary(
-            yomi = "できた",
-            leftId = 349,
-            rightId = 142,
-            cost = 1200,
-            tango = "できた"
-        ),
-        Dictionary(
-            yomi = "なんの",
-            leftId = 1920,
-            rightId = 1920,
-            cost = 4800,
-            tango = "なんの"
-        ),
-        Dictionary(
-            yomi = "めいりんようけんどう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 8500,
-            tango = "明倫養賢堂"
-        ),
-        Dictionary(
-            yomi = "ほうこうせい",
-            leftId = 1851,
-            rightId = 1969,
-            cost = 4000,
-            tango = "方向性"
-        ),
     )
 
     val PHISIC_NOUN_LIST = listOf(
@@ -2108,6 +1899,13 @@ object Constants {
             tango = "日本語"
         ),
         Dictionary(
+            yomi = "にほんとう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3500,
+            tango = "日本刀"
+        ),
+        Dictionary(
             yomi = "よる",
             leftId = 1909,
             rightId = 1909,
@@ -2141,37 +1939,6 @@ object Constants {
             rightId = 1851,
             cost = 2500,
             tango = "アスペ"
-        ),
-    )
-
-    val RESCORE_WORDS = listOf(
-        Dictionary(
-            yomi = "のも",
-            leftId = 382,
-            rightId = 274,
-            cost = 2300,
-            tango = "のも"
-        ),
-        Dictionary(
-            yomi = "のは",
-            leftId = 382,
-            rightId = 283,
-            cost = 1500,
-            tango = "のは"
-        ),
-        Dictionary(
-            yomi = "ころん",
-            leftId = 1841,
-            rightId = 1841,
-            cost = 3000,
-            tango = "コロン"
-        ),
-        Dictionary(
-            yomi = "せつぜんぶ",
-            leftId = 1841,
-            rightId = 1841,
-            cost = 8500,
-            tango = "楔前部"
         ),
     )
 
