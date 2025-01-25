@@ -1949,6 +1949,78 @@ object Constants {
         ),
     )
 
+    val ENTERTAIMENT_NAME = listOf(
+        Dictionary(
+            yomi = "たかちゃんねるず",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "貴ちゃんねるず"
+        ),
+        Dictionary(
+            yomi = "たかちゃん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "貴ちゃん"
+        ),
+    )
+
+    val FOOD_NAME = listOf(
+        Dictionary(
+            yomi = "にしんそば",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "ニシンそば"
+        ),
+        Dictionary(
+            yomi = "にしんそば",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "ニシン蕎麦"
+        ),
+        Dictionary(
+            yomi = "にしんそば",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4002,
+            tango = "鰊蕎麦"
+        ),
+    )
+
+    val RESCORE_WORDS = listOf(
+        Dictionary(
+            yomi = "のも",
+            leftId = 382,
+            rightId = 274,
+            cost = 2300,
+            tango = "のも"
+        ),
+        Dictionary(
+            yomi = "のは",
+            leftId = 382,
+            rightId = 283,
+            cost = 1500,
+            tango = "のは"
+        ),
+        Dictionary(
+            yomi = "ころん",
+            leftId = 1841,
+            rightId = 1841,
+            cost = 3000,
+            tango = "コロン"
+        ),
+        Dictionary(
+            yomi = "せつぜんぶ",
+            leftId = 1841,
+            rightId = 1841,
+            cost = 8500,
+            tango = "楔前部"
+        ),
+    )
+
     val ADDS_NEW_WORDS = listOf(
         Dictionary(
             yomi = "たこわさ",
