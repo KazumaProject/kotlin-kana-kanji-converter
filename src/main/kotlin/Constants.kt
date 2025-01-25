@@ -1909,7 +1909,7 @@ object Constants {
             yomi = "くるまで",
             leftId = 1851,
             rightId = 168,
-            cost = 4500,
+            cost = 4000,
             tango = "車で"
         ),
         Dictionary(
