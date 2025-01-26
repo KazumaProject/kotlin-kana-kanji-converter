@@ -469,7 +469,12 @@ private fun buildDictionaryForPlaces() {
 
     val readingCorrectionBuilder = ReadingCorrectionBuilder()
 
-    val dictionaryList = readingCorrectionBuilder.parseMozcUTDictionary("src/main/bin/place.txt")
+    val dictionaryList = readingCorrectionBuilder.parseMozcUTDictionaryCompressedDictionary(
+        readTextFromZip(
+            filePath =  "src/main/bin/place.txt.zip",
+            fileName = "place.txt"
+        )
+    )
         .groupBy { it.yomi }
         .toSortedMap(compareBy({ it.length }, { it }))
 
@@ -508,21 +513,6 @@ private fun buildDictionaryForPlaces() {
     tokenArray.readPOSTable(1)
 }
 
-fun readWikiFromZip(): InputStream {
-    val zipFile = File("src/main/bin/wiki.txt.zip")
-    val zipInputStream = ZipInputStream(BufferedInputStream(FileInputStream(zipFile)))
-
-    var entry = zipInputStream.nextEntry
-    while (entry != null) {
-        if (!entry.isDirectory && entry.name == "wiki.txt") {
-            return zipInputStream
-        }
-        entry = zipInputStream.nextEntry
-    }
-
-    throw FileNotFoundException("wiki.txt not found in wiki.txt.zip")
-}
-
 private fun buildDictionaryForWiki() {
     val yomiTree = PrefixTreeWithTermId()
     val tangoTree = PrefixTree()
@@ -530,7 +520,12 @@ private fun buildDictionaryForWiki() {
     val readingCorrectionBuilder = ReadingCorrectionBuilder()
 
 
-    val dictionaryList = readingCorrectionBuilder.parseMozcUTDictionaryCompressedDictionary(readWikiFromZip())
+    val dictionaryList = readingCorrectionBuilder.parseMozcUTDictionaryCompressedDictionary(
+        readTextFromZip(
+            filePath = "src/main/bin/wiki.txt.zip",
+            fileName = "wiki.txt"
+        )
+    )
         .groupBy { it.yomi }
         .toSortedMap(compareBy({ it.length }, { it }))
 
@@ -569,3 +564,17 @@ private fun buildDictionaryForWiki() {
     tokenArray.readPOSTable(1)
 }
 
+fun readTextFromZip(filePath: String, fileName: String): InputStream {
+    val zipFile = File(filePath)
+    val zipInputStream = ZipInputStream(BufferedInputStream(FileInputStream(zipFile)))
+
+    var entry = zipInputStream.nextEntry
+    while (entry != null) {
+        if (!entry.isDirectory && entry.name == fileName) {
+            return zipInputStream
+        }
+        entry = zipInputStream.nextEntry
+    }
+
+    throw FileNotFoundException("wiki.txt not found in wiki.txt.zip")
+}
