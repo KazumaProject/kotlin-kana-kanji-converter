@@ -71,13 +71,13 @@ fun main() {
 
     buildConnectionIds()
     buildPOSTable(finalList)
-    buildTriesAndTokenArray(finalList)
-    buildDictionaryForSingleKanji()
-    buildDictionaryForEmoji()
-    buildDictionaryForEmoticon()
-    buildDictionaryForSymbol()
-    buildDictionaryForReadingCorrection()
-    buildDictionaryForKotowaza()
+//    buildTriesAndTokenArray(finalList)
+//    buildDictionaryForSingleKanji()
+//    buildDictionaryForEmoji()
+//    buildDictionaryForEmoticon()
+//    buildDictionaryForSymbol()
+//    buildDictionaryForReadingCorrection()
+//    buildDictionaryForKotowaza()
     buildDictionaryForPersonNames()
     buildDictionaryForPlaces()
     buildDictionaryForWiki()
@@ -419,6 +419,7 @@ private fun buildDictionaryForKotowaza() {
 }
 
 private fun buildDictionaryForPersonNames() {
+    println("start build person names dictionary")
     val yomiTree = PrefixTreeWithTermId()
     val tangoTree = PrefixTree()
 
@@ -464,6 +465,8 @@ private fun buildDictionaryForPersonNames() {
 }
 
 private fun buildDictionaryForPlaces() {
+    println("start build places dictionary")
+
     val yomiTree = PrefixTreeWithTermId()
     val tangoTree = PrefixTree()
 
@@ -471,7 +474,7 @@ private fun buildDictionaryForPlaces() {
 
     val dictionaryList = readingCorrectionBuilder.parseMozcUTDictionaryCompressedDictionary(
         readTextFromZip(
-            filePath =  "src/main/bin/place.txt.zip",
+            filePath = "src/main/bin/place.txt.zip",
             fileName = "place.txt"
         )
     )
@@ -514,11 +517,12 @@ private fun buildDictionaryForPlaces() {
 }
 
 private fun buildDictionaryForWiki() {
+    println("start build wiki dictionary")
+
     val yomiTree = PrefixTreeWithTermId()
     val tangoTree = PrefixTree()
 
     val readingCorrectionBuilder = ReadingCorrectionBuilder()
-
 
     val dictionaryList = readingCorrectionBuilder.parseMozcUTDictionaryCompressedDictionary(
         readTextFromZip(
@@ -576,5 +580,5 @@ fun readTextFromZip(filePath: String, fileName: String): InputStream {
         entry = zipInputStream.nextEntry
     }
 
-    throw FileNotFoundException("wiki.txt not found in wiki.txt.zip")
+    throw FileNotFoundException("$fileName not found in $filePath")
 }
