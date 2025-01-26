@@ -49,4 +49,24 @@ class ReadingCorrectionBuilder {
             }.filterNotNull().toList()
         }
     }
+
+    fun parseMozcUTDictionary(filePath: String): List<Dictionary> {
+        return File(filePath).useLines { lines ->
+            lines.map { line ->
+                val parts = line.split("\t")
+                if (parts.size == 5) {
+                    println("dictionary: ${parts[0]} ${parts[1]} ${parts[2]} ${parts[3]} ${parts[4]}")
+                    Dictionary(
+                        yomi = parts[0],
+                        leftId = parts[1].toShort(),
+                        rightId = parts[2].toShort(),
+                        cost = parts[3].toShort(),
+                        tango = parts[4]
+                    )
+                } else {
+                    null
+                }
+            }.filterNotNull().toList()
+        }
+    }
 }

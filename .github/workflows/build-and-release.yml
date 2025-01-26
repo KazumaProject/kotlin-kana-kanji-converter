@@ -35,17 +35,6 @@ jobs:
           # Download single_kanji.tsv from the single_kanji directory
           wget https://raw.githubusercontent.com/google/mozc/master/src/data/single_kanji/single_kanji.tsv -O ./src/main/resources/single_kanji.tsv
 
-      # Clone merge-ut-dictionaries repository and generate mozcdic-ut.txt
-      - name: Generate mozcdic-ut.txt
-        run: |
-          git clone --depth 1 https://github.com/utuhiro78/merge-ut-dictionaries.git
-          cd merge-ut-dictionaries/src/merge
-          sed -i 's/^\s*jawiki="true"/# jawiki="true"/' make.sh
-          sed -i 's/^\s*sudachidict="true"/# sudachidict="true"/' make.sh
-          sed -i "s|https://raw.githubusercontent.com/google/mozc/master/src/data/dictionary_oss/id.def|https://raw.githubusercontent.com/google/mozc/3733234/src/data/dictionary_oss/id.def|" merge_dictionaries.py
-          bash make.sh
-          cp mozcdic-ut.txt ../../../src/main/resources/
-
       # Build the project with Gradle
       - name: Build with Gradle
         run: ./gradlew build
@@ -83,6 +72,15 @@ jobs:
             ./src/main/resources/yomi_kotowaza.dat
             ./src/main/resources/tango_kotowaza.dat
             ./src/main/resources/token_kotowaza.dat
+            ./src/main/resources/yomi_person_names.dat
+            ./src/main/resources/tango_person_names.dat
+            ./src/main/resources/token_person_names.dat
+            ./src/main/resources/yomi_places.dat
+            ./src/main/resources/tango_places.dat
+            ./src/main/resources/token_places.dat
+             ./src/main/resources/yomi_wiki.dat
+            ./src/main/resources/tango_wiki.dat
+            ./src/main/resources/token_wiki.dat
 
       # Create a GitHub Release and upload artifacts
       - name: Create GitHub Release
