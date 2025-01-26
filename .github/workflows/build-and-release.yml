@@ -21,20 +21,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # Download dictionary and required text files
-      - name: Download required text files
-        run: |
-          mkdir -p ./src/main/resources
-          # Download dictionary files
-          for i in $(seq -w 00 09); do
-            wget https://raw.githubusercontent.com/google/mozc/master/src/data/dictionary_oss/dictionary${i}.txt -O ./src/main/resources/dictionary${i}.txt
-          done
-          # Download additional files from dictionary_oss
-          wget https://raw.githubusercontent.com/google/mozc/master/src/data/dictionary_oss/connection_single_column.txt -O ./src/main/resources/connection_single_column.txt
-          wget https://raw.githubusercontent.com/google/mozc/master/src/data/dictionary_oss/suffix.txt -O ./src/main/resources/suffix.txt
-          # Download single_kanji.tsv from the single_kanji directory
-          wget https://raw.githubusercontent.com/google/mozc/master/src/data/single_kanji/single_kanji.tsv -O ./src/main/resources/single_kanji.tsv
-
       # Build the project with Gradle
       - name: Build with Gradle
         run: ./gradlew build
@@ -78,7 +64,7 @@ jobs:
             ./src/main/resources/yomi_places.dat
             ./src/main/resources/tango_places.dat
             ./src/main/resources/token_places.dat
-             ./src/main/resources/yomi_wiki.dat
+            ./src/main/resources/yomi_wiki.dat
             ./src/main/resources/tango_wiki.dat
             ./src/main/resources/token_wiki.dat
 
@@ -113,3 +99,12 @@ jobs:
             ./src/main/resources/yomi_kotowaza.dat
             ./src/main/resources/tango_kotowaza.dat
             ./src/main/resources/token_kotowaza.dat
+            ./src/main/resources/yomi_person_names.dat
+            ./src/main/resources/tango_person_names.dat
+            ./src/main/resources/token_person_names.dat
+            ./src/main/resources/yomi_places.dat
+            ./src/main/resources/tango_places.dat
+            ./src/main/resources/token_places.dat
+            ./src/main/resources/yomi_wiki.dat
+            ./src/main/resources/tango_wiki.dat
+            ./src/main/resources/token_wiki.dat

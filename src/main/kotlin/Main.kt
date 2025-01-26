@@ -36,6 +36,7 @@ import com.kazumaproject.reading_correction.ReadingCorrectionBuilder
 import com.kazumaproject.symbol.SymbolDictionaryBuilder
 import java.io.*
 import java.util.*
+import java.util.zip.ZipInputStream
 
 fun main() {
     val fileList: List<String> = listOf(
@@ -507,13 +508,29 @@ private fun buildDictionaryForPlaces() {
     tokenArray.readPOSTable(1)
 }
 
+fun readWikiFromZip(): InputStream {
+    val zipFile = File("src/main/bin/wiki.txt.zip")
+    val zipInputStream = ZipInputStream(BufferedInputStream(FileInputStream(zipFile)))
+
+    var entry = zipInputStream.nextEntry
+    while (entry != null) {
+        if (!entry.isDirectory && entry.name == "wiki.txt") {
+            return zipInputStream
+        }
+        entry = zipInputStream.nextEntry
+    }
+
+    throw FileNotFoundException("wiki.txt not found in wiki.txt.zip")
+}
+
 private fun buildDictionaryForWiki() {
     val yomiTree = PrefixTreeWithTermId()
     val tangoTree = PrefixTree()
 
     val readingCorrectionBuilder = ReadingCorrectionBuilder()
 
-    val dictionaryList = readingCorrectionBuilder.parseMozcUTDictionary("src/main/bin/wiki.txt")
+
+    val dictionaryList = readingCorrectionBuilder.parseMozcUTDictionaryCompressedDictionary(readWikiFromZip())
         .groupBy { it.yomi }
         .toSortedMap(compareBy({ it.length }, { it }))
 
