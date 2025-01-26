@@ -43,6 +43,10 @@ jobs:
       - name: Run main.kt
         run: ./gradlew run
 
+      # Build dictionary using Mozc UT dictionaries
+      - name: Run MozcUT function
+        run: ./gradlew runMozcUT
+
       # Upload artifacts to GitHub Actions
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
