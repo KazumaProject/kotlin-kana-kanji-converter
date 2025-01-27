@@ -6,22 +6,18 @@ on:
       - 'v*'  # Trigger only when a tag starting with "v" is pushed
 
 jobs:
-  build-and-release:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up JDK 17 for Kotlin
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # Download dictionary and required text files
       - name: Download required text files
         run: |
           mkdir -p ./src/main/resources
@@ -35,94 +31,69 @@ jobs:
           # Download single_kanji.tsv from the single_kanji directory
           wget https://raw.githubusercontent.com/google/mozc/master/src/data/single_kanji/single_kanji.tsv -O ./src/main/resources/single_kanji.tsv
 
-      # Build the project with Gradle
       - name: Build with Gradle
         run: ./gradlew build
 
-      # Run the Kotlin application
+  run-main:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Run main.kt
         run: ./gradlew run
 
-      # Build dictionary using Mozc UT dictionaries
-      - name: Run MozcUT function
-        run: ./gradlew runMozcUT
-
-      # Upload artifacts to GitHub Actions
-      - name: Upload artifacts
+      - name: Upload main output artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifacts
-          path: |
-            ./src/main/resources/connectionId.dat
-            ./src/main/resources/pos_table.dat
-            ./src/main/resources/yomi_singleKanji.dat
-            ./src/main/resources/tango_singleKanji.dat
-            ./src/main/resources/token_singleKanji.dat
-            ./src/main/resources/yomi.dat
-            ./src/main/resources/tango.dat
-            ./src/main/resources/token.dat
-            ./src/main/resources/yomi_emoji.dat
-            ./src/main/resources/tango_emoji.dat
-            ./src/main/resources/token_emoji.dat
-            ./src/main/resources/yomi_emoticon.dat
-            ./src/main/resources/tango_emoticon.dat
-            ./src/main/resources/token_emoticon.dat
-            ./src/main/resources/yomi_symbol.dat
-            ./src/main/resources/tango_symbol.dat
-            ./src/main/resources/token_symbol.dat
-            ./src/main/resources/yomi_reading_correction.dat
-            ./src/main/resources/tango_reading_correction.dat
-            ./src/main/resources/token_reading_correction.dat
-            ./src/main/resources/yomi_kotowaza.dat
-            ./src/main/resources/tango_kotowaza.dat
-            ./src/main/resources/token_kotowaza.dat
-            ./src/main/resources/yomi_person_names.dat
-            ./src/main/resources/tango_person_names.dat
-            ./src/main/resources/token_person_names.dat
-            ./src/main/resources/yomi_places.dat
-            ./src/main/resources/tango_places.dat
-            ./src/main/resources/token_places.dat
-            ./src/main/resources/yomi_wiki.dat
-            ./src/main/resources/tango_wiki.dat
-            ./src/main/resources/token_wiki.dat
+          name: main-output
+          path: ./src/main/resources/
 
-      # Create a GitHub Release and upload artifacts
-      - name: Create GitHub Release
+  run-mozcut:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build MozcUT Dictionaries
+        run: ./gradlew runMozcUT
+
+      - name: Upload MozcUT output artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mozcUT-output
+          path: ./src/main/resources/
+
+  upload:
+    runs-on: ubuntu-latest
+    needs: [ run-main, run-mozcut ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./src/main/resources/
+
+      - name: Upload artifacts to GitHub Release
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
           name: Release ${{ github.ref }}
-          artifacts: |
-            ./src/main/resources/connectionId.dat
-            ./src/main/resources/pos_table.dat
-            ./src/main/resources/yomi_singleKanji.dat
-            ./src/main/resources/tango_singleKanji.dat
-            ./src/main/resources/token_singleKanji.dat
-            ./src/main/resources/yomi.dat
-            ./src/main/resources/tango.dat
-            ./src/main/resources/token.dat
-            ./src/main/resources/yomi_emoji.dat
-            ./src/main/resources/tango_emoji.dat
-            ./src/main/resources/token_emoji.dat
-            ./src/main/resources/yomi_emoticon.dat
-            ./src/main/resources/tango_emoticon.dat
-            ./src/main/resources/token_emoticon.dat
-            ./src/main/resources/yomi_symbol.dat
-            ./src/main/resources/tango_symbol.dat
-            ./src/main/resources/token_symbol.dat
-            ./src/main/resources/yomi_reading_correction.dat
-            ./src/main/resources/tango_reading_correction.dat
-            ./src/main/resources/token_reading_correction.dat
-            ./src/main/resources/yomi_kotowaza.dat
-            ./src/main/resources/tango_kotowaza.dat
-            ./src/main/resources/token_kotowaza.dat
-            ./src/main/resources/yomi_person_names.dat
-            ./src/main/resources/tango_person_names.dat
-            ./src/main/resources/token_person_names.dat
-            ./src/main/resources/yomi_places.dat
-            ./src/main/resources/tango_places.dat
-            ./src/main/resources/token_places.dat
-            ./src/main/resources/yomi_wiki.dat
-            ./src/main/resources/tango_wiki.dat
-            ./src/main/resources/token_wiki.dat
+          artifacts: ./src/main/resources/*
