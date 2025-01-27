@@ -36,7 +36,6 @@ import com.kazumaproject.reading_correction.ReadingCorrectionBuilder
 import com.kazumaproject.symbol.SymbolDictionaryBuilder
 import java.io.*
 import java.util.*
-import java.util.zip.ZipInputStream
 
 fun main() {
     val fileList: List<String> = listOf(
