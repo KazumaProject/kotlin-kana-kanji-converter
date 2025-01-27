@@ -28,6 +28,11 @@ application {
     mainClass.set("com.kazumaproject.MainKt")
 }
 
+tasks.register<JavaExec>("runMozc") {
+    mainClass.set("com.kazumaproject.MozcKt")
+    classpath = sourceSets["main"].runtimeClasspath
+}
+
 tasks.register<JavaExec>("runMozcUT") {
     mainClass.set("com.kazumaproject.MozcUTKt")
     classpath = sourceSets["main"].runtimeClasspath

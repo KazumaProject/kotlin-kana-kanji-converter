@@ -56,9 +56,31 @@ jobs:
           name: main-output
           path: ./src/main/resources/
 
+  run-mozc:
+    runs-on: ubuntu-latest
+    needs: run-main  # Run only after run-main finishes
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Run Mozc.kt
+        run: ./gradlew runMozc
+
+      - name: Upload Mozc output artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mozc-output
+          path: ./src/main/resources/
+
   run-mozcut:
     runs-on: ubuntu-latest
-    needs: build
+    needs: run-main  # Run only after run-main finishes
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -80,7 +102,7 @@ jobs:
 
   upload:
     runs-on: ubuntu-latest
-    needs: [ run-main, run-mozcut ]
+    needs: [ run-mozc, run-mozcut ]  # Ensure both finish before upload
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
