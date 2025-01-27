@@ -44,10 +44,10 @@ jobs:
         run: ./gradlew run
 
       # Upload artifacts to GitHub Actions
-      - name: Upload artifacts
+      - name: Upload artifacts (Mozc)
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifacts
+          name: mozc-dictionary-artifacts  # Unique name to prevent overwrite
           path: |
             ./src/main/resources/connectionId.dat
             ./src/main/resources/pos_table.dat
@@ -74,7 +74,7 @@ jobs:
             ./src/main/resources/token_kotowaza.dat
 
       # Create a GitHub Release and upload artifacts
-      - name: Create GitHub Release
+      - name: Create GitHub Release (Mozc)
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -104,3 +104,4 @@ jobs:
             ./src/main/resources/yomi_kotowaza.dat
             ./src/main/resources/tango_kotowaza.dat
             ./src/main/resources/token_kotowaza.dat
+          replacesArtifacts: false  # Prevent overwriting

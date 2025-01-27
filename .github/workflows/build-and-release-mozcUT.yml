@@ -44,10 +44,10 @@ jobs:
         run: ./gradlew runMozcUT
 
       # Upload artifacts to GitHub Actions
-      - name: Upload artifacts
+      - name: Upload artifacts (MozcUT)
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifacts
+          name: mozcUT-dictionary-artifacts  # Unique name to prevent overwrite
           path: |
             ./src/main/resources/yomi_person_names.dat
             ./src/main/resources/tango_person_names.dat
@@ -60,12 +60,12 @@ jobs:
             ./src/main/resources/token_wiki.dat
 
       # Create a GitHub Release and upload artifacts
-      - name: Create GitHub Release
+      - name: Create GitHub Release (MozcUT)
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
-          name: Release ${{ github.ref }}
+          name: Release ${{ github.ref }} (MozcUT)
           artifacts: |
             ./src/main/resources/yomi_person_names.dat
             ./src/main/resources/tango_person_names.dat
@@ -76,3 +76,4 @@ jobs:
             ./src/main/resources/yomi_wiki.dat
             ./src/main/resources/tango_wiki.dat
             ./src/main/resources/token_wiki.dat
+          replacesArtifacts: false  # Prevent overwriting
