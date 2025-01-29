@@ -1,4 +1,4 @@
-name: Build and Release Mozc UT Places Names Dictionary
+name: Build and Release Mozc UT Wiki Dictionary
 
 on:
   push:
@@ -41,7 +41,7 @@ jobs:
 
       # Build dictionary using Mozc UT dictionaries
       - name: Build MozcUT Dictionaries
-        run: ./gradlew runMozcUT
+        run: ./gradlew runMozcUTWiki
 
       # Upload artifacts to GitHub Actions
       - name: Upload artifacts (MozcUT)
@@ -49,12 +49,9 @@ jobs:
         with:
           name: mozcUT-dictionary-artifacts  # Unique name to prevent overwrite
           path: |
-            ./src/main/resources/yomi_person_names.dat
-            ./src/main/resources/tango_person_names.dat
-            ./src/main/resources/token_person_names.dat
-            ./src/main/resources/yomi_places.dat
-            ./src/main/resources/tango_places.dat
-            ./src/main/resources/token_places.dat
+            ./src/main/resources/yomi_wiki.dat
+            ./src/main/resources/tango_wiki.dat
+            ./src/main/resources/token_wiki.dat
 
       # Create a GitHub Release and upload artifacts
       - name: Create GitHub Release (MozcUT)
@@ -64,10 +61,7 @@ jobs:
           tag: ${{ github.ref }}
           name: Release ${{ github.ref }} (MozcUT)
           artifacts: |
-            ./src/main/resources/yomi_person_names.dat
-            ./src/main/resources/tango_person_names.dat
-            ./src/main/resources/token_person_names.dat
-            ./src/main/resources/yomi_places.dat
-            ./src/main/resources/tango_places.dat
-            ./src/main/resources/token_places.dat
+            ./src/main/resources/yomi_wiki.dat
+            ./src/main/resources/tango_wiki.dat
+            ./src/main/resources/token_wiki.dat
           replacesArtifacts: false  # Prevent overwriting
