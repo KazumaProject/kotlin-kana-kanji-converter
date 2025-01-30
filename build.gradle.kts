@@ -37,3 +37,8 @@ tasks.register<JavaExec>("runMozcUTWiki") {
     mainClass.set("com.kazumaproject.MozcUTWikiKt")
     classpath = sourceSets["main"].runtimeClasspath
 }
+
+tasks.register<JavaExec>("runMozcUTNeologd") {
+    mainClass.set("com.kazumaproject.MozcUTNeologdKt")
+    classpath = sourceSets["main"].runtimeClasspath
+}
