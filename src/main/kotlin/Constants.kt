@@ -1266,8 +1266,15 @@ object Constants {
             yomi = "きかいがとま",
             leftId = 577,
             rightId = 577,
-            cost = 2500,
+            cost = 1000,
             tango = "機械が止ま"
+        ),
+        Dictionary(
+            yomi = "きかいがとまる",
+            leftId = 763,
+            rightId = 763,
+            cost = 3000,
+            tango = "機械が止まる"
         ),
         Dictionary(
             yomi = "せいどがひくい",
@@ -1676,7 +1683,7 @@ object Constants {
             tango = "頭身"
         ),
     )
-    
+
     val PHISIC_NOUN_LIST = listOf(
         Dictionary(
             yomi = "てっそん",
