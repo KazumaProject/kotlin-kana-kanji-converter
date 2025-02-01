@@ -1263,11 +1263,11 @@ object Constants {
             tango = "肩がこる"
         ),
         Dictionary(
-            yomi = "きかいがとま",
-            leftId = 577,
-            rightId = 577,
-            cost = 1000,
-            tango = "機械が止ま"
+            yomi = "きかいがとまっ",
+            leftId = 841,
+            rightId = 841,
+            cost = 3000,
+            tango = "機械が止まっ"
         ),
         Dictionary(
             yomi = "きかいがとまる",

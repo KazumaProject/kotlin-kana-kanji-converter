@@ -106,8 +106,8 @@ private fun buildDictionaryForNeologd() {
 
     val dictionaryList = readingCorrectionBuilder.parseMozcUTDictionaryCompressedDictionary(
         readTextFromZip(
-            filePath = "src/main/bin/neologd.txt.zip",
-            fileName = "neologd.txt"
+            filePath = "src/main/bin/only_neologd.txt.zip",
+            fileName = "only_neologd.txt"
         )
     )
         .groupBy { it.yomi }

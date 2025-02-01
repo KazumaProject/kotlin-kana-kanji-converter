@@ -106,8 +106,8 @@ private fun buildDictionaryForWiki() {
 
     val dictionaryList = readingCorrectionBuilder.parseMozcUTDictionaryCompressedDictionary(
         readTextFromZip(
-            filePath = "src/main/bin/wiki.txt.zip",
-            fileName = "wiki.txt"
+            filePath = "src/main/bin/only_wiki.txt.zip",
+            fileName = "only_wiki.txt"
         )
     )
         .groupBy { it.yomi }
@@ -143,58 +143,6 @@ private fun buildDictionaryForWiki() {
     val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_wiki.dat"))
     tokenArrayTemp.buildTokenArray(dictionaryList, tangoLOUDS, objectOutput, 1)
     val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_wiki.dat"))
-    val tokenArray = TokenArray()
-    tokenArray.readExternalNotCompress(objectInput)
-    tokenArray.readPOSTable(1)
-}
-
-private fun buildDictionaryForNeologd() {
-    println("start build Neologd dictionary")
-
-    val yomiTree = PrefixTreeWithTermId()
-    val tangoTree = PrefixTree()
-
-    val readingCorrectionBuilder = ReadingCorrectionBuilder()
-
-    val dictionaryList = readingCorrectionBuilder.parseMozcUTDictionaryCompressedDictionary(
-        readTextFromZip(
-            filePath = "src/main/bin/neologd.txt.zip",
-            fileName = "neologd.txt"
-        )
-    )
-        .groupBy { it.yomi }
-        .toSortedMap(compareBy({ it.length }, { it }))
-
-    dictionaryList
-        .forEach { entry ->
-            yomiTree.insert(entry.key)
-            entry.value.forEach {
-                tangoTree.insert(it.tango)
-            }
-        }
-
-    val yomiLOUDSTemp = ConverterWithTermId().convert(yomiTree.root)
-    val tangoLOUDSTemp = Converter().convert(tangoTree.root)
-    yomiLOUDSTemp.convertListToBitSet()
-    tangoLOUDSTemp.convertListToBitSet()
-
-    val objectOutputYomi =
-        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/yomi_neologd.dat")))
-    val objectOutputTango =
-        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/tango_neologd.dat")))
-
-    yomiLOUDSTemp.writeExternalNotCompress(objectOutputYomi)
-    tangoLOUDSTemp.writeExternalNotCompress(objectOutputTango)
-
-    val objectInputYomi = ObjectInputStream(FileInputStream("./src/main/resources/yomi_neologd.dat"))
-    val objectInputTango = ObjectInputStream(FileInputStream("./src/main/resources/tango_neologd.dat"))
-
-    LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
-    val tangoLOUDS: LOUDS = LOUDS().readExternalNotCompress(objectInputTango)
-    val tokenArrayTemp = TokenArray()
-    val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_neologd.dat"))
-    tokenArrayTemp.buildTokenArray(dictionaryList, tangoLOUDS, objectOutput, 1)
-    val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_neologd.dat"))
     val tokenArray = TokenArray()
     tokenArray.readExternalNotCompress(objectInput)
     tokenArray.readPOSTable(1)
