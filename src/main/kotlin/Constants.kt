@@ -905,14 +905,14 @@ object Constants {
             yomi = "かずま",
             leftId = 1922,
             rightId = 1922,
-            cost = 4000,
+            cost = 3500,
             tango = "一真"
         ),
         Dictionary(
             yomi = "なおみ",
             leftId = 1922,
             rightId = 1922,
-            cost = 4000,
+            cost = 3200,
             tango = "尚美"
         ),
         Dictionary(
