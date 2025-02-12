@@ -1682,6 +1682,76 @@ object Constants {
             cost = 4200,
             tango = "頭身"
         ),
+        Dictionary(
+            yomi = "あすぱらがす",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 6500,
+            tango = "竜髭菜"
+        ),
+        Dictionary(
+            yomi = "におっ",
+            leftId = 825,
+            rightId = 825,
+            cost = 3300,
+            tango = "匂っ"
+        ),
+        Dictionary(
+            yomi = "におっ",
+            leftId = 825,
+            rightId = 825,
+            cost = 3400,
+            tango = "臭っ"
+        ),
+        Dictionary(
+            yomi = "におっ",
+            leftId = 825,
+            rightId = 825,
+            cost = 3500,
+            tango = "におっ"
+        ),
+        Dictionary(
+            yomi = "におう",
+            leftId = 813,
+            rightId = 813,
+            cost = 3300,
+            tango = "匂う"
+        ),
+        Dictionary(
+            yomi = "におう",
+            leftId = 813,
+            rightId = 813,
+            cost = 3400,
+            tango = "臭う"
+        ),
+        Dictionary(
+            yomi = "におう",
+            leftId = 813,
+            rightId = 813,
+            cost = 3500,
+            tango = "におう"
+        ),
+        Dictionary(
+            yomi = "におい",
+            leftId = 829,
+            rightId = 829,
+            cost = 1900,
+            tango = "匂い"
+        ),
+        Dictionary(
+            yomi = "におい",
+            leftId = 829,
+            rightId = 829,
+            cost = 3100,
+            tango = "臭い"
+        ),
+        Dictionary(
+            yomi = "におい",
+            leftId = 829,
+            rightId = 829,
+            cost = 3400,
+            tango = "におい"
+        ),
     )
 
     val PHISIC_NOUN_LIST = listOf(
