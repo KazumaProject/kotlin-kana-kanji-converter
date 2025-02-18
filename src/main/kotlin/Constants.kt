@@ -662,13 +662,6 @@ object Constants {
             tango = "中華蕎麦とみ田"
         ),
         Dictionary(
-            yomi = "まーくだうん",
-            leftId = 1920,
-            rightId = 1920,
-            cost = 5000,
-            tango = "MarkDown"
-        ),
-        Dictionary(
             yomi = "じゃば",
             leftId = 1920,
             rightId = 1920,
@@ -1751,6 +1744,34 @@ object Constants {
             rightId = 829,
             cost = 3400,
             tango = "におい"
+        ),
+        Dictionary(
+            yomi = "でかい",
+            leftId = 2423,
+            rightId = 2423,
+            cost = 2000,
+            tango = "でかい"
+        ),
+        Dictionary(
+            yomi = "でかい",
+            leftId = 2423,
+            rightId = 2423,
+            cost = 2100,
+            tango = "デカい"
+        ),
+        Dictionary(
+            yomi = "みせぷ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "魅せプ"
+        ),
+        Dictionary(
+            yomi = "くいっぱぐれない",
+            leftId = 1851,
+            rightId = 2424,
+            cost = 5000,
+            tango = "食いっぱぐれない"
         ),
     )
 
