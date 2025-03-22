@@ -1787,6 +1787,13 @@ object Constants {
             cost = 1000,
             tango = "入っ"
         ),
+        Dictionary(
+            yomi = "か",
+            leftId = 1941,
+            rightId = 1941,
+            cost = 1000,
+            tango = "化"
+        ),
     )
 
     val PHISIC_NOUN_LIST = listOf(
@@ -2259,6 +2266,13 @@ object Constants {
             rightId = 1851,
             cost = 3600,
             tango = "なた"
+        ),
+        Dictionary(
+            yomi = "てんじゅくねずみ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "天竺鼠"
         ),
     )
 
