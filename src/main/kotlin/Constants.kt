@@ -801,6 +801,13 @@ object Constants {
             cost = 2800,
             tango = "怒っ"
         ),
+        Dictionary(
+            yomi = "かけぐるい",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "賭ケグルイ"
+        ),
     )
 
     val ERA = listOf(
@@ -1793,6 +1800,34 @@ object Constants {
             rightId = 1941,
             cost = 1000,
             tango = "化"
+        ),
+        Dictionary(
+            yomi = "かしか",
+            leftId = 1841,
+            rightId = 1941,
+            cost = 2500,
+            tango = "可視化"
+        ),
+        Dictionary(
+            yomi = "ふかしか",
+            leftId = 1841,
+            rightId = 1941,
+            cost = 3500,
+            tango = "不可視化"
+        ),
+        Dictionary(
+            yomi = "じぇみに",
+            leftId = 1920,
+            rightId = 1920,
+            cost = 6000,
+            tango = "双子座"
+        ),
+        Dictionary(
+            yomi = "ぎもうこうい",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "欺罔行為"
         ),
     )
 
