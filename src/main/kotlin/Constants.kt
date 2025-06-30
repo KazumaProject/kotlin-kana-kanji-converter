@@ -6,378 +6,378 @@ object Constants {
     val DIC_LIST = listOf(
         Dictionary(
             yomi = "a",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "a"
         ),
         Dictionary(
             yomi = "b",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "b"
         ),
         Dictionary(
             yomi = "c",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "c"
         ),
         Dictionary(
             yomi = "d",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "d"
         ),
         Dictionary(
             yomi = "e",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "e"
         ),
         Dictionary(
             yomi = "f",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "f"
         ),
         Dictionary(
             yomi = "g",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "g"
         ),
         Dictionary(
             yomi = "h",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "h"
         ),
         Dictionary(
             yomi = "i",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "i"
         ),
         Dictionary(
             yomi = "j",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "j"
         ),
         Dictionary(
             yomi = "k",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "k"
         ),
         Dictionary(
             yomi = "l",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "l"
         ),
         Dictionary(
             yomi = "m",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "m"
         ),
         Dictionary(
             yomi = "n",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "n"
         ),
         Dictionary(
             yomi = "o",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "o"
         ),
         Dictionary(
             yomi = "p",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "p"
         ),
         Dictionary(
             yomi = "q",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "q"
         ),
         Dictionary(
             yomi = "r",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "r"
         ),
         Dictionary(
             yomi = "s",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "s"
         ),
         Dictionary(
             yomi = "t",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "t"
         ),
         Dictionary(
             yomi = "u",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "u"
         ),
         Dictionary(
             yomi = "v",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "v"
         ),
         Dictionary(
             yomi = "x",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "x"
         ),
         Dictionary(
             yomi = "y",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "y"
         ),
         Dictionary(
             yomi = "z",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "z"
         ),
         Dictionary(
             yomi = "A",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "A"
         ),
         Dictionary(
             yomi = "B",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "B"
         ),
         Dictionary(
             yomi = "C",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "C"
         ),
         Dictionary(
             yomi = "D",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "D"
         ),
         Dictionary(
             yomi = "E",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "E"
         ),
         Dictionary(
             yomi = "F",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "F"
         ),
         Dictionary(
             yomi = "G",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "G"
         ),
         Dictionary(
             yomi = "H",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "H"
         ),
         Dictionary(
             yomi = "I",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "I"
         ),
         Dictionary(
             yomi = "J",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "J"
         ),
         Dictionary(
             yomi = "K",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "K"
         ),
         Dictionary(
             yomi = "L",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "L"
         ),
         Dictionary(
             yomi = "M",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "M"
         ),
         Dictionary(
             yomi = "N",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "N"
         ),
         Dictionary(
             yomi = "O",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "O"
         ),
         Dictionary(
             yomi = "P",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "P"
         ),
         Dictionary(
             yomi = "Q",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "Q"
         ),
         Dictionary(
             yomi = "R",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "R"
         ),
         Dictionary(
             yomi = "S",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "S"
         ),
         Dictionary(
             yomi = "T",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "T"
         ),
         Dictionary(
             yomi = "U",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "U"
         ),
         Dictionary(
             yomi = "V",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "V"
         ),
         Dictionary(
             yomi = "W",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "W"
         ),
         Dictionary(
             yomi = "X",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "X"
         ),
         Dictionary(
             yomi = "Y",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "Y"
         ),
         Dictionary(
             yomi = "Z",
-            leftId = 2640,
-            rightId = 2640,
+            leftId = 1851,
+            rightId = 2641,
             cost = 8000,
             tango = "Z"
         ),
         Dictionary(
             yomi = "'",
-            leftId = 2655,
+            leftId = 1851,
             rightId = 2655,
             cost = 8000,
             tango = "'"
         ),
         Dictionary(
             yomi = "~",
-            leftId = 2651,
+            leftId = 1851,
             rightId = 2651,
             cost = 8000,
             tango = "~"
         ),
         Dictionary(
             yomi = "\"",
-            leftId = 2654,
+            leftId = 1851,
             rightId = 2654,
             cost = 8000,
             tango = "\""
@@ -461,91 +461,91 @@ object Constants {
         ),
         Dictionary(
             yomi = "%",
-            leftId = 2641,
+            leftId = 1851,
             rightId = 2641,
             cost = 8000,
             tango = "%"
         ),
         Dictionary(
             yomi = "°",
-            leftId = 2641,
+            leftId = 1851,
             rightId = 2641,
             cost = 8000,
             tango = "°"
         ),
         Dictionary(
             yomi = "￥",
-            leftId = 2641,
+            leftId = 1851,
             rightId = 2641,
             cost = 8000,
             tango = "￥"
         ),
         Dictionary(
             yomi = "€",
-            leftId = 2641,
+            leftId = 1851,
             rightId = 2641,
             cost = 8000,
             tango = "€"
         ),
         Dictionary(
             yomi = "♪",
-            leftId = 2641,
+            leftId = 1851,
             rightId = 2641,
             cost = 8000,
             tango = "♪"
         ),
         Dictionary(
             yomi = "々",
-            leftId = 2641,
+            leftId = 1851,
             rightId = 2641,
             cost = 8000,
             tango = "々"
         ),
         Dictionary(
             yomi = "#",
-            leftId = 2641,
+            leftId = 1851,
             rightId = 2641,
             cost = 8000,
             tango = "#"
         ),
         Dictionary(
             yomi = "&",
-            leftId = 2641,
+            leftId = 1851,
             rightId = 2641,
             cost = 8000,
             tango = "&"
         ),
         Dictionary(
             yomi = "！",
-            leftId = 2642,
+            leftId = 1851,
             rightId = 2642,
             cost = 8000,
             tango = "！"
         ),
         Dictionary(
             yomi = "〜",
-            leftId = 2651,
+            leftId = 1851,
             rightId = 2651,
             cost = 8000,
             tango = "〜"
         ),
         Dictionary(
             yomi = "？",
-            leftId = 2645,
+            leftId = 1851,
             rightId = 2645,
             cost = 8000,
             tango = "？"
         ),
         Dictionary(
             yomi = "（",
-            leftId = 2653,
+            leftId = 1851,
             rightId = 2653,
             cost = 8000,
             tango = "（"
         ),
         Dictionary(
             yomi = "）",
-            leftId = 2652,
+            leftId = 1851,
             rightId = 2652,
             cost = 8000,
             tango = "）"
@@ -1816,6 +1816,13 @@ object Constants {
             tango = "不可視化"
         ),
         Dictionary(
+            yomi = "何度か",
+            leftId = 12,
+            rightId = 12,
+            cost = 3500,
+            tango = "不可視化"
+        ),
+        Dictionary(
             yomi = "じぇみに",
             leftId = 1920,
             rightId = 1920,
@@ -1828,6 +1835,62 @@ object Constants {
             rightId = 1851,
             cost = 4000,
             tango = "欺罔行為"
+        ),
+        Dictionary(
+            yomi = "ききました",
+            leftId = 260,
+            rightId = 727,
+            cost = 1000,
+            tango = "聞きました"
+        ),
+        Dictionary(
+            yomi = "ききました",
+            leftId = 260,
+            rightId = 727,
+            cost = 1005,
+            tango = "効きました"
+        ),
+        Dictionary(
+            yomi = "ききました",
+            leftId = 260,
+            rightId = 727,
+            cost = 1010,
+            tango = "聴きました"
+        ),
+        Dictionary(
+            yomi = "こわすぎ",
+            leftId = 2391,
+            rightId = 1949,
+            cost = 4800,
+            tango = "怖すぎ"
+        ),
+        Dictionary(
+            yomi = "かちかく",
+            leftId = 1851,
+            rightId = 1841,
+            cost = 3500,
+            tango = "勝ち確"
+        ),
+        Dictionary(
+            yomi = "からもじ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3500,
+            tango = "空文字"
+        ),
+        Dictionary(
+            yomi = "まじりぶん",
+            leftId = 1851,
+            rightId = 1841,
+            cost = 3500,
+            tango = "交じり文"
+        ),
+        Dictionary(
+            yomi = "りけん",
+            leftId = 1851,
+            rightId = 1841,
+            cost = 5000,
+            tango = "離鍵"
         ),
     )
 
