@@ -38,21 +38,16 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      # --- Run all dictionary creation tasks ---
-      - name: Run main.kt
-        run: ./gradlew run
-
-      - name: Run MozcUT.kt (Person Names, Places)
-        run: ./gradlew runMozcUT
-
-      - name: Run MozcUTWiki.kt (Wikipedia)
-        run: ./gradlew runMozcUTWiki
-
-      - name: Run MozcUTNeologd.kt (NEologd)
-        run: ./gradlew runMozcUTNeologd
-
-      - name: Run MozcUTWikiNeologdCommon.kt (Web)
-        run: ./gradlew runMozcUTWikiNeologdCommon
+      # --- Run all dictionary creation tasks in parallel ---
+      # 各タスクをバックグラウンドで並列実行し、すべての完了を待ちます。
+      - name: Run all dictionary creation tasks in parallel
+        run: |
+          ./gradlew run &
+          ./gradlew runMozcUT &
+          ./gradlew runMozcUTWiki &
+          ./gradlew runMozcUTNeologd &
+          ./gradlew runMozcUTWikiNeologdCommon &
+          wait
 
       # --- Create a single release with all generated artifacts ---
       - name: Create GitHub Release
