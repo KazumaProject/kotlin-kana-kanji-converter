@@ -1816,11 +1816,11 @@ object Constants {
             tango = "不可視化"
         ),
         Dictionary(
-            yomi = "何度か",
+            yomi = "なんどか",
             leftId = 12,
             rightId = 12,
             cost = 3500,
-            tango = "不可視化"
+            tango = "何度か"
         ),
         Dictionary(
             yomi = "じぇみに",
@@ -1861,7 +1861,7 @@ object Constants {
             yomi = "こわすぎ",
             leftId = 2391,
             rightId = 1949,
-            cost = 4800,
+            cost = 4000,
             tango = "怖すぎ"
         ),
         Dictionary(
@@ -1888,9 +1888,37 @@ object Constants {
         Dictionary(
             yomi = "りけん",
             leftId = 1851,
-            rightId = 1841,
-            cost = 5000,
+            rightId = 1851,
+            cost = 6000,
             tango = "離鍵"
+        ),
+        Dictionary(
+            yomi = "じーぼーど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "Gboard"
+        ),
+        Dictionary(
+            yomi = "あっぷん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "圧粉"
+        ),
+        Dictionary(
+            yomi = "きゅうはいき",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "吸排気"
+        ),
+        Dictionary(
+            yomi = "きゅうはいき",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "給排気"
         ),
     )
 
@@ -1908,6 +1936,13 @@ object Constants {
             rightId = 1851,
             cost = 2000,
             tango = "鉄損失"
+        ),
+        Dictionary(
+            yomi = "あっぷんじしん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4500,
+            tango = "圧粉磁心"
         ),
     )
 
