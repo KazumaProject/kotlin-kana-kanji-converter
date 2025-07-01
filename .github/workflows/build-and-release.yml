@@ -1,5 +1,3 @@
-# GitHub Actions Workflow: Build and Release All Mozc Dictionaries
-
 name: Build and Release Mozc Dictionary
 
 on:
@@ -49,6 +47,41 @@ jobs:
           ./gradlew runMozcUTWikiNeologdCommon &
           wait
 
+      # --- (新規) リリース用に成果物を整理し、zip圧縮する ---
+      - name: Organize and zip artifacts for release
+        run: |
+          # zipファイルと、その中に入れるファイル用のディレクトリを作成
+          mkdir -p release_zips
+          mkdir -p artifacts_temp/main artifacts_temp/mozc_ut artifacts_temp/mozc_ut_wiki artifacts_temp/mozc_ut_neologd artifacts_temp/web
+
+          # main.kt由来のファイルを移動
+          mv ./src/main/resources/{yomi_singleKanji,tango_singleKanji,token_singleKanji}.dat artifacts_temp/main/
+          mv ./src/main/resources/{yomi,tango,token}.dat artifacts_temp/main/
+          mv ./src/main/resources/{yomi,tango,token}_emoji.dat artifacts_temp/main/
+          mv ./src/main/resources/{yomi,tango,token}_emoticon.dat artifacts_temp/main/
+          mv ./src/main/resources/{yomi,tango,token}_symbol.dat artifacts_temp/main/
+          mv ./src/main/resources/{yomi,tango,token}_reading_correction.dat artifacts_temp/main/
+          mv ./src/main/resources/{yomi,tango,token}_kotowaza.dat artifacts_temp/main/
+
+          # MozcUT.kt由来のファイルを移動
+          mv ./src/main/resources/*_{person_names,places}.dat artifacts_temp/mozc_ut/
+
+          # MozcUTWiki.kt由来のファイルを移動
+          mv ./src/main/resources/*_wiki.dat artifacts_temp/mozc_ut_wiki/
+
+          # MozcUTNeologd.kt由来のファイルを移動
+          mv ./src/main/resources/*_neologd.dat artifacts_temp/mozc_ut_neologd/
+          
+          # MozcUTWikiNeologdCommon.kt由来のファイルを移動
+          mv ./src/main/resources/*_web.dat artifacts_temp/web/
+
+          # 各ディレクトリをzip圧縮
+          (cd artifacts_temp/main && zip -r ../../release_zips/main_dictionaries.zip .)
+          (cd artifacts_temp/mozc_ut && zip -r ../../release_zips/mozc_ut_dictionaries.zip .)
+          (cd artifacts_temp/mozc_ut_wiki && zip -r ../../release_zips/wiki_dictionary.zip .)
+          (cd artifacts_temp/mozc_ut_neologd && zip -r ../../release_zips/neologd_dictionary.zip .)
+          (cd artifacts_temp/web && zip -r ../../release_zips/web_dictionary.zip .)
+
       # --- Create a single release with all generated artifacts ---
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
@@ -56,52 +89,13 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
           name: Release ${{ github.ref }}
+          # ルートに配置するファイルと、各辞書をまとめたzipファイルを指定
           artifacts: |
-            # --- Artifacts from main.kt ---
             ./src/main/resources/connectionId.dat
             ./src/main/resources/pos_table.dat
-            ./src/main/resources/yomi_singleKanji.dat
-            ./src/main/resources/tango_singleKanji.dat
-            ./src/main/resources/token_singleKanji.dat
-            ./src/main/resources/yomi.dat
-            ./src/main/resources/tango.dat
-            ./src/main/resources/token.dat
-            ./src/main/resources/yomi_emoji.dat
-            ./src/main/resources/tango_emoji.dat
-            ./src/main/resources/token_emoji.dat
-            ./src/main/resources/yomi_emoticon.dat
-            ./src/main/resources/tango_emoticon.dat
-            ./src/main/resources/token_emoticon.dat
-            ./src/main/resources/yomi_symbol.dat
-            ./src/main/resources/tango_symbol.dat
-            ./src/main/resources/token_symbol.dat
-            ./src/main/resources/yomi_reading_correction.dat
-            ./src/main/resources/tango_reading_correction.dat
-            ./src/main/resources/token_reading_correction.dat
-            ./src/main/resources/yomi_kotowaza.dat
-            ./src/main/resources/tango_kotowaza.dat
-            ./src/main/resources/token_kotowaza.dat
-            
-            # --- Artifacts from MozcUT.kt ---
-            ./src/main/resources/yomi_person_names.dat
-            ./src/main/resources/tango_person_names.dat
-            ./src/main/resources/token_person_names.dat
-            ./src/main/resources/yomi_places.dat
-            ./src/main/resources/tango_places.dat
-            ./src/main/resources/token_places.dat
-            
-            # --- Artifacts from MozcUTWiki.kt ---
-            ./src/main/resources/yomi_wiki.dat
-            ./src/main/resources/tango_wiki.dat
-            ./src/main/resources/token_wiki.dat
-
-            # --- Artifacts from MozcUTNeologd.kt ---
-            ./src/main/resources/yomi_neologd.dat
-            ./src/main/resources/tango_neologd.dat
-            ./src/main/resources/token_neologd.dat
-            
-            # --- Artifacts from MozcUTWikiNeologdCommon.kt ---
-            ./src/main/resources/yomi_web.dat
-            ./src/main/resources/tango_web.dat
-            ./src/main/resources/token_web.dat
+            ./release_zips/main_dictionaries.zip
+            ./release_zips/mozc_ut_dictionaries.zip
+            ./release_zips/wiki_dictionary.zip
+            ./release_zips/neologd_dictionary.zip
+            ./release_zips/web_dictionary.zip
           replacesArtifacts: false
