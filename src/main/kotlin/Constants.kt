@@ -1167,42 +1167,42 @@ object Constants {
     val SYMBOL_LIST = listOf(
         Dictionary(
             yomi = "はてな",
-            leftId = 2645,
+            leftId = 1851,
             rightId = 2645,
             cost = 4001,
             tango = "?"
         ),
         Dictionary(
             yomi = "びっくりまーく",
-            leftId = 2642,
+            leftId = 1851,
             rightId = 2642,
             cost = 4601,
             tango = "!"
         ),
         Dictionary(
             yomi = "かっこ",
-            leftId = 2641,
+            leftId = 1851,
             rightId = 2641,
             cost = 4001,
             tango = "（）"
         ),
         Dictionary(
             yomi = "ぷらす",
-            leftId = 2641,
+            leftId = 1851,
             rightId = 2641,
             cost = 4001,
             tango = "+"
         ),
         Dictionary(
             yomi = "まいなす",
-            leftId = 2641,
+            leftId = 1851,
             rightId = 2641,
             cost = 4001,
             tango = "-"
         ),
         Dictionary(
             yomi = "ー",
-            leftId = 2651,
+            leftId = 1851,
             rightId = 2651,
             cost = 4001,
             tango = "~"
