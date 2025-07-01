@@ -1865,6 +1865,13 @@ object Constants {
             tango = "怖すぎ"
         ),
         Dictionary(
+            yomi = "こわすぎる",
+            leftId = 2391,
+            rightId = 1949,
+            cost = 2500,
+            tango = "怖すぎる"
+        ),
+        Dictionary(
             yomi = "かちかく",
             leftId = 1851,
             rightId = 1841,
