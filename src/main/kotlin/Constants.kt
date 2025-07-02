@@ -823,45 +823,45 @@ object Constants {
     val DOMAIN = listOf(
         Dictionary(
             yomi = "@gmail.com",
-            leftId = 0,
-            rightId = 0,
-            cost = 8000,
+            leftId = 1851,
+            rightId = 1851,
+            cost = 1500,
             tango = "@gmail.com"
         ),
         Dictionary(
             yomi = "@docomo.ne.jp",
-            leftId = 0,
-            rightId = 0,
-            cost = 9000,
+            leftId = 1851,
+            rightId = 1851,
+            cost = 1500,
             tango = "@docomo.ne.jp"
         ),
         Dictionary(
             yomi = "@i.softbank.jp",
-            leftId = 0,
-            rightId = 0,
-            cost = 9001,
+            leftId = 1851,
+            rightId = 1851,
+            cost = 1500,
             tango = "@i.softbank.jp"
         ),
         Dictionary(
             yomi = "@softbank.ne.jp",
             leftId = 0,
             rightId = 0,
-            cost = 9002,
+            cost = 2002,
             tango = "@softbank.ne.jp"
         ),
         Dictionary(
             yomi = "@ezweb.ne.jp",
             leftId = 0,
             rightId = 0,
-            cost = 9003,
-            tango = "@gmail.com"
+            cost = 2003,
+            tango = "@ezweb.ne.jp"
         ),
         Dictionary(
             yomi = "@au.com",
             leftId = 0,
             rightId = 0,
-            cost = 9004,
-            tango = "@gmail.com"
+            cost = 2004,
+            tango = "@au.com"
         ),
     )
 
@@ -1949,10 +1949,17 @@ object Constants {
             tango = "漢字変換"
         ),
         Dictionary(
+            yomi = "かんじへんかん",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "漢字変換"
+        ),
+        Dictionary(
             yomi = "か",
             leftId = 1851,
             rightId = 1851,
-            cost = 1300,
+            cost = 4000,
             tango = "蚊"
         ),
     )
