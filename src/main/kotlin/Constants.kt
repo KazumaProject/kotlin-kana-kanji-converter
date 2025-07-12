@@ -851,11 +851,25 @@ object Constants {
             tango = "掃流力"
         ),
         Dictionary(
-            yomi = "じーくあくす",
+            yomi = "ふどうさん",
             leftId = 1851,
             rightId = 1851,
-            cost = 6000,
-            tango = "GQuuuuuuX"
+            cost = 4200,
+            tango = "負動産"
+        ),
+        Dictionary(
+            yomi = "でみせ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "出店"
+        ),
+        Dictionary(
+            yomi = "かいきり",
+            leftId = 842,
+            rightId = 842,
+            cost = 4000,
+            tango = "買い切り"
         ),
     )
 
@@ -2501,251 +2515,41 @@ object Constants {
     )
 
     val PLACE = listOf(
-        Dictionary(
-            yomi = "あきのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "安芸国"
-        ),
-        Dictionary(
-            yomi = "あそうわん",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "浅海湾"
-        ),
-        Dictionary(
-            yomi = "あつべつ",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "厚別"
-        ),
-        Dictionary(
-            yomi = "あつべつく",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "厚別区"
-        ),
-        Dictionary(
-            yomi = "あわじのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "淡路国"
-        ),
-        Dictionary(
-            yomi = "あわのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "安房国"
-        ),
-        Dictionary(
-            yomi = "あわのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "阿波国"
-        ),
-        Dictionary(
-            yomi = "いがのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "伊賀国"
-        ),
-        Dictionary(
-            yomi = "いきのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "壱岐国"
-        ),
-        Dictionary(
-            yomi = "いしかりのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "石狩国"
-        ),
-        Dictionary(
-            yomi = "いずのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "伊豆国"
-        ),
-        Dictionary(
-            yomi = "いずみのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "和泉国"
-        ),
-        Dictionary(
-            yomi = "いずものくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "出雲国"
-        ),
-        Dictionary(
-            yomi = "いせのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "伊勢国"
-        ),
-        Dictionary(
-            yomi = "いとうおんせん",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "伊東温泉"
-        ),
-        Dictionary(
-            yomi = "いとしの",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "愛し野"
-        ),
-        Dictionary(
-            yomi = "いねこき",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "稲㧡"
-        ),
-        Dictionary(
-            yomi = "いぶりのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "胆振国"
-        ),
-        Dictionary(
-            yomi = "いよのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "伊予国"
-        ),
-        Dictionary(
-            yomi = "いりなか",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "杁中"
-        ),
-        Dictionary(
-            yomi = "いりなかえき",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "いりなか駅"
-        ),
-        Dictionary(
-            yomi = "いわきのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "磐城国"
-        ),
-        Dictionary(
-            yomi = "いわしろのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "岩代国"
-        ),
-        Dictionary(
-            yomi = "いんちょん",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "仁川"
-        ),
-        Dictionary(
-            yomi = "うごのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "羽後国"
-        ),
-        Dictionary(
-            yomi = "うぜん",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "羽前"
-        ),
-        Dictionary(
-            yomi = "うぜんのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "羽前国"
-        ),
-        Dictionary(
-            yomi = "うとろ",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "宇登呂"
-        ),
-        Dictionary(
-            yomi = "うらしべつ",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "浦士別"
-        ),
-        Dictionary(
-            yomi = "えちごのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "越後国"
-        ),
-        Dictionary(
-            yomi = "えちぜんのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "越前国"
-        ),
-        Dictionary(
-            yomi = "えっちゅうのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "越中国"
-        ),
-        Dictionary(
-            yomi = "えとんびやま",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "江鳶山"
-        ),
-        Dictionary(
-            yomi = "えんけい",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "燕京"
-        ),
-        Dictionary(
-            yomi = "おうみのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "近江国"
-        ),
+        Dictionary(yomi = "あきのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "安芸国"),
+        Dictionary(yomi = "あそうわん", leftId = 1924, rightId = 1924, cost = 4000, tango = "浅海湾"),
+        Dictionary(yomi = "あつべつ", leftId = 1924, rightId = 1924, cost = 4000, tango = "厚別"),
+        Dictionary(yomi = "あつべつく", leftId = 1924, rightId = 1924, cost = 4000, tango = "厚別区"),
+        Dictionary(yomi = "あわじのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "淡路国"),
+        Dictionary(yomi = "あわのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "安房国"),
+        Dictionary(yomi = "あわのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "阿波国"),
+        Dictionary(yomi = "いがのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "伊賀国"),
+        Dictionary(yomi = "いきのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "壱岐国"),
+        Dictionary(yomi = "いしかりのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "石狩国"),
+        Dictionary(yomi = "いずのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "伊豆国"),
+        Dictionary(yomi = "いずみのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "和泉国"),
+        Dictionary(yomi = "いずものくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "出雲国"),
+        Dictionary(yomi = "いせのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "伊勢国"),
+        Dictionary(yomi = "いとうおんせん", leftId = 1924, rightId = 1924, cost = 4000, tango = "伊東温泉"),
+        Dictionary(yomi = "いとしの", leftId = 1924, rightId = 1924, cost = 4000, tango = "愛し野"),
+        Dictionary(yomi = "いねこき", leftId = 1924, rightId = 1924, cost = 4000, tango = "稲㧡"),
+        Dictionary(yomi = "いぶりのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "胆振国"),
+        Dictionary(yomi = "いよのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "伊予国"),
+        Dictionary(yomi = "いりなか", leftId = 1924, rightId = 1924, cost = 4000, tango = "杁中"),
+        Dictionary(yomi = "いりなかえき", leftId = 1924, rightId = 1924, cost = 4000, tango = "いりなか駅"),
+        Dictionary(yomi = "いわきのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "磐城国"),
+        Dictionary(yomi = "いわしろのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "岩代国"),
+        Dictionary(yomi = "いんちょん", leftId = 1924, rightId = 1924, cost = 4000, tango = "仁川"),
+        Dictionary(yomi = "うごのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "羽後国"),
+        Dictionary(yomi = "うぜん", leftId = 1924, rightId = 1924, cost = 4000, tango = "羽前"),
+        Dictionary(yomi = "うぜんのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "羽前国"),
+        Dictionary(yomi = "うとろ", leftId = 1924, rightId = 1924, cost = 4000, tango = "宇登呂"),
+        Dictionary(yomi = "うらしべつ", leftId = 1924, rightId = 1924, cost = 4000, tango = "浦士別"),
+        Dictionary(yomi = "えちごのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "越後国"),
+        Dictionary(yomi = "えちぜんのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "越前国"),
+        Dictionary(yomi = "えっちゅうのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "越中国"),
+        Dictionary(yomi = "えとんびやま", leftId = 1924, rightId = 1924, cost = 4000, tango = "江鳶山"),
+        Dictionary(yomi = "えんけい", leftId = 1924, rightId = 1924, cost = 4000, tango = "燕京"),
+        Dictionary(yomi = "おうみのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "近江国"),
         Dictionary(
             yomi = "おおさかこうりつだいがく",
             leftId = 1924,
@@ -2753,258 +2557,44 @@ object Constants {
             cost = 4000,
             tango = "大阪公立大学"
         ),
-        Dictionary(
-            yomi = "おおすみのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "大隅国"
-        ),
-        Dictionary(
-            yomi = "おしまのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "渡島国"
-        ),
-        Dictionary(
-            yomi = "おわりのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "尾張国"
-        ),
-        Dictionary(
-            yomi = "おんねない",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "音根内"
-        ),
-        Dictionary(
-            yomi = "おんねべつ",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "遠音別"
-        ),
-        Dictionary(
-            yomi = "がいえんまええき",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "外苑前駅"
-        ),
-        Dictionary(
-            yomi = "かいのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "甲斐国"
-        ),
-        Dictionary(
-            yomi = "かいふぉん",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "開封"
-        ),
-        Dictionary(
-            yomi = "かいほう",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "開封"
-        ),
-        Dictionary(
-            yomi = "かがのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "加賀国"
-        ),
-        Dictionary(
-            yomi = "かずさのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "上総国"
-        ),
-        Dictionary(
-            yomi = "かっくみ",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "活汲"
-        ),
-        Dictionary(
-            yomi = "かのこだい",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "鹿の子台"
-        ),
-        Dictionary(
-            yomi = "かみとばぐちえき",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "上鳥羽口駅"
-        ),
-        Dictionary(
-            yomi = "かわちのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "河内国"
-        ),
-        Dictionary(
-            yomi = "かんまきちょう",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "上牧町"
-        ),
-        Dictionary(
-            yomi = "きいのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "紀伊国"
-        ),
-        Dictionary(
-            yomi = "ききん",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "木禽"
-        ),
-        Dictionary(
-            yomi = "きたみのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "北見国"
-        ),
-        Dictionary(
-            yomi = "くしろのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "釧路国"
-        ),
-        Dictionary(
-            yomi = "くまのさんざん",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "熊野三山"
-        ),
-        Dictionary(
-            yomi = "こうあんれい",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "興安嶺"
-        ),
-        Dictionary(
-            yomi = "こうずけのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "上野国"
-        ),
-        Dictionary(
-            yomi = "ごきはちどう",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "五畿八道"
-        ),
-        Dictionary(
-            yomi = "さがみのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "相模国"
-        ),
-        Dictionary(
-            yomi = "さかわちょう",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "佐川町"
-        ),
-        Dictionary(
-            yomi = "さきむい",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "崎無異"
-        ),
-        Dictionary(
-            yomi = "さつまのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "薩摩国"
-        ),
-        Dictionary(
-            yomi = "さどのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "佐渡国"
-        ),
-        Dictionary(
-            yomi = "さぬきのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "讃岐国"
-        ),
-        Dictionary(
-            yomi = "しなののくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "信濃国"
-        ),
-        Dictionary(
-            yomi = "しまのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "志摩国"
-        ),
-        Dictionary(
-            yomi = "しもうさなかやま",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "下総中山"
-        ),
-        Dictionary(
-            yomi = "しもうさのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "下総国"
-        ),
-        Dictionary(
-            yomi = "しもつけのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "下野国"
-        ),
-        Dictionary(
-            yomi = "しょうこうあんれい",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "小興安嶺"
-        ),
+        Dictionary(yomi = "おおすみのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "大隅国"),
+        Dictionary(yomi = "おしまのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "渡島国"),
+        Dictionary(yomi = "おわりのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "尾張国"),
+        Dictionary(yomi = "おんねない", leftId = 1924, rightId = 1924, cost = 4000, tango = "音根内"),
+        Dictionary(yomi = "おんねべつ", leftId = 1924, rightId = 1924, cost = 4000, tango = "遠音別"),
+        Dictionary(yomi = "がいえんまええき", leftId = 1924, rightId = 1924, cost = 4000, tango = "外苑前駅"),
+        Dictionary(yomi = "かいのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "甲斐国"),
+        Dictionary(yomi = "かいふぉん", leftId = 1924, rightId = 1924, cost = 4000, tango = "開封"),
+        Dictionary(yomi = "かいほう", leftId = 1924, rightId = 1924, cost = 4000, tango = "開封"),
+        Dictionary(yomi = "かがのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "加賀国"),
+        Dictionary(yomi = "かずさのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "上総国"),
+        Dictionary(yomi = "かっくみ", leftId = 1924, rightId = 1924, cost = 4000, tango = "活汲"),
+        Dictionary(yomi = "かのこだい", leftId = 1924, rightId = 1924, cost = 4000, tango = "鹿の子台"),
+        Dictionary(yomi = "かみいたえき", leftId = 1924, rightId = 1924, cost = 4000, tango = "上伊田駅"),
+        Dictionary(yomi = "かみとばぐちえき", leftId = 1924, rightId = 1924, cost = 4000, tango = "上鳥羽口駅"),
+        Dictionary(yomi = "かわちのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "河内国"),
+        Dictionary(yomi = "かんまきちょう", leftId = 1924, rightId = 1924, cost = 4000, tango = "上牧町"),
+        Dictionary(yomi = "きいのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "紀伊国"),
+        Dictionary(yomi = "ききん", leftId = 1924, rightId = 1924, cost = 4000, tango = "木禽"),
+        Dictionary(yomi = "きたみのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "北見国"),
+        Dictionary(yomi = "くしろのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "釧路国"),
+        Dictionary(yomi = "くまのさんざん", leftId = 1924, rightId = 1924, cost = 4000, tango = "熊野三山"),
+        Dictionary(yomi = "こうあんれい", leftId = 1924, rightId = 1924, cost = 4000, tango = "興安嶺"),
+        Dictionary(yomi = "こうずけのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "上野国"),
+        Dictionary(yomi = "ごきはちどう", leftId = 1924, rightId = 1924, cost = 4000, tango = "五畿八道"),
+        Dictionary(yomi = "さがみのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "相模国"),
+        Dictionary(yomi = "さかわちょう", leftId = 1924, rightId = 1924, cost = 4000, tango = "佐川町"),
+        Dictionary(yomi = "さきむい", leftId = 1924, rightId = 1924, cost = 4000, tango = "崎無異"),
+        Dictionary(yomi = "さつまのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "薩摩国"),
+        Dictionary(yomi = "さどのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "佐渡国"),
+        Dictionary(yomi = "さぬきのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "讃岐国"),
+        Dictionary(yomi = "しつかわ", leftId = 1924, rightId = 1924, cost = 4000, tango = "後川"),
+        Dictionary(yomi = "しなののくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "信濃国"),
+        Dictionary(yomi = "しまのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "志摩国"),
+        Dictionary(yomi = "しもうさなかやま", leftId = 1924, rightId = 1924, cost = 4000, tango = "下総中山"),
+        Dictionary(yomi = "しもうさのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "下総国"),
+        Dictionary(yomi = "しもつけのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "下野国"),
+        Dictionary(yomi = "しょうこうあんれい", leftId = 1924, rightId = 1924, cost = 4000, tango = "小興安嶺"),
         Dictionary(
             yomi = "しょうこうあんれいさんみゃく",
             leftId = 1924,
@@ -3012,62 +2602,14 @@ object Constants {
             cost = 4000,
             tango = "小興安嶺山脈"
         ),
-        Dictionary(
-            yomi = "しりべしのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "後志国"
-        ),
-        Dictionary(
-            yomi = "じんせん",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "仁川"
-        ),
-        Dictionary(
-            yomi = "しんせん",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "深圳"
-        ),
-        Dictionary(
-            yomi = "すおうのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "周防国"
-        ),
-        Dictionary(
-            yomi = "するがのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "駿河国"
-        ),
-        Dictionary(
-            yomi = "せっつのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "摂津国"
-        ),
-        Dictionary(
-            yomi = "そうかまつばら",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "草加松原"
-        ),
-        Dictionary(
-            yomi = "だいこうあんれい",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "大興安嶺"
-        ),
+        Dictionary(yomi = "しりべしのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "後志国"),
+        Dictionary(yomi = "じんせん", leftId = 1924, rightId = 1924, cost = 4000, tango = "仁川"),
+        Dictionary(yomi = "しんせん", leftId = 1924, rightId = 1924, cost = 4000, tango = "深圳"),
+        Dictionary(yomi = "すおうのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "周防国"),
+        Dictionary(yomi = "するがのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "駿河国"),
+        Dictionary(yomi = "せっつのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "摂津国"),
+        Dictionary(yomi = "そうかまつばら", leftId = 1924, rightId = 1924, cost = 4000, tango = "草加松原"),
+        Dictionary(yomi = "だいこうあんれい", leftId = 1924, rightId = 1924, cost = 4000, tango = "大興安嶺"),
         Dictionary(
             yomi = "だいこうあんれいさんみゃく",
             leftId = 1924,
@@ -3075,3543 +2617,835 @@ object Constants {
             cost = 4000,
             tango = "大興安嶺山脈"
         ),
-        Dictionary(
-            yomi = "たけしばえき",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "竹芝駅"
-        ),
-        Dictionary(
-            yomi = "たごうら",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "田子浦"
-        ),
-        Dictionary(
-            yomi = "たちあらい",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "太刀洗"
-        ),
-        Dictionary(
-            yomi = "ちえんべつ",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "知円別"
-        ),
-        Dictionary(
-            yomi = "ちくごのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "筑後国"
-        ),
-        Dictionary(
-            yomi = "ちくぜんのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "筑前国"
-        ),
-        Dictionary(
-            yomi = "ちしまのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "千島国"
-        ),
-        Dictionary(
-            yomi = "ちょうせんかいきょう",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "朝鮮海峡"
-        ),
-        Dictionary(
-            yomi = "つしまのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "対馬国"
-        ),
-        Dictionary(
-            yomi = "ていしゅう",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "鄭州"
-        ),
-        Dictionary(
-            yomi = "てしおのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "天塩国"
-        ),
-        Dictionary(
-            yomi = "でわのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "出羽国"
-        ),
-        Dictionary(
-            yomi = "とおとうみのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "遠江国"
-        ),
-        Dictionary(
-            yomi = "とかちのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "十勝国"
-        ),
-        Dictionary(
-            yomi = "とさのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "土佐国"
-        ),
-        Dictionary(
-            yomi = "とちょうまええき",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "都庁前駅"
-        ),
-        Dictionary(
-            yomi = "とっぷし",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "富武士"
-        ),
-        Dictionary(
-            yomi = "とどがさき",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "魹ヶ崎"
-        ),
-        Dictionary(
-            yomi = "なかさと",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "中佐都"
-        ),
-        Dictionary(
-            yomi = "ながとのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "長門国"
-        ),
-        Dictionary(
-            yomi = "なんかいどう",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "南海道"
-        ),
-        Dictionary(
-            yomi = "にしきょうく",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "西京区"
-        ),
-        Dictionary(
-            yomi = "にほんだいら",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "日本平"
-        ),
-        Dictionary(
-            yomi = "ねぶたに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "掖谷"
-        ),
-        Dictionary(
-            yomi = "ねむろのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "根室国"
-        ),
-        Dictionary(
-            yomi = "のとのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "能登国"
-        ),
-        Dictionary(
-            yomi = "はまひがしま",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "浜比嘉島"
-        ),
-        Dictionary(
-            yomi = "はりまのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "播磨国"
-        ),
-        Dictionary(
-            yomi = "ひかりの",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "ひかり野"
-        ),
-        Dictionary(
-            yomi = "ひごのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "肥後国"
-        ),
-        Dictionary(
-            yomi = "びぜんのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "備前国"
-        ),
-        Dictionary(
-            yomi = "ひぜんのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "肥前国"
-        ),
-        Dictionary(
-            yomi = "ひだかのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "日高国"
-        ),
-        Dictionary(
-            yomi = "ひたちのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "常陸国"
-        ),
-        Dictionary(
-            yomi = "ひだのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "飛騨国"
-        ),
-        Dictionary(
-            yomi = "ひだのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "飛驒国"
-        ),
-        Dictionary(
-            yomi = "びっちゅうのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "備中国"
-        ),
-        Dictionary(
-            yomi = "ひゅうがのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "日向国"
-        ),
-        Dictionary(
-            yomi = "びんごのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "備後国"
-        ),
-        Dictionary(
-            yomi = "ふじさんろく",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "富士山麓"
-        ),
-        Dictionary(
-            yomi = "ぶぜんのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "豊前国"
-        ),
-        Dictionary(
-            yomi = "ぶんごのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "豊後国"
-        ),
-        Dictionary(
-            yomi = "みかわのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "三河国"
-        ),
-        Dictionary(
-            yomi = "みどり",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "美禽"
-        ),
-        Dictionary(
-            yomi = "みぬめ",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "敏馬"
-        ),
-        Dictionary(
-            yomi = "みののくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "美濃国"
-        ),
-        Dictionary(
-            yomi = "みまさかのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "美作国"
-        ),
-        Dictionary(
-            yomi = "みるめ",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "敏馬"
-        ),
-        Dictionary(
-            yomi = "むさしのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "武蔵国"
-        ),
-        Dictionary(
-            yomi = "むつのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "陸奥国"
-        ),
-        Dictionary(
-            yomi = "もとやわた",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "本八幡"
-        ),
-        Dictionary(
-            yomi = "やましろのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "山城国"
-        ),
-        Dictionary(
-            yomi = "やまとのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "大和国"
-        ),
-        Dictionary(
-            yomi = "りくおうのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "陸奥国"
-        ),
-        Dictionary(
-            yomi = "りくぜんのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "陸前国"
-        ),
-        Dictionary(
-            yomi = "りくちゅうのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "陸中国"
-        ),
-        Dictionary(
-            yomi = "りゅうきゅうのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "琉球国"
-        ),
-        Dictionary(
-            yomi = "わかさのくに",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "若狭国"
-        )
+        Dictionary(yomi = "たけしばえき", leftId = 1924, rightId = 1924, cost = 4000, tango = "竹芝駅"),
+        Dictionary(yomi = "たごうら", leftId = 1924, rightId = 1924, cost = 4000, tango = "田子浦"),
+        Dictionary(yomi = "たちあらい", leftId = 1924, rightId = 1924, cost = 4000, tango = "太刀洗"),
+        Dictionary(yomi = "ちえんべつ", leftId = 1924, rightId = 1924, cost = 4000, tango = "知円別"),
+        Dictionary(yomi = "ちくごのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "筑後国"),
+        Dictionary(yomi = "ちくぜんのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "筑前国"),
+        Dictionary(yomi = "ちしまのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "千島国"),
+        Dictionary(yomi = "ちょうせんかいきょう", leftId = 1924, rightId = 1924, cost = 4000, tango = "朝鮮海峡"),
+        Dictionary(yomi = "つしまのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "対馬国"),
+        Dictionary(yomi = "ていしゅう", leftId = 1924, rightId = 1924, cost = 4000, tango = "鄭州"),
+        Dictionary(yomi = "てしおのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "天塩国"),
+        Dictionary(yomi = "でわのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "出羽国"),
+        Dictionary(yomi = "とおとうみのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "遠江国"),
+        Dictionary(yomi = "とかちのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "十勝国"),
+        Dictionary(yomi = "とさのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "土佐国"),
+        Dictionary(yomi = "とちょうまええき", leftId = 1924, rightId = 1924, cost = 4000, tango = "都庁前駅"),
+        Dictionary(yomi = "とっぷし", leftId = 1924, rightId = 1924, cost = 4000, tango = "富武士"),
+        Dictionary(yomi = "とどがさき", leftId = 1924, rightId = 1924, cost = 4000, tango = "魹ヶ崎"),
+        Dictionary(yomi = "なかさと", leftId = 1924, rightId = 1924, cost = 4000, tango = "中佐都"),
+        Dictionary(yomi = "ながとのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "長門国"),
+        Dictionary(yomi = "なんかいどう", leftId = 1924, rightId = 1924, cost = 4000, tango = "南海道"),
+        Dictionary(yomi = "にしきょうく", leftId = 1924, rightId = 1924, cost = 4000, tango = "西京区"),
+        Dictionary(yomi = "にほんだいら", leftId = 1924, rightId = 1924, cost = 4000, tango = "日本平"),
+        Dictionary(yomi = "ねぶたに", leftId = 1924, rightId = 1924, cost = 4000, tango = "掖谷"),
+        Dictionary(yomi = "ねむろのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "根室国"),
+        Dictionary(yomi = "のとのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "能登国"),
+        Dictionary(yomi = "はまひがしま", leftId = 1924, rightId = 1924, cost = 4000, tango = "浜比嘉島"),
+        Dictionary(yomi = "はりまのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "播磨国"),
+        Dictionary(yomi = "はんきゅううめだ", leftId = 1924, rightId = 1924, cost = 4000, tango = "阪急梅田"),
+        Dictionary(yomi = "ひかりの", leftId = 1924, rightId = 1924, cost = 4000, tango = "ひかり野"),
+        Dictionary(yomi = "ひごのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "肥後国"),
+        Dictionary(yomi = "びぜんのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "備前国"),
+        Dictionary(yomi = "ひぜんのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "肥前国"),
+        Dictionary(yomi = "ひだかのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "日高国"),
+        Dictionary(yomi = "ひたちのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "常陸国"),
+        Dictionary(yomi = "ひだのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "飛騨国"),
+        Dictionary(yomi = "ひだのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "飛驒国"),
+        Dictionary(yomi = "びっちゅうのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "備中国"),
+        Dictionary(yomi = "ひゅうがのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "日向国"),
+        Dictionary(yomi = "びんごのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "備後国"),
+        Dictionary(yomi = "ふじさんろく", leftId = 1924, rightId = 1924, cost = 4000, tango = "富士山麓"),
+        Dictionary(yomi = "ぶぜんのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "豊前国"),
+        Dictionary(yomi = "ぶんごのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "豊後国"),
+        Dictionary(yomi = "みかわのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "三河国"),
+        Dictionary(yomi = "みどり", leftId = 1924, rightId = 1924, cost = 4000, tango = "美禽"),
+        Dictionary(yomi = "みぬめ", leftId = 1924, rightId = 1924, cost = 4000, tango = "敏馬"),
+        Dictionary(yomi = "みののくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "美濃国"),
+        Dictionary(yomi = "みまさかのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "美作国"),
+        Dictionary(yomi = "みるめ", leftId = 1924, rightId = 1924, cost = 4000, tango = "敏馬"),
+        Dictionary(yomi = "むさしのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "武蔵国"),
+        Dictionary(yomi = "むつのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "陸奥国"),
+        Dictionary(yomi = "もとやわた", leftId = 1924, rightId = 1924, cost = 4000, tango = "本八幡"),
+        Dictionary(yomi = "やましろのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "山城国"),
+        Dictionary(yomi = "やまとのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "大和国"),
+        Dictionary(yomi = "りくおうのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "陸奥国"),
+        Dictionary(yomi = "りくぜんのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "陸前国"),
+        Dictionary(yomi = "りくちゅうのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "陸中国"),
+        Dictionary(yomi = "りゅうきゅうのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "琉球国"),
+        Dictionary(yomi = "わかさのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "若狭国")
     )
 
-    val WORD = listOf(
-        Dictionary(
-            yomi = "CJKごかんかんじ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "CJK互換漢字"
-        ),
-        Dictionary(
-            yomi = "CJKごかんようもじ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "CJK互換用文字"
-        ),
-        Dictionary(
-            yomi = "CJKとうごうかんじ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "CJK統合漢字"
-        ),
-        Dictionary(
-            yomi = "FCとうきょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "FC東京"
-        ),
-        Dictionary(
-            yomi = "FCまちだぜるびあ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "FC町田ゼルビア"
-        ),
-        Dictionary(
-            yomi = "PFAS",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "PFAS"
-        ),
-        Dictionary(
-            yomi = "あいしんかくら",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "愛新覚羅"
-        ),
-        Dictionary(
-            yomi = "あおぞらぎんこう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "あおぞら銀行"
-        ),
-        Dictionary(
-            yomi = "あくろばてぃっく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "アクロバティック"
-        ),
-        Dictionary(
-            yomi = "あごだし",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "あご出汁"
-        ),
-        Dictionary(
-            yomi = "あさごはん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "朝ごはん"
-        ),
-        Dictionary(
-            yomi = "あさごはん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "朝ご飯"
-        ),
-        Dictionary(
-            yomi = "あてぬの",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "当て布"
-        ),
-        Dictionary(
-            yomi = "あびすぱ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "アビスパ"
-        ),
-        Dictionary(
-            yomi = "あびすぱふくおか",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "アビスパ福岡"
-        ),
-        Dictionary(
-            yomi = "あるびれっくす",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "アルビレックス"
-        ),
+    val WORDS = listOf(
+        Dictionary(yomi = "CJKごかんかんじ", leftId = 1922, rightId = 1922, cost = 4000, tango = "CJK互換漢字"),
+        Dictionary(yomi = "CJKごかんようもじ", leftId = 1922, rightId = 1922, cost = 4000, tango = "CJK互換用文字"),
+        Dictionary(yomi = "CJKとうごうかんじ", leftId = 1922, rightId = 1922, cost = 4000, tango = "CJK統合漢字"),
+        Dictionary(yomi = "FCとうきょう", leftId = 1920, rightId = 1920, cost = 4000, tango = "FC東京"),
+        Dictionary(yomi = "FCまちだぜるびあ", leftId = 1920, rightId = 1920, cost = 4000, tango = "FC町田ゼルビア"),
+        Dictionary(yomi = "PFAS", leftId = 1922, rightId = 1922, cost = 4000, tango = "PFAS"),
+        Dictionary(yomi = "あいしんかくら", leftId = 1923, rightId = 1923, cost = 4000, tango = "愛新覚羅"),
+        Dictionary(yomi = "あおぞらぎんこう", leftId = 1920, rightId = 1920, cost = 4000, tango = "あおぞら銀行"),
+        Dictionary(yomi = "あくろばてぃっく", leftId = 1922, rightId = 1922, cost = 4000, tango = "アクロバティック"),
+        Dictionary(yomi = "あごだし", leftId = 1922, rightId = 1922, cost = 4000, tango = "あご出汁"),
+        Dictionary(yomi = "あさごはん", leftId = 1922, rightId = 1922, cost = 4000, tango = "朝ごはん"),
+        Dictionary(yomi = "あさごはん", leftId = 1922, rightId = 1922, cost = 4000, tango = "朝ご飯"),
+        Dictionary(yomi = "あてぬの", leftId = 1841, rightId = 1841, cost = 4000, tango = "当て布"),
+        Dictionary(yomi = "あびすぱ", leftId = 1920, rightId = 1920, cost = 4000, tango = "アビスパ"),
+        Dictionary(yomi = "あびすぱふくおか", leftId = 1920, rightId = 1920, cost = 4000, tango = "アビスパ福岡"),
+        Dictionary(yomi = "あもせ", leftId = 1923, rightId = 1923, cost = 4000, tango = "阿茂瀬"),
+        Dictionary(yomi = "あるびれっくす", leftId = 1920, rightId = 1920, cost = 4000, tango = "アルビレックス"),
         Dictionary(
             yomi = "あるびれっくすにいがた",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "アルビレックス新潟"
         ),
-        Dictionary(
-            yomi = "あんとらーず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "アントラーズ"
-        ),
-        Dictionary(
-            yomi = "いーぐるす",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "イーグルス"
-        ),
-        Dictionary(
-            yomi = "いえけい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "家系"
-        ),
-        Dictionary(
-            yomi = "いぐのーべるしょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "イグノーベル賞"
-        ),
-        Dictionary(
-            yomi = "いくりんぎょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "育林業"
-        ),
-        Dictionary(
-            yomi = "いけいざい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "違警罪"
-        ),
-        Dictionary(
-            yomi = "いこみき",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "已己巳己"
-        ),
-        Dictionary(
-            yomi = "いただきもの",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "頂き物"
-        ),
-        Dictionary(
-            yomi = "いちまん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "一万"
-        ),
-        Dictionary(
-            yomi = "いっきょうたじゃく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "一強他弱"
-        ),
-        Dictionary(
-            yomi = "いばらてつどう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "井原鉄道"
-        ),
-        Dictionary(
-            yomi = "いもじ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "イ文字"
-        ),
-        Dictionary(
-            yomi = "いもじ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "彝文字"
-        ),
-        Dictionary(
-            yomi = "いわぶろ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "岩風呂"
-        ),
-        Dictionary(
-            yomi = "いんきゃ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "陰キャ"
-        ),
-        Dictionary(
-            yomi = "いんてぃましー",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "intimacy"
-        ),
-        Dictionary(
-            yomi = "いんてぃましー",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "インティマシー"
-        ),
-        Dictionary(
-            yomi = "いんむ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "淫夢"
-        ),
-        Dictionary(
-            yomi = "ゔぃっせる",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ヴィッセル"
-        ),
-        Dictionary(
-            yomi = "ゔぃっせるこうべ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ヴィッセル神戸"
-        ),
-        Dictionary(
-            yomi = "ゔぇるでぃ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ヴェルディ"
-        ),
-        Dictionary(
-            yomi = "うすいほん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "薄い本"
-        ),
-        Dictionary(
-            yomi = "うっぷんばらし",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "鬱憤晴らし"
-        ),
-        Dictionary(
-            yomi = "うらめん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "裏面"
-        ),
-        Dictionary(
-            yomi = "うらわれっず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "浦和レッズ"
-        ),
-        Dictionary(
-            yomi = "うりどき",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "売り時"
-        ),
-        Dictionary(
-            yomi = "うんてい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "芸亭"
-        ),
-        Dictionary(
-            yomi = "えいえいじてん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "英英辞典"
-        ),
-        Dictionary(
-            yomi = "えちぜんてつどう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "えちぜん鉄道"
-        ),
-        Dictionary(
-            yomi = "えつご",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "粤語"
-        ),
-        Dictionary(
-            yomi = "えふしーとうきょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "FC東京"
-        ),
+        Dictionary(yomi = "あんとらーず", leftId = 1920, rightId = 1920, cost = 4000, tango = "アントラーズ"),
+        Dictionary(yomi = "あんのい", leftId = 1923, rightId = 1923, cost = 4000, tango = "安ノ井"),
+        Dictionary(yomi = "いーぐるす", leftId = 1920, rightId = 1920, cost = 4000, tango = "イーグルス"),
+        Dictionary(yomi = "いえけい", leftId = 1922, rightId = 1922, cost = 4000, tango = "家系"),
+        Dictionary(yomi = "いおまぐぬっそ", leftId = 1920, rightId = 1920, cost = 4000, tango = "イオマグヌッソ"),
+        Dictionary(yomi = "いぐのーべるしょう", leftId = 1920, rightId = 1920, cost = 4000, tango = "イグノーベル賞"),
+        Dictionary(yomi = "いくりんぎょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "育林業"),
+        Dictionary(yomi = "いけいざい", leftId = 1922, rightId = 1922, cost = 4000, tango = "違警罪"),
+        Dictionary(yomi = "いこみき", leftId = 1922, rightId = 1922, cost = 4000, tango = "已己巳己"),
+        Dictionary(yomi = "いただきもの", leftId = 1922, rightId = 1922, cost = 4000, tango = "頂き物"),
+        Dictionary(yomi = "いちい", leftId = 1922, rightId = 1922, cost = 4000, tango = "一意"),
+        Dictionary(yomi = "いちまん", leftId = 1922, rightId = 1922, cost = 4000, tango = "一万"),
+        Dictionary(yomi = "いっきょうたじゃく", leftId = 1922, rightId = 1922, cost = 4000, tango = "一強他弱"),
+        Dictionary(yomi = "いばらてつどう", leftId = 1920, rightId = 1920, cost = 4000, tango = "井原鉄道"),
+        Dictionary(yomi = "いもじ", leftId = 1922, rightId = 1922, cost = 4000, tango = "イ文字"),
+        Dictionary(yomi = "いもじ", leftId = 1922, rightId = 1922, cost = 4000, tango = "彝文字"),
+        Dictionary(yomi = "いわぶろ", leftId = 1922, rightId = 1922, cost = 4000, tango = "岩風呂"),
+        Dictionary(yomi = "いんきゃ", leftId = 1922, rightId = 1922, cost = 4000, tango = "陰キャ"),
+        Dictionary(yomi = "いんてぃましー", leftId = 1922, rightId = 1922, cost = 4000, tango = "intimacy"),
+        Dictionary(yomi = "いんてぃましー", leftId = 1922, rightId = 1922, cost = 4000, tango = "インティマシー"),
+        Dictionary(yomi = "いんぴ", leftId = 1841, rightId = 1841, cost = 4000, tango = "隠秘"),
+        Dictionary(yomi = "いんむ", leftId = 1922, rightId = 1922, cost = 4000, tango = "淫夢"),
+        Dictionary(yomi = "ゔぃっせる", leftId = 1920, rightId = 1920, cost = 4000, tango = "ヴィッセル"),
+        Dictionary(yomi = "ゔぃっせるこうべ", leftId = 1920, rightId = 1920, cost = 4000, tango = "ヴィッセル神戸"),
+        Dictionary(yomi = "ゔぇるでぃ", leftId = 1920, rightId = 1920, cost = 4000, tango = "ヴェルディ"),
+        Dictionary(yomi = "うげん", leftId = 1922, rightId = 1922, cost = 4000, tango = "迂言"),
+        Dictionary(yomi = "うすいほん", leftId = 1922, rightId = 1922, cost = 4000, tango = "薄い本"),
+        Dictionary(yomi = "うっぷんばらし", leftId = 1841, rightId = 1841, cost = 4000, tango = "鬱憤晴らし"),
+        Dictionary(yomi = "うらめん", leftId = 1922, rightId = 1922, cost = 4000, tango = "裏面"),
+        Dictionary(yomi = "うらわれっず", leftId = 1920, rightId = 1920, cost = 4000, tango = "浦和レッズ"),
+        Dictionary(yomi = "うりどき", leftId = 1922, rightId = 1922, cost = 4000, tango = "売り時"),
+        Dictionary(yomi = "うんてい", leftId = 1922, rightId = 1922, cost = 4000, tango = "芸亭"),
+        Dictionary(yomi = "えいえいじてん", leftId = 1922, rightId = 1922, cost = 4000, tango = "英英辞典"),
+        Dictionary(yomi = "えちぜんてつどう", leftId = 1920, rightId = 1920, cost = 4000, tango = "えちぜん鉄道"),
+        Dictionary(yomi = "えつご", leftId = 1922, rightId = 1922, cost = 4000, tango = "粤語"),
+        Dictionary(yomi = "えふしーとうきょう", leftId = 1920, rightId = 1920, cost = 4000, tango = "FC東京"),
         Dictionary(
             yomi = "えふしーまちだぜるびあ",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "FC町田ゼルビア"
         ),
+        Dictionary(yomi = "えみー", leftId = 1922, rightId = 1922, cost = 4000, tango = "エミー"),
+        Dictionary(yomi = "えんりゃく", leftId = 1920, rightId = 1920, cost = 4000, tango = "延暦"),
+        Dictionary(yomi = "おーぷんきゃりー", leftId = 1841, rightId = 1841, cost = 4000, tango = "オープンキャリー"),
         Dictionary(
-            yomi = "えみー",
-            leftId = 1851,
-            rightId = 1851,
+            yomi = "おおさかいかやっかだいがく",
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
-            tango = "エミー"
+            tango = "大阪医科薬科大学"
         ),
-        Dictionary(
-            yomi = "えんりゃく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "延暦"
-        ),
-        Dictionary(
-            yomi = "おーぷんきゃりー",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "オープンキャリー"
-        ),
-        Dictionary(
-            yomi = "おくぶたえ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "奥二重"
-        ),
-        Dictionary(
-            yomi = "おくりて",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "送り手"
-        ),
-        Dictionary(
-            yomi = "おさらば",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "オサラバ"
-        ),
-        Dictionary(
-            yomi = "おしごと",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "推し事"
-        ),
-        Dictionary(
-            yomi = "おだいばこ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "お題箱"
-        ),
-        Dictionary(
-            yomi = "おだえいいちろう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "尾田栄一郎"
-        ),
-        Dictionary(
-            yomi = "おねろり",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "おねロリ"
-        ),
+        Dictionary(yomi = "おおつきょう", leftId = 1920, rightId = 1920, cost = 4000, tango = "大津京"),
+        Dictionary(yomi = "おくぶたえ", leftId = 1922, rightId = 1922, cost = 4000, tango = "奥二重"),
+        Dictionary(yomi = "おくりて", leftId = 1922, rightId = 1922, cost = 4000, tango = "送り手"),
+        Dictionary(yomi = "おさらば", leftId = 1841, rightId = 1841, cost = 4000, tango = "オサラバ"),
+        Dictionary(yomi = "おしごと", leftId = 1841, rightId = 1841, cost = 4000, tango = "推し事"),
+        Dictionary(yomi = "おす", leftId = 1922, rightId = 1922, cost = 4000, tango = "お酢"),
+        Dictionary(yomi = "おだいばこ", leftId = 1922, rightId = 1922, cost = 4000, tango = "お題箱"),
+        Dictionary(yomi = "おだえいいちろう", leftId = 1921, rightId = 1921, cost = 4000, tango = "尾田栄一郎"),
+        Dictionary(yomi = "おにのかくらん", leftId = 1922, rightId = 1922, cost = 4000, tango = "鬼の霍乱"),
+        Dictionary(yomi = "おねろり", leftId = 1922, rightId = 1922, cost = 4000, tango = "おねロリ"),
         Dictionary(
             yomi = "おりっくす・ばふぁろーず",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "オリックス・バファローズ"
         ),
         Dictionary(
             yomi = "おりっくすばふぁろーず",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "オリックスバファローズ"
         ),
-        Dictionary(
-            yomi = "かーぷ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "カープ"
-        ),
-        Dictionary(
-            yomi = "かいかい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "回回"
-        ),
-        Dictionary(
-            yomi = "かいごかんせい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "下位互換性"
-        ),
-        Dictionary(
-            yomi = "かいていこう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "改訂稿"
-        ),
-        Dictionary(
-            yomi = "かえがみ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "替紙"
-        ),
+        Dictionary(yomi = "かーぷ", leftId = 1920, rightId = 1920, cost = 4000, tango = "カープ"),
+        Dictionary(yomi = "かいかい", leftId = 1920, rightId = 1920, cost = 4000, tango = "回回"),
+        Dictionary(yomi = "かいごかんせい", leftId = 1922, rightId = 1922, cost = 4000, tango = "下位互換性"),
+        Dictionary(yomi = "かいていこう", leftId = 1922, rightId = 1922, cost = 4000, tango = "改訂稿"),
+        Dictionary(yomi = "かいとうらんま", leftId = 1922, rightId = 1922, cost = 4000, tango = "快刀乱麻"),
+        Dictionary(yomi = "かえがみ", leftId = 1922, rightId = 1922, cost = 4000, tango = "替紙"),
         Dictionary(
             yomi = "かぎょうしもいちだんかつよう",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1922,
+            rightId = 1922,
             cost = 4000,
             tango = "カ行下一段活用"
         ),
-        Dictionary(
-            yomi = "かくしあじ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "隠し味"
-        ),
-        Dictionary(
-            yomi = "かくしゃ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "覚者"
-        ),
-        Dictionary(
-            yomi = "かくしゃく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "赫灼"
-        ),
-        Dictionary(
-            yomi = "かしまあんとらーず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "鹿島アントラーズ"
-        ),
-        Dictionary(
-            yomi = "かしゅうじゅ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "過収受"
-        ),
-        Dictionary(
-            yomi = "かじょうわん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "渦状腕"
-        ),
-        Dictionary(
-            yomi = "かしわれいそる",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "柏レイソル"
-        ),
-        Dictionary(
-            yomi = "かねのなるき",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "金のなる木"
-        ),
-        Dictionary(
-            yomi = "かもふら",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "カモフラ"
-        ),
-        Dictionary(
-            yomi = "からだき",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "空焚き"
-        ),
-        Dictionary(
-            yomi = "かりおき",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "仮置き"
-        ),
-        Dictionary(
-            yomi = "かわきもの",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "乾き物"
-        ),
+        Dictionary(yomi = "かくしあじ", leftId = 1922, rightId = 1922, cost = 4000, tango = "隠し味"),
+        Dictionary(yomi = "がくしかてい", leftId = 1922, rightId = 1922, cost = 4000, tango = "学士課程"),
+        Dictionary(yomi = "かくしゃ", leftId = 1922, rightId = 1922, cost = 4000, tango = "覚者"),
+        Dictionary(yomi = "かくしゃく", leftId = 1922, rightId = 1922, cost = 4000, tango = "赫灼"),
+        Dictionary(yomi = "かくらん", leftId = 1922, rightId = 1922, cost = 4000, tango = "霍乱"),
+        Dictionary(yomi = "かしまあんとらーず", leftId = 1920, rightId = 1920, cost = 4000, tango = "鹿島アントラーズ"),
+        Dictionary(yomi = "かしゅうじゅ", leftId = 1841, rightId = 1841, cost = 4000, tango = "過収受"),
+        Dictionary(yomi = "かじょうわん", leftId = 1922, rightId = 1922, cost = 4000, tango = "渦状腕"),
+        Dictionary(yomi = "かしわれいそる", leftId = 1920, rightId = 1920, cost = 4000, tango = "柏レイソル"),
+        Dictionary(yomi = "かねのなるき", leftId = 1922, rightId = 1922, cost = 4000, tango = "金のなる木"),
+        Dictionary(yomi = "かもふら", leftId = 1841, rightId = 1841, cost = 4000, tango = "カモフラ"),
+        Dictionary(yomi = "からだき", leftId = 1841, rightId = 1841, cost = 4000, tango = "空焚き"),
+        Dictionary(yomi = "かりおき", leftId = 1841, rightId = 1841, cost = 4000, tango = "仮置き"),
+        Dictionary(yomi = "かわきもの", leftId = 1922, rightId = 1922, cost = 4000, tango = "乾き物"),
         Dictionary(
             yomi = "かわさきふろんたーれ",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "川崎フロンターレ"
         ),
+        Dictionary(yomi = "かんいかんようじたい", leftId = 1922, rightId = 1922, cost = 4000, tango = "簡易慣用字体"),
+        Dictionary(yomi = "かんさいはんじ", leftId = 1922, rightId = 1922, cost = 4000, tango = "簡裁判事"),
         Dictionary(
             yomi = "かんさいみらいぎんこう",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "関西みらい銀行"
         ),
-        Dictionary(
-            yomi = "かんじ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "巻次"
-        ),
+        Dictionary(yomi = "かんじ", leftId = 1922, rightId = 1922, cost = 4000, tango = "巻次"),
         Dictionary(
             yomi = "かんじこうせいきじゅつもじ",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1922,
+            rightId = 1922,
             cost = 4000,
             tango = "漢字構成記述文字"
         ),
-        Dictionary(
-            yomi = "かんじょうば",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "勘定場"
-        ),
-        Dictionary(
-            yomi = "かんち",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "漢地"
-        ),
-        Dictionary(
-            yomi = "かんちょく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "漢直"
-        ),
-        Dictionary(
-            yomi = "がんば",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ガンバ"
-        ),
-        Dictionary(
-            yomi = "がんばおおさか",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ガンバ大阪"
-        ),
-        Dictionary(
-            yomi = "かんりめいがら",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "監理銘柄"
-        ),
+        Dictionary(yomi = "かんじょうば", leftId = 1922, rightId = 1922, cost = 4000, tango = "勘定場"),
+        Dictionary(yomi = "かんち", leftId = 1922, rightId = 1922, cost = 4000, tango = "漢地"),
+        Dictionary(yomi = "かんちょく", leftId = 1841, rightId = 1841, cost = 4000, tango = "漢直"),
+        Dictionary(yomi = "がんば", leftId = 1920, rightId = 1920, cost = 4000, tango = "ガンバ"),
+        Dictionary(yomi = "がんばおおさか", leftId = 1920, rightId = 1920, cost = 4000, tango = "ガンバ大阪"),
+        Dictionary(yomi = "かんりめいがら", leftId = 1922, rightId = 1922, cost = 4000, tango = "監理銘柄"),
         Dictionary(
             yomi = "きーぼーどしょーとかっと",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1922,
+            rightId = 1922,
             cost = 4000,
             tango = "キーボードショートカット"
         ),
-        Dictionary(
-            yomi = "きかんせっけい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "機関設計"
-        ),
-        Dictionary(
-            yomi = "きご",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "徽語"
-        ),
-        Dictionary(
-            yomi = "きそう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "寄贈"
-        ),
-        Dictionary(
-            yomi = "きたかたらーめん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "喜多方ラーメン"
-        ),
+        Dictionary(yomi = "きかんせっけい", leftId = 1841, rightId = 1841, cost = 4000, tango = "機関設計"),
+        Dictionary(yomi = "きけろが", leftId = 1920, rightId = 1920, cost = 4000, tango = "キケロガ"),
+        Dictionary(yomi = "きご", leftId = 1922, rightId = 1922, cost = 4000, tango = "徽語"),
+        Dictionary(yomi = "きそう", leftId = 1841, rightId = 1841, cost = 4000, tango = "寄贈"),
+        Dictionary(yomi = "きたかたらーめん", leftId = 1920, rightId = 1920, cost = 4000, tango = "喜多方ラーメン"),
         Dictionary(
             yomi = "きたにっぽんしんぶんはい",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "北日本新聞杯"
         ),
-        Dictionary(
-            yomi = "きっしょく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "喫食"
-        ),
-        Dictionary(
-            yomi = "きったん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "契丹"
-        ),
-        Dictionary(
-            yomi = "きてん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "輝点"
-        ),
-        Dictionary(
-            yomi = "きゅうかんそっかん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "吸汗速乾"
-        ),
-        Dictionary(
-            yomi = "きゅうせいこうこう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "旧制高校"
-        ),
-        Dictionary(
-            yomi = "きゅうまん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "九万"
-        ),
-        Dictionary(
-            yomi = "ぎゅうめし",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "牛めし"
-        ),
-        Dictionary(
-            yomi = "きょうせいきそ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "強制起訴"
-        ),
-        Dictionary(
-            yomi = "きょうとさんが",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "京都サンガ"
-        ),
-        Dictionary(
-            yomi = "きょうとさんがF.C.",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "京都サンガF.C."
-        ),
+        Dictionary(yomi = "きっしょく", leftId = 1841, rightId = 1841, cost = 4000, tango = "喫食"),
+        Dictionary(yomi = "きったん", leftId = 1920, rightId = 1920, cost = 4000, tango = "契丹"),
+        Dictionary(yomi = "きてん", leftId = 1922, rightId = 1922, cost = 4000, tango = "輝点"),
+        Dictionary(yomi = "きやく", leftId = 1922, rightId = 1922, cost = 4000, tango = "既約"),
+        Dictionary(yomi = "きゅうかんそっかん", leftId = 1841, rightId = 1841, cost = 4000, tango = "吸汗速乾"),
+        Dictionary(yomi = "きゅうせいこうこう", leftId = 1922, rightId = 1922, cost = 4000, tango = "旧制高校"),
+        Dictionary(yomi = "きゅうまん", leftId = 1922, rightId = 1922, cost = 4000, tango = "九万"),
+        Dictionary(yomi = "ぎゅうめし", leftId = 1922, rightId = 1922, cost = 4000, tango = "牛めし"),
+        Dictionary(yomi = "きょうかいかくてい", leftId = 1841, rightId = 1841, cost = 4000, tango = "境界確定"),
+        Dictionary(yomi = "きょうじょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "橋上"),
+        Dictionary(yomi = "きょうじょうえきしゃ", leftId = 1922, rightId = 1922, cost = 4000, tango = "橋上駅舎"),
+        Dictionary(yomi = "きょうじょうかいさつ", leftId = 1922, rightId = 1922, cost = 4000, tango = "橋上改札"),
+        Dictionary(yomi = "きょうせいきそ", leftId = 1841, rightId = 1841, cost = 4000, tango = "強制起訴"),
+        Dictionary(yomi = "きょうとさんが", leftId = 1920, rightId = 1920, cost = 4000, tango = "京都サンガ"),
+        Dictionary(yomi = "きょうとさんがF.C.", leftId = 1920, rightId = 1920, cost = 4000, tango = "京都サンガF.C."),
         Dictionary(
             yomi = "きょうとさんがえふしー",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "京都サンガF.C."
         ),
+        Dictionary(yomi = "きらぼしぎんこう", leftId = 1920, rightId = 1920, cost = 4000, tango = "きらぼし銀行"),
         Dictionary(
-            yomi = "きらぼしぎんこう",
-            leftId = 1851,
-            rightId = 1851,
+            yomi = "きんせんぶんぱいせいきゅうけん",
+            leftId = 1922,
+            rightId = 1922,
             cost = 4000,
-            tango = "きらぼし銀行"
+            tango = "金銭分配請求権"
         ),
-        Dictionary(
-            yomi = "きんとれ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "筋トレ"
-        ),
-        Dictionary(
-            yomi = "くうしゅうごう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "空集合"
-        ),
-        Dictionary(
-            yomi = "くうぼうそう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "空乏層"
-        ),
-        Dictionary(
-            yomi = "ぐらんぱす",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "グランパス"
-        ),
-        Dictionary(
-            yomi = "くるるぎ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "枢木"
-        ),
+        Dictionary(yomi = "きんとれ", leftId = 1841, rightId = 1841, cost = 4000, tango = "筋トレ"),
+        Dictionary(yomi = "くうしゅうごう", leftId = 1922, rightId = 1922, cost = 4000, tango = "空集合"),
+        Dictionary(yomi = "くうぼうそう", leftId = 1922, rightId = 1922, cost = 4000, tango = "空乏層"),
+        Dictionary(yomi = "ぐらんぱす", leftId = 1920, rightId = 1920, cost = 4000, tango = "グランパス"),
+        Dictionary(yomi = "くるるぎ", leftId = 1923, rightId = 1923, cost = 4000, tango = "枢木"),
         Dictionary(
             yomi = "くれじっとかーどぎょう",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "クレジットカード業"
         ),
-        Dictionary(
-            yomi = "くわたけいすけ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "桑田佳祐"
-        ),
-        Dictionary(
-            yomi = "けいらんし",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "鶏卵紙"
-        ),
-        Dictionary(
-            yomi = "けっかんしゅうしゅく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "血管収縮"
-        ),
-        Dictionary(
-            yomi = "けっていこう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "決定稿"
-        ),
-        Dictionary(
-            yomi = "けつりょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "結了"
-        ),
-        Dictionary(
-            yomi = "げんごか",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "言語化"
-        ),
-        Dictionary(
-            yomi = "げんしきょうさんしゅぎ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "原始共産主義"
-        ),
-        Dictionary(
-            yomi = "けんじゅう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "県住"
-        ),
-        Dictionary(
-            yomi = "けんちくせこう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "建築施工"
-        ),
-        Dictionary(
-            yomi = "げんな",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "元和"
-        ),
-        Dictionary(
-            yomi = "けんばら",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "権原"
-        ),
-        Dictionary(
-            yomi = "げんゆこうぎょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "原油鉱業"
-        ),
-        Dictionary(
-            yomi = "げんわ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "元和"
-        ),
+        Dictionary(yomi = "くわたけいすけ", leftId = 1921, rightId = 1921, cost = 4000, tango = "桑田佳祐"),
+        Dictionary(yomi = "けいゆう", leftId = 1841, rightId = 1841, cost = 4000, tango = "経由"),
+        Dictionary(yomi = "けいらんし", leftId = 1922, rightId = 1922, cost = 4000, tango = "鶏卵紙"),
+        Dictionary(yomi = "けっかんしゅうしゅく", leftId = 1841, rightId = 1841, cost = 4000, tango = "血管収縮"),
+        Dictionary(yomi = "けっていこう", leftId = 1922, rightId = 1922, cost = 4000, tango = "決定稿"),
+        Dictionary(yomi = "けつりょう", leftId = 1841, rightId = 1841, cost = 4000, tango = "結了"),
+        Dictionary(yomi = "げんごか", leftId = 1841, rightId = 1841, cost = 4000, tango = "言語化"),
+        Dictionary(yomi = "げんしきょうさんしゅぎ", leftId = 1922, rightId = 1922, cost = 4000, tango = "原始共産主義"),
+        Dictionary(yomi = "けんじゅう", leftId = 1922, rightId = 1922, cost = 4000, tango = "県住"),
+        Dictionary(yomi = "けんちくせこう", leftId = 1841, rightId = 1841, cost = 4000, tango = "建築施工"),
+        Dictionary(yomi = "げんちょう", leftId = 1920, rightId = 1920, cost = 4000, tango = "阮朝"),
+        Dictionary(yomi = "げんつきいっしゅ", leftId = 1922, rightId = 1922, cost = 4000, tango = "原付一種"),
+        Dictionary(yomi = "げんつきにしゅ", leftId = 1922, rightId = 1922, cost = 4000, tango = "原付二種"),
+        Dictionary(yomi = "げんな", leftId = 1920, rightId = 1920, cost = 4000, tango = "元和"),
+        Dictionary(yomi = "けんばら", leftId = 1922, rightId = 1922, cost = 4000, tango = "権原"),
+        Dictionary(yomi = "げんゆこうぎょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "原油鉱業"),
+        Dictionary(yomi = "げんわ", leftId = 1920, rightId = 1920, cost = 4000, tango = "元和"),
         Dictionary(
             yomi = "ごーるでんいーぐるす",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "ゴールデンイーグルス"
         ),
-        Dictionary(
-            yomi = "ごいりよう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ご入用"
-        ),
+        Dictionary(yomi = "ごいりよう", leftId = 1922, rightId = 1922, cost = 4000, tango = "ご入用"),
         Dictionary(
             yomi = "こういこうしょくしゃはんざいそうさしょ",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "高位公職者犯罪捜査処"
         ),
-        Dictionary(
-            yomi = "こういしつ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "更衣室"
-        ),
-        Dictionary(
-            yomi = "こうえきつうほう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "公益通報"
-        ),
-        Dictionary(
-            yomi = "こうか",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "弘化"
-        ),
-        Dictionary(
-            yomi = "こうきぶしゅ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "康煕部首"
-        ),
-        Dictionary(
-            yomi = "こうこう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "礦坑"
-        ),
-        Dictionary(
-            yomi = "ごうしかいしゃ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "合資会社"
-        ),
-        Dictionary(
-            yomi = "こうじょ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "扣除"
-        ),
-        Dictionary(
-            yomi = "こうそうしょ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "公捜処"
-        ),
-        Dictionary(
-            yomi = "こうそけん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "公訴権"
-        ),
-        Dictionary(
-            yomi = "こうにん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "弘仁"
-        ),
-        Dictionary(
-            yomi = "こうばいりょくへいか",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "購買力平価"
-        ),
-        Dictionary(
-            yomi = "こうはんいんさつ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "孔版印刷"
-        ),
-        Dictionary(
-            yomi = "こうぶんかいせきき",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "構文解析器"
-        ),
-        Dictionary(
-            yomi = "こうらん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "皇蘭"
-        ),
-        Dictionary(
-            yomi = "ごかんかんじ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "互換漢字"
-        ),
-        Dictionary(
-            yomi = "こきゅう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "枯朽"
-        ),
-        Dictionary(
-            yomi = "こきゅうきしっかん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "呼吸器疾患"
-        ),
-        Dictionary(
-            yomi = "ごぐん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "語群"
-        ),
-        Dictionary(
-            yomi = "ことでん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "琴電"
-        ),
-        Dictionary(
-            yomi = "こま",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "独楽"
-        ),
-        Dictionary(
-            yomi = "ごまん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "五万"
-        ),
-        Dictionary(
-            yomi = "こめだこーひー",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "コメダ珈琲"
-        ),
-        Dictionary(
-            yomi = "こめだこーひーてん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "コメダ珈琲店"
-        ),
-        Dictionary(
-            yomi = "これざね",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "維城"
-        ),
-        Dictionary(
-            yomi = "こんさどーれ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "コンサドーレ"
-        ),
+        Dictionary(yomi = "こういしつ", leftId = 1922, rightId = 1922, cost = 4000, tango = "更衣室"),
+        Dictionary(yomi = "こうえきつうほう", leftId = 1841, rightId = 1841, cost = 4000, tango = "公益通報"),
+        Dictionary(yomi = "こうか", leftId = 1920, rightId = 1920, cost = 4000, tango = "弘化"),
+        Dictionary(yomi = "こうきかてい", leftId = 1922, rightId = 1922, cost = 4000, tango = "後期課程"),
+        Dictionary(yomi = "こうきぶしゅ", leftId = 1922, rightId = 1922, cost = 4000, tango = "康煕部首"),
+        Dictionary(yomi = "こうこう", leftId = 1922, rightId = 1922, cost = 4000, tango = "礦坑"),
+        Dictionary(yomi = "ごうしかいしゃ", leftId = 1922, rightId = 1922, cost = 4000, tango = "合資会社"),
+        Dictionary(yomi = "こうじょ", leftId = 1841, rightId = 1841, cost = 4000, tango = "扣除"),
+        Dictionary(yomi = "こうせいほごほうじん", leftId = 1922, rightId = 1922, cost = 4000, tango = "更生保護法人"),
+        Dictionary(yomi = "こうそうしょ", leftId = 1920, rightId = 1920, cost = 4000, tango = "公捜処"),
+        Dictionary(yomi = "こうそけん", leftId = 1922, rightId = 1922, cost = 4000, tango = "公訴権"),
+        Dictionary(yomi = "こうにん", leftId = 1920, rightId = 1920, cost = 4000, tango = "弘仁"),
+        Dictionary(yomi = "こうばいりょくへいか", leftId = 1922, rightId = 1922, cost = 4000, tango = "購買力平価"),
+        Dictionary(yomi = "こうはんいんさつ", leftId = 1841, rightId = 1841, cost = 4000, tango = "孔版印刷"),
+        Dictionary(yomi = "こうぶんかいせきき", leftId = 1922, rightId = 1922, cost = 4000, tango = "構文解析器"),
+        Dictionary(yomi = "こうらん", leftId = 1920, rightId = 1920, cost = 4000, tango = "皇蘭"),
+        Dictionary(yomi = "ごかんかんじ", leftId = 1922, rightId = 1922, cost = 4000, tango = "互換漢字"),
+        Dictionary(yomi = "こきゅう", leftId = 1922, rightId = 1922, cost = 4000, tango = "枯朽"),
+        Dictionary(yomi = "こきゅうきしっかん", leftId = 1841, rightId = 1841, cost = 4000, tango = "呼吸器疾患"),
+        Dictionary(yomi = "ごぐん", leftId = 1922, rightId = 1922, cost = 4000, tango = "語群"),
+        Dictionary(yomi = "ごじゅうそう", leftId = 1841, rightId = 1841, cost = 4000, tango = "五重奏"),
+        Dictionary(yomi = "ことでん", leftId = 1920, rightId = 1920, cost = 4000, tango = "琴電"),
+        Dictionary(yomi = "こま", leftId = 1922, rightId = 1922, cost = 4000, tango = "独楽"),
+        Dictionary(yomi = "ごまん", leftId = 1922, rightId = 1922, cost = 4000, tango = "五万"),
+        Dictionary(yomi = "こめだこーひー", leftId = 1920, rightId = 1920, cost = 4000, tango = "コメダ珈琲"),
+        Dictionary(yomi = "こめだこーひーてん", leftId = 1920, rightId = 1920, cost = 4000, tango = "コメダ珈琲店"),
+        Dictionary(yomi = "これざね", leftId = 1922, rightId = 1922, cost = 4000, tango = "維城"),
+        Dictionary(yomi = "こんさどーれ", leftId = 1920, rightId = 1920, cost = 4000, tango = "コンサドーレ"),
         Dictionary(
             yomi = "こんさどーれさっぽろ",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "コンサドーレ札幌"
         ),
-        Dictionary(
-            yomi = "こんせ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "今世"
-        ),
-        Dictionary(
-            yomi = "こんぜ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "今世"
-        ),
-        Dictionary(
-            yomi = "こんせい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "今世"
-        ),
-        Dictionary(
-            yomi = "さいかいじょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "催会場"
-        ),
-        Dictionary(
-            yomi = "さいしゅうこう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "最終稿"
-        ),
-        Dictionary(
-            yomi = "さいじょうひでき",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "西城秀樹"
-        ),
+        Dictionary(yomi = "こんせ", leftId = 1922, rightId = 1922, cost = 4000, tango = "今世"),
+        Dictionary(yomi = "こんぜ", leftId = 1922, rightId = 1922, cost = 4000, tango = "今世"),
+        Dictionary(yomi = "こんせい", leftId = 1922, rightId = 1922, cost = 4000, tango = "今世"),
+        Dictionary(yomi = "さいかいじょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "催会場"),
+        Dictionary(yomi = "さいこん", leftId = 1841, rightId = 1841, cost = 4000, tango = "再建"),
+        Dictionary(yomi = "さいしゅうこう", leftId = 1922, rightId = 1922, cost = 4000, tango = "最終稿"),
+        Dictionary(yomi = "さいじょうひでき", leftId = 1921, rightId = 1921, cost = 4000, tango = "西城秀樹"),
         Dictionary(
             yomi = "さいたませいぶらいおんず",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "埼玉西武ライオンズ"
         ),
         Dictionary(
             yomi = "さいたまりそなぎんこう",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "埼玉りそな銀行"
         ),
-        Dictionary(
-            yomi = "ざいにちかきょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "在日華僑"
-        ),
-        Dictionary(
-            yomi = "さいばねきかく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "サイバネ規格"
-        ),
-        Dictionary(
-            yomi = "さいゆうすいてい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "最尤推定"
-        ),
-        Dictionary(
-            yomi = "さがしもの",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "探し物"
-        ),
-        Dictionary(
-            yomi = "さかもとりゅういち",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "坂本龍一"
-        ),
-        Dictionary(
-            yomi = "さがん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "サガン"
-        ),
-        Dictionary(
-            yomi = "さがんとす",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "サガン鳥栖"
-        ),
-        Dictionary(
-            yomi = "さぶすく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "サブスク"
-        ),
-        Dictionary(
-            yomi = "さらっと",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "さらっと"
-        ),
-        Dictionary(
-            yomi = "さらっと",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "サラッと"
-        ),
-        Dictionary(
-            yomi = "さんが",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "サンガ"
-        ),
-        Dictionary(
-            yomi = "さんけん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "産繭"
-        ),
+        Dictionary(yomi = "ざいにちかきょう", leftId = 1920, rightId = 1920, cost = 4000, tango = "在日華僑"),
+        Dictionary(yomi = "さいばねきかく", leftId = 1920, rightId = 1920, cost = 4000, tango = "サイバネ規格"),
+        Dictionary(yomi = "さいゆうすいてい", leftId = 1841, rightId = 1841, cost = 4000, tango = "最尤推定"),
+        Dictionary(yomi = "さがしもの", leftId = 1922, rightId = 1922, cost = 4000, tango = "探し物"),
+        Dictionary(yomi = "さかもとりゅういち", leftId = 1921, rightId = 1921, cost = 4000, tango = "坂本龍一"),
+        Dictionary(yomi = "さがん", leftId = 1920, rightId = 1920, cost = 4000, tango = "サガン"),
+        Dictionary(yomi = "さがんとす", leftId = 1920, rightId = 1920, cost = 4000, tango = "サガン鳥栖"),
+        Dictionary(yomi = "さぶすく", leftId = 1841, rightId = 1841, cost = 4000, tango = "サブスク"),
+        Dictionary(yomi = "さらっと", leftId = 1851, rightId = 1851, cost = 4000, tango = "さらっと"),
+        Dictionary(yomi = "さらっと", leftId = 1851, rightId = 1851, cost = 4000, tango = "サラッと"),
+        Dictionary(yomi = "さんが", leftId = 1920, rightId = 1920, cost = 4000, tango = "サンガ"),
+        Dictionary(yomi = "さんけん", leftId = 1922, rightId = 1922, cost = 4000, tango = "産繭"),
         Dictionary(
             yomi = "さんけんしょりとうせいほう",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "産繭処理統制法"
         ),
-        Dictionary(
-            yomi = "さんこうにんしょうち",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "参考人招致"
-        ),
-        Dictionary(
-            yomi = "さんせりふたい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "サンセリフ体"
-        ),
-        Dictionary(
-            yomi = "さんふれっちぇ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "サンフレッチェ"
-        ),
+        Dictionary(yomi = "さんこうにんしょうち", leftId = 1841, rightId = 1841, cost = 4000, tango = "参考人招致"),
+        Dictionary(yomi = "さんせりふたい", leftId = 1922, rightId = 1922, cost = 4000, tango = "サンセリフ体"),
+        Dictionary(yomi = "さんふれっちぇ", leftId = 1920, rightId = 1920, cost = 4000, tango = "サンフレッチェ"),
         Dictionary(
             yomi = "さんふれっちぇひろしま",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "サンフレッチェ広島"
         ),
+        Dictionary(yomi = "さんまん", leftId = 1922, rightId = 1922, cost = 4000, tango = "三万"),
+        Dictionary(yomi = "じーくあくす", leftId = 1920, rightId = 1920, cost = 4000, tango = "GQuuuuuuX"),
+        Dictionary(yomi = "じーくあくす", leftId = 1920, rightId = 1920, cost = 4000, tango = "ジークアクス"),
+        Dictionary(yomi = "じきしょうそう", leftId = 1922, rightId = 1922, cost = 4000, tango = "時期尚早"),
+        Dictionary(yomi = "しごでき", leftId = 1922, rightId = 1922, cost = 4000, tango = "しごでき"),
+        Dictionary(yomi = "じごな", leftId = 1922, rightId = 1922, cost = 4000, tango = "地粉"),
+        Dictionary(yomi = "じし", leftId = 1841, rightId = 1841, cost = 4000, tango = "自死"),
+        Dictionary(yomi = "じしいぞく", leftId = 1922, rightId = 1922, cost = 4000, tango = "自死遺族"),
+        Dictionary(yomi = "ししゅう", leftId = 1922, rightId = 1922, cost = 4000, tango = "歯周"),
+        Dictionary(yomi = "しっちゃく", leftId = 1841, rightId = 1841, cost = 4000, tango = "失着"),
+        Dictionary(yomi = "しっちゅう", leftId = 1841, rightId = 1841, cost = 4000, tango = "失注"),
+        Dictionary(yomi = "じってんぽ", leftId = 1922, rightId = 1922, cost = 4000, tango = "実店舗"),
+        Dictionary(yomi = "しなごは", leftId = 1922, rightId = 1922, cost = 4000, tango = "シナ語派"),
+        Dictionary(yomi = "じぶんぎんこう", leftId = 1920, rightId = 1920, cost = 4000, tango = "じぶん銀行"),
+        Dictionary(yomi = "じゃいあんつ", leftId = 1920, rightId = 1920, cost = 4000, tango = "ジャイアンツ"),
         Dictionary(
-            yomi = "さんまん",
-            leftId = 1851,
-            rightId = 1851,
+            yomi = "しゃかいほけんろうむしほうじん",
+            leftId = 1922,
+            rightId = 1922,
             cost = 4000,
-            tango = "三万"
+            tango = "社会保険労務士法人"
         ),
-        Dictionary(
-            yomi = "じきしょうそう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "時期尚早"
-        ),
-        Dictionary(
-            yomi = "しごでき",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "しごでき"
-        ),
-        Dictionary(
-            yomi = "じごな",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "地粉"
-        ),
-        Dictionary(
-            yomi = "じし",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "自死"
-        ),
-        Dictionary(
-            yomi = "じしいぞく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "自死遺族"
-        ),
-        Dictionary(
-            yomi = "ししゅう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "歯周"
-        ),
-        Dictionary(
-            yomi = "しっちゃく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "失着"
-        ),
-        Dictionary(
-            yomi = "しっちゅう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "失注"
-        ),
-        Dictionary(
-            yomi = "じってんぽ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "実店舗"
-        ),
-        Dictionary(
-            yomi = "しなごは",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "シナ語派"
-        ),
-        Dictionary(
-            yomi = "じぶんぎんこう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "じぶん銀行"
-        ),
-        Dictionary(
-            yomi = "じゃいあんつ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ジャイアンツ"
-        ),
-        Dictionary(
-            yomi = "じやさい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "地野菜"
-        ),
-        Dictionary(
-            yomi = "しゃしんしょくじ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "写真植字"
-        ),
-        Dictionary(
-            yomi = "しゅうぎかい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "州議会"
-        ),
-        Dictionary(
-            yomi = "しゅうこう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "州侯"
-        ),
-        Dictionary(
-            yomi = "しゅうしかてい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "修士課程"
-        ),
-        Dictionary(
-            yomi = "しゅうじゅう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "集住"
-        ),
-        Dictionary(
-            yomi = "しゅうせいこう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "修正稿"
-        ),
-        Dictionary(
-            yomi = "じゅうまん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "十万"
-        ),
-        Dictionary(
-            yomi = "しゅかい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "珠海"
-        ),
-        Dictionary(
-            yomi = "しゅじょうさいど",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "衆生済度"
-        ),
-        Dictionary(
-            yomi = "しゅっとん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "出音"
-        ),
-        Dictionary(
-            yomi = "しゅはり",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "守破離"
-        ),
-        Dictionary(
-            yomi = "じゅびろ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ジュビロ"
-        ),
-        Dictionary(
-            yomi = "じゅびろいわた",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ジュビロ磐田"
-        ),
-        Dictionary(
-            yomi = "じょういごかんせい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "上位互換性"
-        ),
-        Dictionary(
-            yomi = "しょうおう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "承応"
-        ),
-        Dictionary(
-            yomi = "じょうおう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "承応"
-        ),
-        Dictionary(
-            yomi = "じょうざんかきょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "上山下郷"
-        ),
-        Dictionary(
-            yomi = "しょうじんか",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "省人化"
-        ),
-        Dictionary(
-            yomi = "しょうなんべるまーれ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "湘南ベルマーレ"
-        ),
-        Dictionary(
-            yomi = "しょうりょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "秤量"
-        ),
-        Dictionary(
-            yomi = "しんかん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "身幹"
-        ),
-        Dictionary(
-            yomi = "しんご",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "身後"
-        ),
+        Dictionary(yomi = "じやさい", leftId = 1922, rightId = 1922, cost = 4000, tango = "地野菜"),
+        Dictionary(yomi = "しゃしんしょくじ", leftId = 1841, rightId = 1841, cost = 4000, tango = "写真植字"),
+        Dictionary(yomi = "しゅうぎかい", leftId = 1922, rightId = 1922, cost = 4000, tango = "州議会"),
+        Dictionary(yomi = "しゅうこう", leftId = 1922, rightId = 1922, cost = 4000, tango = "州侯"),
+        Dictionary(yomi = "しゅうしかてい", leftId = 1922, rightId = 1922, cost = 4000, tango = "修士課程"),
+        Dictionary(yomi = "しゅうじゅう", leftId = 1841, rightId = 1841, cost = 4000, tango = "集住"),
+        Dictionary(yomi = "しゅうせいこう", leftId = 1922, rightId = 1922, cost = 4000, tango = "修正稿"),
+        Dictionary(yomi = "じゅうまん", leftId = 1922, rightId = 1922, cost = 4000, tango = "十万"),
+        Dictionary(yomi = "しゅかい", leftId = 1922, rightId = 1922, cost = 4000, tango = "珠海"),
+        Dictionary(yomi = "しゅじょうさいど", leftId = 1922, rightId = 1922, cost = 4000, tango = "衆生済度"),
+        Dictionary(yomi = "しゅっとん", leftId = 1922, rightId = 1922, cost = 4000, tango = "出音"),
+        Dictionary(yomi = "しゅはり", leftId = 1922, rightId = 1922, cost = 4000, tango = "守破離"),
+        Dictionary(yomi = "じゅびろ", leftId = 1920, rightId = 1920, cost = 4000, tango = "ジュビロ"),
+        Dictionary(yomi = "じゅびろいわた", leftId = 1920, rightId = 1920, cost = 4000, tango = "ジュビロ磐田"),
+        Dictionary(yomi = "じょういごかんせい", leftId = 1922, rightId = 1922, cost = 4000, tango = "上位互換性"),
+        Dictionary(yomi = "しょうおう", leftId = 1920, rightId = 1920, cost = 4000, tango = "承応"),
+        Dictionary(yomi = "じょうおう", leftId = 1920, rightId = 1920, cost = 4000, tango = "承応"),
+        Dictionary(yomi = "じょうざんかきょう", leftId = 1920, rightId = 1920, cost = 4000, tango = "上山下郷"),
+        Dictionary(yomi = "しょうしゃ", leftId = 1922, rightId = 1922, cost = 4000, tango = "盛者"),
+        Dictionary(yomi = "しょうじゃ", leftId = 1922, rightId = 1922, cost = 4000, tango = "盛者"),
+        Dictionary(yomi = "しょうしゃひっすい", leftId = 1922, rightId = 1922, cost = 4000, tango = "盛者必衰"),
+        Dictionary(yomi = "しょうじゃひっすい", leftId = 1922, rightId = 1922, cost = 4000, tango = "盛者必衰"),
+        Dictionary(yomi = "じょうしゃひっすい", leftId = 1922, rightId = 1922, cost = 4000, tango = "盛者必衰"),
+        Dictionary(yomi = "しょうじんか", leftId = 1841, rightId = 1841, cost = 4000, tango = "省人化"),
+        Dictionary(yomi = "しょうなんべるまーれ", leftId = 1920, rightId = 1920, cost = 4000, tango = "湘南ベルマーレ"),
+        Dictionary(yomi = "しょうりょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "秤量"),
+        Dictionary(yomi = "しんかん", leftId = 1922, rightId = 1922, cost = 4000, tango = "身幹"),
+        Dictionary(yomi = "しんご", leftId = 1922, rightId = 1922, cost = 4000, tango = "身後"),
         Dictionary(
             yomi = "じんじょうこうとうしょうがっこう",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1922,
+            rightId = 1922,
             cost = 4000,
             tango = "尋常高等小学校"
         ),
-        Dictionary(
-            yomi = "じんじょうしょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "尋常小"
-        ),
-        Dictionary(
-            yomi = "じんじょうしょうがっこう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "尋常小学校"
-        ),
-        Dictionary(
-            yomi = "しんしょかいふうざい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "信書開封罪"
-        ),
-        Dictionary(
-            yomi = "しんちとせくうこう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "新千歳空港"
-        ),
-        Dictionary(
-            yomi = "すいぎょーざ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "水餃子"
-        ),
-        Dictionary(
-            yomi = "すいくち",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "吸い口"
-        ),
-        Dictionary(
-            yomi = "すきまばいと",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "スキマバイト"
-        ),
-        Dictionary(
-            yomi = "すざくもん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "朱雀門"
-        ),
-        Dictionary(
-            yomi = "すみけし",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "墨消し"
-        ),
-        Dictionary(
-            yomi = "すみしん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "住信"
-        ),
-        Dictionary(
-            yomi = "すらんと",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "スラント"
-        ),
-        Dictionary(
-            yomi = "すわろーず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "スワローズ"
-        ),
-        Dictionary(
-            yomi = "せいしんたんぎょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "製薪炭業"
-        ),
-        Dictionary(
-            yomi = "せいしんやまてせん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "西神・山手線"
-        ),
-        Dictionary(
-            yomi = "せいしんやまてせん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "西神山手線"
-        ),
-        Dictionary(
-            yomi = "せいぶらいおんず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "西武ライオンズ"
-        ),
-        Dictionary(
-            yomi = "せいりめいがら",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "整理銘柄"
-        ),
-        Dictionary(
-            yomi = "せきたんこうぎょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "石炭鉱業"
-        ),
-        Dictionary(
-            yomi = "せきゆせいせいぎょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "石油精製業"
-        ),
-        Dictionary(
-            yomi = "せっせん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "接栓"
-        ),
-        Dictionary(
-            yomi = "ぜるびあ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ゼルビア"
-        ),
-        Dictionary(
-            yomi = "せれっそ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "セレッソ"
-        ),
-        Dictionary(
-            yomi = "せれっそおおさか",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "セレッソ大阪"
-        ),
-        Dictionary(
-            yomi = "ぜんざいさん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "全財産"
-        ),
-        Dictionary(
-            yomi = "そうけつ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "倉頡"
-        ),
-        Dictionary(
-            yomi = "そうけつ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "蒼頡"
-        ),
-        Dictionary(
-            yomi = "そきゃく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "阻却"
-        ),
-        Dictionary(
-            yomi = "そっかん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "速乾"
-        ),
+        Dictionary(yomi = "じんじょうしょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "尋常小"),
+        Dictionary(yomi = "じんじょうしょうがっこう", leftId = 1922, rightId = 1922, cost = 4000, tango = "尋常小学校"),
+        Dictionary(yomi = "しんしょかいふうざい", leftId = 1922, rightId = 1922, cost = 4000, tango = "信書開封罪"),
+        Dictionary(yomi = "しんせいぎんこう", leftId = 1920, rightId = 1920, cost = 4000, tango = "新生銀行"),
+        Dictionary(yomi = "しんちとせくうこう", leftId = 1920, rightId = 1920, cost = 4000, tango = "新千歳空港"),
+        Dictionary(yomi = "すいぎょーざ", leftId = 1922, rightId = 1922, cost = 4000, tango = "水餃子"),
+        Dictionary(yomi = "すいくち", leftId = 1922, rightId = 1922, cost = 4000, tango = "吸い口"),
+        Dictionary(yomi = "すきまばいと", leftId = 1841, rightId = 1841, cost = 4000, tango = "スキマバイト"),
+        Dictionary(yomi = "すざくもん", leftId = 1920, rightId = 1920, cost = 4000, tango = "朱雀門"),
+        Dictionary(yomi = "すみけし", leftId = 1841, rightId = 1841, cost = 4000, tango = "墨消し"),
+        Dictionary(yomi = "すみしん", leftId = 1920, rightId = 1920, cost = 4000, tango = "住信"),
+        Dictionary(yomi = "すらんと", leftId = 1922, rightId = 1922, cost = 4000, tango = "スラント"),
+        Dictionary(yomi = "すわろーず", leftId = 1920, rightId = 1920, cost = 4000, tango = "スワローズ"),
+        Dictionary(yomi = "せいしゃ", leftId = 1922, rightId = 1922, cost = 4000, tango = "盛者"),
+        Dictionary(yomi = "せいしんたんぎょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "製薪炭業"),
+        Dictionary(yomi = "せいしんやまてせん", leftId = 1920, rightId = 1920, cost = 4000, tango = "西神・山手線"),
+        Dictionary(yomi = "せいしんやまてせん", leftId = 1920, rightId = 1920, cost = 4000, tango = "西神山手線"),
+        Dictionary(yomi = "せいぶらいおんず", leftId = 1920, rightId = 1920, cost = 4000, tango = "西武ライオンズ"),
+        Dictionary(yomi = "せいりめいがら", leftId = 1922, rightId = 1922, cost = 4000, tango = "整理銘柄"),
+        Dictionary(yomi = "せきたんこうぎょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "石炭鉱業"),
+        Dictionary(yomi = "せきゆせいせいぎょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "石油精製業"),
+        Dictionary(yomi = "せっせん", leftId = 1922, rightId = 1922, cost = 4000, tango = "接栓"),
+        Dictionary(yomi = "ぜるびあ", leftId = 1920, rightId = 1920, cost = 4000, tango = "ゼルビア"),
+        Dictionary(yomi = "せれっそ", leftId = 1920, rightId = 1920, cost = 4000, tango = "セレッソ"),
+        Dictionary(yomi = "せれっそおおさか", leftId = 1920, rightId = 1920, cost = 4000, tango = "セレッソ大阪"),
+        Dictionary(yomi = "ぜんきかてい", leftId = 1922, rightId = 1922, cost = 4000, tango = "前期課程"),
+        Dictionary(yomi = "ぜんざいさん", leftId = 1922, rightId = 1922, cost = 4000, tango = "全財産"),
+        Dictionary(yomi = "そうけつ", leftId = 1921, rightId = 1921, cost = 4000, tango = "倉頡"),
+        Dictionary(yomi = "そうけつ", leftId = 1921, rightId = 1921, cost = 4000, tango = "蒼頡"),
+        Dictionary(yomi = "ぞうじるし", leftId = 1920, rightId = 1920, cost = 4000, tango = "象印"),
+        Dictionary(yomi = "そうだりん", leftId = 1922, rightId = 1922, cost = 4000, tango = "操舵輪"),
+        Dictionary(yomi = "そきゃく", leftId = 1841, rightId = 1841, cost = 4000, tango = "阻却"),
+        Dictionary(yomi = "そっかん", leftId = 1841, rightId = 1841, cost = 4000, tango = "速乾"),
         Dictionary(
             yomi = "そふとばんくほーくす",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "ソフトバンクホークス"
         ),
-        Dictionary(
-            yomi = "たいがーす",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "タイガース"
-        ),
-        Dictionary(
-            yomi = "たいがいじょうほうちょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "対外情報庁"
-        ),
-        Dictionary(
-            yomi = "たいしょうあんごう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "対称暗号"
-        ),
-        Dictionary(
-            yomi = "たいしょうがい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "対象外"
-        ),
-        Dictionary(
-            yomi = "たいしょうかぎ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "対称鍵"
-        ),
-        Dictionary(
-            yomi = "たいしょうかぎあんごう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "対称鍵暗号"
-        ),
-        Dictionary(
-            yomi = "たいしょうない",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "対象内"
-        ),
-        Dictionary(
-            yomi = "たいせつ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "堆雪"
-        ),
-        Dictionary(
-            yomi = "たいせっそう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "耐切創"
-        ),
-        Dictionary(
-            yomi = "だいにほんていこく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "大日本帝国"
-        ),
-        Dictionary(
-            yomi = "たいほうきんば",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "台澎金馬"
-        ),
-        Dictionary(
-            yomi = "たいりょうしあんごう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "耐量子暗号"
-        ),
-        Dictionary(
-            yomi = "だうなー",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ダウナー"
-        ),
-        Dictionary(
-            yomi = "だきまくら",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "抱き枕"
-        ),
-        Dictionary(
-            yomi = "たしせたい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "多子世帯"
-        ),
-        Dictionary(
-            yomi = "たちあらい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "太刀洗"
-        ),
-        Dictionary(
-            yomi = "たちわざ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "立ち技"
-        ),
-        Dictionary(
-            yomi = "たもあみ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "タモ網"
-        ),
-        Dictionary(
-            yomi = "たようそにんしょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "多要素認証"
-        ),
-        Dictionary(
-            yomi = "たんめん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "端面"
-        ),
-        Dictionary(
-            yomi = "たんろくでんち",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "単6電池"
-        ),
-        Dictionary(
-            yomi = "たんろくでんち",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "単六電池"
-        ),
-        Dictionary(
-            yomi = "ちかてつどう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "地下鉄道"
-        ),
-        Dictionary(
-            yomi = "ちかてつどうぎょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "地下鉄道業"
-        ),
-        Dictionary(
-            yomi = "ちくさんるいじぎょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "畜産類似業"
-        ),
-        Dictionary(
-            yomi = "ちばろって",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "千葉ロッテ"
-        ),
+        Dictionary(yomi = "たいがーす", leftId = 1920, rightId = 1920, cost = 4000, tango = "タイガース"),
+        Dictionary(yomi = "たいがいじょうほうちょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "対外情報庁"),
+        Dictionary(yomi = "たいしょうあんごう", leftId = 1922, rightId = 1922, cost = 4000, tango = "対称暗号"),
+        Dictionary(yomi = "たいしょうがい", leftId = 1922, rightId = 1922, cost = 4000, tango = "対象外"),
+        Dictionary(yomi = "たいしょうかぎ", leftId = 1922, rightId = 1922, cost = 4000, tango = "対称鍵"),
+        Dictionary(yomi = "たいしょうかぎあんごう", leftId = 1922, rightId = 1922, cost = 4000, tango = "対称鍵暗号"),
+        Dictionary(yomi = "たいしょうない", leftId = 1922, rightId = 1922, cost = 4000, tango = "対象内"),
+        Dictionary(yomi = "たいせつ", leftId = 1841, rightId = 1841, cost = 4000, tango = "堆雪"),
+        Dictionary(yomi = "たいせっそう", leftId = 1922, rightId = 1922, cost = 4000, tango = "耐切創"),
+        Dictionary(yomi = "だいにほんていこく", leftId = 1920, rightId = 1920, cost = 4000, tango = "大日本帝国"),
+        Dictionary(yomi = "たいほうきんば", leftId = 1920, rightId = 1920, cost = 4000, tango = "台澎金馬"),
+        Dictionary(yomi = "たいりょうしあんごう", leftId = 1922, rightId = 1922, cost = 4000, tango = "耐量子暗号"),
+        Dictionary(yomi = "だうなー", leftId = 1922, rightId = 1922, cost = 4000, tango = "ダウナー"),
+        Dictionary(yomi = "だきまくら", leftId = 1922, rightId = 1922, cost = 4000, tango = "抱き枕"),
+        Dictionary(yomi = "たしせたい", leftId = 1922, rightId = 1922, cost = 4000, tango = "多子世帯"),
+        Dictionary(yomi = "たちあらい", leftId = 1923, rightId = 1923, cost = 4000, tango = "太刀洗"),
+        Dictionary(yomi = "たちわざ", leftId = 1841, rightId = 1841, cost = 4000, tango = "立ち技"),
+        Dictionary(yomi = "たもあみ", leftId = 1922, rightId = 1922, cost = 4000, tango = "タモ網"),
+        Dictionary(yomi = "たようそにんしょう", leftId = 1841, rightId = 1841, cost = 4000, tango = "多要素認証"),
+        Dictionary(yomi = "だりん", leftId = 1922, rightId = 1922, cost = 4000, tango = "舵輪"),
+        Dictionary(yomi = "たんめん", leftId = 1922, rightId = 1922, cost = 4000, tango = "端面"),
+        Dictionary(yomi = "たんよく", leftId = 1922, rightId = 1922, cost = 4000, tango = "貪欲"),
+        Dictionary(yomi = "たんろくでんち", leftId = 1922, rightId = 1922, cost = 4000, tango = "単6電池"),
+        Dictionary(yomi = "たんろくでんち", leftId = 1922, rightId = 1922, cost = 4000, tango = "単六電池"),
+        Dictionary(yomi = "ちかてつどう", leftId = 1922, rightId = 1922, cost = 4000, tango = "地下鉄道"),
+        Dictionary(yomi = "ちかてつどうぎょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "地下鉄道業"),
+        Dictionary(yomi = "ちくさんるいじぎょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "畜産類似業"),
+        Dictionary(yomi = "ちばろって", leftId = 1920, rightId = 1920, cost = 4000, tango = "千葉ロッテ"),
         Dictionary(
             yomi = "ちばろってまりーんず",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "千葉ロッテマリーンズ"
         ),
-        Dictionary(
-            yomi = "ちゃーん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "チャーン"
-        ),
-        Dictionary(
-            yomi = "ちゃくが",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "着画"
-        ),
-        Dictionary(
-            yomi = "ちゃくさ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "着差"
-        ),
-        Dictionary(
-            yomi = "ちゃくどん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "着丼"
-        ),
-        Dictionary(
-            yomi = "ちゅうおん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "注音"
-        ),
-        Dictionary(
-            yomi = "ちゅうおんじぼ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "注音字母"
-        ),
-        Dictionary(
-            yomi = "ちゅうきん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "中近"
-        ),
-        Dictionary(
-            yomi = "ちゅうきんりょうよう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "中近両用"
-        ),
+        Dictionary(yomi = "ちほうぎょうせいきかん", leftId = 1922, rightId = 1922, cost = 4000, tango = "地方行政機関"),
+        Dictionary(yomi = "ちゃーん", leftId = 1922, rightId = 1922, cost = 4000, tango = "チャーン"),
+        Dictionary(yomi = "ちゃくが", leftId = 1922, rightId = 1922, cost = 4000, tango = "着画"),
+        Dictionary(yomi = "ちゃくさ", leftId = 1922, rightId = 1922, cost = 4000, tango = "着差"),
+        Dictionary(yomi = "ちゃくどん", leftId = 1841, rightId = 1841, cost = 4000, tango = "着丼"),
+        Dictionary(yomi = "ちゅうおん", leftId = 1922, rightId = 1922, cost = 4000, tango = "注音"),
+        Dictionary(yomi = "ちゅうおんじぼ", leftId = 1922, rightId = 1922, cost = 4000, tango = "注音字母"),
+        Dictionary(yomi = "ちゅうきん", leftId = 1922, rightId = 1922, cost = 4000, tango = "中近"),
+        Dictionary(yomi = "ちゅうきんりょうよう", leftId = 1922, rightId = 1922, cost = 4000, tango = "中近両用"),
         Dictionary(
             yomi = "ちゅうごくけんせつぎんこう",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "中国建設銀行"
         ),
-        Dictionary(
-            yomi = "ちゅうごくこうていいん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "中国工程院"
-        ),
-        Dictionary(
-            yomi = "ちゅうさつ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "駐紮"
-        ),
-        Dictionary(
-            yomi = "ちゅうにちどらごんず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "中日ドラゴンズ"
-        ),
-        Dictionary(
-            yomi = "ちょうほうとくむちょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "諜報特務庁"
-        ),
-        Dictionary(
-            yomi = "ちょちく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "儲蓄"
-        ),
-        Dictionary(
-            yomi = "つうちよきん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "通知預金"
-        ),
-        Dictionary(
-            yomi = "つなぎめ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "繋ぎ目"
-        ),
-        Dictionary(
-            yomi = "ていせいぶん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "訂正分"
-        ),
-        Dictionary(
-            yomi = "ていせいぶん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "訂正文"
-        ),
-        Dictionary(
-            yomi = "てづかおさむ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "手塚治虫"
-        ),
-        Dictionary(
-            yomi = "ではば",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "出幅"
-        ),
-        Dictionary(
-            yomi = "でびあん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "デビアン"
-        ),
-        Dictionary(
-            yomi = "てんな",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "天和"
-        ),
-        Dictionary(
-            yomi = "てんむす",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "天むす"
-        ),
-        Dictionary(
-            yomi = "てんわ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "天和"
-        ),
-        Dictionary(
-            yomi = "とうきょうゔぇるでぃ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "東京ヴェルディ"
-        ),
+        Dictionary(yomi = "ちゅうごくこうていいん", leftId = 1920, rightId = 1920, cost = 4000, tango = "中国工程院"),
+        Dictionary(yomi = "ちゅうさつ", leftId = 1841, rightId = 1841, cost = 4000, tango = "駐紮"),
+        Dictionary(yomi = "ちゅうにちどらごんず", leftId = 1920, rightId = 1920, cost = 4000, tango = "中日ドラゴンズ"),
+        Dictionary(yomi = "ちょうほうとくむちょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "諜報特務庁"),
+        Dictionary(yomi = "ちょちく", leftId = 1841, rightId = 1841, cost = 4000, tango = "儲蓄"),
+        Dictionary(yomi = "つうちよきん", leftId = 1841, rightId = 1841, cost = 4000, tango = "通知預金"),
+        Dictionary(yomi = "つじた", leftId = 1920, rightId = 1920, cost = 4000, tango = "つじ田"),
+        Dictionary(yomi = "つなぎめ", leftId = 1922, rightId = 1922, cost = 4000, tango = "繋ぎ目"),
+        Dictionary(yomi = "ていせいぶん", leftId = 1922, rightId = 1922, cost = 4000, tango = "訂正分"),
+        Dictionary(yomi = "ていせいぶん", leftId = 1922, rightId = 1922, cost = 4000, tango = "訂正文"),
+        Dictionary(yomi = "てづかおさむ", leftId = 1921, rightId = 1921, cost = 4000, tango = "手塚治虫"),
+        Dictionary(yomi = "ではば", leftId = 1922, rightId = 1922, cost = 4000, tango = "出幅"),
+        Dictionary(yomi = "でびあん", leftId = 1920, rightId = 1920, cost = 4000, tango = "デビアン"),
+        Dictionary(yomi = "でんてい", leftId = 1922, rightId = 1922, cost = 4000, tango = "電停"),
+        Dictionary(yomi = "てんな", leftId = 1920, rightId = 1920, cost = 4000, tango = "天和"),
+        Dictionary(yomi = "てんむす", leftId = 1922, rightId = 1922, cost = 4000, tango = "天むす"),
+        Dictionary(yomi = "てんわ", leftId = 1920, rightId = 1920, cost = 4000, tango = "天和"),
+        Dictionary(yomi = "とうきょうゔぇるでぃ", leftId = 1920, rightId = 1920, cost = 4000, tango = "東京ヴェルディ"),
         Dictionary(
             yomi = "とうきょうすたーぎんこう",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "東京スター銀行"
         ),
         Dictionary(
             yomi = "とうきょうやくるとすわろーず",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "東京ヤクルトスワローズ"
         ),
-        Dictionary(
-            yomi = "とうごうかんじ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "統合漢字"
-        ),
+        Dictionary(yomi = "とうごうかんじ", leftId = 1922, rightId = 1922, cost = 4000, tango = "統合漢字"),
+        Dictionary(yomi = "とうじょ", leftId = 1922, rightId = 1922, cost = 4000, tango = "倒叙"),
         Dictionary(
             yomi = "とうほくらくてんごーるでんいーぐるす",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "東北楽天ゴールデンイーグルス"
         ),
-        Dictionary(
-            yomi = "とうよ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "党与"
-        ),
-        Dictionary(
-            yomi = "とえいあさくさせん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "都営浅草線"
-        ),
-        Dictionary(
-            yomi = "とえいしんじゅくせん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "都営新宿線"
-        ),
-        Dictionary(
-            yomi = "とえいみたせん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "都営三田線"
-        ),
-        Dictionary(
-            yomi = "とかさくせん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "渡河作戦"
-        ),
-        Dictionary(
-            yomi = "とがしよしひろ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "冨樫義博"
-        ),
-        Dictionary(
-            yomi = "どじっこ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ドジっ子"
-        ),
-        Dictionary(
-            yomi = "とっくつ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "突厥"
-        ),
-        Dictionary(
-            yomi = "とっけつ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "突厥"
-        ),
-        Dictionary(
-            yomi = "とでんあらかわせん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "都電荒川線"
-        ),
-        Dictionary(
-            yomi = "とびこうじぎょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "とび工事業"
-        ),
-        Dictionary(
-            yomi = "どらごんず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ドラゴンズ"
-        ),
-        Dictionary(
-            yomi = "とりやまあきら",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "鳥山明"
-        ),
-        Dictionary(
-            yomi = "なかう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "なか卯"
-        ),
-        Dictionary(
-            yomi = "なごやぐらんぱす",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "名古屋グランパス"
-        ),
-        Dictionary(
-            yomi = "ななまん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "七万"
-        ),
-        Dictionary(
-            yomi = "なまやさい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "生野菜"
-        ),
-        Dictionary(
-            yomi = "なるひと",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "徳仁"
-        ),
-        Dictionary(
-            yomi = "にがめ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "苦め"
-        ),
-        Dictionary(
-            yomi = "にかんじ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "二簡字"
-        ),
-        Dictionary(
-            yomi = "にくどん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "肉丼"
-        ),
+        Dictionary(yomi = "とうよ", leftId = 1841, rightId = 1841, cost = 4000, tango = "党与"),
+        Dictionary(yomi = "とえいあさくさせん", leftId = 1920, rightId = 1920, cost = 4000, tango = "都営浅草線"),
+        Dictionary(yomi = "とえいしんじゅくせん", leftId = 1920, rightId = 1920, cost = 4000, tango = "都営新宿線"),
+        Dictionary(yomi = "とえいみたせん", leftId = 1920, rightId = 1920, cost = 4000, tango = "都営三田線"),
+        Dictionary(yomi = "とかさくせん", leftId = 1922, rightId = 1922, cost = 4000, tango = "渡河作戦"),
+        Dictionary(yomi = "とがしよしひろ", leftId = 1921, rightId = 1921, cost = 4000, tango = "冨樫義博"),
+        Dictionary(yomi = "どじっこ", leftId = 1922, rightId = 1922, cost = 4000, tango = "ドジっ子"),
+        Dictionary(yomi = "とっくつ", leftId = 1920, rightId = 1920, cost = 4000, tango = "突厥"),
+        Dictionary(yomi = "とっけつ", leftId = 1920, rightId = 1920, cost = 4000, tango = "突厥"),
+        Dictionary(yomi = "とでんあらかわせん", leftId = 1920, rightId = 1920, cost = 4000, tango = "都電荒川線"),
+        Dictionary(yomi = "とびこうじぎょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "とび工事業"),
+        Dictionary(yomi = "どらごんず", leftId = 1920, rightId = 1920, cost = 4000, tango = "ドラゴンズ"),
+        Dictionary(yomi = "とりやまあきら", leftId = 1921, rightId = 1921, cost = 4000, tango = "鳥山明"),
+        Dictionary(yomi = "なかう", leftId = 1920, rightId = 1920, cost = 4000, tango = "なか卯"),
+        Dictionary(yomi = "なごやぐらんぱす", leftId = 1920, rightId = 1920, cost = 4000, tango = "名古屋グランパス"),
+        Dictionary(yomi = "ななまん", leftId = 1922, rightId = 1922, cost = 4000, tango = "七万"),
+        Dictionary(yomi = "なまやさい", leftId = 1922, rightId = 1922, cost = 4000, tango = "生野菜"),
+        Dictionary(yomi = "なるひと", leftId = 1922, rightId = 1922, cost = 4000, tango = "徳仁"),
+        Dictionary(yomi = "にがめ", leftId = 1922, rightId = 1922, cost = 4000, tango = "苦め"),
+        Dictionary(yomi = "にかんじ", leftId = 1920, rightId = 1920, cost = 4000, tango = "二簡字"),
+        Dictionary(yomi = "にくどん", leftId = 1922, rightId = 1922, cost = 4000, tango = "肉丼"),
         Dictionary(
             yomi = "にくようぎゅうせいさんぎょう",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1922,
+            rightId = 1922,
             cost = 4000,
             tango = "肉用牛生産業"
         ),
-        Dictionary(
-            yomi = "にたまご",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "煮卵"
-        ),
-        Dictionary(
-            yomi = "にだんかいうせつ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "二段階右折"
-        ),
-        Dictionary(
-            yomi = "にだんかいにんしょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "二段階認証"
-        ),
-        Dictionary(
-            yomi = "にっぽりとねりせん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "日暮里・舎人線"
-        ),
+        Dictionary(yomi = "にたまご", leftId = 1922, rightId = 1922, cost = 4000, tango = "煮卵"),
+        Dictionary(yomi = "にだんかいうせつ", leftId = 1841, rightId = 1841, cost = 4000, tango = "二段階右折"),
+        Dictionary(yomi = "にだんかいにんしょう", leftId = 1841, rightId = 1841, cost = 4000, tango = "二段階認証"),
+        Dictionary(yomi = "にっぽりとねりせん", leftId = 1920, rightId = 1920, cost = 4000, tango = "日暮里・舎人線"),
         Dictionary(
             yomi = "にっぽりとねりらいなー",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "日暮里・舎人ライナー"
         ),
-        Dictionary(
-            yomi = "にっぽんじゅう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "日本中"
-        ),
+        Dictionary(yomi = "にっぽんじゅう", leftId = 1922, rightId = 1922, cost = 4000, tango = "日本中"),
         Dictionary(
             yomi = "にっぽんはむふぁいたーず",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "日本ハムファイターズ"
         ),
-        Dictionary(
-            yomi = "にほんじゅう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "日本中"
-        ),
-        Dictionary(
-            yomi = "にまん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "二万"
-        ),
-        Dictionary(
-            yomi = "にようそにんしょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "二要素認証"
-        ),
-        Dictionary(
-            yomi = "のうがっこう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "農学校"
-        ),
-        Dictionary(
-            yomi = "のみくち",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "飲み口"
-        ),
-        Dictionary(
-            yomi = "のりよし",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "義良"
-        ),
-        Dictionary(
-            yomi = "はいたしょり",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "排他処理"
-        ),
-        Dictionary(
-            yomi = "ばうんしゃ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "馬運車"
-        ),
-        Dictionary(
-            yomi = "はきいん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "破毀院"
-        ),
-        Dictionary(
-            yomi = "はくしかてい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "博士課程"
-        ),
-        Dictionary(
-            yomi = "ばくそく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "爆速"
-        ),
-        Dictionary(
-            yomi = "はくたく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "白沢"
-        ),
-        Dictionary(
-            yomi = "はたしじょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "果たし状"
-        ),
-        Dictionary(
-            yomi = "はちまん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "八万"
-        ),
-        Dictionary(
-            yomi = "はっしゃいち",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "発射位置"
-        ),
-        Dictionary(
-            yomi = "ばばあ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "婆"
-        ),
-        Dictionary(
-            yomi = "ばふぁろーず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "バファローズ"
-        ),
-        Dictionary(
-            yomi = "はらわた",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "腑"
-        ),
-        Dictionary(
-            yomi = "はんき",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "搬器"
-        ),
-        Dictionary(
-            yomi = "はんしんたいがーす",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "阪神タイガース"
-        ),
-        Dictionary(
-            yomi = "ぴーふぁす",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "PFAS"
-        ),
-        Dictionary(
-            yomi = "ひきなみ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "引き波"
-        ),
-        Dictionary(
-            yomi = "ひともうけ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "一儲け"
-        ),
-        Dictionary(
-            yomi = "ひゃっきん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "百均"
-        ),
-        Dictionary(
-            yomi = "ひらしゃいん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "平社員"
-        ),
-        Dictionary(
-            yomi = "ひらぶん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "平文"
-        ),
-        Dictionary(
-            yomi = "ひろしまかーぷ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "広島カープ"
-        ),
+        Dictionary(yomi = "にほんじゅう", leftId = 1922, rightId = 1922, cost = 4000, tango = "日本中"),
+        Dictionary(yomi = "にまん", leftId = 1922, rightId = 1922, cost = 4000, tango = "二万"),
+        Dictionary(yomi = "にゅうちょう", leftId = 1841, rightId = 1841, cost = 4000, tango = "入庁"),
+        Dictionary(yomi = "にようそにんしょう", leftId = 1841, rightId = 1841, cost = 4000, tango = "二要素認証"),
+        Dictionary(yomi = "のうがっこう", leftId = 1922, rightId = 1922, cost = 4000, tango = "農学校"),
+        Dictionary(yomi = "のみくち", leftId = 1922, rightId = 1922, cost = 4000, tango = "飲み口"),
+        Dictionary(yomi = "のりよし", leftId = 1922, rightId = 1922, cost = 4000, tango = "義良"),
+        Dictionary(yomi = "ばいあぐら", leftId = 1920, rightId = 1920, cost = 4000, tango = "バイアグラ"),
+        Dictionary(yomi = "はいたしょり", leftId = 1841, rightId = 1841, cost = 4000, tango = "排他処理"),
+        Dictionary(yomi = "ばうんしゃ", leftId = 1922, rightId = 1922, cost = 4000, tango = "馬運車"),
+        Dictionary(yomi = "はきいん", leftId = 1922, rightId = 1922, cost = 4000, tango = "破毀院"),
+        Dictionary(yomi = "はくしかてい", leftId = 1922, rightId = 1922, cost = 4000, tango = "博士課程"),
+        Dictionary(yomi = "ばくそく", leftId = 1922, rightId = 1922, cost = 4000, tango = "爆速"),
+        Dictionary(yomi = "はくたく", leftId = 1922, rightId = 1922, cost = 4000, tango = "白沢"),
+        Dictionary(yomi = "はたしじょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "果たし状"),
+        Dictionary(yomi = "はちまん", leftId = 1922, rightId = 1922, cost = 4000, tango = "八万"),
+        Dictionary(yomi = "はっしゃいち", leftId = 1922, rightId = 1922, cost = 4000, tango = "発射位置"),
+        Dictionary(yomi = "ばばあ", leftId = 1922, rightId = 1922, cost = 4000, tango = "婆"),
+        Dictionary(yomi = "ばふぁろーず", leftId = 1920, rightId = 1920, cost = 4000, tango = "バファローズ"),
+        Dictionary(yomi = "はやしだ", leftId = 1920, rightId = 1920, cost = 4000, tango = "はやし田"),
+        Dictionary(yomi = "はらわた", leftId = 1922, rightId = 1922, cost = 4000, tango = "腑"),
+        Dictionary(yomi = "はんき", leftId = 1922, rightId = 1922, cost = 4000, tango = "搬器"),
+        Dictionary(yomi = "ばんごはん", leftId = 1922, rightId = 1922, cost = 4000, tango = "晩ごはん"),
+        Dictionary(yomi = "はんしんたいがーす", leftId = 1920, rightId = 1920, cost = 4000, tango = "阪神タイガース"),
+        Dictionary(yomi = "ぴーふぁす", leftId = 1922, rightId = 1922, cost = 4000, tango = "PFAS"),
+        Dictionary(yomi = "ひーるど", leftId = 1923, rightId = 1923, cost = 4000, tango = "ヒールド"),
+        Dictionary(yomi = "ひえろぐりふ", leftId = 1920, rightId = 1920, cost = 4000, tango = "ヒエログリフ"),
+        Dictionary(yomi = "ひきなみ", leftId = 1922, rightId = 1922, cost = 4000, tango = "引き波"),
+        Dictionary(yomi = "ひともうけ", leftId = 1841, rightId = 1841, cost = 4000, tango = "一儲け"),
+        Dictionary(yomi = "ひゃっきん", leftId = 1922, rightId = 1922, cost = 4000, tango = "百均"),
+        Dictionary(yomi = "ひらしゃいん", leftId = 1922, rightId = 1922, cost = 4000, tango = "平社員"),
+        Dictionary(yomi = "ひらぶん", leftId = 1922, rightId = 1922, cost = 4000, tango = "平文"),
+        Dictionary(yomi = "ひろしまかーぷ", leftId = 1920, rightId = 1920, cost = 4000, tango = "広島カープ"),
         Dictionary(
             yomi = "ひろしまとうようかーぷ",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "広島東洋カープ"
         ),
-        Dictionary(
-            yomi = "ぴんいん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "拼音"
-        ),
-        Dictionary(
-            yomi = "ぴんきー",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ピンキー"
-        ),
-        Dictionary(
-            yomi = "びんご",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "閩語"
-        ),
-        Dictionary(
-            yomi = "ふぁいたーず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ファイターズ"
-        ),
-        Dictionary(
-            yomi = "ふぁいるぴっかー",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ファイルピッカー"
-        ),
-        Dictionary(
-            yomi = "ふいふい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "回回"
-        ),
-        Dictionary(
-            yomi = "ふきだしぐち",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "吹き出し口"
-        ),
+        Dictionary(yomi = "ぴんいん", leftId = 1922, rightId = 1922, cost = 4000, tango = "拼音"),
+        Dictionary(yomi = "ぴんきー", leftId = 1922, rightId = 1922, cost = 4000, tango = "ピンキー"),
+        Dictionary(yomi = "びんご", leftId = 1922, rightId = 1922, cost = 4000, tango = "閩語"),
+        Dictionary(yomi = "ふぁいたーず", leftId = 1920, rightId = 1920, cost = 4000, tango = "ファイターズ"),
+        Dictionary(yomi = "ふぁいるぴっかー", leftId = 1922, rightId = 1922, cost = 4000, tango = "ファイルピッカー"),
+        Dictionary(yomi = "ふいふい", leftId = 1920, rightId = 1920, cost = 4000, tango = "回回"),
+        Dictionary(yomi = "ふきだしぐち", leftId = 1922, rightId = 1922, cost = 4000, tango = "吹き出し口"),
         Dictionary(
             yomi = "ふくおかそふとばんくほーくす",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "福岡ソフトバンクホークス"
         ),
-        Dictionary(
-            yomi = "ふしんぱんせいきゅう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "付審判請求"
-        ),
-        Dictionary(
-            yomi = "ふしんぱんてつづき",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "付審判手続"
-        ),
-        Dictionary(
-            yomi = "ふたつ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "不達"
-        ),
-        Dictionary(
-            yomi = "ふつーら",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "フツーラ"
-        ),
-        Dictionary(
-            yomi = "ふとぅーら",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "フトゥーラ"
-        ),
-        Dictionary(
-            yomi = "ふもうご",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "不妄語"
-        ),
-        Dictionary(
-            yomi = "ぷらちなでびっと",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "プラチナデビット"
-        ),
-        Dictionary(
-            yomi = "ぶらばん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ブラバン"
-        ),
-        Dictionary(
-            yomi = "ぷりいんすとーる",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "プリインストール"
-        ),
-        Dictionary(
-            yomi = "ふりたんい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "付利単位"
-        ),
-        Dictionary(
-            yomi = "ぷろくし",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "プロクシ"
-        ),
-        Dictionary(
-            yomi = "ふろんたーれ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "フロンターレ"
-        ),
-        Dictionary(
-            yomi = "ぶんぽう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "文保"
-        ),
-        Dictionary(
-            yomi = "べいすたーず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ベイスターズ"
-        ),
-        Dictionary(
-            yomi = "べるまーれ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ベルマーレ"
-        ),
-        Dictionary(
-            yomi = "へんむてき",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "片務的"
-        ),
-        Dictionary(
-            yomi = "ほーくす",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ホークス"
-        ),
-        Dictionary(
-            yomi = "ほしいも",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "干し芋"
-        ),
-        Dictionary(
-            yomi = "ほしゅうごう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "補集合"
-        ),
-        Dictionary(
-            yomi = "ほじょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "圃場"
-        ),
-        Dictionary(
-            yomi = "ほせんご",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "莆仙語"
-        ),
+        Dictionary(yomi = "ふしんぱんせいきゅう", leftId = 1841, rightId = 1841, cost = 4000, tango = "付審判請求"),
+        Dictionary(yomi = "ふしんぱんてつづき", leftId = 1841, rightId = 1841, cost = 4000, tango = "付審判手続"),
+        Dictionary(yomi = "ふたつ", leftId = 1841, rightId = 1841, cost = 4000, tango = "不達"),
+        Dictionary(yomi = "ふつーら", leftId = 1920, rightId = 1920, cost = 4000, tango = "フツーラ"),
+        Dictionary(yomi = "ふとぅーら", leftId = 1920, rightId = 1920, cost = 4000, tango = "フトゥーラ"),
+        Dictionary(yomi = "ふもうご", leftId = 1922, rightId = 1922, cost = 4000, tango = "不妄語"),
+        Dictionary(yomi = "ぷらちなでびっと", leftId = 1922, rightId = 1922, cost = 4000, tango = "プラチナデビット"),
+        Dictionary(yomi = "ぶらばん", leftId = 1841, rightId = 1841, cost = 4000, tango = "ブラバン"),
+        Dictionary(yomi = "ぷりいんすとーる", leftId = 1841, rightId = 1841, cost = 4000, tango = "プリインストール"),
+        Dictionary(yomi = "ふりたんい", leftId = 1922, rightId = 1922, cost = 4000, tango = "付利単位"),
+        Dictionary(yomi = "ぷろくし", leftId = 1922, rightId = 1922, cost = 4000, tango = "プロクシ"),
+        Dictionary(yomi = "ふろんたーれ", leftId = 1920, rightId = 1920, cost = 4000, tango = "フロンターレ"),
+        Dictionary(yomi = "ぶんぽう", leftId = 1920, rightId = 1920, cost = 4000, tango = "文保"),
+        Dictionary(yomi = "べいすたーず", leftId = 1920, rightId = 1920, cost = 4000, tango = "ベイスターズ"),
+        Dictionary(yomi = "べるまーれ", leftId = 1920, rightId = 1920, cost = 4000, tango = "ベルマーレ"),
+        Dictionary(yomi = "へんむてき", leftId = 1922, rightId = 1922, cost = 4000, tango = "片務的"),
+        Dictionary(yomi = "ほーくす", leftId = 1920, rightId = 1920, cost = 4000, tango = "ホークス"),
+        Dictionary(yomi = "ほしいも", leftId = 1922, rightId = 1922, cost = 4000, tango = "干し芋"),
+        Dictionary(yomi = "ほしゅうごう", leftId = 1922, rightId = 1922, cost = 4000, tango = "補集合"),
+        Dictionary(yomi = "ほじょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "圃場"),
+        Dictionary(yomi = "ほせんご", leftId = 1922, rightId = 1922, cost = 4000, tango = "莆仙語"),
         Dictionary(
             yomi = "ほっかいどうこんさどーれさっぽろ",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "北海道コンサドーレ札幌"
         ),
         Dictionary(
             yomi = "ほっかいどうにっぽんはむふぁいたーず",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "北海道日本ハムファイターズ"
         ),
-        Dictionary(
-            yomi = "ほっけ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "𩸽"
-        ),
-        Dictionary(
-            yomi = "ほったて",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "掘立"
-        ),
+        Dictionary(yomi = "ほっけ", leftId = 1922, rightId = 1922, cost = 4000, tango = "𩸽"),
+        Dictionary(yomi = "ほったて", leftId = 1922, rightId = 1922, cost = 4000, tango = "掘立"),
         Dictionary(
             yomi = "ぽるてぃちのおしむすめ",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "ポルティチの唖娘"
         ),
-        Dictionary(
-            yomi = "ほんじ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "翻字"
-        ),
-        Dictionary(
-            yomi = "まいとしこうれい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "毎年恒例"
-        ),
-        Dictionary(
-            yomi = "まいぶーむ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "マイブーム"
-        ),
-        Dictionary(
-            yomi = "まちだぜるびあ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "町田ゼルビア"
-        ),
-        Dictionary(
-            yomi = "まりーんず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "マリーンズ"
-        ),
-        Dictionary(
-            yomi = "まりのす",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "マリノス"
-        ),
-        Dictionary(
-            yomi = "みずきしげる",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "水木しげる"
-        ),
-        Dictionary(
-            yomi = "みぬめじんじゃ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "敏馬神社"
-        ),
-        Dictionary(
-            yomi = "みやこそば",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "宮古そば"
-        ),
-        Dictionary(
-            yomi = "みるめじんじゃ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "敏馬神社"
-        ),
-        Dictionary(
-            yomi = "むえき",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "無益"
-        ),
-        Dictionary(
-            yomi = "むしょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "無床"
-        ),
-        Dictionary(
-            yomi = "むしょうしんりょうじょ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "無床診療所"
-        ),
-        Dictionary(
-            yomi = "むびゅう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "無謬"
-        ),
-        Dictionary(
-            yomi = "むびゅうせい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "無謬性"
-        ),
-        Dictionary(
-            yomi = "むやく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "無役"
-        ),
-        Dictionary(
-            yomi = "めろぶ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "メロブ"
-        ),
-        Dictionary(
-            yomi = "もくさじんじゃ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "儛草神社"
-        ),
-        Dictionary(
-            yomi = "もくさとう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "舞草刀"
-        ),
-        Dictionary(
-            yomi = "もどりち",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "戻り値"
-        ),
-        Dictionary(
-            yomi = "もよりいち",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "もより市"
-        ),
-        Dictionary(
-            yomi = "やくたたず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "役立たず"
-        ),
+        Dictionary(yomi = "ほんじ", leftId = 1841, rightId = 1841, cost = 4000, tango = "翻字"),
+        Dictionary(yomi = "まいとしこうれい", leftId = 1922, rightId = 1922, cost = 4000, tango = "毎年恒例"),
+        Dictionary(yomi = "まいぶーむ", leftId = 1922, rightId = 1922, cost = 4000, tango = "マイブーム"),
+        Dictionary(yomi = "まじれす", leftId = 1841, rightId = 1841, cost = 4000, tango = "マジレス"),
+        Dictionary(yomi = "まちだぜるびあ", leftId = 1920, rightId = 1920, cost = 4000, tango = "町田ゼルビア"),
+        Dictionary(yomi = "まつりか", leftId = 1922, rightId = 1922, cost = 4000, tango = "茉莉花"),
+        Dictionary(yomi = "まりーんず", leftId = 1920, rightId = 1920, cost = 4000, tango = "マリーンズ"),
+        Dictionary(yomi = "まりのす", leftId = 1920, rightId = 1920, cost = 4000, tango = "マリノス"),
+        Dictionary(yomi = "みずきしげる", leftId = 1921, rightId = 1921, cost = 4000, tango = "水木しげる"),
+        Dictionary(yomi = "みなみまんしゅうてつどう", leftId = 1920, rightId = 1920, cost = 4000, tango = "南満洲鉄道"),
+        Dictionary(yomi = "みぬめじんじゃ", leftId = 1920, rightId = 1920, cost = 4000, tango = "敏馬神社"),
+        Dictionary(yomi = "みやこそば", leftId = 1920, rightId = 1920, cost = 4000, tango = "宮古そば"),
+        Dictionary(yomi = "みるめじんじゃ", leftId = 1920, rightId = 1920, cost = 4000, tango = "敏馬神社"),
+        Dictionary(yomi = "むえき", leftId = 1922, rightId = 1922, cost = 4000, tango = "無益"),
+        Dictionary(yomi = "むしょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "無床"),
+        Dictionary(yomi = "むしょうしんりょうじょ", leftId = 1922, rightId = 1922, cost = 4000, tango = "無床診療所"),
+        Dictionary(yomi = "むびゅう", leftId = 1922, rightId = 1922, cost = 4000, tango = "無謬"),
+        Dictionary(yomi = "むびゅうせい", leftId = 1922, rightId = 1922, cost = 4000, tango = "無謬性"),
+        Dictionary(yomi = "むやく", leftId = 1922, rightId = 1922, cost = 4000, tango = "無役"),
+        Dictionary(yomi = "めろぶ", leftId = 1920, rightId = 1920, cost = 4000, tango = "メロブ"),
+        Dictionary(yomi = "もくさじんじゃ", leftId = 1920, rightId = 1920, cost = 4000, tango = "儛草神社"),
+        Dictionary(yomi = "もくさとう", leftId = 1922, rightId = 1922, cost = 4000, tango = "舞草刀"),
+        Dictionary(yomi = "もどりち", leftId = 1922, rightId = 1922, cost = 4000, tango = "戻り値"),
+        Dictionary(yomi = "もよりいち", leftId = 1920, rightId = 1920, cost = 4000, tango = "もより市"),
+        Dictionary(yomi = "やくご", leftId = 1922, rightId = 1922, cost = 4000, tango = "訳語"),
+        Dictionary(yomi = "やくたたず", leftId = 1922, rightId = 1922, cost = 4000, tango = "役立たず"),
         Dictionary(
             yomi = "やくるとすわろーず",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "ヤクルトスワローズ"
         ),
-        Dictionary(
-            yomi = "ゆうしょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "有床"
-        ),
-        Dictionary(
-            yomi = "ゆうしょうしんりょうじょ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "有床診療所"
-        ),
-        Dictionary(
-            yomi = "ゆうちょぎんこう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ゆうちょ銀行"
-        ),
-        Dictionary(
-            yomi = "ようかいおんど",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "溶解温度"
-        ),
-        Dictionary(
-            yomi = "ようさんのうぎょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "養蚕農業"
-        ),
+        Dictionary(yomi = "ゆうげんじっこう", leftId = 1841, rightId = 1841, cost = 4000, tango = "有言実行"),
+        Dictionary(yomi = "ゆうしょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "有床"),
+        Dictionary(yomi = "ゆうしょうしんりょうじょ", leftId = 1922, rightId = 1922, cost = 4000, tango = "有床診療所"),
+        Dictionary(yomi = "ゆうちょぎんこう", leftId = 1920, rightId = 1920, cost = 4000, tango = "ゆうちょ銀行"),
+        Dictionary(yomi = "ようかいおんど", leftId = 1922, rightId = 1922, cost = 4000, tango = "溶解温度"),
+        Dictionary(yomi = "ようさんのうぎょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "養蚕農業"),
         Dictionary(
             yomi = "よこはまDeNAべいすたーず",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "横浜DeNAベイスターズ"
         ),
-        Dictionary(
-            yomi = "よこはまF・まりのす",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "横浜F・マリノス"
-        ),
+        Dictionary(yomi = "よこはまF・まりのす", leftId = 1920, rightId = 1920, cost = 4000, tango = "横浜F・マリノス"),
         Dictionary(
             yomi = "よこはまえふ・まりのす",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "横浜F・マリノス"
         ),
         Dictionary(
             yomi = "よこはまでぃーえぬえーべいすたーず",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "横浜DeNAベイスターズ"
         ),
         Dictionary(
             yomi = "よこはまべいすたーず",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "横浜ベイスターズ"
         ),
-        Dictionary(
-            yomi = "よこはままりのす",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "横浜マリノス"
-        ),
+        Dictionary(yomi = "よこはままりのす", leftId = 1920, rightId = 1920, cost = 4000, tango = "横浜マリノス"),
         Dictionary(
             yomi = "よみうりじゃいあんつ",
-            leftId = 1851,
-            rightId = 1851,
+            leftId = 1920,
+            rightId = 1920,
             cost = 4000,
             tango = "読売ジャイアンツ"
         ),
-        Dictionary(
-            yomi = "よんまん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "四万"
-        ),
-        Dictionary(
-            yomi = "らいおんず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ライオンズ"
-        ),
-        Dictionary(
-            yomi = "らくてんいーぐるす",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "楽天イーグルス"
-        ),
-        Dictionary(
-            yomi = "らのべ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ラノベ"
-        ),
-        Dictionary(
-            yomi = "りねーむ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "リネーム"
-        ),
-        Dictionary(
-            yomi = "りまいんど",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "リマインド"
-        ),
-        Dictionary(
-            yomi = "りゅうこうごたいしょう",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "流行語大賞"
-        ),
-        Dictionary(
-            yomi = "れいそる",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "レイソル"
-        ),
-        Dictionary(
-            yomi = "れいたくだいがく",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "麗澤大学"
-        ),
-        Dictionary(
-            yomi = "れいわ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "令和"
-        ),
-        Dictionary(
-            yomi = "れっず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "レッズ"
-        ),
-        Dictionary(
-            yomi = "れんさいもの",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "連載もの"
-        ),
-        Dictionary(
-            yomi = "ろうくみ",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "労組"
-        ),
-        Dictionary(
-            yomi = "ろくまん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "六万"
-        ),
-        Dictionary(
-            yomi = "ろってまりーんず",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "ロッテマリーンズ"
-        ),
-        Dictionary(
-            yomi = "わいろざい",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "賄賂罪"
-        ),
-        Dictionary(
-            yomi = "わせだあかでみー",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "早稲田アカデミー"
-        ),
-        Dictionary(
-            yomi = "わぜん",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "和膳"
-        ),
-        Dictionary(
-            yomi = "わびさび",
-            leftId = 1851,
-            rightId = 1851,
-            cost = 4000,
-            tango = "侘び寂び"
-        )
+        Dictionary(yomi = "よるごはん", leftId = 1922, rightId = 1922, cost = 4000, tango = "夜ごはん"),
+        Dictionary(yomi = "よんまん", leftId = 1922, rightId = 1922, cost = 4000, tango = "四万"),
+        Dictionary(yomi = "らいおんず", leftId = 1920, rightId = 1920, cost = 4000, tango = "ライオンズ"),
+        Dictionary(yomi = "らくてんいーぐるす", leftId = 1920, rightId = 1920, cost = 4000, tango = "楽天イーグルス"),
+        Dictionary(yomi = "らのべ", leftId = 1922, rightId = 1922, cost = 4000, tango = "ラノベ"),
+        Dictionary(yomi = "りねーむ", leftId = 1841, rightId = 1841, cost = 4000, tango = "リネーム"),
+        Dictionary(yomi = "りまいんど", leftId = 1841, rightId = 1841, cost = 4000, tango = "リマインド"),
+        Dictionary(yomi = "りゅうこうごたいしょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "流行語大賞"),
+        Dictionary(yomi = "れいきし", leftId = 1922, rightId = 1922, cost = 4000, tango = "励起子"),
+        Dictionary(yomi = "れいそる", leftId = 1920, rightId = 1920, cost = 4000, tango = "レイソル"),
+        Dictionary(yomi = "れいたくだいがく", leftId = 1920, rightId = 1920, cost = 4000, tango = "麗澤大学"),
+        Dictionary(yomi = "れいわ", leftId = 1920, rightId = 1920, cost = 4000, tango = "令和"),
+        Dictionary(yomi = "れっず", leftId = 1920, rightId = 1920, cost = 4000, tango = "レッズ"),
+        Dictionary(yomi = "れんさいもの", leftId = 1922, rightId = 1922, cost = 4000, tango = "連載もの"),
+        Dictionary(yomi = "ろうくみ", leftId = 1922, rightId = 1922, cost = 4000, tango = "労組"),
+        Dictionary(yomi = "ろくじゅうそう", leftId = 1841, rightId = 1841, cost = 4000, tango = "六重奏"),
+        Dictionary(yomi = "ろくまん", leftId = 1922, rightId = 1922, cost = 4000, tango = "六万"),
+        Dictionary(yomi = "ろってまりーんず", leftId = 1920, rightId = 1920, cost = 4000, tango = "ロッテマリーンズ"),
+        Dictionary(yomi = "わいろざい", leftId = 1922, rightId = 1922, cost = 4000, tango = "賄賂罪"),
+        Dictionary(yomi = "わせだあかでみー", leftId = 1920, rightId = 1920, cost = 4000, tango = "早稲田アカデミー"),
+        Dictionary(yomi = "わぜん", leftId = 1922, rightId = 1922, cost = 4000, tango = "和膳"),
+        Dictionary(yomi = "わびさび", leftId = 1922, rightId = 1922, cost = 4000, tango = "侘び寂び")
     )
 }
