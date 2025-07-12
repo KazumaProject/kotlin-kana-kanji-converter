@@ -18,7 +18,7 @@ import com.kazumaproject.Constants.PLACE
 import com.kazumaproject.Constants.RESCORE_WORDS
 import com.kazumaproject.Constants.SYMBOL_LIST
 import com.kazumaproject.Constants.VERB_LIST
-import com.kazumaproject.Constants.WORD
+import com.kazumaproject.Constants.WORDS
 import com.kazumaproject.Constants.ZENKANKU_LIST
 import com.kazumaproject.Louds.Converter
 import com.kazumaproject.Louds.LOUDS
@@ -58,7 +58,7 @@ fun main() {
                 DIFFICULT_LIST + SYMBOL_LIST +
                 NAME_MUSIC_LIST + NAME_IT_LIST +
                 VERB_LIST + DOMAIN + ERA + PLACE +
-                WORD + ZENKANKU_LIST + ADDS_NEW_WORDS + PHISIC_NOUN_LIST
+                WORDS + ZENKANKU_LIST + ADDS_NEW_WORDS + PHISIC_NOUN_LIST
                 + FIGHT_NAME + FOOD_NAME + ENTERTAIMENT_NAME + RESCORE_WORDS
                 )
             .groupBy { it.yomi }
