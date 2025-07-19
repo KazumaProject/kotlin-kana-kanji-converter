@@ -2110,6 +2110,13 @@ object Constants {
             tango = "変換精度"
         ),
         Dictionary(
+            yomi = "へんかんのせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 8000,
+            tango = "変換の精度"
+        ),
+        Dictionary(
             yomi = "かいとうせいど",
             leftId = 1851,
             rightId = 1851,
@@ -2206,6 +2213,34 @@ object Constants {
             rightId = 1851,
             cost = 5000,
             tango = "タコピーの原罪"
+        ),
+        Dictionary(
+            yomi = "れっきと",
+            leftId = 12,
+            rightId = 12,
+            cost = 7200,
+            tango = "歴と"
+        ),
+        Dictionary(
+            yomi = "れっきとした",
+            leftId = 2657,
+            rightId = 2657,
+            cost = 3700,
+            tango = "歴とした"
+        ),
+        Dictionary(
+            yomi = "とはなに",
+            leftId = 1906,
+            rightId = 1906,
+            cost = 4500,
+            tango = "とは何"
+        ),
+        Dictionary(
+            yomi = "とはなに",
+            leftId = 1906,
+            rightId = 1906,
+            cost = 4700,
+            tango = "とはなに"
         ),
     )
 
