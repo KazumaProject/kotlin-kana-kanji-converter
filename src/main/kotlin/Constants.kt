@@ -2025,6 +2025,188 @@ object Constants {
             cost = 4000,
             tango = "蚊"
         ),
+        Dictionary(
+            yomi = "そくていせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "測定精度"
+        ),
+        Dictionary(
+            yomi = "けいそくせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "計測精度"
+        ),
+        Dictionary(
+            yomi = "いちせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "位置精度"
+        ),
+        Dictionary(
+            yomi = "じかんせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "時間精度"
+        ),
+        Dictionary(
+            yomi = "くうかんせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "空間精度"
+        ),
+        Dictionary(
+            yomi = "きょりせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "距離精度"
+        ),
+        Dictionary(
+            yomi = "かくどせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "角度精度"
+        ),
+        Dictionary(
+            yomi = "よそくせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "予測精度"
+        ),
+        Dictionary(
+            yomi = "ぶんるいせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "分類精度"
+        ),
+        Dictionary(
+            yomi = "にんしきせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "認識精度"
+        ),
+        Dictionary(
+            yomi = "けんしゅつせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "検出精度"
+        ),
+        Dictionary(
+            yomi = "へんかんせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "変換精度"
+        ),
+        Dictionary(
+            yomi = "かいとうせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "回答精度"
+        ),
+        Dictionary(
+            yomi = "ぜいせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "税制度"
+        ),
+        Dictionary(
+            yomi = "さいばんせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "裁判制度"
+        ),
+        Dictionary(
+            yomi = "ほうしゅうせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 7000,
+            tango = "報酬制度"
+        ),
+        Dictionary(
+            yomi = "ふくりこうせいせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 7000,
+            tango = "福利厚生制度"
+        ),
+        Dictionary(
+            yomi = "たいしょくきんせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 7000,
+            tango = "退職金制度"
+        ),
+        Dictionary(
+            yomi = "たんいせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 7000,
+            tango = "単位制度"
+        ),
+        Dictionary(
+            yomi = "じゅうたくせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 7000,
+            tango = "住宅制度"
+        ),
+        Dictionary(
+            yomi = "いくじきゅうぎょうせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 6000,
+            tango = "育児休業制度"
+        ),
+        Dictionary(
+            yomi = "かいごせいど",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 7000,
+            tango = "介護制度"
+        ),
+        Dictionary(
+            yomi = "むこうか",
+            leftId = 1931,
+            rightId = 1941,
+            cost = 3000,
+            tango = "無効化"
+        ),
+        Dictionary(
+            yomi = "ていれいや",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "低レイヤ"
+        ),
+        Dictionary(
+            yomi = "こうれいや",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "高レイヤ"
+        ),
+        Dictionary(
+            yomi = "たこぴーのげんざい",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5000,
+            tango = "タコピーの原罪"
+        ),
     )
 
     val PHISIC_NOUN_LIST = listOf(
