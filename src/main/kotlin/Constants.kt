@@ -2145,6 +2145,13 @@ object Constants {
             tango = "回答の精度"
         ),
         Dictionary(
+            yomi = "ほけんせい",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "保険制"
+        ),
+        Dictionary(
             yomi = "ぜいせいど",
             leftId = 1851,
             rightId = 1851,
@@ -2166,6 +2173,13 @@ object Constants {
             tango = "報酬制度"
         ),
         Dictionary(
+            yomi = "ほうしゅうせい",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 6000,
+            tango = "報酬制"
+        ),
+        Dictionary(
             yomi = "ふくりこうせいせいど",
             leftId = 1851,
             rightId = 1851,
@@ -2185,6 +2199,13 @@ object Constants {
             rightId = 1851,
             cost = 7000,
             tango = "単位制度"
+        ),
+        Dictionary(
+            yomi = "たんいせい",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 6000,
+            tango = "単位制"
         ),
         Dictionary(
             yomi = "じゅうたくせいど",
@@ -2297,6 +2318,223 @@ object Constants {
             rightId = 1851,
             cost = 3000,
             tango = "一日"
+        ),
+        Dictionary(
+            yomi = "たいかく",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 3000,
+            tango = "体格"
+        ),
+        Dictionary(
+            yomi = "じしょびき",
+            leftId = 1851,
+            rightId = 727,
+            cost = 3500,
+            tango = "辞書引き"
+        ),
+        Dictionary(
+            yomi = "じしょびき",
+            leftId = 1851,
+            rightId = 1967,
+            cost = 3200,
+            tango = "辞書引き"
+        ),
+        Dictionary(
+            yomi = "にれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "二連休"
+        ),
+        Dictionary(
+            yomi = "にれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "2連休"
+        ),
+        Dictionary(
+            yomi = "さんれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "三連休"
+        ),
+        Dictionary(
+            yomi = "さんれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "3連休"
+        ),
+        Dictionary(
+            yomi = "よんれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "四連休"
+        ),
+        Dictionary(
+            yomi = "よんれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "4連休"
+        ),
+        Dictionary(
+            yomi = "ごれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "五連休"
+        ),
+        Dictionary(
+            yomi = "ごれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "5連休"
+        ),
+        Dictionary(
+            yomi = "ろくれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "六連休"
+        ),
+        Dictionary(
+            yomi = "ろくれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "6連休"
+        ),
+        Dictionary(
+            yomi = "ななれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "七連休"
+        ),
+        Dictionary(
+            yomi = "ななれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "7連休"
+        ),
+        Dictionary(
+            yomi = "はちれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "八連休"
+        ),
+        Dictionary(
+            yomi = "はちれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "8連休"
+        ),
+        Dictionary(
+            yomi = "きゅうれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "九連休"
+        ),
+        Dictionary(
+            yomi = "きゅうれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "9連休"
+        ),
+        Dictionary(
+            yomi = "じゅうれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "十連休"
+        ),
+        Dictionary(
+            yomi = "じゅうれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "10連休"
+        ),
+        Dictionary(
+            yomi = "じゅういちれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "十一連休"
+        ),
+        Dictionary(
+            yomi = "じゅういちれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "11連休"
+        ),
+        Dictionary(
+            yomi = "じゅうにれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "十二連休"
+        ),
+        Dictionary(
+            yomi = "じゅうにれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "12連休"
+        ),
+        Dictionary(
+            yomi = "じゅうさんれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "十三連休"
+        ),
+        Dictionary(
+            yomi = "じゅうさんれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "13連休"
+        ),
+        Dictionary(
+            yomi = "じゅうよんれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4000,
+            tango = "十四連休"
+        ),
+        Dictionary(
+            yomi = "じゅうよんれんきゅう",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "14連休"
+        ),
+        Dictionary(
+            yomi = "ごしちご",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 4001,
+            tango = "五七五"
+        ),
+        Dictionary(
+            yomi = "ごしちごしちしち",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 5001,
+            tango = "五七五七七"
         ),
     )
 
