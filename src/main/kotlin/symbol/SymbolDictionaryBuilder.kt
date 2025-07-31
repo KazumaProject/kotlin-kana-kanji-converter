@@ -16,12 +16,20 @@ class SymbolDictionaryBuilder {
         // Read the file line by line
         File(filePath).useLines { lines ->
             lines.forEach { line ->
-                val columns = line.split("\t") // Assuming it's tab-separated
+                // Trim the line and skip if empty
+                val trimmedLine = line.trim()
+                if (trimmedLine.isEmpty()) {
+                    return@forEach // Continue to next line
+                }
+
+                // Split the line by the first occurrence of one or more whitespace characters.
+                // The limit '2' ensures we only get two parts: the symbol and the rest of the string.
+                val columns = trimmedLine.split(Regex("\\s+"), 2)
 
                 // The first column is the symbol (tango), the second is readings (yomi)
                 if (columns.size == 2) {
-                    val tango = columns[0].trim() // First column as tango (symbol)
-                    val yomiEntries = columns[1].trim().split(" ") // Second column, split readings by space
+                    val tango = columns[0] // The symbol is the first part
+                    val yomiEntries = columns[1].trim().split(" ") // The second part contains all readings
 
                     // Create a Dictionary entry for each separated yomi
                     for (yomi in yomiEntries) {
@@ -40,7 +48,6 @@ class SymbolDictionaryBuilder {
                 }
             }
         }
-
         return symbolList
     }
 
