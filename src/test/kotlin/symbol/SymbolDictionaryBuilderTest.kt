@@ -1,14 +1,14 @@
 package symbol
 
 import com.kazumaproject.symbol.SymbolDictionaryBuilder
-import kotlin.test.BeforeTest
-import kotlin.test.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 class SymbolDictionaryBuilderTest {
 
     private var symbolDictionaryBuilder: SymbolDictionaryBuilder? = null
 
-    @BeforeTest
+    @BeforeEach
     fun setUp() {
         symbolDictionaryBuilder = SymbolDictionaryBuilder()
     }
@@ -19,6 +19,9 @@ class SymbolDictionaryBuilderTest {
             val dictionaries = convertSymbolDataToDictionaryList("src/main/bin/symbol.tsv")
             println("symbol size ${dictionaries.size}")
             println("${dictionaries.subList(0, 10)}")
+            println("${dictionaries.filter { it.tango == "\"" }}")
+            println("${dictionaries.filter { it.tango == "\'" }}")
+            println("${dictionaries.filter { it.tango == "”" }}")
         }
 
     }
