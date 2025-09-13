@@ -245,19 +245,19 @@ fun normalizeHiragana(input: String): String {
 
 fun String.isHiraganaOrKatakana(): Boolean {
     // Exclude ゝ (U+309D) and ゞ (U+309E) from Hiragana, and ヽ (U+30FD) and ヾ (U+30FE) from Katakana
-    val hiraganaRegex = Regex("^\\u3041-\\u3096&&[^\\u3090\\u3091]+$")
-    val katakanaRegex = Regex("^\\u30A1-\\u30FF&&[^\\u30F0\\u30F1\\u30F7-\\u30FA\\u30FD\\u30FE]+$")
+    val hiraganaRegex = Regex("^[\\u3041-\\u3096&&[^\\u3090\\u3091]]+$")
+    val katakanaRegex = Regex("^[\\u30A1-\\u30FF&&[^\\u30F0\\u30F1\\u30F7-\\u30FA\\u30FD\\u30FE]]+$")
     return hiraganaRegex.matches(this) || katakanaRegex.matches(this)
 }
 
 fun String.isHiraganaOnly(): Boolean {
     // Exclude ゝ (U+309D) and ゞ (U+309E) from Hiragana
-    val regex = Regex("^\\u3041-\\u3096&&[^\\u3090\\u3091]+$")
+    val regex = Regex("^[\\u3041-\\u3096&&[^\\u3090\\u3091]]+$")
     return regex.matches(this)
 }
 
 fun String.isKatakanaOnly(): Boolean {
     // Exclude ヽ (U+30FD) and ヾ (U+30FE) from Katakana
-    val regex = Regex("^\\u30A1-\\u30FF&&[^\\u30F0\\u30F1\\u30F7-\\u30FA\\u30FD\\u30FE]+$")
+    val regex = Regex("^[\\u30A1-\\u30FF&&[^\\u30F0\\u30F1\\u30F7-\\u30FA\\u30FD\\u30FE]]+$")
     return regex.matches(this)
 }
