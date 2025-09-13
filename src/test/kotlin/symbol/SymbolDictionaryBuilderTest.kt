@@ -22,6 +22,7 @@ class SymbolDictionaryBuilderTest {
             println("${dictionaries.filter { it.tango == "\"" }}")
             println("${dictionaries.filter { it.tango == "\'" }}")
             println("${dictionaries.filter { it.tango == "”" }}")
+            println("${dictionaries.filter { it.tango == "ヱ" }}")
         }
 
     }
