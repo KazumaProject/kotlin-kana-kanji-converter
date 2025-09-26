@@ -263,14 +263,14 @@ fun String.isKatakanaOnly(): Boolean {
 }
 
 // ひらがな五十音＋小書き
-private val HIRA_BASE = "あいうえおかきくけこさしすせそたちつてと" +
+private const val HIRA_BASE = "あいうえおかきくけこさしすせそたちつてと" +
         "なにぬねのはひふへほまみむめもやゆよらりるれろわをん" +
-        "ぁぃぅぇぉゃゅょゎっゔ" // 小書き＋ゔ
+        "ぁぃぅぇぉゃゅょゎっゔー" // 小書き＋ゔ
 
 // カタカナ五十音＋小書き
-private val KATA_BASE = "アイウエオカキクケコサシスセソタチツテト" +
+private const val KATA_BASE = "アイウエオカキクケコサシスセソタチツテト" +
         "ナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン" +
-        "ァィゥェォャュョヮッヴ" // 小書き＋ヴ
+        "ァィゥェォャュョヮッヴー" // 小書き＋ヴ
 
 private val HIRA_SET = HIRA_BASE.toSet()
 private val KATA_SET = KATA_BASE.toSet()

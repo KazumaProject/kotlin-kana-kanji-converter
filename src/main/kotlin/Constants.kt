@@ -871,6 +871,20 @@ object Constants {
             cost = 4000,
             tango = "買い切り"
         ),
+        Dictionary(
+            yomi = "おみおつけ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 7750,
+            tango = "御御御付"
+        ),
+        Dictionary(
+            yomi = "おみおつけ",
+            leftId = 1851,
+            rightId = 1851,
+            cost = 7700,
+            tango = "御味御汁"
+        ),
     )
 
     val ERA = listOf(
