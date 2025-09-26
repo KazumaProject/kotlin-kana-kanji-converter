@@ -257,7 +257,49 @@ fun String.isHiraganaOnly(): Boolean {
 }
 
 fun String.isKatakanaOnly(): Boolean {
-    // Exclude ヽ (U+30FD) and ヾ (U+30FE) from Katakana
-    val regex = Regex("^[\\u30A1-\\u30FF&&[^\\u30F0\\u30F1\\u30F7-\\u30FA\\u30FD\\u30FE]]+$")
+    // Exclude ヽ, ヾ, ㇰなど拡張記号, さらに「・」も除外
+    val regex = Regex("^[\\u30A1-\\u30FF&&[^\\u30F0\\u30F1\\u30F7-\\u30FA\\u30FD\\u30FE\\u30FB]]+$")
     return regex.matches(this)
+}
+
+// ひらがな五十音＋小書き
+private val HIRA_BASE = "あいうえおかきくけこさしすせそたちつてと" +
+        "なにぬねのはひふへほまみむめもやゆよらりるれろわをん" +
+        "ぁぃぅぇぉゃゅょゎっゔ" // 小書き＋ゔ
+
+// カタカナ五十音＋小書き
+private val KATA_BASE = "アイウエオカキクケコサシスセソタチツテト" +
+        "ナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン" +
+        "ァィゥェォャュョヮッヴ" // 小書き＋ヴ
+
+private val HIRA_SET = HIRA_BASE.toSet()
+private val KATA_SET = KATA_BASE.toSet()
+
+// NFC 正規化 + 「ゔ/ヴ」→「ゔ/ヴ」に統一
+private fun String.normalizeKana(): String {
+    val n = Normalizer.normalize(this, Normalizer.Form.NFC)
+    return n.replace("う\u3099", "ゔ")
+        .replace("ウ\u3099", "ヴ")
+}
+
+/** ひらがなのみ（五十音＋小書き＋濁点/半濁点OK） */
+fun String.isHiraganaOnlyPure(): Boolean {
+    val s = this.normalizeKana()
+    return s.isNotEmpty() && s.all { it in HIRA_SET }
+}
+
+/** カタカナのみ（五十音＋小書き＋濁点/半濁点OK） */
+fun String.isKatakanaOnlyPure(): Boolean {
+    val s = this.normalizeKana()
+    return s.isNotEmpty() && s.all { it in KATA_SET }
+}
+
+/** ひらがな or カタカナのみ */
+fun String.isHiraganaOrKatakanaPure(): Boolean =
+    this.isHiraganaOnlyPure() || this.isKatakanaOnlyPure()
+
+/** ひらがな＋カタカナ混在OK */
+fun String.isKanaPureMixedOK(): Boolean {
+    val s = this.normalizeKana()
+    return s.isNotEmpty() && s.all { it in HIRA_SET || it in KATA_SET }
 }
