@@ -64,6 +64,8 @@ class TokenArray {
                     println("build token array: $index $key ${dictionary.tango} $nodeId")
                 } else if (key == "なかぐろ") {
                     println("build token array: $index $key ${dictionary.tango} $nodeId")
+                } else if (key == "いこーる"){
+                    println("build token array: $index $key ${dictionary.tango} $nodeId")
                 }
                 nodeIdList.add(nodeId)
             }
