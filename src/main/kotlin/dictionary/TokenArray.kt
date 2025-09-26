@@ -77,10 +77,10 @@ class TokenArray {
     // Helper function to clean up nodeId determination
     private fun getNodeIdForDictionary(dictionary: Dictionary, tangoTrie: LOUDS, key: String): Int {
         return when {
-            dictionary.tango.isHiraganaOrKatakana() -> {
-                if (dictionary.tango.isHiraganaOnly() || dictionary.tango == key) {
+            dictionary.tango.isHiraganaOrKatakanaPure() -> {
+                if (dictionary.tango.isHiraganaOnlyPure() || dictionary.tango == key) {
                     -2
-                } else if (dictionary.tango.isKatakanaOnly()) {
+                } else if (dictionary.tango.isKatakanaOnlyPure()) {
                     -1
                 } else {
                     -3

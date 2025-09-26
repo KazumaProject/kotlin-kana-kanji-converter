@@ -70,13 +70,13 @@ fun main() {
 
     buildConnectionIds()
     buildPOSTable(finalList)
-    buildTriesAndTokenArray(finalList)
-    buildDictionaryForSingleKanji()
-    buildDictionaryForEmoji()
-    buildDictionaryForEmoticon()
+//    buildTriesAndTokenArray(finalList)
+//    buildDictionaryForSingleKanji()
+//    buildDictionaryForEmoji()
+//    buildDictionaryForEmoticon()
     buildDictionaryForSymbol()
-    buildDictionaryForReadingCorrection()
-    buildDictionaryForKotowaza()
+//    buildDictionaryForReadingCorrection()
+//    buildDictionaryForKotowaza()
 }
 
 private fun buildPOSTable(finalList: SortedMap<String, List<Dictionary>>) {
