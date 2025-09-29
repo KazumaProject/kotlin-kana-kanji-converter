@@ -262,22 +262,31 @@ fun String.isKatakanaOnly(): Boolean {
     return regex.matches(this)
 }
 
-// ひらがな五十音＋小書き
+// ひらがな（五十音、小書き、長音符、繰り返し記号など）
 private const val HIRA_BASE = "あいうえおかきくけこさしすせそたちつてと" +
         "なにぬねのはひふへほまみむめもやゆよらりるれろわをん" +
-        "ぁぃぅぇぉゃゅょゎっゔー" // 小書き＋ゔ
+        "ぁぃぅぇぉゃゅょゎっゔー"
 
-// カタカナ五十音＋小書き
+// ひらがな（濁点・半濁点）
+private const val HIRA_DAKUON = "がぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽ"
+
+// カタカナ（五十音、小書き、長音符、繰り返し記号など）
 private const val KATA_BASE = "アイウエオカキクケコサシスセソタチツテト" +
         "ナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン" +
-        "ァィゥェォャュョヮッヴー" // 小書き＋ヴ
+        "ァィゥェォャュョヮッヴー"
 
-private val HIRA_SET = HIRA_BASE.toSet()
-private val KATA_SET = KATA_BASE.toSet()
+// カタカナ（濁点・半濁点）
+private const val KATA_DAKUON = "ガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポ"
 
-// NFC 正規化 + 「ゔ/ヴ」→「ゔ/ヴ」に統一
+
+// Setを生成する際に、濁点・半濁点も結合する
+private val HIRA_SET = (HIRA_BASE + HIRA_DAKUON).toSet()
+private val KATA_SET = (KATA_BASE + KATA_DAKUON).toSet()
+
+// NFC 正規化 + 「ゔ/ヴ」→「ゔ/ヴ」に統一
 private fun String.normalizeKana(): String {
     val n = Normalizer.normalize(this, Normalizer.Form.NFC)
+    // 濁点付きの「う」と「ウ」を正規化
     return n.replace("う\u3099", "ゔ")
         .replace("ウ\u3099", "ヴ")
 }
