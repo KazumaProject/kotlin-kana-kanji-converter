@@ -9,6 +9,7 @@ import com.kazumaproject.connection_id.inflate
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.dictionary.models.TokenEntry
 import java.io.*
+import java.text.Normalizer
 import java.util.*
 
 class TokenArray {
@@ -74,21 +75,23 @@ class TokenArray {
         writeExternalNotCompress(out)
     }
 
-    // Helper function to clean up nodeId determination
-    private fun getNodeIdForDictionary(dictionary: Dictionary, tangoTrie: LOUDS, key: String): Int {
-        return when {
-            dictionary.tango.isHiraganaOrKatakanaPure() -> {
-                if (dictionary.tango.isHiraganaOnlyPure() || dictionary.tango == key) {
-                    -2
-                } else if (dictionary.tango.isKatakanaOnlyPure()) {
-                    -1
-                } else {
-                    -3
-                }
-            }
+    private val HIRAGANA_SENTINEL = -2
+    private val KATAKANA_SENTINEL = -1
 
+    private fun getNodeIdForDictionary(
+        dictionary: Dictionary,
+        tangoTrie: LOUDS,
+        key: String // 使わない（判定には不要）
+    ): Int {
+        val t = dictionary.tango
+
+        // まず「かなだけ」かどうかを判定（あなたの Pure 系ユーティリティを採用）
+        return when {
+            t.isHiraganaOnlyPure() -> HIRAGANA_SENTINEL
+            t.isKatakanaOnlyPure() -> KATAKANA_SENTINEL
             else -> {
-                tangoTrie.getNodeIndex(dictionary.tango)
+                val normalized = Normalizer.normalize(t, Normalizer.Form.NFC)
+                tangoTrie.getNodeIndex(normalized)
             }
         }
     }
