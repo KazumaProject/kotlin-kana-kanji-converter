@@ -87,6 +87,7 @@ class TokenArray {
 
         // まず「かなだけ」かどうかを判定（あなたの Pure 系ユーティリティを採用）
         return when {
+            key == t -> HIRAGANA_SENTINEL
             t.isHiraganaOnlyPure() -> HIRAGANA_SENTINEL
             t.isKatakanaOnlyPure() -> KATAKANA_SENTINEL
             else -> {
