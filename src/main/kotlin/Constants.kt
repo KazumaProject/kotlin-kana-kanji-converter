@@ -1901,15 +1901,15 @@ object Constants {
         ),
         Dictionary(
             yomi = "かしか",
-            leftId = 1841,
-            rightId = 1941,
+            leftId = 1842,
+            rightId = 1942,
             cost = 2500,
             tango = "可視化"
         ),
         Dictionary(
             yomi = "ふかしか",
-            leftId = 1841,
-            rightId = 1941,
+            leftId = 1842,
+            rightId = 1942,
             cost = 3500,
             tango = "不可視化"
         ),
@@ -2265,8 +2265,8 @@ object Constants {
         ),
         Dictionary(
             yomi = "むこうか",
-            leftId = 1931,
-            rightId = 1941,
+            leftId = 1932,
+            rightId = 1942,
             cost = 3000,
             tango = "無効化"
         ),
