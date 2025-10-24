@@ -162,11 +162,11 @@ class DicUtils {
                             println("skip $yomi $tango")
                         }
 
-                        yomi == "にほんご" && tango == "日本語" && leftId == "1851" -> {
+                        yomi == "にほんご" && tango == "日本語" && leftId == "1852" -> {
                             println("skip $yomi $tango")
                         }
 
-                        yomi == "でみせ" && tango == "出店" && leftId == "1851" -> {
+                        yomi == "でみせ" && tango == "出店" && leftId == "1852" -> {
                             println("skip $yomi $tango")
                         }
 
@@ -194,15 +194,15 @@ class DicUtils {
                             println("skip $yomi $tango")
                         }
 
-                        yomi == "かしか" && tango == "可視化" && leftId == "1841" && rightId == "1941" -> {
+                        yomi == "かしか" && tango == "可視化" && leftId == "1842" && rightId == "1942" -> {
                             println("skip $yomi $tango")
                         }
 
-                        yomi == "じぇみに" && tango == "双子座" && leftId == "1920" && rightId == "1920" -> {
+                        yomi == "じぇみに" && tango == "双子座" && leftId == "1921" && rightId == "1921" -> {
                             println("skip $yomi $tango")
                         }
 
-                        yomi == "むこうか" && tango == "無効化" && leftId == "1931" && rightId == "1941" -> {
+                        yomi == "むこうか" && tango == "無効化" && leftId == "1932" && rightId == "1942" -> {
                             println("skip $yomi $tango")
                         }
 
@@ -290,15 +290,15 @@ class DicUtils {
                             println("skip $yomi $tango")
                         }
 
-                        yomi == "びゃんびゃんめん" && leftId == "1851" && rightId == "1851" -> {
+                        yomi == "びゃんびゃんめん" && leftId == "1852" && rightId == "1852" -> {
                             println("skip $yomi $tango")
                         }
 
-                        yomi == "か" && tango == "化" && leftId == "1941" && rightId == "1941" -> {
+                        yomi == "か" && tango == "化" && leftId == "1942" && rightId == "1942" -> {
                             println("skip $yomi $tango")
                         }
 
-                        yomi == "こわすぎ" && tango == "怖すぎ" && leftId == "2391" && rightId == "1949" -> {
+                        yomi == "こわすぎ" && tango == "怖すぎ" && leftId == "2392" && rightId == "1950" -> {
                             println("skip $yomi $tango")
                         }
 
