@@ -906,6 +906,510 @@ object Constants {
             cost = 5000,
             tango = "自維連立政権"
         ),
+        Dictionary(
+            yomi = "ちきゅうしゅうかい",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4500,
+            tango = "地球周回"
+        ),
+        Dictionary(
+            yomi = "ちきゅうしゅうかいきどう",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 5000,
+            tango = "地球周回軌道"
+        ),
+        Dictionary(
+            yomi = "にだいはばつ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4500,
+            tango = "二大派閥"
+        ),
+        Dictionary(
+            yomi = "えんすいぷーる",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4500,
+            tango = "塩水プール"
+        ),
+        Dictionary(
+            yomi = "おんらいんごうせつ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4500,
+            tango = "オンライン合説"
+        ),
+        Dictionary(
+            yomi = "うぇぶごうせつ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4500,
+            tango = "ウェブ合説"
+        ),
+        Dictionary(
+            yomi = "うぇぶごうせつ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4501,
+            tango = "Web合説"
+        ),
+        Dictionary(
+            yomi = "かしひん",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4500,
+            tango = "下賜品"
+        ),
+        Dictionary(
+            yomi = "ごじょう",
+            leftId = 1841,
+            rightId = 1852,
+            cost = 6000,
+            tango = "誤乗"
+        ),
+        Dictionary(
+            yomi = "そくへん",
+            leftId = 1841,
+            rightId = 1852,
+            cost = 4000,
+            tango = "即返"
+        ),
+        Dictionary(
+            yomi = "たんかんえいがかん",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "単館映画館"
+        ),
+        Dictionary(
+            yomi = "たんごじ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "丹後路"
+        ),
+        Dictionary(
+            yomi = "ぶあつめに",
+            leftId = 12,
+            rightId = 1852,
+            cost = 4000,
+            tango = "分厚めに"
+        ),
+        Dictionary(
+            yomi = "ぶいろぐ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "ブイログ"
+        ),
+        Dictionary(
+            yomi = "ぶいろぐ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4001,
+            tango = "Vlog"
+        ),
+        Dictionary(
+            yomi = "かせんひっしゃ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "下線筆者"
+        ),
+        Dictionary(
+            yomi = "ぼうせんひっしゃ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "傍線筆者"
+        ),
+        Dictionary(
+            yomi = "かいきょくせん",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "開曲線"
+        ),
+        Dictionary(
+            yomi = "かんちょうひん",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "完調品"
+        ),
+        Dictionary(
+            yomi = "きこうしゅう",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "寄稿集"
+        ),
+        Dictionary(
+            yomi = "こめがし",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "米菓子"
+        ),
+        Dictionary(
+            yomi = "そうていぶ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "漕艇部"
+        ),
+        Dictionary(
+            yomi = "たんりゅうしゅ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "短粒種"
+        ),
+        Dictionary(
+            yomi = "とうばくよう",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "塔婆供養"
+        ),
+        Dictionary(
+            yomi = "ひゃくようず",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "百様図"
+        ),
+        Dictionary(
+            yomi = "へいかとしょ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "閉架図書"
+        ),
+        Dictionary(
+            yomi = "けんさし",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "検査士"
+        ),
+        Dictionary(
+            yomi = "あにごえ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "アニ声"
+        ),
+        Dictionary(
+            yomi = "あんこくし",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "暗黒史"
+        ),
+        Dictionary(
+            yomi = "せいびし",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 3000,
+            tango = "整備士"
+        ),
+        Dictionary(
+            yomi = "こくしょき",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "酷暑期"
+        ),
+        Dictionary(
+            yomi = "さっちゅうとう",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "殺虫灯"
+        ),
+        Dictionary(
+            yomi = "そしきち",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "組織知"
+        ),
+        Dictionary(
+            yomi = "ながしした",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "流し下"
+        ),
+        Dictionary(
+            yomi = "なくはめに",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "泣く羽目に"
+        ),
+        Dictionary(
+            yomi = "はんにんげつ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "半人月"
+        ),
+        Dictionary(
+            yomi = "りまにゅふぁくちゃりんぐ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "リマニュファクチャリング"
+        ),
+        Dictionary(
+            yomi = "くろずあん",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "黒酢あん"
+        ),
+        Dictionary(
+            yomi = "こうりょふじん",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "考慮不尽"
+        ),
+        Dictionary(
+            yomi = "ごぶんけい",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "五文型"
+        ),
+        Dictionary(
+            yomi = "じこんて",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "字コンテ"
+        ),
+        Dictionary(
+            yomi = "ぜんぱく",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "前泊"
+        ),
+        Dictionary(
+            yomi = "つつがゆさい",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "筒粥祭"
+        ),
+        Dictionary(
+            yomi = "てんせいろ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "天せいろ"
+        ),
+        Dictionary(
+            yomi = "こみゃく",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "こみゃく"
+        ),
+        Dictionary(
+            yomi = "ださてぃー",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "ダサT"
+        ),
+        Dictionary(
+            yomi = "ちえんしょう",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "遅延証"
+        ),
+        Dictionary(
+            yomi = "おいくらべ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "追い比べ"
+        ),
+        Dictionary(
+            yomi = "ごかきん",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "誤課金"
+        ),
+        Dictionary(
+            yomi = "さんぜんきゅう",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "産前休"
+        ),
+        Dictionary(
+            yomi = "しとだる",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "四斗樽"
+        ),
+        Dictionary(
+            yomi = "じこうしき",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 9130,
+            tango = "字光式"
+        ),
+        Dictionary(
+            yomi = "せりょういん",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "施療院"
+        ),
+        Dictionary(
+            yomi = "はいぜんしゃ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "配膳車"
+        ),
+        Dictionary(
+            yomi = "ひーてっど",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "ヒーテッド"
+        ),
+        Dictionary(
+            yomi = "あれでら",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "荒れ寺"
+        ),
+        Dictionary(
+            yomi = "かいさんひん",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "海産品"
+        ),
+        Dictionary(
+            yomi = "かんもどり",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "寒戻り"
+        ),
+        Dictionary(
+            yomi = "きかんしょく",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "基幹職"
+        ),
+        Dictionary(
+            yomi = "くちゆく",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "朽ちゆく"
+        ),
+        Dictionary(
+            yomi = "こくほうでん",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "国宝殿"
+        ),
+        Dictionary(
+            yomi = "さいさいどの",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "再々度の"
+        ),
+        Dictionary(
+            yomi = "じょしぼう",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "除脂肪"
+        ),
+        Dictionary(
+            yomi = "りは",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "リハ"
+        ),
+        Dictionary(
+            yomi = "ちゅうやきん",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "昼夜勤"
+        ),
+        Dictionary(
+            yomi = "ばくやけ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "爆焼け"
+        ),
+        Dictionary(
+            yomi = "ひふんち",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "避粉地"
+        ),
+        Dictionary(
+            yomi = "ほわはら",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "ホワハラ"
+        ),
+        Dictionary(
+            yomi = "みたつじ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "未達時"
+        ),
+        Dictionary(
+            yomi = "かつぜん",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "カツ膳"
+        ),
+        Dictionary(
+            yomi = "そつだんせい",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "卒団生"
+        ),
+        Dictionary(
+            yomi = "でじえ",
+            leftId = 1852,
+            rightId = 1852,
+            cost = 4000,
+            tango = "デジ絵"
+        ),
     )
 
     val ERA = listOf(
