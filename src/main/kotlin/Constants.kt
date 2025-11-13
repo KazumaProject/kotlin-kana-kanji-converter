@@ -4279,6 +4279,195 @@ object Constants {
             cost = 4000,
             tango = "列島地震"
         ),
+        Dictionary(
+            yomi = "えこしよう",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "エコ仕様"
+        ),
+        Dictionary(
+            yomi = "しんせんなかいせん",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 6000,
+            tango = "新鮮な海鮮"
+        ),
+        Dictionary(
+            yomi = "ごうかなかいせん",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 6000,
+            tango = "豪華な海鮮"
+        ),
+        Dictionary(
+            yomi = "かいせんせんべい",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 6000,
+            tango = "海鮮せんべい"
+        ),
+        Dictionary(
+            yomi = "かいれいやー",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 6000,
+            tango = "下位レイヤー"
+        ),
+        Dictionary(
+            yomi = "かんしょくをしない",
+            leftId = 204,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 6000,
+            tango = "間食をしない"
+        ),
+        Dictionary(
+            yomi = "きゅうようがはいる",
+            leftId = 837,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 6000,
+            tango = "急用が入る"
+        ),
+        Dictionary(
+            yomi = "きゅうようがはいっ",
+            leftId = 841,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 6000,
+            tango = "急用が入っ"
+        ),
+        Dictionary(
+            yomi = "きょうとしせい",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "京都市政"
+        ),
+        Dictionary(
+            yomi = "ぎょうむのみえるか",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 6000,
+            tango = "業務の見える化"
+        ),
+        Dictionary(
+            yomi = "くりすたるしゃいん",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5000,
+            tango = "クリスタルシャイン"
+        ),
+        Dictionary(
+            yomi = "げきよわ",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "激弱"
+        ),
+        Dictionary(
+            yomi = "げっきゅうぎ",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "月球儀"
+        ),
+        Dictionary(
+            yomi = "こうくうせんじょうざい",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "口腔洗浄剤"
+        ),
+        Dictionary(
+            yomi = "こうしゅうきつえんじょ",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "公衆喫煙所"
+        ),
+        Dictionary(
+            yomi = "こうせいさいかん",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "高精細感"
+        ),
+        Dictionary(
+            yomi = "こんしんのせき",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5000,
+            tango = "懇親の席"
+        ),
+        Dictionary(
+            yomi = "さいぶーつ",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5000,
+            tango = "サイブーツ"
+        ),
+        Dictionary(
+            yomi = "しわけかんりょう",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5000,
+            tango = "仕分け完了"
+        ),
+        Dictionary(
+            yomi = "たちかいぎ",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5000,
+            tango = "立ち会議"
+        ),
+        Dictionary(
+            yomi = "どようびはつ",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5000,
+            tango = "土曜日発"
+        ),
+        Dictionary(
+            yomi = "どられこおうしゅう",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5000,
+            tango = "ドラレコ押収"
+        ),
+        Dictionary(
+            yomi = "のどからから",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5000,
+            tango = "喉カラカラ"
+        ),
+        Dictionary(
+            yomi = "ひろうぬき",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5000,
+            tango = "疲労抜き"
+        ),
+        Dictionary(
+            yomi = "ぷろばいだりょう",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5000,
+            tango = "プロバイダ料"
+        ),
+        Dictionary(
+            yomi = "みあったせいか",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5000,
+            tango = "見合った成果"
+        ),
+        Dictionary(
+            yomi = "らっくのちゅうだん",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5000,
+            tango = "ラックの中段"
+        ),
     )
 
     val PLACE = listOf(
