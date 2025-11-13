@@ -1111,9 +1111,9 @@ object Constants {
         ),
         Dictionary(
             yomi = "まぐろをかいたい",
-            leftId = NOUN_PART_OF_SPEECH_ID,
+            leftId = 1842,
             rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 7000,
+            cost = 5000,
             tango = "マグロを解体"
         ),
     )
