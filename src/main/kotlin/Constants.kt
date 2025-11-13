@@ -8,424 +8,184 @@ import com.kazumaproject.dictionary.models.Dictionary
 object Constants {
     val DIC_LIST = listOf(
         Dictionary(
-            yomi = "a",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "a"
+            yomi = "a", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "a"
         ),
         Dictionary(
-            yomi = "b",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "b"
+            yomi = "b", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "b"
         ),
         Dictionary(
-            yomi = "c",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "c"
+            yomi = "c", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "c"
         ),
         Dictionary(
-            yomi = "d",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "d"
+            yomi = "d", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "d"
         ),
         Dictionary(
-            yomi = "e",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "e"
+            yomi = "e", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "e"
         ),
         Dictionary(
-            yomi = "f",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "f"
+            yomi = "f", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "f"
         ),
         Dictionary(
-            yomi = "g",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "g"
+            yomi = "g", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "g"
         ),
         Dictionary(
-            yomi = "h",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "h"
+            yomi = "h", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "h"
         ),
         Dictionary(
-            yomi = "i",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "i"
+            yomi = "i", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "i"
         ),
         Dictionary(
-            yomi = "j",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "j"
+            yomi = "j", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "j"
         ),
         Dictionary(
-            yomi = "k",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "k"
+            yomi = "k", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "k"
         ),
         Dictionary(
-            yomi = "l",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "l"
+            yomi = "l", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "l"
         ),
         Dictionary(
-            yomi = "m",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "m"
+            yomi = "m", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "m"
         ),
         Dictionary(
-            yomi = "n",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "n"
+            yomi = "n", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "n"
         ),
         Dictionary(
-            yomi = "o",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "o"
+            yomi = "o", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "o"
         ),
         Dictionary(
-            yomi = "p",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "p"
+            yomi = "p", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "p"
         ),
         Dictionary(
-            yomi = "q",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "q"
+            yomi = "q", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "q"
         ),
         Dictionary(
-            yomi = "r",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "r"
+            yomi = "r", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "r"
         ),
         Dictionary(
-            yomi = "s",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "s"
+            yomi = "s", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "s"
         ),
         Dictionary(
-            yomi = "t",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "t"
+            yomi = "t", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "t"
         ),
         Dictionary(
-            yomi = "u",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "u"
+            yomi = "u", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "u"
         ),
         Dictionary(
-            yomi = "v",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "v"
+            yomi = "v", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "v"
         ),
         Dictionary(
-            yomi = "x",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "x"
+            yomi = "x", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "x"
         ),
         Dictionary(
-            yomi = "y",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "y"
+            yomi = "y", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "y"
         ),
         Dictionary(
-            yomi = "z",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "z"
+            yomi = "z", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "z"
         ),
         Dictionary(
-            yomi = "A",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "A"
+            yomi = "A", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "A"
         ),
         Dictionary(
-            yomi = "B",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "B"
+            yomi = "B", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "B"
         ),
         Dictionary(
-            yomi = "C",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "C"
+            yomi = "C", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "C"
         ),
         Dictionary(
-            yomi = "D",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "D"
+            yomi = "D", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "D"
         ),
         Dictionary(
-            yomi = "E",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "E"
+            yomi = "E", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "E"
         ),
         Dictionary(
-            yomi = "F",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "F"
+            yomi = "F", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "F"
         ),
         Dictionary(
-            yomi = "G",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "G"
+            yomi = "G", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "G"
         ),
         Dictionary(
-            yomi = "H",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "H"
+            yomi = "H", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "H"
         ),
         Dictionary(
-            yomi = "I",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "I"
+            yomi = "I", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "I"
         ),
         Dictionary(
-            yomi = "J",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "J"
+            yomi = "J", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "J"
         ),
         Dictionary(
-            yomi = "K",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "K"
+            yomi = "K", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "K"
         ),
         Dictionary(
-            yomi = "L",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "L"
+            yomi = "L", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "L"
         ),
         Dictionary(
-            yomi = "M",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "M"
+            yomi = "M", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "M"
         ),
         Dictionary(
-            yomi = "N",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "N"
+            yomi = "N", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "N"
         ),
         Dictionary(
-            yomi = "O",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "O"
+            yomi = "O", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "O"
         ),
         Dictionary(
-            yomi = "P",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "P"
+            yomi = "P", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "P"
         ),
         Dictionary(
-            yomi = "Q",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "Q"
+            yomi = "Q", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "Q"
         ),
         Dictionary(
-            yomi = "R",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "R"
+            yomi = "R", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "R"
         ),
         Dictionary(
-            yomi = "S",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "S"
+            yomi = "S", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "S"
         ),
         Dictionary(
-            yomi = "T",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "T"
+            yomi = "T", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "T"
         ),
         Dictionary(
-            yomi = "U",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "U"
+            yomi = "U", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "U"
         ),
         Dictionary(
-            yomi = "V",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "V"
+            yomi = "V", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "V"
         ),
         Dictionary(
-            yomi = "W",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "W"
+            yomi = "W", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "W"
         ),
         Dictionary(
-            yomi = "X",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "X"
+            yomi = "X", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "X"
         ),
         Dictionary(
-            yomi = "Y",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "Y"
+            yomi = "Y", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "Y"
         ),
         Dictionary(
-            yomi = "Z",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "Z"
+            yomi = "Z", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "Z"
         ),
         Dictionary(
-            yomi = "'",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 2655,
-            cost = 8000,
-            tango = "'"
+            yomi = "'", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 2655, cost = 8000, tango = "'"
         ),
         Dictionary(
-            yomi = "~",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 2651,
-            cost = 8000,
-            tango = "~"
+            yomi = "~", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 2651, cost = 8000, tango = "~"
         ),
         Dictionary(
-            yomi = "\"",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 2654,
-            cost = 8000,
-            tango = "\""
+            yomi = "\"", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 2654, cost = 8000, tango = "\""
         ),
         Dictionary(
-            yomi = "ゃ",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 1998,
-            tango = "ゃ"
+            yomi = "ゃ", leftId = NOUN_PART_OF_SPEECH_ID, rightId = NOUN_PART_OF_SPEECH_ID, cost = 1998, tango = "ゃ"
         ),
         Dictionary(
-            yomi = "ゅ",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "ゅ"
+            yomi = "ゅ", leftId = NOUN_PART_OF_SPEECH_ID, rightId = NOUN_PART_OF_SPEECH_ID, cost = 8000, tango = "ゅ"
         ),
         Dictionary(
-            yomi = "ゃ",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "ャ"
+            yomi = "ゃ", leftId = NOUN_PART_OF_SPEECH_ID, rightId = NOUN_PART_OF_SPEECH_ID, cost = 8000, tango = "ャ"
         ),
         Dictionary(
-            yomi = "ゅ",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 8001,
-            tango = "ュ"
+            yomi = "ゅ", leftId = NOUN_PART_OF_SPEECH_ID, rightId = NOUN_PART_OF_SPEECH_ID, cost = 8001, tango = "ュ"
         ),
         Dictionary(
-            yomi = "ゎ",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "ゎ"
+            yomi = "ゎ", leftId = NOUN_PART_OF_SPEECH_ID, rightId = NOUN_PART_OF_SPEECH_ID, cost = 8000, tango = "ゎ"
         ),
         Dictionary(
-            yomi = "ゔ",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "ゔ"
+            yomi = "ゔ", leftId = NOUN_PART_OF_SPEECH_ID, rightId = NOUN_PART_OF_SPEECH_ID, cost = 8000, tango = "ゔ"
         ),
         Dictionary(
             yomi = "ゔ",
@@ -435,147 +195,67 @@ object Constants {
             tango = "\u30F4"
         ),
         Dictionary(
-            yomi = "ゔ",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 8002,
-            tango = "ｳﾞ"
+            yomi = "ゔ", leftId = NOUN_PART_OF_SPEECH_ID, rightId = NOUN_PART_OF_SPEECH_ID, cost = 8002, tango = "ｳﾞ"
         ),
         Dictionary(
-            yomi = "づ",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "づ"
+            yomi = "づ", leftId = NOUN_PART_OF_SPEECH_ID, rightId = NOUN_PART_OF_SPEECH_ID, cost = 8000, tango = "づ"
         ),
         Dictionary(
-            yomi = "づ",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 8001,
-            tango = "ヅ"
+            yomi = "づ", leftId = NOUN_PART_OF_SPEECH_ID, rightId = NOUN_PART_OF_SPEECH_ID, cost = 8001, tango = "ヅ"
         ),
         Dictionary(
-            yomi = "づ",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 8002,
-            tango = "ﾂﾞ"
+            yomi = "づ", leftId = NOUN_PART_OF_SPEECH_ID, rightId = NOUN_PART_OF_SPEECH_ID, cost = 8002, tango = "ﾂﾞ"
         ),
         Dictionary(
-            yomi = "%",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "%"
+            yomi = "%", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "%"
         ),
         Dictionary(
-            yomi = "°",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "°"
+            yomi = "°", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "°"
         ),
         Dictionary(
-            yomi = "￥",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "￥"
+            yomi = "￥", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "￥"
         ),
         Dictionary(
-            yomi = "€",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "€"
+            yomi = "€", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "€"
         ),
         Dictionary(
-            yomi = "♪",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "♪"
+            yomi = "♪", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "♪"
         ),
         Dictionary(
-            yomi = "々",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "々"
+            yomi = "々", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "々"
         ),
         Dictionary(
-            yomi = "#",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "#"
+            yomi = "#", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "#"
         ),
         Dictionary(
-            yomi = "&",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "&"
+            yomi = "&", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "&"
         ),
         Dictionary(
-            yomi = "！",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = ALPHABET_PART_OF_SPEECH_ID,
-            cost = 8000,
-            tango = "！"
+            yomi = "！", leftId = NOUN_PART_OF_SPEECH_ID, rightId = ALPHABET_PART_OF_SPEECH_ID, cost = 8000, tango = "！"
         ),
         Dictionary(
-            yomi = "〜",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 2651,
-            cost = 8000,
-            tango = "〜"
+            yomi = "〜", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 2651, cost = 8000, tango = "〜"
         ),
         Dictionary(
-            yomi = "？",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 2647,
-            cost = 8000,
-            tango = "？"
+            yomi = "？", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 2647, cost = 8000, tango = "？"
         ),
         Dictionary(
-            yomi = "（",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 2653,
-            cost = 8000,
-            tango = "（"
+            yomi = "（", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 2653, cost = 8000, tango = "（"
         ),
         Dictionary(
-            yomi = "）",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 2652,
-            cost = 8000,
-            tango = "）"
+            yomi = "）", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 2652, cost = 8000, tango = "）"
         ),
     )
 
     val VERB_LIST = listOf(
         Dictionary(
-            yomi = "かいたい",
-            leftId = 727,
-            rightId = 727,
-            cost = 2100,
-            tango = "飼いたい"
+            yomi = "かいたい", leftId = 727, rightId = 727, cost = 2100, tango = "飼いたい"
         ),
         Dictionary(
-            yomi = "かいたい",
-            leftId = 727,
-            rightId = 727,
-            cost = 2150,
-            tango = "買いたい"
+            yomi = "かいたい", leftId = 727, rightId = 727, cost = 2150, tango = "買いたい"
         ),
         Dictionary(
-            yomi = "おうた",
-            leftId = 803,
-            rightId = 803,
-            cost = 3000,
-            tango = "負うた"
+            yomi = "おうた", leftId = 803, rightId = 803, cost = 3000, tango = "負うた"
         ),
         Dictionary(
             yomi = "たいま",
@@ -585,11 +265,7 @@ object Constants {
             tango = "大麻"
         ),
         Dictionary(
-            yomi = "すう",
-            leftId = 813,
-            rightId = 813,
-            cost = 2500,
-            tango = "吸う"
+            yomi = "すう", leftId = 813, rightId = 813, cost = 2500, tango = "吸う"
         ),
     )
 
@@ -756,11 +432,7 @@ object Constants {
             tango = "阿吽の呼吸"
         ),
         Dictionary(
-            yomi = "のみにいこう",
-            leftId = 732,
-            rightId = 842,
-            cost = 3000,
-            tango = "飲みに行こう"
+            yomi = "のみにいこう", leftId = 732, rightId = 842, cost = 3000, tango = "飲みに行こう"
         ),
         Dictionary(
             yomi = "ひとはこ",
@@ -770,11 +442,7 @@ object Constants {
             tango = "一箱"
         ),
         Dictionary(
-            yomi = "こは",
-            leftId = 283,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 1500,
-            tango = "子は"
+            yomi = "こは", leftId = 283, rightId = NOUN_PART_OF_SPEECH_ID, cost = 1500, tango = "子は"
         ),
         Dictionary(
             yomi = "こころ",
@@ -798,11 +466,7 @@ object Constants {
             tango = "創始者"
         ),
         Dictionary(
-            yomi = "おこっ",
-            leftId = 841,
-            rightId = 841,
-            cost = 2800,
-            tango = "怒っ"
+            yomi = "おこっ", leftId = 841, rightId = 841, cost = 2800, tango = "怒っ"
         ),
         Dictionary(
             yomi = "かけぐるい",
@@ -833,18 +497,10 @@ object Constants {
             tango = "垜"
         ),
         Dictionary(
-            yomi = "あづち",
-            leftId = 1923,
-            rightId = 1923,
-            cost = 5100,
-            tango = "的山"
+            yomi = "あづち", leftId = 1923, rightId = 1923, cost = 5100, tango = "的山"
         ),
         Dictionary(
-            yomi = "ふまんてん",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 1973,
-            cost = 4000,
-            tango = "不満点"
+            yomi = "ふまんてん", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 1973, cost = 4000, tango = "不満点"
         ),
         Dictionary(
             yomi = "そうりゅうりょく",
@@ -868,11 +524,7 @@ object Constants {
             tango = "出店"
         ),
         Dictionary(
-            yomi = "かいきり",
-            leftId = 842,
-            rightId = 842,
-            cost = 4000,
-            tango = "買い切り"
+            yomi = "かいきり", leftId = 842, rightId = 842, cost = 4000, tango = "買い切り"
         ),
         Dictionary(
             yomi = "おみおつけ",
@@ -966,18 +618,10 @@ object Constants {
             tango = "下賜品"
         ),
         Dictionary(
-            yomi = "ごじょう",
-            leftId = 1841,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 6000,
-            tango = "誤乗"
+            yomi = "ごじょう", leftId = 1841, rightId = NOUN_PART_OF_SPEECH_ID, cost = 6000, tango = "誤乗"
         ),
         Dictionary(
-            yomi = "そくへん",
-            leftId = 1841,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4000,
-            tango = "即返"
+            yomi = "そくへん", leftId = 1841, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4000, tango = "即返"
         ),
         Dictionary(
             yomi = "たんかんえいがかん",
@@ -994,11 +638,7 @@ object Constants {
             tango = "丹後路"
         ),
         Dictionary(
-            yomi = "ぶあつめに",
-            leftId = 12,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4000,
-            tango = "分厚めに"
+            yomi = "ぶあつめに", leftId = 12, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4000, tango = "分厚めに"
         ),
         Dictionary(
             yomi = "ぶいろぐ",
@@ -1480,11 +1120,7 @@ object Constants {
 
     val ERA = listOf(
         Dictionary(
-            yomi = "れいわ",
-            leftId = 1916,
-            rightId = 1916,
-            cost = 1685,
-            tango = "令和"
+            yomi = "れいわ", leftId = 1916, rightId = 1916, cost = 1685, tango = "令和"
         ),
     )
 
@@ -1511,150 +1147,70 @@ object Constants {
             tango = "@i.softbank.jp"
         ),
         Dictionary(
-            yomi = "@softbank.ne.jp",
-            leftId = 0,
-            rightId = 0,
-            cost = 2002,
-            tango = "@softbank.ne.jp"
+            yomi = "@softbank.ne.jp", leftId = 0, rightId = 0, cost = 2002, tango = "@softbank.ne.jp"
         ),
         Dictionary(
-            yomi = "@ezweb.ne.jp",
-            leftId = 0,
-            rightId = 0,
-            cost = 2003,
-            tango = "@ezweb.ne.jp"
+            yomi = "@ezweb.ne.jp", leftId = 0, rightId = 0, cost = 2003, tango = "@ezweb.ne.jp"
         ),
         Dictionary(
-            yomi = "@au.com",
-            leftId = 0,
-            rightId = 0,
-            cost = 2004,
-            tango = "@au.com"
+            yomi = "@au.com", leftId = 0, rightId = 0, cost = 2004, tango = "@au.com"
         ),
     )
 
     val NAME_LIST = listOf(
         Dictionary(
-            yomi = "みくる",
-            leftId = 1922,
-            rightId = 1922,
-            cost = 3000,
-            tango = "未来"
+            yomi = "みくる", leftId = 1922, rightId = 1922, cost = 3000, tango = "未来"
         ),
         Dictionary(
-            yomi = "かい",
-            leftId = 1922,
-            rightId = 1922,
-            cost = 2000,
-            tango = "海"
+            yomi = "かい", leftId = 1922, rightId = 1922, cost = 2000, tango = "海"
         ),
         Dictionary(
-            yomi = "るきや",
-            leftId = 1922,
-            rightId = 1922,
-            cost = 4000,
-            tango = "瑠輝也"
+            yomi = "るきや", leftId = 1922, rightId = 1922, cost = 4000, tango = "瑠輝也"
         ),
         Dictionary(
-            yomi = "まどか",
-            leftId = 1922,
-            rightId = 1922,
-            cost = 3000,
-            tango = "円佳"
+            yomi = "まどか", leftId = 1922, rightId = 1922, cost = 3000, tango = "円佳"
         ),
         Dictionary(
-            yomi = "ひさし",
-            leftId = 1922,
-            rightId = 1922,
-            cost = 4000,
-            tango = "寿至"
+            yomi = "ひさし", leftId = 1922, rightId = 1922, cost = 4000, tango = "寿至"
         ),
         Dictionary(
-            yomi = "かずま",
-            leftId = 1922,
-            rightId = 1922,
-            cost = 3500,
-            tango = "一真"
+            yomi = "かずま", leftId = 1922, rightId = 1922, cost = 3500, tango = "一真"
         ),
         Dictionary(
-            yomi = "なおみ",
-            leftId = 1922,
-            rightId = 1922,
-            cost = 3200,
-            tango = "尚美"
+            yomi = "なおみ", leftId = 1922, rightId = 1922, cost = 3200, tango = "尚美"
         ),
         Dictionary(
-            yomi = "なか",
-            leftId = 1923,
-            rightId = 1923,
-            cost = 3000,
-            tango = "中"
+            yomi = "なか", leftId = 1923, rightId = 1923, cost = 3000, tango = "中"
         ),
         Dictionary(
-            yomi = "こうじ",
-            leftId = 1922,
-            rightId = 1922,
-            cost = 4000,
-            tango = "皇治"
+            yomi = "こうじ", leftId = 1922, rightId = 1922, cost = 4000, tango = "皇治"
         ),
         Dictionary(
-            yomi = "にしい",
-            leftId = 1923,
-            rightId = 1923,
-            cost = 3500,
-            tango = "西居"
+            yomi = "にしい", leftId = 1923, rightId = 1923, cost = 3500, tango = "西居"
         ),
         Dictionary(
-            yomi = "なかた",
-            leftId = 1923,
-            rightId = 1923,
-            cost = 2000,
-            tango = "中田"
+            yomi = "なかた", leftId = 1923, rightId = 1923, cost = 2000, tango = "中田"
         ),
     )
 
     val FIGHT_NAME = listOf(
         Dictionary(
-            yomi = "らいじん",
-            leftId = 1929,
-            rightId = 1929,
-            cost = 5000,
-            tango = "RIZIN"
+            yomi = "らいじん", leftId = 1929, rightId = 1929, cost = 5000, tango = "RIZIN"
         ),
         Dictionary(
-            yomi = "けーわん",
-            leftId = 1929,
-            rightId = 1929,
-            cost = 5000,
-            tango = "K-1"
+            yomi = "けーわん", leftId = 1929, rightId = 1929, cost = 5000, tango = "K-1"
         ),
         Dictionary(
-            yomi = "k-1",
-            leftId = 1929,
-            rightId = 1929,
-            cost = 5000,
-            tango = "K-1"
+            yomi = "k-1", leftId = 1929, rightId = 1929, cost = 5000, tango = "K-1"
         ),
         Dictionary(
-            yomi = "K-1",
-            leftId = 1929,
-            rightId = 1929,
-            cost = 5000,
-            tango = "K-1"
+            yomi = "K-1", leftId = 1929, rightId = 1929, cost = 5000, tango = "K-1"
         ),
         Dictionary(
-            yomi = "らいず",
-            leftId = 1929,
-            rightId = 1929,
-            cost = 5000,
-            tango = "RIZE"
+            yomi = "らいず", leftId = 1929, rightId = 1929, cost = 5000, tango = "RIZE"
         ),
         Dictionary(
-            yomi = "しゅーと",
-            leftId = 1929,
-            rightId = 1929,
-            cost = 4000,
-            tango = "修斗"
+            yomi = "しゅーと", leftId = 1929, rightId = 1929, cost = 4000, tango = "修斗"
         ),
         Dictionary(
             yomi = "やーまん",
@@ -1796,25 +1352,13 @@ object Constants {
             tango = "YouTube"
         ),
         Dictionary(
-            yomi = "ぐーぐる",
-            leftId = 1929,
-            rightId = 1929,
-            cost = 4000,
-            tango = "Google"
+            yomi = "ぐーぐる", leftId = 1929, rightId = 1929, cost = 4000, tango = "Google"
         ),
         Dictionary(
-            yomi = "ぐーぐるまっぷ",
-            leftId = 1929,
-            rightId = 1929,
-            cost = 4000,
-            tango = "Google Map"
+            yomi = "ぐーぐるまっぷ", leftId = 1929, rightId = 1929, cost = 4000, tango = "Google Map"
         ),
         Dictionary(
-            yomi = "あまぞん",
-            leftId = 1929,
-            rightId = 1929,
-            cost = 4000,
-            tango = "Amazon"
+            yomi = "あまぞん", leftId = 1929, rightId = 1929, cost = 4000, tango = "Amazon"
         ),
         Dictionary(
             yomi = "ぎっと",
@@ -1834,18 +1378,10 @@ object Constants {
 
     val SYMBOL_LIST = listOf(
         Dictionary(
-            yomi = "はてな",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 2645,
-            cost = 4001,
-            tango = "?"
+            yomi = "はてな", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 2645, cost = 4001, tango = "?"
         ),
         Dictionary(
-            yomi = "びっくりまーく",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 2644,
-            cost = 4601,
-            tango = "!"
+            yomi = "びっくりまーく", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 2644, cost = 4601, tango = "!"
         ),
         Dictionary(
             yomi = "かっこ",
@@ -1869,21 +1405,13 @@ object Constants {
             tango = "-"
         ),
         Dictionary(
-            yomi = "ー",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 2651,
-            cost = 4001,
-            tango = "~"
+            yomi = "ー", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 2651, cost = 4001, tango = "~"
         ),
     )
 
     val ZENKANKU_LIST = listOf(
         Dictionary(
-            yomi = "はてな",
-            leftId = 2645,
-            rightId = 2645,
-            cost = 4000,
-            tango = "？"
+            yomi = "はてな", leftId = 2645, rightId = 2645, cost = 4000, tango = "？"
         ),
         Dictionary(
             yomi = "びっくりまーく",
@@ -1907,70 +1435,34 @@ object Constants {
             tango = "＋"
         ),
         Dictionary(
-            yomi = "ー",
-            leftId = 2651,
-            rightId = 2651,
-            cost = 4000,
-            tango = "〜"
+            yomi = "ー", leftId = 2651, rightId = 2651, cost = 4000, tango = "〜"
         ),
     )
 
     val FIXED_LIST = listOf(
         Dictionary(
-            yomi = "かたがこる",
-            leftId = 765,
-            rightId = 765,
-            cost = 3000,
-            tango = "肩が凝る"
+            yomi = "かたがこる", leftId = 765, rightId = 765, cost = 3000, tango = "肩が凝る"
         ),
         Dictionary(
-            yomi = "かたがこる",
-            leftId = 765,
-            rightId = 765,
-            cost = 3001,
-            tango = "肩がこる"
+            yomi = "かたがこる", leftId = 765, rightId = 765, cost = 3001, tango = "肩がこる"
         ),
         Dictionary(
-            yomi = "きかいがとまっ",
-            leftId = 841,
-            rightId = 841,
-            cost = 3000,
-            tango = "機械が止まっ"
+            yomi = "きかいがとまっ", leftId = 841, rightId = 841, cost = 3000, tango = "機械が止まっ"
         ),
         Dictionary(
-            yomi = "きかいがとまる",
-            leftId = 763,
-            rightId = 763,
-            cost = 3000,
-            tango = "機械が止まる"
+            yomi = "きかいがとまる", leftId = 763, rightId = 763, cost = 3000, tango = "機械が止まる"
         ),
         Dictionary(
-            yomi = "せいどがひくい",
-            leftId = 2422,
-            rightId = 2422,
-            cost = 3000,
-            tango = "精度が低い"
+            yomi = "せいどがひくい", leftId = 2422, rightId = 2422, cost = 3000, tango = "精度が低い"
         ),
         Dictionary(
-            yomi = "せいどがたかい",
-            leftId = 2422,
-            rightId = 2422,
-            cost = 3000,
-            tango = "精度が高い"
+            yomi = "せいどがたかい", leftId = 2422, rightId = 2422, cost = 3000, tango = "精度が高い"
         ),
         Dictionary(
-            yomi = "せいどのひくい",
-            leftId = 2422,
-            rightId = 2422,
-            cost = 3000,
-            tango = "精度の低い"
+            yomi = "せいどのひくい", leftId = 2422, rightId = 2422, cost = 3000, tango = "精度の低い"
         ),
         Dictionary(
-            yomi = "せいどのたかい",
-            leftId = 2422,
-            rightId = 2422,
-            cost = 3000,
-            tango = "精度の高い"
+            yomi = "せいどのたかい", leftId = 2422, rightId = 2422, cost = 3000, tango = "精度の高い"
         ),
         Dictionary(
             yomi = "かのように",
@@ -1987,11 +1479,7 @@ object Constants {
             tango = "をしたにも"
         ),
         Dictionary(
-            yomi = "こうざのかいせつ",
-            leftId = 1841,
-            rightId = 1841,
-            cost = 3000,
-            tango = "口座の開設"
+            yomi = "こうざのかいせつ", leftId = 1841, rightId = 1841, cost = 3000, tango = "口座の開設"
         ),
         Dictionary(
             yomi = "へんしんまち",
@@ -2001,25 +1489,13 @@ object Constants {
             tango = "返信待ち"
         ),
         Dictionary(
-            yomi = "しんちょうにはこぶ",
-            leftId = 837,
-            rightId = 837,
-            cost = 3000,
-            tango = "慎重に運ぶ"
+            yomi = "しんちょうにはこぶ", leftId = 837, rightId = 837, cost = 3000, tango = "慎重に運ぶ"
         ),
         Dictionary(
-            yomi = "おんどをおどる",
-            leftId = 837,
-            rightId = 837,
-            cost = 3000,
-            tango = "音頭を踊る"
+            yomi = "おんどをおどる", leftId = 837, rightId = 837, cost = 3000, tango = "音頭を踊る"
         ),
         Dictionary(
-            yomi = "てをふっ",
-            leftId = 779,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 3000,
-            tango = "手を振っ"
+            yomi = "てをふっ", leftId = 779, rightId = NOUN_PART_OF_SPEECH_ID, cost = 3000, tango = "手を振っ"
         ),
         Dictionary(
             yomi = "てをふる",
@@ -2071,46 +1547,22 @@ object Constants {
             tango = "読みにくい文字"
         ),
         Dictionary(
-            yomi = "かぜをひく",
-            leftId = 731,
-            rightId = 731,
-            cost = 3000,
-            tango = "風邪をひく"
+            yomi = "かぜをひく", leftId = 731, rightId = 731, cost = 3000, tango = "風邪をひく"
         ),
         Dictionary(
-            yomi = "こっちにこい",
-            leftId = 871,
-            rightId = 871,
-            cost = 3000,
-            tango = "こっちに来い"
+            yomi = "こっちにこい", leftId = 871, rightId = 871, cost = 3000, tango = "こっちに来い"
         ),
         Dictionary(
-            yomi = "おれかかった",
-            leftId = 701,
-            rightId = 701,
-            cost = 3000,
-            tango = "折れかかった"
+            yomi = "おれかかった", leftId = 701, rightId = 701, cost = 3000, tango = "折れかかった"
         ),
         Dictionary(
-            yomi = "きりがない",
-            leftId = 2525,
-            rightId = 2525,
-            cost = 3000,
-            tango = "きりがない"
+            yomi = "きりがない", leftId = 2525, rightId = 2525, cost = 3000, tango = "きりがない"
         ),
         Dictionary(
-            yomi = "としをとる",
-            leftId = 783,
-            rightId = 783,
-            cost = 3000,
-            tango = "歳をとる"
+            yomi = "としをとる", leftId = 783, rightId = 783, cost = 3000, tango = "歳をとる"
         ),
         Dictionary(
-            yomi = "じしんにみち",
-            leftId = 701,
-            rightId = 701,
-            cost = 3000,
-            tango = "自信に満ち"
+            yomi = "じしんにみち", leftId = 701, rightId = 701, cost = 3000, tango = "自信に満ち"
         ),
         Dictionary(
             yomi = "よくえいぎょうび",
@@ -2120,11 +1572,7 @@ object Constants {
             tango = "翌営業日"
         ),
         Dictionary(
-            yomi = "そけんのらんよう",
-            leftId = 1841,
-            rightId = 1841,
-            cost = 3000,
-            tango = "訴権の濫用"
+            yomi = "そけんのらんよう", leftId = 1841, rightId = 1841, cost = 3000, tango = "訴権の濫用"
         ),
         Dictionary(
             yomi = "そけん",
@@ -2141,11 +1589,7 @@ object Constants {
             tango = "公訴権"
         ),
         Dictionary(
-            yomi = "こうそけんのらんよう",
-            leftId = 1841,
-            rightId = 1841,
-            cost = 3000,
-            tango = "公訴権の濫用"
+            yomi = "こうそけんのらんよう", leftId = 1841, rightId = 1841, cost = 3000, tango = "公訴権の濫用"
         ),
         Dictionary(
             yomi = "きのこ",
@@ -2169,25 +1613,13 @@ object Constants {
             tango = "茸"
         ),
         Dictionary(
-            yomi = "おこる",
-            leftId = 837,
-            rightId = 837,
-            cost = 2600,
-            tango = "怒る"
+            yomi = "おこる", leftId = 837, rightId = 837, cost = 2600, tango = "怒る"
         ),
         Dictionary(
-            yomi = "りゆうしょ",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 1969,
-            cost = 3000,
-            tango = "理由書"
+            yomi = "りゆうしょ", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 1969, cost = 3000, tango = "理由書"
         ),
         Dictionary(
-            yomi = "しんせいにん",
-            leftId = 1841,
-            rightId = 1951,
-            cost = 3000,
-            tango = "申請人"
+            yomi = "しんせいにん", leftId = 1841, rightId = 1951, cost = 3000, tango = "申請人"
         ),
         Dictionary(
             yomi = "らゔぃっと",
@@ -2218,39 +1650,19 @@ object Constants {
             tango = "宴もたけなわ"
         ),
         Dictionary(
-            yomi = "あるひと",
-            leftId = 2656,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 2500,
-            tango = "ある人"
+            yomi = "あるひと", leftId = 2656, rightId = NOUN_PART_OF_SPEECH_ID, cost = 2500, tango = "ある人"
         ),
         Dictionary(
-            yomi = "ぎじゅつしょ",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 1969,
-            cost = 2500,
-            tango = "技術書"
+            yomi = "ぎじゅつしょ", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 1969, cost = 2500, tango = "技術書"
         ),
         Dictionary(
-            yomi = "ずかんしょ",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 1969,
-            cost = 3500,
-            tango = "図鑑書"
+            yomi = "ずかんしょ", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 1969, cost = 3500, tango = "図鑑書"
         ),
         Dictionary(
-            yomi = "じれいしょ",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 1969,
-            cost = 3500,
-            tango = "辞令書"
+            yomi = "じれいしょ", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 1969, cost = 3500, tango = "辞令書"
         ),
         Dictionary(
-            yomi = "でんぴょうしょ",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 1969,
-            cost = 3500,
-            tango = "伝票書"
+            yomi = "でんぴょうしょ", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 1969, cost = 3500, tango = "伝票書"
         ),
         Dictionary(
             yomi = "ぎょとう",
@@ -2260,11 +1672,7 @@ object Constants {
             tango = "魚頭"
         ),
         Dictionary(
-            yomi = "ちゅうしょうか",
-            leftId = 1841,
-            rightId = 1941,
-            cost = 2300,
-            tango = "抽象化"
+            yomi = "ちゅうしょうか", leftId = 1841, rightId = 1941, cost = 2300, tango = "抽象化"
         ),
         Dictionary(
             yomi = "てっそん",
@@ -2323,39 +1731,19 @@ object Constants {
             tango = "又隣"
         ),
         Dictionary(
-            yomi = "けんこうほう",
-            leftId = 1931,
-            rightId = 1949,
-            cost = 2500,
-            tango = "健康法"
+            yomi = "けんこうほう", leftId = 1931, rightId = 1949, cost = 2500, tango = "健康法"
         ),
         Dictionary(
-            yomi = "まずしそう",
-            leftId = 2459,
-            rightId = 2008,
-            cost = 4000,
-            tango = "貧しそう"
+            yomi = "まずしそう", leftId = 2459, rightId = 2008, cost = 4000, tango = "貧しそう"
         ),
         Dictionary(
-            yomi = "みたさ",
-            leftId = 2459,
-            rightId = 2031,
-            cost = 5000,
-            tango = "見たさ"
+            yomi = "みたさ", leftId = 2459, rightId = 2031, cost = 5000, tango = "見たさ"
         ),
         Dictionary(
-            yomi = "あいたさ",
-            leftId = 2459,
-            rightId = 2031,
-            cost = 4301,
-            tango = "逢いたさ"
+            yomi = "あいたさ", leftId = 2459, rightId = 2031, cost = 4301, tango = "逢いたさ"
         ),
         Dictionary(
-            yomi = "あいたさ",
-            leftId = 2459,
-            rightId = 2031,
-            cost = 4300,
-            tango = "会いたさ"
+            yomi = "あいたさ", leftId = 2459, rightId = 2031, cost = 4300, tango = "会いたさ"
         ),
         Dictionary(
             yomi = "なんしんとう",
@@ -2379,81 +1767,37 @@ object Constants {
             tango = "竜髭菜"
         ),
         Dictionary(
-            yomi = "におっ",
-            leftId = 825,
-            rightId = 825,
-            cost = 3300,
-            tango = "匂っ"
+            yomi = "におっ", leftId = 825, rightId = 825, cost = 3300, tango = "匂っ"
         ),
         Dictionary(
-            yomi = "におっ",
-            leftId = 825,
-            rightId = 825,
-            cost = 3400,
-            tango = "臭っ"
+            yomi = "におっ", leftId = 825, rightId = 825, cost = 3400, tango = "臭っ"
         ),
         Dictionary(
-            yomi = "におっ",
-            leftId = 825,
-            rightId = 825,
-            cost = 3500,
-            tango = "におっ"
+            yomi = "におっ", leftId = 825, rightId = 825, cost = 3500, tango = "におっ"
         ),
         Dictionary(
-            yomi = "におう",
-            leftId = 813,
-            rightId = 813,
-            cost = 3300,
-            tango = "匂う"
+            yomi = "におう", leftId = 813, rightId = 813, cost = 3300, tango = "匂う"
         ),
         Dictionary(
-            yomi = "におう",
-            leftId = 813,
-            rightId = 813,
-            cost = 3400,
-            tango = "臭う"
+            yomi = "におう", leftId = 813, rightId = 813, cost = 3400, tango = "臭う"
         ),
         Dictionary(
-            yomi = "におう",
-            leftId = 813,
-            rightId = 813,
-            cost = 3500,
-            tango = "におう"
+            yomi = "におう", leftId = 813, rightId = 813, cost = 3500, tango = "におう"
         ),
         Dictionary(
-            yomi = "におい",
-            leftId = 829,
-            rightId = 829,
-            cost = 1900,
-            tango = "匂い"
+            yomi = "におい", leftId = 829, rightId = 829, cost = 1900, tango = "匂い"
         ),
         Dictionary(
-            yomi = "におい",
-            leftId = 829,
-            rightId = 829,
-            cost = 3100,
-            tango = "臭い"
+            yomi = "におい", leftId = 829, rightId = 829, cost = 3100, tango = "臭い"
         ),
         Dictionary(
-            yomi = "におい",
-            leftId = 829,
-            rightId = 829,
-            cost = 3400,
-            tango = "におい"
+            yomi = "におい", leftId = 829, rightId = 829, cost = 3400, tango = "におい"
         ),
         Dictionary(
-            yomi = "でかい",
-            leftId = 2423,
-            rightId = 2423,
-            cost = 2000,
-            tango = "でかい"
+            yomi = "でかい", leftId = 2423, rightId = 2423, cost = 2000, tango = "でかい"
         ),
         Dictionary(
-            yomi = "でかい",
-            leftId = 2423,
-            rightId = 2423,
-            cost = 2100,
-            tango = "デカい"
+            yomi = "でかい", leftId = 2423, rightId = 2423, cost = 2100, tango = "デカい"
         ),
         Dictionary(
             yomi = "みせぷ",
@@ -2470,46 +1814,22 @@ object Constants {
             tango = "食いっぱぐれない"
         ),
         Dictionary(
-            yomi = "りょうしか",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 1941,
-            cost = 4000,
-            tango = "量子化"
+            yomi = "りょうしか", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 1941, cost = 4000, tango = "量子化"
         ),
         Dictionary(
-            yomi = "はいっ",
-            leftId = 841,
-            rightId = 841,
-            cost = 1000,
-            tango = "入っ"
+            yomi = "はいっ", leftId = 841, rightId = 841, cost = 1000, tango = "入っ"
         ),
         Dictionary(
-            yomi = "か",
-            leftId = 1941,
-            rightId = 1941,
-            cost = 1000,
-            tango = "化"
+            yomi = "か", leftId = 1941, rightId = 1941, cost = 1000, tango = "化"
         ),
         Dictionary(
-            yomi = "かしか",
-            leftId = 1842,
-            rightId = 1942,
-            cost = 2500,
-            tango = "可視化"
+            yomi = "かしか", leftId = 1842, rightId = 1942, cost = 2500, tango = "可視化"
         ),
         Dictionary(
-            yomi = "ふかしか",
-            leftId = 1842,
-            rightId = 1942,
-            cost = 3500,
-            tango = "不可視化"
+            yomi = "ふかしか", leftId = 1842, rightId = 1942, cost = 3500, tango = "不可視化"
         ),
         Dictionary(
-            yomi = "なんどか",
-            leftId = 12,
-            rightId = 12,
-            cost = 3500,
-            tango = "何度か"
+            yomi = "なんどか", leftId = 12, rightId = 12, cost = 3500, tango = "何度か"
         ),
         Dictionary(
             yomi = "じぇみに",
@@ -2526,53 +1846,25 @@ object Constants {
             tango = "欺罔行為"
         ),
         Dictionary(
-            yomi = "ききました",
-            leftId = 260,
-            rightId = 727,
-            cost = 1000,
-            tango = "聞きました"
+            yomi = "ききました", leftId = 260, rightId = 727, cost = 1000, tango = "聞きました"
         ),
         Dictionary(
-            yomi = "ききました",
-            leftId = 260,
-            rightId = 727,
-            cost = 1005,
-            tango = "効きました"
+            yomi = "ききました", leftId = 260, rightId = 727, cost = 1005, tango = "効きました"
         ),
         Dictionary(
-            yomi = "ききました",
-            leftId = 260,
-            rightId = 727,
-            cost = 1010,
-            tango = "聴きました"
+            yomi = "ききました", leftId = 260, rightId = 727, cost = 1010, tango = "聴きました"
         ),
         Dictionary(
-            yomi = "こわすぎ",
-            leftId = 2391,
-            rightId = 1949,
-            cost = 2300,
-            tango = "怖すぎ"
+            yomi = "こわすぎ", leftId = 2391, rightId = 1949, cost = 2300, tango = "怖すぎ"
         ),
         Dictionary(
-            yomi = "こわすぎる",
-            leftId = 2391,
-            rightId = 1949,
-            cost = 2500,
-            tango = "怖すぎる"
+            yomi = "こわすぎる", leftId = 2391, rightId = 1949, cost = 2500, tango = "怖すぎる"
         ),
         Dictionary(
-            yomi = "こわすぎて",
-            leftId = 2391,
-            rightId = 1949,
-            cost = 2600,
-            tango = "怖すぎて"
+            yomi = "こわすぎて", leftId = 2391, rightId = 1949, cost = 2600, tango = "怖すぎて"
         ),
         Dictionary(
-            yomi = "かちかく",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 1841,
-            cost = 3500,
-            tango = "勝ち確"
+            yomi = "かちかく", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 1841, cost = 3500, tango = "勝ち確"
         ),
         Dictionary(
             yomi = "じしょ",
@@ -2589,11 +1881,7 @@ object Constants {
             tango = "空文字"
         ),
         Dictionary(
-            yomi = "まじりぶん",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 1841,
-            cost = 3500,
-            tango = "交じり文"
+            yomi = "まじりぶん", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 1841, cost = 3500, tango = "交じり文"
         ),
         Dictionary(
             yomi = "りけん",
@@ -2645,11 +1933,7 @@ object Constants {
             tango = "漢字変換"
         ),
         Dictionary(
-            yomi = "か",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4000,
-            tango = "蚊"
+            yomi = "か", leftId = NOUN_PART_OF_SPEECH_ID, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4000, tango = "蚊"
         ),
         Dictionary(
             yomi = "そくていせいど",
@@ -2855,11 +2139,7 @@ object Constants {
             tango = "介護制度"
         ),
         Dictionary(
-            yomi = "むこうか",
-            leftId = 1932,
-            rightId = 1942,
-            cost = 3000,
-            tango = "無効化"
+            yomi = "むこうか", leftId = 1932, rightId = 1942, cost = 3000, tango = "無効化"
         ),
         Dictionary(
             yomi = "ていれいや",
@@ -2883,32 +2163,16 @@ object Constants {
             tango = "タコピーの原罪"
         ),
         Dictionary(
-            yomi = "れっきと",
-            leftId = 12,
-            rightId = 12,
-            cost = 7200,
-            tango = "歴と"
+            yomi = "れっきと", leftId = 12, rightId = 12, cost = 7200, tango = "歴と"
         ),
         Dictionary(
-            yomi = "れっきとした",
-            leftId = 2657,
-            rightId = 2657,
-            cost = 3700,
-            tango = "歴とした"
+            yomi = "れっきとした", leftId = 2657, rightId = 2657, cost = 3700, tango = "歴とした"
         ),
         Dictionary(
-            yomi = "とはなに",
-            leftId = 1906,
-            rightId = 1906,
-            cost = 2600,
-            tango = "とは何"
+            yomi = "とはなに", leftId = 1906, rightId = 1906, cost = 2600, tango = "とは何"
         ),
         Dictionary(
-            yomi = "とはなに",
-            leftId = 1906,
-            rightId = 1906,
-            cost = 2800,
-            tango = "とはなに"
+            yomi = "とはなに", leftId = 1906, rightId = 1906, cost = 2800, tango = "とはなに"
         ),
         Dictionary(
             yomi = "けつろをひらく",
@@ -2918,11 +2182,7 @@ object Constants {
             tango = "血路を開く"
         ),
         Dictionary(
-            yomi = "ございますか",
-            leftId = 410,
-            rightId = 742,
-            cost = 600,
-            tango = "ございますか"
+            yomi = "ございますか", leftId = 410, rightId = 742, cost = 600, tango = "ございますか"
         ),
         Dictionary(
             yomi = "いちねん",
@@ -2932,11 +2192,7 @@ object Constants {
             tango = "一年"
         ),
         Dictionary(
-            yomi = "いちねん",
-            leftId = 2044,
-            rightId = 2009,
-            cost = 2000,
-            tango = "一年"
+            yomi = "いちねん", leftId = 2044, rightId = 2009, cost = 2000, tango = "一年"
         ),
         Dictionary(
             yomi = "いちにち",
@@ -2953,18 +2209,10 @@ object Constants {
             tango = "体格"
         ),
         Dictionary(
-            yomi = "じしょびき",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 727,
-            cost = 3500,
-            tango = "辞書引き"
+            yomi = "じしょびき", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 727, cost = 3500, tango = "辞書引き"
         ),
         Dictionary(
-            yomi = "じしょびき",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 1967,
-            cost = 3200,
-            tango = "辞書引き"
+            yomi = "じしょびき", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 1967, cost = 3200, tango = "辞書引き"
         ),
         Dictionary(
             yomi = "にれんきゅう",
@@ -3163,60 +2411,28 @@ object Constants {
             tango = "五七五七七"
         ),
         Dictionary(
-            yomi = "かたにかけ",
-            leftId = 701,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 1500,
-            tango = "肩にかけ"
+            yomi = "かたにかけ", leftId = 701, rightId = NOUN_PART_OF_SPEECH_ID, cost = 1500, tango = "肩にかけ"
         ),
         Dictionary(
-            yomi = "かたにかけ",
-            leftId = 701,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 1501,
-            tango = "肩に掛け"
+            yomi = "かたにかけ", leftId = 701, rightId = NOUN_PART_OF_SPEECH_ID, cost = 1501, tango = "肩に掛け"
         ),
         Dictionary(
-            yomi = "かたにかける",
-            leftId = 680,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 3000,
-            tango = "肩にかける"
+            yomi = "かたにかける", leftId = 680, rightId = NOUN_PART_OF_SPEECH_ID, cost = 3000, tango = "肩にかける"
         ),
         Dictionary(
-            yomi = "かたにかけた",
-            leftId = 142,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 3000,
-            tango = "肩にかけた"
+            yomi = "かたにかけた", leftId = 142, rightId = NOUN_PART_OF_SPEECH_ID, cost = 3000, tango = "肩にかけた"
         ),
         Dictionary(
-            yomi = "かたにかければ",
-            leftId = 361,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 3000,
-            tango = "肩にかければ"
+            yomi = "かたにかければ", leftId = 361, rightId = NOUN_PART_OF_SPEECH_ID, cost = 3000, tango = "肩にかければ"
         ),
         Dictionary(
-            yomi = "かたにかけて",
-            leftId = 348,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 3000,
-            tango = "肩にかけて"
+            yomi = "かたにかけて", leftId = 348, rightId = NOUN_PART_OF_SPEECH_ID, cost = 3000, tango = "肩にかけて"
         ),
         Dictionary(
-            yomi = "かたにかけたい",
-            leftId = 152,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 3000,
-            tango = "肩にかけたい"
+            yomi = "かたにかけたい", leftId = 152, rightId = NOUN_PART_OF_SPEECH_ID, cost = 3000, tango = "肩にかけたい"
         ),
         Dictionary(
-            yomi = "ですか",
-            leftId = 172,
-            rightId = 325,
-            cost = 500,
-            tango = "ですか"
+            yomi = "ですか", leftId = 172, rightId = 325, cost = 500, tango = "ですか"
         ),
     )
 
@@ -3260,11 +2476,7 @@ object Constants {
             tango = "庭には２羽"
         ),
         Dictionary(
-            yomi = "かきくう",
-            leftId = 813,
-            rightId = 813,
-            cost = 4001,
-            tango = "柿食う"
+            yomi = "かきくう", leftId = 813, rightId = 813, cost = 4001, tango = "柿食う"
         ),
         Dictionary(
             yomi = "よくかき",
@@ -3274,18 +2486,10 @@ object Constants {
             tango = "よく柿"
         ),
         Dictionary(
-            yomi = "よくかきくう",
-            leftId = 813,
-            rightId = 813,
-            cost = 4000,
-            tango = "よく柿食う"
+            yomi = "よくかきくう", leftId = 813, rightId = 813, cost = 4000, tango = "よく柿食う"
         ),
         Dictionary(
-            yomi = "はがいたい",
-            leftId = 2422,
-            rightId = 2422,
-            cost = 3000,
-            tango = "歯が痛い"
+            yomi = "はがいたい", leftId = 2422, rightId = 2422, cost = 3000, tango = "歯が痛い"
         ),
         Dictionary(
             yomi = "かえるのこはかえる",
@@ -3344,18 +2548,10 @@ object Constants {
             tango = "断捨離"
         ),
         Dictionary(
-            yomi = "しゃぎょう",
-            leftId = 846,
-            rightId = 846,
-            cost = 4000,
-            tango = "捨行"
+            yomi = "しゃぎょう", leftId = 846, rightId = 846, cost = 4000, tango = "捨行"
         ),
         Dictionary(
-            yomi = "りぎょう",
-            leftId = 643,
-            rightId = 643,
-            cost = 4000,
-            tango = "離行"
+            yomi = "りぎょう", leftId = 643, rightId = 643, cost = 4000, tango = "離行"
         ),
         Dictionary(
             yomi = "しかのこ",
@@ -3421,11 +2617,7 @@ object Constants {
             tango = "海老で鯛を釣る"
         ),
         Dictionary(
-            yomi = "はもの",
-            leftId = 433,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4500,
-            tango = "鱧の"
+            yomi = "はもの", leftId = 433, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4500, tango = "鱧の"
         ),
         Dictionary(
             yomi = "めんばん",
@@ -3477,18 +2669,10 @@ object Constants {
             tango = "雪花"
         ),
         Dictionary(
-            yomi = "つきました",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 701,
-            cost = 3000,
-            tango = "着きました"
+            yomi = "つきました", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 701, cost = 3000, tango = "着きました"
         ),
         Dictionary(
-            yomi = "いきました",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 701,
-            cost = 1500,
-            tango = "行きました"
+            yomi = "いきました", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 701, cost = 1500, tango = "行きました"
         ),
         Dictionary(
             yomi = "にほんご",
@@ -3505,25 +2689,13 @@ object Constants {
             tango = "日本刀"
         ),
         Dictionary(
-            yomi = "がくるまで",
-            leftId = 370,
-            rightId = 369,
-            cost = 4000,
-            tango = "が来るまで"
+            yomi = "がくるまで", leftId = 370, rightId = 369, cost = 4000, tango = "が来るまで"
         ),
         Dictionary(
-            yomi = "がくるまで",
-            leftId = 370,
-            rightId = 369,
-            cost = 4001,
-            tango = "が車で"
+            yomi = "がくるまで", leftId = 370, rightId = 369, cost = 4001, tango = "が車で"
         ),
         Dictionary(
-            yomi = "よる",
-            leftId = 1909,
-            rightId = 1909,
-            cost = 1700,
-            tango = "夜"
+            yomi = "よる", leftId = 1909, rightId = 1909, cost = 1700, tango = "夜"
         ),
         Dictionary(
             yomi = "しょうが",
@@ -3598,32 +2770,16 @@ object Constants {
 
     val RESCORE_WORDS = listOf(
         Dictionary(
-            yomi = "のも",
-            leftId = 382,
-            rightId = 274,
-            cost = 2300,
-            tango = "のも"
+            yomi = "のも", leftId = 382, rightId = 274, cost = 2300, tango = "のも"
         ),
         Dictionary(
-            yomi = "のは",
-            leftId = 382,
-            rightId = 283,
-            cost = 1500,
-            tango = "のは"
+            yomi = "のは", leftId = 382, rightId = 283, cost = 1500, tango = "のは"
         ),
         Dictionary(
-            yomi = "ころん",
-            leftId = 1841,
-            rightId = 1841,
-            cost = 3000,
-            tango = "コロン"
+            yomi = "ころん", leftId = 1841, rightId = 1841, cost = 3000, tango = "コロン"
         ),
         Dictionary(
-            yomi = "せつぜんぶ",
-            leftId = 1841,
-            rightId = 1841,
-            cost = 8500,
-            tango = "楔前部"
+            yomi = "せつぜんぶ", leftId = 1841, rightId = 1841, cost = 8500, tango = "楔前部"
         ),
     )
 
@@ -3643,53 +2799,25 @@ object Constants {
             tango = "季も桃も桃のうち"
         ),
         Dictionary(
-            yomi = "あかずの",
-            leftId = 433,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 3000,
-            tango = "開かずの"
+            yomi = "あかずの", leftId = 433, rightId = NOUN_PART_OF_SPEECH_ID, cost = 3000, tango = "開かずの"
         ),
         Dictionary(
-            yomi = "のいち",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = 433,
-            cost = 2500,
-            tango = "の位置"
+            yomi = "のいち", leftId = NOUN_PART_OF_SPEECH_ID, rightId = 433, cost = 2500, tango = "の位置"
         ),
         Dictionary(
-            yomi = "をふる",
-            leftId = 763,
-            rightId = 379,
-            cost = 3800,
-            tango = "を振る"
+            yomi = "をふる", leftId = 763, rightId = 379, cost = 3800, tango = "を振る"
         ),
         Dictionary(
-            yomi = "をふっ",
-            leftId = 779,
-            rightId = 379,
-            cost = 3800,
-            tango = "を振っ"
+            yomi = "をふっ", leftId = 779, rightId = 379, cost = 3800, tango = "を振っ"
         ),
         Dictionary(
-            yomi = "がふる",
-            leftId = 763,
-            rightId = 369,
-            cost = 3800,
-            tango = "が降る"
+            yomi = "がふる", leftId = 763, rightId = 369, cost = 3800, tango = "が降る"
         ),
         Dictionary(
-            yomi = "がふっ",
-            leftId = 779,
-            rightId = 369,
-            cost = 3800,
-            tango = "が降っ"
+            yomi = "がふっ", leftId = 779, rightId = 369, cost = 3800, tango = "が降っ"
         ),
         Dictionary(
-            yomi = "なた",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 3500,
-            tango = "鉈"
+            yomi = "なた", leftId = NOUN_PART_OF_SPEECH_ID, rightId = NOUN_PART_OF_SPEECH_ID, cost = 3500, tango = "鉈"
         ),
         Dictionary(
             yomi = "なた",
@@ -3720,18 +2848,10 @@ object Constants {
             tango = "現れた新星"
         ),
         Dictionary(
-            yomi = "いぬはか",
-            leftId = 325,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4000,
-            tango = "犬派か"
+            yomi = "いぬはか", leftId = 325, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4000, tango = "犬派か"
         ),
         Dictionary(
-            yomi = "ねこはか",
-            leftId = 325,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4000,
-            tango = "猫派か"
+            yomi = "ねこはか", leftId = 325, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4000, tango = "猫派か"
         ),
         Dictionary(
             yomi = "かりかりのきじ",
@@ -3783,11 +2903,7 @@ object Constants {
             tango = "空直日"
         ),
         Dictionary(
-            yomi = "けいこくはいた",
-            leftId = 142,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4000,
-            tango = "警告吐いた"
+            yomi = "けいこくはいた", leftId = 142, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4000, tango = "警告吐いた"
         ),
         Dictionary(
             yomi = "ぜんちしゅうしょく",
@@ -3881,18 +2997,10 @@ object Constants {
             tango = "豚トロ丼"
         ),
         Dictionary(
-            yomi = "ばんせんかね",
-            leftId = 753,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 6000,
-            tango = "番宣兼ね"
+            yomi = "ばんせんかね", leftId = 753, rightId = NOUN_PART_OF_SPEECH_ID, cost = 6000, tango = "番宣兼ね"
         ),
         Dictionary(
-            yomi = "ばんせんをかね",
-            leftId = 753,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 6000,
-            tango = "番宣を兼ね"
+            yomi = "ばんせんをかね", leftId = 753, rightId = NOUN_PART_OF_SPEECH_ID, cost = 6000, tango = "番宣を兼ね"
         ),
         Dictionary(
             yomi = "ぶかつせい",
@@ -3923,11 +3031,7 @@ object Constants {
             tango = "マキベリー"
         ),
         Dictionary(
-            yomi = "まるちがい",
-            leftId = 724,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 5000,
-            tango = "マルチ買い"
+            yomi = "まるちがい", leftId = 724, rightId = NOUN_PART_OF_SPEECH_ID, cost = 5000, tango = "マルチ買い"
         ),
         Dictionary(
             yomi = "よわのつき",
@@ -4070,11 +3174,7 @@ object Constants {
             tango = "ログを書け"
         ),
         Dictionary(
-            yomi = "われをしゅうり",
-            leftId = 1842,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 6000,
-            tango = "割れを修理"
+            yomi = "われをしゅうり", leftId = 1842, rightId = NOUN_PART_OF_SPEECH_ID, cost = 6000, tango = "割れを修理"
         ),
         Dictionary(
             yomi = "おやへのこうこう",
@@ -4084,32 +3184,16 @@ object Constants {
             tango = "親への孝行"
         ),
         Dictionary(
-            yomi = "おやにこうこう",
-            leftId = 1842,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 6000,
-            tango = "親に孝行"
+            yomi = "おやにこうこう", leftId = 1842, rightId = NOUN_PART_OF_SPEECH_ID, cost = 6000, tango = "親に孝行"
         ),
         Dictionary(
-            yomi = "かくはんに",
-            leftId = 372,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4000,
-            tango = "各班に"
+            yomi = "かくはんに", leftId = 372, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4000, tango = "各班に"
         ),
         Dictionary(
-            yomi = "かざせばあく",
-            leftId = 723,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4000,
-            tango = "かざせば開く"
+            yomi = "かざせばあく", leftId = 723, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4000, tango = "かざせば開く"
         ),
         Dictionary(
-            yomi = "かならずこい",
-            leftId = 586,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4000,
-            tango = "必ず来い"
+            yomi = "かならずこい", leftId = 586, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4000, tango = "必ず来い"
         ),
         Dictionary(
             yomi = "かんかんぼうし",
@@ -4140,53 +3224,25 @@ object Constants {
             tango = "具体的に詰め"
         ),
         Dictionary(
-            yomi = "こうかをはしる",
-            leftId = 837,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 5000,
-            tango = "高架を走る"
+            yomi = "こうかをはしる", leftId = 837, rightId = NOUN_PART_OF_SPEECH_ID, cost = 5000, tango = "高架を走る"
         ),
         Dictionary(
-            yomi = "こうかをはしっ",
-            leftId = 841,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 5000,
-            tango = "高架を走っ"
+            yomi = "こうかをはしっ", leftId = 841, rightId = NOUN_PART_OF_SPEECH_ID, cost = 5000, tango = "高架を走っ"
         ),
         Dictionary(
-            yomi = "こきょうの",
-            leftId = 433,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 5000,
-            tango = "故郷の"
+            yomi = "こきょうの", leftId = 433, rightId = NOUN_PART_OF_SPEECH_ID, cost = 5000, tango = "故郷の"
         ),
         Dictionary(
-            yomi = "こめといで",
-            leftId = 349,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 5000,
-            tango = "米研いで"
+            yomi = "こめといで", leftId = 349, rightId = NOUN_PART_OF_SPEECH_ID, cost = 5000, tango = "米研いで"
         ),
         Dictionary(
-            yomi = "ごうはふかい",
-            leftId = 2424,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 5000,
-            tango = "業は深い"
+            yomi = "ごうはふかい", leftId = 2424, rightId = NOUN_PART_OF_SPEECH_ID, cost = 5000, tango = "業は深い"
         ),
         Dictionary(
-            yomi = "ごうがふかい",
-            leftId = 2424,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 5000,
-            tango = "業が深い"
+            yomi = "ごうがふかい", leftId = 2424, rightId = NOUN_PART_OF_SPEECH_ID, cost = 5000, tango = "業が深い"
         ),
         Dictionary(
-            yomi = "さいかいかいひ",
-            leftId = 1842,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 5000,
-            tango = "最下位回避"
+            yomi = "さいかいかいひ", leftId = 1842, rightId = NOUN_PART_OF_SPEECH_ID, cost = 5000, tango = "最下位回避"
         ),
         Dictionary(
             yomi = "さいされつ",
@@ -4231,11 +3287,7 @@ object Constants {
             tango = "ハイライト色"
         ),
         Dictionary(
-            yomi = "みずからにかす",
-            leftId = 837,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 5000,
-            tango = "自らに課す"
+            yomi = "みずからにかす", leftId = 837, rightId = NOUN_PART_OF_SPEECH_ID, cost = 5000, tango = "自らに課す"
         ),
         Dictionary(
             yomi = "せんゆうりょう",
@@ -4266,11 +3318,7 @@ object Constants {
             tango = "要介護者"
         ),
         Dictionary(
-            yomi = "れいせいをかい",
-            leftId = 726,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 5000,
-            tango = "冷静を欠い"
+            yomi = "れいせいをかい", leftId = 726, rightId = NOUN_PART_OF_SPEECH_ID, cost = 5000, tango = "冷静を欠い"
         ),
         Dictionary(
             yomi = "れっとうじしん",
@@ -4518,11 +3566,7 @@ object Constants {
             tango = "親から勘当"
         ),
         Dictionary(
-            yomi = "おやにかんどう",
-            leftId = 1842,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 5000,
-            tango = "親に勘当"
+            yomi = "おやにかんどう", leftId = 1842, rightId = NOUN_PART_OF_SPEECH_ID, cost = 5000, tango = "親に勘当"
         ),
         Dictionary(
             yomi = "かいごきゅう",
@@ -4560,11 +3604,7 @@ object Constants {
             tango = "間食の多い"
         ),
         Dictionary(
-            yomi = "かんせいねさげ",
-            leftId = 1842,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 5000,
-            tango = "官製値下げ"
+            yomi = "かんせいねさげ", leftId = 1842, rightId = NOUN_PART_OF_SPEECH_ID, cost = 5000, tango = "官製値下げ"
         ),
         Dictionary(
             yomi = "かんぬきじょう",
@@ -4595,11 +3635,7 @@ object Constants {
             tango = "権限の分掌"
         ),
         Dictionary(
-            yomi = "がいさ",
-            leftId = 1842,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4000,
-            tango = "概査"
+            yomi = "がいさ", leftId = 1842, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4000, tango = "概査"
         ),
         Dictionary(
             yomi = "さいだーあめ",
@@ -4616,25 +3652,13 @@ object Constants {
             tango = "出欠登録"
         ),
         Dictionary(
-            yomi = "しんの",
-            leftId = 433,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4000,
-            tango = "芯の"
+            yomi = "しんの", leftId = 433, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4000, tango = "芯の"
         ),
         Dictionary(
-            yomi = "しんが",
-            leftId = 369,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4000,
-            tango = "芯が"
+            yomi = "しんが", leftId = 369, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4000, tango = "芯が"
         ),
         Dictionary(
-            yomi = "しんを",
-            leftId = 379,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4000,
-            tango = "芯を"
+            yomi = "しんを", leftId = 379, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4000, tango = "芯を"
         ),
         Dictionary(
             yomi = "せきりょうのかん",
@@ -4707,18 +3731,240 @@ object Constants {
             tango = "貴社の記者"
         ),
         Dictionary(
-            yomi = "きしゃできしゃ",
-            leftId = 1842,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4000,
-            tango = "汽車で帰社"
+            yomi = "きしゃできしゃ", leftId = 1842, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4000, tango = "汽車で帰社"
         ),
         Dictionary(
-            yomi = "ごうにいってはごうにしたがえ",
+            yomi = "あまずだれ",
             leftId = NOUN_PART_OF_SPEECH_ID,
             rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 7000,
-            tango = "郷に入っては郷に従え"
+            cost = 4000,
+            tango = "甘酢だれ"
+        ),
+        Dictionary(
+            yomi = "おぜとくら",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "尾瀬戸倉"
+        ),
+        Dictionary(
+            yomi = "おりでん",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "折り電"
+        ),
+        Dictionary(
+            yomi = "かってふみきり",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "勝手踏切"
+        ),
+        Dictionary(
+            yomi = "きかんきょういん",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "基幹教員"
+        ),
+        Dictionary(
+            yomi = "きしゅへんじ",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "機種変時"
+        ),
+        Dictionary(
+            yomi = "きせいちゅうの", leftId = 433, rightId = NOUN_PART_OF_SPEECH_ID, cost = 5000, tango = "帰省中の"
+        ),
+        Dictionary(
+            yomi = "きってぼん",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "切手盆"
+        ),
+        Dictionary(
+            yomi = "きんひろう",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "筋疲労"
+        ),
+        Dictionary(
+            yomi = "護摩供養",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "ごまくよう"
+        ),
+        Dictionary(
+            yomi = "さいずをしょうに",
+            leftId = 372,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "サイズを小に"
+        ),
+        Dictionary(
+            yomi = "ざいじかん",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "座位時間"
+        ),
+        Dictionary(
+            yomi = "しょくとれ",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "食トレ"
+        ),
+        Dictionary(
+            yomi = "しんにゅうりょうせい",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "新入寮生"
+        ),
+        Dictionary(
+            yomi = "じきけんちしき",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "磁気検知式"
+        ),
+        Dictionary(
+            yomi = "じっそうさい",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "実装差異"
+        ),
+        Dictionary(
+            yomi = "すぱちゃがく",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "スパチャ額"
+        ),
+        Dictionary(
+            yomi = "そうせんじょう",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4000,
+            tango = "槽洗浄"
+        ),
+        Dictionary(
+            yomi = "そうせんじょう",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4500,
+            tango = "操船"
+        ),
+        Dictionary(
+            yomi = "たいかろっかー",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4500,
+            tango = "耐火ロッカー"
+        ),
+        Dictionary(
+            yomi = "だいすうかいせき",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4500,
+            tango = "代数解析"
+        ),
+        Dictionary(
+            yomi = "ちるする", leftId = 633, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4500, tango = "チルする"
+        ),
+        Dictionary(
+            yomi = "ていじせいやかんぶ",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4500,
+            tango = "定時制夜間部"
+        ),
+        Dictionary(
+            yomi = "でんわのちゃっこ",
+            leftId = 1842,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4500,
+            tango = "電話の着呼"
+        ),
+        Dictionary(
+            yomi = "とうじょうしょうめい",
+            leftId = 1842,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4500,
+            tango = "搭乗証明"
+        ),
+        Dictionary(
+            yomi = "ながくおさない", leftId = 204, rightId = NOUN_PART_OF_SPEECH_ID, cost = 4500, tango = "長く押さない"
+        ),
+        Dictionary(
+            yomi = "ぱすわーどべっそう",
+            leftId = 1842,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4500,
+            tango = "パスワード別送"
+        ),
+        Dictionary(
+            yomi = "ひだりじょうだん",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4500,
+            tango = "左上段"
+        ),
+        Dictionary(
+            yomi = "みぎじょうだん",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4500,
+            tango = "右上段"
+        ),
+        Dictionary(
+            yomi = "ほんだいぶぶん",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4500,
+            tango = "本題部分"
+        ),
+        Dictionary(
+            yomi = "ほんとうざい",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4500,
+            tango = "ほんとうざい"
+        ),
+        Dictionary(
+            yomi = "わちゅうてんそう",
+            leftId = 1842,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4500,
+            tango = "話中転送"
+        ),
+        Dictionary(
+            yomi = "わはっか",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4500,
+            tango = "和ハッカ"
+        ),
+        Dictionary(
+            yomi = "おれいはさんぎょう",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4501,
+            tango = "お礼は3行"
+        ),
+        Dictionary(
+            yomi = "おれいはさんぎょう",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 4500,
+            tango = "お礼は三行"
         ),
     )
 
@@ -4801,11 +4047,7 @@ object Constants {
         Dictionary(yomi = "しゅかい", leftId = 1924, rightId = 1924, cost = 4000, tango = "珠海"),
         Dictionary(yomi = "しょうこうあんれい", leftId = 1924, rightId = 1924, cost = 4000, tango = "小興安嶺"),
         Dictionary(
-            yomi = "しょうこうあんれいさんみゃく",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "小興安嶺山脈"
+            yomi = "しょうこうあんれいさんみゃく", leftId = 1924, rightId = 1924, cost = 4000, tango = "小興安嶺山脈"
         ),
         Dictionary(yomi = "しりべしのくに", leftId = 1924, rightId = 1924, cost = 4000, tango = "後志国"),
         Dictionary(yomi = "しんせん", leftId = 1924, rightId = 1924, cost = 4000, tango = "深圳"),
@@ -4816,11 +4058,7 @@ object Constants {
         Dictionary(yomi = "そうかまつばら", leftId = 1924, rightId = 1924, cost = 4000, tango = "草加松原"),
         Dictionary(yomi = "だいこうあんれい", leftId = 1924, rightId = 1924, cost = 4000, tango = "大興安嶺"),
         Dictionary(
-            yomi = "だいこうあんれいさんみゃく",
-            leftId = 1924,
-            rightId = 1924,
-            cost = 4000,
-            tango = "大興安嶺山脈"
+            yomi = "だいこうあんれいさんみゃく", leftId = 1924, rightId = 1924, cost = 4000, tango = "大興安嶺山脈"
         ),
         Dictionary(yomi = "たいほく", leftId = 1924, rightId = 1924, cost = 4000, tango = "台北"),
         Dictionary(yomi = "たけしばえき", leftId = 1924, rightId = 1924, cost = 4000, tango = "竹芝駅"),
@@ -5142,11 +4380,7 @@ object Constants {
         Dictionary(yomi = "かいとうらんま", leftId = 1922, rightId = 1922, cost = 4000, tango = "快刀乱麻"),
         Dictionary(yomi = "かえがみ", leftId = 1922, rightId = 1922, cost = 4000, tango = "替紙"),
         Dictionary(
-            yomi = "かぎょうしもいちだんかつよう",
-            leftId = 1922,
-            rightId = 1922,
-            cost = 4000,
-            tango = "カ行下一段活用"
+            yomi = "かぎょうしもいちだんかつよう", leftId = 1922, rightId = 1922, cost = 4000, tango = "カ行下一段活用"
         ),
         Dictionary(yomi = "かくしあじ", leftId = 1922, rightId = 1922, cost = 4000, tango = "隠し味"),
         Dictionary(yomi = "がくしかてい", leftId = 1922, rightId = 1922, cost = 4000, tango = "学士課程"),
@@ -5195,11 +4429,7 @@ object Constants {
         ),
         Dictionary(yomi = "かんじ", leftId = 1922, rightId = 1922, cost = 4000, tango = "巻次"),
         Dictionary(
-            yomi = "かんじこうせいきじゅつもじ",
-            leftId = 1922,
-            rightId = 1922,
-            cost = 4000,
-            tango = "漢字構成記述文字"
+            yomi = "かんじこうせいきじゅつもじ", leftId = 1922, rightId = 1922, cost = 4000, tango = "漢字構成記述文字"
         ),
         Dictionary(yomi = "かんじょうば", leftId = 1922, rightId = 1922, cost = 4000, tango = "勘定場"),
         Dictionary(yomi = "かんち", leftId = 1922, rightId = 1922, cost = 4000, tango = "漢地"),
@@ -6108,11 +5338,7 @@ object Constants {
         ),
         Dictionary(yomi = "にくどん", leftId = 1922, rightId = 1922, cost = 4000, tango = "肉丼"),
         Dictionary(
-            yomi = "にくようぎゅうせいさんぎょう",
-            leftId = 1922,
-            rightId = 1922,
-            cost = 4000,
-            tango = "肉用牛生産業"
+            yomi = "にくようぎゅうせいさんぎょう", leftId = 1922, rightId = 1922, cost = 4000, tango = "肉用牛生産業"
         ),
         Dictionary(yomi = "にたまご", leftId = 1922, rightId = 1922, cost = 4000, tango = "煮卵"),
         Dictionary(yomi = "にだんかいうせつ", leftId = 1841, rightId = 1841, cost = 4000, tango = "二段階右折"),
@@ -6183,11 +5409,7 @@ object Constants {
         Dictionary(yomi = "ばんごはん", leftId = 1922, rightId = 1922, cost = 4000, tango = "晩ごはん"),
         Dictionary(yomi = "はんじ", leftId = 1922, rightId = 1922, cost = 4000, tango = "版次"),
         Dictionary(
-            yomi = "はんしゃかいてきせいりょく",
-            leftId = 1922,
-            rightId = 1922,
-            cost = 4000,
-            tango = "反社会的勢力"
+            yomi = "はんしゃかいてきせいりょく", leftId = 1922, rightId = 1922, cost = 4000, tango = "反社会的勢力"
         ),
         Dictionary(
             yomi = "はんしんたいがーす",
