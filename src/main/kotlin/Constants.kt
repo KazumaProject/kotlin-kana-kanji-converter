@@ -1092,21 +1092,21 @@ object Constants {
             yomi = "なに",
             leftId = PROPER_NOUN_PART_OF_SPEECH_ID,
             rightId = PROPER_NOUN_PART_OF_SPEECH_ID,
-            cost = 8000,
+            cost = 4000,
             tango = "Nani!?"
         ),
         Dictionary(
             yomi = "なにほんやく",
             leftId = PROPER_NOUN_PART_OF_SPEECH_ID,
             rightId = PROPER_NOUN_PART_OF_SPEECH_ID,
-            cost = 8001,
+            cost = 4001,
             tango = "Nani翻訳"
         ),
         Dictionary(
             yomi = "なにほんやく",
             leftId = PROPER_NOUN_PART_OF_SPEECH_ID,
             rightId = PROPER_NOUN_PART_OF_SPEECH_ID,
-            cost = 8002,
+            cost = 4002,
             tango = "Nani!?翻訳"
         ),
         Dictionary(
@@ -2941,6 +2941,13 @@ object Constants {
             tango = "サンマ刺し定食"
         ),
         Dictionary(
+            yomi = "さんまさし",
+            leftId = NOUN_PART_OF_SPEECH_ID,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5000,
+            tango = "サンマ刺し"
+        ),
+        Dictionary(
             yomi = "ざんかほしょうがく",
             leftId = NOUN_PART_OF_SPEECH_ID,
             rightId = NOUN_PART_OF_SPEECH_ID,
@@ -3776,7 +3783,25 @@ object Constants {
             tango = "機種変時"
         ),
         Dictionary(
-            yomi = "きせいちゅうの", leftId = 433, rightId = NOUN_PART_OF_SPEECH_ID, cost = 5000, tango = "帰省中の"
+            yomi = "きせいちゅうの",
+            leftId = 433,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5000,
+            tango = "帰省中の"
+        ),
+        Dictionary(
+            yomi = "きせいちゅうの",
+            leftId = 433,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5100,
+            tango = "規制中の"
+        ),
+        Dictionary(
+            yomi = "きせいちゅうの",
+            leftId = 433,
+            rightId = NOUN_PART_OF_SPEECH_ID,
+            cost = 5200,
+            tango = "寄生虫の"
         ),
         Dictionary(
             yomi = "きってぼん",
@@ -3854,13 +3879,6 @@ object Constants {
             rightId = NOUN_PART_OF_SPEECH_ID,
             cost = 4000,
             tango = "槽洗浄"
-        ),
-        Dictionary(
-            yomi = "そうせんじょう",
-            leftId = NOUN_PART_OF_SPEECH_ID,
-            rightId = NOUN_PART_OF_SPEECH_ID,
-            cost = 4500,
-            tango = "操船"
         ),
         Dictionary(
             yomi = "たいかろっかー",
