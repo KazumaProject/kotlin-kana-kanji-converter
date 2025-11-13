@@ -158,6 +158,10 @@ class DicUtils {
                             println("skip $yomi $tango")
                         }
 
+                        yomi == "こうし" && tango == "こうし" -> {
+                            println("skip $yomi $tango")
+                        }
+
                         yomi == "ですか" && tango == "ですか" && leftId == "172" -> {
                             println("skip $yomi $tango")
                         }
