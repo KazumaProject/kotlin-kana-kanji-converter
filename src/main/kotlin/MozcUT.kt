@@ -20,16 +20,10 @@ import com.kazumaproject.Constants.SYMBOL_LIST
 import com.kazumaproject.Constants.VERB_LIST
 import com.kazumaproject.Constants.WORDS
 import com.kazumaproject.Constants.ZENKANKU_LIST
-import com.kazumaproject.Louds.Converter
-import com.kazumaproject.Louds.LOUDS
-import com.kazumaproject.Louds.with_term_id.ConverterWithTermId
-import com.kazumaproject.Louds.with_term_id.LOUDSWithTermId
 import com.kazumaproject.connection_id.ConnectionIdBuilder
 import com.kazumaproject.dictionary.DicUtils
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
-import com.kazumaproject.prefix.PrefixTree
-import com.kazumaproject.prefix.with_term_id.PrefixTreeWithTermId
 import com.kazumaproject.reading_correction.ReadingCorrectionBuilder
 import java.io.*
 import java.util.*
@@ -100,55 +94,21 @@ private fun buildConnectionIds() {
 
 private fun buildDictionaryForPersonNames() {
     println("start build person names dictionary")
-    val yomiTree = PrefixTreeWithTermId()
-    val tangoTree = PrefixTree()
-
     val readingCorrectionBuilder = ReadingCorrectionBuilder()
 
     val dictionaryList = readingCorrectionBuilder.parseMozcUTDictionary("src/main/bin/names.txt")
         .groupBy { it.yomi }
         .toSortedMap(compareBy({ it.length }, { it }))
-
-    dictionaryList
-        .forEach { entry ->
-            yomiTree.insert(entry.key)
-            entry.value.forEach {
-                tangoTree.insert(it.tango)
-            }
-        }
-
-    val yomiLOUDSTemp = ConverterWithTermId().convert(yomiTree.root)
-    val tangoLOUDSTemp = Converter().convert(tangoTree.root)
-    yomiLOUDSTemp.convertListToBitSet()
-    tangoLOUDSTemp.convertListToBitSet()
-
-    val objectOutputYomi =
-        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/yomi_person_names.dat")))
-    val objectOutputTango =
-        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/tango_person_names.dat")))
-
-    yomiLOUDSTemp.writeExternalNotCompress(objectOutputYomi)
-    tangoLOUDSTemp.writeExternalNotCompress(objectOutputTango)
-
-    val objectInputYomi = ObjectInputStream(FileInputStream("./src/main/resources/yomi_person_names.dat"))
-    val objectInputTango = ObjectInputStream(FileInputStream("./src/main/resources/tango_person_names.dat"))
-
-    LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
-    val tangoLOUDS: LOUDS = LOUDS().readExternalNotCompress(objectInputTango)
-    val tokenArrayTemp = TokenArray()
-    val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_person_names.dat"))
-    tokenArrayTemp.buildTokenArray(dictionaryList, tangoLOUDS, objectOutput, 1)
-    val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_person_names.dat"))
-    val tokenArray = TokenArray()
-    tokenArray.readExternalNotCompress(objectInput)
-    tokenArray.readPOSTable(1)
+    buildAndWriteDictionaryArtifacts(
+        dictionaryList = dictionaryList,
+        yomiOutputPath = "./src/main/resources/yomi_person_names.dat",
+        tangoOutputPath = "./src/main/resources/tango_person_names.dat",
+        tokenOutputPath = "./src/main/resources/token_person_names.dat",
+    )
 }
 
 private fun buildDictionaryForPlaces() {
     println("start build places dictionary")
-
-    val yomiTree = PrefixTreeWithTermId()
-    val tangoTree = PrefixTree()
 
     val readingCorrectionBuilder = ReadingCorrectionBuilder()
 
@@ -160,40 +120,12 @@ private fun buildDictionaryForPlaces() {
     )
         .groupBy { it.yomi }
         .toSortedMap(compareBy({ it.length }, { it }))
-
-    dictionaryList
-        .forEach { entry ->
-            yomiTree.insert(entry.key)
-            entry.value.forEach {
-                tangoTree.insert(it.tango)
-            }
-        }
-
-    val yomiLOUDSTemp = ConverterWithTermId().convert(yomiTree.root)
-    val tangoLOUDSTemp = Converter().convert(tangoTree.root)
-    yomiLOUDSTemp.convertListToBitSet()
-    tangoLOUDSTemp.convertListToBitSet()
-
-    val objectOutputYomi =
-        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/yomi_places.dat")))
-    val objectOutputTango =
-        ObjectOutputStream(BufferedOutputStream(FileOutputStream("./src/main/resources/tango_places.dat")))
-
-    yomiLOUDSTemp.writeExternalNotCompress(objectOutputYomi)
-    tangoLOUDSTemp.writeExternalNotCompress(objectOutputTango)
-
-    val objectInputYomi = ObjectInputStream(FileInputStream("./src/main/resources/yomi_places.dat"))
-    val objectInputTango = ObjectInputStream(FileInputStream("./src/main/resources/tango_places.dat"))
-
-    LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
-    val tangoLOUDS: LOUDS = LOUDS().readExternalNotCompress(objectInputTango)
-    val tokenArrayTemp = TokenArray()
-    val objectOutput = ObjectOutputStream(FileOutputStream("./src/main/resources/token_places.dat"))
-    tokenArrayTemp.buildTokenArray(dictionaryList, tangoLOUDS, objectOutput, 1)
-    val objectInput = ObjectInputStream(FileInputStream("./src/main/resources/token_places.dat"))
-    val tokenArray = TokenArray()
-    tokenArray.readExternalNotCompress(objectInput)
-    tokenArray.readPOSTable(1)
+    buildAndWriteDictionaryArtifacts(
+        dictionaryList = dictionaryList,
+        yomiOutputPath = "./src/main/resources/yomi_places.dat",
+        tangoOutputPath = "./src/main/resources/tango_places.dat",
+        tokenOutputPath = "./src/main/resources/token_places.dat",
+    )
 }
 
 private fun readTextFromZip(filePath: String, fileName: String): InputStream {
