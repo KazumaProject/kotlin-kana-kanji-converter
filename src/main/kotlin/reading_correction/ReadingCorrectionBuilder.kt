@@ -54,11 +54,12 @@ class ReadingCorrectionBuilder {
     fun parseMozcUTDictionary(filePath: String): List<Dictionary> {
         return File(filePath).useLines { lines ->
             lines.map { line ->
-                val yomi = line.split("\\t".toRegex())[0]
-                val leftId = line.split("\\t".toRegex())[1]
-                val rightId = line.split("\\t".toRegex())[2]
-                val cost = line.split("\\t".toRegex())[3]
-                val tango = line.split("\\t".toRegex())[4]
+                val fields = line.split('\t', limit = 5)
+                val yomi = fields[0]
+                val leftId = fields[1]
+                val rightId = fields[2]
+                val cost = fields[3]
+                val tango = fields[4]
                 Dictionary(
                     yomi = yomi,
                     leftId = leftId.toShort(),
@@ -73,11 +74,12 @@ class ReadingCorrectionBuilder {
     fun parseMozcUTDictionaryCompressedDictionary(inputStream: InputStream): List<Dictionary> {
         return inputStream.bufferedReader().useLines { lines ->
             lines.map { line ->
-                val yomi = line.split("\\t".toRegex())[0]
-                val leftId = line.split("\\t".toRegex())[1]
-                val rightId = line.split("\\t".toRegex())[2]
-                val cost = line.split("\\t".toRegex())[3]
-                val tango = line.split("\\t".toRegex())[4]
+                val fields = line.split('\t', limit = 5)
+                val yomi = fields[0]
+                val leftId = fields[1]
+                val rightId = fields[2]
+                val cost = fields[3]
+                val tango = fields[4]
                 Dictionary(
                     yomi = yomi,
                     leftId = leftId.toShort(),

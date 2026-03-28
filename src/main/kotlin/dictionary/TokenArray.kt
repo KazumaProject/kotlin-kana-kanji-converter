@@ -2,6 +2,7 @@ package com.kazumaproject.dictionary
 
 import com.kazumaproject.*
 import com.kazumaproject.Louds.LOUDS
+import com.kazumaproject.bitset.SuccinctBitVector
 import com.kazumaproject.bitset.rank1
 import com.kazumaproject.bitset.select0
 import com.kazumaproject.connection_id.deflate
@@ -18,6 +19,8 @@ class TokenArray {
     private var nodeIdList: MutableList<Int> = arrayListOf()
     private var bitListTemp: MutableList<Boolean> = arrayListOf()
     private var bitvector: BitSet = BitSet()
+    @Transient
+    private var postingsSuccinct: SuccinctBitVector? = null
     var posTable: List<Pair<Short, Short>> = listOf()
     var leftIds: List<Short> = listOf()
     var rightIds: List<Short> = listOf()
@@ -25,8 +28,9 @@ class TokenArray {
     fun getListDictionaryByYomiTermId(
         nodeId: Int,
     ): List<TokenEntry> {
-        val b = bitvector.rank1(bitvector.select0(nodeId))
-        val c = bitvector.rank1(bitvector.select0(nodeId + 1))
+        val succinct = postingsSuccinct()
+        val b = succinct.rank1(succinct.select0(nodeId))
+        val c = succinct.rank1(succinct.select0(nodeId + 1))
         val tempList2 = mutableListOf<TokenEntry>()
         for (i in b..<c) {
             tempList2.add(
@@ -44,11 +48,11 @@ class TokenArray {
         dictionaries: Map<String, List<Dictionary>>,
         tangoTrie: LOUDS,
         out: ObjectOutput,
-        mode: Int
+        mode: Int,
+        posTableForBuildPath: String? = null,
     ) {
 
-        val posTableWithIndex = readPOSTableWithIndex(mode)
-        var index = 0
+        val posTableWithIndex = readPOSTableWithIndex(mode, posTableForBuildPath)
         for ((key, dictionaryList) in dictionaries) {
             bitListTemp.add(false)
             for (dictionary in dictionaryList) {
@@ -57,20 +61,8 @@ class TokenArray {
                 posTableIndexList.add(posIndex.toShort())
                 wordCostList.add(dictionary.cost)
                 val nodeId = getNodeIdForDictionary(dictionary, tangoTrie, key)
-                if (index % 10000 == 0) {
-                    println("build token array: $index $key ${dictionary.tango} $nodeId")
-                } else if (key == "こころ") {
-                    println("build token array: $index $key ${dictionary.tango} $nodeId")
-                } else if (key == "うぇ") {
-                    println("build token array: $index $key ${dictionary.tango} $nodeId")
-                } else if (key == "なかぐろ") {
-                    println("build token array: $index $key ${dictionary.tango} $nodeId")
-                } else if (key == "いこーる") {
-                    println("build token array: $index $key ${dictionary.tango} $nodeId")
-                }
                 nodeIdList.add(nodeId)
             }
-            index++
         }
         writeExternalNotCompress(out)
     }
@@ -132,12 +124,12 @@ class TokenArray {
                     (readObject() as ByteArray).inflate(wordCostListSize).byteArrayToShortList().toMutableList()
                 nodeIdList = (readObject() as ByteArray).inflate(nodeIdListSize).toListInt().toMutableList()
                 bitvector = readObject() as BitSet
+                rebuildCache()
                 close()
             } catch (e: Exception) {
                 println(e.stackTraceToString())
             }
         }
-        nodeIdList.writeToTxt("nodeIds.txt")
         return TokenArray()
     }
 
@@ -165,6 +157,7 @@ class TokenArray {
                 wordCostList = (readObject() as ShortArray).toMutableList()
                 nodeIdList = (readObject() as IntArray).toMutableList()
                 bitvector = readObject() as BitSet
+                rebuildCache()
                 close()
             } catch (e: Exception) {
                 println(e.stackTraceToString())
@@ -181,7 +174,8 @@ class TokenArray {
      **/
     fun buildPOSTable(
         fileMap: SortedMap<String, List<Dictionary>>,
-        mode: Int
+        mode: Int,
+        outputPath: String = defaultPosTablePath(mode),
     ) {
         val tempMap: MutableMap<Pair<Short, Short>, Int> = mutableMapOf()
         var counter = 0 // This will track the incremented values for new pairs
@@ -207,12 +201,6 @@ class TokenArray {
         val rightIds2 = result.keys.map { it.second }.toShortArray()
 
         // Define the output file path based on mode
-        val outputPath = if (mode == 0) {
-            "./src/test/resources/pos_table.dat"
-        } else {
-            "./src/main/resources/pos_table.dat"
-        }
-
         // Write the results to the appropriate file using try-with-resources
         try {
             ObjectOutputStream(FileOutputStream(outputPath)).use { objectOutput ->
@@ -232,7 +220,8 @@ class TokenArray {
      **/
     fun buildPOSTableWithIndex(
         fileMap: SortedMap<String, List<Dictionary>>,
-        mode: Int
+        mode: Int,
+        outputPath: String = defaultPosTableForBuildPath(mode),
     ) {
         val tempMap: MutableMap<Pair<Short, Short>, Int> = mutableMapOf()
         var counter = 0 // Initialize a counter to track unique indices
@@ -254,12 +243,6 @@ class TokenArray {
         val result = tempMap.toList().sortedByDescending { (_, value) -> value }.toMap()
 
         // Define the output file path based on mode
-        val outputPath = if (mode == 0) {
-            "./src/test/resources/pos_table_for_build.dat"
-        } else {
-            "./src/main/resources/pos_table_for_build.dat"
-        }
-
         // Create a map with index for each pair
         val mapToSave = result.keys.toList().mapIndexed { index, pair -> pair to index }.toMap()
 
@@ -279,11 +262,7 @@ class TokenArray {
      *
      **/
     fun readPOSTable(mode: Int) {
-        val objectInput = if (mode == 0) {
-            ObjectInputStream(BufferedInputStream(FileInputStream("./src/test/resources/pos_table.dat")))
-        } else {
-            ObjectInputStream(BufferedInputStream(FileInputStream("./src/main/resources/pos_table.dat")))
-        }
+        val objectInput = ObjectInputStream(BufferedInputStream(FileInputStream(defaultPosTablePath(mode))))
         objectInput.apply {
             leftIds = (readObject() as ShortArray).toList()
             rightIds = (readObject() as ShortArray).toList()
@@ -295,17 +274,42 @@ class TokenArray {
      * @param mode 0:test else:main
      *
      **/
-    private fun readPOSTableWithIndex(mode: Int): Map<Pair<Short, Short>, Int> {
-        val objectInput = if (mode == 0) {
-            ObjectInputStream(FileInputStream("./src/test/resources/pos_table_for_build.dat"))
-        } else {
-            ObjectInputStream(FileInputStream("./src/main/resources/pos_table_for_build.dat"))
-        }
+    private fun readPOSTableWithIndex(
+        mode: Int,
+        inputPath: String? = null,
+    ): Map<Pair<Short, Short>, Int> {
+        val objectInput = ObjectInputStream(FileInputStream(inputPath ?: defaultPosTableForBuildPath(mode)))
         var a: Map<Pair<Short, Short>, Int>
         objectInput.apply {
             a = (readObject() as Map<Pair<Short, Short>, Int>)
         }
         return a
+    }
+
+    private fun postingsSuccinct(): SuccinctBitVector {
+        return postingsSuccinct ?: SuccinctBitVector(bitvector).also { postingsSuccinct = it }
+    }
+
+    private fun rebuildCache() {
+        postingsSuccinct = SuccinctBitVector(bitvector)
+    }
+
+    companion object {
+        private fun defaultPosTablePath(mode: Int): String {
+            return if (mode == 0) {
+                "./src/test/resources/pos_table.dat"
+            } else {
+                "./src/main/resources/pos_table.dat"
+            }
+        }
+
+        private fun defaultPosTableForBuildPath(mode: Int): String {
+            return if (mode == 0) {
+                "./src/test/resources/pos_table_for_build.dat"
+            } else {
+                "./src/main/resources/pos_table_for_build.dat"
+            }
+        }
     }
 
 }

@@ -43,4 +43,9 @@ bin/
 .DS_Store
 
 /src/test/resources
+!/src/test/resources/
+/src/test/resources/*
+!/src/test/resources/perf/
+/src/test/resources/perf/*
+!/src/test/resources/perf/dictionary-build-baseline.properties
 /src/main/resources

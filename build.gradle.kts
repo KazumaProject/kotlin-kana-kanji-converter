@@ -20,6 +20,29 @@ tasks.test {
     useJUnitPlatform()
 }
 
+tasks.register<Test>("dictionaryBuildTest") {
+    description = "Runs the full real-dictionary build integration test."
+    group = "verification"
+    useJUnitPlatform()
+    maxHeapSize = "4g"
+    systemProperty("dictionaryBuild.full", "true")
+    filter {
+        includeTestsMatching("*DictionaryBuildIntegrationTest")
+    }
+}
+
+tasks.register<Test>("updateDictionaryBuildBaseline") {
+    description = "Runs the full dictionary build test and updates the committed performance baseline."
+    group = "verification"
+    useJUnitPlatform()
+    maxHeapSize = "4g"
+    systemProperty("dictionaryBuild.full", "true")
+    systemProperty("dictionaryBuild.updateBaseline", "true")
+    filter {
+        includeTestsMatching("*DictionaryBuildIntegrationTest")
+    }
+}
+
 kotlin {
     jvmToolchain(17)
 }

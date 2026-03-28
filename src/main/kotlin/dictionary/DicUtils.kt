@@ -15,12 +15,13 @@ class DicUtils {
             val line = object {}::class.java.getResourceAsStream(it)?.bufferedReader()?.readLines()
 
             line?.forEach { str ->
-                str.apply {
-                    val yomi = split("\\t".toRegex())[0]
-                    val leftId = split("\\t".toRegex())[1]
-                    val rightId = split("\\t".toRegex())[2]
-                    val cost = split("\\t".toRegex())[3]
-                    val tango = split("\\t".toRegex())[4]
+                val fields = str.split('\t', limit = 5)
+                if (fields.size >= 5) {
+                    val yomi = fields[0]
+                    val leftId = fields[1]
+                    val rightId = fields[2]
+                    val cost = fields[3]
+                    val tango = fields[4]
                     when {
                         yomi == "では" && tango == "デは" -> {
                             println("skip $yomi $tango")
@@ -321,7 +322,6 @@ class DicUtils {
                                 )
                             )
                         }
-
                     }
                 }
             }
