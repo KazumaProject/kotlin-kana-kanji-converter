@@ -130,7 +130,7 @@ class TokenArray {
                 println(e.stackTraceToString())
             }
         }
-        return this
+        return TokenArray()
     }
 
     private fun writeExternalNotCompress(
@@ -163,11 +163,7 @@ class TokenArray {
                 println(e.stackTraceToString())
             }
         }
-        return this
-    }
-
-    fun isLoaded(): Boolean {
-        return posTableIndexList.isNotEmpty() && wordCostList.isNotEmpty() && nodeIdList.isNotEmpty()
+        return TokenArray()
     }
 
     /**
