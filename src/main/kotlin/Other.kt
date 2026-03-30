@@ -3,10 +3,7 @@ package com.kazumaproject
 import com.kazumaproject.graph.Node
 
 object Other {
-    const val NUM_OF_CONNECTION_ID = 2671
-    const val NOUN_PART_OF_SPEECH_ID = (1852).toShort()
-    const val ALPHABET_PART_OF_SPEECH_ID = (2642).toShort()
-    const val PROPER_NOUN_PART_OF_SPEECH_ID = (1921).toShort()
+    const val NUM_OF_CONNECTION_ID = 2670
     val BOS = Node(
         l = 0,
         r = 0,
