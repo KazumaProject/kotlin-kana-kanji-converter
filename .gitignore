@@ -49,3 +49,4 @@ bin/
 /src/test/resources/perf/*
 !/src/test/resources/perf/dictionary-build-baseline.properties
 /src/main/resources
+.gradle-user-home
