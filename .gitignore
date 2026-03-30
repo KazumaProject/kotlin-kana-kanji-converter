@@ -46,6 +46,12 @@ bin/
 !/src/test/resources/
 /src/test/resources/*
 !/src/test/resources/perf/
+/src/test/resources/engine/*
+!/src/test/resources/engine/
+!/src/test/resources/engine/accuracy_cases.tsv
+!/src/test/resources/engine/mozc_evaluation.tsv
+!/src/test/resources/engine/mozc_evaluation_baseline.properties
 /src/test/resources/perf/*
 !/src/test/resources/perf/dictionary-build-baseline.properties
 /src/main/resources
+.gradle-user-home
