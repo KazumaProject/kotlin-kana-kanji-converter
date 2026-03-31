@@ -19,6 +19,7 @@ import com.kazumaproject.IdDefConstants.`名詞,形容動詞語幹,*,*,*,*,*`
 import com.kazumaproject.IdDefConstants.`名詞,接尾,サ変接続,*,*,*,化`
 import com.kazumaproject.IdDefConstants.`名詞,接尾,一般,*,*,*,*`
 import com.kazumaproject.IdDefConstants.`名詞,接尾,一般,*,*,*,人`
+import com.kazumaproject.IdDefConstants.`名詞,接尾,一般,*,*,*,制`
 import com.kazumaproject.IdDefConstants.`名詞,接尾,一般,*,*,*,書`
 import com.kazumaproject.IdDefConstants.`名詞,接尾,一般,*,*,*,点`
 import com.kazumaproject.IdDefConstants.`名詞,接尾,助動詞語幹,*,*,*,そう`
@@ -2155,22 +2156,22 @@ object Constants {
         ),
         Dictionary(
             yomi = "におう",
-            leftId = IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
-            rightId = IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
+            leftId = `動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
+            rightId = `動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
             cost = 3300,
             tango = "匂う"
         ),
         Dictionary(
             yomi = "におう",
-            leftId = IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
-            rightId = IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
+            leftId = `動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
+            rightId = `動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
             cost = 3400,
             tango = "臭う"
         ),
         Dictionary(
             yomi = "におう",
-            leftId = IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
-            rightId = IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
+            leftId = `動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
+            rightId = `動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
             cost = 3500,
             tango = "におう"
         ),
@@ -2238,13 +2239,6 @@ object Constants {
             tango = "入っ"
         ),
         Dictionary(
-            yomi = "か",
-            leftId = `名詞,接尾,サ変接続,*,*,*,化`,
-            rightId = `名詞,接尾,サ変接続,*,*,*,化`,
-            cost = 1000,
-            tango = "化"
-        ),
-        Dictionary(
             yomi = "かしか",
             leftId = IdDefConstants.`名詞,サ変接続,*,*,*,*,上京`,
             rightId = IdDefConstants.`名詞,接尾,サ変接続,*,*,*,干し`,
@@ -2273,6 +2267,20 @@ object Constants {
             tango = "双子座"
         ),
         Dictionary(
+            yomi = "じぇみに",
+            leftId = `名詞,固有名詞,一般,*,*,*,*`,
+            rightId = `名詞,固有名詞,一般,*,*,*,*`,
+            cost = 5000,
+            tango = "Gemini"
+        ),
+        Dictionary(
+            yomi = "じぇみない",
+            leftId = `名詞,固有名詞,一般,*,*,*,*`,
+            rightId = `名詞,固有名詞,一般,*,*,*,*`,
+            cost = 5000,
+            tango = "Gemini"
+        ),
+        Dictionary(
             yomi = "ぎもうこうい",
             leftId = `名詞,一般,*,*,*,*,*`,
             rightId = `名詞,一般,*,*,*,*,*`,
@@ -2282,42 +2290,42 @@ object Constants {
         Dictionary(
             yomi = "ききました",
             leftId = IdDefConstants.`助動詞,*,*,*,特殊・マス,連用形,ます`,
-            rightId = IdDefConstants.`動詞,自立,*,*,五段・カ行イ音便,連用形,*`,
+            rightId = `動詞,自立,*,*,五段・カ行イ音便,連用形,*`,
             cost = 1000,
             tango = "聞きました"
         ),
         Dictionary(
             yomi = "ききました",
             leftId = IdDefConstants.`助動詞,*,*,*,特殊・マス,連用形,ます`,
-            rightId = IdDefConstants.`動詞,自立,*,*,五段・カ行イ音便,連用形,*`,
+            rightId = `動詞,自立,*,*,五段・カ行イ音便,連用形,*`,
             cost = 1005,
             tango = "効きました"
         ),
         Dictionary(
             yomi = "ききました",
             leftId = IdDefConstants.`助動詞,*,*,*,特殊・マス,連用形,ます`,
-            rightId = IdDefConstants.`動詞,自立,*,*,五段・カ行イ音便,連用形,*`,
+            rightId = `動詞,自立,*,*,五段・カ行イ音便,連用形,*`,
             cost = 1010,
             tango = "聴きました"
         ),
         Dictionary(
             yomi = "こわすぎ",
             leftId = IdDefConstants.`形容詞,自立,*,*,形容詞・アウオ段,ガル接続,*`,
-            rightId = IdDefConstants.`名詞,接尾,一般,*,*,*,*`,
+            rightId = `名詞,接尾,一般,*,*,*,*`,
             cost = 2300,
             tango = "怖すぎ"
         ),
         Dictionary(
             yomi = "こわすぎる",
             leftId = IdDefConstants.`形容詞,自立,*,*,形容詞・アウオ段,ガル接続,*`,
-            rightId = IdDefConstants.`名詞,接尾,一般,*,*,*,*`,
+            rightId = `名詞,接尾,一般,*,*,*,*`,
             cost = 2500,
             tango = "怖すぎる"
         ),
         Dictionary(
             yomi = "こわすぎて",
             leftId = IdDefConstants.`形容詞,自立,*,*,形容詞・アウオ段,ガル接続,*`,
-            rightId = IdDefConstants.`名詞,接尾,一般,*,*,*,*`,
+            rightId = `名詞,接尾,一般,*,*,*,*`,
             cost = 2600,
             tango = "怖すぎて"
         ),
@@ -2392,138 +2400,19 @@ object Constants {
             tango = "漢字変換"
         ),
         Dictionary(
-            yomi = "かんじへんかん",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 4000,
-            tango = "漢字変換"
-        ),
-        Dictionary(
             yomi = "か", leftId = `名詞,一般,*,*,*,*,*`, rightId = `名詞,一般,*,*,*,*,*`, cost = 4000, tango = "蚊"
         ),
         Dictionary(
-            yomi = "そくていせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 5000,
-            tango = "測定精度"
-        ),
-        Dictionary(
-            yomi = "けいそくせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 5000,
-            tango = "計測精度"
-        ),
-        Dictionary(
-            yomi = "いちせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 5000,
-            tango = "位置精度"
-        ),
-        Dictionary(
-            yomi = "じかんせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 5000,
-            tango = "時間精度"
-        ),
-        Dictionary(
-            yomi = "くうかんせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 5000,
-            tango = "空間精度"
-        ),
-        Dictionary(
-            yomi = "きょりせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 5000,
-            tango = "距離精度"
-        ),
-        Dictionary(
-            yomi = "かくどせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 5000,
-            tango = "角度精度"
-        ),
-        Dictionary(
-            yomi = "よそくせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 5000,
-            tango = "予測精度"
-        ),
-        Dictionary(
-            yomi = "ぶんるいせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 5000,
-            tango = "分類精度"
-        ),
-        Dictionary(
-            yomi = "ぶんるいのせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 7000,
-            tango = "分類の精度"
-        ),
-        Dictionary(
-            yomi = "にんしきせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 5000,
-            tango = "認識精度"
-        ),
-        Dictionary(
-            yomi = "けんしゅつせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 5000,
-            tango = "検出精度"
-        ),
-        Dictionary(
-            yomi = "けんしゅつのせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 8000,
-            tango = "検出の精度"
-        ),
-        Dictionary(
-            yomi = "へんかんせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 5000,
-            tango = "変換精度"
-        ),
-        Dictionary(
-            yomi = "へんかんのせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 8000,
-            tango = "変換の精度"
-        ),
-        Dictionary(
-            yomi = "かいとうせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 5000,
-            tango = "回答精度"
-        ),
-        Dictionary(
-            yomi = "かいとうのせいど",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 8000,
-            tango = "回答の精度"
+            yomi = "げつがくせい",
+            leftId = `名詞,接尾,一般,*,*,*,制`,
+            rightId = `名詞,接尾,一般,*,*,*,制`,
+            cost = 3000,
+            tango = "月額制"
         ),
         Dictionary(
             yomi = "ほけんせい",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
+            leftId = `名詞,接尾,一般,*,*,*,制`,
+            rightId = `名詞,接尾,一般,*,*,*,制`,
             cost = 4000,
             tango = "保険制"
         ),
@@ -2550,8 +2439,8 @@ object Constants {
         ),
         Dictionary(
             yomi = "ほうしゅうせい",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
+            leftId = `名詞,接尾,一般,*,*,*,制`,
+            rightId = `名詞,接尾,一般,*,*,*,制`,
             cost = 6000,
             tango = "報酬制"
         ),
@@ -2578,8 +2467,8 @@ object Constants {
         ),
         Dictionary(
             yomi = "たんいせい",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
+            leftId = `名詞,接尾,一般,*,*,*,制`,
+            rightId = `名詞,接尾,一般,*,*,*,制`,
             cost = 6000,
             tango = "単位制"
         ),
@@ -2606,8 +2495,8 @@ object Constants {
         ),
         Dictionary(
             yomi = "むこうか",
-            leftId = IdDefConstants.`名詞,形容動詞語幹,*,*,*,*,こんな`,
-            rightId = IdDefConstants.`名詞,接尾,サ変接続,*,*,*,干し`,
+            leftId = `名詞,接尾,サ変接続,*,*,*,化`,
+            rightId = `名詞,接尾,サ変接続,*,*,*,化`,
             cost = 3000,
             tango = "無効化"
         ),
@@ -2641,8 +2530,8 @@ object Constants {
         ),
         Dictionary(
             yomi = "れっきとした",
-            leftId = IdDefConstants.`連体詞,*,*,*,*,*,*`,
-            rightId = IdDefConstants.`連体詞,*,*,*,*,*,*`,
+            leftId = `連体詞,*,*,*,*,*,*`,
+            rightId = `連体詞,*,*,*,*,*,*`,
             cost = 3700,
             tango = "歴とした"
         ),
@@ -2659,13 +2548,6 @@ object Constants {
             rightId = IdDefConstants.`名詞,代名詞,対象,*,*,*,*`,
             cost = 2800,
             tango = "とはなに"
-        ),
-        Dictionary(
-            yomi = "けつろをひらく",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 5000,
-            tango = "血路を開く"
         ),
         Dictionary(
             yomi = "ございますか",
@@ -2705,7 +2587,7 @@ object Constants {
         Dictionary(
             yomi = "じしょびき",
             leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = IdDefConstants.`動詞,自立,*,*,五段・カ行イ音便,連用形,*`,
+            rightId = `動詞,自立,*,*,五段・カ行イ音便,連用形,*`,
             cost = 3500,
             tango = "辞書引き"
         ),
@@ -2913,60 +2795,18 @@ object Constants {
             tango = "五七五七七"
         ),
         Dictionary(
-            yomi = "かたにかけ",
-            leftId = `動詞,自立,*,*,一段,連用形,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 1500,
-            tango = "肩にかけ"
-        ),
-        Dictionary(
-            yomi = "かたにかけ",
-            leftId = `動詞,自立,*,*,一段,連用形,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 1501,
-            tango = "肩に掛け"
-        ),
-        Dictionary(
-            yomi = "かたにかける",
-            leftId = IdDefConstants.`動詞,自立,*,*,一段,基本形,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 3000,
-            tango = "肩にかける"
-        ),
-        Dictionary(
-            yomi = "かたにかけた",
-            leftId = IdDefConstants.`助動詞,*,*,*,特殊・タ,基本形,た`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 3000,
-            tango = "肩にかけた"
-        ),
-        Dictionary(
-            yomi = "かたにかければ",
-            leftId = IdDefConstants.`助詞,接続助詞,*,*,*,*,ば`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 3000,
-            tango = "肩にかければ"
-        ),
-        Dictionary(
-            yomi = "かたにかけて",
-            leftId = IdDefConstants.`助詞,接続助詞,*,*,*,*,て`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 3000,
-            tango = "肩にかけて"
-        ),
-        Dictionary(
-            yomi = "かたにかけたい",
-            leftId = IdDefConstants.`助動詞,*,*,*,特殊・タイ,基本形,たい`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 3000,
-            tango = "肩にかけたい"
-        ),
-        Dictionary(
             yomi = "ですか",
             leftId = IdDefConstants.`助動詞,*,*,*,特殊・デス,基本形,です`,
             rightId = IdDefConstants.`助詞,副助詞／並立助詞／終助詞,*,*,*,*,か`,
             cost = 500,
             tango = "ですか"
+        ),
+        Dictionary(
+            yomi = "おてつたび",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 4000,
+            tango = "おてつたび"
         ),
     )
 
@@ -3011,8 +2851,8 @@ object Constants {
         ),
         Dictionary(
             yomi = "かきくう",
-            leftId = IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
-            rightId = IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
+            leftId = `動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
+            rightId = `動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
             cost = 4001,
             tango = "柿食う"
         ),
@@ -3025,8 +2865,8 @@ object Constants {
         ),
         Dictionary(
             yomi = "よくかきくう",
-            leftId = IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
-            rightId = IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
+            leftId = `動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
+            rightId = `動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
             cost = 4000,
             tango = "よく柿食う"
         ),
