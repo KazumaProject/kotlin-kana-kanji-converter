@@ -1738,6 +1738,62 @@ object Constants {
             cost = 3000,
             tango = "GitHub"
         ),
+        Dictionary(
+            yomi = "おーぷんえーあい",
+            leftId = `名詞,固有名詞,一般,*,*,*,*`,
+            rightId = `名詞,固有名詞,一般,*,*,*,*`,
+            cost = 3000,
+            tango = "OpenAI"
+        ),
+        Dictionary(
+            yomi = "あんそろぴっく",
+            leftId = `名詞,固有名詞,一般,*,*,*,*`,
+            rightId = `名詞,固有名詞,一般,*,*,*,*`,
+            cost = 4000,
+            tango = "Anthropic"
+        ),
+        Dictionary(
+            yomi = "あんすろぴっく",
+            leftId = `名詞,固有名詞,一般,*,*,*,*`,
+            rightId = `名詞,固有名詞,一般,*,*,*,*`,
+            cost = 4000,
+            tango = "Anthropic"
+        ),
+        Dictionary(
+            yomi = "くろーどこーど",
+            leftId = `名詞,固有名詞,一般,*,*,*,*`,
+            rightId = `名詞,固有名詞,一般,*,*,*,*`,
+            cost = 4000,
+            tango = "Claude Code"
+        ),
+        Dictionary(
+            yomi = "くろーど",
+            leftId = `名詞,固有名詞,一般,*,*,*,*`,
+            rightId = `名詞,固有名詞,一般,*,*,*,*`,
+            cost = 8000,
+            tango = "Claude"
+        ),
+        Dictionary(
+            yomi = "こでっくす",
+            leftId = `名詞,固有名詞,一般,*,*,*,*`,
+            rightId = `名詞,固有名詞,一般,*,*,*,*`,
+            cost = 4000,
+            tango = "Codex"
+        ),
+        Dictionary(
+            yomi = "こーでっくす",
+            leftId = `名詞,固有名詞,一般,*,*,*,*`,
+            rightId = `名詞,固有名詞,一般,*,*,*,*`,
+            cost = 4000,
+            tango = "Codex"
+        ),
+        Dictionary(
+            yomi = "かーそる",
+            leftId = `名詞,固有名詞,一般,*,*,*,*`,
+            rightId = `名詞,固有名詞,一般,*,*,*,*`,
+            cost = 8000,
+            tango = "Cursor"
+        ),
     )
 
     val SYMBOL_LIST = listOf(
