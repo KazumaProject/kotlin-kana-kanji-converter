@@ -1652,7 +1652,7 @@ object Constants {
             leftId = `名詞,固有名詞,一般,*,*,*,*`,
             rightId = `名詞,固有名詞,一般,*,*,*,*`,
             cost = 4000,
-            tango = "Stack_Overflow"
+            tango = "Stack Overflow"
         ),
         Dictionary(
             yomi = "ふぇいすぶっく",
@@ -1715,7 +1715,7 @@ object Constants {
             leftId = `名詞,固有名詞,組織,*,*,*,*`,
             rightId = `名詞,固有名詞,組織,*,*,*,*`,
             cost = 4000,
-            tango = "Google_Map"
+            tango = "Google Map"
         ),
         Dictionary(
             yomi = "あまぞん",
