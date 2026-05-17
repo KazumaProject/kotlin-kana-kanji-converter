@@ -1794,6 +1794,13 @@ object Constants {
             cost = 8000,
             tango = "Cursor"
         ),
+        Dictionary(
+            yomi = "でぃすこーど",
+            leftId = `名詞,固有名詞,一般,*,*,*,*`,
+            rightId = `名詞,固有名詞,一般,*,*,*,*`,
+            cost = 8000,
+            tango = "Discord"
+        ),
     )
 
     val SYMBOL_LIST = listOf(
@@ -3270,6 +3277,41 @@ object Constants {
             rightId = `名詞,サ変接続,*,*,*,*,*`,
             cost = 8500,
             tango = "楔前部"
+        ),
+        Dictionary(
+            yomi = "かんこつ",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 8500,
+            tango = "寛骨"
+        ),
+        Dictionary(
+            yomi = "ぶんぽう",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 9500,
+            tango = "分蜂"
+        ),
+        Dictionary(
+            yomi = "ねっさつ",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 6000,
+            tango = "熱殺"
+        ),
+        Dictionary(
+            yomi = "ほうきゅう",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 8500,
+            tango = "分蜂"
+        ),
+        Dictionary(
+            yomi = "ねっさつほうきゅう",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 8500,
+            tango = "熱殺蜂球"
         ),
     )
 
