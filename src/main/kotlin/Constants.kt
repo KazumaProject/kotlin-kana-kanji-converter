@@ -1801,6 +1801,20 @@ object Constants {
             cost = 8000,
             tango = "Discord"
         ),
+        Dictionary(
+            yomi = "てすら",
+            leftId = `名詞,固有名詞,一般,*,*,*,*`,
+            rightId = `名詞,固有名詞,一般,*,*,*,*`,
+            cost = 8000,
+            tango = "Tesla"
+        ),
+        Dictionary(
+            yomi = "てすら",
+            leftId = `名詞,固有名詞,一般,*,*,*,*`,
+            rightId = `名詞,固有名詞,一般,*,*,*,*`,
+            cost = 8005,
+            tango = "tesla"
+        ),
     )
 
     val SYMBOL_LIST = listOf(
@@ -3303,8 +3317,8 @@ object Constants {
             yomi = "ほうきゅう",
             leftId = `名詞,一般,*,*,*,*,*`,
             rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 8500,
-            tango = "分蜂"
+            cost = 8000,
+            tango = "蜂球"
         ),
         Dictionary(
             yomi = "ねっさつほうきゅう",
@@ -3312,6 +3326,76 @@ object Constants {
             rightId = `名詞,一般,*,*,*,*,*`,
             cost = 8500,
             tango = "熱殺蜂球"
+        ),
+        Dictionary(
+            yomi = "らいんも",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 8000,
+            tango = "ラインモ"
+        ),
+        Dictionary(
+            yomi = "らいんも",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 8005,
+            tango = "LINEMO"
+        ),
+        Dictionary(
+            yomi = "らいんも",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 8006,
+            tango = "linemo"
+        ),
+        Dictionary(
+            yomi = "らいんも",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 8007,
+            tango = "Linemo"
+        ),
+        Dictionary(
+            yomi = "てんせい",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 7000,
+            tango = "填星"
+        ),
+        Dictionary(
+            yomi = "しんせい",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 7000,
+            tango = "辰星"
+        ),
+        Dictionary(
+            yomi = "けいわく",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 7000,
+            tango = "螢惑"
+        ),
+        Dictionary(
+            yomi = "さいせい",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 7500,
+            tango = "歳星"
+        ),
+        Dictionary(
+            yomi = "にほんごにゅうりょく",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 7000,
+            tango = "日本語入力"
+        ),
+        Dictionary(
+            yomi = "はんこたい",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 7000,
+            tango = "半固体"
         ),
     )
 
