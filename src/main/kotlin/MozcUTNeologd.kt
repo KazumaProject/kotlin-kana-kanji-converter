@@ -20,16 +20,18 @@ import com.kazumaproject.Constants.SYMBOL_LIST
 import com.kazumaproject.Constants.VERB_LIST
 import com.kazumaproject.Constants.WORDS
 import com.kazumaproject.Constants.ZENKANKU_LIST
-import com.kazumaproject.connection_id.ConnectionIdBuilder
 import com.kazumaproject.dictionary.DicUtils
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
+import com.kazumaproject.mozc.buildConnectionIdsFromResource
+import com.kazumaproject.mozc.validateBundledMozcDictionaryResources
 import com.kazumaproject.reading_correction.ReadingCorrectionBuilder
 import java.io.*
 import java.util.*
 import java.util.zip.ZipInputStream
 
 fun main() {
+    validateBundledMozcDictionaryResources()
     val fileList: List<String> = listOf(
         "/dictionary00.txt",
         "/dictionary01.txt",
@@ -72,22 +74,7 @@ private fun buildPOSTable(finalList: SortedMap<String, List<Dictionary>>) {
 }
 
 private fun buildConnectionIds() {
-    val lines = object {}::class.java.getResourceAsStream("/connection_single_column.txt")
-        ?.bufferedReader()
-        ?.readLines()
-
-    val connectionIdBuilder = ConnectionIdBuilder()
-    lines?.let { l ->
-        // Skip the first line and convert the remaining lines to Short
-        val connectionIds = l.drop(1).map { line ->
-            line.toShort()
-        }.toShortArray()
-        println("connectionID size: ${connectionIds.size}")
-        connectionIdBuilder.writeShortArrayAsBytes(
-            connectionIds,
-            "./src/main/resources/connectionId.dat",
-        )
-    }
+    buildConnectionIdsFromResource()
 }
 
 private fun buildDictionaryForNeologd() {

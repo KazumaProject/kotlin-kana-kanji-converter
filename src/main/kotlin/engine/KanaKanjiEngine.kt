@@ -5,6 +5,7 @@ import com.kazumaproject.Louds.with_term_id.LOUDSWithTermId
 import com.kazumaproject.connection_id.ConnectionIdBuilder
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.graph.GraphBuilder
+import com.kazumaproject.mozc.ConnectionMatrix
 import com.kazumaproject.viterbi.FindPath
 import java.io.BufferedInputStream
 import java.io.FileInputStream
@@ -15,7 +16,7 @@ class KanaKanjiEngine {
     private lateinit var graphBuilder: GraphBuilder
     private lateinit var yomiTrie: LOUDSWithTermId
     private lateinit var tangoTrie: LOUDS
-    private lateinit var connectionIds: ShortArray
+    private lateinit var connectionMatrix: ConnectionMatrix
     private lateinit var findPath: FindPath
     private lateinit var tokenArray: TokenArray
 
@@ -23,7 +24,7 @@ class KanaKanjiEngine {
         val objectInputYomi = ObjectInputStream(FileInputStream("src/main/resources/yomi.dat"))
         val objectInputTango = ObjectInputStream(FileInputStream("src/main/resources/tango.dat"))
         val objectInputTokenArray = ObjectInputStream(FileInputStream("src/main/resources/token.dat"))
-        val objectInputConnectionId = ObjectInputStream(FileInputStream("src/main/resources/connectionIds.dat"))
+        val objectInputConnectionId = BufferedInputStream(FileInputStream("src/main/resources/connectionId.dat"))
 
         yomiTrie = LOUDSWithTermId().readExternal(objectInputYomi)
         tangoTrie = LOUDS().readExternal(objectInputTango)
@@ -31,7 +32,7 @@ class KanaKanjiEngine {
         tokenArray = TokenArray()
         tokenArray.readExternal(objectInputTokenArray)
         tokenArray.readPOSTable(1)
-        connectionIds = ConnectionIdBuilder().read(objectInputConnectionId)
+        connectionMatrix = ConnectionIdBuilder().readMatrix(objectInputConnectionId, "src/main/resources/connectionId.dat")
         findPath = FindPath()
     }
 
@@ -46,7 +47,7 @@ class KanaKanjiEngine {
         tokenArray = TokenArray()
         tokenArray.readExternal(objectInputTokenArray)
         tokenArray.readPOSTable(0)
-        connectionIds = ConnectionIdBuilder().read(objectInputConnectionId)
+        connectionMatrix = ConnectionIdBuilder().readMatrix(objectInputConnectionId, "src/test/resources/connectionId.dat")
         findPath = FindPath()
     }
 
@@ -60,7 +61,7 @@ class KanaKanjiEngine {
             tangoTrie,
             tokenArray,
         )
-        val result = findPath.backwardAStar(graph,input.length, connectionIds,n)
+        val result = findPath.backwardAStar(graph,input.length, connectionMatrix,n)
         return result
     }
 
@@ -73,7 +74,7 @@ class KanaKanjiEngine {
             tangoTrie,
             tokenArray,
         )
-        val result = findPath.viterbi(graph,input.length, connectionIds)
+        val result = findPath.viterbi(graph,input.length, connectionMatrix)
         return result
     }
 

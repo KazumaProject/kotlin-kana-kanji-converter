@@ -4,6 +4,15 @@ on:
   push:
     tags:
       - 'v*'  # Trigger only when a tag starting with "v" is pushed
+  workflow_dispatch:
+    inputs:
+      mozc_ref:
+        description: 'google/mozc ref to use for dictionary resources'
+        required: false
+        default: 'master'
+
+env:
+  MOZC_REF: ${{ github.event.inputs.mozc_ref || 'master' }}
 
 jobs:
   build-and-release:
@@ -12,29 +21,54 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      # Checkout Mozc once so id.def, dictionary, suffix, connection, and single_kanji files share one revision.
+      - name: Checkout google/mozc
+        uses: actions/checkout@v4
+        with:
+          repository: google/mozc
+          ref: ${{ env.MOZC_REF }}
+          path: mozc-src
 
       # Set up JDK 17 for Kotlin
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # Download base dictionary files
-      - name: Download base dictionary files
+      # Copy base dictionary files
+      - name: Copy Mozc dictionary resources
         run: |
           mkdir -p ./src/main/resources
+          cp ./mozc-src/src/data/dictionary_oss/id.def ./src/main/resources/id.def
           for i in $(seq -w 00 09); do
-            wget https://raw.githubusercontent.com/google/mozc/master/src/data/dictionary_oss/dictionary${i}.txt -O ./src/main/resources/dictionary${i}.txt
+            cp ./mozc-src/src/data/dictionary_oss/dictionary${i}.txt ./src/main/resources/dictionary${i}.txt
           done
-          wget https://raw.githubusercontent.com/google/mozc/master/src/data/dictionary_oss/connection_single_column.txt -O ./src/main/resources/connection_single_column.txt
-          wget https://raw.githubusercontent.com/google/mozc/master/src/data/dictionary_oss/suffix.txt -O ./src/main/resources/suffix.txt
-          wget https://raw.githubusercontent.com/google/mozc/master/src/data/single_kanji/single_kanji.tsv -O ./src/main/resources/single_kanji.tsv
+          cp ./mozc-src/src/data/dictionary_oss/connection_single_column.txt ./src/main/resources/connection_single_column.txt
+          cp ./mozc-src/src/data/dictionary_oss/suffix.txt ./src/main/resources/suffix.txt
+          cp ./mozc-src/src/data/single_kanji/single_kanji.tsv ./src/main/resources/single_kanji.tsv
+
+      - name: Verify Mozc resources exist
+        run: |
+          test -s ./src/main/resources/id.def
+          test -s ./src/main/resources/connection_single_column.txt
+          test -s ./src/main/resources/suffix.txt
+          test -s ./src/main/resources/single_kanji.tsv
+          for i in $(seq -w 00 09); do
+            test -s ./src/main/resources/dictionary${i}.txt
+          done
+
+      - name: Validate Mozc resource consistency
+        run: ./gradlew validateMozcIdDef validateConnectionMatrix validateDictionaryIds validateIdDefReferences
 
       # Build the project with Gradle
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Compile Kotlin
+        run: ./gradlew clean compileKotlin
+
+      - name: Test with Gradle
+        run: ./gradlew test
 
       # --- Run all dictionary creation tasks in parallel ---
       # 各タスクをバックグラウンドで並列実行し、すべての完了を待ちます。
