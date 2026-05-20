@@ -6,6 +6,7 @@ import com.kazumaproject.connection_id.ConnectionIdBuilder
 import com.kazumaproject.dictionary.DicUtils
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
+import com.kazumaproject.mozc.ConnectionMatrixParser
 import org.junit.jupiter.api.Assumptions.assumeTrue
 import java.nio.file.Files
 import java.nio.file.Path
@@ -154,13 +155,14 @@ class DictionaryBuildIntegrationTest {
             .toSortedMap(compareBy({ it.length }, { it }))
 
     private fun buildConnectionIds(outputPath: Path) {
-        val lines = object {}::class.java.getResourceAsStream("/connection_single_column.txt")
+        val reader = object {}::class.java.getResourceAsStream("/connection_single_column.txt")
             ?.bufferedReader()
-            ?.readLines()
             ?: error("connection_single_column.txt was not found")
 
-        val connectionIds = lines.drop(1).map(String::toShort).toShortArray()
-        ConnectionIdBuilder().writeShortArrayAsBytes(connectionIds, outputPath.toString())
+        val connectionMatrix = reader.use {
+            ConnectionMatrixParser.parse(it, "/connection_single_column.txt")
+        }
+        ConnectionIdBuilder().writeMatrixAsBytes(connectionMatrix, outputPath.toString())
     }
 
     private fun assertArtifactWritten(path: Path) {

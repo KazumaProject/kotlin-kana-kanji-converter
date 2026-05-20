@@ -1,7 +1,10 @@
 package com.kazumaproject.connection_id
 
+import com.kazumaproject.mozc.ConnectionMatrix
+import com.kazumaproject.mozc.ConnectionMatrixIO
 import java.io.*
 import java.nio.ByteBuffer
+import java.nio.file.Path
 
 class ConnectionIdBuilder {
     fun build(
@@ -20,17 +23,21 @@ class ConnectionIdBuilder {
     }
 
     fun read(inputStream: InputStream): ShortArray {
-        val byteArray = inputStream.readBytes()
-        val byteBuffer = ByteBuffer.wrap(byteArray)
-        val shortArray = ShortArray(byteArray.size / 2)
-        byteBuffer.asShortBuffer().get(shortArray)
-        return shortArray
+        return readMatrix(inputStream).costs
+    }
+
+    fun readMatrix(inputStream: InputStream, filePath: String = "<stream>"): ConnectionMatrix {
+        return ConnectionMatrixIO.read(inputStream, filePath)
     }
 
     fun writeShortArrayAsBytes(shortArray: ShortArray, fileName: String) {
         val byteBuffer = ByteBuffer.allocate(shortArray.size * 2)
         shortArray.forEach { byteBuffer.putShort(it) }
         FileOutputStream(fileName).use { it.write(byteBuffer.array()) }
+    }
+
+    fun writeMatrixAsBytes(connectionMatrix: ConnectionMatrix, fileName: String) {
+        ConnectionMatrixIO.writeRaw(connectionMatrix, Path.of(fileName))
     }
 
 
@@ -44,7 +51,6 @@ class ConnectionIdBuilder {
     }
 
     fun writeBitSet(shortArray: ShortArray, fileName: String) {
-        val a = shortArray.map { Integer.toBinaryString(it.toInt()) }.map { it == "1" }.toBooleanArray()
         val byteBuffer = ByteBuffer.allocate(shortArray.size * 2)
         shortArray.forEach { byteBuffer.putShort(it) }
         FileOutputStream(fileName).use { it.write(byteBuffer.array()) }

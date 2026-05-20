@@ -1,9 +1,10 @@
 package com.kazumaproject.viterbi
 
 import com.kazumaproject.Other.BOS
-import com.kazumaproject.Other.NUM_OF_CONNECTION_ID
 import com.kazumaproject.graph.Node
+import com.kazumaproject.mozc.ConnectionMatrix
 import java.util.*
+import kotlin.math.sqrt
 
 class FindPath {
 
@@ -11,8 +12,14 @@ class FindPath {
         graph: List<MutableList<MutableList<Node>>>,
         length: Int,
         connectionIds: ShortArray
+    ): String = viterbi(graph, length, inferConnectionMatrix(connectionIds))
+
+    fun viterbi(
+        graph: List<MutableList<MutableList<Node>>>,
+        length: Int,
+        connectionMatrix: ConnectionMatrix
     ): String {
-        buildViterbi(graph, length, connectionIds)
+        buildViterbi(graph, length, connectionMatrix)
         var node = graph[length + 1][0][0]
         val result: MutableList<String> = mutableListOf()
         while (node.tango != "BOS"){
@@ -30,8 +37,15 @@ class FindPath {
         length: Int,
         connectionIds: ShortArray,
         n: Int
+    ): MutableList<String> = backwardAStar(graph, length, inferConnectionMatrix(connectionIds), n)
+
+    fun backwardAStar(
+        graph: List<MutableList<MutableList<Node>>>,
+        length: Int,
+        connectionMatrix: ConnectionMatrix,
+        n: Int
     ): MutableList<String> {
-        forwardDp(graph, length, connectionIds)
+        forwardDp(graph, length, connectionMatrix)
         val result: MutableList<Pair<Node,Int>> = mutableListOf()
         val resultFinal: MutableList<String> = mutableListOf()
         val pQueue: PriorityQueue<Pair<Node,Int>> = PriorityQueue (compareBy{
@@ -55,7 +69,7 @@ class FindPath {
                     val edgeScore = getEdgeCost(
                         prevNode.l.toInt(),
                         node.first.r.toInt(),
-                        connectionIds
+                        connectionMatrix
                     )
                     prevNode.g = node.first.g + edgeScore + node.first.score
                     prevNode.next = node.first
@@ -73,7 +87,7 @@ class FindPath {
     private fun buildViterbi(
         graph: List<MutableList<MutableList<Node>>>,
         length: Int,
-        connectionIds: ShortArray
+        connectionMatrix: ConnectionMatrix
     ){
         for (i in 1 .. length + 1){
             val nodes = graph[i].flatten()
@@ -90,7 +104,7 @@ class FindPath {
                     val edgeCost = getEdgeCost(
                         prevNode.l.toInt(),
                         node.r.toInt(),
-                        connectionIds
+                        connectionMatrix
                     )
                     val tempCost = prevNode.score + nodeCost + edgeCost
                     if (tempCost < cost){
@@ -107,7 +121,7 @@ class FindPath {
     private fun forwardDp(
         graph: List<MutableList<MutableList<Node>>>,
         length: Int,
-        connectionIds: ShortArray
+        connectionMatrix: ConnectionMatrix
     ){
         for (i in 1 .. length + 1){
             val nodes = graph[i].flatten()
@@ -124,7 +138,7 @@ class FindPath {
                     val edgeCost = getEdgeCost(
                         prev.l.toInt(),
                         node.r.toInt(),
-                        connectionIds
+                        connectionMatrix
                     )
                     val tempCost = prev.f + nodeScore + edgeCost
                     if (tempCost < score){
@@ -174,9 +188,17 @@ class FindPath {
     private fun getEdgeCost(
         leftId: Int,
         rightId: Int,
-        connectionIds: ShortArray
+        connectionMatrix: ConnectionMatrix
     ):Int {
-        return connectionIds[leftId * NUM_OF_CONNECTION_ID + rightId].toInt()
+        return connectionMatrix.getCost(leftId, rightId)
+    }
+
+    private fun inferConnectionMatrix(connectionIds: ShortArray): ConnectionMatrix {
+        val size = sqrt(connectionIds.size.toDouble()).toInt()
+        require(size * size == connectionIds.size) {
+            "Invalid connection ID array: short count=${connectionIds.size}, reason=short count must be a perfect square"
+        }
+        return ConnectionMatrix(size, connectionIds)
     }
 
     private fun getStringFromNode(node: Node): String{
