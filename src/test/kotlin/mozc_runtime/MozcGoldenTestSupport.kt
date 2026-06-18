@@ -17,10 +17,11 @@ object MozcGoldenTestSupport {
     fun fixture(relativePath: String): Path {
         val path = repoRoot.resolve("src/test/resources/mozc_golden").resolve(relativePath)
         assertTrue(Files.isRegularFile(path), "Missing official Mozc golden fixture: $path")
-        if (relativePath == "dictionary/system_dictionary_lookup.json") {
-            assertContainsDictionaryTokenFields(path)
-        } else {
-            assertContainsCandidateFields(path)
+        when (relativePath) {
+            "dictionary/system_dictionary_lookup.json" -> assertContainsDictionaryTokenFields(path)
+            "connector/connector_cost.json" -> assertContainsConnectorFields(path)
+            "segmenter/segmenter_boundary.json" -> assertContainsSegmenterFields(path)
+            else -> assertContainsCandidateFields(path)
         }
         return path
     }
@@ -70,5 +71,37 @@ object MozcGoldenTestSupport {
         )
         val missing = fields.filterNot { "\"$it\"" in text }
         assertTrue(missing.isEmpty(), "Dictionary fixture is missing required token fields: path=$path missing=${missing.joinToString()}")
+    }
+
+    private fun assertContainsConnectorFields(path: Path) {
+        val text = Files.readString(path)
+        val fields = listOf(
+            "engineDataVersion",
+            "costs",
+            "leftId",
+            "rightId",
+            "cost",
+            "order",
+            "label",
+        )
+        val missing = fields.filterNot { "\"$it\"" in text }
+        assertTrue(missing.isEmpty(), "Connector fixture is missing required fields: path=$path missing=${missing.joinToString()}")
+    }
+
+    private fun assertContainsSegmenterFields(path: Path) {
+        val text = Files.readString(path)
+        val fields = listOf(
+            "engineDataVersion",
+            "cases",
+            "input",
+            "checks",
+            "leftPosId",
+            "rightPosId",
+            "boundaryType",
+            "result",
+            "order",
+        )
+        val missing = fields.filterNot { "\"$it\"" in text }
+        assertTrue(missing.isEmpty(), "Segmenter fixture is missing required fields: path=$path missing=${missing.joinToString()}")
     }
 }

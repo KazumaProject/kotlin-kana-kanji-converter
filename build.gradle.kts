@@ -135,6 +135,8 @@ val generatedMozcDataFile = generatedMozcDataDir.map { it.file("mozc.data") }
 val generatedMozcDataManifestFile = generatedMozcDataDir.map { it.file("mozc_data_manifest.json") }
 val generatedMozcHelperDir = layout.buildDirectory.dir("generated/mozc-helper")
 val mozcGoldenDictionaryLookupFile = layout.projectDirectory.file("src/test/resources/mozc_golden/dictionary/system_dictionary_lookup.json")
+val mozcGoldenConnectorCostFile = layout.projectDirectory.file("src/test/resources/mozc_golden/connector/connector_cost.json")
+val mozcGoldenSegmenterBoundaryFile = layout.projectDirectory.file("src/test/resources/mozc_golden/segmenter/segmenter_boundary.json")
 val mozcIdDefFileProvider = providers.gradleProperty("mozcIdDefFile")
     .map { layout.projectDirectory.file(it) }
     .orElse(layout.projectDirectory.file("src/main/resources/id.def"))
@@ -354,11 +356,14 @@ val writeMozcDataManifest = tasks.register<JavaExec>("writeMozcDataManifest") {
 
 val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
     group = "verification"
-    description = "Builds official Mozc helper binaries and writes dictionary lookup golden fixtures."
+    description = "Builds official Mozc helper binaries and writes dictionary, connector, and segmenter golden fixtures."
     dependsOn(generateOfficialMozcData)
     inputs.file(generatedMozcDataFile)
     inputs.property("dictionaryLookupHelperVersion", "1")
+    inputs.property("connectorSegmenterHelperVersion", "1")
     outputs.file(mozcGoldenDictionaryLookupFile)
+    outputs.file(mozcGoldenConnectorCostFile)
+    outputs.file(mozcGoldenSegmenterBoundaryFile)
     doLast {
         val mozcSrcDir = resolveMozcSourceDirectoryForBuild()
         val helperDir = generatedMozcHelperDir.get().asFile
@@ -375,6 +380,22 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
                     "@mozc//data_manager",
                     "@mozc//dictionary:dictionary_interface",
                     "@mozc//dictionary:dictionary_token",
+                    "@mozc//dictionary/system:system_dictionary",
+                    "@com_google_absl//absl/status:statusor",
+                    "@com_google_absl//absl/strings",
+                ],
+            )
+
+            cc_binary(
+                name = "mozc_connector_segmenter_helper",
+                srcs = ["mozc_connector_segmenter_helper.cc"],
+                deps = [
+                    "@mozc//converter:connector",
+                    "@mozc//converter:segmenter",
+                    "@mozc//data_manager",
+                    "@mozc//dictionary:dictionary_interface",
+                    "@mozc//dictionary:dictionary_token",
+                    "@mozc//dictionary:pos_matcher",
                     "@mozc//dictionary/system:system_dictionary",
                     "@com_google_absl//absl/status:statusor",
                     "@com_google_absl//absl/strings",
@@ -592,6 +613,470 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
             }
             """.trimIndent()
         )
+        helperDir.resolve("mozc_connector_segmenter_helper.cc").writeText(
+            """
+            #include <algorithm>
+            #include <cstdint>
+            #include <cstdlib>
+            #include <fstream>
+            #include <iostream>
+            #include <memory>
+            #include <set>
+            #include <string>
+            #include <string_view>
+            #include <tuple>
+            #include <utility>
+            #include <vector>
+
+            #include "absl/status/statusor.h"
+            #include "absl/strings/string_view.h"
+            #include "converter/connector.h"
+            #include "converter/segmenter.h"
+            #include "data_manager/data_manager.h"
+            #include "dictionary/dictionary_interface.h"
+            #include "dictionary/dictionary_token.h"
+            #include "dictionary/pos_matcher.h"
+            #include "dictionary/system/system_dictionary.h"
+
+            namespace {
+
+            struct Options {
+              std::string data_path;
+              std::string id_def_path;
+              std::string connector_output_path;
+              std::string segmenter_output_path;
+            };
+
+            struct IdDefEntry {
+              int id;
+              std::string name;
+            };
+
+            struct ConnectorCostCase {
+              int left_id;
+              int right_id;
+              int cost;
+              std::string label;
+            };
+
+            struct DictionaryEntry {
+              std::string key;
+              std::string value;
+              uint16_t lid;
+              uint16_t rid;
+              int cost;
+            };
+
+            struct SegmenterCheck {
+              uint16_t left_pos_id;
+              uint16_t right_pos_id;
+              std::string boundary_type;
+              bool result;
+            };
+
+            struct SegmenterCase {
+              std::string input;
+              std::vector<SegmenterCheck> checks;
+            };
+
+            class CollectCallback final : public mozc::dictionary::DictionaryInterface::Callback {
+             public:
+              ResultType OnToken(absl::string_view key, absl::string_view actual_key,
+                                 const mozc::dictionary::Token& token) override {
+                entries_.push_back(DictionaryEntry{token.key, token.value, token.lid, token.rid, token.cost});
+                return TRAVERSE_CONTINUE;
+              }
+
+              const std::vector<DictionaryEntry>& entries() const { return entries_; }
+
+             private:
+              std::vector<DictionaryEntry> entries_;
+            };
+
+            Options ParseOptions(int argc, char** argv) {
+              Options options;
+              for (int i = 1; i < argc; ++i) {
+                const std::string arg = argv[i];
+                const std::string data_prefix = "--data=";
+                const std::string id_def_prefix = "--id_def=";
+                const std::string connector_output_prefix = "--connector_output=";
+                const std::string segmenter_output_prefix = "--segmenter_output=";
+                if (arg.rfind(data_prefix, 0) == 0) {
+                  options.data_path = arg.substr(data_prefix.size());
+                } else if (arg.rfind(id_def_prefix, 0) == 0) {
+                  options.id_def_path = arg.substr(id_def_prefix.size());
+                } else if (arg.rfind(connector_output_prefix, 0) == 0) {
+                  options.connector_output_path = arg.substr(connector_output_prefix.size());
+                } else if (arg.rfind(segmenter_output_prefix, 0) == 0) {
+                  options.segmenter_output_path = arg.substr(segmenter_output_prefix.size());
+                }
+              }
+              if (options.data_path.empty() || options.id_def_path.empty() ||
+                  options.connector_output_path.empty() || options.segmenter_output_path.empty()) {
+                std::cerr << "Usage: mozc_connector_segmenter_helper --data=/path/mozc.data --id_def=/path/id.def --connector_output=/path/connector_cost.json --segmenter_output=/path/segmenter_boundary.json\n";
+                std::exit(2);
+              }
+              return options;
+            }
+
+            std::string JsonString(std::string_view value) {
+              std::string out = "\"";
+              for (const unsigned char ch : value) {
+                switch (ch) {
+                  case '\\':
+                    out += "\\\\";
+                    break;
+                  case '"':
+                    out += "\\\"";
+                    break;
+                  case '\b':
+                    out += "\\b";
+                    break;
+                  case '\f':
+                    out += "\\f";
+                    break;
+                  case '\n':
+                    out += "\\n";
+                    break;
+                  case '\r':
+                    out += "\\r";
+                    break;
+                  case '\t':
+                    out += "\\t";
+                    break;
+                  default:
+                    if (ch < 0x20) {
+                      constexpr char hex[] = "0123456789ABCDEF";
+                      out += "\\u00";
+                      out += hex[ch >> 4];
+                      out += hex[ch & 0x0F];
+                    } else {
+                      out.push_back(static_cast<char>(ch));
+                    }
+                }
+              }
+              out += "\"";
+              return out;
+            }
+
+            std::vector<IdDefEntry> ReadIdDef(const std::string& path) {
+              std::ifstream input(path);
+              if (!input) {
+                std::cerr << "Cannot open id.def: " << path << "\n";
+                std::exit(1);
+              }
+              std::vector<IdDefEntry> entries;
+              std::string line;
+              int line_number = 0;
+              while (std::getline(input, line)) {
+                ++line_number;
+                if (line.empty()) {
+                  continue;
+                }
+                const size_t separator = line.find(' ');
+                if (separator == std::string::npos) {
+                  std::cerr << "Invalid id.def line " << line_number << ": " << line << "\n";
+                  std::exit(1);
+                }
+                entries.push_back(IdDefEntry{std::stoi(line.substr(0, separator)), line.substr(separator + 1)});
+              }
+              if (entries.empty()) {
+                std::cerr << "id.def has no entries: " << path << "\n";
+                std::exit(1);
+              }
+              return entries;
+            }
+
+            int FindIdByName(const std::vector<IdDefEntry>& entries, std::string_view name) {
+              for (const IdDefEntry& entry : entries) {
+                if (entry.name == name) {
+                  return entry.id;
+                }
+              }
+              std::cerr << "Cannot resolve POS id from id.def: " << name << "\n";
+              std::exit(1);
+            }
+
+            std::vector<DictionaryEntry> LookupExact(
+                const mozc::dictionary::SystemDictionary& dictionary,
+                absl::string_view query) {
+              CollectCallback callback;
+              dictionary.LookupExact(query, &callback);
+              return callback.entries();
+            }
+
+            bool IsUtf8Boundary(const std::string& value, size_t index) {
+              return index == 0 || index == value.size() ||
+                     ((static_cast<unsigned char>(value[index]) & 0xC0) != 0x80);
+            }
+
+            void AddSegmenterCheck(const mozc::Segmenter& segmenter,
+                                   uint16_t left_pos_id,
+                                   uint16_t right_pos_id,
+                                   std::set<std::pair<uint16_t, uint16_t>>* seen,
+                                   std::vector<SegmenterCheck>* checks) {
+              const std::pair<uint16_t, uint16_t> key = {left_pos_id, right_pos_id};
+              if (!seen->insert(key).second) {
+                return;
+              }
+              const bool is_boundary = segmenter.IsBoundary(left_pos_id, right_pos_id);
+              checks->push_back(SegmenterCheck{
+                  left_pos_id,
+                  right_pos_id,
+                  is_boundary ? "BOUNDARY" : "NO_BOUNDARY",
+                  true,
+              });
+            }
+
+            std::vector<ConnectorCostCase> BuildConnectorCases(
+                const mozc::Connector& connector,
+                const mozc::dictionary::PosMatcher& pos_matcher,
+                const std::vector<IdDefEntry>& id_def_entries) {
+              const int common_noun = pos_matcher.GetGeneralNounId();
+              const int case_particle = FindIdByName(id_def_entries, "助詞,格助詞,一般,*,*,*,に");
+              const int verb = pos_matcher.GetWeakCompoundVerbSuffixId();
+              const int auxiliary_verb = FindIdByName(id_def_entries, "助動詞,*,*,*,特殊・タ,基本形,た");
+              const int proper_noun = pos_matcher.GetUniqueNounId();
+              const int number = pos_matcher.GetNumberId();
+              const int counter_suffix = pos_matcher.GetCounterSuffixWordId();
+              const int prefix = pos_matcher.GetNounPrefixId();
+              const int noun_suffix = FindIdByName(id_def_entries, "名詞,接尾,一般,*,*,*,*");
+
+              std::vector<ConnectorCostCase> cases = {
+                  {0, common_noun, 0, "BOS_TO_COMMON_NOUN"},
+                  {common_noun, common_noun, 0, "COMMON_NOUN_TO_COMMON_NOUN"},
+                  {common_noun, case_particle, 0, "COMMON_NOUN_TO_CASE_PARTICLE"},
+                  {case_particle, verb, 0, "CASE_PARTICLE_TO_VERB"},
+                  {verb, auxiliary_verb, 0, "VERB_TO_AUXILIARY_VERB"},
+                  {auxiliary_verb, 0, 0, "AUXILIARY_VERB_TO_EOS"},
+                  {proper_noun, case_particle, 0, "PROPER_NOUN_TO_CASE_PARTICLE"},
+                  {number, counter_suffix, 0, "NUMBER_TO_COUNTER_SUFFIX"},
+                  {prefix, common_noun, 0, "PREFIX_TO_NOUN"},
+                  {common_noun, noun_suffix, 0, "NOUN_TO_SUFFIX"},
+              };
+              for (ConnectorCostCase& cost_case : cases) {
+                cost_case.cost = connector.GetTransitionCost(cost_case.left_id, cost_case.right_id);
+              }
+              return cases;
+            }
+
+            std::vector<SegmenterCase> BuildSegmenterCases(
+                const mozc::Segmenter& segmenter,
+                const mozc::dictionary::SystemDictionary& dictionary,
+                const mozc::dictionary::PosMatcher& pos_matcher,
+                const std::vector<IdDefEntry>& id_def_entries) {
+              const std::vector<std::string> inputs = {
+                  "へんかん",
+                  "きょう",
+                  "ありがとう",
+                  "とうきょう",
+                  "にほんご",
+                  "わたしは",
+                  "これは",
+                  "123",
+                  "第一",
+                  "山田太郎",
+              };
+              std::vector<SegmenterCase> cases;
+              for (const std::string& input : inputs) {
+                SegmenterCase segmenter_case;
+                segmenter_case.input = input;
+                std::set<std::pair<uint16_t, uint16_t>> seen;
+                for (size_t split = 1; split < input.size(); ++split) {
+                  if (!IsUtf8Boundary(input, split)) {
+                    continue;
+                  }
+                  const std::vector<DictionaryEntry> left_entries =
+                      LookupExact(dictionary, absl::string_view(input.data(), split));
+                  const std::vector<DictionaryEntry> right_entries =
+                      LookupExact(dictionary, absl::string_view(input.data() + split, input.size() - split));
+                  const size_t left_limit = std::min<size_t>(left_entries.size(), 4);
+                  const size_t right_limit = std::min<size_t>(right_entries.size(), 4);
+                  for (size_t left_index = 0; left_index < left_limit; ++left_index) {
+                    for (size_t right_index = 0; right_index < right_limit; ++right_index) {
+                      AddSegmenterCheck(
+                          segmenter,
+                          left_entries[left_index].rid,
+                          right_entries[right_index].lid,
+                          &seen,
+                          &segmenter_case.checks);
+                      if (segmenter_case.checks.size() >= 12) {
+                        break;
+                      }
+                    }
+                    if (segmenter_case.checks.size() >= 12) {
+                      break;
+                    }
+                  }
+                  if (segmenter_case.checks.size() >= 12) {
+                    break;
+                  }
+                }
+                if (segmenter_case.checks.empty()) {
+                  const std::vector<DictionaryEntry> exact_entries = LookupExact(dictionary, input);
+                  const size_t limit = std::min<size_t>(exact_entries.size(), 12);
+                  for (size_t index = 0; index < limit; ++index) {
+                    AddSegmenterCheck(
+                        segmenter,
+                        exact_entries[index].rid,
+                        exact_entries[index].lid,
+                        &seen,
+                        &segmenter_case.checks);
+                  }
+                }
+                if (segmenter_case.checks.empty() &&
+                    std::all_of(input.begin(), input.end(), [](unsigned char ch) {
+                      return ch >= '0' && ch <= '9';
+                    })) {
+                  AddSegmenterCheck(
+                      segmenter,
+                      pos_matcher.GetNumberId(),
+                      pos_matcher.GetNumberId(),
+                      &seen,
+                      &segmenter_case.checks);
+                }
+                if (segmenter_case.checks.empty() && input == "第一") {
+                  AddSegmenterCheck(
+                      segmenter,
+                      FindIdByName(id_def_entries, "接頭詞,数接続,*,*,*,*,*"),
+                      pos_matcher.GetKanjiNumberId(),
+                      &seen,
+                      &segmenter_case.checks);
+                }
+                if (segmenter_case.checks.empty() && input == "山田太郎") {
+                  AddSegmenterCheck(
+                      segmenter,
+                      pos_matcher.GetLastNameId(),
+                      pos_matcher.GetFirstNameId(),
+                      &seen,
+                      &segmenter_case.checks);
+                }
+                if (segmenter_case.checks.empty()) {
+                  std::cerr << "Cannot generate segmenter checks for input: " << input << "\n";
+                  std::exit(1);
+                }
+                cases.push_back(std::move(segmenter_case));
+              }
+              return cases;
+            }
+
+            void WriteConnectorFixture(const std::string& output_path,
+                                       std::string_view version,
+                                       const std::vector<ConnectorCostCase>& cases) {
+              std::ofstream out(output_path);
+              if (!out) {
+                std::cerr << "Cannot open connector output: " << output_path << "\n";
+                std::exit(1);
+              }
+              out << "{\n";
+              out << "  \"engineDataVersion\": " << JsonString(version) << ",\n";
+              out << "  \"costs\": [\n";
+              for (size_t i = 0; i < cases.size(); ++i) {
+                const ConnectorCostCase& cost_case = cases[i];
+                out << "    {\n";
+                out << "      \"leftId\": " << cost_case.left_id << ",\n";
+                out << "      \"rightId\": " << cost_case.right_id << ",\n";
+                out << "      \"cost\": " << cost_case.cost << ",\n";
+                out << "      \"order\": " << i << ",\n";
+                out << "      \"label\": " << JsonString(cost_case.label) << "\n";
+                out << "    }";
+                if (i + 1 != cases.size()) {
+                  out << ",";
+                }
+                out << "\n";
+              }
+              out << "  ]\n";
+              out << "}\n";
+            }
+
+            void WriteSegmenterFixture(const std::string& output_path,
+                                       std::string_view version,
+                                       const std::vector<SegmenterCase>& cases) {
+              std::ofstream out(output_path);
+              if (!out) {
+                std::cerr << "Cannot open segmenter output: " << output_path << "\n";
+                std::exit(1);
+              }
+              out << "{\n";
+              out << "  \"engineDataVersion\": " << JsonString(version) << ",\n";
+              out << "  \"cases\": [\n";
+              for (size_t i = 0; i < cases.size(); ++i) {
+                const SegmenterCase& segmenter_case = cases[i];
+                out << "    {\n";
+                out << "      \"input\": " << JsonString(segmenter_case.input) << ",\n";
+                out << "      \"checks\": [\n";
+                for (size_t j = 0; j < segmenter_case.checks.size(); ++j) {
+                  const SegmenterCheck& check = segmenter_case.checks[j];
+                  out << "        {\n";
+                  out << "          \"leftPosId\": " << check.left_pos_id << ",\n";
+                  out << "          \"rightPosId\": " << check.right_pos_id << ",\n";
+                  out << "          \"boundaryType\": " << JsonString(check.boundary_type) << ",\n";
+                  out << "          \"result\": " << (check.result ? "true" : "false") << ",\n";
+                  out << "          \"order\": " << j << "\n";
+                  out << "        }";
+                  if (j + 1 != segmenter_case.checks.size()) {
+                    out << ",";
+                  }
+                  out << "\n";
+                }
+                out << "      ]\n";
+                out << "    }";
+                if (i + 1 != cases.size()) {
+                  out << ",";
+                }
+                out << "\n";
+              }
+              out << "  ]\n";
+              out << "}\n";
+            }
+
+            }  // namespace
+
+            int main(int argc, char** argv) {
+              const Options options = ParseOptions(argc, argv);
+              absl::StatusOr<std::unique_ptr<const mozc::DataManager>> data_manager =
+                  mozc::DataManager::CreateFromFile(options.data_path, mozc::DataManager::GetDataSetMagicNumber("oss"));
+              if (!data_manager.ok()) {
+                std::cerr << data_manager.status() << "\n";
+                return 1;
+              }
+
+              absl::StatusOr<mozc::Connector> connector =
+                  mozc::Connector::Create((*data_manager)->GetConnectorData());
+              if (!connector.ok()) {
+                std::cerr << connector.status() << "\n";
+                return 1;
+              }
+              const mozc::dictionary::PosMatcher pos_matcher((*data_manager)->GetPosMatcherData());
+              auto segmenter_data = (*data_manager)->GetSegmenterData();
+              const mozc::Segmenter segmenter(
+                  std::get<0>(segmenter_data),
+                  std::get<1>(segmenter_data),
+                  std::get<2>(segmenter_data),
+                  std::get<3>(segmenter_data),
+                  std::get<4>(segmenter_data),
+                  std::get<5>(segmenter_data));
+              const absl::string_view dictionary_data = (*data_manager)->GetSystemDictionaryData();
+              absl::StatusOr<std::unique_ptr<mozc::dictionary::SystemDictionary>> dictionary =
+                  mozc::dictionary::SystemDictionary::Builder(dictionary_data.data(), dictionary_data.size()).Build();
+              if (!dictionary.ok()) {
+                std::cerr << dictionary.status() << "\n";
+                return 1;
+              }
+
+              const std::vector<IdDefEntry> id_def_entries = ReadIdDef(options.id_def_path);
+              WriteConnectorFixture(
+                  options.connector_output_path,
+                  (*data_manager)->GetDataVersion(),
+                  BuildConnectorCases(std::move(connector).value(), pos_matcher, id_def_entries));
+              WriteSegmenterFixture(
+                  options.segmenter_output_path,
+                  (*data_manager)->GetDataVersion(),
+                  BuildSegmenterCases(segmenter, **dictionary, pos_matcher, id_def_entries));
+              return 0;
+            }
+            """.trimIndent()
+        )
         val fixtureFile = mozcGoldenDictionaryLookupFile.asFile
         fixtureFile.parentFile.mkdirs()
         exec {
@@ -611,6 +1096,34 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
             throw GradleException("Official Mozc dictionary lookup helper did not write fixture: ${fixtureFile.path}")
         }
         logger.lifecycle("Generated official Mozc dictionary lookup fixture: ${fixtureFile.path}")
+
+        val connectorFixtureFile = mozcGoldenConnectorCostFile.asFile
+        val segmenterFixtureFile = mozcGoldenSegmenterBoundaryFile.asFile
+        connectorFixtureFile.parentFile.mkdirs()
+        segmenterFixtureFile.parentFile.mkdirs()
+        exec {
+            workingDir = mozcSrcDir
+            commandLine(
+                mozcBazelCommand(),
+                "run",
+                "--check_visibility=false",
+                "--inject_repository=mozc_helper=${helperDir.absolutePath}",
+                "@mozc_helper//:mozc_connector_segmenter_helper",
+                "--",
+                "--data=${generatedMozcDataFile.get().asFile.absolutePath}",
+                "--id_def=${mozcSrcDir.resolve("data/dictionary_oss/id.def").absolutePath}",
+                "--connector_output=${connectorFixtureFile.absolutePath}",
+                "--segmenter_output=${segmenterFixtureFile.absolutePath}",
+            )
+        }
+        if (!connectorFixtureFile.isFile || connectorFixtureFile.length() == 0L) {
+            throw GradleException("Official Mozc connector helper did not write fixture: ${connectorFixtureFile.path}")
+        }
+        if (!segmenterFixtureFile.isFile || segmenterFixtureFile.length() == 0L) {
+            throw GradleException("Official Mozc segmenter helper did not write fixture: ${segmenterFixtureFile.path}")
+        }
+        logger.lifecycle("Generated official Mozc connector fixture: ${connectorFixtureFile.path}")
+        logger.lifecycle("Generated official Mozc segmenter fixture: ${segmenterFixtureFile.path}")
     }
 }
 

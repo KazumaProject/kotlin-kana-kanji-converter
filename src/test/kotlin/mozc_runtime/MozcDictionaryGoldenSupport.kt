@@ -33,6 +33,37 @@ data class GoldenToken(
     val cost: Int,
 )
 
+data class GoldenConnectorFixture(
+    val engineDataVersion: String,
+    val costs: List<GoldenConnectorCost>,
+)
+
+data class GoldenConnectorCost(
+    val leftId: Int,
+    val rightId: Int,
+    val cost: Int,
+    val order: Int,
+    val label: String,
+)
+
+data class GoldenSegmenterFixture(
+    val engineDataVersion: String,
+    val cases: List<GoldenSegmenterCase>,
+)
+
+data class GoldenSegmenterCase(
+    val input: String,
+    val checks: List<GoldenSegmenterCheck>,
+)
+
+data class GoldenSegmenterCheck(
+    val leftPosId: Int,
+    val rightPosId: Int,
+    val boundaryType: String,
+    val result: Boolean,
+    val order: Int,
+)
+
 object MozcDictionaryGoldenSupport {
     fun systemDictionary(): SystemDictionary {
         val dataSet = MozcDataSetReader().read(MozcGoldenTestSupport.officialData())
@@ -66,6 +97,51 @@ object MozcDictionaryGoldenSupport {
                     lookupExact = query.tokens("lookupExact"),
                     lookupPredictive = query.tokens("lookupPredictive"),
                     lookupReverse = query.tokens("lookupReverse"),
+                )
+            },
+        )
+    }
+
+    fun readConnectorFixture(path: Path): GoldenConnectorFixture {
+        val root = JsonParser(Files.readString(path)).parseObject()
+        root.requireKeys("engineDataVersion", "costs")
+        return GoldenConnectorFixture(
+            engineDataVersion = root.string("engineDataVersion"),
+            costs = root.array("costs").map { costValue ->
+                val cost = costValue.asObject()
+                cost.requireKeys("leftId", "rightId", "cost", "order", "label")
+                GoldenConnectorCost(
+                    leftId = cost.int("leftId"),
+                    rightId = cost.int("rightId"),
+                    cost = cost.int("cost"),
+                    order = cost.int("order"),
+                    label = cost.string("label"),
+                )
+            },
+        )
+    }
+
+    fun readSegmenterFixture(path: Path): GoldenSegmenterFixture {
+        val root = JsonParser(Files.readString(path)).parseObject()
+        root.requireKeys("engineDataVersion", "cases")
+        return GoldenSegmenterFixture(
+            engineDataVersion = root.string("engineDataVersion"),
+            cases = root.array("cases").map { caseValue ->
+                val case = caseValue.asObject()
+                case.requireKeys("input", "checks")
+                GoldenSegmenterCase(
+                    input = case.string("input"),
+                    checks = case.array("checks").map { checkValue ->
+                        val check = checkValue.asObject()
+                        check.requireKeys("leftPosId", "rightPosId", "boundaryType", "result", "order")
+                        GoldenSegmenterCheck(
+                            leftPosId = check.int("leftPosId"),
+                            rightPosId = check.int("rightPosId"),
+                            boundaryType = check.string("boundaryType"),
+                            result = check.boolean("result"),
+                            order = check.int("order"),
+                        )
+                    },
                 )
             },
         )
@@ -132,12 +208,16 @@ private class JsonObject(
 
     fun int(name: String): Int = (values.getValue(name) as JsonNumber).value
 
+    fun boolean(name: String): Boolean = (values.getValue(name) as JsonBoolean).value
+
     fun array(name: String): List<JsonValue> = (values.getValue(name) as JsonArray).values
 }
 
 private data class JsonString(val value: String) : JsonValue
 
 private data class JsonNumber(val value: Int) : JsonValue
+
+private data class JsonBoolean(val value: Boolean) : JsonValue
 
 private data class JsonArray(val values: List<JsonValue>) : JsonValue
 
@@ -161,6 +241,7 @@ private class JsonParser(
             '[' -> parseArray()
             '"' -> JsonString(parseString())
             '-', in '0'..'9' -> JsonNumber(parseNumber())
+            't', 'f' -> JsonBoolean(parseBoolean())
             else -> error("Unexpected JSON character at $index: ${text[index]}")
         }
     }
@@ -252,6 +333,20 @@ private class JsonParser(
             index += 1
         }
         return text.substring(start, index).toInt()
+    }
+
+    private fun parseBoolean(): Boolean {
+        return when {
+            text.startsWith("true", index) -> {
+                index += 4
+                true
+            }
+            text.startsWith("false", index) -> {
+                index += 5
+                false
+            }
+            else -> error("Invalid JSON boolean at $index")
+        }
     }
 
     private fun skipWhitespace() {

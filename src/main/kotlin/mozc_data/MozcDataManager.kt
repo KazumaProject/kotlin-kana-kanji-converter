@@ -25,6 +25,36 @@ class MozcDataManager(
     fun metadata(name: String): MozcDataSection =
         sections[name] ?: error("Missing mozc.data section: $name")
 
+    val posMatcherData: ByteBuffer
+        get() = section("pos_matcher")
+
+    val userPosTokenData: ByteBuffer
+        get() = section("user_pos_token")
+
+    val userPosStringData: ByteBuffer
+        get() = section("user_pos_string")
+
+    val connectorData: ByteBuffer
+        get() = section("conn")
+
+    val posGroupData: ByteBuffer
+        get() = section("posg")
+
+    val boundaryData: ByteBuffer
+        get() = section("bdry")
+
+    val segmenterSizeInfo: ByteBuffer
+        get() = section("segmenter_sizeinfo")
+
+    val segmenterLTable: ByteBuffer
+        get() = section("segmenter_ltable")
+
+    val segmenterRTable: ByteBuffer
+        get() = section("segmenter_rtable")
+
+    val segmenterBitArray: ByteBuffer
+        get() = section("segmenter_bitarray")
+
     fun version(): String =
         sections["version"]?.data?.toUtf8String()?.trimEnd('\u0000', '\r', '\n')
             ?: error("Missing mozc.data section: version")
