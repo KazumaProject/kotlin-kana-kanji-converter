@@ -69,6 +69,23 @@ class Segmenter(
         boundaryType: BoundaryType,
     ): Boolean = getBoundaryType(leftPosId, rightPosId) == boundaryType
 
+    fun isBoundary(
+        leftNode: Node,
+        rightNode: Node,
+        isSingleSegment: Boolean,
+    ): Boolean {
+        if (leftNode.nodeType == Node.NodeType.BOS_NODE || rightNode.nodeType == Node.NodeType.EOS_NODE) {
+            return true
+        }
+        if (isSingleSegment) {
+            return false
+        }
+        if (leftNode.attributes and Node.Attributes.STARTS_WITH_PARTICLE != 0) {
+            return false
+        }
+        return isBoundary(leftNode.rid, rightNode.lid)
+    }
+
     fun isBoundary(leftPosId: Int, rightPosId: Int): Boolean {
         require(leftPosId in 0 until leftSize) {
             "Segmenter left POS id is out of range: leftPosId=$leftPosId leftSize=$leftSize"

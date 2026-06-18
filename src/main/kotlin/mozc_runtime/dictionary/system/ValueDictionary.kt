@@ -16,13 +16,7 @@ class ValueDictionary(
     override fun hasValue(value: String): Boolean = valueTrie.hasKey(codec.encodeValueToBytes(value))
 
     override fun lookupPrefix(key: String, callback: (Token) -> Unit) {
-        val encoded = codec.encodeValueToBytes(key)
-        valueTrie.prefixSearch(encoded) { prefixLength, node ->
-            val value = codec.decodeValue(valueTrie.restoreKeyBytes(node))
-            if (prefixLength <= encoded.size) {
-                callback(valueToken(value))
-            }
-        }
+        Unit
     }
 
     override fun lookupExact(key: String, callback: (Token) -> Unit) {
@@ -55,7 +49,7 @@ class ValueDictionary(
     }
 
     override fun lookupReverse(value: String, callback: (Token) -> Unit) {
-        lookupExact(value, callback)
+        Unit
     }
 
     override fun lookupComment(key: String, value: String): String? = null

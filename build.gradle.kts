@@ -137,6 +137,8 @@ val generatedMozcHelperDir = layout.buildDirectory.dir("generated/mozc-helper")
 val mozcGoldenDictionaryLookupFile = layout.projectDirectory.file("src/test/resources/mozc_golden/dictionary/system_dictionary_lookup.json")
 val mozcGoldenConnectorCostFile = layout.projectDirectory.file("src/test/resources/mozc_golden/connector/connector_cost.json")
 val mozcGoldenSegmenterBoundaryFile = layout.projectDirectory.file("src/test/resources/mozc_golden/segmenter/segmenter_boundary.json")
+val mozcGoldenImmutableConverterFile = layout.projectDirectory.file("src/test/resources/mozc_golden/converter/immutable_converter.json")
+val mozcImmutableConverterHelperSource = layout.projectDirectory.file("tools/mozc_golden/mozc_immutable_converter_helper.cc")
 val mozcIdDefFileProvider = providers.gradleProperty("mozcIdDefFile")
     .map { layout.projectDirectory.file(it) }
     .orElse(layout.projectDirectory.file("src/main/resources/id.def"))
@@ -356,14 +358,17 @@ val writeMozcDataManifest = tasks.register<JavaExec>("writeMozcDataManifest") {
 
 val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
     group = "verification"
-    description = "Builds official Mozc helper binaries and writes dictionary, connector, and segmenter golden fixtures."
+    description = "Builds official Mozc helper binaries and writes dictionary, connector, segmenter, and immutable converter golden fixtures."
     dependsOn(generateOfficialMozcData)
     inputs.file(generatedMozcDataFile)
+    inputs.file(mozcImmutableConverterHelperSource)
     inputs.property("dictionaryLookupHelperVersion", "1")
     inputs.property("connectorSegmenterHelperVersion", "1")
+    inputs.property("immutableConverterHelperVersion", "1")
     outputs.file(mozcGoldenDictionaryLookupFile)
     outputs.file(mozcGoldenConnectorCostFile)
     outputs.file(mozcGoldenSegmenterBoundaryFile)
+    outputs.file(mozcGoldenImmutableConverterFile)
     doLast {
         val mozcSrcDir = resolveMozcSourceDirectoryForBuild()
         val helperDir = generatedMozcHelperDir.get().asFile
@@ -399,6 +404,23 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
                     "@mozc//dictionary/system:system_dictionary",
                     "@com_google_absl//absl/status:statusor",
                     "@com_google_absl//absl/strings",
+                ],
+            )
+
+            cc_binary(
+                name = "mozc_immutable_converter_helper",
+                srcs = ["mozc_immutable_converter_helper.cc"],
+                deps = [
+                    "@mozc//converter:attribute",
+                    "@mozc//converter:immutable_converter",
+                    "@mozc//converter:inner_segment",
+                    "@mozc//converter:lattice",
+                    "@mozc//converter:node",
+                    "@mozc//converter:segments",
+                    "@mozc//data_manager",
+                    "@mozc//engine:modules",
+                    "@mozc//request:options",
+                    "@com_google_absl//absl/status:statusor",
                 ],
             )
             """.trimIndent()
@@ -1077,6 +1099,7 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
             }
             """.trimIndent()
         )
+        helperDir.resolve("mozc_immutable_converter_helper.cc").writeText(mozcImmutableConverterHelperSource.asFile.readText())
         val fixtureFile = mozcGoldenDictionaryLookupFile.asFile
         fixtureFile.parentFile.mkdirs()
         exec {
@@ -1124,6 +1147,26 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
         }
         logger.lifecycle("Generated official Mozc connector fixture: ${connectorFixtureFile.path}")
         logger.lifecycle("Generated official Mozc segmenter fixture: ${segmenterFixtureFile.path}")
+
+        val immutableConverterFixtureFile = mozcGoldenImmutableConverterFile.asFile
+        immutableConverterFixtureFile.parentFile.mkdirs()
+        exec {
+            workingDir = mozcSrcDir
+            commandLine(
+                mozcBazelCommand(),
+                "run",
+                "--check_visibility=false",
+                "--inject_repository=mozc_helper=${helperDir.absolutePath}",
+                "@mozc_helper//:mozc_immutable_converter_helper",
+                "--",
+                "--data=${generatedMozcDataFile.get().asFile.absolutePath}",
+                "--output=${immutableConverterFixtureFile.absolutePath}",
+            )
+        }
+        if (!immutableConverterFixtureFile.isFile || immutableConverterFixtureFile.length() == 0L) {
+            throw GradleException("Official Mozc immutable converter helper did not write fixture: ${immutableConverterFixtureFile.path}")
+        }
+        logger.lifecycle("Generated official Mozc immutable converter fixture: ${immutableConverterFixtureFile.path}")
     }
 }
 

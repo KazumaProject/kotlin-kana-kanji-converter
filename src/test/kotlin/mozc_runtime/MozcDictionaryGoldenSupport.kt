@@ -64,6 +64,59 @@ data class GoldenSegmenterCheck(
     val order: Int,
 )
 
+data class GoldenImmutableConverterFixture(
+    val engineDataVersion: String,
+    val cases: List<GoldenImmutableConverterCase>,
+)
+
+data class GoldenImmutableConverterCase(
+    val input: String,
+    val requestType: String,
+    val segments: List<GoldenConverterSegment>,
+    val bestPathNodes: List<GoldenBestPathNode>,
+)
+
+data class GoldenConverterSegment(
+    val index: Int,
+    val key: String,
+    val candidates: List<GoldenConverterCandidate>,
+)
+
+data class GoldenConverterCandidate(
+    val index: Int,
+    val key: String,
+    val value: String,
+    val contentKey: String,
+    val contentValue: String,
+    val cost: Int,
+    val wcost: Int,
+    val structureCost: Int,
+    val lid: Int,
+    val rid: Int,
+    val attributes: List<String>,
+    val consumedKeySize: Int,
+    val innerSegments: List<GoldenInnerSegment>,
+    val description: String,
+    val category: String,
+)
+
+data class GoldenInnerSegment(
+    val index: Int,
+    val key: String,
+    val value: String,
+    val contentKey: String,
+    val contentValue: String,
+)
+
+data class GoldenBestPathNode(
+    val key: String,
+    val value: String,
+    val lid: Int,
+    val rid: Int,
+    val wcost: Int,
+    val cost: Int,
+)
+
 object MozcDictionaryGoldenSupport {
     fun systemDictionary(): SystemDictionary {
         val dataSet = MozcDataSetReader().read(MozcGoldenTestSupport.officialData())
@@ -147,6 +200,89 @@ object MozcDictionaryGoldenSupport {
         )
     }
 
+    fun readImmutableConverterFixture(path: Path): GoldenImmutableConverterFixture {
+        val root = JsonParser(Files.readString(path)).parseObject()
+        root.requireKeys("engineDataVersion", "cases")
+        return GoldenImmutableConverterFixture(
+            engineDataVersion = root.string("engineDataVersion"),
+            cases = root.array("cases").map { caseValue ->
+                val case = caseValue.asObject()
+                case.requireKeys("input", "requestType", "segments", "bestPathNodes")
+                GoldenImmutableConverterCase(
+                    input = case.string("input"),
+                    requestType = case.string("requestType"),
+                    segments = case.array("segments").map { segmentValue ->
+                        val segment = segmentValue.asObject()
+                        segment.requireKeys("index", "key", "candidates")
+                        GoldenConverterSegment(
+                            index = segment.int("index"),
+                            key = segment.string("key"),
+                            candidates = segment.array("candidates").map { candidateValue ->
+                                val candidate = candidateValue.asObject()
+                                candidate.requireKeys(
+                                    "index",
+                                    "key",
+                                    "value",
+                                    "contentKey",
+                                    "contentValue",
+                                    "cost",
+                                    "wcost",
+                                    "structureCost",
+                                    "lid",
+                                    "rid",
+                                    "attributes",
+                                    "consumedKeySize",
+                                    "innerSegments",
+                                    "description",
+                                    "category",
+                                )
+                                GoldenConverterCandidate(
+                                    index = candidate.int("index"),
+                                    key = candidate.string("key"),
+                                    value = candidate.string("value"),
+                                    contentKey = candidate.string("contentKey"),
+                                    contentValue = candidate.string("contentValue"),
+                                    cost = candidate.int("cost"),
+                                    wcost = candidate.int("wcost"),
+                                    structureCost = candidate.int("structureCost"),
+                                    lid = candidate.int("lid"),
+                                    rid = candidate.int("rid"),
+                                    attributes = candidate.stringArray("attributes"),
+                                    consumedKeySize = candidate.int("consumedKeySize"),
+                                    innerSegments = candidate.array("innerSegments").map { innerValue ->
+                                        val inner = innerValue.asObject()
+                                        inner.requireKeys("index", "key", "value", "contentKey", "contentValue")
+                                        GoldenInnerSegment(
+                                            index = inner.int("index"),
+                                            key = inner.string("key"),
+                                            value = inner.string("value"),
+                                            contentKey = inner.string("contentKey"),
+                                            contentValue = inner.string("contentValue"),
+                                        )
+                                    },
+                                    description = candidate.string("description"),
+                                    category = candidate.string("category"),
+                                )
+                            },
+                        )
+                    },
+                    bestPathNodes = case.array("bestPathNodes").map { nodeValue ->
+                        val node = nodeValue.asObject()
+                        node.requireKeys("key", "value", "lid", "rid", "wcost", "cost")
+                        GoldenBestPathNode(
+                            key = node.string("key"),
+                            value = node.string("value"),
+                            lid = node.int("lid"),
+                            rid = node.int("rid"),
+                            wcost = node.int("wcost"),
+                            cost = node.int("cost"),
+                        )
+                    },
+                )
+            },
+        )
+    }
+
     fun collect(block: ((Token) -> Unit) -> Unit): List<GoldenToken> {
         val result = ArrayList<GoldenToken>()
         block { token ->
@@ -190,6 +326,9 @@ object MozcDictionaryGoldenSupport {
                 cost = token.int("cost"),
             )
         }
+
+    private fun JsonObject.stringArray(name: String): List<String> =
+        array(name).map { (it as JsonString).value }
 }
 
 private sealed interface JsonValue {
