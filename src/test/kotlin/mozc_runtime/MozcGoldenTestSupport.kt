@@ -17,7 +17,11 @@ object MozcGoldenTestSupport {
     fun fixture(relativePath: String): Path {
         val path = repoRoot.resolve("src/test/resources/mozc_golden").resolve(relativePath)
         assertTrue(Files.isRegularFile(path), "Missing official Mozc golden fixture: $path")
-        assertContainsCandidateFields(path)
+        if (relativePath == "dictionary/system_dictionary_lookup.json") {
+            assertContainsDictionaryTokenFields(path)
+        } else {
+            assertContainsCandidateFields(path)
+        }
         return path
     }
 
@@ -46,5 +50,25 @@ object MozcGoldenTestSupport {
         )
         val missing = fields.filterNot { "\"$it\"" in text }
         assertTrue(missing.isEmpty(), "Golden fixture is missing required candidate fields: path=$path missing=${missing.joinToString()}")
+    }
+
+    private fun assertContainsDictionaryTokenFields(path: Path) {
+        val text = Files.readString(path)
+        val fields = listOf(
+            "engineDataVersion",
+            "queries",
+            "query",
+            "lookupPrefix",
+            "lookupExact",
+            "lookupPredictive",
+            "lookupReverse",
+            "key",
+            "value",
+            "lid",
+            "rid",
+            "cost",
+        )
+        val missing = fields.filterNot { "\"$it\"" in text }
+        assertTrue(missing.isEmpty(), "Dictionary fixture is missing required token fields: path=$path missing=${missing.joinToString()}")
     }
 }

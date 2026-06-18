@@ -133,6 +133,8 @@ val generatedMozcIdDefDir = layout.buildDirectory.dir("generated/source/mozcIdDe
 val generatedMozcDataDir = layout.buildDirectory.dir("generated/mozc-data")
 val generatedMozcDataFile = generatedMozcDataDir.map { it.file("mozc.data") }
 val generatedMozcDataManifestFile = generatedMozcDataDir.map { it.file("mozc_data_manifest.json") }
+val generatedMozcHelperDir = layout.buildDirectory.dir("generated/mozc-helper")
+val mozcGoldenDictionaryLookupFile = layout.projectDirectory.file("src/test/resources/mozc_golden/dictionary/system_dictionary_lookup.json")
 val mozcIdDefFileProvider = providers.gradleProperty("mozcIdDefFile")
     .map { layout.projectDirectory.file(it) }
     .orElse(layout.projectDirectory.file("src/main/resources/id.def"))
@@ -352,21 +354,263 @@ val writeMozcDataManifest = tasks.register<JavaExec>("writeMozcDataManifest") {
 
 val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
     group = "verification"
-    description = "Builds official Mozc converter binaries and prepares golden fixture generation."
+    description = "Builds official Mozc helper binaries and writes dictionary lookup golden fixtures."
     dependsOn(generateOfficialMozcData)
-    outputs.dir(layout.projectDirectory.dir("src/test/resources/mozc_golden"))
+    inputs.file(generatedMozcDataFile)
+    inputs.property("dictionaryLookupHelperVersion", "1")
+    outputs.file(mozcGoldenDictionaryLookupFile)
     doLast {
         val mozcSrcDir = resolveMozcSourceDirectoryForBuild()
+        val helperDir = generatedMozcHelperDir.get().asFile
+        helperDir.mkdirs()
+        helperDir.resolve("MODULE.bazel").writeText("module(name = \"mozc_helper\")\n")
+        helperDir.resolve("BUILD.bazel").writeText(
+            """
+            load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
+
+            cc_binary(
+                name = "mozc_dictionary_lookup_helper",
+                srcs = ["mozc_dictionary_lookup_helper.cc"],
+                deps = [
+                    "@mozc//data_manager",
+                    "@mozc//dictionary:dictionary_interface",
+                    "@mozc//dictionary:dictionary_token",
+                    "@mozc//dictionary/system:system_dictionary",
+                    "@com_google_absl//absl/status:statusor",
+                    "@com_google_absl//absl/strings",
+                ],
+            )
+            """.trimIndent()
+        )
+        helperDir.resolve("mozc_dictionary_lookup_helper.cc").writeText(
+            """
+            #include <cstdint>
+            #include <fstream>
+            #include <iostream>
+            #include <memory>
+            #include <string>
+            #include <string_view>
+            #include <vector>
+
+            #include "absl/status/statusor.h"
+            #include "absl/strings/string_view.h"
+            #include "data_manager/data_manager.h"
+            #include "dictionary/dictionary_interface.h"
+            #include "dictionary/dictionary_token.h"
+            #include "dictionary/system/system_dictionary.h"
+
+            namespace {
+
+            struct Options {
+              std::string data_path;
+              std::string output_path;
+            };
+
+            struct Entry {
+              std::string key;
+              std::string value;
+              uint16_t lid;
+              uint16_t rid;
+              int cost;
+            };
+
+            class CollectCallback final : public mozc::dictionary::DictionaryInterface::Callback {
+             public:
+              ResultType OnToken(absl::string_view key, absl::string_view actual_key,
+                                 const mozc::dictionary::Token& token) override {
+                entries_.push_back(Entry{token.key, token.value, token.lid, token.rid, token.cost});
+                return TRAVERSE_CONTINUE;
+              }
+
+              const std::vector<Entry>& entries() const { return entries_; }
+
+             private:
+              std::vector<Entry> entries_;
+            };
+
+            Options ParseOptions(int argc, char** argv) {
+              Options options;
+              for (int i = 1; i < argc; ++i) {
+                const std::string arg = argv[i];
+                const std::string data_prefix = "--data=";
+                const std::string output_prefix = "--output=";
+                if (arg.rfind(data_prefix, 0) == 0) {
+                  options.data_path = arg.substr(data_prefix.size());
+                } else if (arg.rfind(output_prefix, 0) == 0) {
+                  options.output_path = arg.substr(output_prefix.size());
+                }
+              }
+              if (options.data_path.empty() || options.output_path.empty()) {
+                std::cerr << "Usage: mozc_dictionary_lookup_helper --data=/path/mozc.data --output=/path/system_dictionary_lookup.json\n";
+                std::exit(2);
+              }
+              return options;
+            }
+
+            std::string JsonString(std::string_view value) {
+              std::string out = "\"";
+              for (const unsigned char ch : value) {
+                switch (ch) {
+                  case '\\':
+                    out += "\\\\";
+                    break;
+                  case '"':
+                    out += "\\\"";
+                    break;
+                  case '\b':
+                    out += "\\b";
+                    break;
+                  case '\f':
+                    out += "\\f";
+                    break;
+                  case '\n':
+                    out += "\\n";
+                    break;
+                  case '\r':
+                    out += "\\r";
+                    break;
+                  case '\t':
+                    out += "\\t";
+                    break;
+                  default:
+                    if (ch < 0x20) {
+                      constexpr char hex[] = "0123456789ABCDEF";
+                      out += "\\u00";
+                      out += hex[ch >> 4];
+                      out += hex[ch & 0x0F];
+                    } else {
+                      out.push_back(static_cast<char>(ch));
+                    }
+                }
+              }
+              out += "\"";
+              return out;
+            }
+
+            void WriteEntries(std::ostream& out, const char* name,
+                              const std::vector<Entry>& entries, int indent) {
+              const std::string pad(indent, ' ');
+              out << pad << JsonString(name) << ": [\n";
+              for (size_t i = 0; i < entries.size(); ++i) {
+                const Entry& entry = entries[i];
+                out << pad << "  {\n";
+                out << pad << "    \"key\": " << JsonString(entry.key) << ",\n";
+                out << pad << "    \"value\": " << JsonString(entry.value) << ",\n";
+                out << pad << "    \"lid\": " << entry.lid << ",\n";
+                out << pad << "    \"rid\": " << entry.rid << ",\n";
+                out << pad << "    \"cost\": " << entry.cost << "\n";
+                out << pad << "  }";
+                if (i + 1 != entries.size()) {
+                  out << ",";
+                }
+                out << "\n";
+              }
+              out << pad << "]";
+            }
+
+            std::vector<Entry> LookupPrefix(const mozc::dictionary::SystemDictionary& dictionary,
+                                            absl::string_view query) {
+              CollectCallback callback;
+              dictionary.LookupPrefix(query, &callback);
+              return callback.entries();
+            }
+
+            std::vector<Entry> LookupExact(const mozc::dictionary::SystemDictionary& dictionary,
+                                           absl::string_view query) {
+              CollectCallback callback;
+              dictionary.LookupExact(query, &callback);
+              return callback.entries();
+            }
+
+            std::vector<Entry> LookupPredictive(const mozc::dictionary::SystemDictionary& dictionary,
+                                                absl::string_view query) {
+              CollectCallback callback;
+              dictionary.LookupPredictive(query, &callback);
+              return callback.entries();
+            }
+
+            std::vector<Entry> LookupReverse(const mozc::dictionary::SystemDictionary& dictionary,
+                                             absl::string_view query) {
+              CollectCallback callback;
+              dictionary.LookupReverse(query, &callback);
+              return callback.entries();
+            }
+
+            }  // namespace
+
+            int main(int argc, char** argv) {
+              const Options options = ParseOptions(argc, argv);
+              absl::StatusOr<std::unique_ptr<const mozc::DataManager>> data_manager =
+                  mozc::DataManager::CreateFromFile(options.data_path, mozc::DataManager::GetDataSetMagicNumber("oss"));
+              if (!data_manager.ok()) {
+                std::cerr << data_manager.status() << "\n";
+                return 1;
+              }
+              const absl::string_view dictionary_data = (*data_manager)->GetSystemDictionaryData();
+              absl::StatusOr<std::unique_ptr<mozc::dictionary::SystemDictionary>> dictionary =
+                  mozc::dictionary::SystemDictionary::Builder(dictionary_data.data(), dictionary_data.size()).Build();
+              if (!dictionary.ok()) {
+                std::cerr << dictionary.status() << "\n";
+                return 1;
+              }
+
+              const std::vector<std::string> queries = {
+                  "へん", "へんかん", "きょう", "ありがとう", "とうきょう",
+                  "かんじ", "にほん", "にほんご", "わたし", "123",
+              };
+
+              std::ofstream out(options.output_path);
+              if (!out) {
+                std::cerr << "Cannot open output: " << options.output_path << "\n";
+                return 1;
+              }
+
+              out << "{\n";
+              out << "  \"engineDataVersion\": " << JsonString((*data_manager)->GetDataVersion()) << ",\n";
+              out << "  \"queries\": [\n";
+              for (size_t i = 0; i < queries.size(); ++i) {
+                const std::string& query = queries[i];
+                out << "    {\n";
+                out << "      \"query\": " << JsonString(query) << ",\n";
+                WriteEntries(out, "lookupPrefix", LookupPrefix(**dictionary, query), 6);
+                out << ",\n";
+                WriteEntries(out, "lookupExact", LookupExact(**dictionary, query), 6);
+                out << ",\n";
+                WriteEntries(out, "lookupPredictive", LookupPredictive(**dictionary, query), 6);
+                out << ",\n";
+                WriteEntries(out, "lookupReverse", LookupReverse(**dictionary, query), 6);
+                out << "\n";
+                out << "    }";
+                if (i + 1 != queries.size()) {
+                  out << ",";
+                }
+                out << "\n";
+              }
+              out << "  ]\n";
+              out << "}\n";
+              return 0;
+            }
+            """.trimIndent()
+        )
+        val fixtureFile = mozcGoldenDictionaryLookupFile.asFile
+        fixtureFile.parentFile.mkdirs()
         exec {
             workingDir = mozcSrcDir
-            commandLine(mozcBazelCommand(), "build", "//converter:converter_main", "//converter:immutable_converter_main")
+            commandLine(
+                mozcBazelCommand(),
+                "run",
+                "--check_visibility=false",
+                "--inject_repository=mozc_helper=${helperDir.absolutePath}",
+                "@mozc_helper//:mozc_dictionary_lookup_helper",
+                "--",
+                "--data=${generatedMozcDataFile.get().asFile.absolutePath}",
+                "--output=${fixtureFile.absolutePath}",
+            )
         }
-        val fixtureDir = layout.projectDirectory.dir("src/test/resources/mozc_golden").asFile
-        fixtureDir.mkdirs()
-        throw GradleException(
-            "Official Mozc converter output parser must extract all candidate fields before fixtures can be written. " +
-                    "No golden fixture was generated."
-        )
+        if (!fixtureFile.isFile || fixtureFile.length() == 0L) {
+            throw GradleException("Official Mozc dictionary lookup helper did not write fixture: ${fixtureFile.path}")
+        }
+        logger.lifecycle("Generated official Mozc dictionary lookup fixture: ${fixtureFile.path}")
     }
 }
 
@@ -459,5 +703,19 @@ tasks.register<Zip>("packageMozcAndroidBundle") {
     }
     from(tasks.named<Jar>("jar").flatMap { it.archiveFile }) {
         rename { "mozc-runtime.jar" }
+    }
+}
+
+tasks.register<Zip>("packageMozcDataBundle") {
+    group = "distribution"
+    description = "Packages only official mozc.data and its manifest without runtime tests."
+    dependsOn(verifyMozcData, writeMozcDataManifest)
+    archiveFileName.set("mozc_data_bundle.zip")
+    destinationDirectory.set(layout.buildDirectory.dir("distributions"))
+    from(generatedMozcDataFile) {
+        rename { "mozc.data" }
+    }
+    from(generatedMozcDataManifestFile) {
+        rename { "mozc_data_manifest.json" }
     }
 }
