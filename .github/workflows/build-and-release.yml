@@ -38,6 +38,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Set up Bazelisk
+        uses: bazelbuild/setup-bazelisk@v3
+
       # Copy base dictionary files
       - name: Copy Mozc dictionary resources
         run: |
@@ -60,15 +63,30 @@ jobs:
             test -s ./src/main/resources/dictionary${i}.txt
           done
 
-      - name: Validate Mozc resource consistency
-        run: ./gradlew validateMozcIdDef validateConnectionMatrix validateDictionaryIds validateIdDefReferences
+      - name: Validate Mozc id.def
+        run: ./gradlew validateMozcIdDef
+
+      - name: Validate Mozc connection matrix
+        run: ./gradlew validateConnectionMatrix
+
+      - name: Validate Mozc dictionary IDs
+        run: ./gradlew validateDictionaryIds
 
       # Build the project with Gradle
       - name: Compile Kotlin
         run: ./gradlew clean compileKotlin
 
+      - name: Generate official Mozc data
+        run: ./gradlew -PmozcSrcDir="$PWD/mozc-src/src" -PmozcBazelCommand=bazelisk generateOfficialMozcData
+
+      - name: Verify official Mozc data
+        run: ./gradlew -PmozcSrcDir="$PWD/mozc-src/src" -PmozcBazelCommand=bazelisk verifyMozcData
+
+      - name: Write Mozc data manifest
+        run: ./gradlew -PmozcSrcDir="$PWD/mozc-src/src" -PmozcBazelCommand=bazelisk writeMozcDataManifest
+
       - name: Test with Gradle
-        run: ./gradlew test
+        run: ./gradlew -PmozcSrcDir="$PWD/mozc-src/src" -PmozcBazelCommand=bazelisk test
 
       # --- Run all dictionary creation tasks in parallel ---
       # 各タスクをバックグラウンドで並列実行し、すべての完了を待ちます。
@@ -80,6 +98,9 @@ jobs:
           ./gradlew runMozcUTNeologd &
           ./gradlew runMozcUTWikiNeologdCommon &
           wait
+
+      - name: Package Mozc Android bundle
+        run: ./gradlew -PmozcSrcDir="$PWD/mozc-src/src" -PmozcBazelCommand=bazelisk packageMozcAndroidBundle
 
       # --- (新規) リリース用に成果物を整理し、zip圧縮する ---
       - name: Organize and zip artifacts for release
@@ -115,6 +136,7 @@ jobs:
           (cd artifacts_temp/mozc_ut_wiki && zip -r ../../release_zips/wiki_dictionary.zip .)
           (cd artifacts_temp/mozc_ut_neologd && zip -r ../../release_zips/neologd_dictionary.zip .)
           (cd artifacts_temp/web && zip -r ../../release_zips/web_dictionary.zip .)
+          cp ./build/distributions/mozc_android_bundle.zip ./release_zips/mozc_android_bundle.zip
 
       # --- Create a single release with all generated artifacts ---
       - name: Create GitHub Release
@@ -132,4 +154,5 @@ jobs:
             ./release_zips/wiki_dictionary.zip
             ./release_zips/neologd_dictionary.zip
             ./release_zips/web_dictionary.zip
+            ./release_zips/mozc_android_bundle.zip
           replacesArtifacts: false

@@ -1,4 +1,6 @@
 import org.gradle.api.GradleException
+import org.gradle.api.tasks.bundling.Zip
+import org.gradle.jvm.tasks.Jar
 
 plugins {
     kotlin("jvm") version "1.9.21"
@@ -128,6 +130,9 @@ dependencies {
 }
 
 val generatedMozcIdDefDir = layout.buildDirectory.dir("generated/source/mozcIdDef/main/kotlin")
+val generatedMozcDataDir = layout.buildDirectory.dir("generated/mozc-data")
+val generatedMozcDataFile = generatedMozcDataDir.map { it.file("mozc.data") }
+val generatedMozcDataManifestFile = generatedMozcDataDir.map { it.file("mozc_data_manifest.json") }
 val mozcIdDefFileProvider = providers.gradleProperty("mozcIdDefFile")
     .map { layout.projectDirectory.file(it) }
     .orElse(layout.projectDirectory.file("src/main/resources/id.def"))
@@ -135,6 +140,32 @@ val mozcConnectionFileProvider = layout.projectDirectory.file("src/main/resource
 val mozcDictionaryFilesProvider = files(
     (0..9).map { "src/main/resources/dictionary%02d.txt".format(it) } + "src/main/resources/suffix.txt"
 )
+
+fun resolveMozcSourceDirectoryForBuild(): File {
+    providers.gradleProperty("mozcSrcDir").orNull?.takeIf { it.isNotBlank() }?.let { explicit ->
+        val explicitFile = file(explicit)
+        if (!explicitFile.isDirectory) {
+            throw GradleException("Mozc source directory does not exist: mozcSrcDir=${explicitFile.path}")
+        }
+        return explicitFile
+    }
+    val candidates = listOf(
+        rootDir.resolve("third_party/mozc/src"),
+        rootDir.resolve("../mozc/src").normalize(),
+        rootDir.resolve("../mozc-master/src").normalize(),
+    )
+    return candidates.firstOrNull { it.isDirectory }
+        ?: throw GradleException(
+            "Mozc source directory was not found. Set -PmozcSrcDir=/path/to/mozc/src or place Mozc at one of: " +
+                    candidates.joinToString { it.path }
+        )
+}
+
+fun mozcBazelCommand(): String =
+    providers.gradleProperty("mozcBazelCommand").orNull?.takeIf { it.isNotBlank() } ?: "bazel"
+
+fun mozcExpectedVersion(): String =
+    providers.gradleProperty("mozcExpectedVersion").orNull?.takeIf { it.isNotBlank() } ?: "24.11.oss"
 
 val generateIdDefConstants = tasks.register("generateIdDefConstants") {
     val idDefFile = mozcIdDefFileProvider
@@ -261,6 +292,84 @@ val validateIdDefReferences = tasks.register("validateIdDefReferences") {
     }
 }
 
+val generateOfficialMozcData = tasks.register("generateOfficialMozcData") {
+    group = "mozc"
+    description = "Builds official Mozc mozc.data with Bazel and copies it into build/generated/mozc-data."
+    outputs.file(generatedMozcDataFile)
+    doLast {
+        val mozcSrcDir = resolveMozcSourceDirectoryForBuild()
+        exec {
+            workingDir = mozcSrcDir
+            commandLine(mozcBazelCommand(), "build", "//data_manager/oss:mozc_dataset_for_oss")
+        }
+        val generated = mozcSrcDir.resolve("bazel-bin/data_manager/oss/mozc.data")
+        if (!generated.isFile) {
+            throw GradleException("Bazel did not produce official mozc.data: ${generated.path}")
+        }
+        val output = generatedMozcDataFile.get().asFile
+        output.parentFile.mkdirs()
+        generated.copyTo(output, overwrite = true)
+        logger.lifecycle("Generated official mozc.data: ${output.path}")
+    }
+}
+
+val verifyMozcData = tasks.register<JavaExec>("verifyMozcData") {
+    group = "verification"
+    description = "Verifies build/generated/mozc-data/mozc.data using the Kotlin Mozc data reader."
+    dependsOn(generateOfficialMozcData, "classes")
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("mozc_data.MozcDataToolMainKt")
+    inputs.file(generatedMozcDataFile)
+    doFirst {
+        setArgs(
+            listOf(
+                "verify",
+                "--input=${generatedMozcDataFile.get().asFile.path}",
+                "--expectedVersion=${mozcExpectedVersion()}",
+            )
+        )
+    }
+}
+
+val writeMozcDataManifest = tasks.register<JavaExec>("writeMozcDataManifest") {
+    group = "mozc"
+    description = "Writes build/generated/mozc-data/mozc_data_manifest.json for the generated mozc.data."
+    dependsOn(verifyMozcData, "classes")
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("mozc_data.MozcDataToolMainKt")
+    inputs.file(generatedMozcDataFile)
+    outputs.file(generatedMozcDataManifestFile)
+    doFirst {
+        setArgs(
+            listOf(
+                "manifest",
+                "--input=${generatedMozcDataFile.get().asFile.path}",
+                "--output=${generatedMozcDataManifestFile.get().asFile.path}",
+            )
+        )
+    }
+}
+
+val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
+    group = "verification"
+    description = "Builds official Mozc converter binaries and prepares golden fixture generation."
+    dependsOn(generateOfficialMozcData)
+    outputs.dir(layout.projectDirectory.dir("src/test/resources/mozc_golden"))
+    doLast {
+        val mozcSrcDir = resolveMozcSourceDirectoryForBuild()
+        exec {
+            workingDir = mozcSrcDir
+            commandLine(mozcBazelCommand(), "build", "//converter:converter_main", "//converter:immutable_converter_main")
+        }
+        val fixtureDir = layout.projectDirectory.dir("src/test/resources/mozc_golden").asFile
+        fixtureDir.mkdirs()
+        throw GradleException(
+            "Official Mozc converter output parser must extract all candidate fields before fixtures can be written. " +
+                    "No golden fixture was generated."
+        )
+    }
+}
+
 tasks.test {
     useJUnitPlatform()
     dependsOn(validateMozcIdDef, validateConnectionMatrix, validateDictionaryIds, validateIdDefReferences)
@@ -334,4 +443,21 @@ tasks.register<JavaExec>("runMozcUTWikiNeologdCommon") {
     mainClass.set("com.kazumaproject.MozcUTWikiNeologdCommonKt")
     classpath = sourceSets["main"].runtimeClasspath
     dependsOn(validateDictionaryIds)
+}
+
+tasks.register<Zip>("packageMozcAndroidBundle") {
+    group = "distribution"
+    description = "Packages mozc.data, its manifest, and the Kotlin runtime jar for Android integration."
+    dependsOn(verifyMozcData, writeMozcDataManifest, "test", "jar")
+    archiveFileName.set("mozc_android_bundle.zip")
+    destinationDirectory.set(layout.buildDirectory.dir("distributions"))
+    from(generatedMozcDataFile) {
+        rename { "mozc.data" }
+    }
+    from(generatedMozcDataManifestFile) {
+        rename { "mozc_data_manifest.json" }
+    }
+    from(tasks.named<Jar>("jar").flatMap { it.archiveFile }) {
+        rename { "mozc-runtime.jar" }
+    }
 }
