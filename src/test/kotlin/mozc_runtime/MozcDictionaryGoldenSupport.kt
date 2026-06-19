@@ -112,6 +112,19 @@ data class GoldenZeroQueryCase(
     val results: List<GoldenPredictionResult>,
 )
 
+data class GoldenRewriterFixture(
+    val engineDataVersion: String,
+    val fixedTime: String,
+    val cases: List<GoldenRewriterCase>,
+)
+
+data class GoldenRewriterCase(
+    val input: String,
+    val requestType: String,
+    val beforeRewrite: List<GoldenConverterCandidate>,
+    val afterRewrite: List<GoldenConverterCandidate>,
+)
+
 data class GoldenPredictionResult(
     val index: Int,
     val key: String,
@@ -421,6 +434,25 @@ object MozcDictionaryGoldenSupport {
         )
     }
 
+    fun readRewriterFixture(path: Path): GoldenRewriterFixture {
+        val root = JsonParser(Files.readString(path)).parseObject()
+        root.requireKeys("engineDataVersion", "fixedTime", "cases")
+        return GoldenRewriterFixture(
+            engineDataVersion = root.string("engineDataVersion"),
+            fixedTime = root.string("fixedTime"),
+            cases = root.array("cases").map { caseValue ->
+                val case = caseValue.asObject()
+                case.requireKeys("input", "requestType", "beforeRewrite", "afterRewrite")
+                GoldenRewriterCase(
+                    input = case.string("input"),
+                    requestType = case.string("requestType"),
+                    beforeRewrite = case.array("beforeRewrite").map { readConverterCandidate(it.asObject()) },
+                    afterRewrite = case.array("afterRewrite").map { readConverterCandidate(it.asObject()) },
+                )
+            },
+        )
+    }
+
     fun collect(block: ((Token) -> Unit) -> Unit): List<GoldenToken> {
         val result = ArrayList<GoldenToken>()
         block { token ->
@@ -458,49 +490,52 @@ object MozcDictionaryGoldenSupport {
             index = segment.int("index"),
             key = segment.string("key"),
             candidates = segment.array("candidates").map { candidateValue ->
-                val candidate = candidateValue.asObject()
-                candidate.requireKeys(
-                    "index",
-                    "key",
-                    "value",
-                    "contentKey",
-                    "contentValue",
-                    "cost",
-                    "wcost",
-                    "structureCost",
-                    "lid",
-                    "rid",
-                    "attributes",
-                    "innerSegments",
-                )
-                GoldenConverterCandidate(
-                    index = candidate.int("index"),
-                    key = candidate.string("key"),
-                    value = candidate.string("value"),
-                    contentKey = candidate.string("contentKey"),
-                    contentValue = candidate.string("contentValue"),
-                    cost = candidate.int("cost"),
-                    wcost = candidate.int("wcost"),
-                    structureCost = candidate.int("structureCost"),
-                    lid = candidate.int("lid"),
-                    rid = candidate.int("rid"),
-                    attributes = candidate.stringArray("attributes"),
-                    consumedKeySize = candidate.optionalInt("consumedKeySize") ?: 0,
-                    innerSegments = candidate.array("innerSegments").map { innerValue ->
-                        val inner = innerValue.asObject()
-                        inner.requireKeys("index", "key", "value", "contentKey", "contentValue")
-                        GoldenInnerSegment(
-                            index = inner.int("index"),
-                            key = inner.string("key"),
-                            value = inner.string("value"),
-                            contentKey = inner.string("contentKey"),
-                            contentValue = inner.string("contentValue"),
-                        )
-                    },
-                    description = candidate.optionalString("description") ?: "",
-                    category = candidate.optionalString("category") ?: "DEFAULT_CATEGORY",
+                readConverterCandidate(candidateValue.asObject())
+            },
+        )
+    }
+
+    private fun readConverterCandidate(candidate: JsonObject): GoldenConverterCandidate {
+        candidate.requireContainsKeys(
+            "index",
+            "key",
+            "value",
+            "contentKey",
+            "contentValue",
+            "cost",
+            "wcost",
+            "structureCost",
+            "lid",
+            "rid",
+            "attributes",
+            "innerSegments",
+        )
+        return GoldenConverterCandidate(
+            index = candidate.int("index"),
+            key = candidate.string("key"),
+            value = candidate.string("value"),
+            contentKey = candidate.string("contentKey"),
+            contentValue = candidate.string("contentValue"),
+            cost = candidate.int("cost"),
+            wcost = candidate.int("wcost"),
+            structureCost = candidate.int("structureCost"),
+            lid = candidate.int("lid"),
+            rid = candidate.int("rid"),
+            attributes = candidate.stringArray("attributes"),
+            consumedKeySize = candidate.optionalInt("consumedKeySize") ?: 0,
+            innerSegments = candidate.array("innerSegments").map { innerValue ->
+                val inner = innerValue.asObject()
+                inner.requireKeys("index", "key", "value", "contentKey", "contentValue")
+                GoldenInnerSegment(
+                    index = inner.int("index"),
+                    key = inner.string("key"),
+                    value = inner.string("value"),
+                    contentKey = inner.string("contentKey"),
+                    contentValue = inner.string("contentValue"),
                 )
             },
+            description = candidate.optionalString("description") ?: "",
+            category = candidate.optionalString("category") ?: "DEFAULT_CATEGORY",
         )
     }
 
@@ -582,6 +617,11 @@ private class JsonObject(
     fun requireKeys(vararg expected: String) {
         val expectedSet = expected.toSet()
         assertEquals(expectedSet, values.keys, "JSON object keys")
+    }
+
+    fun requireContainsKeys(vararg expected: String) {
+        val missing = expected.filterNot { it in values }
+        assertEquals(listOf(), missing, "JSON object missing keys")
     }
 
     fun string(name: String): String = (values.getValue(name) as JsonString).value
