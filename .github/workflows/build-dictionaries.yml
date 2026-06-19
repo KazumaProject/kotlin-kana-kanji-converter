@@ -1,0 +1,110 @@
+name: Build Dictionary Artifacts
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'dict-v*'
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - '.github/workflows/build-dictionaries.yml'
+
+jobs:
+  build-dictionaries:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Bazelisk
+        run: |
+          curl -L -o bazelisk https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64
+          chmod +x bazelisk
+          sudo mv bazelisk /usr/local/bin/bazelisk
+
+      - name: Checkout Mozc
+        uses: actions/checkout@v4
+        with:
+          repository: google/mozc
+          path: third_party/mozc
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/bazel
+          key: ${{ runner.os }}-bazel-${{ hashFiles('build.gradle.kts', 'src/main/kotlin/**') }}
+          restore-keys: |
+            ${{ runner.os }}-bazel-
+
+      - name: Build dictionary artifacts
+        run: |
+          ./gradlew \
+            -PmozcBazelCommand=bazelisk \
+            -PmozcSrcDir=$GITHUB_WORKSPACE/third_party/mozc/src \
+            generateOfficialMozcData \
+            verifyMozcData \
+            writeMozcDataManifest \
+            generateMozcGoldenFixtures \
+            test \
+            run \
+            packageMozcDataBundle \
+            packageMozcAndroidBundle \
+            packageMainDictionaries \
+            packageMozcUTDictionaries \
+            packageWikiDictionary \
+            packageNeologdDictionary \
+            packageWebDictionary \
+            packageJapaneseKeyboardMozcAssets \
+            packageJapaneseKeyboardDictionaryAssets \
+            verifyJapaneseKeyboardAssetBundles \
+            --stacktrace
+
+      - name: Upload dictionary artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: japanese-keyboard-dictionary-artifacts
+          path: |
+            build/distributions/main_dictionaries.zip
+            build/distributions/mozc_ut_dictionaries.zip
+            build/distributions/wiki_dictionary.zip
+            build/distributions/neologd_dictionary.zip
+            build/distributions/web_dictionary.zip
+            build/distributions/mozc_data_bundle.zip
+            build/distributions/mozc_android_bundle.zip
+            build/distributions/japanese_keyboard_mozc_assets.zip
+            build/distributions/japanese_keyboard_dictionary_assets.zip
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/dict-v')
+        with:
+          generate_release_notes: true
+          files: |
+            build/distributions/main_dictionaries.zip
+            build/distributions/mozc_ut_dictionaries.zip
+            build/distributions/wiki_dictionary.zip
+            build/distributions/neologd_dictionary.zip
+            build/distributions/web_dictionary.zip
+            build/distributions/mozc_data_bundle.zip
+            build/distributions/mozc_android_bundle.zip
+            build/distributions/japanese_keyboard_mozc_assets.zip
+            build/distributions/japanese_keyboard_dictionary_assets.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,6 +1,10 @@
 import org.gradle.api.GradleException
+import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.tasks.bundling.Zip
 import org.gradle.jvm.tasks.Jar
+import java.io.ByteArrayInputStream
+import java.util.zip.ZipFile
+import java.util.zip.ZipInputStream
 
 plugins {
     kotlin("jvm") version "1.9.21"
@@ -1382,6 +1386,10 @@ tasks.test {
     dependsOn(validateMozcIdDef, validateConnectionMatrix, validateDictionaryIds, validateIdDefReferences)
 }
 
+tasks.named("processTestResources") {
+    mustRunAfter(generateMozcGoldenFixtures)
+}
+
 tasks.register<Test>("dictionaryBuildTest") {
     description = "Runs the full real-dictionary build integration test."
     group = "verification"
@@ -1452,33 +1460,582 @@ tasks.register<JavaExec>("runMozcUTWikiNeologdCommon") {
     dependsOn(validateDictionaryIds)
 }
 
-tasks.register<Zip>("packageMozcAndroidBundle") {
+data class KeyboardAssetFile(val sourceName: String, val archivePath: String)
+
+data class KeyboardDatZipFile(
+    val sourceName: String,
+    val archivePath: String,
+    val generatedBy: List<String>,
+) {
+    val innerEntryName: String = sourceName
+}
+
+data class BuildZipEntrySnapshot(
+    val name: String,
+    val directory: Boolean,
+    val size: Long,
+)
+
+data class BuildZipEntryContent(
+    val name: String,
+    val directory: Boolean,
+    val bytes: ByteArray,
+)
+
+val dictionaryResourcesDir = layout.projectDirectory.dir("src/main/resources")
+val distributionsDir = layout.buildDirectory.dir("distributions")
+val generatedKeyboardInnerZipDir = layout.buildDirectory.dir("generated/japanese-keyboard-inner-zips")
+val mozcRuntimeJar = tasks.named<Jar>("jar").flatMap { it.archiveFile }
+
+fun archiveParent(path: String): String = path.substringBeforeLast("/", "")
+
+fun archiveFileName(path: String): String = path.substringAfterLast("/")
+
+fun String.toTaskNameSuffix(): String =
+    split(Regex("[^A-Za-z0-9]+"))
+        .filter { it.isNotEmpty() }
+        .joinToString("") { it.substring(0, 1).uppercase() + it.substring(1) }
+
+fun Zip.configureDistributionZip(fileName: String, taskDescription: String) {
     group = "distribution"
-    description = "Packages mozc.data, its manifest, and the Kotlin runtime jar for Android integration."
-    dependsOn(verifyMozcData, writeMozcDataManifest, "test", "jar")
-    archiveFileName.set("mozc_android_bundle.zip")
-    destinationDirectory.set(layout.buildDirectory.dir("distributions"))
+    description = taskDescription
+    archiveFileName.set(fileName)
+    destinationDirectory.set(distributionsDir)
+    includeEmptyDirs = false
+    duplicatesStrategy = DuplicatesStrategy.FAIL
+    isPreserveFileTimestamps = false
+    isReproducibleFileOrder = true
+}
+
+fun Zip.addDictionaryFile(asset: KeyboardAssetFile) {
+    val parent = archiveParent(asset.archivePath)
+    from(dictionaryResourcesDir.file(asset.sourceName)) {
+        if (parent.isNotEmpty()) {
+            into(parent)
+        }
+        rename { archiveFileName(asset.archivePath) }
+    }
+}
+
+fun Zip.addInnerDatZip(asset: KeyboardDatZipFile, task: TaskProvider<Zip>) {
+    val parent = archiveParent(asset.archivePath)
+    from(task.flatMap { it.archiveFile }) {
+        if (parent.isNotEmpty()) {
+            into(parent)
+        }
+        rename { archiveFileName(asset.archivePath) }
+    }
+}
+
+fun Zip.addMozcFiles(prefix: String = "") {
     from(generatedMozcDataFile) {
+        if (prefix.isNotEmpty()) {
+            into(prefix)
+        }
         rename { "mozc.data" }
     }
     from(generatedMozcDataManifestFile) {
+        if (prefix.isNotEmpty()) {
+            into(prefix)
+        }
         rename { "mozc_data_manifest.json" }
     }
-    from(tasks.named<Jar>("jar").flatMap { it.archiveFile }) {
+    from(mozcRuntimeJar) {
+        if (prefix.isNotEmpty()) {
+            into(prefix)
+        }
         rename { "mozc-runtime.jar" }
     }
 }
 
-tasks.register<Zip>("packageMozcDataBundle") {
+fun readBuildZipEntryContents(bytes: ByteArray, label: String): List<BuildZipEntryContent> {
+    val entries = mutableListOf<BuildZipEntryContent>()
+    try {
+        ZipInputStream(ByteArrayInputStream(bytes)).use { zipInput ->
+            var entry = zipInput.nextEntry
+            while (entry != null) {
+                entries += BuildZipEntryContent(
+                    name = entry.name,
+                    directory = entry.isDirectory,
+                    bytes = if (entry.isDirectory) ByteArray(0) else zipInput.readBytes(),
+                )
+                zipInput.closeEntry()
+                entry = zipInput.nextEntry
+            }
+        }
+    } catch (e: Exception) {
+        throw GradleException("Failed to read zip archive: $label", e)
+    }
+    return entries
+}
+
+fun readBuildZipEntries(file: File): List<BuildZipEntrySnapshot> {
+    if (!file.isFile) {
+        throw GradleException("Missing bundle zip: ${file.path}")
+    }
+    return ZipFile(file).use { zipFile ->
+        zipFile.entries().asSequence().map { entry ->
+            BuildZipEntrySnapshot(
+                name = entry.name,
+                directory = entry.isDirectory,
+                size = entry.size,
+            )
+        }.toList()
+    }
+}
+
+fun assertNoForbiddenBundlePaths(zipName: String, entries: List<BuildZipEntrySnapshot>) {
+    val invalidEntries = entries.map { it.name }.filter { name ->
+        name.startsWith("/") ||
+                Regex("^[A-Za-z]:").containsMatchIn(name) ||
+                name.startsWith("../") ||
+                name.contains("/../") ||
+                name.contains('\\') ||
+                name.startsWith("app/src/main/assets/") ||
+                name.startsWith("assets/") ||
+                name.contains("src/main/resources/") ||
+                name.contains("build/")
+    }
+    if (invalidEntries.isNotEmpty()) {
+        throw GradleException("$zipName contains forbidden path entries: ${invalidEntries.joinToString()}")
+    }
+}
+
+fun assertNoNativeFiles(zipName: String, zipFile: File) {
+    val forbiddenExtensions = listOf(".so", ".dylib", ".jnilib", ".dll")
+    val violations = mutableListOf<String>()
+
+    fun scanZipStream(pathPrefix: String, zipInput: ZipInputStream) {
+        var entry = zipInput.nextEntry
+        while (entry != null) {
+            val path = "$pathPrefix!/${entry.name}"
+            val lower = entry.name.lowercase()
+            if (forbiddenExtensions.any { lower.endsWith(it) }) {
+                violations += path
+            }
+            if (!entry.isDirectory && (lower.endsWith(".zip") || lower.endsWith(".jar"))) {
+                val nestedBytes = zipInput.readBytes()
+                scanZipStream(path, ZipInputStream(ByteArrayInputStream(nestedBytes)))
+            }
+            zipInput.closeEntry()
+            entry = zipInput.nextEntry
+        }
+    }
+
+    ZipFile(zipFile).use { zip ->
+        zip.entries().asSequence().filterNot { it.isDirectory }.forEach { entry ->
+            val lower = entry.name.lowercase()
+            if (forbiddenExtensions.any { lower.endsWith(it) }) {
+                violations += entry.name
+            }
+            if (lower.endsWith(".zip") || lower.endsWith(".jar")) {
+                ZipInputStream(zip.getInputStream(entry)).use { nestedZip ->
+                    scanZipStream(entry.name, nestedZip)
+                }
+            }
+        }
+    }
+    if (violations.isNotEmpty()) {
+        throw GradleException("$zipName contains native library files: ${violations.joinToString()}")
+    }
+}
+
+fun assertInnerDatZip(zipName: String, outerEntryName: String, bytes: ByteArray, expectedInnerEntry: String) {
+    val innerEntries = readBuildZipEntryContents(bytes, "$zipName!/$outerEntryName")
+        .filterNot { it.directory }
+    val innerNames = innerEntries.map { it.name }
+    if (innerNames != listOf(expectedInnerEntry)) {
+        throw GradleException(
+            "$zipName entry $outerEntryName must be a zip containing only $expectedInnerEntry, actual=${innerNames.joinToString()}"
+        )
+    }
+    if (innerEntries.single().bytes.isEmpty()) {
+        throw GradleException("$zipName entry $outerEntryName contains empty $expectedInnerEntry")
+    }
+}
+
+fun verifyAssetBundleZip(
+    zipName: String,
+    requiredEntries: List<String>,
+    expectedDatZipEntries: Map<String, String>,
+    rejectEnglishAssets: Boolean = false,
+) {
+    val zipFile = distributionsDir.get().asFile.resolve(zipName)
+    val entries = readBuildZipEntries(zipFile)
+    val entryNames = entries.map { it.name }
+    val fileEntryNames = entries.filterNot { it.directory }.map { it.name }
+    val missing = requiredEntries.filterNot { it in fileEntryNames }
+    if (missing.isNotEmpty()) {
+        throw GradleException("$zipName is missing required entries: ${missing.joinToString()}")
+    }
+    val duplicates = entryNames.groupingBy { it }.eachCount().filterValues { it > 1 }
+    if (duplicates.isNotEmpty()) {
+        throw GradleException("$zipName contains duplicate entries: ${duplicates.keys.joinToString()}")
+    }
+    val emptyFiles = entries.filter { !it.directory && it.size == 0L }.map { it.name }
+    if (emptyFiles.isNotEmpty()) {
+        throw GradleException("$zipName contains empty files: ${emptyFiles.joinToString()}")
+    }
+    assertNoForbiddenBundlePaths(zipName, entries)
+    assertNoNativeFiles(zipName, zipFile)
+    if (rejectEnglishAssets) {
+        val englishEntries = fileEntryNames.filter { it.startsWith("english/") }
+        if (englishEntries.isNotEmpty()) {
+            throw GradleException("$zipName must not contain english assets: ${englishEntries.joinToString()}")
+        }
+    }
+    ZipFile(zipFile).use { outerZip ->
+        entries.filter { !it.directory && it.name.endsWith(".dat.zip") }.forEach { entry ->
+            val expectedInnerEntry = expectedDatZipEntries[entry.name]
+                ?: throw GradleException("$zipName contains unexpected .dat.zip entry: ${entry.name}")
+            val entryBytes = outerZip.getInputStream(outerZip.getEntry(entry.name)).use { it.readBytes() }
+            assertInnerDatZip(zipName, entry.name, entryBytes, expectedInnerEntry)
+        }
+    }
+}
+
+val mainDictionaryDatZipAssets = listOf(
+    KeyboardDatZipFile("connectionId.dat", "connectionId.dat.zip", listOf("run")),
+    KeyboardDatZipFile("tango.dat", "system/tango.dat.zip", listOf("run")),
+    KeyboardDatZipFile("yomi.dat", "system/yomi.dat.zip", listOf("run")),
+    KeyboardDatZipFile("token.dat", "system/token.dat.zip", listOf("run")),
+)
+
+val mainDictionaryRawAssets = listOf(
+    KeyboardAssetFile("pos_table.dat", "pos_table.dat"),
+    KeyboardAssetFile("id.def", "id.def"),
+    KeyboardAssetFile("tango_singleKanji.dat", "single_kanji/tango_singleKanji.dat"),
+    KeyboardAssetFile("yomi_singleKanji.dat", "single_kanji/yomi_singleKanji.dat"),
+    KeyboardAssetFile("token_singleKanji.dat", "single_kanji/token_singleKanji.dat"),
+    KeyboardAssetFile("tango_emoji.dat", "emoji/tango_emoji.dat"),
+    KeyboardAssetFile("yomi_emoji.dat", "emoji/yomi_emoji.dat"),
+    KeyboardAssetFile("token_emoji.dat", "emoji/token_emoji.dat"),
+    KeyboardAssetFile("tango_emoticon.dat", "emoticon/tango_emoticon.dat"),
+    KeyboardAssetFile("yomi_emoticon.dat", "emoticon/yomi_emoticon.dat"),
+    KeyboardAssetFile("token_emoticon.dat", "emoticon/token_emoticon.dat"),
+    KeyboardAssetFile("tango_symbol.dat", "symbol/tango_symbol.dat"),
+    KeyboardAssetFile("yomi_symbol.dat", "symbol/yomi_symbol.dat"),
+    KeyboardAssetFile("token_symbol.dat", "symbol/token_symbol.dat"),
+    KeyboardAssetFile("tango_reading_correction.dat", "reading_correction/tango_reading_correction.dat"),
+    KeyboardAssetFile("yomi_reading_correction.dat", "reading_correction/yomi_reading_correction.dat"),
+    KeyboardAssetFile("token_reading_correction.dat", "reading_correction/token_reading_correction.dat"),
+    KeyboardAssetFile("tango_kotowaza.dat", "kotowaza/tango_kotowaza.dat"),
+    KeyboardAssetFile("yomi_kotowaza.dat", "kotowaza/yomi_kotowaza.dat"),
+    KeyboardAssetFile("token_kotowaza.dat", "kotowaza/token_kotowaza.dat"),
+)
+
+val mozcUTRawAssets = listOf(
+    KeyboardAssetFile("tango_person_names.dat", "person_name/tango_person_names.dat"),
+    KeyboardAssetFile("yomi_person_names.dat", "person_name/yomi_person_names.dat"),
+    KeyboardAssetFile("token_person_names.dat", "person_name/token_person_names.dat"),
+)
+
+val mozcUTDatZipAssets = listOf(
+    KeyboardDatZipFile("tango_places.dat", "places/tango_places.dat.zip", listOf("runMozcUT")),
+    KeyboardDatZipFile("yomi_places.dat", "places/yomi_places.dat.zip", listOf("runMozcUT")),
+    KeyboardDatZipFile("token_places.dat", "places/token_places.dat.zip", listOf("runMozcUT")),
+)
+
+val wikiDatZipAssets = listOf(
+    KeyboardDatZipFile("tango_wiki.dat", "wiki/tango_wiki.dat.zip", listOf("runMozcUTWiki")),
+    KeyboardDatZipFile("yomi_wiki.dat", "wiki/yomi_wiki.dat.zip", listOf("runMozcUTWiki")),
+    KeyboardDatZipFile("token_wiki.dat", "wiki/token_wiki.dat.zip", listOf("runMozcUTWiki")),
+)
+
+val neologdDatZipAssets = listOf(
+    KeyboardDatZipFile("tango_neologd.dat", "neologd/tango_neologd.dat.zip", listOf("runMozcUTNeologd")),
+    KeyboardDatZipFile("yomi_neologd.dat", "neologd/yomi_neologd.dat.zip", listOf("runMozcUTNeologd")),
+    KeyboardDatZipFile("token_neologd.dat", "neologd/token_neologd.dat.zip", listOf("runMozcUTNeologd")),
+)
+
+val webDatZipAssets = listOf(
+    KeyboardDatZipFile("tango_web.dat", "web/tango_web.dat.zip", listOf("runMozcUTWikiNeologdCommon")),
+    KeyboardDatZipFile("yomi_web.dat", "web/yomi_web.dat.zip", listOf("runMozcUTWikiNeologdCommon")),
+    KeyboardDatZipFile("token_web.dat", "web/token_web.dat.zip", listOf("runMozcUTWikiNeologdCommon")),
+)
+
+val allDatZipAssets = (
+        mainDictionaryDatZipAssets +
+                mozcUTDatZipAssets +
+                wikiDatZipAssets +
+                neologdDatZipAssets +
+                webDatZipAssets
+        ).distinctBy { it.archivePath }
+
+val datZipInnerEntryByArchivePath = allDatZipAssets.associate { it.archivePath to it.innerEntryName }
+
+val mozcAssetEntries = listOf(
+    "mozc/mozc.data",
+    "mozc/mozc_data_manifest.json",
+    "mozc/mozc-runtime.jar",
+)
+
+val mainDictionaryEntries = mainDictionaryDatZipAssets.map { it.archivePath } + mainDictionaryRawAssets.map { it.archivePath }
+val mozcUTDictionaryEntries = mozcUTRawAssets.map { it.archivePath } + mozcUTDatZipAssets.map { it.archivePath }
+val wikiDictionaryEntries = wikiDatZipAssets.map { it.archivePath }
+val neologdDictionaryEntries = neologdDatZipAssets.map { it.archivePath }
+val webDictionaryEntries = webDatZipAssets.map { it.archivePath }
+val japaneseKeyboardDictionaryEntries = mainDictionaryEntries +
+        mozcUTDictionaryEntries +
+        wikiDictionaryEntries +
+        neologdDictionaryEntries +
+        webDictionaryEntries +
+        mozcAssetEntries
+
+val requiredBundleEntries = mapOf(
+    "main_dictionaries.zip" to mainDictionaryEntries,
+    "mozc_ut_dictionaries.zip" to mozcUTDictionaryEntries,
+    "wiki_dictionary.zip" to wikiDictionaryEntries,
+    "neologd_dictionary.zip" to neologdDictionaryEntries,
+    "web_dictionary.zip" to webDictionaryEntries,
+    "mozc_data_bundle.zip" to listOf("mozc.data", "mozc_data_manifest.json"),
+    "mozc_android_bundle.zip" to listOf("mozc.data", "mozc_data_manifest.json", "mozc-runtime.jar"),
+    "japanese_keyboard_mozc_assets.zip" to mozcAssetEntries,
+    "japanese_keyboard_dictionary_assets.zip" to japaneseKeyboardDictionaryEntries,
+)
+
+val innerDatZipTasks = allDatZipAssets.associate { asset ->
+    asset.archivePath to tasks.register<Zip>("zip${asset.archivePath.toTaskNameSuffix()}") {
+        group = "distribution"
+        description = "Builds inner zip ${asset.archivePath} containing ${asset.innerEntryName}."
+        dependsOn(asset.generatedBy)
+        val parent = archiveParent(asset.archivePath)
+        destinationDirectory.set(generatedKeyboardInnerZipDir.map { if (parent.isEmpty()) it else it.dir(parent) })
+        archiveFileName.set(archiveFileName(asset.archivePath))
+        includeEmptyDirs = false
+        duplicatesStrategy = DuplicatesStrategy.FAIL
+        isPreserveFileTimestamps = false
+        isReproducibleFileOrder = true
+        from(dictionaryResourcesDir.file(asset.sourceName)) {
+            rename { asset.innerEntryName }
+        }
+    }
+}
+
+tasks.named<Jar>("jar") {
+    mustRunAfter("run", "runMozcUT", "runMozcUTWiki", "runMozcUTNeologd", "runMozcUTWikiNeologdCommon")
+}
+
+val assembleMozcAndroidBundleZip = tasks.register<Zip>("assembleMozcAndroidBundleZip") {
+    configureDistributionZip(
+        fileName = "mozc_android_bundle.zip",
+        taskDescription = "Assembles mozc.data, its manifest, and the Kotlin runtime jar for Android integration.",
+    )
+    dependsOn(verifyMozcData, writeMozcDataManifest, "jar")
+    mustRunAfter("run", "runMozcUT", "runMozcUTWiki", "runMozcUTNeologd", "runMozcUTWikiNeologdCommon")
+    addMozcFiles()
+}
+
+tasks.register("packageMozcAndroidBundle") {
+    group = "distribution"
+    description = "Packages mozc.data, its manifest, and the Kotlin runtime jar for Android integration."
+    dependsOn(assembleMozcAndroidBundleZip, "test")
+    outputs.file(assembleMozcAndroidBundleZip.flatMap { it.archiveFile })
+}
+
+val packageMozcDataBundle = tasks.register<Zip>("packageMozcDataBundle") {
     group = "distribution"
     description = "Packages only official mozc.data and its manifest without runtime tests."
     dependsOn(verifyMozcData, writeMozcDataManifest)
     archiveFileName.set("mozc_data_bundle.zip")
-    destinationDirectory.set(layout.buildDirectory.dir("distributions"))
+    destinationDirectory.set(distributionsDir)
+    includeEmptyDirs = false
+    duplicatesStrategy = DuplicatesStrategy.FAIL
+    isPreserveFileTimestamps = false
+    isReproducibleFileOrder = true
     from(generatedMozcDataFile) {
         rename { "mozc.data" }
     }
     from(generatedMozcDataManifestFile) {
         rename { "mozc_data_manifest.json" }
     }
+}
+
+val packageMainDictionaries = tasks.register<Zip>("packageMainDictionaries") {
+    configureDistributionZip(
+        fileName = "main_dictionaries.zip",
+        taskDescription = "Packages default Japanese dictionaries in JapaneseKeyboard assets layout.",
+    )
+    dependsOn("run")
+    mainDictionaryDatZipAssets.forEach { asset ->
+        dependsOn(innerDatZipTasks.getValue(asset.archivePath))
+        addInnerDatZip(asset, innerDatZipTasks.getValue(asset.archivePath))
+    }
+    mainDictionaryRawAssets.forEach { addDictionaryFile(it) }
+}
+
+val packageMozcUTDictionaries = tasks.register<Zip>("packageMozcUTDictionaries") {
+    configureDistributionZip(
+        fileName = "mozc_ut_dictionaries.zip",
+        taskDescription = "Packages Mozc UT person-name and place dictionaries in JapaneseKeyboard assets layout.",
+    )
+    dependsOn("runMozcUT")
+    mozcUTRawAssets.forEach { addDictionaryFile(it) }
+    mozcUTDatZipAssets.forEach { asset ->
+        dependsOn(innerDatZipTasks.getValue(asset.archivePath))
+        addInnerDatZip(asset, innerDatZipTasks.getValue(asset.archivePath))
+    }
+}
+
+val packageWikiDictionary = tasks.register<Zip>("packageWikiDictionary") {
+    configureDistributionZip(
+        fileName = "wiki_dictionary.zip",
+        taskDescription = "Packages the wiki dictionary in JapaneseKeyboard assets layout.",
+    )
+    dependsOn("runMozcUTWiki")
+    wikiDatZipAssets.forEach { asset ->
+        dependsOn(innerDatZipTasks.getValue(asset.archivePath))
+        addInnerDatZip(asset, innerDatZipTasks.getValue(asset.archivePath))
+    }
+}
+
+val packageNeologdDictionary = tasks.register<Zip>("packageNeologdDictionary") {
+    configureDistributionZip(
+        fileName = "neologd_dictionary.zip",
+        taskDescription = "Packages the NEologd dictionary in JapaneseKeyboard assets layout.",
+    )
+    dependsOn("runMozcUTNeologd")
+    neologdDatZipAssets.forEach { asset ->
+        dependsOn(innerDatZipTasks.getValue(asset.archivePath))
+        addInnerDatZip(asset, innerDatZipTasks.getValue(asset.archivePath))
+    }
+}
+
+val packageWebDictionary = tasks.register<Zip>("packageWebDictionary") {
+    configureDistributionZip(
+        fileName = "web_dictionary.zip",
+        taskDescription = "Packages the shared web dictionary in JapaneseKeyboard assets layout.",
+    )
+    dependsOn("runMozcUTWikiNeologdCommon")
+    webDatZipAssets.forEach { asset ->
+        dependsOn(innerDatZipTasks.getValue(asset.archivePath))
+        addInnerDatZip(asset, innerDatZipTasks.getValue(asset.archivePath))
+    }
+}
+
+val assembleJapaneseKeyboardMozcAssetsZip = tasks.register<Zip>("assembleJapaneseKeyboardMozcAssetsZip") {
+    configureDistributionZip(
+        fileName = "japanese_keyboard_mozc_assets.zip",
+        taskDescription = "Assembles the partial JapaneseKeyboard Mozc Kotlin engine assets bundle.",
+    )
+    dependsOn(generateOfficialMozcData, verifyMozcData, writeMozcDataManifest, assembleMozcAndroidBundleZip)
+    addMozcFiles(prefix = "mozc")
+}
+
+tasks.register("packageJapaneseKeyboardMozcAssets") {
+    group = "distribution"
+    description = "Packages the partial JapaneseKeyboard Mozc Kotlin engine assets bundle."
+    dependsOn(
+        generateOfficialMozcData,
+        verifyMozcData,
+        writeMozcDataManifest,
+        "test",
+        "packageMozcAndroidBundle",
+        assembleJapaneseKeyboardMozcAssetsZip,
+    )
+    outputs.file(assembleJapaneseKeyboardMozcAssetsZip.flatMap { it.archiveFile })
+}
+
+val assembleJapaneseKeyboardDictionaryAssetsZip = tasks.register<Zip>("assembleJapaneseKeyboardDictionaryAssetsZip") {
+    configureDistributionZip(
+        fileName = "japanese_keyboard_dictionary_assets.zip",
+        taskDescription = "Assembles JapaneseKeyboard app/src/main/assets-ready Japanese dictionary and Mozc assets.",
+    )
+    dependsOn(
+        "run",
+        "runMozcUT",
+        "runMozcUTWiki",
+        "runMozcUTNeologd",
+        "runMozcUTWikiNeologdCommon",
+        generateOfficialMozcData,
+        verifyMozcData,
+        writeMozcDataManifest,
+        assembleMozcAndroidBundleZip,
+    )
+    mainDictionaryDatZipAssets.forEach { asset ->
+        dependsOn(innerDatZipTasks.getValue(asset.archivePath))
+        addInnerDatZip(asset, innerDatZipTasks.getValue(asset.archivePath))
+    }
+    mainDictionaryRawAssets.forEach { addDictionaryFile(it) }
+    mozcUTRawAssets.forEach { addDictionaryFile(it) }
+    mozcUTDatZipAssets.forEach { asset ->
+        dependsOn(innerDatZipTasks.getValue(asset.archivePath))
+        addInnerDatZip(asset, innerDatZipTasks.getValue(asset.archivePath))
+    }
+    wikiDatZipAssets.forEach { asset ->
+        dependsOn(innerDatZipTasks.getValue(asset.archivePath))
+        addInnerDatZip(asset, innerDatZipTasks.getValue(asset.archivePath))
+    }
+    neologdDatZipAssets.forEach { asset ->
+        dependsOn(innerDatZipTasks.getValue(asset.archivePath))
+        addInnerDatZip(asset, innerDatZipTasks.getValue(asset.archivePath))
+    }
+    webDatZipAssets.forEach { asset ->
+        dependsOn(innerDatZipTasks.getValue(asset.archivePath))
+        addInnerDatZip(asset, innerDatZipTasks.getValue(asset.archivePath))
+    }
+    addMozcFiles(prefix = "mozc")
+}
+
+tasks.register("packageJapaneseKeyboardDictionaryAssets") {
+    group = "distribution"
+    description = "Packages JapaneseKeyboard app/src/main/assets-ready Japanese dictionary assets without English assets."
+    dependsOn(
+        "run",
+        "runMozcUT",
+        "runMozcUTWiki",
+        "runMozcUTNeologd",
+        "runMozcUTWikiNeologdCommon",
+        generateOfficialMozcData,
+        verifyMozcData,
+        writeMozcDataManifest,
+        "test",
+        "packageMozcAndroidBundle",
+        assembleJapaneseKeyboardDictionaryAssetsZip,
+    )
+    outputs.file(assembleJapaneseKeyboardDictionaryAssetsZip.flatMap { it.archiveFile })
+}
+
+tasks.register("verifyJapaneseKeyboardAssetBundles") {
+    group = "verification"
+    description = "Verifies JapaneseKeyboard dictionary and Mozc asset bundle layouts."
+    dependsOn(
+        packageMainDictionaries,
+        packageMozcUTDictionaries,
+        packageWikiDictionary,
+        packageNeologdDictionary,
+        packageWebDictionary,
+        packageMozcDataBundle,
+        "packageMozcAndroidBundle",
+        "packageJapaneseKeyboardMozcAssets",
+        "packageJapaneseKeyboardDictionaryAssets",
+    )
+    requiredBundleEntries.keys.forEach { zipName ->
+        inputs.file(distributionsDir.map { it.file(zipName) })
+    }
+    doLast {
+        requiredBundleEntries.forEach { (zipName, requiredEntries) ->
+            verifyAssetBundleZip(
+                zipName = zipName,
+                requiredEntries = requiredEntries,
+                expectedDatZipEntries = datZipInnerEntryByArchivePath,
+                rejectEnglishAssets = zipName == "japanese_keyboard_dictionary_assets.zip",
+            )
+        }
+        logger.lifecycle("Verified JapaneseKeyboard asset bundles: ${requiredBundleEntries.keys.joinToString()}")
+    }
+}
+
+tasks.named<Test>("test") {
+    dependsOn(
+        packageMainDictionaries,
+        packageMozcUTDictionaries,
+        packageWikiDictionary,
+        packageNeologdDictionary,
+        packageWebDictionary,
+        packageMozcDataBundle,
+        assembleMozcAndroidBundleZip,
+        assembleJapaneseKeyboardMozcAssetsZip,
+        assembleJapaneseKeyboardDictionaryAssetsZip,
+    )
 }
