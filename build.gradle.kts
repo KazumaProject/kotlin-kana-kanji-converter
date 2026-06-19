@@ -1,6 +1,8 @@
 import org.gradle.api.GradleException
+import org.gradle.api.file.CopySpec
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.tasks.bundling.Zip
+import org.gradle.language.jvm.tasks.ProcessResources
 import org.gradle.jvm.tasks.Jar
 import java.io.ByteArrayInputStream
 import java.util.zip.ZipFile
@@ -16,7 +18,7 @@ data class BuildIdDefEntry(val id: Int, val name: String, val lineNumber: Int)
 
 fun parseBuildIdDef(file: File): List<BuildIdDefEntry> {
     if (!file.isFile) {
-        throw GradleException("Missing Mozc id.def: file path=${file.path}. Set -PmozcIdDefFile=/path/to/id.def or place src/main/resources/id.def.")
+        throw GradleException("Missing Mozc id.def: file path=${file.path}. Set -PmozcIdDefFile=/path/to/id.def or -PmozcSrcDir=/path/to/mozc/src.")
     }
     val entries = mutableListOf<BuildIdDefEntry>()
     val seenIds = mutableMapOf<Int, BuildIdDefEntry>()
@@ -137,6 +139,7 @@ val generatedMozcIdDefDir = layout.buildDirectory.dir("generated/source/mozcIdDe
 val generatedMozcDataDir = layout.buildDirectory.dir("generated/mozc-data")
 val generatedMozcDataFile = generatedMozcDataDir.map { it.file("mozc.data") }
 val generatedMozcDataManifestFile = generatedMozcDataDir.map { it.file("mozc_data_manifest.json") }
+val generatedMozcDictionaryResourcesDir = layout.buildDirectory.dir("generated/mozc-dictionary-resources/main")
 val generatedMozcHelperDir = layout.buildDirectory.dir("generated/mozc-helper")
 val mozcGoldenDictionaryLookupFile = layout.projectDirectory.file("src/test/resources/mozc_golden/dictionary/system_dictionary_lookup.json")
 val mozcGoldenConnectorCostFile = layout.projectDirectory.file("src/test/resources/mozc_golden/connector/connector_cost.json")
@@ -153,15 +156,21 @@ val mozcNBestCandidateFilterHelperSource = layout.projectDirectory.file("tools/m
 val mozcPredictionHelperSource = layout.projectDirectory.file("tools/mozc_golden/mozc_prediction_helper.cc")
 val mozcRewriterHelperSource = layout.projectDirectory.file("tools/mozc_golden/mozc_rewriter_helper.cc")
 val mozcEngineHelperSource = layout.projectDirectory.file("tools/mozc_golden/mozc_engine_helper.cc")
+val bundledMozcDictionaryResourcesDir = layout.projectDirectory.dir("src/main/resources")
+fun generatedMozcDictionaryResourceFile(name: String) = generatedMozcDictionaryResourcesDir.map { it.file(name) }
+
 val mozcIdDefFileProvider = providers.gradleProperty("mozcIdDefFile")
     .map { layout.projectDirectory.file(it) }
-    .orElse(layout.projectDirectory.file("src/main/resources/id.def"))
-val mozcConnectionFileProvider = layout.projectDirectory.file("src/main/resources/connection_single_column.txt")
-val mozcDictionaryFilesProvider = files(
-    (0..9).map { "src/main/resources/dictionary%02d.txt".format(it) } + "src/main/resources/suffix.txt"
-)
+    .orElse(generatedMozcDictionaryResourceFile("id.def"))
+val mozcConnectionFileProvider = generatedMozcDictionaryResourceFile("connection_single_column.txt")
+val mozcDictionaryFileProviders =
+    (0..9).map { generatedMozcDictionaryResourceFile("dictionary%02d.txt".format(it)) } +
+            generatedMozcDictionaryResourceFile("suffix.txt")
+val mozcDictionaryFilesProvider = files(mozcDictionaryFileProviders)
 
-fun resolveMozcSourceDirectoryForBuild(): File {
+data class MozcDictionaryResourceCopySpec(val targetName: String, val source: File)
+
+fun findMozcSourceDirectoryForBuild(): File? {
     providers.gradleProperty("mozcSrcDir").orNull?.takeIf { it.isNotBlank() }?.let { explicit ->
         val explicitFile = file(explicit)
         if (!explicitFile.isDirectory) {
@@ -175,11 +184,44 @@ fun resolveMozcSourceDirectoryForBuild(): File {
         rootDir.resolve("../mozc-master/src").normalize(),
     )
     return candidates.firstOrNull { it.isDirectory }
+}
+
+fun mozcDictionaryResourceCopySpecs(): List<MozcDictionaryResourceCopySpec> {
+    val targetNames = listOf(
+        "id.def",
+        "connection_single_column.txt",
+        "suffix.txt",
+        "single_kanji.tsv",
+    ) + (0..9).map { "dictionary%02d.txt".format(it) }
+
+    val mozcSrcDir = findMozcSourceDirectoryForBuild()
+    return targetNames.map { targetName ->
+        val source = if (mozcSrcDir != null) {
+            when (targetName) {
+                "single_kanji.tsv" -> mozcSrcDir.resolve("data/single_kanji/single_kanji.tsv")
+                else -> mozcSrcDir.resolve("data/dictionary_oss/$targetName")
+            }
+        } else {
+            bundledMozcDictionaryResourcesDir.asFile.resolve(targetName)
+        }
+        if (!source.isFile) {
+            val mozcHint = "Set -PmozcSrcDir=/path/to/mozc/src or provide src/main/resources/$targetName."
+            throw GradleException("Missing Mozc dictionary resource: target=$targetName, source=${source.path}. $mozcHint")
+        }
+        MozcDictionaryResourceCopySpec(targetName, source)
+    }
+}
+
+fun resolveMozcSourceDirectoryForBuild(): File =
+    findMozcSourceDirectoryForBuild()
         ?: throw GradleException(
             "Mozc source directory was not found. Set -PmozcSrcDir=/path/to/mozc/src or place Mozc at one of: " +
-                    candidates.joinToString { it.path }
+                    listOf(
+                        rootDir.resolve("third_party/mozc/src"),
+                        rootDir.resolve("../mozc/src").normalize(),
+                        rootDir.resolve("../mozc-master/src").normalize(),
+                    ).joinToString { it.path }
         )
-}
 
 fun mozcBazelCommand(): String =
     providers.gradleProperty("mozcBazelCommand").orNull?.takeIf { it.isNotBlank() } ?: "bazel"
@@ -187,8 +229,25 @@ fun mozcBazelCommand(): String =
 fun mozcExpectedVersion(): String =
     providers.gradleProperty("mozcExpectedVersion").orNull?.takeIf { it.isNotBlank() } ?: "24.11.oss"
 
+val prepareMozcDictionaryResources = tasks.register("prepareMozcDictionaryResources") {
+    group = "mozc"
+    description = "Copies required Mozc dictionary text resources into build/generated without mutating src/main/resources."
+    inputs.files(providers.provider { mozcDictionaryResourceCopySpecs().map { it.source } })
+    outputs.dir(generatedMozcDictionaryResourcesDir)
+    doLast {
+        val outputDir = generatedMozcDictionaryResourcesDir.get().asFile
+        outputDir.deleteRecursively()
+        outputDir.mkdirs()
+        mozcDictionaryResourceCopySpecs().forEach { spec ->
+            spec.source.copyTo(outputDir.resolve(spec.targetName), overwrite = true)
+        }
+        logger.lifecycle("Prepared Mozc dictionary resources: ${outputDir.path}")
+    }
+}
+
 val generateIdDefConstants = tasks.register("generateIdDefConstants") {
     val idDefFile = mozcIdDefFileProvider
+    dependsOn(prepareMozcDictionaryResources)
     inputs.file(idDefFile)
     inputs.property("generatorVersion", "3")
     outputs.dir(generatedMozcIdDefDir)
@@ -203,6 +262,7 @@ val generateIdDefConstants = tasks.register("generateIdDefConstants") {
 val validateMozcIdDef = tasks.register("validateMozcIdDef") {
     group = "verification"
     description = "Validates Mozc id.def and its ID/name sequence."
+    dependsOn(prepareMozcDictionaryResources)
     inputs.file(mozcIdDefFileProvider)
     doLast {
         val entries = parseBuildIdDef(mozcIdDefFileProvider.get().asFile)
@@ -213,9 +273,10 @@ val validateMozcIdDef = tasks.register("validateMozcIdDef") {
 val validateConnectionMatrix = tasks.register("validateConnectionMatrix") {
     group = "verification"
     description = "Validates Mozc connection_single_column.txt matrix size and costs."
+    dependsOn(prepareMozcDictionaryResources)
     inputs.file(mozcConnectionFileProvider)
     doLast {
-        val file = mozcConnectionFileProvider.asFile
+        val file = mozcConnectionFileProvider.get().asFile
         if (!file.isFile) {
             throw GradleException("Missing Mozc connection_single_column.txt: file path=${file.path}")
         }
@@ -247,15 +308,17 @@ val validateConnectionMatrix = tasks.register("validateConnectionMatrix") {
 val validateDictionaryIds = tasks.register("validateDictionaryIds") {
     group = "verification"
     description = "Validates Mozc dictionary leftId/rightId against id.def and connection matrix size."
+    dependsOn(prepareMozcDictionaryResources)
     inputs.file(mozcIdDefFileProvider)
     inputs.file(mozcConnectionFileProvider)
     inputs.files(mozcDictionaryFilesProvider)
     dependsOn(validateMozcIdDef, validateConnectionMatrix)
     doLast {
         val idDefEntries = parseBuildIdDef(mozcIdDefFileProvider.get().asFile)
-        val connectionHeader = mozcConnectionFileProvider.asFile.useLines { lines ->
+        val connectionFile = mozcConnectionFileProvider.get().asFile
+        val connectionHeader = connectionFile.useLines { lines ->
             lines.firstOrNull()?.toIntOrNull()
-        } ?: throw GradleException("Invalid connection matrix size: file path=${mozcConnectionFileProvider.asFile.path}, line number=1")
+        } ?: throw GradleException("Invalid connection matrix size: file path=${connectionFile.path}, line number=1")
         mozcDictionaryFilesProvider.files.sortedBy { it.name }.forEach { file ->
             if (!file.isFile) {
                 throw GradleException("Missing Mozc dictionary file: file path=${file.path}")
@@ -1384,6 +1447,7 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
 tasks.test {
     useJUnitPlatform()
     dependsOn(validateMozcIdDef, validateConnectionMatrix, validateDictionaryIds, validateIdDefReferences)
+    systemProperty("mozcDictionaryResourcesDir", generatedMozcDictionaryResourcesDir.get().asFile.absolutePath)
 }
 
 tasks.named("processTestResources") {
@@ -1395,6 +1459,8 @@ tasks.register<Test>("dictionaryBuildTest") {
     group = "verification"
     useJUnitPlatform()
     maxHeapSize = "4g"
+    dependsOn(prepareMozcDictionaryResources)
+    systemProperty("mozcDictionaryResourcesDir", generatedMozcDictionaryResourcesDir.get().asFile.absolutePath)
     systemProperty("dictionaryBuild.full", "true")
     filter {
         includeTestsMatching("*DictionaryBuildIntegrationTest")
@@ -1406,6 +1472,8 @@ tasks.register<Test>("updateDictionaryBuildBaseline") {
     group = "verification"
     useJUnitPlatform()
     maxHeapSize = "4g"
+    dependsOn(prepareMozcDictionaryResources)
+    systemProperty("mozcDictionaryResourcesDir", generatedMozcDictionaryResourcesDir.get().asFile.absolutePath)
     systemProperty("dictionaryBuild.full", "true")
     systemProperty("dictionaryBuild.updateBaseline", "true")
     filter {
@@ -1420,6 +1488,15 @@ kotlin {
     }
 }
 
+sourceSets.main {
+    resources.setSrcDirs(listOf(generatedMozcDictionaryResourcesDir, bundledMozcDictionaryResourcesDir))
+}
+
+tasks.named<ProcessResources>("processResources") {
+    dependsOn(prepareMozcDictionaryResources)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 tasks.named("compileKotlin") {
     dependsOn(generateIdDefConstants)
 }
@@ -1432,32 +1509,40 @@ application {
     mainClass.set("com.kazumaproject.MainKt")
 }
 
+fun JavaExec.configureDictionaryGeneratorTask() {
+    dependsOn(validateDictionaryIds, prepareMozcDictionaryResources)
+    doFirst {
+        bundledMozcDictionaryResourcesDir.asFile.mkdirs()
+        systemProperty("mozcDictionaryResourcesDir", generatedMozcDictionaryResourcesDir.get().asFile.absolutePath)
+    }
+}
+
 tasks.named<JavaExec>("run") {
-    dependsOn(validateDictionaryIds)
+    configureDictionaryGeneratorTask()
 }
 
 tasks.register<JavaExec>("runMozcUT") {
     mainClass.set("com.kazumaproject.MozcUTKt")
     classpath = sourceSets["main"].runtimeClasspath
-    dependsOn(validateDictionaryIds)
+    configureDictionaryGeneratorTask()
 }
 
 tasks.register<JavaExec>("runMozcUTWiki") {
     mainClass.set("com.kazumaproject.MozcUTWikiKt")
     classpath = sourceSets["main"].runtimeClasspath
-    dependsOn(validateDictionaryIds)
+    configureDictionaryGeneratorTask()
 }
 
 tasks.register<JavaExec>("runMozcUTNeologd") {
     mainClass.set("com.kazumaproject.MozcUTNeologdKt")
     classpath = sourceSets["main"].runtimeClasspath
-    dependsOn(validateDictionaryIds)
+    configureDictionaryGeneratorTask()
 }
 
 tasks.register<JavaExec>("runMozcUTWikiNeologdCommon") {
     mainClass.set("com.kazumaproject.MozcUTWikiNeologdCommonKt")
     classpath = sourceSets["main"].runtimeClasspath
-    dependsOn(validateDictionaryIds)
+    configureDictionaryGeneratorTask()
 }
 
 data class KeyboardAssetFile(val sourceName: String, val archivePath: String)
@@ -1509,11 +1594,20 @@ fun Zip.configureDistributionZip(fileName: String, taskDescription: String) {
 
 fun Zip.addDictionaryFile(asset: KeyboardAssetFile) {
     val parent = archiveParent(asset.archivePath)
-    from(dictionaryResourcesDir.file(asset.sourceName)) {
+    fun CopySpec.configureArchivePath() {
         if (parent.isNotEmpty()) {
             into(parent)
         }
         rename { archiveFileName(asset.archivePath) }
+    }
+    if (asset.sourceName == "id.def") {
+        from(generatedMozcDictionaryResourceFile("id.def")) {
+            configureArchivePath()
+        }
+    } else {
+        from(dictionaryResourcesDir.file(asset.sourceName)) {
+            configureArchivePath()
+        }
     }
 }
 

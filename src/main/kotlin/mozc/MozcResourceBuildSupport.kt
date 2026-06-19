@@ -5,8 +5,14 @@ import kotlin.io.path.isRegularFile
 
 private val mozcDictionaryResourceNames = (0..9).map { "dictionary%02d.txt".format(it) } + "suffix.txt"
 
+private fun defaultMozcDictionaryResourcesDirectory(): Path =
+    System.getProperty("mozcDictionaryResourcesDir")
+        ?.takeIf { it.isNotBlank() }
+        ?.let { Path.of(it) }
+        ?: Path.of("src/main/resources")
+
 fun validateBundledMozcDictionaryResources(
-    resourcesDirectory: Path = Path.of("src/main/resources"),
+    resourcesDirectory: Path = defaultMozcDictionaryResourcesDirectory(),
 ) {
     val idDefFile = resourcesDirectory.resolve("id.def")
     val connectionFile = resourcesDirectory.resolve("connection_single_column.txt")

@@ -12,7 +12,9 @@ import kotlin.test.assertTrue
 
 class MozcDictionaryValidatorTest {
     private val repoRoot: Path = Path.of(System.getProperty("user.dir"))
-    private val resources: Path = repoRoot.resolve("src/main/resources")
+    private val resources: Path = Path.of(
+        System.getProperty("mozcDictionaryResourcesDir", repoRoot.resolve("src/main/resources").toString())
+    )
 
     @Test
     fun bundledMozcDictionaryIdsFitIdDefAndConnectionMatrix() {

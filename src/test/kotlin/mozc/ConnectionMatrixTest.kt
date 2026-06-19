@@ -14,7 +14,10 @@ import kotlin.test.assertTrue
 
 class ConnectionMatrixTest {
     private val repoRoot: Path = Path.of(System.getProperty("user.dir"))
-    private val connectionPath: Path = repoRoot.resolve("src/main/resources/connection_single_column.txt")
+    private val resources: Path = Path.of(
+        System.getProperty("mozcDictionaryResourcesDir", repoRoot.resolve("src/main/resources").toString())
+    )
+    private val connectionPath: Path = resources.resolve("connection_single_column.txt")
 
     @Test
     fun parsesBundledConnectionMatrixHeaderAndDataCount() {
@@ -113,7 +116,10 @@ class ConnectionMatrixTest {
     companion object {
         private val realMatrix: ConnectionMatrix by lazy {
             val repoRoot = Path.of(System.getProperty("user.dir"))
-            ConnectionMatrixParser.parse(repoRoot.resolve("src/main/resources/connection_single_column.txt"))
+            val resources = Path.of(
+                System.getProperty("mozcDictionaryResourcesDir", repoRoot.resolve("src/main/resources").toString())
+            )
+            ConnectionMatrixParser.parse(resources.resolve("connection_single_column.txt"))
         }
     }
 }

@@ -12,7 +12,10 @@ import kotlin.test.assertTrue
 
 class MozcIdDefParserTest {
     private val repoRoot: Path = Path.of(System.getProperty("user.dir"))
-    private val idDefPath: Path = repoRoot.resolve("src/main/resources/id.def")
+    private val resources: Path = Path.of(
+        System.getProperty("mozcDictionaryResourcesDir", repoRoot.resolve("src/main/resources").toString())
+    )
+    private val idDefPath: Path = resources.resolve("id.def")
 
     @Test
     fun parsesBundledMozcIdDefWithoutLosingNames() {

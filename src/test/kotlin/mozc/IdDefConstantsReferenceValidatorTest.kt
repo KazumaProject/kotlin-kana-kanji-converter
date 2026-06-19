@@ -12,7 +12,10 @@ import kotlin.test.assertTrue
 
 class IdDefConstantsReferenceValidatorTest {
     private val repoRoot: Path = Path.of(System.getProperty("user.dir"))
-    private val idDefEntries = MozcIdDefParser.parse(repoRoot.resolve("src/main/resources/id.def"))
+    private val resources: Path = Path.of(
+        System.getProperty("mozcDictionaryResourcesDir", repoRoot.resolve("src/main/resources").toString())
+    )
+    private val idDefEntries = MozcIdDefParser.parse(resources.resolve("id.def"))
 
     @Test
     fun constantsReferencesExistInMozcIdDef() {
