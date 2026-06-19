@@ -64,6 +64,9 @@ class Node {
         if (token.attributes and Token.Attributes.SpellingCorrection != 0) {
             attributes = attributes or Attributes.SPELLING_CORRECTION
         }
+        if (token.attributes and Token.Attributes.KeyExpanded != 0) {
+            attributes = attributes or Attributes.KEY_EXPANDED
+        }
         if (token.attributes and Token.Attributes.SuffixDictionary != 0) {
             attributes = attributes or Attributes.SUFFIX_DICTIONARY
         }

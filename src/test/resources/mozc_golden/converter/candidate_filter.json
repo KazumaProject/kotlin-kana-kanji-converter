@@ -1,0 +1,4354 @@
+{
+  "engineDataVersion": "24.11.oss",
+  "cases": [
+    {
+      "input": "へんかん",
+      "beforeFilter": [
+        {
+          "key": "へんかん",
+          "value": "変換",
+          "lid": 1845,
+          "rid": 1845,
+          "cost": 5440,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "変換",
+          "lid": 1845,
+          "rid": 1845,
+          "cost": 5440,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "返還",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 6265,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "返還",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 6265,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "偏官",
+          "lid": 1841,
+          "rid": 1949,
+          "cost": 8856,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "偏官",
+          "lid": 1841,
+          "rid": 1949,
+          "cost": 8856,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "篇感",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 11361,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "篇感",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 11361,
+          "attributes": []
+        },
+        {
+          "key": "べんかん",
+          "value": "弁韓",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 11762,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "べんかん",
+          "value": "弁韓",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 11762,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "へんかん",
+          "value": "編感",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 11774,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "編感",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 11774,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "篇間",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 11917,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "篇間",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 11917,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "辺感",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 12022,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "辺感",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 12022,
+          "attributes": []
+        },
+        {
+          "key": "べんかん",
+          "value": "ベンカン",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 12088,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "べんかん",
+          "value": "ベンカン",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 12088,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "へんかん",
+          "value": "篇館",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 12301,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "篇館",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 12301,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "編間",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 12330,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "編間",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 12330,
+          "attributes": []
+        },
+        {
+          "key": "べんかん",
+          "value": "弁官",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 12641,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "べんかん",
+          "value": "弁官",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 12641,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "へんかん",
+          "value": "へんかん",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 12642,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "へんかん",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 12642,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "ヘンカン",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 12643,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "ヘンカン",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 12643,
+          "attributes": []
+        }
+      ],
+      "afterFilter": [
+        {
+          "key": "へんかん",
+          "value": "変換",
+          "lid": 1845,
+          "rid": 1845,
+          "cost": 5440,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "返還",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 6265,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "偏官",
+          "lid": 1841,
+          "rid": 1949,
+          "cost": 8856,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "篇感",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 11361,
+          "attributes": []
+        },
+        {
+          "key": "べんかん",
+          "value": "弁韓",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 11762,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "へんかん",
+          "value": "編感",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 11774,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "篇間",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 11917,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "辺感",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 12022,
+          "attributes": []
+        },
+        {
+          "key": "べんかん",
+          "value": "ベンカン",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 12088,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "へんかん",
+          "value": "篇館",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 12301,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "編間",
+          "lid": 2011,
+          "rid": 1949,
+          "cost": 12330,
+          "attributes": []
+        },
+        {
+          "key": "べんかん",
+          "value": "弁官",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 12641,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "へんかん",
+          "value": "へんかん",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 12642,
+          "attributes": []
+        },
+        {
+          "key": "へんかん",
+          "value": "ヘンカン",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 12643,
+          "attributes": []
+        }
+      ]
+    },
+    {
+      "input": "きょう",
+      "beforeFilter": [
+        {
+          "key": "きょう",
+          "value": "今日",
+          "lid": 1913,
+          "rid": 1913,
+          "cost": 4626,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "今日",
+          "lid": 1913,
+          "rid": 1913,
+          "cost": 4626,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "きょう",
+          "lid": 1909,
+          "rid": 1909,
+          "cost": 5924,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "きょう",
+          "lid": 1909,
+          "rid": 1909,
+          "cost": 5924,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "教",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6226,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "教",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6226,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "強",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6483,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "強",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6483,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "凶",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6486,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "凶",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6486,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "経",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6566,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "経",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6566,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "供",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 6675,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "供",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 6675,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "卿",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6715,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "卿",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6715,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "狂",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 6823,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "狂",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 6823,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "興",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6927,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "興",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6927,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "境",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6931,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "境",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6931,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "京",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 7220,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "京",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 7220,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "強",
+          "lid": 1949,
+          "rid": 1949,
+          "cost": 7597,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "強",
+          "lid": 1949,
+          "rid": 1949,
+          "cost": 7597,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "鏡",
+          "lid": 1949,
+          "rid": 1949,
+          "cost": 7667,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "鏡",
+          "lid": 1949,
+          "rid": 1949,
+          "cost": 7667,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "橋",
+          "lid": 1949,
+          "rid": 1949,
+          "cost": 7915,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "橋",
+          "lid": 1949,
+          "rid": 1949,
+          "cost": 7915,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "キョウ",
+          "lid": 1909,
+          "rid": 1909,
+          "cost": 7948,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "キョウ",
+          "lid": 1909,
+          "rid": 1909,
+          "cost": 7948,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "橋",
+          "lid": 2011,
+          "rid": 2011,
+          "cost": 7949,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "橋",
+          "lid": 2011,
+          "rid": 2011,
+          "cost": 7949,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "挟",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 7956,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "挟",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 7956,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "協",
+          "lid": 1949,
+          "rid": 1949,
+          "cost": 7993,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "協",
+          "lid": 1949,
+          "rid": 1949,
+          "cost": 7993,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "今日",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 7999,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "今日",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 7999,
+          "attributes": []
+        }
+      ],
+      "afterFilter": [
+        {
+          "key": "きょう",
+          "value": "今日",
+          "lid": 1913,
+          "rid": 1913,
+          "cost": 4626,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "きょう",
+          "lid": 1909,
+          "rid": 1909,
+          "cost": 5924,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "教",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6226,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "強",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6483,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "凶",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6486,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "経",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6566,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "供",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 6675,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "卿",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6715,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "狂",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 6823,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "興",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6927,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "境",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 6931,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "京",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 7220,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "強",
+          "lid": 1949,
+          "rid": 1949,
+          "cost": 7597,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "鏡",
+          "lid": 1949,
+          "rid": 1949,
+          "cost": 7667,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "橋",
+          "lid": 1949,
+          "rid": 1949,
+          "cost": 7915,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "キョウ",
+          "lid": 1909,
+          "rid": 1909,
+          "cost": 7948,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "橋",
+          "lid": 2011,
+          "rid": 2011,
+          "cost": 7949,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "挟",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 7956,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "協",
+          "lid": 1949,
+          "rid": 1949,
+          "cost": 7993,
+          "attributes": []
+        },
+        {
+          "key": "きょう",
+          "value": "今日",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 7999,
+          "attributes": []
+        }
+      ]
+    },
+    {
+      "input": "ありがとう",
+      "beforeFilter": [
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 2591,
+          "rid": 2591,
+          "cost": 4124,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 2591,
+          "rid": 2591,
+          "cost": 4124,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 5791,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 5791,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "有難う",
+          "lid": 2591,
+          "rid": 2591,
+          "cost": 5870,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "有難う",
+          "lid": 2591,
+          "rid": 2591,
+          "cost": 5870,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "有り難う",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 6568,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "有り難う",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 6568,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "有難う",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 6819,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "有難う",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 6819,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "アリガトウ",
+          "lid": 2591,
+          "rid": 2591,
+          "cost": 8239,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "アリガトウ",
+          "lid": 2591,
+          "rid": 2591,
+          "cost": 8239,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 783,
+          "rid": 16,
+          "cost": 9492,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 783,
+          "rid": 16,
+          "cost": 9492,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 57,
+          "rid": 2546,
+          "cost": 9649,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 57,
+          "rid": 2546,
+          "cost": 9649,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "有りがとう",
+          "lid": 842,
+          "rid": 2546,
+          "cost": 9821,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "有りがとう",
+          "lid": 842,
+          "rid": 2546,
+          "cost": 9821,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 783,
+          "rid": 2546,
+          "cost": 10021,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 783,
+          "rid": 2546,
+          "cost": 10021,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "難有う",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 10159,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "難有う",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 10159,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "在り難う",
+          "lid": 842,
+          "rid": 2552,
+          "cost": 10797,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "在り難う",
+          "lid": 842,
+          "rid": 2552,
+          "cost": 10797,
+          "attributes": []
+        },
+        {
+          "key": "ありがとぅ",
+          "value": "ありがとぅ",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 11077,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ありがとぅ",
+          "value": "ありがとぅ",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 11077,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 57,
+          "rid": 16,
+          "cost": 12417,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 57,
+          "rid": 16,
+          "cost": 12417,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "あり難う",
+          "lid": 644,
+          "rid": 2552,
+          "cost": 12475,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "あり難う",
+          "lid": 644,
+          "rid": 2552,
+          "cost": 12475,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 644,
+          "rid": 2546,
+          "cost": 12515,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 644,
+          "rid": 2546,
+          "cost": 12515,
+          "attributes": []
+        },
+        {
+          "key": "ありがとぅ",
+          "value": "有り難ぅ",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 13807,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ありがとぅ",
+          "value": "有り難ぅ",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 13807,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ありがとぅ",
+          "value": "有難ぅ",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 14451,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ありがとぅ",
+          "value": "有難ぅ",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 14451,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ありがとぅ",
+          "value": "ありがとぅ",
+          "lid": 644,
+          "rid": 2546,
+          "cost": 16052,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ありがとぅ",
+          "value": "ありがとぅ",
+          "lid": 644,
+          "rid": 2546,
+          "cost": 16052,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ありがとぅ",
+          "value": "難有ぅ",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 18944,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ありがとぅ",
+          "value": "難有ぅ",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 18944,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        }
+      ],
+      "afterFilter": [
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 2591,
+          "rid": 2591,
+          "cost": 4124,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 5791,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "有難う",
+          "lid": 2591,
+          "rid": 2591,
+          "cost": 5870,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "有り難う",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 6568,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "有難う",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 6819,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "アリガトウ",
+          "lid": 2591,
+          "rid": 2591,
+          "cost": 8239,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 783,
+          "rid": 16,
+          "cost": 9492,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 57,
+          "rid": 2546,
+          "cost": 9649,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "有りがとう",
+          "lid": 842,
+          "rid": 2546,
+          "cost": 9821,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 783,
+          "rid": 2546,
+          "cost": 10021,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "難有う",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 10159,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "在り難う",
+          "lid": 842,
+          "rid": 2552,
+          "cost": 10797,
+          "attributes": []
+        },
+        {
+          "key": "ありがとぅ",
+          "value": "ありがとぅ",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 11077,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 57,
+          "rid": 16,
+          "cost": 12417,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "あり難う",
+          "lid": 644,
+          "rid": 2552,
+          "cost": 12475,
+          "attributes": []
+        },
+        {
+          "key": "ありがとう",
+          "value": "ありがとう",
+          "lid": 644,
+          "rid": 2546,
+          "cost": 12515,
+          "attributes": []
+        },
+        {
+          "key": "ありがとぅ",
+          "value": "有り難ぅ",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 13807,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ありがとぅ",
+          "value": "有難ぅ",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 14451,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ありがとぅ",
+          "value": "ありがとぅ",
+          "lid": 644,
+          "rid": 2546,
+          "cost": 16052,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ありがとぅ",
+          "value": "難有ぅ",
+          "lid": 2444,
+          "rid": 2444,
+          "cost": 18944,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        }
+      ]
+    },
+    {
+      "input": "とうきょう",
+      "beforeFilter": [
+        {
+          "key": "とうきょう",
+          "value": "東京",
+          "lid": 1927,
+          "rid": 1927,
+          "cost": 4656,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "東京",
+          "lid": 1927,
+          "rid": 1927,
+          "cost": 4656,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "TOKYO",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 6887,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "TOKYO",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 6887,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "トウキョウ",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 8238,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "トウキョウ",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 8238,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "東京",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 8395,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "東京",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 8395,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "東響",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 8783,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "東響",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 8783,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "トウキョウ",
+          "lid": 1927,
+          "rid": 1927,
+          "cost": 9401,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "トウキョウ",
+          "lid": 1927,
+          "rid": 1927,
+          "cost": 9401,
+          "attributes": []
+        },
+        {
+          "key": "どうきょう",
+          "value": "道教",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 9921,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうきょう",
+          "value": "道教",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 9921,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうきょう",
+          "value": "同郷",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 9954,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうきょう",
+          "value": "同郷",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 9954,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "とうきょう",
+          "value": "当教",
+          "lid": 2619,
+          "rid": 1851,
+          "cost": 10052,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "当教",
+          "lid": 2619,
+          "rid": 1851,
+          "cost": 10052,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "凍京",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 10233,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "凍京",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 10233,
+          "attributes": []
+        },
+        {
+          "key": "どうきょう",
+          "value": "銅鏡",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 10692,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうきょう",
+          "value": "銅鏡",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 10692,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうきょう",
+          "value": "道鏡",
+          "lid": 1921,
+          "rid": 1921,
+          "cost": 11629,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうきょう",
+          "value": "道鏡",
+          "lid": 1921,
+          "rid": 1921,
+          "cost": 11629,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうぎょう",
+          "value": "同業",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 11694,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうぎょう",
+          "value": "同業",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 11694,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "とうきょう",
+          "value": "冬響",
+          "lid": 1921,
+          "rid": 1921,
+          "cost": 12979,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "冬響",
+          "lid": 1921,
+          "rid": 1921,
+          "cost": 12979,
+          "attributes": []
+        },
+        {
+          "key": "とうぎょう",
+          "value": "東行",
+          "lid": 1923,
+          "rid": 1922,
+          "cost": 13105,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "とうぎょう",
+          "value": "東行",
+          "lid": 1923,
+          "rid": 1922,
+          "cost": 13105,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうきょう",
+          "value": "道京",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 13670,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうきょう",
+          "value": "道京",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 13670,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうきょう",
+          "value": "道教",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 13778,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうきょう",
+          "value": "道教",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 13778,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうぎょう",
+          "value": "童形",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 14450,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうぎょう",
+          "value": "童形",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 14450,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "とうきょう",
+          "value": "とうきょう",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 14451,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "とうきょう",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 14451,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "トウキョウ",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 14452,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "トウキョウ",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 14452,
+          "attributes": []
+        }
+      ],
+      "afterFilter": [
+        {
+          "key": "とうきょう",
+          "value": "東京",
+          "lid": 1927,
+          "rid": 1927,
+          "cost": 4656,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "TOKYO",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 6887,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "トウキョウ",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 8238,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "東京",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 8395,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "東響",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 8783,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "トウキョウ",
+          "lid": 1927,
+          "rid": 1927,
+          "cost": 9401,
+          "attributes": []
+        },
+        {
+          "key": "どうきょう",
+          "value": "道教",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 9921,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうきょう",
+          "value": "同郷",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 9954,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "とうきょう",
+          "value": "当教",
+          "lid": 2619,
+          "rid": 1851,
+          "cost": 10052,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "凍京",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 10233,
+          "attributes": []
+        },
+        {
+          "key": "どうきょう",
+          "value": "銅鏡",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 10692,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうきょう",
+          "value": "道鏡",
+          "lid": 1921,
+          "rid": 1921,
+          "cost": 11629,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうぎょう",
+          "value": "同業",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 11694,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "とうきょう",
+          "value": "冬響",
+          "lid": 1921,
+          "rid": 1921,
+          "cost": 12979,
+          "attributes": []
+        },
+        {
+          "key": "とうぎょう",
+          "value": "東行",
+          "lid": 1923,
+          "rid": 1922,
+          "cost": 13105,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうきょう",
+          "value": "道京",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 13670,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうきょう",
+          "value": "道教",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 13778,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "どうぎょう",
+          "value": "童形",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 14450,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "とうきょう",
+          "value": "とうきょう",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 14451,
+          "attributes": []
+        },
+        {
+          "key": "とうきょう",
+          "value": "トウキョウ",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 14452,
+          "attributes": []
+        }
+      ]
+    },
+    {
+      "input": "にほんご",
+      "beforeFilter": [
+        {
+          "key": "にほんご",
+          "value": "日本語",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 5159,
+          "attributes": []
+        },
+        {
+          "key": "にほんご",
+          "value": "日本語",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 5159,
+          "attributes": []
+        },
+        {
+          "key": "にほんご",
+          "value": "ニホンゴ",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 9235,
+          "attributes": []
+        },
+        {
+          "key": "にほんご",
+          "value": "ニホンゴ",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 9235,
+          "attributes": []
+        },
+        {
+          "key": "にぽんご",
+          "value": "ニポンゴ",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 13297,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "にぽんご",
+          "value": "ニポンゴ",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 13297,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "にほんご",
+          "value": "日本語",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 16048,
+          "attributes": []
+        },
+        {
+          "key": "にほんご",
+          "value": "日本語",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 16048,
+          "attributes": []
+        },
+        {
+          "key": "にほんご",
+          "value": "にほんご",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 16049,
+          "attributes": []
+        },
+        {
+          "key": "にほんご",
+          "value": "にほんご",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 16049,
+          "attributes": []
+        },
+        {
+          "key": "にほんご",
+          "value": "ニホンゴ",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 16050,
+          "attributes": []
+        },
+        {
+          "key": "にほんご",
+          "value": "ニホンゴ",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 16050,
+          "attributes": []
+        }
+      ],
+      "afterFilter": [
+        {
+          "key": "にほんご",
+          "value": "日本語",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 5159,
+          "attributes": []
+        },
+        {
+          "key": "にほんご",
+          "value": "ニホンゴ",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 9235,
+          "attributes": []
+        },
+        {
+          "key": "にぽんご",
+          "value": "ニポンゴ",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 13297,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "にほんご",
+          "value": "日本語",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 16048,
+          "attributes": []
+        },
+        {
+          "key": "にほんご",
+          "value": "にほんご",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 16049,
+          "attributes": []
+        },
+        {
+          "key": "にほんご",
+          "value": "ニホンゴ",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 16050,
+          "attributes": []
+        }
+      ]
+    },
+    {
+      "input": "わたしは",
+      "beforeFilter": [
+        {
+          "key": "わたしは",
+          "value": "私は",
+          "lid": 1902,
+          "rid": 283,
+          "cost": 4450,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "私は",
+          "lid": 1902,
+          "rid": 283,
+          "cost": 4450,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "わたしは",
+          "lid": 1900,
+          "rid": 283,
+          "cost": 5607,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "わたしは",
+          "lid": 1900,
+          "rid": 283,
+          "cost": 5607,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "渡しは",
+          "lid": 842,
+          "rid": 283,
+          "cost": 7748,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "渡しは",
+          "lid": 842,
+          "rid": 283,
+          "cost": 7748,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "ワタシは",
+          "lid": 1851,
+          "rid": 283,
+          "cost": 8151,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "ワタシは",
+          "lid": 1851,
+          "rid": 283,
+          "cost": 8151,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "渡しは",
+          "lid": 1851,
+          "rid": 283,
+          "cost": 8296,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "渡しは",
+          "lid": 1851,
+          "rid": 283,
+          "cost": 8296,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "ワタシハ",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 9363,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "ワタシハ",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 9363,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "渡は",
+          "lid": 1924,
+          "rid": 283,
+          "cost": 9847,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "渡は",
+          "lid": 1924,
+          "rid": 283,
+          "cost": 9847,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "わたしは",
+          "lid": 842,
+          "rid": 283,
+          "cost": 10116,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "わたしは",
+          "lid": 842,
+          "rid": 283,
+          "cost": 10116,
+          "attributes": []
+        },
+        {
+          "key": "わたしば",
+          "value": "渡し場",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 10687,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わたしば",
+          "value": "渡し場",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 10687,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わだしは",
+          "value": "和田氏は",
+          "lid": 1841,
+          "rid": 283,
+          "cost": 12384,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わだしは",
+          "value": "和田氏は",
+          "lid": 1841,
+          "rid": 283,
+          "cost": 12384,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わたしは",
+          "value": "渡氏は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 12524,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "渡氏は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 12524,
+          "attributes": []
+        },
+        {
+          "key": "わだしは",
+          "value": "和田は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 12538,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わだしは",
+          "value": "和田は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 12538,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わたしは",
+          "value": "渡士は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 12655,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "渡士は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 12655,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "私は",
+          "lid": 1851,
+          "rid": 283,
+          "cost": 12824,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "私は",
+          "lid": 1851,
+          "rid": 283,
+          "cost": 12824,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "渡司は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 12897,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "渡司は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 12897,
+          "attributes": []
+        },
+        {
+          "key": "わだしは",
+          "value": "和田氏は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 13139,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わだしは",
+          "value": "和田氏は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 13139,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わたしは",
+          "value": "綿氏は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 13159,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "綿氏は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 13159,
+          "attributes": []
+        },
+        {
+          "key": "わたしば",
+          "value": "渡場",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 13419,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わたしば",
+          "value": "渡場",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 13419,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わだしは",
+          "value": "和出汁は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 13867,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わだしは",
+          "value": "和出汁は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 13867,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わたしは",
+          "value": "ワタしは",
+          "lid": 1851,
+          "rid": 283,
+          "cost": 14888,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "ワタしは",
+          "lid": 1851,
+          "rid": 283,
+          "cost": 14888,
+          "attributes": []
+        }
+      ],
+      "afterFilter": [
+        {
+          "key": "わたしは",
+          "value": "私は",
+          "lid": 1902,
+          "rid": 283,
+          "cost": 4450,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "わたしは",
+          "lid": 1900,
+          "rid": 283,
+          "cost": 5607,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "渡しは",
+          "lid": 842,
+          "rid": 283,
+          "cost": 7748,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "ワタシは",
+          "lid": 1851,
+          "rid": 283,
+          "cost": 8151,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "渡しは",
+          "lid": 1851,
+          "rid": 283,
+          "cost": 8296,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "ワタシハ",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 9363,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "渡は",
+          "lid": 1924,
+          "rid": 283,
+          "cost": 9847,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "わたしは",
+          "lid": 842,
+          "rid": 283,
+          "cost": 10116,
+          "attributes": []
+        },
+        {
+          "key": "わたしば",
+          "value": "渡し場",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 10687,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わだしは",
+          "value": "和田氏は",
+          "lid": 1841,
+          "rid": 283,
+          "cost": 12384,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わたしは",
+          "value": "渡氏は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 12524,
+          "attributes": []
+        },
+        {
+          "key": "わだしは",
+          "value": "和田は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 12538,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わたしは",
+          "value": "渡士は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 12655,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "私は",
+          "lid": 1851,
+          "rid": 283,
+          "cost": 12824,
+          "attributes": []
+        },
+        {
+          "key": "わたしは",
+          "value": "渡司は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 12897,
+          "attributes": []
+        },
+        {
+          "key": "わだしは",
+          "value": "和田氏は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 13139,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わたしは",
+          "value": "綿氏は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 13159,
+          "attributes": []
+        },
+        {
+          "key": "わたしば",
+          "value": "渡場",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 13419,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わだしは",
+          "value": "和出汁は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 13867,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "わたしは",
+          "value": "ワタしは",
+          "lid": 1851,
+          "rid": 283,
+          "cost": 14888,
+          "attributes": []
+        }
+      ]
+    },
+    {
+      "input": "これは",
+      "beforeFilter": [
+        {
+          "key": "これは",
+          "value": "これは",
+          "lid": 1906,
+          "rid": 283,
+          "cost": 4313,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "これは",
+          "lid": 1906,
+          "rid": 283,
+          "cost": 4313,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "コレは",
+          "lid": 1899,
+          "rid": 283,
+          "cost": 6639,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "コレは",
+          "lid": 1899,
+          "rid": 283,
+          "cost": 6639,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "之は",
+          "lid": 1899,
+          "rid": 283,
+          "cost": 7389,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "之は",
+          "lid": 1899,
+          "rid": 283,
+          "cost": 7389,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "此れは",
+          "lid": 1899,
+          "rid": 283,
+          "cost": 8361,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "此れは",
+          "lid": 1899,
+          "rid": 283,
+          "cost": 8361,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "来れは",
+          "lid": 701,
+          "rid": 283,
+          "cost": 9583,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "来れは",
+          "lid": 701,
+          "rid": 283,
+          "cost": 9583,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "惟は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 10395,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "惟は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 10395,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "是は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 10440,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "是は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 10440,
+          "attributes": []
+        },
+        {
+          "key": "これば",
+          "value": "これば",
+          "lid": 833,
+          "rid": 361,
+          "cost": 11574,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "これば",
+          "value": "これば",
+          "lid": 833,
+          "rid": 361,
+          "cost": 11574,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "これば",
+          "value": "凝れば",
+          "lid": 833,
+          "rid": 361,
+          "cost": 11918,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "これば",
+          "value": "凝れば",
+          "lid": 833,
+          "rid": 361,
+          "cost": 11918,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "これぱ",
+          "value": "コレパ",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 12164,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "これぱ",
+          "value": "コレパ",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 12164,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ごれは",
+          "value": "ゴレは",
+          "lid": 1851,
+          "rid": 283,
+          "cost": 12539,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ごれは",
+          "value": "ゴレは",
+          "lid": 1851,
+          "rid": 283,
+          "cost": 12539,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "これは",
+          "value": "凝れは",
+          "lid": 836,
+          "rid": 283,
+          "cost": 12942,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "凝れは",
+          "lid": 836,
+          "rid": 283,
+          "cost": 12942,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "これは",
+          "lid": 833,
+          "rid": 283,
+          "cost": 13078,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "これは",
+          "lid": 833,
+          "rid": 283,
+          "cost": 13078,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "凝れは",
+          "lid": 833,
+          "rid": 283,
+          "cost": 13422,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "凝れは",
+          "lid": 833,
+          "rid": 283,
+          "cost": 13422,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "来れは",
+          "lid": 694,
+          "rid": 283,
+          "cost": 14367,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "来れは",
+          "lid": 694,
+          "rid": 283,
+          "cost": 14367,
+          "attributes": []
+        },
+        {
+          "key": "これば",
+          "value": "梱れば",
+          "lid": 833,
+          "rid": 361,
+          "cost": 15168,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "これば",
+          "value": "梱れば",
+          "lid": 833,
+          "rid": 361,
+          "cost": 15168,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "これは",
+          "value": "樵れは",
+          "lid": 836,
+          "rid": 283,
+          "cost": 15564,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "樵れは",
+          "lid": 836,
+          "rid": 283,
+          "cost": 15564,
+          "attributes": []
+        },
+        {
+          "key": "これば",
+          "value": "樵れば",
+          "lid": 833,
+          "rid": 361,
+          "cost": 15761,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "これば",
+          "value": "樵れば",
+          "lid": 833,
+          "rid": 361,
+          "cost": 15761,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "これは",
+          "value": "梱れは",
+          "lid": 836,
+          "rid": 283,
+          "cost": 15866,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "梱れは",
+          "lid": 836,
+          "rid": 283,
+          "cost": 15866,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "梱れは",
+          "lid": 833,
+          "rid": 283,
+          "cost": 16672,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "梱れは",
+          "lid": 833,
+          "rid": 283,
+          "cost": 16672,
+          "attributes": []
+        }
+      ],
+      "afterFilter": [
+        {
+          "key": "これは",
+          "value": "これは",
+          "lid": 1906,
+          "rid": 283,
+          "cost": 4313,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "コレは",
+          "lid": 1899,
+          "rid": 283,
+          "cost": 6639,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "之は",
+          "lid": 1899,
+          "rid": 283,
+          "cost": 7389,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "此れは",
+          "lid": 1899,
+          "rid": 283,
+          "cost": 8361,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "来れは",
+          "lid": 701,
+          "rid": 283,
+          "cost": 9583,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "惟は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 10395,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "是は",
+          "lid": 1923,
+          "rid": 283,
+          "cost": 10440,
+          "attributes": []
+        },
+        {
+          "key": "これば",
+          "value": "これば",
+          "lid": 833,
+          "rid": 361,
+          "cost": 11574,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "これば",
+          "value": "凝れば",
+          "lid": 833,
+          "rid": 361,
+          "cost": 11918,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "これぱ",
+          "value": "コレパ",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 12164,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "ごれは",
+          "value": "ゴレは",
+          "lid": 1851,
+          "rid": 283,
+          "cost": 12539,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "これは",
+          "value": "凝れは",
+          "lid": 836,
+          "rid": 283,
+          "cost": 12942,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "これは",
+          "lid": 833,
+          "rid": 283,
+          "cost": 13078,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "凝れは",
+          "lid": 833,
+          "rid": 283,
+          "cost": 13422,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "来れは",
+          "lid": 694,
+          "rid": 283,
+          "cost": 14367,
+          "attributes": []
+        },
+        {
+          "key": "これば",
+          "value": "梱れば",
+          "lid": 833,
+          "rid": 361,
+          "cost": 15168,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "これは",
+          "value": "樵れは",
+          "lid": 836,
+          "rid": 283,
+          "cost": 15564,
+          "attributes": []
+        },
+        {
+          "key": "これば",
+          "value": "樵れば",
+          "lid": 833,
+          "rid": 361,
+          "cost": 15761,
+          "attributes": ["KEY_EXPANDED_IN_DICTIONARY"]
+        },
+        {
+          "key": "これは",
+          "value": "梱れは",
+          "lid": 836,
+          "rid": 283,
+          "cost": 15866,
+          "attributes": []
+        },
+        {
+          "key": "これは",
+          "value": "梱れは",
+          "lid": 833,
+          "rid": 283,
+          "cost": 16672,
+          "attributes": []
+        }
+      ]
+    },
+    {
+      "input": "かんじ",
+      "beforeFilter": [
+        {
+          "key": "かんじ",
+          "value": "感じ",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 4649,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "感じ",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 4649,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "感じ",
+          "lid": 701,
+          "rid": 701,
+          "cost": 5086,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "感じ",
+          "lid": 701,
+          "rid": 701,
+          "cost": 5086,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "漢字",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 5557,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "漢字",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 5557,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "幹事",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 6452,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "幹事",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 6452,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "監事",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 7048,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "監事",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 7048,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "幹事",
+          "lid": 2040,
+          "rid": 2040,
+          "cost": 7188,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "幹事",
+          "lid": 2040,
+          "rid": 2040,
+          "cost": 7188,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "カンジ",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 7334,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "カンジ",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 7334,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "感じ",
+          "lid": 694,
+          "rid": 694,
+          "cost": 7420,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "感じ",
+          "lid": 694,
+          "rid": 694,
+          "cost": 7420,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "かんじ",
+          "lid": 701,
+          "rid": 701,
+          "cost": 7888,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "かんじ",
+          "lid": 701,
+          "rid": 701,
+          "cost": 7888,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "かんじ",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 8547,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "かんじ",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 8547,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "監事",
+          "lid": 2040,
+          "rid": 2040,
+          "cost": 8594,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "監事",
+          "lid": 2040,
+          "rid": 2040,
+          "cost": 8594,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "莞爾",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 9248,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "莞爾",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 9248,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "換字",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 9259,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "換字",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 9259,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "巻次",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 9351,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "巻次",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 9351,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "寛治",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 9650,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "寛治",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 9650,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "観じ",
+          "lid": 701,
+          "rid": 701,
+          "cost": 9672,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "観じ",
+          "lid": 701,
+          "rid": 701,
+          "cost": 9672,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "幹二",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 9888,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "幹二",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 9888,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "莞爾",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 10141,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "莞爾",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 10141,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "観寺",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 10219,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "観寺",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 10219,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "完治",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 10228,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "完治",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 10228,
+          "attributes": []
+        }
+      ],
+      "afterFilter": [
+        {
+          "key": "かんじ",
+          "value": "感じ",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 4649,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "感じ",
+          "lid": 701,
+          "rid": 701,
+          "cost": 5086,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "漢字",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 5557,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "幹事",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 6452,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "監事",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 7048,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "幹事",
+          "lid": 2040,
+          "rid": 2040,
+          "cost": 7188,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "カンジ",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 7334,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "感じ",
+          "lid": 694,
+          "rid": 694,
+          "cost": 7420,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "かんじ",
+          "lid": 701,
+          "rid": 701,
+          "cost": 7888,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "かんじ",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 8547,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "監事",
+          "lid": 2040,
+          "rid": 2040,
+          "cost": 8594,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "莞爾",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 9248,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "換字",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 9259,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "巻次",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 9351,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "寛治",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 9650,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "観じ",
+          "lid": 701,
+          "rid": 701,
+          "cost": 9672,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "幹二",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 9888,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "莞爾",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 10141,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "観寺",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 10219,
+          "attributes": []
+        },
+        {
+          "key": "かんじ",
+          "value": "完治",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 10228,
+          "attributes": []
+        }
+      ]
+    },
+    {
+      "input": "やまだたろう",
+      "beforeFilter": [
+        {
+          "key": "やまだ",
+          "value": "山田",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 6795,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山田",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 6795,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "やまだ",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 8129,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "やまだ",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 8129,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山田",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 10231,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山田",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 10231,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "ヤマダ",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 10325,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "ヤマダ",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 10325,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山田",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 10745,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山田",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 10745,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山だ",
+          "lid": 1851,
+          "rid": 165,
+          "cost": 10964,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山だ",
+          "lid": 1851,
+          "rid": 165,
+          "cost": 10964,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山多",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 12276,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山多",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 12276,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "ヤマだ",
+          "lid": 1851,
+          "rid": 165,
+          "cost": 12492,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "ヤマだ",
+          "lid": 1851,
+          "rid": 165,
+          "cost": 12492,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "矢満田",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 12689,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "矢満田",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 12689,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山だ",
+          "lid": 1923,
+          "rid": 165,
+          "cost": 14540,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山だ",
+          "lid": 1923,
+          "rid": 165,
+          "cost": 14540,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "ヤマだ",
+          "lid": 1922,
+          "rid": 165,
+          "cost": 16136,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "ヤマだ",
+          "lid": 1922,
+          "rid": 165,
+          "cost": 16136,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "耶麻だ",
+          "lid": 1923,
+          "rid": 165,
+          "cost": 17257,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "耶麻だ",
+          "lid": 1923,
+          "rid": 165,
+          "cost": 17257,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山田",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 19409,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山田",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 19409,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "やまだ",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 19410,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "やまだ",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 19410,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "ヤマダ",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 19411,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "ヤマダ",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 19411,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太郎",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 4421,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太郎",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 4421,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "たろう",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 5515,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "たろう",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 5515,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "タロウ",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 5702,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "タロウ",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 5702,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太朗",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 5872,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太朗",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 5872,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太郎",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 6032,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太郎",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 6032,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "大郎",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 6939,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "大郎",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 6939,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太郎",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 6210,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太郎",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 6210,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "多朗",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 7068,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "多朗",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 7068,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太良",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 7271,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太良",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 7271,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "多郎",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 7389,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "多郎",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 7389,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "大朗",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 7790,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "大朗",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 7790,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "田老",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 8225,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "田老",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 8225,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太郎",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 8231,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太郎",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 8231,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "田老",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 8318,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "田老",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 8318,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "祐洋",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 9453,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "祐洋",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 9453,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "タロう",
+          "lid": 1922,
+          "rid": 35,
+          "cost": 10204,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "タロう",
+          "lid": 1922,
+          "rid": 35,
+          "cost": 10204,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "田老",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 11072,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "田老",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 11072,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太呂う",
+          "lid": 1922,
+          "rid": 35,
+          "cost": 11154,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太呂う",
+          "lid": 1922,
+          "rid": 35,
+          "cost": 11154,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "足ろう",
+          "lid": 838,
+          "rid": 35,
+          "cost": 11686,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "足ろう",
+          "lid": 838,
+          "rid": 35,
+          "cost": 11686,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "たろう",
+          "lid": 838,
+          "rid": 35,
+          "cost": 11724,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "たろう",
+          "lid": 838,
+          "rid": 35,
+          "cost": 11724,
+          "attributes": []
+        }
+      ],
+      "afterFilter": [
+        {
+          "key": "やまだ",
+          "value": "山田",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 6795,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "やまだ",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 8129,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山田",
+          "lid": 1851,
+          "rid": 1851,
+          "cost": 10231,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "ヤマダ",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 10325,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山田",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 10745,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山だ",
+          "lid": 1851,
+          "rid": 165,
+          "cost": 10964,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山多",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 12276,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "ヤマだ",
+          "lid": 1851,
+          "rid": 165,
+          "cost": 12492,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "矢満田",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 12689,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山だ",
+          "lid": 1923,
+          "rid": 165,
+          "cost": 14540,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "ヤマだ",
+          "lid": 1922,
+          "rid": 165,
+          "cost": 16136,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "耶麻だ",
+          "lid": 1923,
+          "rid": 165,
+          "cost": 17257,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "山田",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 19409,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "やまだ",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 19410,
+          "attributes": []
+        },
+        {
+          "key": "やまだ",
+          "value": "ヤマダ",
+          "lid": 1929,
+          "rid": 1929,
+          "cost": 19411,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太郎",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 4421,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "たろう",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 5515,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "タロウ",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 5702,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太朗",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 5872,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太郎",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 6032,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "大郎",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 6939,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太郎",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 6210,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "多朗",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 7068,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太良",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 7271,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "多郎",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 7389,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "大朗",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 7790,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "田老",
+          "lid": 1923,
+          "rid": 1923,
+          "cost": 8225,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太郎",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 8231,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "田老",
+          "lid": 1924,
+          "rid": 1924,
+          "cost": 8318,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "祐洋",
+          "lid": 1922,
+          "rid": 1922,
+          "cost": 9453,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "タロう",
+          "lid": 1922,
+          "rid": 35,
+          "cost": 10204,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "田老",
+          "lid": 1920,
+          "rid": 1920,
+          "cost": 11072,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "太呂う",
+          "lid": 1922,
+          "rid": 35,
+          "cost": 11154,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "足ろう",
+          "lid": 838,
+          "rid": 35,
+          "cost": 11686,
+          "attributes": []
+        },
+        {
+          "key": "たろう",
+          "value": "たろう",
+          "lid": 838,
+          "rid": 35,
+          "cost": 11724,
+          "attributes": []
+        }
+      ]
+    },
+    {
+      "input": "123",
+      "beforeFilter": [
+        {
+          "key": "123",
+          "value": "123",
+          "lid": 2044,
+          "rid": 2044,
+          "cost": 37514,
+          "attributes": []
+        },
+        {
+          "key": "123",
+          "value": "123",
+          "lid": 2044,
+          "rid": 2044,
+          "cost": 37514,
+          "attributes": []
+        }
+      ],
+      "afterFilter": [
+        {
+          "key": "123",
+          "value": "123",
+          "lid": 2044,
+          "rid": 2044,
+          "cost": 37514,
+          "attributes": []
+        }
+      ]
+    },
+    {
+      "input": "第一",
+      "beforeFilter": [
+        {
+          "key": "第",
+          "value": "第",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 35332,
+          "attributes": []
+        },
+        {
+          "key": "第",
+          "value": "第",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 35332,
+          "attributes": []
+        },
+        {
+          "key": "一",
+          "value": "一",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 34392,
+          "attributes": []
+        },
+        {
+          "key": "一",
+          "value": "一",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 34392,
+          "attributes": []
+        }
+      ],
+      "afterFilter": [
+        {
+          "key": "第",
+          "value": "第",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 35332,
+          "attributes": []
+        },
+        {
+          "key": "一",
+          "value": "一",
+          "lid": 1841,
+          "rid": 1841,
+          "cost": 34392,
+          "attributes": []
+        }
+      ]
+    }
+  ]
+}

@@ -69,6 +69,37 @@ data class GoldenImmutableConverterFixture(
     val cases: List<GoldenImmutableConverterCase>,
 )
 
+data class GoldenNBestGeneratorFixture(
+    val engineDataVersion: String,
+    val cases: List<GoldenNBestGeneratorCase>,
+)
+
+data class GoldenNBestGeneratorCase(
+    val input: String,
+    val requestType: String,
+    val segments: List<GoldenConverterSegment>,
+)
+
+data class GoldenCandidateFilterFixture(
+    val engineDataVersion: String,
+    val cases: List<GoldenCandidateFilterCase>,
+)
+
+data class GoldenCandidateFilterCase(
+    val input: String,
+    val beforeFilter: List<GoldenFilterCandidate>,
+    val afterFilter: List<GoldenFilterCandidate>,
+)
+
+data class GoldenFilterCandidate(
+    val key: String,
+    val value: String,
+    val lid: Int,
+    val rid: Int,
+    val cost: Int,
+    val attributes: List<String>,
+)
+
 data class GoldenImmutableConverterCase(
     val input: String,
     val requestType: String,
@@ -283,6 +314,42 @@ object MozcDictionaryGoldenSupport {
         )
     }
 
+    fun readNBestGeneratorFixture(path: Path): GoldenNBestGeneratorFixture {
+        val root = JsonParser(Files.readString(path)).parseObject()
+        root.requireKeys("engineDataVersion", "cases")
+        return GoldenNBestGeneratorFixture(
+            engineDataVersion = root.string("engineDataVersion"),
+            cases = root.array("cases").map { caseValue ->
+                val case = caseValue.asObject()
+                case.requireKeys("input", "requestType", "segments")
+                GoldenNBestGeneratorCase(
+                    input = case.string("input"),
+                    requestType = case.string("requestType"),
+                    segments = case.array("segments").map { segmentValue ->
+                        readConverterSegment(segmentValue.asObject())
+                    },
+                )
+            },
+        )
+    }
+
+    fun readCandidateFilterFixture(path: Path): GoldenCandidateFilterFixture {
+        val root = JsonParser(Files.readString(path)).parseObject()
+        root.requireKeys("engineDataVersion", "cases")
+        return GoldenCandidateFilterFixture(
+            engineDataVersion = root.string("engineDataVersion"),
+            cases = root.array("cases").map { caseValue ->
+                val case = caseValue.asObject()
+                case.requireKeys("input", "beforeFilter", "afterFilter")
+                GoldenCandidateFilterCase(
+                    input = case.string("input"),
+                    beforeFilter = case.filterCandidates("beforeFilter"),
+                    afterFilter = case.filterCandidates("afterFilter"),
+                )
+            },
+        )
+    }
+
     fun collect(block: ((Token) -> Unit) -> Unit): List<GoldenToken> {
         val result = ArrayList<GoldenToken>()
         block { token ->
@@ -314,6 +381,58 @@ object MozcDictionaryGoldenSupport {
         return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
     }
 
+    private fun readConverterSegment(segment: JsonObject): GoldenConverterSegment {
+        segment.requireKeys("index", "key", "candidates")
+        return GoldenConverterSegment(
+            index = segment.int("index"),
+            key = segment.string("key"),
+            candidates = segment.array("candidates").map { candidateValue ->
+                val candidate = candidateValue.asObject()
+                candidate.requireKeys(
+                    "index",
+                    "key",
+                    "value",
+                    "contentKey",
+                    "contentValue",
+                    "cost",
+                    "wcost",
+                    "structureCost",
+                    "lid",
+                    "rid",
+                    "attributes",
+                    "innerSegments",
+                )
+                GoldenConverterCandidate(
+                    index = candidate.int("index"),
+                    key = candidate.string("key"),
+                    value = candidate.string("value"),
+                    contentKey = candidate.string("contentKey"),
+                    contentValue = candidate.string("contentValue"),
+                    cost = candidate.int("cost"),
+                    wcost = candidate.int("wcost"),
+                    structureCost = candidate.int("structureCost"),
+                    lid = candidate.int("lid"),
+                    rid = candidate.int("rid"),
+                    attributes = candidate.stringArray("attributes"),
+                    consumedKeySize = candidate.optionalInt("consumedKeySize") ?: 0,
+                    innerSegments = candidate.array("innerSegments").map { innerValue ->
+                        val inner = innerValue.asObject()
+                        inner.requireKeys("index", "key", "value", "contentKey", "contentValue")
+                        GoldenInnerSegment(
+                            index = inner.int("index"),
+                            key = inner.string("key"),
+                            value = inner.string("value"),
+                            contentKey = inner.string("contentKey"),
+                            contentValue = inner.string("contentValue"),
+                        )
+                    },
+                    description = candidate.optionalString("description") ?: "",
+                    category = candidate.optionalString("category") ?: "DEFAULT_CATEGORY",
+                )
+            },
+        )
+    }
+
     private fun JsonObject.tokens(name: String): List<GoldenToken> =
         array(name).map { value ->
             val token = value.asObject()
@@ -324,6 +443,20 @@ object MozcDictionaryGoldenSupport {
                 lid = token.int("lid"),
                 rid = token.int("rid"),
                 cost = token.int("cost"),
+            )
+        }
+
+    private fun JsonObject.filterCandidates(name: String): List<GoldenFilterCandidate> =
+        array(name).map { value ->
+            val candidate = value.asObject()
+            candidate.requireKeys("key", "value", "lid", "rid", "cost", "attributes")
+            GoldenFilterCandidate(
+                key = candidate.string("key"),
+                value = candidate.string("value"),
+                lid = candidate.int("lid"),
+                rid = candidate.int("rid"),
+                cost = candidate.int("cost"),
+                attributes = candidate.stringArray("attributes"),
             )
         }
 
@@ -345,7 +478,11 @@ private class JsonObject(
 
     fun string(name: String): String = (values.getValue(name) as JsonString).value
 
+    fun optionalString(name: String): String? = (values[name] as? JsonString)?.value
+
     fun int(name: String): Int = (values.getValue(name) as JsonNumber).value
+
+    fun optionalInt(name: String): Int? = (values[name] as? JsonNumber)?.value
 
     fun boolean(name: String): Boolean = (values.getValue(name) as JsonBoolean).value
 

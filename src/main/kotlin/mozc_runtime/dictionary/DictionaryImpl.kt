@@ -18,6 +18,16 @@ class DictionaryImpl(
         dictionaries.forEach { it.lookupPrefix(key, callback) }
     }
 
+    override fun lookupPrefixWithOptions(
+        key: String,
+        kanaModifierInsensitiveConversion: Boolean,
+        callback: (Token) -> Unit,
+    ) {
+        dictionaries.forEach { dictionary ->
+            dictionary.lookupPrefixWithOptions(key, kanaModifierInsensitiveConversion, callback)
+        }
+    }
+
     override fun lookupExact(key: String, callback: (Token) -> Unit) {
         dictionaries.forEach { it.lookupExact(key, callback) }
     }

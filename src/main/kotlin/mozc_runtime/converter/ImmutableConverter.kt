@@ -167,7 +167,7 @@ class ImmutableConverter(
             val isPrediction = options.requestType == RequestType.SUGGESTION ||
                 options.requestType == RequestType.PREDICTION
             if (!isPrediction && index + 1 == historySize) {
-                lookup(segmentsPos, options, isReverse, lattice).forEach { compoundNode ->
+                    lookup(segmentsPos, options, isReverse, lattice).forEach { compoundNode ->
                     if (compoundNode.key.utf8Size() <= rnode.key.utf8Size() ||
                         compoundNode.value.utf8Size() <= rnode.value.utf8Size() ||
                         !compoundNode.key.startsWith(rnode.key) ||
@@ -230,7 +230,7 @@ class ImmutableConverter(
                 }
             }
             lattice.insert(pos, rnodes)
-            insertCorrectedNodes(pos, key, keyCorrector, dictionary, lattice)
+            insertCorrectedNodes(pos, key, options, keyCorrector, dictionary, lattice)
         }
     }
 
@@ -243,7 +243,7 @@ class ImmutableConverter(
         if (isReverse) {
             dictionary.lookupReverse(keySubstr, callback)
         } else {
-            dictionary.lookupPrefix(keySubstr, callback)
+            dictionary.lookupPrefixWithOptions(keySubstr, options.kanaModifierInsensitiveConversion, callback)
         }
         addCharacterTypeBasedNodes(keySubstr, lattice, builder)
         return builder.result()
@@ -302,6 +302,7 @@ class ImmutableConverter(
     fun insertCorrectedNodes(
         pos: Int,
         key: String,
+        options: ConversionOptions,
         keyCorrector: KeyCorrector?,
         dictionary: DictionaryInterface,
         lattice: Lattice,
@@ -312,7 +313,7 @@ class ImmutableConverter(
             return
         }
         val builder = BaseNodeListBuilder(lattice.nodeAllocator(), MaxNodesSize)
-        dictionary.lookupPrefix(prefix) { token ->
+        dictionary.lookupPrefixWithOptions(prefix, options.kanaModifierInsensitiveConversion) { token ->
             val offset = keyCorrector.getOriginalOffset(pos, token.key.utf8Size())
             if (KeyCorrector.isValidPosition(offset) && offset != 0) {
                 val node = builder.newNodeFromToken(token)
@@ -688,6 +689,15 @@ class ImmutableConverter(
             prev = node
             node = node.next
         }
+        val nbestGenerator = NBestGenerator(
+            segmenter = segmenter,
+            connector = connector,
+            posMatcher = posMatcher,
+            lattice = lattice,
+        )
+        val originalKey = buildString {
+            segments.conversionSegments().forEach { append(it.key()) }
+        }
         var beginPos: Int? = null
         while (node != null && node.next != null) {
             if (beginPos == null) {
@@ -703,11 +713,9 @@ class ImmutableConverter(
             if (oldSegmentIndex in 0 until segments.segmentsSize()) {
                 segment.segmentType = segments.segment(oldSegmentIndex).segmentType
             }
-            val candidate = segment.addCandidate()
-            makeCandidateFromBestPath(prev, node.next ?: lattice.eosNode(), candidate)
-            if (options.requestType == RequestType.SUGGESTION) {
-                candidate.attributes = candidate.attributes or Attribute.REALTIME_CONVERSION
-            }
+            val nbestOptions = nbestOptionsFor(segment, isSingleSegment)
+            nbestGenerator.reset(prev, node.next ?: lattice.eosNode(), nbestOptions)
+            nbestGenerator.setCandidates(options, originalKey, maxCandidatesSize.coerceIn(1, 512), segment)
             if (node.nodeType == Node.NodeType.CON_NODE) {
                 segment.segmentType = Segment.SegmentType.FIXED_VALUE
             }
@@ -720,6 +728,19 @@ class ImmutableConverter(
             node = node.next
         }
         return result
+    }
+
+    private fun nbestOptionsFor(segment: Segment, isSingleSegment: Boolean): NBestOptions {
+        if (isSingleSegment) {
+            return NBestOptions(
+                boundaryCheckMode = BoundaryCheckMode.ONLY_EDGE,
+                candidateModes = setOf(CandidateMode.FILL_INNER_SEGMENT_INFO),
+            )
+        }
+        if (segment.segmentType == Segment.SegmentType.FIXED_BOUNDARY) {
+            return NBestOptions(boundaryCheckMode = BoundaryCheckMode.ONLY_MID)
+        }
+        return NBestOptions()
     }
 
     private fun insertDummyCandidates(segment: Segment, expandSize: Int) {

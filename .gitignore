@@ -48,5 +48,11 @@ bin/
 !/src/test/resources/perf/
 /src/test/resources/perf/*
 !/src/test/resources/perf/dictionary-build-baseline.properties
+!/src/test/resources/mozc_golden/
+/src/test/resources/mozc_golden/*
+!/src/test/resources/mozc_golden/converter/
+/src/test/resources/mozc_golden/converter/*
+!/src/test/resources/mozc_golden/converter/nbest_generator.json
+!/src/test/resources/mozc_golden/converter/candidate_filter.json
 /src/main/resources
 .gradle-user-home

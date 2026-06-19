@@ -53,6 +53,59 @@ class SystemDictionary(
         }
     }
 
+    override fun lookupPrefixWithOptions(
+        key: String,
+        kanaModifierInsensitiveConversion: Boolean,
+        callback: (Token) -> Unit,
+    ) {
+        if (!kanaModifierInsensitiveConversion) {
+            lookupPrefix(key, callback)
+            return
+        }
+        val encodedKey = codec.encodeKeyToBytes(key)
+        val table = KeyExpansionTable.hiragana(codec)
+        val actualKeyBuffer = ByteArray(LoudsTrieMaxDepth + 1)
+
+        fun traverse(node: LoudsTrie.Node, keyPos: Int, numExpanded: Int) {
+            if (keyTrie.isTerminalNode(node)) {
+                val actualKey = codec.decodeKey(actualKeyBuffer.copyOfRange(0, keyPos))
+                val keyId = keyTrie.keyIdOfTerminalNode(node)
+                decodeTokens(actualKey, tokenArray.get(keyId)) { info ->
+                    val token = info.token.toToken()
+                    val expandedToken = if (numExpanded > 0) {
+                        token.copy(
+                            cost = token.cost + getSpatialCostPenalty(numExpanded),
+                            attributes = token.attributes or Token.Attributes.KeyExpanded,
+                        )
+                    } else {
+                        token
+                    }
+                    callback(expandedToken)
+                }
+            }
+            if (keyPos == encodedKey.size) {
+                return
+            }
+            val current = encodedKey[keyPos]
+            val expanded = table.expandKey(current).toSet()
+            var child = keyTrie.moveToFirstChild(node)
+            while (keyTrie.isValidNode(child)) {
+                val label = keyTrie.edgeLabelToParentNode(child)
+                if (label in expanded) {
+                    actualKeyBuffer[keyPos] = label
+                    traverse(
+                        child,
+                        keyPos + 1,
+                        numExpanded + if (label == current) 0 else 1,
+                    )
+                }
+                child = keyTrie.moveToNextSibling(child)
+            }
+        }
+
+        traverse(LoudsTrie.Node(), 0, 0)
+    }
+
     override fun lookupExact(key: String, callback: (Token) -> Unit) {
         val keyId = keyTrie.exactSearch(codec.encodeKeyToBytes(key))
         if (keyId < 0) {
@@ -197,11 +250,14 @@ class SystemDictionary(
     }
 
     private fun runCallbackOnEachPrefix(
-        key: String,
+        sourceKey: String,
         encodedKey: ByteArray,
         callback: (Token) -> Unit,
         tokenFilter: (TokenInfo) -> Boolean,
     ) {
+        require(sourceKey.isNotEmpty() || encodedKey.isEmpty()) {
+            "Encoded key is present while source key is empty"
+        }
         keyTrie.prefixSearch(encodedKey) { prefixLength, node ->
             val prefix = codec.decodeKey(encodedKey.copyOfRange(0, prefixLength))
             val keyId = keyTrie.keyIdOfTerminalNode(node)
@@ -305,9 +361,13 @@ class SystemDictionary(
         private const val MinTokenArrayBlobSize: Int = 4
         private const val LookupLimit: Int = 64
         private const val LoudsTrieMaxDepth: Int = 256
+        private const val PerExpansionSpatialCostPenalty: Int = 2500
 
         fun fromMozcDataManager(dataManager: MozcDataManager): SystemDictionary =
             SystemDictionary(DictionaryFile(dataManager.section("dict")))
+
+        private fun getSpatialCostPenalty(numExpanded: Int): Int =
+            numExpanded * PerExpansionSpatialCostPenalty
 
         private fun readFrequentPos(buffer: ByteBuffer): IntArray {
             val data = buffer.asReadOnlyBuffer().slice().order(ByteOrder.LITTLE_ENDIAN)

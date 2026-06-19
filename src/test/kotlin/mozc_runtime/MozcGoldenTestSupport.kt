@@ -21,6 +21,8 @@ object MozcGoldenTestSupport {
             "dictionary/system_dictionary_lookup.json" -> assertContainsDictionaryTokenFields(path)
             "connector/connector_cost.json" -> assertContainsConnectorFields(path)
             "segmenter/segmenter_boundary.json" -> assertContainsSegmenterFields(path)
+            "converter/nbest_generator.json" -> assertContainsNBestGeneratorFields(path)
+            "converter/candidate_filter.json" -> assertContainsCandidateFilterFields(path)
             else -> assertContainsCandidateFields(path)
         }
         return path
@@ -103,5 +105,50 @@ object MozcGoldenTestSupport {
         )
         val missing = fields.filterNot { "\"$it\"" in text }
         assertTrue(missing.isEmpty(), "Segmenter fixture is missing required fields: path=$path missing=${missing.joinToString()}")
+    }
+
+    private fun assertContainsCandidateFilterFields(path: Path) {
+        val text = Files.readString(path)
+        val fields = listOf(
+            "engineDataVersion",
+            "cases",
+            "input",
+            "beforeFilter",
+            "afterFilter",
+            "key",
+            "value",
+            "lid",
+            "rid",
+            "cost",
+            "attributes",
+        )
+        val missing = fields.filterNot { "\"$it\"" in text }
+        assertTrue(missing.isEmpty(), "CandidateFilter fixture is missing required fields: path=$path missing=${missing.joinToString()}")
+    }
+
+    private fun assertContainsNBestGeneratorFields(path: Path) {
+        val text = Files.readString(path)
+        val fields = listOf(
+            "engineDataVersion",
+            "cases",
+            "input",
+            "requestType",
+            "segments",
+            "index",
+            "key",
+            "candidates",
+            "value",
+            "contentKey",
+            "contentValue",
+            "cost",
+            "wcost",
+            "structureCost",
+            "lid",
+            "rid",
+            "attributes",
+            "innerSegments",
+        )
+        val missing = fields.filterNot { "\"$it\"" in text }
+        assertTrue(missing.isEmpty(), "NBest fixture is missing required fields: path=$path missing=${missing.joinToString()}")
     }
 }

@@ -11,6 +11,7 @@ data class Token(
     object Attributes {
         const val None: Int = 0
         const val SpellingCorrection: Int = 1
+        const val KeyExpanded: Int = 1 shl 1
         const val SuffixDictionary: Int = 1 shl 6
         const val UserDictionary: Int = 1 shl 7
     }

@@ -138,7 +138,10 @@ val mozcGoldenDictionaryLookupFile = layout.projectDirectory.file("src/test/reso
 val mozcGoldenConnectorCostFile = layout.projectDirectory.file("src/test/resources/mozc_golden/connector/connector_cost.json")
 val mozcGoldenSegmenterBoundaryFile = layout.projectDirectory.file("src/test/resources/mozc_golden/segmenter/segmenter_boundary.json")
 val mozcGoldenImmutableConverterFile = layout.projectDirectory.file("src/test/resources/mozc_golden/converter/immutable_converter.json")
+val mozcGoldenNBestGeneratorFile = layout.projectDirectory.file("src/test/resources/mozc_golden/converter/nbest_generator.json")
+val mozcGoldenCandidateFilterFile = layout.projectDirectory.file("src/test/resources/mozc_golden/converter/candidate_filter.json")
 val mozcImmutableConverterHelperSource = layout.projectDirectory.file("tools/mozc_golden/mozc_immutable_converter_helper.cc")
+val mozcNBestCandidateFilterHelperSource = layout.projectDirectory.file("tools/mozc_golden/mozc_nbest_candidate_filter_helper.cc")
 val mozcIdDefFileProvider = providers.gradleProperty("mozcIdDefFile")
     .map { layout.projectDirectory.file(it) }
     .orElse(layout.projectDirectory.file("src/main/resources/id.def"))
@@ -358,17 +361,21 @@ val writeMozcDataManifest = tasks.register<JavaExec>("writeMozcDataManifest") {
 
 val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
     group = "verification"
-    description = "Builds official Mozc helper binaries and writes dictionary, connector, segmenter, and immutable converter golden fixtures."
+    description = "Builds official Mozc helper binaries and writes dictionary, connector, segmenter, immutable converter, N-best, and candidate filter golden fixtures."
     dependsOn(generateOfficialMozcData)
     inputs.file(generatedMozcDataFile)
     inputs.file(mozcImmutableConverterHelperSource)
+    inputs.file(mozcNBestCandidateFilterHelperSource)
     inputs.property("dictionaryLookupHelperVersion", "1")
     inputs.property("connectorSegmenterHelperVersion", "1")
     inputs.property("immutableConverterHelperVersion", "1")
+    inputs.property("nbestCandidateFilterHelperVersion", "1")
     outputs.file(mozcGoldenDictionaryLookupFile)
     outputs.file(mozcGoldenConnectorCostFile)
     outputs.file(mozcGoldenSegmenterBoundaryFile)
     outputs.file(mozcGoldenImmutableConverterFile)
+    outputs.file(mozcGoldenNBestGeneratorFile)
+    outputs.file(mozcGoldenCandidateFilterFile)
     doLast {
         val mozcSrcDir = resolveMozcSourceDirectoryForBuild()
         val helperDir = generatedMozcHelperDir.get().asFile
@@ -412,6 +419,24 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
                 srcs = ["mozc_immutable_converter_helper.cc"],
                 deps = [
                     "@mozc//converter:attribute",
+                    "@mozc//converter:immutable_converter",
+                    "@mozc//converter:inner_segment",
+                    "@mozc//converter:lattice",
+                    "@mozc//converter:node",
+                    "@mozc//converter:segments",
+                    "@mozc//data_manager",
+                    "@mozc//engine:modules",
+                    "@mozc//request:options",
+                    "@com_google_absl//absl/status:statusor",
+                ],
+            )
+
+            cc_binary(
+                name = "mozc_nbest_candidate_filter_helper",
+                srcs = ["mozc_nbest_candidate_filter_helper.cc"],
+                deps = [
+                    "@mozc//converter:attribute",
+                    "@mozc//converter:candidate_filter",
                     "@mozc//converter:immutable_converter",
                     "@mozc//converter:inner_segment",
                     "@mozc//converter:lattice",
@@ -1100,6 +1125,7 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
             """.trimIndent()
         )
         helperDir.resolve("mozc_immutable_converter_helper.cc").writeText(mozcImmutableConverterHelperSource.asFile.readText())
+        helperDir.resolve("mozc_nbest_candidate_filter_helper.cc").writeText(mozcNBestCandidateFilterHelperSource.asFile.readText())
         val fixtureFile = mozcGoldenDictionaryLookupFile.asFile
         fixtureFile.parentFile.mkdirs()
         exec {
@@ -1167,6 +1193,33 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
             throw GradleException("Official Mozc immutable converter helper did not write fixture: ${immutableConverterFixtureFile.path}")
         }
         logger.lifecycle("Generated official Mozc immutable converter fixture: ${immutableConverterFixtureFile.path}")
+
+        val nbestGeneratorFixtureFile = mozcGoldenNBestGeneratorFile.asFile
+        val candidateFilterFixtureFile = mozcGoldenCandidateFilterFile.asFile
+        nbestGeneratorFixtureFile.parentFile.mkdirs()
+        candidateFilterFixtureFile.parentFile.mkdirs()
+        exec {
+            workingDir = mozcSrcDir
+            commandLine(
+                mozcBazelCommand(),
+                "run",
+                "--check_visibility=false",
+                "--inject_repository=mozc_helper=${helperDir.absolutePath}",
+                "@mozc_helper//:mozc_nbest_candidate_filter_helper",
+                "--",
+                "--data=${generatedMozcDataFile.get().asFile.absolutePath}",
+                "--nbest_output=${nbestGeneratorFixtureFile.absolutePath}",
+                "--candidate_filter_output=${candidateFilterFixtureFile.absolutePath}",
+            )
+        }
+        if (!nbestGeneratorFixtureFile.isFile || nbestGeneratorFixtureFile.length() == 0L) {
+            throw GradleException("Official Mozc NBestGenerator helper did not write fixture: ${nbestGeneratorFixtureFile.path}")
+        }
+        if (!candidateFilterFixtureFile.isFile || candidateFilterFixtureFile.length() == 0L) {
+            throw GradleException("Official Mozc CandidateFilter helper did not write fixture: ${candidateFilterFixtureFile.path}")
+        }
+        logger.lifecycle("Generated official Mozc NBestGenerator fixture: ${nbestGeneratorFixtureFile.path}")
+        logger.lifecycle("Generated official Mozc CandidateFilter fixture: ${candidateFilterFixtureFile.path}")
     }
 }
 

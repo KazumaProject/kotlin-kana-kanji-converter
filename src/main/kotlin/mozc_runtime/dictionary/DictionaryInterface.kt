@@ -7,6 +7,13 @@ interface DictionaryInterface {
         key: String,
         callback: (Token) -> Unit,
     )
+    fun lookupPrefixWithOptions(
+        key: String,
+        kanaModifierInsensitiveConversion: Boolean,
+        callback: (Token) -> Unit,
+    ) {
+        lookupPrefix(key, callback)
+    }
     fun lookupExact(
         key: String,
         callback: (Token) -> Unit,
