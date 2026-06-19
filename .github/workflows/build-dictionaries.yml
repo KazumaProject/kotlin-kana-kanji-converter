@@ -2,15 +2,23 @@ name: Build Dictionary Artifacts
 
 on:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Optional release tag to create, e.g. dict-v2026.06.19'
+        required: false
+        default: ''
   push:
     tags:
-      - 'dict-v*'
+      - 'v*'
   pull_request:
     paths:
       - 'src/**'
       - 'build.gradle.kts'
       - 'settings.gradle.kts'
       - '.github/workflows/build-dictionaries.yml'
+
+permissions:
+  contents: write
 
 jobs:
   build-dictionaries:
@@ -91,11 +99,35 @@ jobs:
             build/distributions/japanese_keyboard_mozc_assets.zip
             build/distributions/japanese_keyboard_dictionary_assets.zip
 
+      - name: Resolve release tag
+        id: release
+        shell: bash
+        env:
+          RELEASE_TAG_INPUT: ${{ inputs.release_tag || '' }}
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" == "tag" && "${GITHUB_REF_NAME}" == dict-v* ]]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          elif [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" && -n "${RELEASE_TAG_INPUT}" ]]; then
+            if [[ "${RELEASE_TAG_INPUT}" != dict-v* ]]; then
+              echo "::error::release_tag must start with dict-v"
+              exit 1
+            fi
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "tag=${RELEASE_TAG_INPUT}" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "tag=" >> "$GITHUB_OUTPUT"
+            echo "No GitHub Release requested for ${GITHUB_EVENT_NAME} on ${GITHUB_REF}."
+          fi
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/dict-v')
+        if: steps.release.outputs.enabled == 'true'
         with:
           generate_release_notes: true
+          tag_name: ${{ steps.release.outputs.tag }}
+          target_commitish: ${{ github.sha }}
           files: |
             build/distributions/main_dictionaries.zip
             build/distributions/mozc_ut_dictionaries.zip
