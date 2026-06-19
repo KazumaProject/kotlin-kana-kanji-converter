@@ -23,6 +23,8 @@ object MozcGoldenTestSupport {
             "segmenter/segmenter_boundary.json" -> assertContainsSegmenterFields(path)
             "converter/nbest_generator.json" -> assertContainsNBestGeneratorFields(path)
             "converter/candidate_filter.json" -> assertContainsCandidateFilterFields(path)
+            "prediction/predictor.json" -> assertContainsPredictionFields(path)
+            "prediction/zero_query.json" -> assertContainsZeroQueryFields(path)
             else -> assertContainsCandidateFields(path)
         }
         return path
@@ -150,5 +152,58 @@ object MozcGoldenTestSupport {
         )
         val missing = fields.filterNot { "\"$it\"" in text }
         assertTrue(missing.isEmpty(), "NBest fixture is missing required fields: path=$path missing=${missing.joinToString()}")
+    }
+
+    private fun assertContainsPredictionFields(path: Path) {
+        val text = Files.readString(path)
+        val fields = listOf(
+            "engineDataVersion",
+            "cases",
+            "input",
+            "requestType",
+            "results",
+            "index",
+            "key",
+            "value",
+            "contentKey",
+            "contentValue",
+            "cost",
+            "wcost",
+            "structureCost",
+            "lid",
+            "rid",
+            "attributes",
+            "types",
+            "candidateSource",
+            "consumedKeySize",
+        )
+        val missing = fields.filterNot { "\"$it\"" in text }
+        assertTrue(missing.isEmpty(), "Predictor fixture is missing required fields: path=$path missing=${missing.joinToString()}")
+    }
+
+    private fun assertContainsZeroQueryFields(path: Path) {
+        val text = Files.readString(path)
+        val fields = listOf(
+            "engineDataVersion",
+            "cases",
+            "context",
+            "results",
+            "index",
+            "key",
+            "value",
+            "contentKey",
+            "contentValue",
+            "cost",
+            "wcost",
+            "structureCost",
+            "lid",
+            "rid",
+            "attributes",
+            "types",
+            "candidateSource",
+            "consumedKeySize",
+        )
+        val missing = fields.filterNot { "\"$it\"" in text }
+        assertTrue(missing.isEmpty(), "ZeroQuery fixture is missing required fields: path=$path missing=${missing.joinToString()}")
     }
 }

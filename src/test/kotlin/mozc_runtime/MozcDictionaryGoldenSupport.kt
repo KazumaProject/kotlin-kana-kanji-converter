@@ -91,6 +91,44 @@ data class GoldenCandidateFilterCase(
     val afterFilter: List<GoldenFilterCandidate>,
 )
 
+data class GoldenPredictionFixture(
+    val engineDataVersion: String,
+    val cases: List<GoldenPredictionCase>,
+)
+
+data class GoldenPredictionCase(
+    val input: String,
+    val requestType: String,
+    val results: List<GoldenPredictionResult>,
+)
+
+data class GoldenZeroQueryFixture(
+    val engineDataVersion: String,
+    val cases: List<GoldenZeroQueryCase>,
+)
+
+data class GoldenZeroQueryCase(
+    val context: String,
+    val results: List<GoldenPredictionResult>,
+)
+
+data class GoldenPredictionResult(
+    val index: Int,
+    val key: String,
+    val value: String,
+    val contentKey: String,
+    val contentValue: String,
+    val cost: Int,
+    val wcost: Int,
+    val structureCost: Int,
+    val lid: Int,
+    val rid: Int,
+    val attributes: List<String>,
+    val types: List<String>,
+    val candidateSource: String,
+    val consumedKeySize: Int,
+)
+
 data class GoldenFilterCandidate(
     val key: String,
     val value: String,
@@ -350,6 +388,39 @@ object MozcDictionaryGoldenSupport {
         )
     }
 
+    fun readPredictionFixture(path: Path): GoldenPredictionFixture {
+        val root = JsonParser(Files.readString(path)).parseObject()
+        root.requireKeys("engineDataVersion", "cases")
+        return GoldenPredictionFixture(
+            engineDataVersion = root.string("engineDataVersion"),
+            cases = root.array("cases").map { caseValue ->
+                val case = caseValue.asObject()
+                case.requireKeys("input", "requestType", "results")
+                GoldenPredictionCase(
+                    input = case.string("input"),
+                    requestType = case.string("requestType"),
+                    results = case.predictionResults("results"),
+                )
+            },
+        )
+    }
+
+    fun readZeroQueryFixture(path: Path): GoldenZeroQueryFixture {
+        val root = JsonParser(Files.readString(path)).parseObject()
+        root.requireKeys("engineDataVersion", "cases")
+        return GoldenZeroQueryFixture(
+            engineDataVersion = root.string("engineDataVersion"),
+            cases = root.array("cases").map { caseValue ->
+                val case = caseValue.asObject()
+                case.requireKeys("context", "results")
+                GoldenZeroQueryCase(
+                    context = case.string("context"),
+                    results = case.predictionResults("results"),
+                )
+            },
+        )
+    }
+
     fun collect(block: ((Token) -> Unit) -> Unit): List<GoldenToken> {
         val result = ArrayList<GoldenToken>()
         block { token ->
@@ -457,6 +528,43 @@ object MozcDictionaryGoldenSupport {
                 rid = candidate.int("rid"),
                 cost = candidate.int("cost"),
                 attributes = candidate.stringArray("attributes"),
+            )
+        }
+
+    private fun JsonObject.predictionResults(name: String): List<GoldenPredictionResult> =
+        array(name).map { value ->
+            val result = value.asObject()
+            result.requireKeys(
+                "index",
+                "key",
+                "value",
+                "contentKey",
+                "contentValue",
+                "cost",
+                "wcost",
+                "structureCost",
+                "lid",
+                "rid",
+                "attributes",
+                "types",
+                "candidateSource",
+                "consumedKeySize",
+            )
+            GoldenPredictionResult(
+                index = result.int("index"),
+                key = result.string("key"),
+                value = result.string("value"),
+                contentKey = result.string("contentKey"),
+                contentValue = result.string("contentValue"),
+                cost = result.int("cost"),
+                wcost = result.int("wcost"),
+                structureCost = result.int("structureCost"),
+                lid = result.int("lid"),
+                rid = result.int("rid"),
+                attributes = result.stringArray("attributes"),
+                types = result.stringArray("types"),
+                candidateSource = result.string("candidateSource"),
+                consumedKeySize = result.int("consumedKeySize"),
             )
         }
 

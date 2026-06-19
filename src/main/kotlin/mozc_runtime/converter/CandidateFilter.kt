@@ -429,7 +429,10 @@ class CandidateFilter(
         nodes.size == 1 && nodes[0].lid != nodes[0].rid
 
     private fun isEnglishTransliteration(value: String): Boolean =
-        value.all { it.code <= 0x7f }
+        value.isNotEmpty() && value.all {
+            it == ' ' || it == '!' || it == '\'' || it == '-' ||
+                it in 'A'..'Z' || it in 'a'..'z'
+        }
 
     private fun kanjiNumberToArabicNumber(value: String): String =
         buildString {

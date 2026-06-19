@@ -140,8 +140,11 @@ val mozcGoldenSegmenterBoundaryFile = layout.projectDirectory.file("src/test/res
 val mozcGoldenImmutableConverterFile = layout.projectDirectory.file("src/test/resources/mozc_golden/converter/immutable_converter.json")
 val mozcGoldenNBestGeneratorFile = layout.projectDirectory.file("src/test/resources/mozc_golden/converter/nbest_generator.json")
 val mozcGoldenCandidateFilterFile = layout.projectDirectory.file("src/test/resources/mozc_golden/converter/candidate_filter.json")
+val mozcGoldenPredictorFile = layout.projectDirectory.file("src/test/resources/mozc_golden/prediction/predictor.json")
+val mozcGoldenZeroQueryFile = layout.projectDirectory.file("src/test/resources/mozc_golden/prediction/zero_query.json")
 val mozcImmutableConverterHelperSource = layout.projectDirectory.file("tools/mozc_golden/mozc_immutable_converter_helper.cc")
 val mozcNBestCandidateFilterHelperSource = layout.projectDirectory.file("tools/mozc_golden/mozc_nbest_candidate_filter_helper.cc")
+val mozcPredictionHelperSource = layout.projectDirectory.file("tools/mozc_golden/mozc_prediction_helper.cc")
 val mozcIdDefFileProvider = providers.gradleProperty("mozcIdDefFile")
     .map { layout.projectDirectory.file(it) }
     .orElse(layout.projectDirectory.file("src/main/resources/id.def"))
@@ -361,21 +364,25 @@ val writeMozcDataManifest = tasks.register<JavaExec>("writeMozcDataManifest") {
 
 val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
     group = "verification"
-    description = "Builds official Mozc helper binaries and writes dictionary, connector, segmenter, immutable converter, N-best, and candidate filter golden fixtures."
+    description = "Builds official Mozc helper binaries and writes dictionary, connector, segmenter, immutable converter, N-best, candidate filter, predictor, and zero query golden fixtures."
     dependsOn(generateOfficialMozcData)
     inputs.file(generatedMozcDataFile)
     inputs.file(mozcImmutableConverterHelperSource)
     inputs.file(mozcNBestCandidateFilterHelperSource)
+    inputs.file(mozcPredictionHelperSource)
     inputs.property("dictionaryLookupHelperVersion", "1")
     inputs.property("connectorSegmenterHelperVersion", "1")
     inputs.property("immutableConverterHelperVersion", "1")
     inputs.property("nbestCandidateFilterHelperVersion", "1")
+    inputs.property("predictionHelperVersion", "1")
     outputs.file(mozcGoldenDictionaryLookupFile)
     outputs.file(mozcGoldenConnectorCostFile)
     outputs.file(mozcGoldenSegmenterBoundaryFile)
     outputs.file(mozcGoldenImmutableConverterFile)
     outputs.file(mozcGoldenNBestGeneratorFile)
     outputs.file(mozcGoldenCandidateFilterFile)
+    outputs.file(mozcGoldenPredictorFile)
+    outputs.file(mozcGoldenZeroQueryFile)
     doLast {
         val mozcSrcDir = resolveMozcSourceDirectoryForBuild()
         val helperDir = generatedMozcHelperDir.get().asFile
@@ -446,6 +453,27 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
                     "@mozc//engine:modules",
                     "@mozc//request:options",
                     "@com_google_absl//absl/status:statusor",
+                ],
+            )
+
+            cc_binary(
+                name = "mozc_prediction_helper",
+                srcs = ["mozc_prediction_helper.cc"],
+                deps = [
+                    "@mozc//converter:attribute",
+                    "@mozc//converter:converter_interface",
+                    "@mozc//converter:immutable_converter",
+                    "@mozc//converter:segments",
+                    "@mozc//data_manager",
+                    "@mozc//engine:modules",
+                    "@mozc//prediction:predictor",
+                    "@mozc//prediction:result",
+                    "@mozc//protocol:commands_cc_proto",
+                    "@mozc//protocol:config_cc_proto",
+                    "@mozc//request:conversion_request",
+                    "@com_google_absl//absl/status:statusor",
+                    "@com_google_absl//absl/strings",
+                    "@com_google_absl//absl/types:span",
                 ],
             )
             """.trimIndent()
@@ -1126,6 +1154,7 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
         )
         helperDir.resolve("mozc_immutable_converter_helper.cc").writeText(mozcImmutableConverterHelperSource.asFile.readText())
         helperDir.resolve("mozc_nbest_candidate_filter_helper.cc").writeText(mozcNBestCandidateFilterHelperSource.asFile.readText())
+        helperDir.resolve("mozc_prediction_helper.cc").writeText(mozcPredictionHelperSource.asFile.readText())
         val fixtureFile = mozcGoldenDictionaryLookupFile.asFile
         fixtureFile.parentFile.mkdirs()
         exec {
@@ -1220,6 +1249,33 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
         }
         logger.lifecycle("Generated official Mozc NBestGenerator fixture: ${nbestGeneratorFixtureFile.path}")
         logger.lifecycle("Generated official Mozc CandidateFilter fixture: ${candidateFilterFixtureFile.path}")
+
+        val predictorFixtureFile = mozcGoldenPredictorFile.asFile
+        val zeroQueryFixtureFile = mozcGoldenZeroQueryFile.asFile
+        predictorFixtureFile.parentFile.mkdirs()
+        zeroQueryFixtureFile.parentFile.mkdirs()
+        exec {
+            workingDir = mozcSrcDir
+            commandLine(
+                mozcBazelCommand(),
+                "run",
+                "--check_visibility=false",
+                "--inject_repository=mozc_helper=${helperDir.absolutePath}",
+                "@mozc_helper//:mozc_prediction_helper",
+                "--",
+                "--data=${generatedMozcDataFile.get().asFile.absolutePath}",
+                "--predictor_output=${predictorFixtureFile.absolutePath}",
+                "--zero_query_output=${zeroQueryFixtureFile.absolutePath}",
+            )
+        }
+        if (!predictorFixtureFile.isFile || predictorFixtureFile.length() == 0L) {
+            throw GradleException("Official Mozc Predictor helper did not write fixture: ${predictorFixtureFile.path}")
+        }
+        if (!zeroQueryFixtureFile.isFile || zeroQueryFixtureFile.length() == 0L) {
+            throw GradleException("Official Mozc ZeroQuery helper did not write fixture: ${zeroQueryFixtureFile.path}")
+        }
+        logger.lifecycle("Generated official Mozc Predictor fixture: ${predictorFixtureFile.path}")
+        logger.lifecycle("Generated official Mozc ZeroQuery fixture: ${zeroQueryFixtureFile.path}")
     }
 }
 
