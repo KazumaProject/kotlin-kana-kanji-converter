@@ -48,6 +48,12 @@ class DictionaryPredictor(
         val maxCandidates = minOf(request.maxDictionaryPredictionCandidatesSize, results.size)
         val filter = ResultFilter(request, posMatcher, connector, suggestionFilter)
         val finalResults = ArrayList<Result>()
+        val mergedTypes = LinkedHashMap<String, Int>()
+        results.forEach { result ->
+            if (!result.removed) {
+                mergedTypes[result.value] = (mergedTypes[result.value] ?: 0) or result.attributes
+            }
+        }
         results.sortedWith(ResultOrdering.costComparator()).forEach { result ->
             if (finalResults.size >= maxCandidates || result.cost >= Result.InvalidCost) {
                 return@forEach
@@ -61,10 +67,17 @@ class DictionaryPredictor(
             if (result.attributes and Attribute.SUFFIX_DICTIONARY != 0) {
                 result.attributes = result.attributes or Attribute.NO_VARIANTS_EXPANSION or Attribute.NO_EXTRA_DESCRIPTION
             }
+            val debugDescription = PredictionTypes.debugString(mergedTypes[result.value] ?: 0)
+            if (debugDescription.isNotEmpty()) {
+                result.description = appendDescription(result.description, debugDescription)
+            }
             finalResults += result
         }
         return finalResults
     }
+
+    private fun appendDescription(description: String, value: String): String =
+        if (description.isEmpty()) value else "$description $value"
 
     private fun getLMCost(result: Result, rid: Int): Int {
         val costWithContext = connector.cost(rid, result.lid)

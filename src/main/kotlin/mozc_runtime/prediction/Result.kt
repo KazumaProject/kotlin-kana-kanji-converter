@@ -1,6 +1,7 @@
 package mozc_runtime.prediction
 
 import mozc_runtime.converter.Attribute
+import mozc_runtime.converter.InnerSegment
 import mozc_runtime.dictionary.Token
 
 // Ported from mozc/src/prediction/result.h
@@ -23,6 +24,7 @@ data class Result(
     var costBeforeRescoring: Int = 0,
     var removed: Boolean = false,
     var candidateSource: String = "",
+    val innerSegments: MutableList<InnerSegment> = ArrayList(),
 ) {
     fun initializeByTokenAndTypes(token: Token, types: Int) {
         setTypesAndTokenAttributes(types, token.attributes)
@@ -109,6 +111,22 @@ object PredictionTypes {
 
     fun namesOf(types: Int): List<String> =
         names.filter { (bit, _) -> types and bit != 0 }.map { it.second }
+
+    fun debugString(types: Int): String = buildString {
+        if (types and Unigram != 0) append('U')
+        if (types and Bigram != 0) append('B')
+        if (types and RealtimeTop != 0) {
+            append("R1")
+        } else if (types and Realtime != 0) {
+            append('R')
+        }
+        if (types and Suffix != 0) append('S')
+        if (types and English != 0) append('E')
+        if (types and TypingCorrection != 0) append('T')
+        if (types and TypingCompletion != 0) append('C')
+        if (types and SupplementalModel != 0) append('X')
+        if (types and KeyExpandedInDictionary != 0) append('K')
+    }
 
     fun bitsOf(names: List<String>): Int {
         val byName = this.names.associate { it.second to it.first }

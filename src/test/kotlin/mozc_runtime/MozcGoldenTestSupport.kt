@@ -25,6 +25,7 @@ object MozcGoldenTestSupport {
             "converter/candidate_filter.json" -> assertContainsCandidateFilterFields(path)
             "prediction/predictor.json" -> assertContainsPredictionFields(path)
             "prediction/zero_query.json" -> assertContainsZeroQueryFields(path)
+            "engine/mozc_kotlin_engine.json" -> assertContainsEngineFields(path)
             else -> assertContainsCandidateFields(path)
         }
         return path
@@ -205,5 +206,38 @@ object MozcGoldenTestSupport {
         )
         val missing = fields.filterNot { "\"$it\"" in text }
         assertTrue(missing.isEmpty(), "ZeroQuery fixture is missing required fields: path=$path missing=${missing.joinToString()}")
+    }
+
+    private fun assertContainsEngineFields(path: Path) {
+        val text = Files.readString(path)
+        val fields = listOf(
+            "engineDataVersion",
+            "fixedTime",
+            "cases",
+            "requestType",
+            "input",
+            "context",
+            "segments",
+            "index",
+            "key",
+            "candidates",
+            "value",
+            "contentKey",
+            "contentValue",
+            "cost",
+            "wcost",
+            "structureCost",
+            "lid",
+            "rid",
+            "attributes",
+            "description",
+            "category",
+            "innerSegments",
+            "source",
+            "types",
+            "consumedKeySize",
+        )
+        val missing = fields.filterNot { "\"$it\"" in text }
+        assertTrue(missing.isEmpty(), "Engine fixture is missing required fields: path=$path missing=${missing.joinToString()}")
     }
 }

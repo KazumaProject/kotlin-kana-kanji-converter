@@ -72,13 +72,11 @@ class NumberRewriter(
             if (candidate.attributes and Attribute.NO_MODIFICATION != 0) {
                 continue
             }
+            if (!isNumberCompoundCandidate(candidate)) {
+                continue
+            }
+            val number = arabicNumberOf(candidate.contentValue) ?: continue
             val normalized = digitsToHalfWidth(candidate.contentValue)
-            val number = when {
-                normalized.allDigits() -> normalized
-                candidate.contentValue in KanjiToArabic -> KanjiToArabic.getValue(candidate.contentValue)
-                hasNumberSuffix(candidate.contentValue) -> leadingDigits(normalized)
-                else -> null
-            } ?: continue
             if (!seen.add(number)) {
                 continue
             }
@@ -92,8 +90,47 @@ class NumberRewriter(
         return result
     }
 
-    private fun hasNumberSuffix(value: String): Boolean =
-        counterSuffixes.any { suffix -> value.endsWith(suffix) && value.length > suffix.length }
+    private fun isNumberCompoundCandidate(candidate: Candidate): Boolean {
+        if (posMatcher.isNumber(candidate.lid) || posMatcher.isKanjiNumber(candidate.lid)) {
+            return true
+        }
+        if (!posMatcher.isGeneralNoun(candidate.lid)) {
+            return false
+        }
+        if ((candidate.key to candidate.value) in NumberCompoundExclusions) {
+            return false
+        }
+        return splitNumberAndCounterSuffix(candidate.contentValue)?.number?.isNotEmpty() == true
+    }
+
+    private fun arabicNumberOf(value: String): String? {
+        val split = splitNumberAndCounterSuffix(value) ?: return null
+        if (split.number.isEmpty()) {
+            return null
+        }
+        val halfWidth = digitsToHalfWidth(split.number)
+        if (halfWidth.allDigits()) {
+            return halfWidth
+        }
+        return kanjiNumberToArabic(split.number)
+    }
+
+    private fun splitNumberAndCounterSuffix(value: String): NumberAndSuffix? {
+        var index = 0
+        while (index < value.length) {
+            val codePoint = value.codePointAt(index)
+            if (!isNumberCompoundCodePoint(codePoint)) {
+                break
+            }
+            index += Character.charCount(codePoint)
+        }
+        val number = value.substring(0, index)
+        val suffix = value.substring(index)
+        if (suffix.isNotEmpty() && suffix !in counterSuffixes) {
+            return null
+        }
+        return NumberAndSuffix(number, suffix)
+    }
 
     private fun leadingDigits(value: String): String? {
         val digits = value.takeWhile { it in '0'..'9' }
@@ -267,6 +304,11 @@ class NumberRewriter(
         val description: String,
         val noVariants: Boolean = false,
     )
+
+    private data class NumberAndSuffix(
+        val number: String,
+        val suffix: String,
+    )
 }
 
 private fun String.allDigits(): Boolean = isNotEmpty() && all { it in '0'..'9' }
@@ -278,6 +320,18 @@ internal fun digitsToHalfWidth(value: String): String =
         value.codePoints().forEachOrdered { codePoint ->
             appendCodePoint(if (codePoint in 0xff10..0xff19) codePoint - 0xfee0 else codePoint)
         }
+    }
+
+private fun isNumberCompoundCodePoint(codePoint: Int): Boolean =
+    codePoint in 0x0030..0x0039 ||
+        codePoint in 0xff10..0xff19 ||
+        codePoint in KanjiNumberCodePoints
+
+private fun kanjiNumberToArabic(value: String): String? =
+    if (value.length == 1) {
+        KanjiToArabic[value]
+    } else {
+        value.map { KanjiToArabic[it.toString()] ?: return null }.joinToString("")
     }
 
 internal fun toFullWidthDigits(value: String): String =
@@ -453,4 +507,105 @@ private val KanjiToArabic = mapOf(
     "九" to "9",
     "〇" to "0",
     "零" to "0",
+)
+
+private val KanjiNumberCodePoints = setOf(
+    0x3007,
+    0x4e00,
+    0x4e03,
+    0x4e09,
+    0x4e5d,
+    0x4e8c,
+    0x4e94,
+    0x516b,
+    0x516d,
+    0x5341,
+    0x5343,
+    0x56db,
+    0x767e,
+    0x96f6,
+    0x58f1,
+    0x5f10,
+    0x53c2,
+)
+
+private val NumberCompoundExclusions = setOf(
+    "いざよい" to "十六夜",
+    "いちぎ" to "一義",
+    "いちじょ" to "一女",
+    "いっか" to "一家",
+    "いっこう" to "一行",
+    "いったい" to "一体",
+    "いっとき" to "一時",
+    "おはこ" to "十八番",
+    "ここのえ" to "九重",
+    "ごごん" to "五言",
+    "ごしちにち" to "五七日",
+    "ごじゅうさんつぎ" to "五十三次",
+    "ごせち" to "五節",
+    "さんきゃく" to "三脚",
+    "さんさんくど" to "三三九度",
+    "さんしちにち" to "三七日",
+    "さんしゃ" to "三者",
+    "しき" to "四季",
+    "しきゅう" to "四球",
+    "しちごん" to "七言",
+    "しちりん" to "七輪",
+    "しで" to "四手",
+    "じゅうじ" to "十字",
+    "しろくばん" to "四六判",
+    "しろくぶん" to "四六文",
+    "しんし" to "参差",
+    "せんきん" to "千金",
+    "せんげん" to "千言",
+    "せんざい" to "千歳",
+    "せんしん" to "千進",
+    "せんすじ" to "千筋",
+    "せんみつ" to "千三つ",
+    "ちくさ" to "千種",
+    "ちとせ" to "千年",
+    "ちとせ" to "千歳",
+    "ちよ" to "千代",
+    "とうしゃく" to "十尺",
+    "とえ" to "十重",
+    "とき" to "十寸",
+    "ななえ" to "七重",
+    "ななくさ" to "七種",
+    "なななぬか" to "七七日",
+    "はたえ" to "二十重",
+    "はちじゅうはちや" to "八十八夜",
+    "はっぴゃくやちょう" to "八百八町",
+    "ひとえ" to "一重",
+    "ひとなのか" to "一七日",
+    "ひゃっこう" to "百行",
+    "ふたえ" to "二重",
+    "ふたご" to "二子",
+    "ふたなのか" to "二七日",
+    "ふたば" to "二葉",
+    "ふため" to "二目",
+    "みけ" to "三毛",
+    "みそか" to "三十日",
+    "みつくち" to "三口",
+    "みつご" to "三児",
+    "みつご" to "三子",
+    "みつば" to "三葉",
+    "みつめ" to "三目",
+    "みなのか" to "三七日",
+    "むかで" to "百足",
+    "ももとせ" to "百歳",
+    "やえ" to "八重",
+    "やちよ" to "八千代",
+    "やつがしら" to "八頭",
+    "やつくち" to "八口",
+    "やつで" to "八手",
+    "やつはし" to "八橋",
+    "ゆり" to "百合",
+    "よも" to "四方",
+    "りくごう" to "六合",
+    "りくたい" to "六体",
+    "れいほん" to "零本",
+    "ろくどう" to "六道",
+    "ろっかい" to "六界",
+    "ろっぽう" to "六方",
+    "ろっぽう" to "六法",
 )

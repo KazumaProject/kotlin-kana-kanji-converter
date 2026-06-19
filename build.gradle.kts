@@ -143,10 +143,12 @@ val mozcGoldenCandidateFilterFile = layout.projectDirectory.file("src/test/resou
 val mozcGoldenPredictorFile = layout.projectDirectory.file("src/test/resources/mozc_golden/prediction/predictor.json")
 val mozcGoldenZeroQueryFile = layout.projectDirectory.file("src/test/resources/mozc_golden/prediction/zero_query.json")
 val mozcGoldenRewriterFile = layout.projectDirectory.file("src/test/resources/mozc_golden/rewriter/rewriter.json")
+val mozcGoldenEngineFile = layout.projectDirectory.file("src/test/resources/mozc_golden/engine/mozc_kotlin_engine.json")
 val mozcImmutableConverterHelperSource = layout.projectDirectory.file("tools/mozc_golden/mozc_immutable_converter_helper.cc")
 val mozcNBestCandidateFilterHelperSource = layout.projectDirectory.file("tools/mozc_golden/mozc_nbest_candidate_filter_helper.cc")
 val mozcPredictionHelperSource = layout.projectDirectory.file("tools/mozc_golden/mozc_prediction_helper.cc")
 val mozcRewriterHelperSource = layout.projectDirectory.file("tools/mozc_golden/mozc_rewriter_helper.cc")
+val mozcEngineHelperSource = layout.projectDirectory.file("tools/mozc_golden/mozc_engine_helper.cc")
 val mozcIdDefFileProvider = providers.gradleProperty("mozcIdDefFile")
     .map { layout.projectDirectory.file(it) }
     .orElse(layout.projectDirectory.file("src/main/resources/id.def"))
@@ -366,19 +368,21 @@ val writeMozcDataManifest = tasks.register<JavaExec>("writeMozcDataManifest") {
 
 val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
     group = "verification"
-    description = "Builds official Mozc helper binaries and writes dictionary, connector, segmenter, immutable converter, N-best, candidate filter, predictor, zero query, and rewriter golden fixtures."
+    description = "Builds official Mozc helper binaries and writes dictionary, connector, segmenter, immutable converter, N-best, candidate filter, predictor, zero query, rewriter, and full engine golden fixtures."
     dependsOn(generateOfficialMozcData)
     inputs.file(generatedMozcDataFile)
     inputs.file(mozcImmutableConverterHelperSource)
     inputs.file(mozcNBestCandidateFilterHelperSource)
     inputs.file(mozcPredictionHelperSource)
     inputs.file(mozcRewriterHelperSource)
+    inputs.file(mozcEngineHelperSource)
     inputs.property("dictionaryLookupHelperVersion", "1")
     inputs.property("connectorSegmenterHelperVersion", "1")
     inputs.property("immutableConverterHelperVersion", "1")
     inputs.property("nbestCandidateFilterHelperVersion", "1")
     inputs.property("predictionHelperVersion", "1")
     inputs.property("rewriterHelperVersion", "1")
+    inputs.property("engineHelperVersion", "1")
     outputs.file(mozcGoldenDictionaryLookupFile)
     outputs.file(mozcGoldenConnectorCostFile)
     outputs.file(mozcGoldenSegmenterBoundaryFile)
@@ -388,6 +392,7 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
     outputs.file(mozcGoldenPredictorFile)
     outputs.file(mozcGoldenZeroQueryFile)
     outputs.file(mozcGoldenRewriterFile)
+    outputs.file(mozcGoldenEngineFile)
     doLast {
         val mozcSrcDir = resolveMozcSourceDirectoryForBuild()
         val helperDir = generatedMozcHelperDir.get().asFile
@@ -503,6 +508,28 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
                     "@mozc//rewriter:rewriter",
                     "@mozc//rewriter:rewriter_interface",
                     "@com_google_absl//absl/status:statusor",
+                ],
+            )
+
+            cc_binary(
+                name = "mozc_engine_helper",
+                testonly = True,
+                srcs = ["mozc_engine_helper.cc"],
+                deps = [
+                    "@mozc//base:clock",
+                    "@mozc//base:clock_mock",
+                    "@mozc//converter:attribute",
+                    "@mozc//converter:converter_interface",
+                    "@mozc//converter:inner_segment",
+                    "@mozc//converter:segments",
+                    "@mozc//data_manager",
+                    "@mozc//engine:engine",
+                    "@mozc//prediction:result",
+                    "@mozc//protocol:commands_cc_proto",
+                    "@mozc//protocol:config_cc_proto",
+                    "@mozc//request:conversion_request",
+                    "@com_google_absl//absl/status:statusor",
+                    "@com_google_absl//absl/strings",
                 ],
             )
             """.trimIndent()
@@ -1185,6 +1212,7 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
         helperDir.resolve("mozc_nbest_candidate_filter_helper.cc").writeText(mozcNBestCandidateFilterHelperSource.asFile.readText())
         helperDir.resolve("mozc_prediction_helper.cc").writeText(mozcPredictionHelperSource.asFile.readText())
         helperDir.resolve("mozc_rewriter_helper.cc").writeText(mozcRewriterHelperSource.asFile.readText())
+        helperDir.resolve("mozc_engine_helper.cc").writeText(mozcEngineHelperSource.asFile.readText())
         val fixtureFile = mozcGoldenDictionaryLookupFile.asFile
         fixtureFile.parentFile.mkdirs()
         exec {
@@ -1326,6 +1354,26 @@ val generateMozcGoldenFixtures = tasks.register("generateMozcGoldenFixtures") {
             throw GradleException("Official Mozc Rewriter helper did not write fixture: ${rewriterFixtureFile.path}")
         }
         logger.lifecycle("Generated official Mozc Rewriter fixture: ${rewriterFixtureFile.path}")
+
+        val engineFixtureFile = mozcGoldenEngineFile.asFile
+        engineFixtureFile.parentFile.mkdirs()
+        exec {
+            workingDir = mozcSrcDir
+            commandLine(
+                mozcBazelCommand(),
+                "run",
+                "--check_visibility=false",
+                "--inject_repository=mozc_helper=${helperDir.absolutePath}",
+                "@mozc_helper//:mozc_engine_helper",
+                "--",
+                "--data=${generatedMozcDataFile.get().asFile.absolutePath}",
+                "--output=${engineFixtureFile.absolutePath}",
+            )
+        }
+        if (!engineFixtureFile.isFile || engineFixtureFile.length() == 0L) {
+            throw GradleException("Official Mozc engine helper did not write fixture: ${engineFixtureFile.path}")
+        }
+        logger.lifecycle("Generated official Mozc full engine fixture: ${engineFixtureFile.path}")
     }
 }
 

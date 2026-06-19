@@ -118,11 +118,50 @@ data class GoldenRewriterFixture(
     val cases: List<GoldenRewriterCase>,
 )
 
+data class GoldenEngineFixture(
+    val engineDataVersion: String,
+    val fixedTime: String,
+    val cases: List<GoldenEngineCase>,
+)
+
 data class GoldenRewriterCase(
     val input: String,
     val requestType: String,
     val beforeRewrite: List<GoldenConverterCandidate>,
     val afterRewrite: List<GoldenConverterCandidate>,
+)
+
+data class GoldenEngineCase(
+    val requestType: String,
+    val input: String,
+    val context: String,
+    val segments: List<GoldenEngineSegment>,
+)
+
+data class GoldenEngineSegment(
+    val index: Int,
+    val key: String,
+    val candidates: List<GoldenEngineCandidate>,
+)
+
+data class GoldenEngineCandidate(
+    val index: Int,
+    val key: String,
+    val value: String,
+    val contentKey: String,
+    val contentValue: String,
+    val cost: Int,
+    val wcost: Int,
+    val structureCost: Int,
+    val lid: Int,
+    val rid: Int,
+    val attributes: List<String>,
+    val description: String,
+    val category: String,
+    val innerSegments: List<GoldenInnerSegment>,
+    val source: String,
+    val types: List<String>,
+    val consumedKeySize: Int,
 )
 
 data class GoldenPredictionResult(
@@ -453,6 +492,35 @@ object MozcDictionaryGoldenSupport {
         )
     }
 
+    fun readEngineFixture(path: Path): GoldenEngineFixture {
+        val root = JsonParser(Files.readString(path)).parseObject()
+        root.requireKeys("engineDataVersion", "fixedTime", "cases")
+        return GoldenEngineFixture(
+            engineDataVersion = root.string("engineDataVersion"),
+            fixedTime = root.string("fixedTime"),
+            cases = root.array("cases").map { caseValue ->
+                val case = caseValue.asObject()
+                case.requireKeys("requestType", "input", "context", "segments")
+                GoldenEngineCase(
+                    requestType = case.string("requestType"),
+                    input = case.string("input"),
+                    context = case.string("context"),
+                    segments = case.array("segments").map { segmentValue ->
+                        val segment = segmentValue.asObject()
+                        segment.requireKeys("index", "key", "candidates")
+                        GoldenEngineSegment(
+                            index = segment.int("index"),
+                            key = segment.string("key"),
+                            candidates = segment.array("candidates").map { candidateValue ->
+                                readEngineCandidate(candidateValue.asObject())
+                            },
+                        )
+                    },
+                )
+            },
+        )
+    }
+
     fun collect(block: ((Token) -> Unit) -> Unit): List<GoldenToken> {
         val result = ArrayList<GoldenToken>()
         block { token ->
@@ -536,6 +604,57 @@ object MozcDictionaryGoldenSupport {
             },
             description = candidate.optionalString("description") ?: "",
             category = candidate.optionalString("category") ?: "DEFAULT_CATEGORY",
+        )
+    }
+
+    private fun readEngineCandidate(candidate: JsonObject): GoldenEngineCandidate {
+        candidate.requireKeys(
+            "index",
+            "key",
+            "value",
+            "contentKey",
+            "contentValue",
+            "cost",
+            "wcost",
+            "structureCost",
+            "lid",
+            "rid",
+            "attributes",
+            "description",
+            "category",
+            "innerSegments",
+            "source",
+            "types",
+            "consumedKeySize",
+        )
+        return GoldenEngineCandidate(
+            index = candidate.int("index"),
+            key = candidate.string("key"),
+            value = candidate.string("value"),
+            contentKey = candidate.string("contentKey"),
+            contentValue = candidate.string("contentValue"),
+            cost = candidate.int("cost"),
+            wcost = candidate.int("wcost"),
+            structureCost = candidate.int("structureCost"),
+            lid = candidate.int("lid"),
+            rid = candidate.int("rid"),
+            attributes = candidate.stringArray("attributes"),
+            description = candidate.string("description"),
+            category = candidate.string("category"),
+            innerSegments = candidate.array("innerSegments").map { innerValue ->
+                val inner = innerValue.asObject()
+                inner.requireKeys("index", "key", "value", "contentKey", "contentValue")
+                GoldenInnerSegment(
+                    index = inner.int("index"),
+                    key = inner.string("key"),
+                    value = inner.string("value"),
+                    contentKey = inner.string("contentKey"),
+                    contentValue = inner.string("contentValue"),
+                )
+            },
+            source = candidate.string("source"),
+            types = candidate.stringArray("types"),
+            consumedKeySize = candidate.int("consumedKeySize"),
         )
     }
 

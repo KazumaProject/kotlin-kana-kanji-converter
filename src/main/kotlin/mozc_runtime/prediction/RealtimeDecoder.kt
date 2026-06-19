@@ -3,6 +3,7 @@ package mozc_runtime.prediction
 import mozc_runtime.converter.Attribute
 import mozc_runtime.converter.ConversionOptions
 import mozc_runtime.converter.ImmutableConverter
+import mozc_runtime.converter.InnerSegment
 import mozc_runtime.converter.RequestType
 import mozc_runtime.converter.Segments
 import mozc_runtime.converter.charsLen
@@ -59,7 +60,18 @@ class RealtimeDecoder(
                 lid = candidate.lid,
                 rid = candidate.rid,
                 consumedKeySize = consumedKeySize,
-            )
+            ).also { result ->
+                result.innerSegments += candidate.innerSegments.ifEmpty {
+                    listOf(
+                        InnerSegment(
+                            key = candidate.key,
+                            value = candidate.value,
+                            contentKey = candidate.contentKey.ifEmpty { candidate.key },
+                            contentValue = candidate.contentValue.ifEmpty { candidate.value },
+                        ),
+                    )
+                }
+            }
         }
     }
 
@@ -94,6 +106,17 @@ class RealtimeDecoder(
             structureCost = 0,
             lid = candidate.lid,
             rid = candidate.rid,
-        )
+        ).also { result ->
+            result.innerSegments += candidate.innerSegments.ifEmpty {
+                listOf(
+                    InnerSegment(
+                        key = candidate.key,
+                        value = candidate.value,
+                        contentKey = candidate.contentKey.ifEmpty { candidate.key },
+                        contentValue = candidate.contentValue.ifEmpty { candidate.value },
+                    ),
+                )
+            }
+        }
     }
 }
