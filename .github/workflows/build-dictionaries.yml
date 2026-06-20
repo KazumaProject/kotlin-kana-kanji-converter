@@ -89,13 +89,6 @@ jobs:
         with:
           name: japanese-keyboard-dictionary-artifacts
           path: |
-            build/distributions/main_dictionaries.zip
-            build/distributions/mozc_ut_dictionaries.zip
-            build/distributions/wiki_dictionary.zip
-            build/distributions/neologd_dictionary.zip
-            build/distributions/web_dictionary.zip
-            build/distributions/mozc_data_bundle.zip
-            build/distributions/mozc_android_bundle.zip
             build/distributions/japanese_keyboard_mozc_assets.zip
             build/distributions/japanese_keyboard_dictionary_assets.zip
 
@@ -121,6 +114,54 @@ jobs:
             echo "No GitHub Release requested for ${GITHUB_EVENT_NAME} on ${GITHUB_REF}."
           fi
 
+      - name: Delete legacy release assets
+        if: steps.release.outputs.enabled == 'true'
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          release_json="$(
+            curl -fsSL \
+              -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}" \
+            || true
+          )"
+          if [[ -z "${release_json}" ]]; then
+            echo "Release ${RELEASE_TAG} does not exist yet; no legacy assets to delete."
+            exit 0
+          fi
+
+          legacy_assets=(
+            main_dictionaries.zip
+            mozc_android_bundle.zip
+            mozc_data_bundle.zip
+            mozc_ut_dictionaries.zip
+            neologd_dictionary.zip
+            web_dictionary.zip
+            wiki_dictionary.zip
+          )
+
+          for asset in "${legacy_assets[@]}"; do
+            ids="$(jq -r --arg name "${asset}" '.assets[] | select(.name == $name) | .id' <<< "${release_json}")"
+            if [[ -z "${ids}" ]]; then
+              echo "Legacy asset not present: ${asset}"
+              continue
+            fi
+            while IFS= read -r id; do
+              [[ -z "${id}" ]] && continue
+              curl -fsSL \
+                -X DELETE \
+                -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+                -H "Accept: application/vnd.github+json" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/assets/${id}"
+              echo "Deleted legacy release asset: ${asset}"
+            done <<< "${ids}"
+          done
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         if: steps.release.outputs.enabled == 'true'
@@ -129,13 +170,6 @@ jobs:
           tag_name: ${{ steps.release.outputs.tag }}
           target_commitish: ${{ github.sha }}
           files: |
-            build/distributions/main_dictionaries.zip
-            build/distributions/mozc_ut_dictionaries.zip
-            build/distributions/wiki_dictionary.zip
-            build/distributions/neologd_dictionary.zip
-            build/distributions/web_dictionary.zip
-            build/distributions/mozc_data_bundle.zip
-            build/distributions/mozc_android_bundle.zip
             build/distributions/japanese_keyboard_mozc_assets.zip
             build/distributions/japanese_keyboard_dictionary_assets.zip
         env:
