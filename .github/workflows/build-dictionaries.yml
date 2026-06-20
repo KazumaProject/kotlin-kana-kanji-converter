@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: 'Optional release tag to create, e.g. dict-v2026.06.19'
+        description: 'Optional release tag to create, e.g. v1.7.205'
         required: false
         default: ''
   push:
@@ -105,12 +105,12 @@ jobs:
         env:
           RELEASE_TAG_INPUT: ${{ inputs.release_tag || '' }}
         run: |
-          if [[ "${GITHUB_REF_TYPE}" == "tag" && "${GITHUB_REF_NAME}" == dict-v* ]]; then
+          if [[ "${GITHUB_REF_TYPE}" == "tag" && "${GITHUB_REF_NAME}" == v* ]]; then
             echo "enabled=true" >> "$GITHUB_OUTPUT"
             echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
           elif [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" && -n "${RELEASE_TAG_INPUT}" ]]; then
-            if [[ "${RELEASE_TAG_INPUT}" != dict-v* ]]; then
-              echo "::error::release_tag must start with dict-v"
+            if [[ "${RELEASE_TAG_INPUT}" != v* ]]; then
+              echo "::error::release_tag must start with v"
               exit 1
             fi
             echo "enabled=true" >> "$GITHUB_OUTPUT"
