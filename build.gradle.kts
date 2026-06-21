@@ -1,4 +1,12 @@
 import org.gradle.api.GradleException
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.File
+import java.io.InputStream
+import java.util.zip.ZipEntry
+import java.util.zip.ZipFile
+import java.util.zip.ZipInputStream
+import java.util.zip.ZipOutputStream
 
 plugins {
     kotlin("jvm") version "1.9.21"
@@ -7,6 +15,13 @@ plugins {
 }
 
 data class BuildIdDefEntry(val id: Int, val name: String, val lineNumber: Int)
+
+data class JapaneseKeyboardAssetSpec(
+    val sourceRelativePath: String,
+    val destinationRelativePath: String,
+    val zipped: Boolean = false,
+    val innerEntryName: String = File(sourceRelativePath).name,
+)
 
 fun parseBuildIdDef(file: File): List<BuildIdDefEntry> {
     if (!file.isFile) {
@@ -135,6 +150,160 @@ val mozcConnectionFileProvider = layout.projectDirectory.file("src/main/resource
 val mozcDictionaryFilesProvider = files(
     (0..9).map { "src/main/resources/dictionary%02d.txt".format(it) } + "src/main/resources/suffix.txt"
 )
+val dictionaryResourcesDir = layout.projectDirectory.dir("src/main/resources")
+val japaneseKeyboardAssetsRootPath = "app/src/main/assets"
+val japaneseKeyboardAssetsStagingDir = layout.buildDirectory.dir("japaneseKeyboardDictionaryAssets")
+val japaneseKeyboardAssetsReleaseDir = layout.projectDirectory.dir("release_zips")
+val japaneseKeyboardAssetsReleaseZip = japaneseKeyboardAssetsReleaseDir.file("japanese_keyboard_dictionary_assets.zip")
+val japaneseKeyboardAssetSpecs = listOf(
+    JapaneseKeyboardAssetSpec("connectionId.dat", "connectionId.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("pos_table.dat", "pos_table.dat"),
+    JapaneseKeyboardAssetSpec("id.def", "id.def"),
+    JapaneseKeyboardAssetSpec("yomi.dat", "system/yomi.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("tango.dat", "system/tango.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("token.dat", "system/token.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("yomi_singleKanji.dat", "single_kanji/yomi_singleKanji.dat"),
+    JapaneseKeyboardAssetSpec("tango_singleKanji.dat", "single_kanji/tango_singleKanji.dat"),
+    JapaneseKeyboardAssetSpec("token_singleKanji.dat", "single_kanji/token_singleKanji.dat"),
+    JapaneseKeyboardAssetSpec("yomi_emoji.dat", "emoji/yomi_emoji.dat"),
+    JapaneseKeyboardAssetSpec("tango_emoji.dat", "emoji/tango_emoji.dat"),
+    JapaneseKeyboardAssetSpec("token_emoji.dat", "emoji/token_emoji.dat"),
+    JapaneseKeyboardAssetSpec("yomi_emoticon.dat", "emoticon/yomi_emoticon.dat"),
+    JapaneseKeyboardAssetSpec("tango_emoticon.dat", "emoticon/tango_emoticon.dat"),
+    JapaneseKeyboardAssetSpec("token_emoticon.dat", "emoticon/token_emoticon.dat"),
+    JapaneseKeyboardAssetSpec("yomi_symbol.dat", "symbol/yomi_symbol.dat"),
+    JapaneseKeyboardAssetSpec("tango_symbol.dat", "symbol/tango_symbol.dat"),
+    JapaneseKeyboardAssetSpec("token_symbol.dat", "symbol/token_symbol.dat"),
+    JapaneseKeyboardAssetSpec("yomi_reading_correction.dat", "reading_correction/yomi_reading_correction.dat"),
+    JapaneseKeyboardAssetSpec("tango_reading_correction.dat", "reading_correction/tango_reading_correction.dat"),
+    JapaneseKeyboardAssetSpec("token_reading_correction.dat", "reading_correction/token_reading_correction.dat"),
+    JapaneseKeyboardAssetSpec("yomi_kotowaza.dat", "kotowaza/yomi_kotowaza.dat"),
+    JapaneseKeyboardAssetSpec("tango_kotowaza.dat", "kotowaza/tango_kotowaza.dat"),
+    JapaneseKeyboardAssetSpec("token_kotowaza.dat", "kotowaza/token_kotowaza.dat"),
+    JapaneseKeyboardAssetSpec("yomi_person_names.dat", "person_name/yomi_person_names.dat"),
+    JapaneseKeyboardAssetSpec("tango_person_names.dat", "person_name/tango_person_names.dat"),
+    JapaneseKeyboardAssetSpec("token_person_names.dat", "person_name/token_person_names.dat"),
+    JapaneseKeyboardAssetSpec("yomi_places.dat", "places/yomi_places.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("tango_places.dat", "places/tango_places.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("token_places.dat", "places/token_places.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("yomi_wiki.dat", "wiki/yomi_wiki.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("tango_wiki.dat", "wiki/tango_wiki.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("token_wiki.dat", "wiki/token_wiki.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("yomi_neologd.dat", "neologd/yomi_neologd.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("tango_neologd.dat", "neologd/tango_neologd.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("token_neologd.dat", "neologd/token_neologd.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("yomi_web.dat", "web/yomi_web.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("tango_web.dat", "web/tango_web.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("token_web.dat", "web/token_web.dat.zip", zipped = true),
+)
+
+fun requireNonEmptyFile(file: File, label: String) {
+    if (!file.isFile) {
+        throw GradleException("Missing JapaneseKeyboard dictionary asset: $label, file path=${file.path}")
+    }
+    if (file.length() == 0L) {
+        throw GradleException("Empty JapaneseKeyboard dictionary asset: $label, file path=${file.path}")
+    }
+}
+
+fun validateZipEntryName(name: String, context: String) {
+    if (name.isBlank() || name.startsWith("/") || name.contains('\\') || name.split('/').any { it == ".." }) {
+        throw GradleException("Invalid zip entry path in $context: entry=$name")
+    }
+    val segments = name.split('/')
+    if (segments.any { it == "__MACOSX" || it == ".DS_Store" || it.startsWith("._") }) {
+        throw GradleException("Unexpected metadata entry in $context: entry=$name")
+    }
+}
+
+fun writeSingleFileZip(sourceFile: File, destinationZip: File, entryName: String) {
+    validateZipEntryName(entryName, destinationZip.path)
+    if (entryName.contains('/')) {
+        throw GradleException("Inner .dat.zip entry must not contain a directory: zip=${destinationZip.path}, entry=$entryName")
+    }
+    destinationZip.parentFile.mkdirs()
+    ZipOutputStream(BufferedOutputStream(destinationZip.outputStream())).use { zipOutput ->
+        val entry = ZipEntry(entryName)
+        entry.time = 0L
+        zipOutput.putNextEntry(entry)
+        sourceFile.inputStream().use { input ->
+            input.copyTo(zipOutput)
+        }
+        zipOutput.closeEntry()
+    }
+}
+
+fun writeDirectoryZip(sourceDirectory: File, destinationZip: File) {
+    val files = sourceDirectory.walkTopDown()
+        .filter { it.isFile }
+        .sortedBy { it.relativeTo(sourceDirectory).invariantSeparatorsPath }
+        .toList()
+    if (files.isEmpty()) {
+        throw GradleException("No files to zip: source directory=${sourceDirectory.path}")
+    }
+    destinationZip.parentFile.mkdirs()
+    ZipOutputStream(BufferedOutputStream(destinationZip.outputStream())).use { zipOutput ->
+        files.forEach { file ->
+            requireNonEmptyFile(file, file.relativeTo(sourceDirectory).invariantSeparatorsPath)
+            val entryName = file.relativeTo(sourceDirectory).invariantSeparatorsPath
+            validateZipEntryName(entryName, destinationZip.path)
+            val entry = ZipEntry(entryName)
+            entry.time = 0L
+            zipOutput.putNextEntry(entry)
+            file.inputStream().use { input ->
+                input.copyTo(zipOutput)
+            }
+            zipOutput.closeEntry()
+        }
+    }
+}
+
+fun ensureNonEmptyZipEntry(zipFile: ZipFile, entry: ZipEntry, context: String) {
+    if (entry.size == 0L) {
+        throw GradleException("Empty zip entry in $context: entry=${entry.name}")
+    }
+    if (entry.size < 0L) {
+        zipFile.getInputStream(entry).use { input ->
+            if (input.read() == -1) {
+                throw GradleException("Empty zip entry in $context: entry=${entry.name}")
+            }
+        }
+    }
+}
+
+fun verifySingleEntryZip(inputStream: InputStream, outerEntryName: String, expectedInnerEntryName: String) {
+    val innerEntries = mutableListOf<String>()
+    ZipInputStream(BufferedInputStream(inputStream)).use { zipInput ->
+        var entry = zipInput.nextEntry
+        while (entry != null) {
+            validateZipEntryName(entry.name, outerEntryName)
+            if (entry.isDirectory) {
+                throw GradleException("Directory entry is not allowed inside .dat.zip: zip=$outerEntryName, entry=${entry.name}")
+            }
+            if (entry.name.contains('/')) {
+                throw GradleException("Nested path is not allowed inside .dat.zip: zip=$outerEntryName, entry=${entry.name}")
+            }
+            var uncompressedSize = 0L
+            val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+            while (true) {
+                val read = zipInput.read(buffer)
+                if (read < 0) break
+                uncompressedSize += read
+            }
+            if (uncompressedSize == 0L) {
+                throw GradleException("Empty .dat entry inside .dat.zip: zip=$outerEntryName, entry=${entry.name}")
+            }
+            innerEntries += entry.name
+            zipInput.closeEntry()
+            entry = zipInput.nextEntry
+        }
+    }
+    if (innerEntries != listOf(expectedInnerEntryName)) {
+        throw GradleException(
+            "Invalid .dat.zip contents: zip=$outerEntryName, expected=[$expectedInnerEntryName], actual=$innerEntries"
+        )
+    }
+}
 
 val generateIdDefConstants = tasks.register("generateIdDefConstants") {
     val idDefFile = mozcIdDefFileProvider
@@ -334,4 +503,123 @@ tasks.register<JavaExec>("runMozcUTWikiNeologdCommon") {
     mainClass.set("com.kazumaproject.MozcUTWikiNeologdCommonKt")
     classpath = sourceSets["main"].runtimeClasspath
     dependsOn(validateDictionaryIds)
+}
+
+tasks.named("runMozcUT") {
+    mustRunAfter("run")
+}
+
+tasks.named("runMozcUTWiki") {
+    mustRunAfter("runMozcUT")
+}
+
+tasks.named("runMozcUTNeologd") {
+    mustRunAfter("runMozcUTWiki")
+}
+
+tasks.named("runMozcUTWikiNeologdCommon") {
+    mustRunAfter("runMozcUTNeologd")
+}
+
+val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeyboardDictionaries") {
+    group = "distribution"
+    description = "Generates all dictionary .dat files used by the JapaneseKeyboard assets package."
+    dependsOn(
+        "run",
+        "runMozcUT",
+        "runMozcUTWiki",
+        "runMozcUTNeologd",
+        "runMozcUTWikiNeologdCommon",
+    )
+}
+
+val packageJapaneseKeyboardDictionaryAssets = tasks.register("packageJapaneseKeyboardDictionaryAssets") {
+    group = "distribution"
+    description = "Packages generated dictionaries as app/src/main/assets for JapaneseKeyboard."
+    dependsOn(generateJapaneseKeyboardDictionaries)
+    inputs.files(japaneseKeyboardAssetSpecs.map { dictionaryResourcesDir.file(it.sourceRelativePath) })
+    outputs.dir(japaneseKeyboardAssetsStagingDir)
+    outputs.file(japaneseKeyboardAssetsReleaseZip)
+
+    doLast {
+        val resourcesDirectory = dictionaryResourcesDir.asFile
+        val stagingDirectory = japaneseKeyboardAssetsStagingDir.get().asFile
+        val assetsDirectory = stagingDirectory.resolve(japaneseKeyboardAssetsRootPath)
+        val releaseDirectory = japaneseKeyboardAssetsReleaseDir.asFile
+        val releaseZip = japaneseKeyboardAssetsReleaseZip.asFile
+
+        delete(stagingDirectory)
+        delete(releaseDirectory)
+        assetsDirectory.mkdirs()
+
+        japaneseKeyboardAssetSpecs.forEach { spec ->
+            val sourceFile = resourcesDirectory.resolve(spec.sourceRelativePath)
+            val destinationFile = assetsDirectory.resolve(spec.destinationRelativePath)
+            requireNonEmptyFile(sourceFile, spec.sourceRelativePath)
+            destinationFile.parentFile.mkdirs()
+            if (spec.zipped) {
+                writeSingleFileZip(sourceFile, destinationFile, spec.innerEntryName)
+            } else {
+                sourceFile.copyTo(destinationFile, overwrite = true)
+            }
+        }
+
+        writeDirectoryZip(stagingDirectory, releaseZip)
+        logger.lifecycle("Wrote JapaneseKeyboard dictionary assets: ${releaseZip.path}")
+    }
+}
+
+tasks.register("verifyJapaneseKeyboardDictionaryAssets") {
+    group = "verification"
+    description = "Verifies the JapaneseKeyboard dictionary assets zip layout and nested .dat.zip files."
+    dependsOn(packageJapaneseKeyboardDictionaryAssets)
+    inputs.file(japaneseKeyboardAssetsReleaseZip)
+
+    doLast {
+        val releaseZip = japaneseKeyboardAssetsReleaseZip.asFile
+        requireNonEmptyFile(releaseZip, "release zip")
+
+        val expectedEntriesByName = japaneseKeyboardAssetSpecs.associateBy {
+            "$japaneseKeyboardAssetsRootPath/${it.destinationRelativePath}"
+        }
+
+        ZipFile(releaseZip).use { zipFile ->
+            val allEntries = zipFile.entries().asSequence().toList()
+            if (allEntries.isEmpty()) {
+                throw GradleException("Release zip is empty: file path=${releaseZip.path}")
+            }
+            allEntries.forEach { entry ->
+                validateZipEntryName(entry.name.removeSuffix("/"), releaseZip.path)
+            }
+
+            val actualFileEntries = allEntries
+                .filterNot { it.isDirectory }
+                .map { it.name }
+                .toSet()
+            val expectedFileEntries = expectedEntriesByName.keys
+            val missingEntries = expectedFileEntries - actualFileEntries
+            val unexpectedEntries = actualFileEntries - expectedFileEntries
+            if (missingEntries.isNotEmpty() || unexpectedEntries.isNotEmpty()) {
+                throw GradleException(
+                    "Invalid JapaneseKeyboard assets zip entries: missing=$missingEntries, unexpected=$unexpectedEntries"
+                )
+            }
+
+            expectedEntriesByName.forEach { (entryName, spec) ->
+                val entry = zipFile.getEntry(entryName)
+                    ?: throw GradleException("Missing required zip entry: $entryName")
+                if (entry.isDirectory) {
+                    throw GradleException("Required zip entry is a directory: $entryName")
+                }
+                ensureNonEmptyZipEntry(zipFile, entry, releaseZip.path)
+                if (spec.zipped) {
+                    zipFile.getInputStream(entry).use { input ->
+                        verifySingleEntryZip(input, entryName, spec.innerEntryName)
+                    }
+                }
+            }
+        }
+
+        logger.lifecycle("Verified JapaneseKeyboard dictionary assets: ${releaseZip.path}")
+    }
 }
