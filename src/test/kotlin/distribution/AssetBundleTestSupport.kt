@@ -79,29 +79,14 @@ internal object AssetBundleTestSupport {
         "web/token_web.dat.zip",
     )
 
-    val japaneseKeyboardMozcEntries = listOf(
-        "mozc/mozc.data",
-        "mozc/mozc_data_manifest.json",
-        "mozc/mozc-runtime.jar",
-    )
-
     val japaneseKeyboardDictionaryEntries =
         mainDictionaryEntries +
                 mozcUTDictionaryEntries +
                 wikiDictionaryEntries +
                 neologdDictionaryEntries +
-                webDictionaryEntries +
-                japaneseKeyboardMozcEntries
+                webDictionaryEntries
 
     val finalArtifactNames = listOf(
-        "main_dictionaries.zip",
-        "mozc_ut_dictionaries.zip",
-        "wiki_dictionary.zip",
-        "neologd_dictionary.zip",
-        "web_dictionary.zip",
-        "mozc_data_bundle.zip",
-        "mozc_android_bundle.zip",
-        "japanese_keyboard_mozc_assets.zip",
         "japanese_keyboard_dictionary_assets.zip",
     )
 

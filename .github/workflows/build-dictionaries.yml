@@ -66,20 +66,7 @@ jobs:
           ./gradlew \
             -PmozcBazelCommand=bazelisk \
             -PmozcSrcDir=$GITHUB_WORKSPACE/third_party/mozc/src \
-            generateOfficialMozcData \
-            verifyMozcData \
-            writeMozcDataManifest \
-            generateMozcGoldenFixtures \
             test \
-            run \
-            packageMozcDataBundle \
-            packageMozcAndroidBundle \
-            packageMainDictionaries \
-            packageMozcUTDictionaries \
-            packageWikiDictionary \
-            packageNeologdDictionary \
-            packageWebDictionary \
-            packageJapaneseKeyboardMozcAssets \
             packageJapaneseKeyboardDictionaryAssets \
             verifyJapaneseKeyboardAssetBundles \
             --stacktrace
@@ -89,7 +76,6 @@ jobs:
         with:
           name: japanese-keyboard-dictionary-artifacts
           path: |
-            build/distributions/japanese_keyboard_mozc_assets.zip
             build/distributions/japanese_keyboard_dictionary_assets.zip
 
       - name: Resolve release tag
@@ -142,6 +128,7 @@ jobs:
             neologd_dictionary.zip
             web_dictionary.zip
             wiki_dictionary.zip
+            japanese_keyboard_mozc_assets.zip
           )
 
           for asset in "${legacy_assets[@]}"; do
@@ -170,7 +157,6 @@ jobs:
           tag_name: ${{ steps.release.outputs.tag }}
           target_commitish: ${{ github.sha }}
           files: |
-            build/distributions/japanese_keyboard_mozc_assets.zip
             build/distributions/japanese_keyboard_dictionary_assets.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

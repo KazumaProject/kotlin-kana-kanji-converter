@@ -1858,12 +1858,6 @@ val allDatZipAssets = (
 
 val datZipInnerEntryByArchivePath = allDatZipAssets.associate { it.archivePath to it.innerEntryName }
 
-val mozcAssetEntries = listOf(
-    "mozc/mozc.data",
-    "mozc/mozc_data_manifest.json",
-    "mozc/mozc-runtime.jar",
-)
-
 val mainDictionaryEntries = mainDictionaryDatZipAssets.map { it.archivePath } + mainDictionaryRawAssets.map { it.archivePath }
 val mozcUTDictionaryEntries = mozcUTRawAssets.map { it.archivePath } + mozcUTDatZipAssets.map { it.archivePath }
 val wikiDictionaryEntries = wikiDatZipAssets.map { it.archivePath }
@@ -1873,18 +1867,9 @@ val japaneseKeyboardDictionaryEntries = mainDictionaryEntries +
         mozcUTDictionaryEntries +
         wikiDictionaryEntries +
         neologdDictionaryEntries +
-        webDictionaryEntries +
-        mozcAssetEntries
+        webDictionaryEntries
 
 val requiredBundleEntries = mapOf(
-    "main_dictionaries.zip" to mainDictionaryEntries,
-    "mozc_ut_dictionaries.zip" to mozcUTDictionaryEntries,
-    "wiki_dictionary.zip" to wikiDictionaryEntries,
-    "neologd_dictionary.zip" to neologdDictionaryEntries,
-    "web_dictionary.zip" to webDictionaryEntries,
-    "mozc_data_bundle.zip" to listOf("mozc.data", "mozc_data_manifest.json"),
-    "mozc_android_bundle.zip" to listOf("mozc.data", "mozc_data_manifest.json", "mozc-runtime.jar"),
-    "japanese_keyboard_mozc_assets.zip" to mozcAssetEntries,
     "japanese_keyboard_dictionary_assets.zip" to japaneseKeyboardDictionaryEntries,
 )
 
@@ -2033,7 +2018,7 @@ tasks.register("packageJapaneseKeyboardMozcAssets") {
 val assembleJapaneseKeyboardDictionaryAssetsZip = tasks.register<Zip>("assembleJapaneseKeyboardDictionaryAssetsZip") {
     configureDistributionZip(
         fileName = "japanese_keyboard_dictionary_assets.zip",
-        taskDescription = "Assembles JapaneseKeyboard app/src/main/assets-ready Japanese dictionary and Mozc assets.",
+        taskDescription = "Assembles JapaneseKeyboard app/src/main/assets-ready Japanese dictionary assets.",
     )
     dependsOn(
         "run",
@@ -2041,10 +2026,6 @@ val assembleJapaneseKeyboardDictionaryAssetsZip = tasks.register<Zip>("assembleJ
         "runMozcUTWiki",
         "runMozcUTNeologd",
         "runMozcUTWikiNeologdCommon",
-        generateOfficialMozcData,
-        verifyMozcData,
-        writeMozcDataManifest,
-        assembleMozcAndroidBundleZip,
     )
     mainDictionaryDatZipAssets.forEach { asset ->
         dependsOn(innerDatZipTasks.getValue(asset.archivePath))
@@ -2068,42 +2049,19 @@ val assembleJapaneseKeyboardDictionaryAssetsZip = tasks.register<Zip>("assembleJ
         dependsOn(innerDatZipTasks.getValue(asset.archivePath))
         addInnerDatZip(asset, innerDatZipTasks.getValue(asset.archivePath))
     }
-    addMozcFiles(prefix = "mozc")
 }
 
 tasks.register("packageJapaneseKeyboardDictionaryAssets") {
     group = "distribution"
     description = "Packages JapaneseKeyboard app/src/main/assets-ready Japanese dictionary assets without English assets."
-    dependsOn(
-        "run",
-        "runMozcUT",
-        "runMozcUTWiki",
-        "runMozcUTNeologd",
-        "runMozcUTWikiNeologdCommon",
-        generateOfficialMozcData,
-        verifyMozcData,
-        writeMozcDataManifest,
-        "test",
-        "packageMozcAndroidBundle",
-        assembleJapaneseKeyboardDictionaryAssetsZip,
-    )
+    dependsOn(assembleJapaneseKeyboardDictionaryAssetsZip)
     outputs.file(assembleJapaneseKeyboardDictionaryAssetsZip.flatMap { it.archiveFile })
 }
 
 tasks.register("verifyJapaneseKeyboardAssetBundles") {
     group = "verification"
-    description = "Verifies JapaneseKeyboard dictionary and Mozc asset bundle layouts."
-    dependsOn(
-        packageMainDictionaries,
-        packageMozcUTDictionaries,
-        packageWikiDictionary,
-        packageNeologdDictionary,
-        packageWebDictionary,
-        packageMozcDataBundle,
-        "packageMozcAndroidBundle",
-        "packageJapaneseKeyboardMozcAssets",
-        "packageJapaneseKeyboardDictionaryAssets",
-    )
+    description = "Verifies the JapaneseKeyboard dictionary asset bundle layout."
+    dependsOn("packageJapaneseKeyboardDictionaryAssets")
     requiredBundleEntries.keys.forEach { zipName ->
         inputs.file(distributionsDir.map { it.file(zipName) })
     }
@@ -2122,14 +2080,7 @@ tasks.register("verifyJapaneseKeyboardAssetBundles") {
 
 tasks.named<Test>("test") {
     dependsOn(
-        packageMainDictionaries,
-        packageMozcUTDictionaries,
-        packageWikiDictionary,
-        packageNeologdDictionary,
-        packageWebDictionary,
-        packageMozcDataBundle,
-        assembleMozcAndroidBundleZip,
-        assembleJapaneseKeyboardMozcAssetsZip,
+        generateOfficialMozcData,
         assembleJapaneseKeyboardDictionaryAssetsZip,
     )
 }
