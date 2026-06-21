@@ -4736,6 +4736,27 @@ object Constants {
             cost = 4500,
             tango = "お礼は三行"
         ),
+        Dictionary(
+            yomi = "かきじゅん",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 4000,
+            tango = "書き順"
+        ),
+        Dictionary(
+            yomi = "えんみ",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 5000,
+            tango = "塩味"
+        ),
+        Dictionary(
+            yomi = "しおみ",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 6000,
+            tango = "塩味"
+        ),
     )
 
     val PLACE = listOf(
