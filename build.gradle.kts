@@ -157,6 +157,7 @@ val japaneseKeyboardAssetsStagingDir = layout.buildDirectory.dir("japaneseKeyboa
 val japaneseKeyboardAssetsReleaseDir = layout.projectDirectory.dir("release_zips")
 val japaneseKeyboardAssetsReleaseZip = japaneseKeyboardAssetsReleaseDir.file("japanese_keyboard_dictionary_assets.zip")
 val japaneseKeyboardAssetSpecs = listOf(
+    JapaneseKeyboardAssetSpec("dictionary_manifest.json", "dictionary_manifest.json"),
     JapaneseKeyboardAssetSpec("connectionId.dat", "connectionId.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("pos_table.dat", "pos_table.dat"),
     JapaneseKeyboardAssetSpec("id.def", "id.def"),
@@ -200,6 +201,9 @@ val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("zero_query_string.data", "mozc/zero_query/zero_query_string.data"),
     JapaneseKeyboardAssetSpec("zero_query_number_token.data", "mozc/zero_query/zero_query_number_token.data"),
     JapaneseKeyboardAssetSpec("zero_query_number_string.data", "mozc/zero_query/zero_query_number_string.data"),
+    JapaneseKeyboardAssetSpec("ngram/ngram_presence.data", "ngram/ngram_presence.data"),
+    JapaneseKeyboardAssetSpec("ngram/ngram_presence_manifest.json", "ngram/ngram_presence_manifest.json"),
+    JapaneseKeyboardAssetSpec("ngram/stable_term_id_map.tsv", "ngram/stable_term_id_map.tsv"),
 )
 
 val mozcZeroQueryOfficialResourceNames = listOf(
@@ -218,6 +222,12 @@ val mozcZeroQueryGeneratedResourceNames = listOf(
 val mozcZeroQueryAuditResourceName = "zero_query_data.tsv"
 val mozcCustomZeroQueryResourceName = "custom_zero_query.def"
 val mozcCustomZeroQueryFileProvider = layout.projectDirectory.file("src/main/custom_zero_query.def")
+val committedNgramSourcesDir = layout.projectDirectory.dir("src/main/ngram/sources")
+val ngramSourcesDir = dictionaryResourcesDir.dir("ngram/sources")
+val stableTermIdMapFile = dictionaryResourcesDir.file("ngram/stable_term_id_map.tsv")
+val ngramPresenceDataFile = dictionaryResourcesDir.file("ngram/ngram_presence.data")
+val ngramPresenceManifestFile = dictionaryResourcesDir.file("ngram/ngram_presence_manifest.json")
+val dictionaryManifestFile = dictionaryResourcesDir.file("dictionary_manifest.json")
 
 fun requireNonEmptyFile(file: File, label: String) {
     if (!file.isFile) {
@@ -769,6 +779,105 @@ val verifyMozcZeroQueryParity = tasks.register("verifyMozcZeroQueryParity") {
     }
 }
 
+val prepareNgramSources = tasks.register<Copy>("prepareNgramSources") {
+    group = "distribution"
+    description = "Copies committed N-gram TSV sources into the ignored resources input directory."
+    val sourceTree = fileTree(committedNgramSourcesDir) {
+        include("*.tsv")
+    }
+    from(sourceTree)
+    into(ngramSourcesDir)
+    doFirst {
+        if (sourceTree.files.isEmpty()) {
+            throw GradleException("Missing committed N-gram TSV sources: directory=${committedNgramSourcesDir.asFile.path}")
+        }
+    }
+}
+
+tasks.named("processResources") {
+    dependsOn(prepareNgramSources)
+}
+
+val generateStableTermIdMap = tasks.register<JavaExec>("generateStableTermIdMap") {
+    group = "distribution"
+    description = "Generates the stable termId/token map used by the N-gram presence dictionary."
+    mainClass.set("com.kazumaproject.ngram.GenerateStableTermIdMap")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("compileKotlin", validateDictionaryIds)
+    inputs.files(mozcDictionaryFilesProvider)
+    inputs.file(mozcIdDefFileProvider)
+    outputs.file(stableTermIdMapFile)
+    args("--output", stableTermIdMapFile.asFile.path)
+}
+
+val generateTokenArrayV2 = tasks.register("generateTokenArrayV2") {
+    group = "distribution"
+    description = "Compatibility lifecycle task for token data with stable N-gram term IDs."
+    dependsOn(generateStableTermIdMap)
+}
+
+val generateNgramPresenceData = tasks.register<JavaExec>("generateNgramPresenceData") {
+    group = "distribution"
+    description = "Generates the BDZ MPHF N-gram presence dictionary and manifest."
+    mainClass.set("com.kazumaproject.ngram.GenerateNgramPresenceData")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("compileKotlin", prepareNgramSources, generateStableTermIdMap)
+    inputs.dir(ngramSourcesDir)
+    inputs.file(stableTermIdMapFile)
+    outputs.file(ngramPresenceDataFile)
+    outputs.file(ngramPresenceManifestFile)
+    outputs.file(dictionaryManifestFile)
+    args(
+        "--sources_dir", ngramSourcesDir.asFile.path,
+        "--term_id_map", stableTermIdMapFile.asFile.path,
+        "--output_data", ngramPresenceDataFile.asFile.path,
+        "--output_manifest", ngramPresenceManifestFile.asFile.path,
+        "--dictionary_manifest", dictionaryManifestFile.asFile.path,
+    )
+}
+
+val verifyNgramPresenceData = tasks.register<JavaExec>("verifyNgramPresenceData") {
+    group = "verification"
+    description = "Verifies generated N-gram presence lookups and negative probes."
+    mainClass.set("com.kazumaproject.ngram.VerifyNgramPresenceData")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("compileKotlin", generateNgramPresenceData)
+    inputs.dir(ngramSourcesDir)
+    inputs.file(stableTermIdMapFile)
+    inputs.file(ngramPresenceDataFile)
+    args(
+        "--sources_dir", ngramSourcesDir.asFile.path,
+        "--term_id_map", stableTermIdMapFile.asFile.path,
+        "--input_data", ngramPresenceDataFile.asFile.path,
+    )
+}
+
+val dumpNgramPresenceManifest = tasks.register<JavaExec>("dumpNgramPresenceManifest") {
+    group = "verification"
+    description = "Dumps the generated N-gram presence manifest."
+    mainClass.set("com.kazumaproject.ngram.DumpNgramPresenceManifest")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn(generateNgramPresenceData)
+    inputs.file(ngramPresenceManifestFile)
+    args("--manifest", ngramPresenceManifestFile.asFile.path)
+}
+
+tasks.register<JavaExec>("probeNgramPresencePerformance") {
+    group = "verification"
+    description = "Prints N-gram presence load, heap, lookup, size, and verification probes."
+    mainClass.set("com.kazumaproject.ngram.ProbeNgramPresencePerformance")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn(generateNgramPresenceData)
+    inputs.dir(ngramSourcesDir)
+    inputs.file(stableTermIdMapFile)
+    inputs.file(ngramPresenceDataFile)
+    args(
+        "--sources_dir", ngramSourcesDir.asFile.path,
+        "--term_id_map", stableTermIdMapFile.asFile.path,
+        "--input_data", ngramPresenceDataFile.asFile.path,
+    )
+}
+
 val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeyboardDictionaries") {
     group = "distribution"
     description = "Generates all dictionary .dat files used by the JapaneseKeyboard assets package."
@@ -779,6 +888,11 @@ val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeybo
         "runMozcUTNeologd",
         "runMozcUTWikiNeologdCommon",
         generateMozcZeroQueryData,
+        generateStableTermIdMap,
+        generateTokenArrayV2,
+        generateNgramPresenceData,
+        verifyNgramPresenceData,
+        dumpNgramPresenceManifest,
     )
 }
 

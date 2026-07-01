@@ -90,8 +90,16 @@ jobs:
       - name: Generate and verify Mozc zero query data
         run: ./gradlew generateMozcZeroQueryData verifyMozcZeroQueryData
 
-      - name: Generate dictionaries, package assets, and verify
-        run: ./gradlew packageJapaneseKeyboardDictionaryAssets verifyJapaneseKeyboardDictionaryAssets
+      - name: Generate dictionaries, N-gram presence data, package assets, and verify
+        run: >
+          ./gradlew
+          generateStableTermIdMap
+          generateTokenArrayV2
+          generateNgramPresenceData
+          verifyNgramPresenceData
+          dumpNgramPresenceManifest
+          packageJapaneseKeyboardDictionaryAssets
+          verifyJapaneseKeyboardDictionaryAssets
 
       # --- Create a single release with the JapaneseKeyboard-ready assets zip ---
       - name: Create GitHub Release
