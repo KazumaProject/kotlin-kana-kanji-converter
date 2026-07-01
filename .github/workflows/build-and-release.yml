@@ -49,6 +49,11 @@ jobs:
           cp ./mozc-src/src/data/dictionary_oss/connection_single_column.txt ./src/main/resources/connection_single_column.txt
           cp ./mozc-src/src/data/dictionary_oss/suffix.txt ./src/main/resources/suffix.txt
           cp ./mozc-src/src/data/single_kanji/single_kanji.tsv ./src/main/resources/single_kanji.tsv
+          cp ./mozc-src/src/data/zero_query/zero_query.def ./src/main/resources/zero_query.def
+          cp ./mozc-src/src/data/zero_query/zero_query_number.def ./src/main/resources/zero_query_number.def
+          cp ./mozc-src/src/data/emoji/emoji_data.tsv ./src/main/resources/mozc_emoji_data.tsv
+          cp ./mozc-src/src/data/emoticon/categorized.tsv ./src/main/resources/mozc_emoticon_categorized.tsv
+          cp ./mozc-src/src/data/symbol/symbol.tsv ./src/main/resources/mozc_symbol.tsv
 
       - name: Verify Mozc resources exist
         run: |
@@ -56,12 +61,21 @@ jobs:
           test -s ./src/main/resources/connection_single_column.txt
           test -s ./src/main/resources/suffix.txt
           test -s ./src/main/resources/single_kanji.tsv
+          test -s ./src/main/resources/zero_query.def
+          test -s ./src/main/resources/zero_query_number.def
+          test -s ./src/main/resources/mozc_emoji_data.tsv
+          test -s ./src/main/resources/mozc_emoticon_categorized.tsv
+          test -s ./src/main/resources/mozc_symbol.tsv
+          test -f ./src/main/custom_zero_query.def
           for i in $(seq -w 00 09); do
             test -s ./src/main/resources/dictionary${i}.txt
           done
 
       - name: Validate Mozc resource consistency
         run: ./gradlew validateMozcIdDef validateConnectionMatrix validateDictionaryIds validateIdDefReferences
+
+      - name: Validate Mozc zero query resources
+        run: ./gradlew validateMozcZeroQueryResources
 
       # Build the project with Gradle
       - name: Compile Kotlin
@@ -70,8 +84,14 @@ jobs:
       - name: Test with Gradle
         run: ./gradlew test
 
+      - name: Verify Mozc zero query parity
+        run: ./gradlew verifyMozcZeroQueryParity -PmozcSourceDir=./mozc-src
+
+      - name: Generate and verify Mozc zero query data
+        run: ./gradlew generateMozcZeroQueryData verifyMozcZeroQueryData
+
       - name: Generate dictionaries, package assets, and verify
-        run: ./gradlew generateJapaneseKeyboardDictionaries packageJapaneseKeyboardDictionaryAssets verifyJapaneseKeyboardDictionaryAssets
+        run: ./gradlew packageJapaneseKeyboardDictionaryAssets verifyJapaneseKeyboardDictionaryAssets
 
       # --- Create a single release with the JapaneseKeyboard-ready assets zip ---
       - name: Create GitHub Release

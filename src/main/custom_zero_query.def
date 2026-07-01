@@ -1,0 +1,9 @@
+# Custom zero query entries for JapaneseKeyboard / Sumire.
+# Format:
+# trigger<TAB>candidate1,candidate2,...
+#
+# Examples:
+服を	着る
+靴を	履く
+帽子を	かぶる
+ご飯を	食べる

@@ -3,6 +3,7 @@ import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.InputStream
+import java.nio.file.Files
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 import java.util.zip.ZipInputStream
@@ -195,7 +196,28 @@ val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("yomi_web.dat", "web/yomi_web.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("tango_web.dat", "web/tango_web.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("token_web.dat", "web/token_web.dat.zip", zipped = true),
+    JapaneseKeyboardAssetSpec("zero_query_token.data", "mozc/zero_query/zero_query_token.data"),
+    JapaneseKeyboardAssetSpec("zero_query_string.data", "mozc/zero_query/zero_query_string.data"),
+    JapaneseKeyboardAssetSpec("zero_query_number_token.data", "mozc/zero_query/zero_query_number_token.data"),
+    JapaneseKeyboardAssetSpec("zero_query_number_string.data", "mozc/zero_query/zero_query_number_string.data"),
 )
+
+val mozcZeroQueryOfficialResourceNames = listOf(
+    "zero_query.def",
+    "zero_query_number.def",
+    "mozc_emoji_data.tsv",
+    "mozc_emoticon_categorized.tsv",
+    "mozc_symbol.tsv",
+)
+val mozcZeroQueryGeneratedResourceNames = listOf(
+    "zero_query_token.data",
+    "zero_query_string.data",
+    "zero_query_number_token.data",
+    "zero_query_number_string.data",
+)
+val mozcZeroQueryAuditResourceName = "zero_query_data.tsv"
+val mozcCustomZeroQueryResourceName = "custom_zero_query.def"
+val mozcCustomZeroQueryFileProvider = layout.projectDirectory.file("src/main/custom_zero_query.def")
 
 fun requireNonEmptyFile(file: File, label: String) {
     if (!file.isFile) {
@@ -204,6 +226,49 @@ fun requireNonEmptyFile(file: File, label: String) {
     if (file.length() == 0L) {
         throw GradleException("Empty JapaneseKeyboard dictionary asset: $label, file path=${file.path}")
     }
+}
+
+fun splitBuildPreservingEmpty(value: String, delimiter: Char): List<String> {
+    val result = mutableListOf<String>()
+    var start = 0
+    while (true) {
+        val index = value.indexOf(delimiter, start)
+        if (index < 0) {
+            result += value.substring(start)
+            return result
+        }
+        result += value.substring(start, index)
+        start = index + 1
+    }
+}
+
+fun isMozcDataLine(line: String): Boolean = line.trim().isNotEmpty() && !line.trimStart().startsWith("#")
+
+fun requireMozcZeroQueryFile(file: File, label: String, allowEmpty: Boolean = false) {
+    if (!file.isFile) {
+        throw GradleException("Missing Mozc zero query resource: $label, file path=${file.path}")
+    }
+    if (!allowEmpty && file.length() == 0L) {
+        throw GradleException("Empty Mozc zero query resource: $label, file path=${file.path}")
+    }
+}
+
+fun validateMozcTwoColumnFile(file: File, label: String): List<List<String>> {
+    val dataRows = mutableListOf<List<String>>()
+    file.useLines { lines ->
+        lines.forEachIndexed { index, rawLine ->
+            if (!isMozcDataLine(rawLine)) return@forEachIndexed
+            val columns = splitBuildPreservingEmpty(rawLine, '\t')
+            if (columns.size != 2) {
+                throw GradleException(
+                    "Invalid $label: file path=${file.path}, line number=${index + 1}, " +
+                            "reason=expected exactly 2 tab-separated columns"
+                )
+            }
+            dataRows += columns
+        }
+    }
+    return dataRows
 }
 
 fun validateZipEntryName(name: String, context: String) {
@@ -430,9 +495,93 @@ val validateIdDefReferences = tasks.register("validateIdDefReferences") {
     }
 }
 
+val validateMozcZeroQueryResources = tasks.register("validateMozcZeroQueryResources") {
+    group = "verification"
+    description = "Validates Mozc zero query source resources copied from google/mozc and the custom overlay."
+    inputs.files(mozcZeroQueryOfficialResourceNames.map { dictionaryResourcesDir.file(it) })
+    inputs.file(mozcCustomZeroQueryFileProvider)
+    doLast {
+        val resourcesDirectory = dictionaryResourcesDir.asFile
+
+        val zeroQueryDef = resourcesDirectory.resolve("zero_query.def")
+        val zeroQueryNumberDef = resourcesDirectory.resolve("zero_query_number.def")
+        val emojiData = resourcesDirectory.resolve("mozc_emoji_data.tsv")
+        val emoticonCategorized = resourcesDirectory.resolve("mozc_emoticon_categorized.tsv")
+        val symbol = resourcesDirectory.resolve("mozc_symbol.tsv")
+        val custom = mozcCustomZeroQueryFileProvider.asFile
+
+        requireMozcZeroQueryFile(zeroQueryDef, "zero_query.def")
+        requireMozcZeroQueryFile(zeroQueryNumberDef, "zero_query_number.def")
+        requireMozcZeroQueryFile(emojiData, "mozc_emoji_data.tsv")
+        requireMozcZeroQueryFile(emoticonCategorized, "mozc_emoticon_categorized.tsv")
+        requireMozcZeroQueryFile(symbol, "mozc_symbol.tsv")
+        requireMozcZeroQueryFile(custom, mozcCustomZeroQueryResourceName, allowEmpty = true)
+
+        validateMozcTwoColumnFile(zeroQueryDef, "zero_query.def")
+        val numberRows = validateMozcTwoColumnFile(zeroQueryNumberDef, "zero_query_number.def")
+        if (numberRows.none { it[0] == "default" }) {
+            throw GradleException("Invalid zero_query_number.def: file path=${zeroQueryNumberDef.path}, reason=missing default key")
+        }
+
+        emojiData.useLines { lines ->
+            lines.forEachIndexed { index, rawLine ->
+                if (!isMozcDataLine(rawLine)) return@forEachIndexed
+                val columns = splitBuildPreservingEmpty(rawLine, '\t')
+                if (columns.size != 7) {
+                    throw GradleException(
+                        "Invalid mozc_emoji_data.tsv: file path=${emojiData.path}, line number=${index + 1}, " +
+                                "reason=expected exactly 7 tab-separated columns"
+                    )
+                }
+            }
+        }
+
+        emoticonCategorized.useLines { lines ->
+            lines.forEachIndexed { index, rawLine ->
+                if (!isMozcDataLine(rawLine)) return@forEachIndexed
+                val columns = splitBuildPreservingEmpty(rawLine, '\t')
+                if (columns.size != 3) {
+                    throw GradleException(
+                        "Invalid mozc_emoticon_categorized.tsv: file path=${emoticonCategorized.path}, line number=${index + 1}, " +
+                                "reason=expected exactly 3 tab-separated columns"
+                    )
+                }
+            }
+        }
+
+        var symbolHeaderSeen = false
+        symbol.useLines { lines ->
+            lines.forEachIndexed { index, rawLine ->
+                if (!isMozcDataLine(rawLine)) return@forEachIndexed
+                val columns = splitBuildPreservingEmpty(rawLine, '\t')
+                if (!symbolHeaderSeen) {
+                    if (columns.size >= 3 && columns[0] == "POS" && columns[1] == "CHAR") {
+                        symbolHeaderSeen = true
+                        return@forEachIndexed
+                    }
+                    throw GradleException(
+                        "Invalid mozc_symbol.tsv: file path=${symbol.path}, line number=${index + 1}, reason=missing header"
+                    )
+                }
+                if (columns.size < 3) {
+                    throw GradleException(
+                        "Invalid mozc_symbol.tsv: file path=${symbol.path}, line number=${index + 1}, " +
+                                "reason=expected at least 3 tab-separated columns"
+                    )
+                }
+            }
+        }
+        if (!symbolHeaderSeen) {
+            throw GradleException("Invalid mozc_symbol.tsv: file path=${symbol.path}, reason=missing header")
+        }
+
+        logger.lifecycle("Validated Mozc zero query resources")
+    }
+}
+
 tasks.test {
     useJUnitPlatform()
-    dependsOn(validateMozcIdDef, validateConnectionMatrix, validateDictionaryIds, validateIdDefReferences)
+    dependsOn(validateMozcIdDef, validateConnectionMatrix, validateDictionaryIds, validateIdDefReferences, validateMozcZeroQueryResources)
 }
 
 tasks.register<Test>("dictionaryBuildTest") {
@@ -470,7 +619,7 @@ tasks.named("compileKotlin") {
 }
 
 tasks.named("check") {
-    dependsOn(validateMozcIdDef, validateConnectionMatrix, validateDictionaryIds, validateIdDefReferences)
+    dependsOn(validateMozcIdDef, validateConnectionMatrix, validateDictionaryIds, validateIdDefReferences, validateMozcZeroQueryResources)
 }
 
 application {
@@ -521,6 +670,105 @@ tasks.named("runMozcUTWikiNeologdCommon") {
     mustRunAfter("runMozcUTNeologd")
 }
 
+val generateMozcZeroQueryData = tasks.register<JavaExec>("generateMozcZeroQueryData") {
+    group = "distribution"
+    description = "Generates Mozc-compatible zero query binary data from official resources and the custom overlay."
+    mainClass.set("com.kazumaproject.mozc.zeroquery.GenerateMozcZeroQueryData")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("compileKotlin", validateMozcZeroQueryResources)
+    inputs.files(mozcZeroQueryOfficialResourceNames.map { dictionaryResourcesDir.file(it) })
+    inputs.file(mozcCustomZeroQueryFileProvider)
+    outputs.files((mozcZeroQueryGeneratedResourceNames + mozcZeroQueryAuditResourceName).map { dictionaryResourcesDir.file(it) })
+    args(
+        "--zero_query_def", dictionaryResourcesDir.file("zero_query.def").asFile.path,
+        "--zero_query_number_def", dictionaryResourcesDir.file("zero_query_number.def").asFile.path,
+        "--emoji_data", dictionaryResourcesDir.file("mozc_emoji_data.tsv").asFile.path,
+        "--emoticon_categorized", dictionaryResourcesDir.file("mozc_emoticon_categorized.tsv").asFile.path,
+        "--symbol", dictionaryResourcesDir.file("mozc_symbol.tsv").asFile.path,
+        "--custom_zero_query_def", mozcCustomZeroQueryFileProvider.asFile.path,
+        "--output_dir", dictionaryResourcesDir.asFile.path,
+    )
+}
+
+val verifyMozcZeroQueryData = tasks.register<JavaExec>("verifyMozcZeroQueryData") {
+    group = "verification"
+    description = "Verifies generated Mozc zero query binary data and required lookups."
+    mainClass.set("com.kazumaproject.mozc.zeroquery.VerifyMozcZeroQueryData")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("compileKotlin", generateMozcZeroQueryData)
+    inputs.files(mozcZeroQueryGeneratedResourceNames.map { dictionaryResourcesDir.file(it) })
+    args("--input_dir", dictionaryResourcesDir.asFile.path)
+}
+
+val verifyMozcZeroQueryParity = tasks.register("verifyMozcZeroQueryParity") {
+    group = "verification"
+    description = "Compares Kotlin zero query generation with the official Mozc Python generators using an empty custom overlay."
+    dependsOn("compileKotlin")
+    doLast {
+        val mozcSourceDir = file(providers.gradleProperty("mozcSourceDir").orNull ?: "./mozc-src")
+        val mozcSrcRoot = mozcSourceDir.resolve("src")
+        val officialGenerator = mozcSrcRoot.resolve("prediction/gen_zero_query_data.py")
+        val officialNumberGenerator = mozcSrcRoot.resolve("prediction/gen_zero_query_number_data.py")
+        if (!officialGenerator.isFile || !officialNumberGenerator.isFile) {
+            throw GradleException("Missing Mozc official zero query generators: mozcSourceDir=${mozcSourceDir.path}")
+        }
+
+        delete(temporaryDir)
+        val officialOutput = temporaryDir.resolve("official").apply { mkdirs() }
+        val kotlinOutput = temporaryDir.resolve("kotlin").apply { mkdirs() }
+        val emptyCustom = temporaryDir.resolve("empty_custom_zero_query.def").apply { writeText("") }
+
+        exec {
+            workingDir = mozcSrcRoot
+            environment("PYTHONPATH", mozcSrcRoot.path)
+            commandLine(
+                "python3",
+                "prediction/gen_zero_query_data.py",
+                "--input_rule", "data/zero_query/zero_query.def",
+                "--input_symbol", "data/symbol/symbol.tsv",
+                "--input_emoji", "data/emoji/emoji_data.tsv",
+                "--input_emoticon", "data/emoticon/categorized.tsv",
+                "--output_token_array", officialOutput.resolve("zero_query_token.data").path,
+                "--output_string_array", officialOutput.resolve("zero_query_string.data").path,
+            )
+        }
+        exec {
+            workingDir = mozcSrcRoot
+            environment("PYTHONPATH", mozcSrcRoot.path)
+            commandLine(
+                "python3",
+                "prediction/gen_zero_query_number_data.py",
+                "--input", "data/zero_query/zero_query_number.def",
+                "--output_token_array", officialOutput.resolve("zero_query_number_token.data").path,
+                "--output_string_array", officialOutput.resolve("zero_query_number_string.data").path,
+            )
+        }
+        javaexec {
+            mainClass.set("com.kazumaproject.mozc.zeroquery.GenerateMozcZeroQueryData")
+            classpath = sourceSets["main"].runtimeClasspath
+            args(
+                "--zero_query_def", mozcSrcRoot.resolve("data/zero_query/zero_query.def").path,
+                "--zero_query_number_def", mozcSrcRoot.resolve("data/zero_query/zero_query_number.def").path,
+                "--emoji_data", mozcSrcRoot.resolve("data/emoji/emoji_data.tsv").path,
+                "--emoticon_categorized", mozcSrcRoot.resolve("data/emoticon/categorized.tsv").path,
+                "--symbol", mozcSrcRoot.resolve("data/symbol/symbol.tsv").path,
+                "--custom_zero_query_def", emptyCustom.path,
+                "--output_dir", kotlinOutput.path,
+            )
+        }
+
+        mozcZeroQueryGeneratedResourceNames.forEach { fileName ->
+            val officialFile = officialOutput.resolve(fileName).toPath()
+            val kotlinFile = kotlinOutput.resolve(fileName).toPath()
+            val mismatch = Files.mismatch(officialFile, kotlinFile)
+            if (mismatch != -1L) {
+                throw GradleException("Zero query parity mismatch: file=$fileName, byte offset=$mismatch")
+            }
+        }
+        logger.lifecycle("Verified Mozc zero query parity against official Python generators: mozcSourceDir=${mozcSourceDir.path}")
+    }
+}
+
 val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeyboardDictionaries") {
     group = "distribution"
     description = "Generates all dictionary .dat files used by the JapaneseKeyboard assets package."
@@ -530,6 +778,7 @@ val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeybo
         "runMozcUTWiki",
         "runMozcUTNeologd",
         "runMozcUTWikiNeologdCommon",
+        generateMozcZeroQueryData,
     )
 }
 
