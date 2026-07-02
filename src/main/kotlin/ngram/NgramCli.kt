@@ -6,10 +6,20 @@ object GenerateStableTermIdMap {
     @JvmStatic
     fun main(args: Array<String>) {
         val cli = CliArgs(args)
-        val output = Path.of(cli.required("--output"))
-        val map = StableTermIdMap.build(NgramDictionarySource.buildMainDictionaryList())
-        map.writeTo(output)
-        println("Wrote stable termId map: $output terms=${map.terms.size}")
+        val outputData = Path.of(cli.required("--output_data"))
+        val outputManifest = Path.of(cli.required("--output_manifest"))
+        val build = NgramTokenTermIdBuilder.build(NgramDictionarySource.buildMainDictionaryList())
+        val checksum = NgramTokenTermIdDataWriter().write(outputData, build)
+        NgramTokenTermIdManifestWriter.write(
+            outputPath = outputManifest,
+            build = build,
+            contentChecksumHex = checksum,
+            byteSize = java.nio.file.Files.size(outputData),
+        )
+        println(
+            "Wrote compact N-gram token termId sidecar: $outputData " +
+                    "postings=${build.termIdsByTokenPosting.size} uniqueTerms=${build.uniqueTermCount}"
+        )
     }
 }
 
@@ -20,7 +30,6 @@ object GenerateNgramPresenceData {
         val manifest = NgramPresenceGenerator.generate(
             NgramGenerationOptions(
                 sourceDirectory = Path.of(cli.required("--sources_dir")),
-                stableTermIdMapPath = Path.of(cli.required("--term_id_map")),
                 outputDataPath = Path.of(cli.required("--output_data")),
                 outputManifestPath = Path.of(cli.required("--output_manifest")),
                 strictUnresolved = cli.hasFlag("--strict_unresolved"),
@@ -30,7 +39,8 @@ object GenerateNgramPresenceData {
             JapaneseKeyboardDictionaryManifestWriter.write(
                 outputPath = Path.of(output),
                 ngramManifest = manifest,
-                stableTermIdMapPath = "ngram/stable_term_id_map.tsv",
+                tokenTermIdDataPath = "ngram/token_term_id.data",
+                tokenTermIdManifestPath = "ngram/token_term_id_manifest.json",
             )
         }
         println(
@@ -46,7 +56,6 @@ object VerifyNgramPresenceData {
         val cli = CliArgs(args)
         val result = NgramPresenceVerifier.verify(
             sourceDirectory = Path.of(cli.required("--sources_dir")),
-            stableTermIdMapPath = Path.of(cli.required("--term_id_map")),
             dataPath = Path.of(cli.required("--input_data")),
             strictUnresolved = cli.hasFlag("--strict_unresolved"),
         )
@@ -73,7 +82,6 @@ object ProbeNgramPresencePerformance {
         println(
             NgramPerformanceProbe.run(
                 sourceDirectory = Path.of(cli.required("--sources_dir")),
-                stableTermIdMapPath = Path.of(cli.required("--term_id_map")),
                 dataPath = Path.of(cli.required("--input_data")),
             )
         )

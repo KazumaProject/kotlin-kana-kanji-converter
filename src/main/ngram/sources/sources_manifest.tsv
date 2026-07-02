@@ -1,0 +1,2 @@
+enabled	file	kind	orders	description
+true	atok_exact.tsv	presence	1,2,3,4,5	ATOK exact N-gram presence correction rules.

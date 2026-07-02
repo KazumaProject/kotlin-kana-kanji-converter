@@ -5,7 +5,6 @@ import kotlin.io.path.fileSize
 
 data class NgramGenerationOptions(
     val sourceDirectory: Path,
-    val stableTermIdMapPath: Path,
     val outputDataPath: Path,
     val outputManifestPath: Path,
     val strictUnresolved: Boolean = false,
@@ -20,10 +19,10 @@ data class NgramCompiledRules(
 )
 
 object NgramPresenceCompiler {
-    fun compile(sourceDirectory: Path, stableTermIdMapPath: Path, strictUnresolved: Boolean = false): NgramCompiledRules {
+    fun compile(sourceDirectory: Path, strictUnresolved: Boolean = false): NgramCompiledRules {
         val sourceReadResult = NgramSourceTsvReader().readDirectory(sourceDirectory)
         val normalizeResult = NgramRuleNormalizer.normalizeAndDedupe(sourceReadResult.rules)
-        val termMap = StableTermIdMap.readFrom(stableTermIdMapPath)
+        val termMap = StableTermIdMap.build(NgramDictionarySource.buildMainDictionaryList())
         val resolver = FullReadingSegmentResolver(NgramTermResolver(termMap.terms))
         val resolved = mutableListOf<ResolvedNgramRule>()
         val unresolved = mutableListOf<UnresolvedNgramRule>()
@@ -72,7 +71,6 @@ object NgramPresenceGenerator {
     fun generate(options: NgramGenerationOptions): NgramPresenceManifest {
         val compiled = NgramPresenceCompiler.compile(
             sourceDirectory = options.sourceDirectory,
-            stableTermIdMapPath = options.stableTermIdMapPath,
             strictUnresolved = options.strictUnresolved,
         )
         val duplicateKeyCount = compiled.resolvedRules.size - compiled.keySequences.size
@@ -116,9 +114,9 @@ data class NgramVerificationResult(
 )
 
 object NgramPresenceVerifier {
-    fun verify(sourceDirectory: Path, stableTermIdMapPath: Path, dataPath: Path, strictUnresolved: Boolean = false): NgramVerificationResult {
+    fun verify(sourceDirectory: Path, dataPath: Path, strictUnresolved: Boolean = false): NgramVerificationResult {
         val startedAt = System.nanoTime()
-        val compiled = NgramPresenceCompiler.compile(sourceDirectory, stableTermIdMapPath, strictUnresolved)
+        val compiled = NgramPresenceCompiler.compile(sourceDirectory, strictUnresolved)
         val dictionary = NgramPresenceDataReader().read(dataPath)
         val byOrder = compiled.keySequences.groupBy { it.order }
         var verified = 0
@@ -181,14 +179,20 @@ object NgramPresenceVerifier {
 }
 
 object JapaneseKeyboardDictionaryManifestWriter {
-    fun write(outputPath: Path, ngramManifest: NgramPresenceManifest, stableTermIdMapPath: String) {
+    fun write(
+        outputPath: Path,
+        ngramManifest: NgramPresenceManifest,
+        tokenTermIdDataPath: String,
+        tokenTermIdManifestPath: String,
+    ) {
         val json = buildString {
             appendLine("{")
             appendLine("  \"version\": 1,")
             appendLine("  \"ngramPresence\": {")
             appendLine("    \"data\": \"ngram/ngram_presence.data\",")
             appendLine("    \"manifest\": \"ngram/ngram_presence_manifest.json\",")
-            appendLine("    \"stableTermIdMap\": ${jsonString(stableTermIdMapPath)},")
+            appendLine("    \"tokenTermIdData\": ${jsonString(tokenTermIdDataPath)},")
+            appendLine("    \"tokenTermIdManifest\": ${jsonString(tokenTermIdManifestPath)},")
             appendLine("    \"format\": ${jsonString(ngramManifest.format)},")
             appendLine("    \"keyMode\": ${jsonString(ngramManifest.keyMode)},")
             appendLine("    \"dictionaryBuildId\": ${jsonString(ngramManifest.dictionaryBuildId)},")
@@ -217,7 +221,7 @@ object JapaneseKeyboardDictionaryManifestWriter {
 }
 
 object NgramPerformanceProbe {
-    fun run(sourceDirectory: Path, stableTermIdMapPath: Path, dataPath: Path): String {
+    fun run(sourceDirectory: Path, dataPath: Path): String {
         val runtime = Runtime.getRuntime()
         runtime.gc()
         val heapBefore = runtime.totalMemory() - runtime.freeMemory()
@@ -227,7 +231,7 @@ object NgramPerformanceProbe {
         runtime.gc()
         val heapAfter = runtime.totalMemory() - runtime.freeMemory()
 
-        val compiled = NgramPresenceCompiler.compile(sourceDirectory, stableTermIdMapPath)
+        val compiled = NgramPresenceCompiler.compile(sourceDirectory)
         val probes = compiled.keySequences.take(10_000).ifEmpty {
             listOf(NgramKeySequence(1, longArrayOf(1L)))
         }
@@ -239,7 +243,7 @@ object NgramPerformanceProbe {
         val lookupCount = probes.size * 20L
         val lookupNanos = System.nanoTime() - lookupStart
         val verifyStart = System.nanoTime()
-        val verifyResult = NgramPresenceVerifier.verify(sourceDirectory, stableTermIdMapPath, dataPath)
+        val verifyResult = NgramPresenceVerifier.verify(sourceDirectory, dataPath)
         val verifyNanos = System.nanoTime() - verifyStart
 
         return buildString {

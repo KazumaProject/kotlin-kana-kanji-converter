@@ -6,6 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -34,6 +35,67 @@ class NgramPresenceDictionaryTest {
             assertEquals(listOf("今日", "は", "", "", ""), result.rules.first { it.order == 2 }.surfaces)
             assertEquals("ATOK-1", result.rules.first { it.order == 2 }.source)
             assertEquals("今日は", result.rules.first { it.order == 2 }.comment)
+        } finally {
+            dir.toFile().deleteRecursively()
+        }
+    }
+
+    @Test
+    fun sourceSetManifestSelectsEnabledFilesOnly() {
+        val dir = Files.createTempDirectory("ngram-source-set-")
+        try {
+            dir.resolve("sources_manifest.tsv").writeText(
+                """
+                enabled	file	kind	orders	description
+                true	enabled.tsv	presence	1,2	enabled fixture
+                false	disabled.tsv	presence	1	disabled fixture
+                """.trimIndent() + "\n"
+            )
+            dir.resolve("enabled.tsv").writeText(
+                """
+                order	reading	surface1	surface2	surface3	surface4	surface5	source	comment
+                1	きょう	今日				test	enabled
+                """.trimIndent() + "\n"
+            )
+            dir.resolve("disabled.tsv").writeText(
+                """
+                order	reading	surface1	surface2	surface3	surface4	surface5	source	comment
+                1	あす	明日				test	disabled
+                """.trimIndent() + "\n"
+            )
+
+            val sourceSet = NgramSourceSetManifestReader.read(dir)
+            val result = NgramSourceTsvReader().readDirectory(dir)
+
+            assertEquals(listOf("enabled.tsv"), sourceSet?.enabledFiles)
+            assertEquals(1, result.sourceRowCount)
+            assertEquals(listOf("enabled.tsv"), result.sourceFiles)
+            assertEquals("きょう", result.rules.single().reading)
+        } finally {
+            dir.toFile().deleteRecursively()
+        }
+    }
+
+    @Test
+    fun sourceSetManifestValidatesDeclaredOrders() {
+        val dir = Files.createTempDirectory("ngram-source-set-order-")
+        try {
+            dir.resolve("sources_manifest.tsv").writeText(
+                """
+                enabled	file	kind	orders	description
+                true	rules.tsv	presence	1	only unigrams
+                """.trimIndent() + "\n"
+            )
+            dir.resolve("rules.tsv").writeText(
+                """
+                order	reading	surface1	surface2	surface3	surface4	surface5	source	comment
+                2	きょうは	今日	は			test	invalid
+                """.trimIndent() + "\n"
+            )
+
+            assertFailsWith<IllegalArgumentException> {
+                NgramSourceTsvReader().readDirectory(dir)
+            }
         } finally {
             dir.toFile().deleteRecursively()
         }
@@ -166,6 +228,31 @@ class NgramPresenceDictionaryTest {
         assertContentEquals(bytes1, bytes2)
     }
 
+    @Test
+    fun tokenTermIdSidecarRoundTripsCompactPostingIds() {
+        val dictionaries = listOf(
+            dictionary("きょう", "今日", 10, 11, 100),
+            dictionary("きょう", "京", 12, 13, 200),
+            dictionary("は", "は", 14, 15, 50),
+            dictionary("きょう", "今日", 16, 17, 300),
+        )
+        val build = NgramTokenTermIdBuilder.build(dictionaries)
+        val tempDir = Files.createTempDirectory("ngram-token-term-id-")
+        try {
+            val output = tempDir.resolve("token_term_id.data")
+            val checksum = NgramTokenTermIdDataWriter().write(output, build)
+            val loaded = NgramTokenTermIdDataReader().read(output)
+
+            assertEquals(checksum, loaded.contentChecksumHex)
+            assertEquals(build.buildIdHex, loaded.buildIdHex)
+            assertEquals(build.uniqueTermCount, loaded.uniqueTermCount)
+            assertContentEquals(build.termIdsByTokenPosting, loaded.termIdsByTokenPosting)
+            assertTrue(Files.size(output) < 128L)
+        } finally {
+            tempDir.toFile().deleteRecursively()
+        }
+    }
+
     private fun readDictionaryFromSections(vararg sections: BdzSectionBuild): LoadedNgramPresenceDictionary {
         val byOrder = sections.associateBy { it.order }
         val allSections = (1..NGRAM_SECTION_COUNT).map { order ->
@@ -205,6 +292,15 @@ class NgramPresenceDictionaryTest {
             cost = cost.toShort(),
         )
     }
+
+    private fun dictionary(reading: String, surface: String, leftId: Int, rightId: Int, cost: Int) =
+        com.kazumaproject.dictionary.models.Dictionary(
+            yomi = reading,
+            tango = surface,
+            leftId = leftId.toShort(),
+            rightId = rightId.toShort(),
+            cost = cost.toShort(),
+        )
 
     private fun seq(order: Int, vararg keys: Long): NgramKeySequence = NgramKeySequence(order, keys)
 }

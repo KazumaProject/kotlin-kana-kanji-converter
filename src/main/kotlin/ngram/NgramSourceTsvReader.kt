@@ -10,21 +10,33 @@ class NgramSourceTsvReader {
         require(Files.isDirectory(sourceDirectory)) {
             "N-gram source directory does not exist: $sourceDirectory"
         }
-        val files = Files.list(sourceDirectory).use { stream ->
-            stream
-                .filter { it.isRegularFile() && it.name.endsWith(".tsv") }
-                .sorted { left, right -> left.name.compareTo(right.name) }
-                .toList()
-        }
-        return readFiles(files, sourceDirectory)
+        val sourceSet = NgramSourceSetManifestReader.read(sourceDirectory)
+        val files = sourceSet
+            ?.enabledFiles
+            ?.map { sourceDirectory.resolve(it).normalize() }
+            ?: NgramSourceSetManifestReader.discoverSourceFiles(sourceDirectory)
+        val allowedOrdersBySource = sourceSet
+            ?.entries
+            ?.filter { it.enabled }
+            ?.associate { it.file to it.orders }
+            .orEmpty()
+        return readFiles(files, sourceDirectory, allowedOrdersBySource)
     }
 
     fun readFiles(files: List<Path>, sourceRoot: Path? = null): NgramSourceReadResult {
+        return readFiles(files, sourceRoot, emptyMap())
+    }
+
+    private fun readFiles(
+        files: List<Path>,
+        sourceRoot: Path? = null,
+        allowedOrdersBySource: Map<String, Set<Int>>,
+    ): NgramSourceReadResult {
         val allRules = mutableListOf<NgramRule>()
         val sourceFiles = mutableListOf<String>()
         var sourceRowCount = 0
 
-        files.sortedBy { it.toString() }.forEach { file ->
+        files.forEach { file ->
             require(file.isRegularFile()) { "N-gram source TSV does not exist: $file" }
             val sourceName = sourceRoot?.relativize(file)?.toString()?.replace('\\', '/') ?: file.name
             sourceFiles += sourceName
@@ -48,6 +60,12 @@ class NgramSourceTsvReader {
                 val orderText = column(columns, headerIndex, "order")
                 val order = orderText.toIntOrNull()
                     ?: throw IllegalArgumentException("Invalid N-gram order: file=$file line=$lineNumber value=$orderText")
+                allowedOrdersBySource[sourceName]?.let { allowedOrders ->
+                    require(order in allowedOrders) {
+                        "N-gram source order is not allowed by $NGRAM_SOURCE_SET_MANIFEST: " +
+                                "file=$sourceName line=$lineNumber order=$order allowed=${allowedOrders.sorted()}"
+                    }
+                }
                 val surfaces = (1..NGRAM_SECTION_COUNT).map { surfaceIndex ->
                     column(columns, headerIndex, "surface$surfaceIndex")
                 }

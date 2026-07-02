@@ -32,19 +32,10 @@ data class StableTermIdMap(
 
     companion object {
         fun build(dictionaries: Iterable<Dictionary>): StableTermIdMap {
-            val termIdentities = dictionaries
-                .map { TermIdentity(it.yomi, it.tango) }
-                .distinct()
-                .sortedWith(compareBy<TermIdentity> { it.reading.length }
-                    .thenBy { it.reading }
-                    .thenBy { it.surface.length }
-                    .thenBy { it.surface })
+            val dictionaryList = dictionaries.toList()
+            val termIds = NgramTokenTermIdBuilder.stableTermIds(dictionaryList)
 
-            val termIds = termIdentities
-                .mapIndexed { index, identity -> identity to index + 1 }
-                .toMap()
-
-            val terms = dictionaries
+            val terms = dictionaryList
                 .map { dictionary ->
                     val termId = termIds.getValue(TermIdentity(dictionary.yomi, dictionary.tango))
                     NgramTerm(
@@ -146,11 +137,6 @@ private fun decodeTermMapText(value: String): String = buildString {
         index += 2
     }
 }
-
-private data class TermIdentity(
-    val reading: String,
-    val surface: String,
-)
 
 object NgramDictionarySource {
     private val systemDictionaryFiles = listOf(
