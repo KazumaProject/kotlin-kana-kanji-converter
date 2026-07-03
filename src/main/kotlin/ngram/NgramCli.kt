@@ -66,7 +66,50 @@ object VerifyNgramPresenceData {
     }
 }
 
+object GenerateNgramCorrectionData {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val cli = CliArgs(args)
+        val manifest = NgramCorrectionGenerator.generate(
+            sourceDirectory = Path.of(cli.required("--sources_dir")),
+            outputDataPath = Path.of(cli.required("--output_data")),
+            outputManifestPath = Path.of(cli.required("--output_manifest")),
+        )
+        cli.optional("--dictionary_manifest")?.let { output ->
+            JapaneseKeyboardDictionaryManifestWriter.writeCorrection(
+                outputPath = Path.of(output),
+                manifest = manifest,
+            )
+        }
+        println(
+            "Wrote N-gram correction data: candidates=${manifest.candidateCount} " +
+                    "readings=${manifest.readingCount} checksum=${manifest.contentChecksum}"
+        )
+    }
+}
+
+object VerifyNgramCorrectionData {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val cli = CliArgs(args)
+        val verified = NgramCorrectionVerifier.verify(
+            sourceDirectory = Path.of(cli.required("--sources_dir")),
+            dataPath = Path.of(cli.required("--input_data")),
+        )
+        println("Verified N-gram correction data: candidates=$verified")
+    }
+}
+
 object DumpNgramPresenceManifest {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val cli = CliArgs(args)
+        val manifestPath = Path.of(cli.required("--manifest"))
+        print(java.nio.file.Files.readString(manifestPath))
+    }
+}
+
+object DumpNgramCorrectionManifest {
     @JvmStatic
     fun main(args: Array<String>) {
         val cli = CliArgs(args)
@@ -81,6 +124,19 @@ object ProbeNgramPresencePerformance {
         val cli = CliArgs(args)
         println(
             NgramPerformanceProbe.run(
+                sourceDirectory = Path.of(cli.required("--sources_dir")),
+                dataPath = Path.of(cli.required("--input_data")),
+            )
+        )
+    }
+}
+
+object ProbeNgramCorrectionPerformance {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val cli = CliArgs(args)
+        println(
+            NgramCorrectionPerformanceProbe.run(
                 sourceDirectory = Path.of(cli.required("--sources_dir")),
                 dataPath = Path.of(cli.required("--input_data")),
             )

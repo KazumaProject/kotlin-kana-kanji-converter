@@ -201,10 +201,8 @@ val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("zero_query_string.data", "mozc/zero_query/zero_query_string.data"),
     JapaneseKeyboardAssetSpec("zero_query_number_token.data", "mozc/zero_query/zero_query_number_token.data"),
     JapaneseKeyboardAssetSpec("zero_query_number_string.data", "mozc/zero_query/zero_query_number_string.data"),
-    JapaneseKeyboardAssetSpec("ngram/ngram_presence.data", "ngram/ngram_presence.data"),
-    JapaneseKeyboardAssetSpec("ngram/ngram_presence_manifest.json", "ngram/ngram_presence_manifest.json"),
-    JapaneseKeyboardAssetSpec("ngram/token_term_id.data", "ngram/token_term_id.data"),
-    JapaneseKeyboardAssetSpec("ngram/token_term_id_manifest.json", "ngram/token_term_id_manifest.json"),
+    JapaneseKeyboardAssetSpec("ngram/ngram_correction.data", "ngram/ngram_correction.data"),
+    JapaneseKeyboardAssetSpec("ngram/ngram_correction_manifest.json", "ngram/ngram_correction_manifest.json"),
 )
 
 val mozcZeroQueryOfficialResourceNames = listOf(
@@ -229,6 +227,8 @@ val ngramTokenTermIdDataFile = dictionaryResourcesDir.file("ngram/token_term_id.
 val ngramTokenTermIdManifestFile = dictionaryResourcesDir.file("ngram/token_term_id_manifest.json")
 val ngramPresenceDataFile = dictionaryResourcesDir.file("ngram/ngram_presence.data")
 val ngramPresenceManifestFile = dictionaryResourcesDir.file("ngram/ngram_presence_manifest.json")
+val ngramCorrectionDataFile = dictionaryResourcesDir.file("ngram/ngram_correction.data")
+val ngramCorrectionManifestFile = dictionaryResourcesDir.file("ngram/ngram_correction_manifest.json")
 val dictionaryManifestFile = dictionaryResourcesDir.file("dictionary_manifest.json")
 
 fun requireNonEmptyFile(file: File, label: String) {
@@ -892,6 +892,73 @@ tasks.register<Test>("ngramPresenceLookupPerformanceTest") {
     }
 }
 
+val generateNgramCorrectionData = tasks.register<JavaExec>("generateNgramCorrectionData") {
+    group = "distribution"
+    description = "Generates the independent exact N-gram correction dictionary and manifest."
+    mainClass.set("com.kazumaproject.ngram.GenerateNgramCorrectionData")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("compileKotlin", prepareNgramSources)
+    inputs.dir(ngramSourcesDir)
+    outputs.file(ngramCorrectionDataFile)
+    outputs.file(ngramCorrectionManifestFile)
+    outputs.file(dictionaryManifestFile)
+    args(
+        "--sources_dir", ngramSourcesDir.asFile.path,
+        "--output_data", ngramCorrectionDataFile.asFile.path,
+        "--output_manifest", ngramCorrectionManifestFile.asFile.path,
+        "--dictionary_manifest", dictionaryManifestFile.asFile.path,
+    )
+}
+
+val verifyNgramCorrectionData = tasks.register<JavaExec>("verifyNgramCorrectionData") {
+    group = "verification"
+    description = "Verifies independent N-gram correction lookups."
+    mainClass.set("com.kazumaproject.ngram.VerifyNgramCorrectionData")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("compileKotlin", generateNgramCorrectionData)
+    inputs.dir(ngramSourcesDir)
+    inputs.file(ngramCorrectionDataFile)
+    args(
+        "--sources_dir", ngramSourcesDir.asFile.path,
+        "--input_data", ngramCorrectionDataFile.asFile.path,
+    )
+}
+
+val dumpNgramCorrectionManifest = tasks.register<JavaExec>("dumpNgramCorrectionManifest") {
+    group = "verification"
+    description = "Dumps the generated N-gram correction manifest."
+    mainClass.set("com.kazumaproject.ngram.DumpNgramCorrectionManifest")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn(generateNgramCorrectionData)
+    inputs.file(ngramCorrectionManifestFile)
+    args("--manifest", ngramCorrectionManifestFile.asFile.path)
+}
+
+tasks.register<JavaExec>("probeNgramCorrectionPerformance") {
+    group = "verification"
+    description = "Prints N-gram correction load, heap, lookup, size, and verification probes."
+    mainClass.set("com.kazumaproject.ngram.ProbeNgramCorrectionPerformance")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn(generateNgramCorrectionData)
+    inputs.dir(ngramSourcesDir)
+    inputs.file(ngramCorrectionDataFile)
+    args(
+        "--sources_dir", ngramSourcesDir.asFile.path,
+        "--input_data", ngramCorrectionDataFile.asFile.path,
+    )
+}
+
+tasks.register<Test>("ngramCorrectionLookupPerformanceTest") {
+    group = "verification"
+    description = "Measures generated independent N-gram correction dictionary lookup time."
+    useJUnitPlatform()
+    dependsOn(generateNgramCorrectionData)
+    systemProperty("ngram.correction.lookup.perf", "true")
+    filter {
+        includeTestsMatching("*NgramCorrectionLookupPerformanceTest")
+    }
+}
+
 val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeyboardDictionaries") {
     group = "distribution"
     description = "Generates all dictionary .dat files used by the JapaneseKeyboard assets package."
@@ -902,11 +969,9 @@ val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeybo
         "runMozcUTNeologd",
         "runMozcUTWikiNeologdCommon",
         generateMozcZeroQueryData,
-        generateStableTermIdMap,
-        generateTokenArrayV2,
-        generateNgramPresenceData,
-        verifyNgramPresenceData,
-        dumpNgramPresenceManifest,
+        generateNgramCorrectionData,
+        verifyNgramCorrectionData,
+        dumpNgramCorrectionManifest,
     )
 }
 

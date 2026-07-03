@@ -184,6 +184,13 @@ object JapaneseKeyboardDictionaryManifestWriter {
         ngramManifest: NgramPresenceManifest,
         tokenTermIdDataPath: String,
         tokenTermIdManifestPath: String,
+    ) = writePresence(outputPath, ngramManifest, tokenTermIdDataPath, tokenTermIdManifestPath)
+
+    fun writePresence(
+        outputPath: Path,
+        ngramManifest: NgramPresenceManifest,
+        tokenTermIdDataPath: String,
+        tokenTermIdManifestPath: String,
     ) {
         val json = buildString {
             appendLine("{")
@@ -197,6 +204,26 @@ object JapaneseKeyboardDictionaryManifestWriter {
             appendLine("    \"keyMode\": ${jsonString(ngramManifest.keyMode)},")
             appendLine("    \"dictionaryBuildId\": ${jsonString(ngramManifest.dictionaryBuildId)},")
             appendLine("    \"contentChecksum\": ${jsonString(ngramManifest.contentChecksum)}")
+            appendLine("  }")
+            appendLine("}")
+        }
+        outputPath.parent?.toFile()?.mkdirs()
+        java.nio.file.Files.writeString(outputPath, json)
+    }
+
+    fun writeCorrection(outputPath: Path, manifest: NgramCorrectionManifest) {
+        val json = buildString {
+            appendLine("{")
+            appendLine("  \"version\": 2,")
+            appendLine("  \"ngramCorrection\": {")
+            appendLine("    \"data\": \"ngram/ngram_correction.data\",")
+            appendLine("    \"manifest\": \"ngram/ngram_correction_manifest.json\",")
+            appendLine("    \"format\": ${jsonString(manifest.format)},")
+            appendLine("    \"lookupMode\": ${jsonString(manifest.lookupMode)},")
+            appendLine("    \"candidateOrder\": ${jsonString(manifest.candidateOrder)},")
+            appendLine("    \"defaultPlacement\": \"FIRST_CANDIDATE\",")
+            appendLine("    \"dictionaryBuildId\": ${jsonString(manifest.dictionaryBuildId)},")
+            appendLine("    \"contentChecksum\": ${jsonString(manifest.contentChecksum)}")
             appendLine("  }")
             appendLine("}")
         }

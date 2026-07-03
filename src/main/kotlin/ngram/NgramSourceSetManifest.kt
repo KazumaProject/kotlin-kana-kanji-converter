@@ -69,7 +69,7 @@ object NgramSourceSetManifestReader {
                             "firstLine=${first.lineNumber}, secondLine=${entry.lineNumber}"
                 )
             }
-            require(entry.kind == "presence") {
+            require(entry.kind in setOf("presence", "correction")) {
                 "Unsupported N-gram source kind at $manifest:${entry.lineNumber}: ${entry.kind}"
             }
             require(entry.orders.all { it in 1..NGRAM_SECTION_COUNT }) {

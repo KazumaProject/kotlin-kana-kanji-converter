@@ -90,14 +90,12 @@ jobs:
       - name: Generate and verify Mozc zero query data
         run: ./gradlew generateMozcZeroQueryData verifyMozcZeroQueryData
 
-      - name: Generate dictionaries, N-gram presence data, package assets, and verify
+      - name: Generate dictionaries, N-gram correction data, package assets, and verify
         run: >
           ./gradlew
-          generateStableTermIdMap
-          generateTokenArrayV2
-          generateNgramPresenceData
-          verifyNgramPresenceData
-          dumpNgramPresenceManifest
+          generateNgramCorrectionData
+          verifyNgramCorrectionData
+          dumpNgramCorrectionManifest
           packageJapaneseKeyboardDictionaryAssets
           verifyJapaneseKeyboardDictionaryAssets
 
