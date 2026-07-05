@@ -1,0 +1,2 @@
+enabled	file	kind	description
+true	manual_context.tsv	contextual_correction	Manual contextual correction rules.

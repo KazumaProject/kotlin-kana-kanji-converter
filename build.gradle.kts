@@ -203,6 +203,10 @@ val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("zero_query_number_string.data", "mozc/zero_query/zero_query_number_string.data"),
     JapaneseKeyboardAssetSpec("ngram/ngram_correction.data", "ngram/ngram_correction.data"),
     JapaneseKeyboardAssetSpec("ngram/ngram_correction_manifest.json", "ngram/ngram_correction_manifest.json"),
+    JapaneseKeyboardAssetSpec("ngram/coarse_pos_class.data", "ngram/coarse_pos_class.data"),
+    JapaneseKeyboardAssetSpec("ngram/coarse_pos_class_manifest.json", "ngram/coarse_pos_class_manifest.json"),
+    JapaneseKeyboardAssetSpec("ngram/context_correction.data", "ngram/context_correction.data"),
+    JapaneseKeyboardAssetSpec("ngram/context_correction_manifest.json", "ngram/context_correction_manifest.json"),
 )
 
 val mozcZeroQueryOfficialResourceNames = listOf(
@@ -223,12 +227,18 @@ val mozcCustomZeroQueryResourceName = "custom_zero_query.def"
 val mozcCustomZeroQueryFileProvider = layout.projectDirectory.file("src/main/custom_zero_query.def")
 val committedNgramSourcesDir = layout.projectDirectory.dir("src/main/ngram/sources")
 val ngramSourcesDir = dictionaryResourcesDir.dir("ngram/sources")
+val committedContextualCorrectionSourcesDir = layout.projectDirectory.dir("src/main/ngram/context_sources")
+val contextualCorrectionSourcesDir = dictionaryResourcesDir.dir("ngram/context_sources")
 val ngramTokenTermIdDataFile = dictionaryResourcesDir.file("ngram/token_term_id.data")
 val ngramTokenTermIdManifestFile = dictionaryResourcesDir.file("ngram/token_term_id_manifest.json")
 val ngramPresenceDataFile = dictionaryResourcesDir.file("ngram/ngram_presence.data")
 val ngramPresenceManifestFile = dictionaryResourcesDir.file("ngram/ngram_presence_manifest.json")
 val ngramCorrectionDataFile = dictionaryResourcesDir.file("ngram/ngram_correction.data")
 val ngramCorrectionManifestFile = dictionaryResourcesDir.file("ngram/ngram_correction_manifest.json")
+val coarsePosClassDataFile = dictionaryResourcesDir.file("ngram/coarse_pos_class.data")
+val coarsePosClassManifestFile = dictionaryResourcesDir.file("ngram/coarse_pos_class_manifest.json")
+val contextualCorrectionDataFile = dictionaryResourcesDir.file("ngram/context_correction.data")
+val contextualCorrectionManifestFile = dictionaryResourcesDir.file("ngram/context_correction_manifest.json")
 val dictionaryManifestFile = dictionaryResourcesDir.file("dictionary_manifest.json")
 
 fun requireNonEmptyFile(file: File, label: String) {
@@ -796,8 +806,24 @@ val prepareNgramSources = tasks.register<Copy>("prepareNgramSources") {
     }
 }
 
+val prepareContextualCorrectionSources = tasks.register<Copy>("prepareContextualCorrectionSources") {
+    group = "distribution"
+    description = "Copies committed contextual correction TSV sources into the ignored resources input directory."
+    val sourceTree = fileTree(committedContextualCorrectionSourcesDir) {
+        include("**/*.tsv")
+    }
+    from(sourceTree)
+    into(contextualCorrectionSourcesDir)
+    doFirst {
+        if (sourceTree.files.isEmpty()) {
+            throw GradleException("Missing committed contextual correction TSV sources: directory=${committedContextualCorrectionSourcesDir.asFile.path}")
+        }
+    }
+}
+
 tasks.named("processResources") {
     dependsOn(prepareNgramSources)
+    dependsOn(prepareContextualCorrectionSources)
 }
 
 val generateStableTermIdMap = tasks.register<JavaExec>("generateStableTermIdMap") {
@@ -959,6 +985,142 @@ tasks.register<Test>("ngramCorrectionLookupPerformanceTest") {
     }
 }
 
+val generateCoarsePosClassData = tasks.register<JavaExec>("generateCoarsePosClassData") {
+    group = "distribution"
+    description = "Generates the compact leftId-to-coarse-class table for contextual correction."
+    mainClass.set("com.kazumaproject.ngram.GenerateCoarsePosClassData")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("compileKotlin", validateMozcIdDef)
+    inputs.file(mozcIdDefFileProvider)
+    outputs.file(coarsePosClassDataFile)
+    outputs.file(coarsePosClassManifestFile)
+    args(
+        "--id_def", mozcIdDefFileProvider.get().asFile.path,
+        "--output_data", coarsePosClassDataFile.asFile.path,
+        "--output_manifest", coarsePosClassManifestFile.asFile.path,
+    )
+}
+
+val verifyCoarsePosClassData = tasks.register<JavaExec>("verifyCoarsePosClassData") {
+    group = "verification"
+    description = "Verifies the generated leftId-to-coarse-class table against id.def."
+    mainClass.set("com.kazumaproject.ngram.VerifyCoarsePosClassData")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("compileKotlin", generateCoarsePosClassData)
+    inputs.file(mozcIdDefFileProvider)
+    inputs.file(coarsePosClassDataFile)
+    args(
+        "--id_def", mozcIdDefFileProvider.get().asFile.path,
+        "--input_data", coarsePosClassDataFile.asFile.path,
+    )
+}
+
+val dumpCoarsePosClassManifest = tasks.register<JavaExec>("dumpCoarsePosClassManifest") {
+    group = "verification"
+    description = "Dumps the generated coarse POS class manifest."
+    mainClass.set("com.kazumaproject.ngram.DumpCoarsePosClassManifest")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn(generateCoarsePosClassData)
+    inputs.file(coarsePosClassManifestFile)
+    args("--manifest", coarsePosClassManifestFile.asFile.path)
+}
+
+tasks.register<JavaExec>("probeCoarsePosClassPerformance") {
+    group = "verification"
+    description = "Prints coarse POS class load, heap, lookup, size, and verification probes."
+    mainClass.set("com.kazumaproject.ngram.ProbeCoarsePosClassPerformance")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn(generateCoarsePosClassData)
+    inputs.file(mozcIdDefFileProvider)
+    inputs.file(coarsePosClassDataFile)
+    args(
+        "--id_def", mozcIdDefFileProvider.get().asFile.path,
+        "--input_data", coarsePosClassDataFile.asFile.path,
+    )
+}
+
+tasks.register<Test>("coarsePosClassLookupPerformanceTest") {
+    group = "verification"
+    description = "Measures generated coarse POS class lookup time."
+    useJUnitPlatform()
+    dependsOn(generateCoarsePosClassData)
+    systemProperty("coarse.pos.class.lookup.perf", "true")
+    filter {
+        includeTestsMatching("*CoarsePosClassLookupPerformanceTest")
+    }
+}
+
+val generateContextualCorrectionData = tasks.register<JavaExec>("generateContextualCorrectionData") {
+    group = "distribution"
+    description = "Generates the independent contextual correction dictionary and manifest."
+    mainClass.set("com.kazumaproject.ngram.GenerateContextualCorrectionData")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("compileKotlin", prepareContextualCorrectionSources, generateNgramCorrectionData, generateCoarsePosClassData)
+    inputs.dir(contextualCorrectionSourcesDir)
+    inputs.file(ngramCorrectionManifestFile)
+    inputs.file(coarsePosClassManifestFile)
+    outputs.file(contextualCorrectionDataFile)
+    outputs.file(contextualCorrectionManifestFile)
+    outputs.file(dictionaryManifestFile)
+    args(
+        "--sources_dir", contextualCorrectionSourcesDir.asFile.path,
+        "--output_data", contextualCorrectionDataFile.asFile.path,
+        "--output_manifest", contextualCorrectionManifestFile.asFile.path,
+        "--ngram_manifest", ngramCorrectionManifestFile.asFile.path,
+        "--coarse_pos_manifest", coarsePosClassManifestFile.asFile.path,
+        "--dictionary_manifest", dictionaryManifestFile.asFile.path,
+    )
+}
+
+val verifyContextualCorrectionData = tasks.register<JavaExec>("verifyContextualCorrectionData") {
+    group = "verification"
+    description = "Verifies independent contextual correction lookups."
+    mainClass.set("com.kazumaproject.ngram.VerifyContextualCorrectionData")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("compileKotlin", generateContextualCorrectionData)
+    inputs.dir(contextualCorrectionSourcesDir)
+    inputs.file(contextualCorrectionDataFile)
+    args(
+        "--sources_dir", contextualCorrectionSourcesDir.asFile.path,
+        "--input_data", contextualCorrectionDataFile.asFile.path,
+    )
+}
+
+val dumpContextualCorrectionManifest = tasks.register<JavaExec>("dumpContextualCorrectionManifest") {
+    group = "verification"
+    description = "Dumps the generated contextual correction manifest."
+    mainClass.set("com.kazumaproject.ngram.DumpContextualCorrectionManifest")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn(generateContextualCorrectionData)
+    inputs.file(contextualCorrectionManifestFile)
+    args("--manifest", contextualCorrectionManifestFile.asFile.path)
+}
+
+tasks.register<JavaExec>("probeContextualCorrectionPerformance") {
+    group = "verification"
+    description = "Prints contextual correction load, heap, lookup, size, and verification probes."
+    mainClass.set("com.kazumaproject.ngram.ProbeContextualCorrectionPerformance")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn(generateContextualCorrectionData)
+    inputs.dir(contextualCorrectionSourcesDir)
+    inputs.file(contextualCorrectionDataFile)
+    args(
+        "--sources_dir", contextualCorrectionSourcesDir.asFile.path,
+        "--input_data", contextualCorrectionDataFile.asFile.path,
+    )
+}
+
+tasks.register<Test>("contextualCorrectionLookupPerformanceTest") {
+    group = "verification"
+    description = "Measures generated contextual correction dictionary lookup time."
+    useJUnitPlatform()
+    dependsOn(generateContextualCorrectionData)
+    systemProperty("contextual.correction.lookup.perf", "true")
+    filter {
+        includeTestsMatching("*ContextualCorrectionLookupPerformanceTest")
+    }
+}
+
 val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeyboardDictionaries") {
     group = "distribution"
     description = "Generates all dictionary .dat files used by the JapaneseKeyboard assets package."
@@ -972,6 +1134,12 @@ val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeybo
         generateNgramCorrectionData,
         verifyNgramCorrectionData,
         dumpNgramCorrectionManifest,
+        generateCoarsePosClassData,
+        verifyCoarsePosClassData,
+        dumpCoarsePosClassManifest,
+        generateContextualCorrectionData,
+        verifyContextualCorrectionData,
+        dumpContextualCorrectionManifest,
     )
 }
 

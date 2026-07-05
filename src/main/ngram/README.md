@@ -31,3 +31,69 @@ reading are kept as additional candidates, not scored rules.
 The Gradle task `prepareNgramSources` copies these committed sources into
 `src/main/resources/ngram/sources`, which remains ignored by git. The generator
 then reads `src/main/resources/ngram/sources/*.tsv` through the manifest.
+
+## Contextual Correction Sources
+
+Add variable-context correction rules under `src/main/ngram/context_sources`.
+
+1. Add a TSV file with columns:
+   `id pattern source comment`
+2. Add one row to `context_sources/sources_manifest.tsv`.
+3. Run `./gradlew generateContextualCorrectionData verifyContextualCorrectionData`.
+
+Pattern DSL:
+
+- `lit(reading,surface)`: fixed token, reading and surface must match exactly.
+- `slot(name,CLASS)`: variable token constrained by coarse class such as `NOUN`.
+- `target(reading,fromSurface,toSurface)`: fixed token to rewrite.
+
+Example:
+
+```text
+lit(ぬので,布で) slot(object,NOUN) lit(を,を) target(ふく,吹く,拭く)
+```
+
+This matches `布で / フルート / を / 吹く` when `フルート` is tagged as
+`NOUN`, and returns `布で / フルート / を / 拭く`. Rule priority is
+deterministic: manifest order, then TSV row order. The runtime dictionary uses
+token sequence exact checks plus coarse-class slots, and remains independent
+from system dictionary IDs.
+
+## Coarse POS Class Table
+
+Contextual correction rules do not parse `id.def` at JapaneseKeyboard runtime.
+The converter generates `ngram/coarse_pos_class.data` from Mozc `id.def`:
+
+```text
+leftId -> ContextualCorrectionCoarseClass byte
+```
+
+JapaneseKeyboard should build each contextual token from the actual conversion
+path node:
+
+```kotlin
+ContextualCorrectionToken(
+    reading = node.yomiUsed,
+    surface = node.tango,
+    coarseClass = coarsePosClassTable.classify(node.l),
+)
+```
+
+The mapping policy is `LEFT_ID_POS1_V1`. It uses the left connection ID as the
+primary POS signal:
+
+- `名詞` -> `NOUN`
+- `助詞` -> `PARTICLE`
+- `動詞` -> `VERB`
+- `助動詞` -> `AUX`
+- `記号` -> `SYMBOL`
+- everything else -> `UNKNOWN`
+
+Run:
+
+```shell
+./gradlew generateCoarsePosClassData verifyCoarsePosClassData
+```
+
+The generated table is a compact byte array indexed by `leftId`; it is included
+in the JapaneseKeyboard-ready assets package with `coarse_pos_class_manifest.json`.

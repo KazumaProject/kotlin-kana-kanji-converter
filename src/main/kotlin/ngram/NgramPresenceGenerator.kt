@@ -231,6 +231,66 @@ object JapaneseKeyboardDictionaryManifestWriter {
         java.nio.file.Files.writeString(outputPath, json)
     }
 
+    fun writeCorrection(
+        outputPath: Path,
+        ngramCorrectionDataPath: String,
+        ngramCorrectionManifestPath: String,
+        ngramCorrectionFormat: String,
+        ngramCorrectionLookupMode: String,
+        ngramCorrectionCandidateOrder: String,
+        ngramCorrectionDictionaryBuildId: String,
+        ngramCorrectionContentChecksum: String,
+        contextualCorrectionManifest: ContextualCorrectionManifest,
+        coarsePosClassDataPath: String,
+        coarsePosClassManifestPath: String,
+        coarsePosClassFormat: String,
+        coarsePosClassKeyMode: String,
+        coarsePosClassMappingPolicy: String,
+        coarsePosClassDictionaryBuildId: String,
+        coarsePosClassContentChecksum: String,
+        coarsePosClassSourceChecksum: String,
+    ) {
+        val json = buildString {
+            appendLine("{")
+            appendLine("  \"version\": 4,")
+            appendLine("  \"ngramCorrection\": {")
+            appendLine("    \"data\": ${jsonString(ngramCorrectionDataPath)},")
+            appendLine("    \"manifest\": ${jsonString(ngramCorrectionManifestPath)},")
+            appendLine("    \"format\": ${jsonString(ngramCorrectionFormat)},")
+            appendLine("    \"lookupMode\": ${jsonString(ngramCorrectionLookupMode)},")
+            appendLine("    \"candidateOrder\": ${jsonString(ngramCorrectionCandidateOrder)},")
+            appendLine("    \"defaultPlacement\": \"FIRST_CANDIDATE\",")
+            appendLine("    \"dictionaryBuildId\": ${jsonString(ngramCorrectionDictionaryBuildId)},")
+            appendLine("    \"contentChecksum\": ${jsonString(ngramCorrectionContentChecksum)}")
+            appendLine("  },")
+            appendLine("  \"contextualCorrection\": {")
+            appendLine("    \"data\": \"ngram/context_correction.data\",")
+            appendLine("    \"manifest\": \"ngram/context_correction_manifest.json\",")
+            appendLine("    \"format\": ${jsonString(contextualCorrectionManifest.format)},")
+            appendLine("    \"lookupMode\": ${jsonString(contextualCorrectionManifest.lookupMode)},")
+            appendLine("    \"candidateOrder\": ${jsonString(contextualCorrectionManifest.candidateOrder)},")
+            appendLine("    \"defaultPlacement\": \"FIRST_CANDIDATE\",")
+            appendLine("    \"dictionaryBuildId\": ${jsonString(contextualCorrectionManifest.dictionaryBuildId)},")
+            appendLine("    \"contentChecksum\": ${jsonString(contextualCorrectionManifest.contentChecksum)}")
+            appendLine("  },")
+            appendLine("  \"coarsePosClass\": {")
+            appendLine("    \"data\": ${jsonString(coarsePosClassDataPath)},")
+            appendLine("    \"manifest\": ${jsonString(coarsePosClassManifestPath)},")
+            appendLine("    \"format\": ${jsonString(coarsePosClassFormat)},")
+            appendLine("    \"keyMode\": ${jsonString(coarsePosClassKeyMode)},")
+            appendLine("    \"mappingPolicy\": ${jsonString(coarsePosClassMappingPolicy)},")
+            appendLine("    \"nodeField\": \"leftId\",")
+            appendLine("    \"fallbackNodeField\": \"rightId\",")
+            appendLine("    \"dictionaryBuildId\": ${jsonString(coarsePosClassDictionaryBuildId)},")
+            appendLine("    \"contentChecksum\": ${jsonString(coarsePosClassContentChecksum)},")
+            appendLine("    \"sourceChecksum\": ${jsonString(coarsePosClassSourceChecksum)}")
+            appendLine("  }")
+            appendLine("}")
+        }
+        outputPath.parent?.toFile()?.mkdirs()
+        java.nio.file.Files.writeString(outputPath, json)
+    }
+
     private fun jsonString(value: String): String = buildString {
         append('"')
         value.forEach { ch ->

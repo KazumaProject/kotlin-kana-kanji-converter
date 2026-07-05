@@ -1,0 +1,2 @@
+id	pattern	source	comment
+cloth_wipe_object	lit(ぬので,布で) slot(object,NOUN) lit(を,を) target(ふく,吹く,拭く)	manual	布で + 名詞 + を + ふく is usually wipe, not play.

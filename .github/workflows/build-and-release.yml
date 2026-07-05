@@ -96,6 +96,12 @@ jobs:
           generateNgramCorrectionData
           verifyNgramCorrectionData
           dumpNgramCorrectionManifest
+          generateCoarsePosClassData
+          verifyCoarsePosClassData
+          dumpCoarsePosClassManifest
+          generateContextualCorrectionData
+          verifyContextualCorrectionData
+          dumpContextualCorrectionManifest
           packageJapaneseKeyboardDictionaryAssets
           verifyJapaneseKeyboardDictionaryAssets
 
