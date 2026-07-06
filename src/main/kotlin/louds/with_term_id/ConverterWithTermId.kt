@@ -28,9 +28,6 @@ class ConverterWithTermId {
                     LBSTemp.add(true)
                     labels.add(entry.key)
                     isLeafTemp.add(entry.value.second.isWord)
-                    if (entry.value.second.isWord){
-                        termIds.add(entry.value.second.termId)
-                    }
                 }
             }
         }

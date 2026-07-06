@@ -14,10 +14,9 @@ import java.text.Normalizer
 import java.util.*
 
 class TokenArray {
-    private var posTableIndexList: MutableList<Short> = arrayListOf()
-    private var wordCostList: MutableList<Short> = arrayListOf()
-    private var nodeIdList: MutableList<Int> = arrayListOf()
-    private var bitListTemp: MutableList<Boolean> = arrayListOf()
+    private var posTableIndexList: ShortArray = shortArrayOf()
+    private var wordCostList: ShortArray = shortArrayOf()
+    private var nodeIdList: IntArray = intArrayOf()
     private var bitvector: BitSet = BitSet()
     @Transient
     private var postingsSuccinct: SuccinctBitVector? = null
@@ -50,25 +49,63 @@ class TokenArray {
         out: ObjectOutput,
         mode: Int,
         posTableForBuildPath: String? = null,
+        yomiTermIdResolver: ((String) -> Int)? = null,
     ) {
 
         val posTableWithIndex = readPOSTableWithIndex(mode, posTableForBuildPath)
-        for ((key, dictionaryList) in dictionaries) {
-            bitListTemp.add(false)
+        val orderedEntries = orderDictionaryEntries(dictionaries, yomiTermIdResolver)
+        val entryCount = orderedEntries.sumOf { it.value.size }
+        val posTableIndexBuilder = ShortArray(entryCount)
+        val wordCostBuilder = ShortArray(entryCount)
+        val nodeIdBuilder = IntArray(entryCount)
+        val bitvectorBuilder = BitSet()
+        var tokenIndex = 0
+        var bitIndex = 0
+
+        for ((key, dictionaryList) in orderedEntries) {
+            bitIndex += 1
             for (dictionary in dictionaryList) {
-                bitListTemp.add(true)
+                bitvectorBuilder.set(bitIndex)
+                bitIndex += 1
                 val posIndex = posTableWithIndex.getValue(Pair(dictionary.leftId, dictionary.rightId))
-                posTableIndexList.add(posIndex.toShort())
-                wordCostList.add(dictionary.cost)
+                posTableIndexBuilder[tokenIndex] = posIndex.toShort()
+                wordCostBuilder[tokenIndex] = dictionary.cost
                 val nodeId = getNodeIdForDictionary(dictionary, tangoTrie, key)
-                nodeIdList.add(nodeId)
+                nodeIdBuilder[tokenIndex] = nodeId
+                tokenIndex += 1
             }
         }
+
+        posTableIndexList = posTableIndexBuilder
+        wordCostList = wordCostBuilder
+        nodeIdList = nodeIdBuilder
+        bitvector = bitvectorBuilder
         writeExternalNotCompress(out)
     }
 
-    private val HIRAGANA_SENTINEL = -2
-    private val KATAKANA_SENTINEL = -1
+    private fun orderDictionaryEntries(
+        dictionaries: Map<String, List<Dictionary>>,
+        yomiTermIdResolver: ((String) -> Int)?,
+    ): List<Map.Entry<String, List<Dictionary>>> {
+        val entries = dictionaries.entries.toList()
+        if (yomiTermIdResolver == null) return entries
+
+        val entriesWithTermIds = entries.map { entry ->
+            val termId = yomiTermIdResolver(entry.key)
+            require(termId > 0) {
+                "Invalid yomi term id: yomi=${entry.key}, termId=$termId"
+            }
+            entry to termId
+        }.sortedBy { it.second }
+
+        entriesWithTermIds.forEachIndexed { index, (_, termId) ->
+            require(termId == index + 1) {
+                "Yomi term ids must be contiguous and 1-based: expected=${index + 1}, actual=$termId"
+            }
+        }
+
+        return entriesWithTermIds.map { it.first }
+    }
 
     private fun getNodeIdForDictionary(
         dictionary: Dictionary,
@@ -94,14 +131,17 @@ class TokenArray {
     ) {
         try {
             out.apply {
-                writeInt(posTableIndexList.toByteArrayFromListShort().size)
-                writeInt(wordCostList.toByteArrayFromListShort().size)
-                writeInt(nodeIdList.toByteArray().size)
+                val posTableIndexBytes = posTableIndexList.toByteArray()
+                val wordCostBytes = wordCostList.toByteArray()
+                val nodeIdBytes = nodeIdList.toByteArray()
+                writeInt(posTableIndexBytes.size)
+                writeInt(wordCostBytes.size)
+                writeInt(nodeIdBytes.size)
 
-                writeObject(posTableIndexList.toByteArrayFromListShort().deflate())
-                writeObject(wordCostList.toByteArrayFromListShort().deflate())
-                writeObject(nodeIdList.toByteArray().deflate())
-                writeObject(bitListTemp.toBitSet())
+                writeObject(posTableIndexBytes.deflate())
+                writeObject(wordCostBytes.deflate())
+                writeObject(nodeIdBytes.deflate())
+                writeObject(bitvector)
 
                 flush()
                 close()
@@ -119,18 +159,19 @@ class TokenArray {
                 val nodeIdListSize = readInt()
 
                 posTableIndexList =
-                    (readObject() as ByteArray).inflate(posTableIndexListSize).byteArrayToShortList().toMutableList()
+                    (readObject() as ByteArray).inflate(posTableIndexListSize).toShortArray()
                 wordCostList =
-                    (readObject() as ByteArray).inflate(wordCostListSize).byteArrayToShortList().toMutableList()
-                nodeIdList = (readObject() as ByteArray).inflate(nodeIdListSize).toListInt().toMutableList()
+                    (readObject() as ByteArray).inflate(wordCostListSize).toShortArray()
+                nodeIdList = (readObject() as ByteArray).inflate(nodeIdListSize).toListInt().toIntArray()
                 bitvector = readObject() as BitSet
+                requireConsistentArraySizes()
                 rebuildCache()
                 close()
             } catch (e: Exception) {
                 println(e.stackTraceToString())
             }
         }
-        return TokenArray()
+        return this
     }
 
     private fun writeExternalNotCompress(
@@ -138,10 +179,10 @@ class TokenArray {
     ) {
         try {
             out.apply {
-                writeObject(posTableIndexList.toShortArray())
-                writeObject(wordCostList.toShortArray())
-                writeObject(nodeIdList.toIntArray())
-                writeObject(bitListTemp.toBitSet())
+                writeObject(posTableIndexList)
+                writeObject(wordCostList)
+                writeObject(encodeNodeIds(nodeIdList))
+                writeObject(bitvector)
                 flush()
                 close()
             }
@@ -153,17 +194,23 @@ class TokenArray {
     fun readExternalNotCompress(objectInput: ObjectInput): TokenArray {
         objectInput.apply {
             try {
-                posTableIndexList = (readObject() as ShortArray).toMutableList()
-                wordCostList = (readObject() as ShortArray).toMutableList()
-                nodeIdList = (readObject() as IntArray).toMutableList()
+                posTableIndexList = readObject() as ShortArray
+                wordCostList = readObject() as ShortArray
+                val nodeIdsObject = readObject()
+                nodeIdList = when (nodeIdsObject) {
+                    is IntArray -> nodeIdsObject
+                    is ByteArray -> decodeNodeIds(nodeIdsObject, posTableIndexList.size)
+                    else -> error("Unsupported nodeIdList payload: ${nodeIdsObject::class.qualifiedName}")
+                }
                 bitvector = readObject() as BitSet
+                requireConsistentArraySizes()
                 rebuildCache()
                 close()
             } catch (e: Exception) {
                 println(e.stackTraceToString())
             }
         }
-        return TokenArray()
+        return this
     }
 
     /**
@@ -294,7 +341,77 @@ class TokenArray {
         postingsSuccinct = SuccinctBitVector(bitvector)
     }
 
+    private fun requireConsistentArraySizes() {
+        require(posTableIndexList.size == wordCostList.size && wordCostList.size == nodeIdList.size) {
+            "Invalid token array sizes: posTableIndex=${posTableIndexList.size}, " +
+                    "wordCost=${wordCostList.size}, nodeId=${nodeIdList.size}"
+        }
+    }
+
     companion object {
+        private const val HIRAGANA_SENTINEL = -2
+        private const val KATAKANA_SENTINEL = -1
+        private const val HIRAGANA_NODE_CODE = 0
+        private const val KATAKANA_NODE_CODE = 1
+        private const val NODE_ID_OFFSET = 2
+
+        private fun encodeNodeIds(nodeIds: IntArray): ByteArray {
+            val out = ByteArrayOutputStream(nodeIds.size)
+            nodeIds.forEach { nodeId ->
+                val encoded = when (nodeId) {
+                    HIRAGANA_SENTINEL -> HIRAGANA_NODE_CODE
+                    KATAKANA_SENTINEL -> KATAKANA_NODE_CODE
+                    else -> {
+                        require(nodeId >= 0) { "Unsupported negative node id: $nodeId" }
+                        nodeId + NODE_ID_OFFSET
+                    }
+                }
+                writeUnsignedVarInt(out, encoded)
+            }
+            return out.toByteArray()
+        }
+
+        private fun decodeNodeIds(bytes: ByteArray, expectedCount: Int): IntArray {
+            val decoded = IntArray(expectedCount)
+            var index = 0
+            var offset = 0
+            while (offset < bytes.size) {
+                require(index < expectedCount) {
+                    "Too many node ids in payload: expected=$expectedCount"
+                }
+                var shift = 0
+                var value = 0
+                while (true) {
+                    require(offset < bytes.size) { "Truncated node id varint payload" }
+                    val byteValue = bytes[offset].toInt() and 0xFF
+                    offset += 1
+                    value = value or ((byteValue and 0x7F) shl shift)
+                    if ((byteValue and 0x80) == 0) break
+                    shift += 7
+                    require(shift <= 28) { "Node id varint is too large" }
+                }
+                decoded[index] = when (value) {
+                    HIRAGANA_NODE_CODE -> HIRAGANA_SENTINEL
+                    KATAKANA_NODE_CODE -> KATAKANA_SENTINEL
+                    else -> value - NODE_ID_OFFSET
+                }
+                index += 1
+            }
+            require(index == expectedCount) {
+                "Too few node ids in payload: expected=$expectedCount, actual=$index"
+            }
+            return decoded
+        }
+
+        private fun writeUnsignedVarInt(out: ByteArrayOutputStream, value: Int) {
+            var current = value
+            while ((current and 0x7F.inv()) != 0) {
+                out.write((current and 0x7F) or 0x80)
+                current = current ushr 7
+            }
+            out.write(current)
+        }
+
         private fun defaultPosTablePath(mode: Int): String {
             return if (mode == 0) {
                 "./src/test/resources/pos_table.dat"

@@ -1,22 +1,32 @@
 package integration
 
 import com.kazumaproject.Constants
+import com.kazumaproject.Louds.LOUDS
+import com.kazumaproject.Louds.with_term_id.LOUDSWithTermId
 import com.kazumaproject.buildAndWriteDictionaryArtifacts
 import com.kazumaproject.connection_id.ConnectionIdBuilder
 import com.kazumaproject.dictionary.DicUtils
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
+import com.kazumaproject.hiraToKata
 import com.kazumaproject.mozc.ConnectionMatrixParser
 import org.junit.jupiter.api.Assumptions.assumeTrue
+import java.io.BufferedInputStream
+import java.io.EOFException
+import java.io.ObjectInputStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Instant
 import java.util.Properties
+import java.util.SortedMap
 import kotlin.io.path.exists
 import kotlin.io.path.fileSize
 import kotlin.io.path.inputStream
 import kotlin.io.path.outputStream
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.measureTime
@@ -59,6 +69,16 @@ class DictionaryBuildIntegrationTest {
             assertArtifactWritten(yomiPath)
             assertArtifactWritten(tangoPath)
             assertArtifactWritten(tokenPath)
+
+            assertYomiDoesNotStoreTermIds(yomiPath)
+            assertTokenNodeIdsAreVarIntEncoded(tokenPath)
+            assertRoundTripCandidatesMatchSourceDictionaries(
+                dictionaries = dictionaries,
+                posTablePath = posTablePath,
+                yomiPath = yomiPath,
+                tangoPath = tangoPath,
+                tokenPath = tokenPath,
+            )
         } finally {
             tempDir.toFile().deleteRecursively()
         }
@@ -170,6 +190,91 @@ class DictionaryBuildIntegrationTest {
         assertTrue(path.fileSize() > 0, "Expected artifact to be non-empty: $path")
     }
 
+    private fun assertYomiDoesNotStoreTermIds(yomiPath: Path) {
+        ObjectInputStream(BufferedInputStream(yomiPath.inputStream())).use { input ->
+            input.readObject()
+            input.readObject()
+            input.readObject()
+            assertFailsWith<EOFException>("yomi.dat should not store a legacy termIds array") {
+                input.readObject()
+            }
+        }
+    }
+
+    private fun assertTokenNodeIdsAreVarIntEncoded(tokenPath: Path) {
+        ObjectInputStream(BufferedInputStream(tokenPath.inputStream())).use { input ->
+            val posTableIndexes = input.readObject() as ShortArray
+            input.readObject()
+            val nodeIdPayload = assertIs<ByteArray>(input.readObject())
+            val fixedIntBytes = posTableIndexes.size * Int.SIZE_BYTES
+            assertTrue(
+                nodeIdPayload.size < fixedIntBytes,
+                "Expected varint node id payload to be smaller than fixed IntArray bytes: " +
+                        "varint=${nodeIdPayload.size}, fixed=$fixedIntBytes",
+            )
+            println("token node ids: varint bytes=${nodeIdPayload.size}, fixed int bytes=$fixedIntBytes")
+        }
+    }
+
+    private fun assertRoundTripCandidatesMatchSourceDictionaries(
+        dictionaries: SortedMap<String, List<Dictionary>>,
+        posTablePath: Path,
+        yomiPath: Path,
+        tangoPath: Path,
+        tokenPath: Path,
+    ) {
+        val yomiTrie = ObjectInputStream(BufferedInputStream(yomiPath.inputStream())).use {
+            LOUDSWithTermId().readExternalNotCompress(it)
+        }
+        val tangoTrie = ObjectInputStream(BufferedInputStream(tangoPath.inputStream())).use {
+            LOUDS().readExternalNotCompress(it)
+        }
+        val tokenArray = ObjectInputStream(BufferedInputStream(tokenPath.inputStream())).use {
+            TokenArray().readExternalNotCompress(it)
+        }
+        ObjectInputStream(BufferedInputStream(posTablePath.inputStream())).use { input ->
+            tokenArray.leftIds = (input.readObject() as ShortArray).toList()
+            tokenArray.rightIds = (input.readObject() as ShortArray).toList()
+        }
+
+        val yomiKeys = dictionaries.keys.toList()
+        val sampledYomi = buildList {
+            addAll(yomiKeys.take(20))
+            addAll(yomiKeys.drop(yomiKeys.size / 2).take(20))
+            addAll(yomiKeys.takeLast(20))
+            addAll(dictionaries.filterValues { it.size >= 3 }.keys.take(20))
+        }.distinct()
+
+        sampledYomi.forEach { yomi ->
+            val nodeIndex = yomiTrie.getNodeIndex(yomi)
+            assertTrue(nodeIndex >= 0, "Expected yomi to exist in trie: $yomi")
+            val termId = yomiTrie.getTermId(nodeIndex)
+            assertTrue(termId > 0, "Expected yomi term id to be positive: yomi=$yomi, termId=$termId")
+
+            val actual = tokenArray.getListDictionaryByYomiTermId(termId).map { token ->
+                CandidateSnapshot(
+                    leftId = tokenArray.leftIds[token.posTableIndex.toInt()],
+                    rightId = tokenArray.rightIds[token.posTableIndex.toInt()],
+                    cost = token.wordCost,
+                    tango = when (token.nodeId) {
+                        -2 -> yomi
+                        -1 -> yomi.hiraToKata()
+                        else -> tangoTrie.getLetter(token.nodeId)
+                    },
+                )
+            }
+            val expected = dictionaries.getValue(yomi).map { dictionary ->
+                CandidateSnapshot(
+                    leftId = dictionary.leftId,
+                    rightId = dictionary.rightId,
+                    cost = dictionary.cost,
+                    tango = dictionary.tango,
+                )
+            }
+            assertEquals(expected, actual, "Candidate list changed for yomi=$yomi")
+        }
+    }
+
     private fun assertWithinRegressionBudget(elapsedMs: Long) {
         val baseline = readBaseline()
         val ratioLimit = (baseline.fullBuildMs * baseline.allowedRegressionRatio).toLong()
@@ -230,5 +335,12 @@ class DictionaryBuildIntegrationTest {
         val fullBuildMs: Long,
         val allowedRegressionRatio: Double,
         val allowedRegressionMs: Long,
+    )
+
+    private data class CandidateSnapshot(
+        val leftId: Short,
+        val rightId: Short,
+        val cost: Short,
+        val tango: String,
     )
 }

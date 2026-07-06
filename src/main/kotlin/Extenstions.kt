@@ -20,7 +20,7 @@ fun List<Boolean>.toBitSet(): BitSet {
 
 fun String.hiraToKata() =
     this.map {
-        if (it.code in 0x3041..0x3093) {
+        if (it.code in 0x3041..0x3096) {
             it + 0x60
         } else {
             it

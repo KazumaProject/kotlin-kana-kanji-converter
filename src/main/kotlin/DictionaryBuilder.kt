@@ -46,6 +46,15 @@ internal fun buildAndWriteDictionaryArtifacts(
         tangoLOUDS.writeExternalNotCompress(out)
     }
     ObjectOutputStream(BufferedOutputStream(FileOutputStream(tokenOutputPath))).use { out ->
-        TokenArray().buildTokenArray(dictionaryList, tangoLOUDS, out, mode, posTableForBuildPath)
+        TokenArray().buildTokenArray(
+            dictionaries = dictionaryList,
+            tangoTrie = tangoLOUDS,
+            out = out,
+            mode = mode,
+            posTableForBuildPath = posTableForBuildPath,
+            yomiTermIdResolver = { yomi ->
+                yomiLOUDS.getTermId(yomiLOUDS.getNodeIndex(yomi))
+            },
+        )
     }
 }

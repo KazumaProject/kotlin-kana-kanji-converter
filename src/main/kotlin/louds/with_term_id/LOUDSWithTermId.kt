@@ -16,8 +16,6 @@ class LOUDSWithTermId {
     val LBSTemp: MutableList<Boolean> = arrayListOf()
     var LBS: BitSet = BitSet()
     var labels: MutableList<Char> = arrayListOf()
-    var termIds: MutableList<Int> = arrayListOf()
-    var termIdsSave: IntArray = intArrayOf()
     var isLeaf: BitSet = BitSet()
     val isLeafTemp: MutableList<Boolean> = arrayListOf()
     @Transient
@@ -47,12 +45,10 @@ class LOUDSWithTermId {
         LBS: BitSet,
         labels: MutableList<Char>,
         isLeaf: BitSet,
-        termIds: IntArray,
     ){
         this.LBS = LBS
         this.labels = labels
         this.isLeaf = isLeaf
-        this.termIdsSave = termIds
         rebuildCache()
     }
 
@@ -103,12 +99,8 @@ class LOUDSWithTermId {
     }
 
     fun getTermId(nodeIndex: Int): Int {
-        val firstNodeId = isLeafSuccinct().rank1(nodeIndex) - 1
-        if (firstNodeId < 0) return -1
-
-        //val firstTermId = termIds[firstNodeId]
-        val firstTermId = termIdsSave[firstNodeId]
-        return firstTermId
+        if (nodeIndex < 0 || !isLeaf[nodeIndex]) return -1
+        return isLeafSuccinct().rank1(nodeIndex)
     }
 
     private fun firstChild(pos: Int): Int {
@@ -192,13 +184,12 @@ class LOUDSWithTermId {
     fun writeExternal(out: ObjectOutput){
         try {
             out.apply {
-                writeInt(labels.toByteArrayFromListChar().size)
-                writeInt(termIds.toByteArray().size)
+                val labelBytes = labels.toByteArrayFromListChar()
+                writeInt(labelBytes.size)
 
                 writeObject(LBS)
                 writeObject(isLeaf)
-                writeObject(labels.toByteArrayFromListChar().deflate())
-                writeObject(termIds.toByteArray().deflate())
+                writeObject(labelBytes.deflate())
                 flush()
                 close()
             }
@@ -211,18 +202,30 @@ class LOUDSWithTermId {
         objectInput.apply {
             try {
                 val labelsSize = objectInput.readInt()
-                val termIdSize = objectInput.readInt()
-                LBS = objectInput.readObject() as BitSet
+                LBS = try {
+                    objectInput.readObject() as BitSet
+                } catch (e: OptionalDataException) {
+                    // Backward compatibility for the old compressed format:
+                    // labelSize, termIdSize, LBS, isLeaf, labels, termIds.
+                    objectInput.readInt()
+                    objectInput.readObject() as BitSet
+                }
                 isLeaf = objectInput.readObject() as BitSet
                 labels = (objectInput.readObject() as ByteArray).inflate(labelsSize).toListChar()
-                termIds = (objectInput.readObject() as ByteArray).inflate(termIdSize).toListInt().toMutableList()
+                try {
+                    objectInput.readObject()
+                } catch (_: EOFException) {
+                    // New format has no stored termIds.
+                } catch (_: OptionalDataException) {
+                    // New format has no stored termIds.
+                }
                 rebuildCache()
                 close()
             }catch (e: Exception){
                 println(e.stackTraceToString())
             }
         }
-        return LOUDSWithTermId()
+        return LOUDSWithTermId(LBS, labels, isLeaf)
     }
 
     fun writeExternalNotCompress(out: ObjectOutput){
@@ -231,7 +234,6 @@ class LOUDSWithTermId {
                 writeObject(LBS)
                 writeObject(isLeaf)
                 writeObject(labels.toCharArray())
-                writeObject(termIds.toIntArray())
                 flush()
                 close()
             }
@@ -246,14 +248,20 @@ class LOUDSWithTermId {
                 LBS = objectInput.readObject() as BitSet
                 isLeaf = objectInput.readObject() as BitSet
                 labels = (objectInput.readObject() as CharArray).toMutableList()
-                termIdsSave = (objectInput.readObject() as IntArray)
+                try {
+                    objectInput.readObject()
+                } catch (_: EOFException) {
+                    // New format has no stored termIds.
+                } catch (_: OptionalDataException) {
+                    // New format has no stored termIds.
+                }
                 rebuildCache()
                 close()
             }catch (e: Exception){
                 println(e.stackTraceToString())
             }
         }
-        return LOUDSWithTermId(LBS, labels, isLeaf, termIdsSave)
+        return LOUDSWithTermId(LBS, labels, isLeaf)
     }
 
 }
