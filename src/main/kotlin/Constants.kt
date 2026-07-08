@@ -575,6 +575,20 @@ object Constants {
             tango = "Android"
         ),
         Dictionary(
+            yomi = "あいおーえす",
+            leftId = `名詞,固有名詞,一般,*,*,*,*`,
+            rightId = `名詞,固有名詞,一般,*,*,*,*`,
+            cost = 3500,
+            tango = "iOS"
+        ),
+        Dictionary(
+            yomi = "まっくおーえす",
+            leftId = `名詞,固有名詞,一般,*,*,*,*`,
+            rightId = `名詞,固有名詞,一般,*,*,*,*`,
+            cost = 4000,
+            tango = "macOS"
+        ),
+        Dictionary(
             yomi = "とりまよ",
             leftId = `名詞,固有名詞,一般,*,*,*,*`,
             rightId = `名詞,固有名詞,一般,*,*,*,*`,
@@ -2477,7 +2491,7 @@ object Constants {
             tango = "漢字変換"
         ),
         Dictionary(
-            yomi = "か", leftId = `名詞,一般,*,*,*,*,*`, rightId = `名詞,一般,*,*,*,*,*`, cost = 4000, tango = "蚊"
+            yomi = "か", leftId = `名詞,一般,*,*,*,*,*`, rightId = `名詞,一般,*,*,*,*,*`, cost = 5500, tango = "蚊"
         ),
         Dictionary(
             yomi = "げつがくせい",
