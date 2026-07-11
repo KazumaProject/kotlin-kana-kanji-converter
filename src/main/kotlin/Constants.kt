@@ -9020,13 +9020,6 @@ object Constants {
             tango = "付審判手続"
         ),
         Dictionary(
-            yomi = "ふたつ",
-            leftId = `名詞,サ変接続,*,*,*,*,*`,
-            rightId = `名詞,サ変接続,*,*,*,*,*`,
-            cost = 4000,
-            tango = "不達"
-        ),
-        Dictionary(
             yomi = "ふつーら",
             leftId = `名詞,固有名詞,一般,*,*,*,*`,
             rightId = `名詞,固有名詞,一般,*,*,*,*`,
