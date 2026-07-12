@@ -18,6 +18,8 @@ fun main(args: Array<String>) {
             appendLine("signatureCount=${report.signatureCount}")
             appendLine("stateCount=${report.stateCount}")
             appendLine("edgeCount=${report.edgeCount}")
+            appendLine("hashIndexBytes=${report.hashIndexBytes}")
+            appendLine("exactDataBytes=${report.exactDataBytes}")
             appendLine("bytes=${report.bytes}")
             appendLine("bytesPerRule=${report.bytes.toDouble() / report.ruleCount}")
         },

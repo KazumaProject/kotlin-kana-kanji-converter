@@ -1,28 +1,83 @@
 package com.kazumaproject.ngram
 
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.util.TreeMap
 import java.util.zip.CRC32
 
 data class NgramBuildReport(
     val ruleCount: Int,
     val posClassCount: Int,
     val signatureCount: Int,
-    val stateCount: Int,
-    val edgeCount: Int,
+    val stateCount: Int = 0,
+    val edgeCount: Int = 0,
     val bytes: Int,
+    val hashIndexBytes: Int,
+    val exactDataBytes: Int,
 )
 
-object SystemNgramBinaryBuilder {
-    private class TrieNode {
-        var terminal: Boolean = false
-        val edges = TreeMap<Int, TrieNode>()
+object NgramV3 {
+    private const val FNV_OFFSET = -3750763034362895579L
+    private const val FNV_PRIME = 1099511628211L
+    private const val MIX_1 = -49064778989728563L
+    private const val MIX_2 = -4265267296055464877L
+
+    fun hash64(bytes: ByteArray): Long {
+        var hash = FNV_OFFSET
+        for (byte in bytes) hash = (hash xor (byte.toLong() and 0xffL)) * FNV_PRIME
+        hash = (hash xor (hash ushr 33)) * MIX_1
+        hash = (hash xor (hash ushr 33)) * MIX_2
+        return hash xor (hash ushr 33)
     }
 
-    private data class StateKey(val terminal: Boolean, val edges: List<Pair<Int, Int>>)
-    private data class CanonicalState(val terminal: Boolean, val edges: List<Pair<Int, Int>>)
+    fun canonicalKey(rule: NgramRule, posIdByName: Map<String, Int>): ByteArray {
+        val output = ByteArrayOutputStream()
+        val signature = NgramEncoding.signature(rule.features)
+        output.write(signature and 0xff)
+        output.write((signature ushr 8) and 0xff)
+        rule.features.forEach { feature ->
+            when (feature) {
+                is NgramFeature.Word -> {
+                    val utf8 = feature.value.toByteArray(Charsets.UTF_8)
+                    writeUVarint(output, utf8.size)
+                    output.write(utf8)
+                }
+                is NgramFeature.Pos -> output.write(requireNotNull(posIdByName[feature.value]))
+                NgramFeature.Any -> Unit
+            }
+        }
+        return output.toByteArray()
+    }
+
+    fun writeUVarint(output: ByteArrayOutputStream, value: Int) {
+        var remaining = value
+        while (remaining >= 0x80) {
+            output.write((remaining and 0x7f) or 0x80)
+            remaining = remaining ushr 7
+        }
+        output.write(remaining)
+    }
+
+    fun compareUnsigned(left: ByteArray, right: ByteArray): Int {
+        val common = minOf(left.size, right.size)
+        for (index in 0 until common) {
+            val comparison = (left[index].toInt() and 0xff).compareTo(right[index].toInt() and 0xff)
+            if (comparison != 0) return comparison
+        }
+        return left.size.compareTo(right.size)
+    }
+
+    fun commonPrefix(left: ByteArray, right: ByteArray): Int {
+        val limit = minOf(left.size, right.size)
+        var index = 0
+        while (index < limit && left[index] == right[index]) index++
+        return index
+    }
+}
+
+object SystemNgramBinaryBuilder {
+    private data class HashEntry(val remainder: Long, val recordId: Int)
 
     fun build(rules: List<NgramRule>, idDef: File, output: File): NgramBuildReport {
         val contextNames = parseIdDef(idDef)
@@ -35,87 +90,106 @@ object SystemNgramBinaryBuilder {
         val contextClasses = ByteArray(contextNames.size) { index ->
             requireNotNull(posIdByName[contextNames[index].substringBefore(',')]).toByte()
         }
+        val signatures = rules.mapTo(sortedSetOf()) { NgramEncoding.signature(it.features) }
+        val keys = rules.map { NgramV3.canonicalKey(it, posIdByName) }
+            .sortedWith(NgramV3::compareUnsigned)
+        require(keys.zipWithNext().none { (left, right) -> left.contentEquals(right) }) {
+            "Duplicate canonical n-gram keys"
+        }
+        val maxKeyBytes = keys.maxOfOrNull(ByteArray::size) ?: 0
 
-        val root = TrieNode()
-        val signatures = sortedSetOf<Int>()
-        rules.sortedBy(::canonicalRule).forEach { rule ->
-            val signature = NgramEncoding.signature(rule.features)
-            signatures += signature
-            val tokens = buildList {
-                add(NgramEncoding.SIGNATURE_BASE + signature)
-                rule.features.forEach { feature ->
-                    when (feature) {
-                        is NgramFeature.Word -> {
-                            add(NgramEncoding.WORD_START)
-                            feature.value.forEach { add(it.code) }
-                            add(NgramEncoding.WORD_END)
-                        }
-                        is NgramFeature.Pos -> add(
-                            NgramEncoding.POS_BASE + requireNotNull(posIdByName[feature.value]),
-                        )
-                        NgramFeature.Any -> Unit
-                    }
+        val bucketCount = chooseBucketCount(keys.size)
+        val bucketBits = Integer.numberOfTrailingZeros(bucketCount)
+        val buckets = Array(bucketCount) { mutableListOf<HashEntry>() }
+        keys.forEachIndexed { recordId, key ->
+            val hash = NgramV3.hash64(key)
+            val bucket = (hash ushr (64 - bucketBits)).toInt() and (bucketCount - 1)
+            buckets[bucket] += HashEntry(hash and LOW_48_MASK, recordId)
+        }
+        buckets.forEach { entries ->
+            entries.sortWith(compareBy<HashEntry> { it.remainder }.thenBy { it.recordId })
+        }
+
+        val exactOutput = ByteArrayOutputStream()
+        val blockCount = (keys.size + NgramEncoding.BLOCK_SIZE - 1) / NgramEncoding.BLOCK_SIZE
+        val blockOffsets = IntArray(blockCount + 1)
+        for (block in 0 until blockCount) {
+            blockOffsets[block] = exactOutput.size()
+            val start = block * NgramEncoding.BLOCK_SIZE
+            val end = minOf(start + NgramEncoding.BLOCK_SIZE, keys.size)
+            var previous = ByteArray(0)
+            for (recordId in start until end) {
+                val key = keys[recordId]
+                if (recordId == start) {
+                    NgramV3.writeUVarint(exactOutput, key.size)
+                    exactOutput.write(key)
+                } else {
+                    val prefix = NgramV3.commonPrefix(previous, key)
+                    val suffixLength = key.size - prefix
+                    NgramV3.writeUVarint(exactOutput, prefix)
+                    NgramV3.writeUVarint(exactOutput, suffixLength)
+                    exactOutput.write(key, prefix, suffixLength)
                 }
+                previous = key
             }
-            var node = root
-            tokens.forEach { token -> node = node.edges.getOrPut(token, ::TrieNode) }
-            node.terminal = true
         }
+        blockOffsets[blockCount] = exactOutput.size()
+        val exactBytes = exactOutput.toByteArray()
 
-        val states = mutableListOf<CanonicalState>()
-        val stateIds = HashMap<StateKey, Int>()
-        fun intern(node: TrieNode): Int {
-            val edges = node.edges.map { (label, child) -> label to intern(child) }
-            val key = StateKey(node.terminal, edges)
-            return stateIds.getOrPut(key) {
-                states.add(CanonicalState(node.terminal, edges))
-                states.lastIndex
-            }
-        }
-        val rootState = intern(root)
-        val edgeCount = states.sumOf { it.edges.size }
         val signaturesOffset = NgramEncoding.HEADER_SIZE
-        val contextsOffset = signaturesOffset + signatures.size * Int.SIZE_BYTES
-        val statesOffset = align4(contextsOffset + contextClasses.size)
-        val edgesOffset = statesOffset + states.size * NgramEncoding.STATE_SIZE
-        val fileSize = edgesOffset + edgeCount * NgramEncoding.EDGE_SIZE
+        val contextsOffset = signaturesOffset + signatures.size * 4
+        val bucketOffsetsOffset = align4(contextsOffset + contextClasses.size)
+        val hashEntriesOffset = bucketOffsetsOffset + (bucketCount + 1) * 4
+        val blockOffsetsOffset = hashEntriesOffset + keys.size * NgramEncoding.HASH_ENTRY_SIZE
+        val recordsOffset = blockOffsetsOffset + blockOffsets.size * 4
+        val fileSize = recordsOffset + exactBytes.size
         val bytes = ByteArray(fileSize)
         val buffer = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
         buffer.putInt(0, NgramEncoding.MAGIC)
         buffer.putInt(4, NgramEncoding.VERSION)
-        buffer.putInt(8, rules.size)
-        buffer.putInt(12, rootState)
-        buffer.putInt(16, states.size)
-        buffer.putInt(20, edgeCount)
-        buffer.putInt(24, signatures.size)
-        buffer.putInt(28, contextClasses.size)
-        buffer.putInt(32, posNames.size)
-        buffer.putInt(36, signaturesOffset)
-        buffer.putInt(40, contextsOffset)
-        buffer.putInt(44, statesOffset)
-        buffer.putInt(48, edgesOffset)
-        buffer.putInt(52, fileSize)
+        buffer.putInt(8, keys.size)
+        buffer.putInt(12, contextClasses.size)
+        buffer.putInt(16, posNames.size)
+        buffer.putInt(20, signatures.size)
+        buffer.putInt(24, maxKeyBytes)
+        buffer.putInt(28, NgramEncoding.BLOCK_SIZE)
+        buffer.putInt(32, signaturesOffset)
+        buffer.putInt(36, contextsOffset)
+        buffer.putInt(40, bucketOffsetsOffset)
+        buffer.putInt(44, hashEntriesOffset)
+        buffer.putInt(48, blockOffsetsOffset)
+        buffer.putInt(52, recordsOffset)
+        buffer.putInt(56, fileSize)
+        buffer.putInt(64, bucketCount)
+        buffer.putInt(68, blockCount)
         signatures.forEachIndexed { index, signature -> buffer.putInt(signaturesOffset + index * 4, signature) }
         contextClasses.copyInto(bytes, contextsOffset)
-        var edgeIndex = 0
-        states.forEachIndexed { stateId, state ->
-            val stateOffset = statesOffset + stateId * NgramEncoding.STATE_SIZE
-            buffer.putInt(stateOffset, edgeIndex)
-            buffer.putShort(stateOffset + 4, state.edges.size.toShort())
-            buffer.put(stateOffset + 6, if (state.terminal) 1 else 0)
-            state.edges.forEach { (label, target) ->
-                val edgeOffset = edgesOffset + edgeIndex * NgramEncoding.EDGE_SIZE
-                buffer.putInt(edgeOffset, label)
-                buffer.putInt(edgeOffset + 4, target)
-                edgeIndex++
+        var hashEntryIndex = 0
+        for (bucket in buckets.indices) {
+            buffer.putInt(bucketOffsetsOffset + bucket * 4, hashEntryIndex)
+            for (entry in buckets[bucket]) {
+                val offset = hashEntriesOffset + hashEntryIndex * NgramEncoding.HASH_ENTRY_SIZE
+                putUInt48(bytes, offset, entry.remainder)
+                buffer.putInt(offset + 6, entry.recordId)
+                hashEntryIndex++
             }
         }
+        buffer.putInt(bucketOffsetsOffset + bucketCount * 4, hashEntryIndex)
+        blockOffsets.forEachIndexed { index, value -> buffer.putInt(blockOffsetsOffset + index * 4, value) }
+        exactBytes.copyInto(bytes, recordsOffset)
         val crc = CRC32().apply { update(bytes, NgramEncoding.HEADER_SIZE, bytes.size - NgramEncoding.HEADER_SIZE) }
-        buffer.putInt(56, crc.value.toInt())
+        buffer.putInt(60, crc.value.toInt())
         output.parentFile.mkdirs()
         output.writeBytes(bytes)
         SystemNgramBinaryReader(bytes).verify()
-        return NgramBuildReport(rules.size, posNames.size, signatures.size, states.size, edgeCount, bytes.size)
+        return NgramBuildReport(
+            ruleCount = keys.size,
+            posClassCount = posNames.size,
+            signatureCount = signatures.size,
+            bytes = bytes.size,
+            hashIndexBytes = (bucketCount + 1) * 4 + keys.size * NgramEncoding.HASH_ENTRY_SIZE,
+            exactDataBytes = exactBytes.size,
+        )
     }
 
     private fun parseIdDef(file: File): List<String> {
@@ -123,21 +197,23 @@ object SystemNgramBinaryBuilder {
         return file.readLines().mapIndexed { index, line ->
             val split = line.indexOfFirst(Char::isWhitespace)
             require(split > 0) { "Invalid id.def line ${index + 1}: $line" }
-            val id = line.substring(0, split).toInt()
-            require(id == index) { "Non-contiguous id.def at line ${index + 1}: $id" }
+            require(line.substring(0, split).toInt() == index) { "Non-contiguous id.def at line ${index + 1}" }
             line.substring(split + 1)
         }
     }
 
-    private fun canonicalRule(rule: NgramRule): String = rule.features.joinToString("|") {
-        when (it) {
-            is NgramFeature.Word -> "W:${it.value}"
-            is NgramFeature.Pos -> "P:${it.value}"
-            NgramFeature.Any -> "*"
-        }
+    private fun align4(value: Int): Int = (value + 3) and -4
+
+    private fun chooseBucketCount(ruleCount: Int): Int {
+        val wanted = ruleCount.coerceIn(256, NgramEncoding.BUCKET_COUNT)
+        return if (wanted == 1) 1 else Integer.highestOneBit(wanted - 1) shl 1
     }
 
-    private fun align4(value: Int): Int = (value + 3) and -4
+    private fun putUInt48(bytes: ByteArray, offset: Int, value: Long) {
+        repeat(6) { index -> bytes[offset + index] = (value ushr (index * 8)).toByte() }
+    }
+
+    private const val LOW_48_MASK = 0x0000ffffffffffffL
 }
 
 class SystemNgramBinaryReader(private val bytes: ByteArray) {
@@ -147,31 +223,24 @@ class SystemNgramBinaryReader(private val bytes: ByteArray) {
         require(bytes.size >= NgramEncoding.HEADER_SIZE) { "Truncated n-gram header" }
         require(buffer.getInt(0) == NgramEncoding.MAGIC) { "Invalid n-gram magic" }
         require(buffer.getInt(4) == NgramEncoding.VERSION) { "Unsupported n-gram version" }
-        require(buffer.getInt(52) == bytes.size) { "Invalid n-gram file size" }
-        val crc = CRC32().apply { update(bytes, NgramEncoding.HEADER_SIZE, bytes.size - NgramEncoding.HEADER_SIZE) }
-        require(buffer.getInt(56).toUInt().toLong() == crc.value) { "Invalid n-gram checksum" }
-        val stateCount = buffer.getInt(16)
-        val edgeCount = buffer.getInt(20)
-        val root = buffer.getInt(12)
-        require(root in 0 until stateCount)
-        val statesOffset = buffer.getInt(44)
-        val edgesOffset = buffer.getInt(48)
-        require(statesOffset >= NgramEncoding.HEADER_SIZE)
-        require(edgesOffset == statesOffset + stateCount * NgramEncoding.STATE_SIZE)
-        require(edgesOffset + edgeCount * NgramEncoding.EDGE_SIZE == bytes.size)
-        repeat(stateCount) { state ->
-            val offset = statesOffset + state * NgramEncoding.STATE_SIZE
-            val first = buffer.getInt(offset)
-            val count = buffer.getShort(offset + 4).toInt() and 0xffff
-            require(first >= 0 && first + count <= edgeCount)
-            var previous = Int.MIN_VALUE
-            repeat(count) { local ->
-                val edge = edgesOffset + (first + local) * NgramEncoding.EDGE_SIZE
-                val label = buffer.getInt(edge)
-                require(label > previous) { "Unsorted edge labels in state $state" }
-                previous = label
-                require(buffer.getInt(edge + 4) in 0 until stateCount)
-            }
+        require(buffer.getInt(56) == bytes.size) { "Invalid n-gram file size" }
+        val bucketCount = buffer.getInt(64)
+        require(bucketCount in 256..NgramEncoding.BUCKET_COUNT && bucketCount.countOneBits() == 1) {
+            "Invalid bucket count"
         }
+        val crc = CRC32().apply { update(bytes, NgramEncoding.HEADER_SIZE, bytes.size - NgramEncoding.HEADER_SIZE) }
+        require(buffer.getInt(60).toUInt().toLong() == crc.value) { "Invalid n-gram checksum" }
+        val rules = buffer.getInt(8)
+        val bucketOffsetsOffset = buffer.getInt(40)
+        val hashEntriesOffset = buffer.getInt(44)
+        val blockOffsetsOffset = buffer.getInt(48)
+        val recordsOffset = buffer.getInt(52)
+        val blockCount = buffer.getInt(68)
+        require(hashEntriesOffset == bucketOffsetsOffset + (bucketCount + 1) * 4)
+        require(blockOffsetsOffset == hashEntriesOffset + rules * NgramEncoding.HASH_ENTRY_SIZE)
+        require(recordsOffset == blockOffsetsOffset + (blockCount + 1) * 4)
+        require(buffer.getInt(bucketOffsetsOffset) == 0)
+        require(buffer.getInt(bucketOffsetsOffset + bucketCount * 4) == rules)
+        require(recordsOffset <= bytes.size)
     }
 }

@@ -14,14 +14,11 @@ data class NgramRule(
 
 object NgramEncoding {
     const val MAGIC = 0x4A4B4E47 // JKNG
-    const val VERSION = 2
-    const val HEADER_SIZE = 64
-    const val STATE_SIZE = 8
-    const val EDGE_SIZE = 8
-    const val SIGNATURE_BASE = 0x120000
-    const val WORD_START = 0x130000
-    const val WORD_END = 0x130001
-    const val POS_BASE = 0x140000
+    const val VERSION = 3
+    const val HEADER_SIZE = 80
+    const val BLOCK_SIZE = 16
+    const val BUCKET_COUNT = 65536
+    const val HASH_ENTRY_SIZE = 10
 
     const val KIND_WORD = 1
     const val KIND_POS = 2

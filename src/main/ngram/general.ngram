@@ -9,5 +9,5 @@
 # Use it carefully because a wildcard rule is broader than a POS rule.
 # Example: "布" + "で" + * + "を" + "拭く"
 "服" + "を" + "着る"
-"布" + "で" + pos("名詞") + "を" + "拭く"
 "布" + "で" + * + "を" + "拭く"
+"機械" + "が" + "止まる"

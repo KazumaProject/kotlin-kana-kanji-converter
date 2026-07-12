@@ -1,96 +1,99 @@
-# Scoreless system n-gram implementation and performance report
+# Scoreless system n-gram version 3 performance report
 
 Date: 2026-07-12
 
-Post-measurement update: single-node `*` wildcard support was added. The current release asset contains 3 rules and is 3,252 bytes; the small-dictionary timing table below records the preceding 2-rule, 3,144-byte build.
+## Result
 
-## Implementation
+The fixed-width state/edge format was replaced by version 3. Version 3 uses a
+bucketed 64-bit hash index and front-coded canonical rule records. It does not
+use mmap. JapaneseKeyboard retains exactly one dictionary `ByteArray` and uses
+small thread-local query/record scratch buffers for lookup.
 
-- Editable source: `src/main/ngram/*.ngram`
-- Runtime asset: `app/src/main/assets/ngram/system_ngram.dat`
-- Runtime format: scoreless packed minimal acyclic automaton with terminal bits
-- Storage used in this measurement: resident `ByteArray` (no mmap)
-- Runtime storage policy: dictionaries up to 1 MiB use `ByteArray`; larger dictionaries are copied once to `noBackupFilesDir` and mapped read-only
-- Ranking: a completed candidate path either matches or does not match; matching candidates are placed first and `Candidate.score` is not changed
-- Rules in the measured dictionary:
-  - `"服" + "を" + "着る"`
-  - `"布" + "で" + pos("名詞") + "を" + "拭く"`
+The rule language and result semantics did not change:
 
-Binary build result:
+- exact words, coarse POS and one-node `*` wildcard are supported;
+- the dictionary stores no score;
+- a hash hit is always checked against the complete canonical rule, so a hash
+  collision cannot produce a false match;
+- matching only changes candidate ordering and never changes `Candidate.score`.
 
-| Rules | POS classes | Signatures | States | Edges | Bytes |
-|---:|---:|---:|---:|---:|---:|
-| 2 | 14 | 2 | 25 | 25 | 3,144 |
+## Binary layout
 
-The current bytes-per-rule value is dominated by the fixed 2,672-byte context-ID-to-POS-class table, so it must not be extrapolated linearly from this two-rule dictionary.
+The binary contains a header and CRC, context-ID-to-POS table, rule signatures,
+a dynamically sized bucket directory, 10-byte hash entries (48 hash bits plus a
+32-bit record ID), and complete canonical rules front-coded in blocks of 16.
 
-## End-to-end conversion measurement
+Lookup performs:
 
-Environment:
+1. allocation-free canonical query encoding;
+2. bucket selection and binary search of the 48-bit hash suffix;
+3. decoding of at most one 16-record block for each hash hit;
+4. byte-for-byte comparison with the complete canonical rule.
 
-- Pixel 7 Pro AVD, Android API 35, arm64
-- `liteStandardDebug`
-- Input: `ふくをきる`
-- Requested candidates: 4
-- Warm-up: 20 conversions per configuration
-- Measurement: 50 conversions per configuration
-- Full path: graph construction, path search, binary dictionary lookup, scoreless reranking, and final candidate construction
+The editable source remains `src/main/ngram/*.ngram`. GitHub Actions runs
+`buildSystemNgramDictionary`, publishes its build report, and packages
+`app/src/main/assets/ngram/system_ngram.dat` in the JapaneseKeyboard asset ZIP.
 
-| System n-gram | Binary | Java heap delta | Native heap delta | PSS delta | Allocated / conversion | GC | p50 | p95 | p99 | First candidate | Original score |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---:|
-| Disabled | 0 B | 0 B | 992 B | -1,219,584 B* | 153,354 B | 0 | 2.350 ms | 4.968 ms | 6.490 ms | 服を切る | 10,440 |
-| Enabled | 3,144 B | 4,096 B | 0 B | 4,096 B | 248,217 B | 0 | 2.295 ms | 4.324 ms | 5.537 ms | 服を着る | 10,691 |
+## 100,000-rule storage measurement
 
-`*` The disabled PSS delta is measurement noise caused by GC/page accounting between snapshots. PSS is reported at KiB granularity. The enabled run retained one additional 4 KiB page, consistent with the 3,144-byte binary.
+The stress dictionary contained the three release rules plus 99,997
+deterministic exact three-gram rules with randomized hexadecimal word
+components. The temporary rules were removed after measurement.
 
-Observed enabled-minus-disabled differences:
+| Format | Rules | Binary bytes | MiB | Bytes/rule |
+|---|---:|---:|---:|---:|
+| Previous fixed-width format (reported baseline) | 100,000 | about 27,996,000 | about 26.7 | about 280.0 |
+| Version 3 | 100,000 | 5,524,486 | 5.27 | 55.24 |
 
-- p50: -0.055 ms; effectively unchanged at emulator measurement resolution
-- p95: -0.645 ms; not interpreted as an optimization because the configurations were measured sequentially
-- p99: -0.953 ms; likewise subject to emulator/JIT noise
-- Java heap: +4,096 B
-- PSS: approximately +4,096 B
-- allocation per conversion: +94,863 B
-- GC count: no increase
+Version 3 is about 79.8% smaller than the 26.7 MiB baseline and remains below
+the 8 MiB target without mmap. Its measured components were 1,262,148 bytes for
+the hash index and 4,234,570 bytes for the exact compressed records.
 
-The allocation increase comes primarily from requesting a larger internal candidate pool for scoreless reranking. It did not increase GC in this 50-iteration run, but it is the main item to optimize before substantially increasing the pool or rule set.
+The final three-rule release dictionary is 3,895 bytes. The relatively high
+per-rule figure at this size is caused by fixed metadata, mainly the 2,672-entry
+POS context table, and must not be extrapolated linearly.
 
-## 100,002-rule large-dictionary measurement
+## End-to-end Pixel 6 measurement
 
-To exercise the large-dictionary path, 100,000 deterministic nonmatching rules with randomized 16-character hexadecimal word components were temporarily added to the two real rules. The temporary rules were removed after measurement and are not present in the release asset.
+Environment and method:
 
-Build result:
+- physical Pixel 6, Android 16;
+- `liteStandardDebug`;
+- input `ふくをきる`, requested candidates 4;
+- full graph construction, path search, dictionary lookup, reranking and final
+  candidate construction;
+- both paths pre-warmed 30 times;
+- 100 timed samples per path, with enabled/disabled calls interleaved to avoid
+  sequential JIT/cache bias.
 
-| Rules | States | Edges | Binary bytes | Bytes/rule |
-|---:|---:|---:|---:|---:|
-| 100,002 | 801,562 | 901,562 | 13,627,736 | 136.27 |
+| System n-gram | Rules | Retained Java heap | PSS delta | Allocated/conversion | GC | p50 | p95 | p99 | First candidate | Score |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---:|
+| Disabled | 0 | 0 B | 17,408 B* | 153,026 B | 0 | 2.847 ms | 3.035 ms | 3.091 ms | 服を切る | 10,440 |
+| Enabled | 100,000 | 5,525,504 B | 5,525,504 B | 153,026 B | 0 | 2.753 ms | 3.191 ms | 3.302 ms | 服を着る | 10,691 |
 
-The first resident-`ByteArray` run retained approximately 13.63 MiB of Java heap/PSS. That failed the low-memory objective, although conversion latency and GC remained acceptable. Based on that result, the runtime loader was changed to use read-only mmap only for assets larger than 1 MiB.
+`*` PSS snapshots use page-level accounting and contain background noise. The
+enabled retained-heap result is the relevant deterministic result: dictionary
+retention is only 1,018 bytes above the 5,524,486-byte file.
 
-After that change, the same 100,002-rule dictionary was measured for 30 conversions:
+Enabled-minus-disabled timing differences were -0.094 ms at p50, +0.156 ms at
+p95, and +0.211 ms at p99. No GC was added.
 
-| System n-gram | Storage | Java heap delta | Native heap delta | PSS delta | Allocated / conversion | GC | p50 | p95 | p99 | First candidate |
-|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| Disabled | none | 0 B | 992 B | -145,408 B* | 154,009 B | 0 | 2.777 ms | 6.058 ms | 7.440 ms | 服を切る |
-| Enabled | mmap, 13,627,736 B file | 0 B | 0 B | 65,536 B | 248,490 B | 0 | 2.552 ms | 4.688 ms | 6.502 ms | 服を着る |
+An initial version 3 run always expanded the internal pool to 32 candidates. It
+allocated about 248,053 bytes per conversion versus 153,354 bytes without the
+dictionary. The search was changed to stop once the requested candidate count
+has been reached and a system-rule match has already been found; it continues
+up to the larger safety pool only when no match has yet been found. After this
+change, measured allocation was identical for enabled and disabled conversion:
+153,026 bytes per conversion.
 
-`*` Negative PSS is snapshot noise. The relevant enabled measurement shows that only approximately 64 KiB of the 13.63 MiB mapped file was resident after the measured lookup workload.
+## Functional verification
 
-This result is why mmap is conditional rather than mandatory: it provides no meaningful advantage for the 3,144-byte production dictionary, but removes approximately 13.63 MiB of Java-heap retention for the synthetic 100,002-rule dictionary.
-
-## Functional result
-
-- Without the system dictionary, the first candidate was `服を切る` with score 10,440.
-- With the system dictionary, `服を着る` was detected as a matching path and moved to first place.
-- Its existing conversion score remained 10,691. No score or adjustment is stored in the n-gram dictionary and no score was added to the candidate.
-
-## Verification
-
-- Converter unit tests: passed
-- Deterministic binary and score-rejection tests: passed
-- JapaneseKeyboard `liteStandardDebug` unit tests: passed
-- Pixel 7 Pro AVD end-to-end instrumented test: passed
-- Full dictionary asset generation and ZIP layout verification: passed
-- Release ZIP contains `app/src/main/assets/ngram/system_ngram.dat`
-
-The synthetic large test validates the data path and conditional mmap behavior at 100,002 rules. Its randomized long words are intentionally a low-compression stress case, not a model of expected Japanese corpus size. Final release thresholds should still be confirmed with representative rules on a fixed physical Android device.
+- Without the dictionary, the first candidate was `服を切る` (score 10,440).
+- With the dictionary, `服を着る` matched and moved to first place.
+- Its original score remained 10,691; no dictionary score exists.
+- Exact-word, POS and wildcard reader tests passed.
+- Converter format and deterministic-build tests passed.
+- JapaneseKeyboard unit tests passed.
+- The end-to-end Android instrumentation test passed with 100,000 rules.
+- The final release asset was restored to the three editable rules after the
+  stress measurement.
