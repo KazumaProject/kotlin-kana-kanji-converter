@@ -1,4 +1,5 @@
 import org.gradle.api.GradleException
+import org.gradle.api.tasks.bundling.Zip
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
@@ -141,6 +142,7 @@ repositories {
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC.2")
+    implementation("org.openjdk.jol:jol-core:0.17")
 }
 
 val generatedMozcIdDefDir = layout.buildDirectory.dir("generated/source/mozcIdDef/main/kotlin")
@@ -200,7 +202,18 @@ val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("zero_query_string.data", "mozc/zero_query/zero_query_string.data"),
     JapaneseKeyboardAssetSpec("zero_query_number_token.data", "mozc/zero_query/zero_query_number_token.data"),
     JapaneseKeyboardAssetSpec("zero_query_number_string.data", "mozc/zero_query/zero_query_number_string.data"),
+    JapaneseKeyboardAssetSpec("ngram/system_ngram.dat", "ngram/system_ngram.dat"),
+    JapaneseKeyboardAssetSpec("ngram/system_ngram_manifest.json", "ngram/system_ngram_manifest.json"),
 )
+
+val systemNgramSourceDir = layout.projectDirectory.dir("src/main/ngram/rules")
+val systemNgramOutputDir = dictionaryResourcesDir.dir("ngram")
+val systemNgramBinary = systemNgramOutputDir.file("system_ngram.dat")
+val systemNgramManifest = systemNgramOutputDir.file("system_ngram_manifest.json")
+val systemNgramReportDir = layout.buildDirectory.dir("reports/system-ngram")
+val systemNgramBenchmarkMarkdown = systemNgramReportDir.map { it.file("benchmark.md") }
+val systemNgramBenchmarkProperties = systemNgramReportDir.map { it.file("benchmark.properties") }
+val systemNgramReleaseZip = japaneseKeyboardAssetsReleaseDir.file("system_ngram_dictionary.zip")
 
 val mozcZeroQueryOfficialResourceNames = listOf(
     "zero_query.def",
@@ -618,8 +631,100 @@ tasks.named("compileKotlin") {
     dependsOn(generateIdDefConstants)
 }
 
+val validateSystemNgramSources = tasks.register<JavaExec>("validateSystemNgramSources") {
+    group = "verification"
+    description = "Validates editable typed system N-gram rules and the Mozc POS mapping source."
+    mainClass.set("com.kazumaproject.ngram.system.SystemNgramTool")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("compileKotlin")
+    inputs.dir(systemNgramSourceDir)
+    inputs.file(mozcIdDefFileProvider)
+    args(
+        "validate",
+        "--source", systemNgramSourceDir.asFile.path,
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
+    )
+}
+
+val generateSystemNgramDictionary = tasks.register<JavaExec>("generateSystemNgramDictionary") {
+    group = "distribution"
+    description = "Compiles editable system N-gram rules into the typed succinct LOUDS dictionary."
+    mainClass.set("com.kazumaproject.ngram.system.SystemNgramTool")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("compileKotlin", validateSystemNgramSources)
+    inputs.dir(systemNgramSourceDir)
+    inputs.file(mozcIdDefFileProvider)
+    outputs.files(systemNgramBinary, systemNgramManifest)
+    args(
+        "build",
+        "--source", systemNgramSourceDir.asFile.path,
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
+        "--output", systemNgramBinary.asFile.path,
+        "--manifest", systemNgramManifest.asFile.path,
+    )
+}
+
+val verifySystemNgramDictionary = tasks.register<JavaExec>("verifySystemNgramDictionary") {
+    group = "verification"
+    description = "Reloads the generated system N-gram dictionary and verifies every source pattern."
+    mainClass.set("com.kazumaproject.ngram.system.SystemNgramTool")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn(generateSystemNgramDictionary)
+    inputs.dir(systemNgramSourceDir)
+    inputs.file(systemNgramBinary)
+    args(
+        "verify",
+        "--source", systemNgramSourceDir.asFile.path,
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
+        "--input", systemNgramBinary.asFile.path,
+    )
+}
+
+val benchmarkSystemNgramDictionary = tasks.register<JavaExec>("benchmarkSystemNgramDictionary") {
+    group = "verification"
+    description = "Measures serialized size, retained memory estimate, and lookup latency for the system N-gram dictionary."
+    mainClass.set("com.kazumaproject.ngram.system.SystemNgramTool")
+    classpath = sourceSets["main"].runtimeClasspath
+    jvmArgs("-Djdk.attach.allowAttachSelf=true")
+    dependsOn(verifySystemNgramDictionary)
+    inputs.dir(systemNgramSourceDir)
+    inputs.file(systemNgramBinary)
+    outputs.files(systemNgramBenchmarkMarkdown, systemNgramBenchmarkProperties)
+    args(
+        "benchmark",
+        "--source", systemNgramSourceDir.asFile.path,
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
+        "--input", systemNgramBinary.asFile.path,
+        "--markdown", systemNgramBenchmarkMarkdown.get().asFile.path,
+        "--properties", systemNgramBenchmarkProperties.get().asFile.path,
+        "--operations", providers.gradleProperty("systemNgramBenchmarkOperations").orElse("300000").get(),
+    )
+}
+
+val packageSystemNgramRelease = tasks.register<Zip>("packageSystemNgramRelease") {
+    group = "distribution"
+    description = "Packages the system N-gram binary, manifest, and benchmark evidence for GitHub Releases."
+    dependsOn(benchmarkSystemNgramDictionary)
+    destinationDirectory.set(japaneseKeyboardAssetsReleaseDir)
+    archiveFileName.set(systemNgramReleaseZip.asFile.name)
+    isReproducibleFileOrder = true
+    isPreserveFileTimestamps = false
+    from(systemNgramBinary) { into("dictionary") }
+    from(systemNgramManifest) { into("dictionary") }
+    from(systemNgramBenchmarkMarkdown) { into("reports") }
+    from(systemNgramBenchmarkProperties) { into("reports") }
+    from(systemNgramSourceDir) { into("sources") }
+}
+
 tasks.named("check") {
-    dependsOn(validateMozcIdDef, validateConnectionMatrix, validateDictionaryIds, validateIdDefReferences, validateMozcZeroQueryResources)
+    dependsOn(
+        validateMozcIdDef,
+        validateConnectionMatrix,
+        validateDictionaryIds,
+        validateIdDefReferences,
+        validateMozcZeroQueryResources,
+        verifySystemNgramDictionary,
+    )
 }
 
 application {
@@ -779,13 +884,14 @@ val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeybo
         "runMozcUTNeologd",
         "runMozcUTWikiNeologdCommon",
         generateMozcZeroQueryData,
+        generateSystemNgramDictionary,
     )
 }
 
 val packageJapaneseKeyboardDictionaryAssets = tasks.register("packageJapaneseKeyboardDictionaryAssets") {
     group = "distribution"
     description = "Packages generated dictionaries as app/src/main/assets for JapaneseKeyboard."
-    dependsOn(generateJapaneseKeyboardDictionaries)
+    dependsOn(generateJapaneseKeyboardDictionaries, generateSystemNgramDictionary)
     inputs.files(japaneseKeyboardAssetSpecs.map { dictionaryResourcesDir.file(it.sourceRelativePath) })
     outputs.dir(japaneseKeyboardAssetsStagingDir)
     outputs.file(japaneseKeyboardAssetsReleaseZip)
@@ -798,7 +904,8 @@ val packageJapaneseKeyboardDictionaryAssets = tasks.register("packageJapaneseKey
         val releaseZip = japaneseKeyboardAssetsReleaseZip.asFile
 
         delete(stagingDirectory)
-        delete(releaseDirectory)
+        releaseDirectory.mkdirs()
+        delete(releaseZip)
         assetsDirectory.mkdirs()
 
         japaneseKeyboardAssetSpecs.forEach { spec ->

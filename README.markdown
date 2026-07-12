@@ -19,6 +19,8 @@
 GitHub Actions を使用して、プッシュされたタグに基づいてビルドとリリースを自動化しています。このプロセスには、辞書ファイルのダウンロード、Kotlin
 アプリケーションのビルド、アーティファクトの生成、および GitHub Release へのアップロードが含まれます。
 
+システム N-Gram 辞書は、編集可能な型付きルールから adjustment を持たない LOUDS バイナリへコンパイルされます。生成、検証、サイズ・保持メモリ・検索時間の測定、GitHub Release 用 ZIP の作成方法は [System N-Gram dictionary](docs/system-ngram-dictionary.md) を参照してください。
+
 ## インストール
 
 ```bash

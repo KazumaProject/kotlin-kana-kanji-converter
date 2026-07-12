@@ -84,6 +84,9 @@ jobs:
       - name: Test with Gradle
         run: ./gradlew test
 
+      - name: Build, verify, and benchmark system N-Gram dictionary
+        run: ./gradlew generateSystemNgramDictionary verifySystemNgramDictionary benchmarkSystemNgramDictionary
+
       - name: Verify Mozc zero query parity
         run: ./gradlew verifyMozcZeroQueryParity -PmozcSourceDir=./mozc-src
 
@@ -93,14 +96,30 @@ jobs:
       - name: Generate dictionaries, package assets, and verify
         run: ./gradlew packageJapaneseKeyboardDictionaryAssets verifyJapaneseKeyboardDictionaryAssets
 
+      - name: Package system N-Gram release with performance evidence
+        run: ./gradlew packageSystemNgramRelease
+
+      - name: Publish system N-Gram benchmark summary
+        run: cat ./build/reports/system-ngram/benchmark.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload generated release files
+        uses: actions/upload-artifact@v4
+        with:
+          name: japanese-keyboard-dictionaries-${{ github.ref_name }}
+          path: |
+            ./release_zips/japanese_keyboard_dictionary_assets.zip
+            ./release_zips/system_ngram_dictionary.zip
+          if-no-files-found: error
+
       # --- Create a single release with the JapaneseKeyboard-ready assets zip ---
       - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref }}
-          name: Release ${{ github.ref }}
-          artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip
+          tag: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./release_zips/system_ngram_dictionary.zip
           allowUpdates: true
           artifactErrorsFailBuild: true
           removeArtifacts: true

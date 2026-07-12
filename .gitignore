@@ -49,5 +49,7 @@ bin/
 /src/test/resources/perf/*
 !/src/test/resources/perf/dictionary-build-baseline.properties
 /src/main/resources
+!/src/main/ngram/
+!/src/main/ngram/**
 .gradle-user-home
 release_zips
