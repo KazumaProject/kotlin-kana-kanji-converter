@@ -96,9 +96,6 @@ jobs:
       - name: Generate dictionaries, package assets, and verify
         run: ./gradlew packageJapaneseKeyboardDictionaryAssets verifyJapaneseKeyboardDictionaryAssets
 
-      - name: Package system N-Gram release with performance evidence
-        run: ./gradlew packageSystemNgramRelease
-
       - name: Publish system N-Gram benchmark summary
         run: cat ./build/reports/system-ngram/benchmark.md >> "$GITHUB_STEP_SUMMARY"
 
@@ -106,9 +103,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: japanese-keyboard-dictionaries-${{ github.ref_name }}
-          path: |
-            ./release_zips/japanese_keyboard_dictionary_assets.zip
-            ./release_zips/system_ngram_dictionary.zip
+          path: ./release_zips/japanese_keyboard_dictionary_assets.zip
           if-no-files-found: error
 
       # --- Create a single release with the JapaneseKeyboard-ready assets zip ---
@@ -119,7 +114,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./release_zips/system_ngram_dictionary.zip
+          artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip
           allowUpdates: true
           artifactErrorsFailBuild: true
           removeArtifacts: true

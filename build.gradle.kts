@@ -1,5 +1,4 @@
 import org.gradle.api.GradleException
-import org.gradle.api.tasks.bundling.Zip
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
@@ -203,7 +202,6 @@ val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("zero_query_number_token.data", "mozc/zero_query/zero_query_number_token.data"),
     JapaneseKeyboardAssetSpec("zero_query_number_string.data", "mozc/zero_query/zero_query_number_string.data"),
     JapaneseKeyboardAssetSpec("ngram/system_ngram.dat", "ngram/system_ngram.dat"),
-    JapaneseKeyboardAssetSpec("ngram/system_ngram_manifest.json", "ngram/system_ngram_manifest.json"),
 )
 
 val systemNgramSourceDir = layout.projectDirectory.dir("src/main/ngram/rules")
@@ -213,7 +211,6 @@ val systemNgramManifest = systemNgramOutputDir.file("system_ngram_manifest.json"
 val systemNgramReportDir = layout.buildDirectory.dir("reports/system-ngram")
 val systemNgramBenchmarkMarkdown = systemNgramReportDir.map { it.file("benchmark.md") }
 val systemNgramBenchmarkProperties = systemNgramReportDir.map { it.file("benchmark.properties") }
-val systemNgramReleaseZip = japaneseKeyboardAssetsReleaseDir.file("system_ngram_dictionary.zip")
 
 val mozcZeroQueryOfficialResourceNames = listOf(
     "zero_query.def",
@@ -701,21 +698,6 @@ val benchmarkSystemNgramDictionary = tasks.register<JavaExec>("benchmarkSystemNg
     )
 }
 
-val packageSystemNgramRelease = tasks.register<Zip>("packageSystemNgramRelease") {
-    group = "distribution"
-    description = "Packages the system N-gram binary, manifest, and benchmark evidence for GitHub Releases."
-    dependsOn(benchmarkSystemNgramDictionary)
-    destinationDirectory.set(japaneseKeyboardAssetsReleaseDir)
-    archiveFileName.set(systemNgramReleaseZip.asFile.name)
-    isReproducibleFileOrder = true
-    isPreserveFileTimestamps = false
-    from(systemNgramBinary) { into("dictionary") }
-    from(systemNgramManifest) { into("dictionary") }
-    from(systemNgramBenchmarkMarkdown) { into("reports") }
-    from(systemNgramBenchmarkProperties) { into("reports") }
-    from(systemNgramSourceDir) { into("sources") }
-}
-
 tasks.named("check") {
     dependsOn(
         validateMozcIdDef,
@@ -904,8 +886,7 @@ val packageJapaneseKeyboardDictionaryAssets = tasks.register("packageJapaneseKey
         val releaseZip = japaneseKeyboardAssetsReleaseZip.asFile
 
         delete(stagingDirectory)
-        releaseDirectory.mkdirs()
-        delete(releaseZip)
+        delete(releaseDirectory)
         assetsDirectory.mkdirs()
 
         japaneseKeyboardAssetSpecs.forEach { spec ->

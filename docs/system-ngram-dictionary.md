@@ -34,7 +34,7 @@ Patterns must contain 2–5 elements and must be globally unique across all `.ng
 ./gradlew generateSystemNgramDictionary
 ./gradlew verifySystemNgramDictionary
 ./gradlew benchmarkSystemNgramDictionary
-./gradlew packageSystemNgramRelease
+./gradlew packageJapaneseKeyboardDictionaryAssets
 ```
 
 Generated runtime files are deliberately ignored by Git:
@@ -42,7 +42,7 @@ Generated runtime files are deliberately ignored by Git:
 - `src/main/resources/ngram/system_ngram.dat`
 - `src/main/resources/ngram/system_ngram_manifest.json`
 
-The release bundle is `release_zips/system_ngram_dictionary.zip`. It contains the binary, manifest, editable sources, and performance evidence. The main JapaneseKeyboard assets ZIP also contains the binary and manifest under `app/src/main/assets/ngram/`.
+The only GitHub Release bundle is `release_zips/japanese_keyboard_dictionary_assets.zip`. It contains only the runtime dictionary at `app/src/main/assets/ngram/system_ngram.dat`; the manifest, editable sources, and benchmark reports are not packaged. GitHub Actions publishes benchmark evidence in the job summary.
 
 ## Binary structure
 
