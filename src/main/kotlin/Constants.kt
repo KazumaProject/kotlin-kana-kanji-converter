@@ -1900,6 +1900,13 @@ object Constants {
 
     val FIXED_LIST = listOf(
         Dictionary(
+            yomi = "しゅうしょくきー",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 4000,
+            tango = "修飾キー"
+        ),
+        Dictionary(
             yomi = "かのように",
             leftId = `名詞,一般,*,*,*,*,*`,
             rightId = `名詞,一般,*,*,*,*,*`,
