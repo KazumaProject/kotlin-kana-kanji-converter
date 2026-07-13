@@ -1,0 +1,21 @@
+# System n-gram rules. This source is compiled; JapaneseKeyboard reads only the binary asset.
+#
+# Available coarse POS selectors from Mozc id.def:
+# pos("その他"), pos("フィラー"), pos("副詞"), pos("助動詞"), pos("助詞"),
+# pos("動詞"), pos("名詞"), pos("形容詞"), pos("感動詞"), pos("接続詞"),
+# pos("接頭詞"), pos("記号"), pos("連体詞")
+#
+# `*` matches exactly one conversion node regardless of its word or POS.
+# Use it carefully because a wildcard rule is broader than a POS rule.
+# Example: "布" + "で" + * + "を" + "拭く"
+"服" + "を" + "着る"
+"布" + "で" + * + "を" + "拭く"
+"機械" + "が" + "止まる"
+"機械" + * + "止" + *
+"機械" + * + "止っ" + *
+"マグロ" + "を" + "解体"
+"精度" + * + "低い"
+"風邪" + "を" + "引く"
+"風邪" + "を" + "引いた"
+"肩" + "が" + "こる"
+"肩" + "が" + "こっ"

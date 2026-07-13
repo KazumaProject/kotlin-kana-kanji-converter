@@ -156,10 +156,29 @@ val japaneseKeyboardAssetsRootPath = "app/src/main/assets"
 val japaneseKeyboardAssetsStagingDir = layout.buildDirectory.dir("japaneseKeyboardDictionaryAssets")
 val japaneseKeyboardAssetsReleaseDir = layout.projectDirectory.dir("release_zips")
 val japaneseKeyboardAssetsReleaseZip = japaneseKeyboardAssetsReleaseDir.file("japanese_keyboard_dictionary_assets.zip")
+val systemNgramDictionaryFile = dictionaryResourcesDir.file("ngram/system_ngram.dat")
+val buildSystemNgramDictionary = tasks.register<JavaExec>("buildSystemNgramDictionary") {
+    group = "distribution"
+    description = "Compiles editable scoreless n-gram sources into the JapaneseKeyboard binary asset."
+    dependsOn("classes")
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.ngram.BuildSystemNgramDictionaryKt")
+    args(
+        "--source", layout.projectDirectory.dir("src/main/ngram").asFile.path,
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
+        "--output", systemNgramDictionaryFile.asFile.path,
+        "--report", layout.buildDirectory.file("reports/ngram/build.txt").get().asFile.path,
+    )
+    inputs.dir(layout.projectDirectory.dir("src/main/ngram"))
+    inputs.file(mozcIdDefFileProvider)
+    outputs.file(systemNgramDictionaryFile)
+    outputs.file(layout.buildDirectory.file("reports/ngram/build.txt"))
+}
 val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("connectionId.dat", "connectionId.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("pos_table.dat", "pos_table.dat"),
     JapaneseKeyboardAssetSpec("id.def", "id.def"),
+    JapaneseKeyboardAssetSpec("ngram/system_ngram.dat", "ngram/system_ngram.dat"),
     JapaneseKeyboardAssetSpec("yomi.dat", "system/yomi.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("tango.dat", "system/tango.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("token.dat", "system/token.dat.zip", zipped = true),
@@ -779,6 +798,7 @@ val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeybo
         "runMozcUTNeologd",
         "runMozcUTWikiNeologdCommon",
         generateMozcZeroQueryData,
+        buildSystemNgramDictionary,
     )
 }
 
