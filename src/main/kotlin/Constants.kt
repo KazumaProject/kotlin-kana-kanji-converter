@@ -530,6 +530,13 @@ object Constants {
             tango = "買いたい"
         ),
         Dictionary(
+            yomi = "かいたい",
+            leftId = `名詞,サ変接続,*,*,*,*,*`,
+            rightId = `名詞,サ変接続,*,*,*,*,*`,
+            cost = 4500,
+            tango = "解体"
+        ),
+        Dictionary(
             yomi = "おうた",
             leftId = `動詞,自立,*,*,五段・ワ行ウ音便,連用形,*`,
             rightId = `動詞,自立,*,*,五段・ワ行ウ音便,連用形,*`,
