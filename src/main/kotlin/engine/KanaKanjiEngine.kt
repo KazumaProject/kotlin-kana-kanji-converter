@@ -8,6 +8,7 @@ import com.kazumaproject.graph.GraphBuilder
 import com.kazumaproject.mozc.ConnectionMatrix
 import com.kazumaproject.viterbi.FindPath
 import java.io.BufferedInputStream
+import java.io.File
 import java.io.FileInputStream
 import java.io.ObjectInputStream
 
@@ -21,34 +22,23 @@ class KanaKanjiEngine {
     private lateinit var tokenArray: TokenArray
 
     fun buildEngine(){
-        val objectInputYomi = ObjectInputStream(FileInputStream("src/main/resources/yomi.dat"))
-        val objectInputTango = ObjectInputStream(FileInputStream("src/main/resources/tango.dat"))
-        val objectInputTokenArray = ObjectInputStream(FileInputStream("src/main/resources/token.dat"))
-        val objectInputConnectionId = BufferedInputStream(FileInputStream("src/main/resources/connectionId.dat"))
-
-        yomiTrie = LOUDSWithTermId().readExternal(objectInputYomi)
-        tangoTrie = LOUDS().readExternal(objectInputTango)
-        graphBuilder = GraphBuilder()
-        tokenArray = TokenArray()
-        tokenArray.readExternal(objectInputTokenArray)
-        tokenArray.readPOSTable(1)
-        connectionMatrix = ConnectionIdBuilder().readMatrix(objectInputConnectionId, "src/main/resources/connectionId.dat")
-        findPath = FindPath()
+        buildEngineFromResourceDirectory("src/main/resources", mode = 1)
     }
 
     fun buildEngineForTest(){
-        val objectInputYomi = ObjectInputStream(FileInputStream("src/test/resources/yomi.dat"))
-        val objectInputTango = ObjectInputStream(FileInputStream("src/test/resources/tango.dat"))
-        val objectInputTokenArray = ObjectInputStream(FileInputStream("src/test/resources/token.dat"))
-        val objectInputConnectionId = BufferedInputStream(FileInputStream("src/test/resources/connectionId.dat"))
-        yomiTrie = LOUDSWithTermId().readExternal(objectInputYomi)
-        tangoTrie = LOUDS().readExternal(objectInputTango)
-        graphBuilder = GraphBuilder()
-        tokenArray = TokenArray()
-        tokenArray.readExternal(objectInputTokenArray)
-        tokenArray.readPOSTable(0)
-        connectionMatrix = ConnectionIdBuilder().readMatrix(objectInputConnectionId, "src/test/resources/connectionId.dat")
-        findPath = FindPath()
+        val testResources = "src/test/resources"
+        val hasTestResources = listOf(
+            "yomi.dat",
+            "tango.dat",
+            "token.dat",
+            "connectionId.dat",
+            "pos_table.dat",
+        ).all { File("$testResources/$it").isFile }
+        if (hasTestResources) {
+            buildEngineFromResourceDirectory(testResources, mode = 0)
+        } else {
+            buildEngine()
+        }
     }
 
     fun nBestPath(
@@ -65,17 +55,46 @@ class KanaKanjiEngine {
         return result
     }
 
-    fun viterbiAlgorithm(
+    fun convert(
         input: String
-    ): String{
+    ): ConversionResult {
         val graph = graphBuilder.constructGraph(
             input,
             yomiTrie,
             tangoTrie,
             tokenArray,
         )
-        val result = findPath.viterbi(graph,input.length, connectionMatrix)
-        return result
+        val bestPath = findPath.findBestPath(graph, input.length, connectionMatrix)
+        return ConversionResult(
+            input = input,
+            bestPath = bestPath.map { it.toConversionPathNode() },
+        )
+    }
+
+    fun viterbiAlgorithm(
+        input: String
+    ): String{
+        return convert(input).value
+    }
+
+    private fun buildEngineFromResourceDirectory(
+        resourceDirectory: String,
+        mode: Int,
+    ) {
+        val objectInputYomi = ObjectInputStream(BufferedInputStream(FileInputStream("$resourceDirectory/yomi.dat")))
+        val objectInputTango = ObjectInputStream(BufferedInputStream(FileInputStream("$resourceDirectory/tango.dat")))
+        val objectInputTokenArray =
+            ObjectInputStream(BufferedInputStream(FileInputStream("$resourceDirectory/token.dat")))
+        val objectInputConnectionId = BufferedInputStream(FileInputStream("$resourceDirectory/connectionId.dat"))
+
+        yomiTrie = LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
+        tangoTrie = LOUDS().readExternalNotCompress(objectInputTango)
+        graphBuilder = GraphBuilder()
+        tokenArray = TokenArray()
+        tokenArray.readExternalNotCompress(objectInputTokenArray)
+        tokenArray.readPOSTable(mode)
+        connectionMatrix = ConnectionIdBuilder().readMatrix(objectInputConnectionId, "$resourceDirectory/connectionId.dat")
+        findPath = FindPath()
     }
 
 }
