@@ -9,6 +9,9 @@ data class Node(
     val tango: String,
     val len: Short,
     var sPos: Int,
+    val key: String = "",
+    val wcost: Int = score,
+    var totalCost: Int = Int.MAX_VALUE,
     var prev: Node? = null,
     var next: Node? = null,
 ){

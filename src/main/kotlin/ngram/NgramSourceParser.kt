@@ -6,10 +6,12 @@ import java.text.Normalizer
 object NgramSourceParser {
     fun parseDirectory(directory: File): List<NgramRule> {
         require(directory.isDirectory) { "Missing n-gram source directory: ${directory.path}" }
+        val sourceRoot = directory.canonicalFile
+        val wordListLoader = WordListLoader(sourceRoot)
         val rules = directory.walkTopDown()
             .filter { it.isFile && it.extension == "ngram" }
             .sortedBy { it.relativeTo(directory).invariantSeparatorsPath }
-            .flatMap { parseFile(it).asSequence() }
+            .flatMap { parseFile(it, wordListLoader).asSequence() }
             .toList()
         require(rules.isNotEmpty()) { "No .ngram rules found in ${directory.path}" }
         val duplicates = rules.groupBy { canonical(it) }.filterValues { it.size > 1 }
@@ -21,7 +23,10 @@ object NgramSourceParser {
         return rules
     }
 
-    fun parseFile(file: File): List<NgramRule> = buildList {
+    fun parseFile(file: File): List<NgramRule> =
+        parseFile(file, WordListLoader(requireNotNull(file.parentFile).canonicalFile))
+
+    private fun parseFile(file: File, wordListLoader: WordListLoader): List<NgramRule> = buildList {
         file.readLines(Charsets.UTF_8).forEachIndexed { index, raw ->
             val line = raw.trim()
             if (line.isEmpty() || line.startsWith("#")) return@forEachIndexed
@@ -32,14 +37,43 @@ object NgramSourceParser {
             require(parts.size in 2..5) {
                 "N-gram order must be 2..5 at ${file.path}:${index + 1}: $line"
             }
-            add(
-                NgramRule(
-                    features = parts.map { parseFeature(it, file, index + 1) },
-                    source = file.path,
-                    lineNumber = index + 1,
-                ),
-            )
+            val alternatives = parts.map {
+                parseFeatureAlternatives(it, file, index + 1, wordListLoader)
+            }
+            var expandedFeatures = listOf(emptyList<NgramFeature>())
+            alternatives.forEach { choices ->
+                require(expandedFeatures.size.toLong() * choices.size <= MAX_EXPANDED_RULES_PER_LINE) {
+                    "N-gram word-set expansion exceeds $MAX_EXPANDED_RULES_PER_LINE rules " +
+                        "at ${file.path}:${index + 1}: $line"
+                }
+                expandedFeatures = expandedFeatures.flatMap { existing ->
+                    choices.map { choice -> existing + choice }
+                }
+            }
+            expandedFeatures.forEach { features ->
+                add(
+                    NgramRule(
+                        features = features,
+                        source = file.path,
+                        lineNumber = index + 1,
+                    ),
+                )
+            }
         }
+    }
+
+    private fun parseFeatureAlternatives(
+        text: String,
+        file: File,
+        lineNumber: Int,
+        wordListLoader: WordListLoader,
+    ): List<NgramFeature> {
+        val wordsMatch = WORDS_PATTERN.matchEntire(text)
+        if (wordsMatch != null) {
+            val reference = requireNotNull(parseQuoted(wordsMatch.groupValues[1]))
+            return wordListLoader.load(reference, file, lineNumber).map(NgramFeature::Word)
+        }
+        return listOf(parseFeature(text, file, lineNumber))
     }
 
     private fun splitFeatures(line: String): List<String> {
@@ -107,6 +141,70 @@ object NgramSourceParser {
         return result.toString()
     }
 
+    private class WordListLoader(sourceRoot: File) {
+        private val sourceRoot = sourceRoot.canonicalFile
+        private val sourceRootPath = this.sourceRoot.toPath()
+        private val cache = mutableMapOf<File, List<String>>()
+
+        fun load(reference: String, owner: File, lineNumber: Int): List<String> =
+            load(resolve(reference, owner, lineNumber), mutableListOf())
+
+        private fun load(file: File, stack: MutableList<File>): List<String> {
+            cache[file]?.let { return it }
+            val cycleStart = stack.indexOf(file)
+            require(cycleStart < 0) {
+                val cycle = (stack.drop(cycleStart) + file).joinToString(" -> ") {
+                    it.relativeTo(sourceRoot).invariantSeparatorsPath
+                }
+                "Cyclic .words include: $cycle"
+            }
+
+            stack += file
+            val words = linkedSetOf<String>()
+            try {
+                file.readLines(Charsets.UTF_8).forEachIndexed { index, raw ->
+                    val line = raw.trim()
+                    if (line.isEmpty() || line.startsWith("#")) return@forEachIndexed
+                    val includeMatch = INCLUDE_PATTERN.matchEntire(line)
+                    if (includeMatch != null) {
+                        val reference = requireNotNull(parseQuoted(includeMatch.groupValues[1]))
+                        words += load(resolve(reference, file, index + 1), stack)
+                    } else {
+                        require(!line.startsWith("@include")) {
+                            "Invalid .words include at ${file.path}:${index + 1}: $line"
+                        }
+                        val normalized = Normalizer.normalize(line, Normalizer.Form.NFC)
+                        require(normalized.isNotEmpty() && '\u0000' !in normalized) {
+                            "Invalid word at ${file.path}:${index + 1}"
+                        }
+                        words += normalized
+                    }
+                }
+            } finally {
+                stack.removeAt(stack.lastIndex)
+            }
+            require(words.isNotEmpty()) { "No words found in ${file.path}" }
+            return words.toList().also { cache[file] = it }
+        }
+
+        private fun resolve(reference: String, owner: File, lineNumber: Int): File {
+            require(reference.isNotEmpty() && !File(reference).isAbsolute) {
+                ".words reference must be a non-empty relative path at ${owner.path}:$lineNumber: $reference"
+            }
+            require(File(reference).extension == "words") {
+                ".words reference must end in .words at ${owner.path}:$lineNumber: $reference"
+            }
+            val resolved = requireNotNull(owner.parentFile).resolve(reference).canonicalFile
+            require(resolved.toPath().startsWith(sourceRootPath)) {
+                ".words reference escapes ${sourceRoot.path} at ${owner.path}:$lineNumber: $reference"
+            }
+            require(resolved.isFile) {
+                "Missing .words file referenced at ${owner.path}:$lineNumber: ${resolved.path}"
+            }
+            return resolved
+        }
+    }
+
     private fun canonical(rule: NgramRule): String = rule.features.joinToString("|") {
         when (it) {
             is NgramFeature.Word -> "W:${it.value}"
@@ -114,4 +212,8 @@ object NgramSourceParser {
             NgramFeature.Any -> "*"
         }
     }
+
+    private val WORDS_PATTERN = Regex("words\\(\\s*(\"(?:\\\\.|[^\"])*\")\\s*\\)")
+    private val INCLUDE_PATTERN = Regex("@include\\s+(\"(?:\\\\.|[^\"])*\")")
+    private const val MAX_EXPANDED_RULES_PER_LINE = 100_000
 }

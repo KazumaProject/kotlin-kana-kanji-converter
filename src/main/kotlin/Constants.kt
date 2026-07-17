@@ -543,20 +543,6 @@ object Constants {
             cost = 3000,
             tango = "負うた"
         ),
-        Dictionary(
-            yomi = "たいま",
-            leftId = `名詞,一般,*,*,*,*,*`,
-            rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 3000,
-            tango = "大麻"
-        ),
-        Dictionary(
-            yomi = "すう",
-            leftId = `動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
-            rightId = `動詞,自立,*,*,五段・ワ行促音便,基本形,*`,
-            cost = 2500,
-            tango = "吸う"
-        ),
     )
 
     val CUSTOM_LIST = listOf(
@@ -748,6 +734,13 @@ object Constants {
             rightId = `名詞,一般,*,*,*,*,*`,
             cost = 4000,
             tango = "ナーバス"
+        ),
+        Dictionary(
+            yomi = "へんかんせいど",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 5000,
+            tango = "変換精度"
         ),
         Dictionary(
             yomi = "そうししゃ",

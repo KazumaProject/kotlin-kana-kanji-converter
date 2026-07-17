@@ -14,27 +14,37 @@ class GraphBuilder {
         tangoTrie: LOUDS,
         tokenArray: TokenArray
     ): List<MutableList<MutableList<Node>>> {
-        val graph: MutableList<MutableList<MutableList<Node>>?> = mutableListOf()
-        for (i in 0 .. str.length + 1){
-            when(i){
-                0 -> graph.add(i, mutableListOf(mutableListOf(BOS)))
-                str.length + 1 -> graph.add(i, mutableListOf(
-                    mutableListOf(
-                        Node(
-                        l = 0,
-                        r = 0,
-                        score = 0,
-                        f = 0,
-                        g = 0,
-                        tango = "EOS",
-                        len = 0,
-                        sPos = str.length + 1
-                    ))
+        val graph: MutableList<MutableList<MutableList<Node>>> =
+            MutableList(str.length + 2) { mutableListOf() }
+        graph[0].add(
+            mutableListOf(
+                BOS.copy(
+                    score = 0,
+                    f = 0,
+                    g = 0,
+                    totalCost = 0,
+                    prev = null,
+                    next = null,
                 )
+            )
+        )
+        graph[str.length + 1].add(
+            mutableListOf(
+                Node(
+                    l = 0,
+                    r = 0,
+                    score = 0,
+                    f = 0,
+                    g = 0,
+                    tango = "EOS",
+                    len = 0,
+                    sPos = str.length,
+                    key = "EOS",
+                    wcost = 0,
+                    totalCost = Int.MAX_VALUE,
                 )
-                else -> graph.add(i,null)
-            }
-        }
+            )
+        )
 
         for (i in str.indices){
             val subStr = str.substring(i, str.length)
@@ -55,17 +65,16 @@ class GraphBuilder {
                             else -> tangoTrie.getLetter(it.nodeId)
                         },
                         len = yomiStr.length.toShort(),
-                        sPos = i
+                        sPos = i,
+                        key = yomiStr,
+                        wcost = it.wordCost.toInt(),
+                        totalCost = Int.MAX_VALUE,
                     )
                 }
-                if (graph[i + yomiStr.length].isNullOrEmpty()){
-                    graph[i + yomiStr.length] = mutableListOf(tangoList.toMutableList())
-                }else{
-                    graph[i + yomiStr.length]!!.add(tangoList.toMutableList())
-                }
+                graph[i + yomiStr.length].add(tangoList.toMutableList())
             }
         }
-        return graph.toList().filterNotNull()
+        return graph
     }
 
 }

@@ -11,6 +11,9 @@ object Other {
         g = 0,
         tango = "BOS",
         len = 0,
-        0
+        sPos = 0,
+        key = "BOS",
+        wcost = 0,
+        totalCost = 0,
     )
 }
