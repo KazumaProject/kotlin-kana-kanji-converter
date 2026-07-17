@@ -1,0 +1,2 @@
+# Expand every entry in kaitai.words into an exact system n-gram rule.
+words("kaitai.words") + "を" + "解体"

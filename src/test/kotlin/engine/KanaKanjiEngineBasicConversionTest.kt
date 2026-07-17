@@ -4,6 +4,7 @@ import com.kazumaproject.engine.ConversionPathNode
 import com.kazumaproject.engine.KanaKanjiEngine
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class KanaKanjiEngineBasicConversionTest {
     @Test
@@ -47,6 +48,13 @@ class KanaKanjiEngineBasicConversionTest {
             engine.nBestPath("へんかん", 3),
         )
         assertEquals(emptyList(), engine.nBestPath("へんかん", 0))
+    }
+
+    @Test
+    fun houseDemolitionExistsInTheSystemCandidatePool() {
+        val candidates = engine.nBestPath("いえをかいたい", 64)
+
+        assertTrue("家を解体" in candidates, "System n-gram can only rerank candidates that already exist")
     }
 
     private fun assertBestPath(
