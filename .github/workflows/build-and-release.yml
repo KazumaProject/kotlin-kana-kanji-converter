@@ -81,9 +81,6 @@ jobs:
       - name: Compile Kotlin
         run: ./gradlew clean compileKotlin
 
-      - name: Test with Gradle
-        run: ./gradlew test
-
       - name: Build and verify scoreless system n-gram dictionary
         run: ./gradlew buildSystemNgramDictionary test --tests 'com.kazumaproject.ngram.*'
 
@@ -101,6 +98,10 @@ jobs:
 
       - name: Generate dictionaries, package assets, and verify
         run: ./gradlew packageJapaneseKeyboardDictionaryAssets verifyJapaneseKeyboardDictionaryAssets
+
+      # Engine tests load the generated dictionary .dat files, so run them after packaging.
+      - name: Test with Gradle
+        run: ./gradlew test
 
       # --- Create a single release with the JapaneseKeyboard-ready assets zip ---
       - name: Create GitHub Release
