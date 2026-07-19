@@ -547,6 +547,13 @@ object Constants {
 
     val CUSTOM_LIST = listOf(
         Dictionary(
+            yomi = "したい",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 6000,
+            tango = "死体"
+        ),
+        Dictionary(
             yomi = "きめつ",
             leftId = `名詞,固有名詞,一般,*,*,*,*`,
             rightId = `名詞,固有名詞,一般,*,*,*,*`,
