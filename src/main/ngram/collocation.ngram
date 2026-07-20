@@ -1,7 +1,6 @@
 # Exact rules for collocation.txt entries that are not the current first conversion candidate.
 # Entries already covered by general.ngram or kaitai.ngram are intentionally omitted.
 "こっち" + "に" + "来い"
-"し" + "とう" + "存じ" + "ます"
 "人口" + "に" + "膾炙"
 "公訴権" + "の" + "濫用"
 "敵" + "か味方か"
@@ -13,4 +12,3 @@
 "銀行口座" + "の" + "開設"
 "音頭" + "を" + "踊る"
 "風邪" + "を" + "ひく"
-"風邪" + "を" + "ひいた"
