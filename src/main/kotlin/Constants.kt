@@ -561,6 +561,13 @@ object Constants {
             tango = "未達"
         ),
         Dictionary(
+            yomi = "ひとおおすぎ",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `動詞,自立,*,*,一段,連用形,*`,
+            cost = 3500,
+            tango = "人多すぎ"
+        ),
+        Dictionary(
             yomi = "きめつ",
             leftId = `名詞,固有名詞,一般,*,*,*,*`,
             rightId = `名詞,固有名詞,一般,*,*,*,*`,
