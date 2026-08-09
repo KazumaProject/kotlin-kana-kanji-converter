@@ -5,6 +5,7 @@ import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段・カ行イ音
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段・ラ行,連用タ接続,ある`
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段・ワ行ウ音便,連用形,*`
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,基本形,*`
+import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,連用タ接続,*`
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段動詞,基本形,*`
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段動詞,連用形,*`
 import com.kazumaproject.IdDefConstants.`名詞,サ変接続,*,*,*,*,*`
@@ -566,6 +567,20 @@ object Constants {
             rightId = `名詞,一般,*,*,*,*,*`,
             cost = 2000,
             tango = "したか"
+        ),
+        Dictionary(
+            yomi = "かたゆび",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 3000,
+            tango = "片指"
+        ),
+        Dictionary(
+            yomi = "になっ",
+            leftId = `動詞,自立,*,*,五段・ワ行促音便,連用タ接続,*`,
+            rightId = `動詞,自立,*,*,五段・ワ行促音便,連用タ接続,*`,
+            cost = 2000,
+            tango = "になっ"
         ),
         Dictionary(
             yomi = "ひとおおすぎ",

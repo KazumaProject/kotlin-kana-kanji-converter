@@ -8,13 +8,13 @@ class DicUtils {
     fun getListDictionary(fileList: List<String>): List<Dictionary> {
         val tempList = mutableListOf<Dictionary>()
 
-        fileList.forEach fileLoop@ { resourcePath ->
+        fileList.forEach fileLoop@{ resourcePath ->
             val lines = object {}::class.java
                 .getResourceAsStream(resourcePath)
                 ?.bufferedReader()
                 ?.readLines()
 
-            lines?.forEach lineLoop@ { str ->
+            lines?.forEach lineLoop@{ str ->
                 val fields = str.split('\t', limit = 5)
 
                 if (fields.size < 5) {
@@ -235,6 +235,13 @@ class DicUtils {
                         println("skip $yomi $tango")
                     }
 
+                    yomi == "した" &&
+                            tango == "下" &&
+                            leftId == "2002" &&
+                            rightId == "2002" -> {
+                        println("skip $yomi $tango")
+                    }
+
                     yomi == "じぇみに" &&
                             tango == "双子座" &&
                             leftId == "1921" &&
@@ -302,6 +309,12 @@ class DicUtils {
                     }
 
                     yomi == "ひとおおすぎ" && tango == "人多すぎ" -> {
+                        println("skip $yomi $tango")
+                    }
+
+                    yomi == "になっ" && tango == "になっ" &&
+                            rightId == "825" &&
+                            leftId == "825" -> {
                         println("skip $yomi $tango")
                     }
 
