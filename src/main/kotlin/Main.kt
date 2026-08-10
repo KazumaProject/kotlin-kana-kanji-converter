@@ -25,6 +25,8 @@ import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.emoji.EmojiDictionaryBuilder
 import com.kazumaproject.emoticon.EmoticonDictionaryBuilder
+import com.kazumaproject.english.EnglishDictionaryBuilder
+import com.kazumaproject.english.EnglishDictionaryQuality
 import com.kazumaproject.mozc.buildConnectionIdsFromResource
 import com.kazumaproject.mozc.validateBundledMozcDictionaryResources
 import com.kazumaproject.reading_correction.ReadingCorrectionBuilder
@@ -49,8 +51,14 @@ fun main() {
     )
     val dicUtils = DicUtils()
     val dictionaryList = dicUtils.getListDictionary(fileList).toMutableList()
+    val englishDictionarySource = EnglishDictionaryBuilder().parseResource(
+        resourcePath = "/english-dictionary.txt",
+        expectedContextId = IdDefConstants.`名詞,一般,*,*,*,*,*`.toInt(),
+    )
+    val englishDictionaryList = EnglishDictionaryQuality.runtimeEntries(englishDictionarySource)
     val finalList =
         (dictionaryList +
+                englishDictionaryList +
                 DIC_LIST + CUSTOM_LIST +
                 NAME_LIST + FIXED_LIST +
                 DIFFICULT_LIST + SYMBOL_LIST +
@@ -63,6 +71,10 @@ fun main() {
             .toSortedMap(compareBy({ it.length }, { it }))
 
     println("finalList size: ${finalList.size}")
+    println(
+        "English dictionary entries: source=${englishDictionarySource.size}, " +
+                "runtime=${englishDictionaryList.size}",
+    )
 
     buildConnectionIds()
     buildPOSTable(finalList)

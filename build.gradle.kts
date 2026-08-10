@@ -152,6 +152,8 @@ val mozcDictionaryFilesProvider = files(
     (0..9).map { "src/main/resources/dictionary%02d.txt".format(it) } + "src/main/resources/suffix.txt"
 )
 val dictionaryResourcesDir = layout.projectDirectory.dir("src/main/resources")
+val englishDictionaryFile = dictionaryResourcesDir.file("english-dictionary.txt")
+val englishDictionaryReportDir = layout.buildDirectory.dir("reports/english-dictionary")
 val japaneseKeyboardAssetsRootPath = "app/src/main/assets"
 val japaneseKeyboardAssetsStagingDir = layout.buildDirectory.dir("japaneseKeyboardDictionaryAssets")
 val japaneseKeyboardAssetsReleaseDir = layout.projectDirectory.dir("release_zips")
@@ -219,6 +221,13 @@ val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("zero_query_string.data", "mozc/zero_query/zero_query_string.data"),
     JapaneseKeyboardAssetSpec("zero_query_number_token.data", "mozc/zero_query/zero_query_number_token.data"),
     JapaneseKeyboardAssetSpec("zero_query_number_string.data", "mozc/zero_query/zero_query_number_string.data"),
+    JapaneseKeyboardAssetSpec("THIRD-PARTY-NOTICES.md", "THIRD-PARTY-NOTICES.md"),
+    JapaneseKeyboardAssetSpec("third-party/JMDICT-LICENSE.html", "licenses/JMDICT-LICENSE.html"),
+    JapaneseKeyboardAssetSpec("third-party/LICENSE-DATA.md", "licenses/LICENSE-DATA.md"),
+    JapaneseKeyboardAssetSpec("third-party/NOTICE.md", "licenses/NOTICE.md"),
+    JapaneseKeyboardAssetSpec("third-party/MOZC-LICENSE", "licenses/MOZC-LICENSE"),
+    JapaneseKeyboardAssetSpec("third-party/IPADIC-COPYING", "licenses/IPADIC-COPYING"),
+    JapaneseKeyboardAssetSpec("third-party/IPADIC-NOTICE", "licenses/IPADIC-NOTICE"),
 )
 
 val mozcZeroQueryOfficialResourceNames = listOf(
@@ -487,6 +496,37 @@ val validateDictionaryIds = tasks.register("validateDictionaryIds") {
     }
 }
 
+val validateEnglishDictionary = tasks.register<JavaExec>("validateEnglishDictionary") {
+    group = "verification"
+    description = "Validates the JapaneseCorpus hiragana-to-English Mozc dictionary source."
+    dependsOn("classes")
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.english.ValidateEnglishDictionaryKt")
+    args(
+        "--input", englishDictionaryFile.asFile.path,
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
+    )
+    inputs.file(englishDictionaryFile)
+    inputs.file(mozcIdDefFileProvider)
+}
+
+val analyzeEnglishDictionary = tasks.register<JavaExec>("analyzeEnglishDictionary") {
+    group = "reporting"
+    description = "Writes a complete reading-to-English-candidate report from the JapaneseCorpus source."
+    dependsOn(validateEnglishDictionary)
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.english.GenerateEnglishDictionaryReportKt")
+    val reportDirectory = englishDictionaryReportDir.get().asFile
+    args(
+        "--input", englishDictionaryFile.asFile.path,
+        "--output", reportDirectory.resolve("english-dictionary-candidates.tsv").path,
+        "--quality-output", reportDirectory.resolve("english-dictionary-quality.tsv").path,
+        "--summary", reportDirectory.resolve("summary.md").path,
+    )
+    inputs.file(englishDictionaryFile)
+    outputs.dir(englishDictionaryReportDir)
+}
+
 val validateIdDefReferences = tasks.register("validateIdDefReferences") {
     group = "verification"
     description = "Validates IdDefConstants references in Kotlin files against Mozc id.def."
@@ -600,7 +640,14 @@ val validateMozcZeroQueryResources = tasks.register("validateMozcZeroQueryResour
 
 tasks.test {
     useJUnitPlatform()
-    dependsOn(validateMozcIdDef, validateConnectionMatrix, validateDictionaryIds, validateIdDefReferences, validateMozcZeroQueryResources)
+    dependsOn(
+        validateMozcIdDef,
+        validateConnectionMatrix,
+        validateDictionaryIds,
+        validateEnglishDictionary,
+        validateIdDefReferences,
+        validateMozcZeroQueryResources,
+    )
 }
 
 tasks.register<Test>("dictionaryBuildTest") {
@@ -638,7 +685,14 @@ tasks.named("compileKotlin") {
 }
 
 tasks.named("check") {
-    dependsOn(validateMozcIdDef, validateConnectionMatrix, validateDictionaryIds, validateIdDefReferences, validateMozcZeroQueryResources)
+    dependsOn(
+        validateMozcIdDef,
+        validateConnectionMatrix,
+        validateDictionaryIds,
+        validateEnglishDictionary,
+        validateIdDefReferences,
+        validateMozcZeroQueryResources,
+    )
 }
 
 application {
@@ -646,7 +700,7 @@ application {
 }
 
 tasks.named<JavaExec>("run") {
-    dependsOn(validateDictionaryIds)
+    dependsOn(validateDictionaryIds, validateEnglishDictionary)
 }
 
 tasks.register<JavaExec>("runMozcUT") {
