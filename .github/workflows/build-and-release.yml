@@ -13,8 +13,8 @@ on:
 
 env:
   MOZC_REF: ${{ github.event.inputs.mozc_ref || 'master' }}
-  JAPANESE_CORPUS_TAG: 'v2026.0803.6'
-  JAPANESE_CORPUS_ENGLISH_SHA256: 'b0bdc9ff0e6f7725758f65bb5fa3afc54df6dc22ecac73207c3289ff2111be13'
+  JAPANESE_CORPUS_TAG: 'v2026.0810.7'
+  JAPANESE_CORPUS_ENGLISH_SHA256: 'b24cfec43651627fc829645e74400c49a4999550899dd17d00a2431ffcb434fa'
 
 permissions:
   contents: write
