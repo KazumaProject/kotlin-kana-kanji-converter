@@ -6,6 +6,8 @@ import com.kazumaproject.connection_id.ConnectionIdBuilder
 import com.kazumaproject.dictionary.DicUtils
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
+import com.kazumaproject.english.EnglishDictionaryBuilder
+import com.kazumaproject.english.EnglishDictionaryQuality
 import com.kazumaproject.mozc.ConnectionMatrixParser
 import org.junit.jupiter.api.Assumptions.assumeTrue
 import java.nio.file.Files
@@ -32,6 +34,7 @@ class DictionaryBuildIntegrationTest {
         try {
             val dictionaries = buildFinalList(
                 listOf("/dictionary00.txt", "/suffix.txt"),
+                includeEnglishDictionary = false,
             )
             val tokenArray = TokenArray()
             val posTablePath = tempDir.resolve("pos_table.dat")
@@ -88,6 +91,7 @@ class DictionaryBuildIntegrationTest {
                         "/dictionary09.txt",
                         "/suffix.txt",
                     ),
+                    includeEnglishDictionary = true,
                 )
 
                 val tokenArray = TokenArray()
@@ -129,8 +133,18 @@ class DictionaryBuildIntegrationTest {
         }
     }
 
-    private fun buildFinalList(fileList: List<String>) =
+    private fun buildFinalList(
+        fileList: List<String>,
+        includeEnglishDictionary: Boolean,
+    ) =
         (DicUtils().getListDictionary(fileList) +
+                if (includeEnglishDictionary) {
+                    EnglishDictionaryQuality.runtimeEntries(
+                        EnglishDictionaryBuilder().parseResource("/english-dictionary.txt", required = false),
+                    )
+                } else {
+                    emptyList()
+                } +
                 Constants.DIC_LIST +
                 Constants.CUSTOM_LIST +
                 Constants.NAME_LIST +
