@@ -110,6 +110,74 @@ class EnglishDictionaryBuilderTest {
         assertEquals(1, quality.runtimeEntries)
     }
 
+    @Test
+    fun excludesNonLexicalShortCandidatesButKeepsNaturalEnglishTerms() {
+        val entries = listOf(
+            dictionary("あー", "two"),
+            dictionary("いー", "one"),
+            dictionary("うー", "five"),
+            dictionary("えー", "A"),
+            dictionary("おー", "the penny drops!"),
+            dictionary("ぜろ", "zero"),
+            dictionary("ざん", "the"),
+            dictionary("えす", "S"),
+            dictionary("ぐふふ", "ha ha ha"),
+            dictionary("いひひ", "hee-hee"),
+            dictionary("うっぷす", "oops"),
+            dictionary("あい", "eye"),
+            dictionary("あいあん", "iron"),
+            dictionary("あいすくりーむ", "ice cream"),
+            dictionary("あめりか", "United States"),
+            dictionary("おーけー", "okay"),
+            dictionary("いぇす", "yes"),
+            dictionary("えびでんす", "evidence-based medicine"),
+            dictionary("ぶら", "the way a bra fits"),
+        )
+
+        val assessments = EnglishDictionaryQuality.assessAll(entries).associateBy { it.source.tango }
+
+        for (surface in listOf(
+            "two",
+            "one",
+            "five",
+            "A",
+            "the penny drops!",
+            "zero",
+            "the",
+            "S",
+            "ha ha ha",
+            "hee-hee",
+            "oops",
+        )) {
+            assertEquals(EnglishCandidateStatus.EXCLUDED, assessments.getValue(surface).status, surface)
+        }
+        assertTrue(EnglishQualityFlag.VOCALIZATION_READING in assessments.getValue("two").flags)
+        assertTrue(EnglishQualityFlag.NUMERIC_SURFACE in assessments.getValue("two").flags)
+        assertTrue(EnglishQualityFlag.EXCLAMATORY_SURFACE in assessments.getValue("the penny drops!").flags)
+        assertTrue(EnglishQualityFlag.FUNCTION_WORD_SURFACE in assessments.getValue("the").flags)
+        assertTrue(EnglishQualityFlag.SINGLE_LETTER_SURFACE in assessments.getValue("S").flags)
+
+        for (surface in listOf(
+            "eye",
+            "iron",
+            "ice cream",
+            "United States",
+            "okay",
+            "yes",
+            "evidence-based medicine",
+        )) {
+            assertEquals(EnglishCandidateStatus.PRIMARY, assessments.getValue(surface).status, surface)
+        }
+        assertEquals(EnglishCandidateStatus.REVIEW, assessments.getValue("the way a bra fits").status)
+        assertTrue(EnglishQualityFlag.DEFINITION_FRAGMENT in assessments.getValue("the way a bra fits").flags)
+
+        val runtime = EnglishDictionaryQuality.runtimeEntriesFromAssessments(assessments.values.toList())
+        assertEquals(
+            setOf("eye", "iron", "ice cream", "United States", "okay", "yes", "evidence-based medicine"),
+            runtime.map { it.tango }.toSet(),
+        )
+    }
+
     private fun dictionary(reading: String, surface: String, cost: Int = 18500): Dictionary =
         Dictionary(
             yomi = reading,

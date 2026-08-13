@@ -161,7 +161,7 @@ object EnglishDictionaryReport {
             writer.appendLine("- clean runtime entries after normalization/deduplication: ${quality.runtimeEntries}")
             writer.appendLine("- clean runtime readings: ${quality.runtimeReadings}")
             writer.appendLine()
-            writer.appendLine("`primary` は直接出力しやすい英単語・英語句、`review` は有効な辞書訳だが説明文・長い定義・括弧注釈を含む候補、`excluded` は単独出力に不向きな読み記号・句読点・接辞・未完の省略表現です。実行時のノイズ除去済み辞書には primary だけを収録し、review と excluded は監査表だけに残しています。")
+            writer.appendLine("`primary` は直接出力しやすい英単語・英語句、`review` は有効な辞書訳だが説明文・長い定義・括弧注釈を含む候補、`excluded` は単独出力に不向きな母音反復読み・数値表記・感嘆表現・機能語・間投詞・読み記号・接辞・未完の省略表現です。実行時のノイズ除去済み辞書には primary だけを収録し、review と excluded は監査表だけに残しています。")
             writer.appendLine()
             writer.appendLine("### フラグ件数")
             writer.appendLine()
