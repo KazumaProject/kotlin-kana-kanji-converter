@@ -79,4 +79,22 @@ class SystemNgramBinaryTest {
             assertTrue(listOf(target, "を", "解体") in exactValues, "Missing expanded rule for $target")
         }
     }
+
+    @Test
+    fun checkedInConversionPreferenceRulesArePresent() {
+        val root = File(System.getProperty("user.dir"))
+        val rules = NgramSourceParser.parseDirectory(root.resolve("src/main/ngram"))
+        val exactValues = rules.mapNotNull { rule ->
+            rule.features.map { (it as? NgramFeature.Word)?.value ?: return@mapNotNull null }
+        }.toSet()
+
+        val expectedRules = setOf(
+            listOf("で", "いう", "と"),
+            listOf("いり", "ます"),
+            listOf("インクジェット", "紙"),
+        )
+        expectedRules.forEach { expected ->
+            assertTrue(expected in exactValues, "Missing conversion preference rule: $expected")
+        }
+    }
 }
