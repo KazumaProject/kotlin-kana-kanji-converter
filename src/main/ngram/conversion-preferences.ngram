@@ -1,0 +1,6 @@
+# Orthographic and collocation preferences for common conversion candidates.
+# JapaneseKeyboard promotes candidates matching these scoreless rules after
+# collecting its bounded N-best safety window.
+"で" + "いう" + "と"
+"いり" + "ます"
+"インクジェット" + "紙"

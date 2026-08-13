@@ -10,7 +10,9 @@ import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段動詞,基本�
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段動詞,連用形,*`
 import com.kazumaproject.IdDefConstants.`名詞,サ変接続,*,*,*,*,*`
 import com.kazumaproject.IdDefConstants.`名詞,一般,*,*,*,*,*`
+import com.kazumaproject.IdDefConstants.`名詞,一般,*,*,*,*,目`
 import com.kazumaproject.IdDefConstants.`名詞,副詞可能,*,*,*,*,時間`
+import com.kazumaproject.IdDefConstants.`名詞,副詞可能,*,*,*,*,前`
 import com.kazumaproject.IdDefConstants.`名詞,固有名詞,一般,*,*,*,*`
 import com.kazumaproject.IdDefConstants.`名詞,固有名詞,人名,名,*,*,*`
 import com.kazumaproject.IdDefConstants.`名詞,固有名詞,人名,姓,*,*,*`
@@ -3328,6 +3330,16 @@ object Constants {
     )
 
     val RESCORE_WORDS = listOf(
+        // Keep the standard spelling ahead of the literary alternative "眼の前".
+        // The bundled Mozc row currently has cost 4115; 3500 clears the current
+        // BOS/connection-cost disadvantage without changing the source dictionary.
+        Dictionary(
+            yomi = "めのまえ",
+            leftId = `名詞,一般,*,*,*,*,目`,
+            rightId = `名詞,副詞可能,*,*,*,*,前`,
+            cost = 3500,
+            tango = "目の前"
+        ),
         Dictionary(
             yomi = "のも",
             leftId = IdDefConstants.`助詞,格助詞,一般,*,*,*,ノ`,

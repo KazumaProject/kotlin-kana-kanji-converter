@@ -42,6 +42,25 @@ class KanaKanjiEngineBasicConversionTest {
     }
 
     @Test
+    fun conversionPreferenceRegressionCases() {
+        assertEquals("目の前", engine.viterbiAlgorithm("めのまえ"))
+
+        // The generator's engine does not load system_ngram.dat. These
+        // candidates are promoted by JapaneseKeyboard after this project
+        // packages the generated scoreless n-gram asset.
+        mapOf(
+            "でいうと" to "でいうと",
+            "いります" to "いります",
+            "いんくじぇっとし" to "インクジェット紙",
+        ).forEach { (input, expected) ->
+            assertTrue(
+                expected in engine.nBestPath(input, 64),
+                "Candidate must remain available for system n-gram reranking: $input -> $expected",
+            )
+        }
+    }
+
+    @Test
     fun nBestReturnsBasicCandidatesInCostOrder() {
         assertEquals(
             listOf("変換", "返還", "偏官"),
