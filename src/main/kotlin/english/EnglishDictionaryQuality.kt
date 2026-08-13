@@ -1,6 +1,7 @@
 package com.kazumaproject.english
 
 import com.kazumaproject.dictionary.models.Dictionary
+import java.util.Locale
 
 /**
  * How suitable a JMdict English gloss is for a normal conversion candidate.
@@ -19,12 +20,19 @@ enum class EnglishCandidateStatus {
 enum class EnglishQualityFlag(val code: String) {
     NORMALIZED_READING("reading-normalized"),
     SPECIAL_READING("special-reading"),
+    VOCALIZATION_READING("vocalization-reading"),
     SINGLE_CHARACTER_READING("single-character-reading"),
     PUNCTUATION_ONLY("punctuation-only"),
+    EXCLAMATORY_SURFACE("exclamatory-surface"),
+    SINGLE_LETTER_SURFACE("single-letter-surface"),
+    NUMERIC_SURFACE("numeric-surface"),
+    FUNCTION_WORD_SURFACE("function-word-surface"),
+    INTERJECTION_SURFACE("interjection-surface"),
     BOUND_MORPHEME("bound-morpheme"),
     INCOMPLETE_PLACEHOLDER("incomplete-placeholder"),
     EXPLANATORY_GLOSS("explanatory-gloss"),
     LONG_DEFINITION("long-definition"),
+    DEFINITION_FRAGMENT("definition-fragment"),
     PARENTHETICAL("parenthetical"),
 }
 
@@ -65,6 +73,7 @@ object EnglishDictionaryQuality {
     private val reviewFlags = setOf(
         EnglishQualityFlag.EXPLANATORY_GLOSS,
         EnglishQualityFlag.LONG_DEFINITION,
+        EnglishQualityFlag.DEFINITION_FRAGMENT,
         EnglishQualityFlag.PARENTHETICAL,
     )
 
@@ -82,6 +91,251 @@ object EnglishDictionaryQuality {
     private val iterationMarks = setOf('ゝ', 'ゞ')
     private val hyphenCharacters = setOf('-', '‐', '‑', '‒', '–', '—')
 
+    /*
+     * A gloss is not useful as a conversion candidate when it is just a
+     * number or a notation for a number.  These often enter this dictionary
+     * through Chinese readings such as あー -> two and いー -> one.
+     */
+    private val numericSurfaceWords = setOf(
+        "zero",
+        "nought",
+        "nil",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+        "ten",
+        "eleven",
+        "twelve",
+        "thirteen",
+        "fourteen",
+        "fifteen",
+        "sixteen",
+        "seventeen",
+        "eighteen",
+        "nineteen",
+        "twenty",
+        "thirty",
+        "forty",
+        "fifty",
+        "sixty",
+        "seventy",
+        "eighty",
+        "ninety",
+        "hundred",
+        "thousand",
+        "million",
+        "billion",
+        "trillion",
+        "first",
+        "second",
+        "third",
+        "fourth",
+        "fifth",
+        "sixth",
+        "seventh",
+        "eighth",
+        "ninth",
+        "tenth",
+        "eleventh",
+        "twelfth",
+        "thirteenth",
+        "fourteenth",
+        "fifteenth",
+        "sixteenth",
+        "seventeenth",
+        "eighteenth",
+        "nineteenth",
+        "twentieth",
+    )
+
+    /*
+     * Function words and pronouns have too little lexical information to be
+     * safe standalone conversion candidates.  Upper-case abbreviations such
+     * as US and IT are deliberately not matched by [isFunctionWordSurface].
+     */
+    private val functionWords = setOf(
+        "a",
+        "an",
+        "the",
+        "and",
+        "or",
+        "but",
+        "if",
+        "then",
+        "than",
+        "to",
+        "of",
+        "in",
+        "on",
+        "at",
+        "by",
+        "for",
+        "with",
+        "from",
+        "as",
+        "is",
+        "am",
+        "are",
+        "be",
+        "was",
+        "were",
+        "been",
+        "being",
+        "do",
+        "does",
+        "did",
+        "it",
+        "this",
+        "that",
+        "these",
+        "those",
+        "here",
+        "there",
+        "who",
+        "whom",
+        "whose",
+        "which",
+        "what",
+        "when",
+        "where",
+        "why",
+        "how",
+        "me",
+        "my",
+        "mine",
+        "you",
+        "your",
+        "yours",
+        "he",
+        "him",
+        "his",
+        "she",
+        "her",
+        "hers",
+        "we",
+        "us",
+        "our",
+        "ours",
+        "they",
+        "them",
+        "their",
+        "theirs",
+        "some",
+        "any",
+        "no",
+        "not",
+        "nor",
+    )
+
+    /*
+     * These are unambiguous sound effects or short response tokens.  Words
+     * such as yes, right, okay, and gotcha are only rejected for a very short
+     * reading; they remain useful when the reading is an actual loanword
+     * (for example いぇす -> yes or おっけー -> okay).
+     */
+    private val nonLexicalInterjectionWords = setOf(
+        "aah",
+        "aaah",
+        "ah",
+        "alas",
+        "argh",
+        "blech",
+        "bleh",
+        "eek",
+        "eew",
+        "er",
+        "erm",
+        "gah",
+        "hmm",
+        "hmmm",
+        "huh",
+        "ick",
+        "meh",
+        "ooh",
+        "ouch",
+        "ow",
+        "phew",
+        "phooey",
+        "pish",
+        "pshaw",
+        "sigh",
+        "shh",
+        "shush",
+        "ugh",
+        "ulp",
+        "um",
+        "ungh",
+        "whoa",
+        "wow",
+        "yikes",
+        "yahoo",
+        "yay",
+        "oops",
+        "oops-a-daisy",
+        "ha ha",
+        "ha ha ha",
+        "haha",
+        "hahaha",
+        "he he",
+        "hehe",
+        "hee hee",
+        "hee hee hee",
+        "hee-hee",
+        "tee hee",
+        "tee-hee",
+        "hi hi hi",
+        "uh huh",
+        "uh-huh",
+        "mm-hmm",
+        "yeah yeah",
+        "sure sure",
+        "no no",
+        "no-no",
+    )
+    private val shortResponseWords = setOf(
+        "gotcha",
+        "indeed",
+        "right",
+        "yes",
+        "okay",
+        "well",
+        "sure",
+        "understood",
+        "oh",
+        "yeah",
+    )
+
+    /*
+     * JMdict glosses sometimes contain a compact definition without enough
+     * words to trigger the long-definition rule.  Keep these in the audit
+     * report, but do not expose them as conversion output.
+     */
+    private val definitionFragmentPattern = Regex(
+        """(?ix)
+            \A\s*(?:
+                (?:the|a|an)\s+(?:act|action|process|state|condition|quality|property|
+                    characteristic|kind|type|form|way|place|person|people|someone|something|
+                    thing|device|method|sound|group|member|species|variety|family|genus|mark|
+                    term|word|name|symbol|letter|part|piece|amount|degree|period|time|area|
+                    region|side|edge|surface|material|substance|food|dish|drink|plant|animal|
+                    bird|fish|insect|tree|flower|color|colour|language|country|city|river|mountain)
+                |(?:person|people|someone|something|thing|device|method|sound|member|species|
+                    variety|family|genus)\s+
+                |(?:usually|generally|typically|specifically|especially|primarily|normally|often)\s+
+            )
+            |\b(?:the\s+act\s+of|the\s+state\s+of|the\s+process\s+of|the\s+quality\s+of|
+                one's|someone's|something's)\b
+            |\A(?:using|used)\s+.+\b(?:to|for|as|with)\b
+            |\A(?:[a-z]+\s+){0,2}(?:that|which|who|where|while|when)\s+
+        """.trimIndent(),
+    )
+
     fun assess(entry: Dictionary): EnglishCandidateAssessment {
         val normalizedReading = normalizeReading(entry.yomi)
         val flags = buildList {
@@ -89,8 +343,26 @@ object EnglishDictionaryQuality {
             if (entry.yomi.any(iterationMarks::contains) || entry.yomi == "ー") {
                 add(EnglishQualityFlag.SPECIAL_READING)
             }
+            if (isVocalizationReading(normalizedReading)) {
+                add(EnglishQualityFlag.VOCALIZATION_READING)
+            }
             if (normalizedReading.length == 1) add(EnglishQualityFlag.SINGLE_CHARACTER_READING)
             if (isPunctuationOnly(entry.tango)) add(EnglishQualityFlag.PUNCTUATION_ONLY)
+            if (hasExclamatoryPunctuation(entry.tango)) {
+                add(EnglishQualityFlag.EXCLAMATORY_SURFACE)
+            }
+            if (isSingleLetterSurface(entry.tango)) {
+                add(EnglishQualityFlag.SINGLE_LETTER_SURFACE)
+            }
+            if (isNumericSurface(entry.tango)) {
+                add(EnglishQualityFlag.NUMERIC_SURFACE)
+            }
+            if (isFunctionWordSurface(entry.tango)) {
+                add(EnglishQualityFlag.FUNCTION_WORD_SURFACE)
+            }
+            if (isInterjectionSurface(entry.tango, normalizedReading)) {
+                add(EnglishQualityFlag.INTERJECTION_SURFACE)
+            }
             if (entry.tango.firstOrNull()?.let(hyphenCharacters::contains) == true ||
                 entry.tango.lastOrNull()?.let(hyphenCharacters::contains) == true
             ) {
@@ -108,6 +380,9 @@ object EnglishDictionaryQuality {
                 (entry.tango.length >= 45 && startsWithLowercase)
             ) {
                 add(EnglishQualityFlag.LONG_DEFINITION)
+            }
+            if (definitionFragmentPattern.containsMatchIn(entry.tango)) {
+                add(EnglishQualityFlag.DEFINITION_FRAGMENT)
             }
             if ('(' in entry.tango || ')' in entry.tango) {
                 add(EnglishQualityFlag.PARENTHETICAL)
@@ -213,8 +488,14 @@ object EnglishDictionaryQuality {
         val surface = entry.tango
         return entry.yomi.indexOfAny(charArrayOf('ゝ', 'ゞ')) >= 0 ||
                 entry.yomi == "ー" ||
+                isVocalizationReading(normalizedReading) ||
                 normalizedReading.length == 1 ||
                 isPunctuationOnly(surface) ||
+                hasExclamatoryPunctuation(surface) ||
+                isSingleLetterSurface(surface) ||
+                isNumericSurface(surface) ||
+                isFunctionWordSurface(surface) ||
+                isInterjectionSurface(surface, normalizedReading) ||
                 surface.firstOrNull()?.let(hyphenCharacters::contains) == true ||
                 surface.lastOrNull()?.let(hyphenCharacters::contains) == true ||
                 surface.contains("...") ||
@@ -227,8 +508,52 @@ object EnglishDictionaryQuality {
                 surface.count { it == ' ' } + 1 >= 8 ||
                 surface.length >= 64 ||
                 (surface.length >= 45 && startsWithLowercase) ||
+                definitionFragmentPattern.containsMatchIn(surface) ||
                 '(' in surface ||
                 ')' in surface
+    }
+
+    private fun isVocalizationReading(reading: String): Boolean {
+        val characters = reading.toList()
+        if (characters.size < 2) return false
+        val vowel = vowelBase(characters.first()) ?: return false
+        return characters.drop(1).all { it == 'ー' || vowelBase(it) == vowel }
+    }
+
+    private fun vowelBase(character: Char): Char? = when (character) {
+        'あ', 'ぁ' -> 'あ'
+        'い', 'ぃ' -> 'い'
+        'う', 'ぅ' -> 'う'
+        'え', 'ぇ' -> 'え'
+        'お', 'ぉ' -> 'お'
+        else -> null
+    }
+
+    private fun hasExclamatoryPunctuation(surface: String): Boolean =
+        surface.any { it == '!' || it == '?' || it == '！' || it == '？' }
+
+    private fun isSingleLetterSurface(surface: String): Boolean =
+        surface.length == 1 && surface.first().isLetter() && surface.first().code < 128
+
+    private fun isNumericSurface(surface: String): Boolean {
+        val normalized = surface.trim().lowercase(Locale.ROOT)
+        if (normalized in numericSurfaceWords) return true
+        if (normalized.matches(Regex("\\d+(?:st|nd|rd|th)?"))) return true
+        return normalized.isNotEmpty() &&
+                normalized.any(Char::isDigit) &&
+                normalized.all { it.isDigit() || it in "^+-*/=." }
+    }
+
+    private fun isFunctionWordSurface(surface: String): Boolean {
+        if (surface.isEmpty() || surface != surface.lowercase(Locale.ROOT)) return false
+        return surface in functionWords
+    }
+
+    private fun isInterjectionSurface(surface: String, normalizedReading: String): Boolean {
+        val normalizedSurface = surface.trim().lowercase(Locale.ROOT)
+        if (normalizedSurface in nonLexicalInterjectionWords) return true
+        return normalizedSurface in shortResponseWords &&
+                (normalizedReading.length <= 2 || isVocalizationReading(normalizedReading))
     }
 
     private data class RuntimeSelection(
