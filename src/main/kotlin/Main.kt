@@ -58,7 +58,6 @@ fun main() {
     val englishDictionaryList = EnglishDictionaryQuality.runtimeEntries(englishDictionarySource)
     val finalList =
         (dictionaryList +
-                englishDictionaryList +
                 DIC_LIST + CUSTOM_LIST +
                 NAME_LIST + FIXED_LIST +
                 DIFFICULT_LIST + SYMBOL_LIST +
@@ -79,6 +78,7 @@ fun main() {
     buildConnectionIds()
     buildPOSTable(finalList)
     buildTriesAndTokenArray(finalList)
+    buildEnglishDictionary(englishDictionaryList)
     buildDictionaryForSingleKanji()
     buildDictionaryForEmoji()
     buildDictionaryForEmoticon()
@@ -99,6 +99,20 @@ private fun buildTriesAndTokenArray(finalList: SortedMap<String, List<Dictionary
         yomiOutputPath = "./src/main/resources/yomi.dat",
         tangoOutputPath = "./src/main/resources/tango.dat",
         tokenOutputPath = "./src/main/resources/token.dat",
+        mode = 1,
+        skipKanaOnlyTango = true,
+    )
+}
+
+private fun buildEnglishDictionary(dictionaryList: List<Dictionary>) {
+    val englishDictionary = dictionaryList
+        .groupBy { it.yomi }
+        .toSortedMap(compareBy({ it.length }, { it }))
+    buildAndWriteDictionaryArtifacts(
+        dictionaryList = englishDictionary,
+        yomiOutputPath = "./src/main/resources/yomi_english_reading.dat",
+        tangoOutputPath = "./src/main/resources/tango_english_reading.dat",
+        tokenOutputPath = "./src/main/resources/token_english_reading.dat",
         mode = 1,
         skipKanaOnlyTango = true,
     )

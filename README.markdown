@@ -37,8 +37,8 @@ cd kotlin-kana-kanji-converter
 このプロジェクトは [MIT ライセンス](LICENSE) のもとで提供されています。
 
 ただし、生成される辞書データには JMdict/JMdict_e（CC BY-SA 4.0）および Mozc
-辞書資源（IPAdic、ICOT、沖縄辞書など）の個別条件が適用されます。配布物に含まれる
-[`THIRD-PARTY-NOTICES.md`](src/main/resources/THIRD-PARTY-NOTICES.md) を確認してください。
+辞書資源（IPAdic、ICOT、沖縄辞書など）の個別条件が適用されます。出典と条件の整理は
+リポジトリ内の [`THIRD-PARTY-NOTICES.md`](src/main/resources/THIRD-PARTY-NOTICES.md) を確認してください。
 
 ---
 

@@ -90,8 +90,9 @@ class EnglishDictionaryBuilderTest {
         val assessments = EnglishDictionaryQuality.assessAll(entries)
 
         assertEquals(EnglishCandidateStatus.PRIMARY, assessments[0].status)
-        assertEquals(EnglishCandidateStatus.REVIEW, assessments[1].status)
+        assertEquals(EnglishCandidateStatus.PRIMARY, assessments[1].status)
         assertTrue(EnglishQualityFlag.PARENTHETICAL in assessments[1].flags)
+        assertEquals("iron", assessments[1].normalizedSurface)
         assertEquals(EnglishCandidateStatus.REVIEW, assessments[2].status)
         assertTrue(EnglishQualityFlag.EXPLANATORY_GLOSS in assessments[2].flags)
         assertEquals(EnglishCandidateStatus.EXCLUDED, assessments[3].status)
@@ -103,11 +104,12 @@ class EnglishDictionaryBuilderTest {
         val runtime = EnglishDictionaryQuality.runtimeEntriesFromAssessments(assessments)
         assertEquals(runtime, EnglishDictionaryQuality.runtimeEntries(entries))
         assertTrue(runtime.any { it.tango == "ice cream" && it.yomi == "あいすくりーむ" })
+        assertTrue(runtime.any { it.tango == "iron" && it.yomi == "あいあん" })
         assertTrue(runtime.none { it.tango in setOf("iron (element)", "counter for small things", "-ism", "doing ...", "+-", "ke") })
-        assertEquals(1, runtime.size)
+        assertEquals(2, runtime.size)
 
         val quality = EnglishDictionaryQuality.summarize(entries)
-        assertEquals(1, quality.runtimeEntries)
+        assertEquals(2, quality.runtimeEntries)
     }
 
     @Test
@@ -176,6 +178,56 @@ class EnglishDictionaryBuilderTest {
             setOf("eye", "iron", "ice cream", "United States", "okay", "yes", "evidence-based medicine"),
             runtime.map { it.tango }.toSet(),
         )
+    }
+
+    @Test
+    fun keepsOnlyTheBestEnglishCandidateForAReadingAndRemovesGlossNotes() {
+        val entries = listOf(
+            dictionary("ぎゃらりー", "art gallery", 12520),
+            dictionary("ぎゃらりー", "corridor", 12501),
+            dictionary("ぎゃらりー", "gallery", 12500),
+            dictionary("あーと", "assisted reproductive technologies", 18500),
+            dictionary("あーと", "ART", 18501),
+            dictionary("あーと", "art", 12500),
+            dictionary("あいあいおーてぃー", "Industrial Internet of Things", 18500),
+            dictionary("あいあいおーてぃー", "IIoT", 18501),
+            dictionary("あすきー", "American Standard Code for Information Interchange", 12500),
+            dictionary("あすきー", "ASCII", 12501),
+            dictionary("てすと", "test (of ability, knowledge, etc.)", 12500),
+            dictionary("てすと", "exam", 12501),
+        )
+
+        val runtime = EnglishDictionaryQuality.runtimeEntries(entries)
+
+        assertEquals(
+            setOf("gallery", "art", "IIoT", "ASCII", "test"),
+            runtime.map { it.tango }.toSet(),
+        )
+        assertTrue(runtime.none {
+            it.tango in setOf(
+                "corridor",
+                "art gallery",
+                "ART",
+                "assisted reproductive technologies",
+                "Industrial Internet of Things",
+                "American Standard Code for Information Interchange",
+                "exam",
+            )
+        })
+
+        val assessments = EnglishDictionaryQuality.assessAll(entries).associateBy { it.source.tango }
+        for (surface in listOf(
+            "corridor",
+            "art gallery",
+            "ART",
+            "assisted reproductive technologies",
+            "Industrial Internet of Things",
+            "exam",
+        )) {
+            assertEquals(EnglishCandidateStatus.REVIEW, assessments.getValue(surface).status, surface)
+            assertTrue(EnglishQualityFlag.ALTERNATIVE_CANDIDATE in assessments.getValue(surface).flags, surface)
+        }
+        assertEquals("test", assessments.getValue("test (of ability, knowledge, etc.)").normalizedSurface)
     }
 
     private fun dictionary(reading: String, surface: String, cost: Int = 18500): Dictionary =

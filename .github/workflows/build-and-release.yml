@@ -124,21 +124,6 @@ jobs:
       - name: Generate dictionaries, package assets, and verify
         run: ./gradlew packageJapaneseKeyboardDictionaryAssets verifyJapaneseKeyboardDictionaryAssets
 
-      - name: Package English dictionary quality report for the release
-        run: |
-          report_stage="$(mktemp -d)"
-          mkdir -p "$report_stage/english-dictionary-report/licenses"
-          cp ./build/reports/english-dictionary/english-dictionary-candidates.tsv "$report_stage/english-dictionary-report/"
-          cp ./build/reports/english-dictionary/english-dictionary-quality.tsv "$report_stage/english-dictionary-report/"
-          cp ./build/reports/english-dictionary/summary.md "$report_stage/english-dictionary-report/"
-          cp ./src/main/resources/THIRD-PARTY-NOTICES.md "$report_stage/english-dictionary-report/"
-          cp ./src/main/resources/third-party/* "$report_stage/english-dictionary-report/licenses/"
-          mkdir -p ./release_zips
-          tar -czf ./release_zips/english-dictionary-quality-report.tar.gz \
-            -C "$report_stage" \
-            english-dictionary-report
-          tar -tzf ./release_zips/english-dictionary-quality-report.tar.gz
-
       # Engine tests load the generated dictionary .dat files, so run them after packaging.
       - name: Test with Gradle
         run: ./gradlew test
@@ -151,7 +136,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./release_zips/english-dictionary-quality-report.tar.gz
+          artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip
           allowUpdates: true
           artifactErrorsFailBuild: true
           removeArtifacts: true

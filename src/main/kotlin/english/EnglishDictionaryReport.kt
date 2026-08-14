@@ -102,7 +102,7 @@ object EnglishDictionaryReport {
         Files.newBufferedWriter(output, StandardCharsets.UTF_8).use { writer ->
             writer.appendLine(
                 "entry_index\treading\tnormalized_reading\tenglish_candidate\t" +
-                        "source_cost\truntime_cost\tstatus\tscore\tflags",
+                        "normalized_surface\tsource_cost\truntime_cost\tstatus\tscore\tflags",
             )
             EnglishDictionaryQuality.assessAll(entries).forEachIndexed { index, assessment ->
                 writer.appendLine(
@@ -111,6 +111,7 @@ object EnglishDictionaryReport {
                         assessment.source.yomi,
                         assessment.normalizedReading,
                         assessment.source.tango,
+                        assessment.normalizedSurface,
                         assessment.source.cost.toString(),
                         assessment.runtimeCost?.toString().orEmpty(),
                         assessment.status.code(),
@@ -161,7 +162,7 @@ object EnglishDictionaryReport {
             writer.appendLine("- clean runtime entries after normalization/deduplication: ${quality.runtimeEntries}")
             writer.appendLine("- clean runtime readings: ${quality.runtimeReadings}")
             writer.appendLine()
-            writer.appendLine("`primary` は直接出力しやすい英単語・英語句、`review` は有効な辞書訳だが説明文・長い定義・括弧注釈を含む候補、`excluded` は単独出力に不向きな母音反復読み・数値表記・感嘆表現・機能語・間投詞・読み記号・接辞・未完の省略表現です。実行時のノイズ除去済み辞書には primary だけを収録し、review と excluded は監査表だけに残しています。")
+            writer.appendLine("`primary` は各読みから選んだ実行時候補、`review` は説明文・長い定義・括弧注釈、または同じ読みの低優先度な代替候補、`excluded` は単独出力に不向きな母音反復読み・数値表記・感嘆表現・機能語・間投詞・読み記号・接辞・未完の省略表現です。括弧内の説明は監査用に保持し、実行時表記からは取り除きます。実行時辞書には読みごとに primary を1件だけ収録します。")
             writer.appendLine()
             writer.appendLine("### フラグ件数")
             writer.appendLine()
@@ -187,7 +188,11 @@ object EnglishDictionaryReport {
     private fun formatCandidate(assessment: EnglishCandidateAssessment): String {
         val flags = assessment.flags.joinToString(",") { it.code }.ifEmpty { "-" }
         val runtimeCost = assessment.runtimeCost?.let { "; runtime_cost=$it" }.orEmpty()
-        return "${assessment.source.tango} [cost=${assessment.source.cost}; status=${assessment.status.code()}; score=${assessment.score}; flags=$flags$runtimeCost]"
+        val runtimeSurface = assessment.normalizedSurface
+            .takeUnless { it == assessment.source.tango }
+            ?.let { "; runtime_surface=$it" }
+            .orEmpty()
+        return "${assessment.source.tango} [cost=${assessment.source.cost}; status=${assessment.status.code()}; score=${assessment.score}; flags=$flags$runtimeSurface$runtimeCost]"
     }
 
     private fun statusRank(status: EnglishCandidateStatus): Int = when (status) {

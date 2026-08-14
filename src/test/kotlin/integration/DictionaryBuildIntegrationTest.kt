@@ -34,7 +34,6 @@ class DictionaryBuildIntegrationTest {
         try {
             val dictionaries = buildFinalList(
                 listOf("/dictionary00.txt", "/suffix.txt"),
-                includeEnglishDictionary = false,
             )
             val tokenArray = TokenArray()
             val posTablePath = tempDir.resolve("pos_table.dat")
@@ -91,8 +90,8 @@ class DictionaryBuildIntegrationTest {
                         "/dictionary09.txt",
                         "/suffix.txt",
                     ),
-                    includeEnglishDictionary = true,
                 )
+                val englishDictionaries = buildEnglishList()
 
                 val tokenArray = TokenArray()
                 val posTablePath = tempDir.resolve("pos_table.dat")
@@ -109,6 +108,15 @@ class DictionaryBuildIntegrationTest {
                     skipKanaOnlyTango = true,
                     posTableForBuildPath = posTableForBuildPath.toString(),
                 )
+                buildAndWriteDictionaryArtifacts(
+                    dictionaryList = englishDictionaries,
+                    yomiOutputPath = tempDir.resolve("english_reading_yomi.dat").toString(),
+                    tangoOutputPath = tempDir.resolve("english_reading_tango.dat").toString(),
+                    tokenOutputPath = tempDir.resolve("english_reading_token.dat").toString(),
+                    mode = 1,
+                    skipKanaOnlyTango = true,
+                    posTableForBuildPath = posTableForBuildPath.toString(),
+                )
 
                 buildConnectionIds(tempDir.resolve("connectionId.dat"))
 
@@ -117,6 +125,9 @@ class DictionaryBuildIntegrationTest {
                 assertArtifactWritten(tempDir.resolve("yomi.dat"))
                 assertArtifactWritten(tempDir.resolve("tango.dat"))
                 assertArtifactWritten(tempDir.resolve("token.dat"))
+                assertArtifactWritten(tempDir.resolve("english_reading_yomi.dat"))
+                assertArtifactWritten(tempDir.resolve("english_reading_tango.dat"))
+                assertArtifactWritten(tempDir.resolve("english_reading_token.dat"))
                 assertArtifactWritten(tempDir.resolve("connectionId.dat"))
             }
 
@@ -135,16 +146,8 @@ class DictionaryBuildIntegrationTest {
 
     private fun buildFinalList(
         fileList: List<String>,
-        includeEnglishDictionary: Boolean,
     ) =
         (DicUtils().getListDictionary(fileList) +
-                if (includeEnglishDictionary) {
-                    EnglishDictionaryQuality.runtimeEntries(
-                        EnglishDictionaryBuilder().parseResource("/english-dictionary.txt", required = false),
-                    )
-                } else {
-                    emptyList()
-                } +
                 Constants.DIC_LIST +
                 Constants.CUSTOM_LIST +
                 Constants.NAME_LIST +
@@ -165,6 +168,13 @@ class DictionaryBuildIntegrationTest {
                 Constants.FOOD_NAME +
                 Constants.ENTERTAIMENT_NAME +
                 Constants.RESCORE_WORDS)
+            .groupBy(Dictionary::yomi)
+            .toSortedMap(compareBy({ it.length }, { it }))
+
+    private fun buildEnglishList() =
+        EnglishDictionaryQuality.runtimeEntries(
+            EnglishDictionaryBuilder().parseResource("/english-dictionary.txt", required = false),
+        )
             .groupBy(Dictionary::yomi)
             .toSortedMap(compareBy({ it.length }, { it }))
 

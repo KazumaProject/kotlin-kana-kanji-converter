@@ -221,13 +221,9 @@ val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("zero_query_string.data", "mozc/zero_query/zero_query_string.data"),
     JapaneseKeyboardAssetSpec("zero_query_number_token.data", "mozc/zero_query/zero_query_number_token.data"),
     JapaneseKeyboardAssetSpec("zero_query_number_string.data", "mozc/zero_query/zero_query_number_string.data"),
-    JapaneseKeyboardAssetSpec("THIRD-PARTY-NOTICES.md", "THIRD-PARTY-NOTICES.md"),
-    JapaneseKeyboardAssetSpec("third-party/JMDICT-LICENSE.html", "licenses/JMDICT-LICENSE.html"),
-    JapaneseKeyboardAssetSpec("third-party/LICENSE-DATA.md", "licenses/LICENSE-DATA.md"),
-    JapaneseKeyboardAssetSpec("third-party/NOTICE.md", "licenses/NOTICE.md"),
-    JapaneseKeyboardAssetSpec("third-party/MOZC-LICENSE", "licenses/MOZC-LICENSE"),
-    JapaneseKeyboardAssetSpec("third-party/IPADIC-COPYING", "licenses/IPADIC-COPYING"),
-    JapaneseKeyboardAssetSpec("third-party/IPADIC-NOTICE", "licenses/IPADIC-NOTICE"),
+    JapaneseKeyboardAssetSpec("yomi_english_reading.dat", "english_reading/yomi.dat.zip", zipped = true, innerEntryName = "yomi.dat"),
+    JapaneseKeyboardAssetSpec("tango_english_reading.dat", "english_reading/tango.dat.zip", zipped = true, innerEntryName = "tango.dat"),
+    JapaneseKeyboardAssetSpec("token_english_reading.dat", "english_reading/token.dat.zip", zipped = true, innerEntryName = "token.dat"),
 )
 
 val mozcZeroQueryOfficialResourceNames = listOf(
