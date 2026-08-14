@@ -76,6 +76,11 @@ class KanaKanjiEngineBasicConversionTest {
         assertTrue("家を解体" in candidates, "System n-gram can only rerank candidates that already exist")
     }
 
+    @Test
+    fun englishReadingCandidatesAreNotMergedIntoTheSystemDictionary() {
+        assertTrue("car" !in engine.nBestPath("かー", 64))
+    }
+
     private fun assertBestPath(
         input: String,
         value: String,

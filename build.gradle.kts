@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream
 import java.io.File
 import java.io.InputStream
 import java.nio.file.Files
+import java.util.Locale
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 import java.util.zip.ZipInputStream
@@ -152,6 +153,8 @@ val mozcDictionaryFilesProvider = files(
     (0..9).map { "src/main/resources/dictionary%02d.txt".format(it) } + "src/main/resources/suffix.txt"
 )
 val dictionaryResourcesDir = layout.projectDirectory.dir("src/main/resources")
+// Build input: JapaneseCorpus's dedicated direct-loanword artifact. This is
+// intentionally kept separate from the normal system dictionary sources.
 val englishDictionaryFile = dictionaryResourcesDir.file("english-dictionary.txt")
 val englishDictionaryReportDir = layout.buildDirectory.dir("reports/english-dictionary")
 val japaneseKeyboardAssetsRootPath = "app/src/main/assets"
@@ -221,13 +224,9 @@ val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("zero_query_string.data", "mozc/zero_query/zero_query_string.data"),
     JapaneseKeyboardAssetSpec("zero_query_number_token.data", "mozc/zero_query/zero_query_number_token.data"),
     JapaneseKeyboardAssetSpec("zero_query_number_string.data", "mozc/zero_query/zero_query_number_string.data"),
-    JapaneseKeyboardAssetSpec("THIRD-PARTY-NOTICES.md", "THIRD-PARTY-NOTICES.md"),
-    JapaneseKeyboardAssetSpec("third-party/JMDICT-LICENSE.html", "licenses/JMDICT-LICENSE.html"),
-    JapaneseKeyboardAssetSpec("third-party/LICENSE-DATA.md", "licenses/LICENSE-DATA.md"),
-    JapaneseKeyboardAssetSpec("third-party/NOTICE.md", "licenses/NOTICE.md"),
-    JapaneseKeyboardAssetSpec("third-party/MOZC-LICENSE", "licenses/MOZC-LICENSE"),
-    JapaneseKeyboardAssetSpec("third-party/IPADIC-COPYING", "licenses/IPADIC-COPYING"),
-    JapaneseKeyboardAssetSpec("third-party/IPADIC-NOTICE", "licenses/IPADIC-NOTICE"),
+    JapaneseKeyboardAssetSpec("yomi_english_reading.dat", "english_reading/yomi.dat.zip", zipped = true, innerEntryName = "yomi.dat"),
+    JapaneseKeyboardAssetSpec("tango_english_reading.dat", "english_reading/tango.dat.zip", zipped = true, innerEntryName = "tango.dat"),
+    JapaneseKeyboardAssetSpec("token_english_reading.dat", "english_reading/token.dat.zip", zipped = true, innerEntryName = "token.dat"),
 )
 
 val mozcZeroQueryOfficialResourceNames = listOf(
@@ -498,7 +497,7 @@ val validateDictionaryIds = tasks.register("validateDictionaryIds") {
 
 val validateEnglishDictionary = tasks.register<JavaExec>("validateEnglishDictionary") {
     group = "verification"
-    description = "Validates the JapaneseCorpus hiragana-to-English Mozc dictionary source."
+    description = "Validates the JapaneseCorpus direct-loanword hiragana-to-English source."
     dependsOn("classes")
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("com.kazumaproject.english.ValidateEnglishDictionaryKt")
@@ -919,6 +918,18 @@ tasks.register("verifyJapaneseKeyboardDictionaryAssets") {
                 .filterNot { it.isDirectory }
                 .map { it.name }
                 .toSet()
+            val forbiddenMetadataEntries = actualFileEntries.filter { entry ->
+                val lower = entry.lowercase(Locale.ROOT)
+                lower.contains("license") ||
+                        lower.contains("notice") ||
+                        lower.contains("third-party") ||
+                        lower.contains("third_party")
+            }
+            if (forbiddenMetadataEntries.isNotEmpty()) {
+                throw GradleException(
+                    "Release zip must contain dictionary data only; metadata entries found: $forbiddenMetadataEntries",
+                )
+            }
             val expectedFileEntries = expectedEntriesByName.keys
             val missingEntries = expectedFileEntries - actualFileEntries
             val unexpectedEntries = actualFileEntries - expectedFileEntries

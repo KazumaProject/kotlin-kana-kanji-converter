@@ -90,8 +90,9 @@ class EnglishDictionaryBuilderTest {
         val assessments = EnglishDictionaryQuality.assessAll(entries)
 
         assertEquals(EnglishCandidateStatus.PRIMARY, assessments[0].status)
-        assertEquals(EnglishCandidateStatus.REVIEW, assessments[1].status)
+        assertEquals(EnglishCandidateStatus.EXCLUDED, assessments[1].status)
         assertTrue(EnglishQualityFlag.PARENTHETICAL in assessments[1].flags)
+        assertEquals("iron (element)", assessments[1].normalizedSurface)
         assertEquals(EnglishCandidateStatus.REVIEW, assessments[2].status)
         assertTrue(EnglishQualityFlag.EXPLANATORY_GLOSS in assessments[2].flags)
         assertEquals(EnglishCandidateStatus.EXCLUDED, assessments[3].status)
@@ -161,21 +162,64 @@ class EnglishDictionaryBuilderTest {
             "eye",
             "iron",
             "ice cream",
-            "United States",
             "okay",
             "yes",
-            "evidence-based medicine",
         )) {
             assertEquals(EnglishCandidateStatus.PRIMARY, assessments.getValue(surface).status, surface)
+        }
+        for (surface in listOf("United States", "evidence-based medicine")) {
+            assertEquals(EnglishCandidateStatus.REVIEW, assessments.getValue(surface).status, surface)
         }
         assertEquals(EnglishCandidateStatus.REVIEW, assessments.getValue("the way a bra fits").status)
         assertTrue(EnglishQualityFlag.DEFINITION_FRAGMENT in assessments.getValue("the way a bra fits").flags)
 
         val runtime = EnglishDictionaryQuality.runtimeEntriesFromAssessments(assessments.values.toList())
         assertEquals(
-            setOf("eye", "iron", "ice cream", "United States", "okay", "yes", "evidence-based medicine"),
+            setOf("eye", "iron", "ice cream", "okay", "yes"),
             runtime.map { it.tango }.toSet(),
         )
+    }
+
+    @Test
+    fun keepsOnlyDirectWordsAndRetainsAllDistinctNaturalCandidates() {
+        val entries = listOf(
+            dictionary("ぎゃらりー", "art gallery", 12520),
+            dictionary("ぎゃらりー", "gallery", 12500),
+            dictionary("あーと", "assisted reproductive technologies", 18500),
+            dictionary("あーと", "ART", 18501),
+            dictionary("あーと", "art", 12500),
+            dictionary("あすきー", "American Standard Code for Information Interchange", 12500),
+            dictionary("あすきー", "ASCII", 12501),
+            dictionary("てすと", "test (of ability, knowledge, etc.)", 12500),
+            dictionary("てすと", "exam", 12501),
+        )
+
+        val runtime = EnglishDictionaryQuality.runtimeEntries(entries)
+
+        assertEquals(
+            setOf("gallery", "art", "ASCII", "exam"),
+            runtime.map { it.tango }.toSet(),
+        )
+        assertTrue(runtime.none {
+            it.tango in setOf(
+                "art gallery",
+                "assisted reproductive technologies",
+                "American Standard Code for Information Interchange",
+                "test (of ability, knowledge, etc.)",
+            )
+        })
+
+        val assessments = EnglishDictionaryQuality.assessAll(entries).associateBy { it.source.tango }
+        for (surface in listOf(
+            "art gallery",
+            "assisted reproductive technologies",
+            "American Standard Code for Information Interchange",
+        )) {
+            assertEquals(EnglishCandidateStatus.REVIEW, assessments.getValue(surface).status, surface)
+        }
+        assertEquals(EnglishCandidateStatus.EXCLUDED, assessments.getValue("test (of ability, knowledge, etc.)").status)
+        assertEquals("test (of ability, knowledge, etc.)", assessments.getValue("test (of ability, knowledge, etc.)").normalizedSurface)
+        assertEquals(EnglishCandidateStatus.PRIMARY, assessments.getValue("exam").status)
     }
 
     private fun dictionary(reading: String, surface: String, cost: Int = 18500): Dictionary =
