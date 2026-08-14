@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream
 import java.io.File
 import java.io.InputStream
 import java.nio.file.Files
+import java.util.Locale
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 import java.util.zip.ZipInputStream
@@ -152,6 +153,8 @@ val mozcDictionaryFilesProvider = files(
     (0..9).map { "src/main/resources/dictionary%02d.txt".format(it) } + "src/main/resources/suffix.txt"
 )
 val dictionaryResourcesDir = layout.projectDirectory.dir("src/main/resources")
+// Build input: JapaneseCorpus's dedicated direct-loanword artifact. This is
+// intentionally kept separate from the normal system dictionary sources.
 val englishDictionaryFile = dictionaryResourcesDir.file("english-dictionary.txt")
 val englishDictionaryReportDir = layout.buildDirectory.dir("reports/english-dictionary")
 val japaneseKeyboardAssetsRootPath = "app/src/main/assets"
@@ -494,7 +497,7 @@ val validateDictionaryIds = tasks.register("validateDictionaryIds") {
 
 val validateEnglishDictionary = tasks.register<JavaExec>("validateEnglishDictionary") {
     group = "verification"
-    description = "Validates the JapaneseCorpus hiragana-to-English Mozc dictionary source."
+    description = "Validates the JapaneseCorpus direct-loanword hiragana-to-English source."
     dependsOn("classes")
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("com.kazumaproject.english.ValidateEnglishDictionaryKt")
@@ -915,6 +918,18 @@ tasks.register("verifyJapaneseKeyboardDictionaryAssets") {
                 .filterNot { it.isDirectory }
                 .map { it.name }
                 .toSet()
+            val forbiddenMetadataEntries = actualFileEntries.filter { entry ->
+                val lower = entry.lowercase(Locale.ROOT)
+                lower.contains("license") ||
+                        lower.contains("notice") ||
+                        lower.contains("third-party") ||
+                        lower.contains("third_party")
+            }
+            if (forbiddenMetadataEntries.isNotEmpty()) {
+                throw GradleException(
+                    "Release zip must contain dictionary data only; metadata entries found: $forbiddenMetadataEntries",
+                )
+            }
             val expectedFileEntries = expectedEntriesByName.keys
             val missingEntries = expectedFileEntries - actualFileEntries
             val unexpectedEntries = actualFileEntries - expectedFileEntries

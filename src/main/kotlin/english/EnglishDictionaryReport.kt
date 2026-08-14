@@ -162,7 +162,7 @@ object EnglishDictionaryReport {
             writer.appendLine("- clean runtime entries after normalization/deduplication: ${quality.runtimeEntries}")
             writer.appendLine("- clean runtime readings: ${quality.runtimeReadings}")
             writer.appendLine()
-            writer.appendLine("`primary` は各読みから選んだ実行時候補、`review` は説明文・長い定義・括弧注釈、または同じ読みの低優先度な代替候補、`excluded` は単独出力に不向きな母音反復読み・数値表記・感嘆表現・機能語・間投詞・読み記号・接辞・未完の省略表現です。括弧内の説明は監査用に保持し、実行時表記からは取り除きます。実行時辞書には読みごとに primary を1件だけ収録します。")
+            writer.appendLine("`primary` は直接辞書生成時に完全な読みと発音が一致した候補、`review` は説明文・定義断片・未許可の複合語、`excluded` は括弧注釈・母音反復読み・数値表記・感嘆表現・機能語・間投詞・読み記号・接辞・未完の省略表現です。括弧注釈は表記を切り詰めず、原文のまま監査用に保持します。実行時辞書には全 primary 候補を残し、同じ読みと英語表記の重複だけを除去します。")
             writer.appendLine()
             writer.appendLine("### フラグ件数")
             writer.appendLine()

@@ -13,8 +13,10 @@ on:
 
 env:
   MOZC_REF: ${{ github.event.inputs.mozc_ref || 'master' }}
-  JAPANESE_CORPUS_TAG: 'v2026.0810.7'
-  JAPANESE_CORPUS_ENGLISH_SHA256: 'b24cfec43651627fc829645e74400c49a4999550899dd17d00a2431ffcb434fa'
+  JAPANESE_CORPUS_TAG: 'v2026.0814.8'
+  JAPANESE_CORPUS_ENGLISH_ASSET: 'mozc-english-reading-unigram-00000.txt.zst'
+  JAPANESE_CORPUS_ENGLISH_MANIFEST: 'english-dictionary-manifest.json'
+  JAPANESE_CORPUS_ENGLISH_SHA256: 'b34b9c630ecf4d3f404049ef6580d8f4d5d5b13e1197e083d51b8ea3f064cd6e'
 
 permissions:
   contents: write
@@ -78,10 +80,16 @@ jobs:
 
       - name: Download JapaneseCorpus English dictionary
         run: |
-          corpus_url="https://github.com/KazumaProject/JapaneseCorpus/releases/download/${JAPANESE_CORPUS_TAG}/mozc-english-unigram-00000.txt.zst"
-          curl --fail --location --retry 3 --retry-delay 2 "$corpus_url" --output /tmp/mozc-english-unigram-00000.txt.zst
-          echo "${JAPANESE_CORPUS_ENGLISH_SHA256}  /tmp/mozc-english-unigram-00000.txt.zst" | sha256sum --check
-          zstd --decompress --stdout /tmp/mozc-english-unigram-00000.txt.zst > ./src/main/resources/english-dictionary.txt
+          corpus_url="https://github.com/KazumaProject/JapaneseCorpus/releases/download/${JAPANESE_CORPUS_TAG}/${JAPANESE_CORPUS_ENGLISH_ASSET}"
+          curl --fail --location --retry 3 --retry-delay 2 "$corpus_url" --output "/tmp/${JAPANESE_CORPUS_ENGLISH_ASSET}"
+          echo "${JAPANESE_CORPUS_ENGLISH_SHA256}  /tmp/${JAPANESE_CORPUS_ENGLISH_ASSET}" | sha256sum --check
+          manifest_url="https://github.com/KazumaProject/JapaneseCorpus/releases/download/${JAPANESE_CORPUS_TAG}/${JAPANESE_CORPUS_ENGLISH_MANIFEST}"
+          curl --fail --location --retry 3 --retry-delay 2 "$manifest_url" --output "/tmp/${JAPANESE_CORPUS_ENGLISH_MANIFEST}"
+          jq -e --arg asset "$JAPANESE_CORPUS_ENGLISH_ASSET" --arg sha "$JAPANESE_CORPUS_ENGLISH_SHA256" '
+            .parameters.dictionary_kind == "direct-loanword" and
+            (.assets[] | select(.name == $asset) | .sha256) == $sha
+          ' "/tmp/${JAPANESE_CORPUS_ENGLISH_MANIFEST}" >/dev/null
+          zstd --decompress --stdout "/tmp/${JAPANESE_CORPUS_ENGLISH_ASSET}" > ./src/main/resources/english-dictionary.txt
           test -s ./src/main/resources/english-dictionary.txt
 
       - name: Verify English dictionary source

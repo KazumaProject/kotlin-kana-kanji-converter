@@ -4,12 +4,12 @@ import com.kazumaproject.dictionary.models.Dictionary
 import java.util.Locale
 
 /**
- * How suitable a JMdict English gloss is for a normal conversion candidate.
+ * How suitable an English dictionary row is for a normal conversion candidate.
  *
- * PRIMARY is a lexical word or phrase that can be shown directly. REVIEW is
- * still a valid dictionary translation, but it is usually an explanation,
- * disambiguation, or a long definition. EXCLUDED is a source artifact that
- * should not become an English output token.
+ * The published source is already a direct-loanword artifact: its generator
+ * requires the complete Japanese reading to match an English pronunciation.
+ * This class remains a defensive runtime gate for malformed rows, gloss
+ * explanations, and legacy source files.
  */
 enum class EnglishCandidateStatus {
     PRIMARY,
@@ -29,7 +29,6 @@ enum class EnglishQualityFlag(val code: String) {
     NUMERIC_SURFACE("numeric-surface"),
     FUNCTION_WORD_SURFACE("function-word-surface"),
     INTERJECTION_SURFACE("interjection-surface"),
-    ALTERNATIVE_CANDIDATE("alternative-candidate"),
     BOUND_MORPHEME("bound-morpheme"),
     INCOMPLETE_PLACEHOLDER("incomplete-placeholder"),
     EXPLANATORY_GLOSS("explanatory-gloss"),
@@ -46,7 +45,7 @@ data class EnglishCandidateAssessment(
     val score: Int,
     val flags: List<EnglishQualityFlag>,
 ) {
-    /** Cost used by the clean runtime dictionary, or null when the row is not selected. */
+    /** Cost used by the clean runtime dictionary, or null for review/excluded rows. */
     val runtimeCost: Int?
         get() = when (status) {
             EnglishCandidateStatus.PRIMARY -> source.cost.toInt()
@@ -75,7 +74,6 @@ data class EnglishDictionaryQualitySummary(
 
 object EnglishDictionaryQuality {
     private val reviewFlags = setOf(
-        EnglishQualityFlag.ALTERNATIVE_CANDIDATE,
         EnglishQualityFlag.EXPLANATORY_GLOSS,
         EnglishQualityFlag.LONG_DEFINITION,
         EnglishQualityFlag.DEFINITION_FRAGMENT,
@@ -94,6 +92,11 @@ object EnglishDictionaryQuality {
     private val ellipsisCharacters = setOf('…')
     private val iterationMarks = setOf('ゝ', 'ゞ')
     private val hyphenCharacters = setOf('-', '‐', '‑', '‒', '–', '—')
+    private val allowedDirectCompounds = setOf(
+        "あいすくりーむ\u0000ice cream",
+        "あーとぎゃらりー\u0000art gallery",
+        "きーほるだー\u0000key holder",
+    )
 
     /*
      * A gloss is not useful as a conversion candidate when it is just a
@@ -413,43 +416,26 @@ object EnglishDictionaryQuality {
         )
     }
 
-    fun assessAll(entries: List<Dictionary>): List<EnglishCandidateAssessment> {
-        val assessments = entries.map(::assess)
-        val selected = selectBestByReading(assessments)
-        return assessments.map { assessment ->
-            if (assessment.status != EnglishCandidateStatus.PRIMARY) {
-                assessment
-            } else if (selected[assessment.normalizedReading] === assessment) {
-                assessment
-            } else {
-                assessment.copy(
-                    status = EnglishCandidateStatus.REVIEW,
-                    score = 80,
-                    flags = assessment.flags + EnglishQualityFlag.ALTERNATIVE_CANDIDATE,
-                )
-            }
-        }
-    }
+    fun assessAll(entries: List<Dictionary>): List<EnglishCandidateAssessment> = entries.map(::assess)
 
     /**
      * Produces the noise-removed runtime dictionary.
      *
-     * Only the best PRIMARY row for each normalized reading is emitted. REVIEW
-     * and EXCLUDED rows remain available in the audit reports so the filtering
-     * decision is inspectable, but they cannot become conversion output.
-     * Normalizing gloss heads and readings makes the runtime dictionary stable
-     * across corpus updates.
+     * Every PRIMARY row is emitted. A reading may legitimately have more than
+     * one exact English spelling (for example armor/armour); choosing one row
+     * here would reintroduce the old lossy "one primary per reading" policy.
+     * REVIEW and EXCLUDED rows remain available in audit reports only.
      */
     fun runtimeEntries(entries: List<Dictionary>): List<Dictionary> =
         runtimeEntriesFromAssessments(assessAll(entries))
 
     fun runtimeEntriesFromAssessments(assessments: List<EnglishCandidateAssessment>): List<Dictionary> {
-        val selected = linkedMapOf<String, EnglishCandidateAssessment>()
+        val selected = linkedMapOf<Pair<String, String>, EnglishCandidateAssessment>()
         assessments.forEach { assessment ->
             val runtimeEntry = assessment.toRuntimeEntry() ?: return@forEach
-            val key = runtimeEntry.yomi
+            val key = runtimeEntry.yomi to runtimeEntry.tango.lowercase(Locale.ROOT)
             val current = selected[key]
-            if (current == null || compareForRuntime(assessment, current) < 0) {
+            if (current == null || assessment.source.cost < current.source.cost) {
                 selected[key] = assessment
             }
         }
@@ -482,22 +468,9 @@ object EnglishDictionaryQuality {
         .replace('ゕ', 'か')
         .replace('ゖ', 'け')
 
-    /**
-     * Removes JMdict's parenthetical explanation from an English gloss while
-     * retaining the lexical head. For example, "test (of ability, ...)"
-     * becomes "test" and "(computer) program" becomes "program".
-     */
+    /** Trims transport whitespace without hiding source annotations. */
     fun normalizeSurface(surface: String): String {
-        var normalized = surface.trim()
-        var previous: String
-        do {
-            previous = normalized
-            normalized = normalized
-                .replace(Regex("^\\([^()]*\\)\\s*"), "")
-                .replace(Regex("\\s*\\([^()]*\\)$"), "")
-                .trim()
-        } while (normalized != previous)
-        return normalized
+        return surface.trim()
     }
 
     private fun classifyStatus(
@@ -506,7 +479,7 @@ object EnglishDictionaryQuality {
         normalizedSurface: String,
     ): EnglishCandidateStatus {
         if (isHardExcluded(entry, normalizedReading, normalizedSurface)) return EnglishCandidateStatus.EXCLUDED
-        if (isReviewCandidate(normalizedSurface)) return EnglishCandidateStatus.REVIEW
+        if (isReviewCandidate(normalizedReading, normalizedSurface)) return EnglishCandidateStatus.REVIEW
         return EnglishCandidateStatus.PRIMARY
     }
 
@@ -526,15 +499,19 @@ object EnglishDictionaryQuality {
                 isNumericSurface(surface) ||
                 isFunctionWordSurface(surface) ||
                 isInterjectionSurface(surface, normalizedReading) ||
+                '(' in surface ||
+                ')' in surface ||
                 surface.firstOrNull()?.let(hyphenCharacters::contains) == true ||
                 surface.lastOrNull()?.let(hyphenCharacters::contains) == true ||
                 surface.contains("...") ||
                 surface.any(ellipsisCharacters::contains)
     }
 
-    private fun isReviewCandidate(surface: String): Boolean {
+    private fun isReviewCandidate(reading: String, surface: String): Boolean {
         val startsWithLowercase = surface.firstOrNull()?.isLowerCase() == true
-        return explanatoryGlossPattern.containsMatchIn(surface) ||
+        val isPhrase = surface.any(Char::isWhitespace) || surface.any(hyphenCharacters::contains)
+        return (isPhrase && !isAllowedCompound(reading, surface)) ||
+                explanatoryGlossPattern.containsMatchIn(surface) ||
                 surface.count { it == ' ' } + 1 >= 8 ||
                 surface.length >= 64 ||
                 (surface.length >= 45 && startsWithLowercase) ||
@@ -543,14 +520,14 @@ object EnglishDictionaryQuality {
                 ')' in surface
     }
 
-    private fun selectBestByReading(
-        assessments: List<EnglishCandidateAssessment>,
-    ): Map<String, EnglishCandidateAssessment> =
-        assessments
-            .asSequence()
-            .filter { it.status == EnglishCandidateStatus.PRIMARY }
-            .groupBy { it.normalizedReading }
-            .mapValues { (_, candidates) -> candidates.minWith(::compareForRuntime) }
+    /**
+     * Multi-word English output is accepted only when the complete Japanese
+     * reading/surface pair is explicitly known to be a direct loanword. A
+     * surface-only allowlist would incorrectly admit `art gallery` for
+     * `ぎゃらりー`.
+     */
+    private fun isAllowedCompound(reading: String, surface: String): Boolean =
+        allowedDirectCompounds.contains("$reading\u0000$surface")
 
     private fun isVocalizationReading(reading: String): Boolean {
         val characters = reading.toList()
@@ -593,68 +570,6 @@ object EnglishDictionaryQuality {
         if (normalizedSurface in nonLexicalInterjectionWords) return true
         return normalizedSurface in shortResponseWords &&
                 (normalizedReading.length <= 2 || isVocalizationReading(normalizedReading))
-    }
-
-    private fun compareForRuntime(
-        left: EnglishCandidateAssessment,
-        right: EnglishCandidateAssessment,
-    ): Int {
-        val statusComparison = statusRank(left.status).compareTo(statusRank(right.status))
-        if (statusComparison != 0) return statusComparison
-        val acronymComparison = compareAcronymWithExpansion(left, right)
-        if (acronymComparison != 0) return acronymComparison
-        val priorityTierComparison = priorityTier(left).compareTo(priorityTier(right))
-        if (priorityTierComparison != 0) return priorityTierComparison
-        val costComparison = (left.runtimeCost ?: Int.MAX_VALUE).compareTo(right.runtimeCost ?: Int.MAX_VALUE)
-        if (costComparison != 0) return costComparison
-        val surfaceLengthComparison = left.normalizedSurface.length.compareTo(right.normalizedSurface.length)
-        if (surfaceLengthComparison != 0) return surfaceLengthComparison
-        val surfaceComparison = left.normalizedSurface.compareTo(right.normalizedSurface)
-        if (surfaceComparison != 0) return surfaceComparison
-        return left.source.tango.compareTo(right.source.tango)
-    }
-
-    /*
-     * JapaneseCorpus encodes JMdict priority in the cost. Prefer a candidate
-     * from a prioritized entry over an unprioritized expansion, even when the
-     * latter happens to be one gloss position earlier. This handles pairs such
-     * as "ASCII" vs "American Standard Code for Information Interchange".
-     */
-    private fun priorityTier(assessment: EnglishCandidateAssessment): Int =
-        if ((assessment.runtimeCost ?: Int.MAX_VALUE) < PRIORITIZED_COST_LIMIT) 0 else 1
-
-    /*
-     * Prefer a compact acronym over a multi-word expansion. This is a shape
-     * rule rather than a cost rule: "ASCII" is the useful output for アスキー
-     * even though the expansion has a slightly lower JMdict cost, and the
-     * same applies to IIoT/IaaS/ISO and their long expansions.
-     */
-    private fun compareAcronymWithExpansion(
-        left: EnglishCandidateAssessment,
-        right: EnglishCandidateAssessment,
-    ): Int {
-        val leftAcronym = isCompactAcronym(left.normalizedSurface)
-        val rightAcronym = isCompactAcronym(right.normalizedSurface)
-        if (leftAcronym == rightAcronym) return 0
-        val hasExpansion = left.normalizedSurface.any(Char::isWhitespace) ||
-                right.normalizedSurface.any(Char::isWhitespace)
-        if (!hasExpansion) return 0
-        return if (leftAcronym) -1 else 1
-    }
-
-    private fun isCompactAcronym(surface: String): Boolean {
-        if (surface.length !in 2..12 || surface.any(Char::isWhitespace)) return false
-        if (!surface.any(Char::isUpperCase)) return false
-        val uppercaseOrDigitCount = surface.count { it.isUpperCase() || it.isDigit() }
-        return uppercaseOrDigitCount >= 2 && surface.all { it.isLetterOrDigit() || it in "/.-" }
-    }
-
-    private const val PRIORITIZED_COST_LIMIT = 18_000
-
-    private fun statusRank(status: EnglishCandidateStatus): Int = when (status) {
-        EnglishCandidateStatus.PRIMARY -> 0
-        EnglishCandidateStatus.REVIEW -> 1
-        EnglishCandidateStatus.EXCLUDED -> 2
     }
 
     private fun isPunctuationOnly(surface: String): Boolean =
