@@ -29,7 +29,24 @@ class SystemNgramRuntimeTest {
 
         assertEquals("指の軌跡", engine.nBestPath("ゆびのきせき", 1).single())
         assertEquals("タイヤの軌跡", engine.nBestPath("たいやのきせき", 1).single())
-        assertEquals("軌跡に沿って", engine.nBestPath("きせきにそって", 1).single())
+        mapOf(
+            "てのきせき" to "手の軌跡",
+            "しゃりんのきせき" to "車輪の軌跡",
+            "だんどうのきせき" to "弾道の軌跡",
+            "ぼーるのきせき" to "ボールの軌跡",
+            "だきゅうのきせき" to "打球の軌跡",
+            "ひこうきのきせき" to "飛行機の軌跡",
+            "えいせいのきせき" to "衛星の軌跡",
+            "きせきをえがく" to "軌跡を描く",
+            "きせきをたどる" to "軌跡をたどる",
+            "きせきをおう" to "軌跡を追う",
+            "きせきをのこす" to "軌跡を残す",
+            "きせきがのこる" to "軌跡が残る",
+            "きせきにそって" to "軌跡に沿って",
+        ).forEach { (input, expected) ->
+            assertEquals(expected, engine.nBestPath(input, 1).single(), input)
+        }
+        assertEquals("ドーハの奇跡", engine.nBestPath("どーはのきせき", 1).single())
     }
 
     @Test

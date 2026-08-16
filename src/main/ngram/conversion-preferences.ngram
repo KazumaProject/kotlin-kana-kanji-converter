@@ -4,8 +4,20 @@
 "で" + "いう" + "と"
 "いり" + "ます"
 "インクジェット" + "紙"
-# Prefer the trajectory sense in noun + の + 軌跡 phrases without making
-# 軌跡 the global default for the ambiguous reading きせき.
-pos("名詞") + "の" + "軌跡"
-# The inflected verb is a separate conversion node in the system dictionary.
+# Keep trajectory preferences as an explicit whitelist. A POS-based rule would
+# incorrectly turn phrases such as ドーハの奇跡 into ドーハの軌跡.
+"指" + "の" + "軌跡"
+"タイヤ" + "の" + "軌跡"
+"手" + "の" + "軌跡"
+"車輪" + "の" + "軌跡"
+"弾道" + "の" + "軌跡"
+"ボール" + "の" + "軌跡"
+"打球" + "の" + "軌跡"
+"飛行機" + "の" + "軌跡"
+"衛星" + "の" + "軌跡"
+"軌跡" + "を" + "描く"
+"軌跡" + "を" + "たどる"
+"軌跡" + "を" + "追う"
+"軌跡" + "を" + "残す"
+"軌跡" + "が" + "残る"
 "軌跡" + "に" + "沿っ"
