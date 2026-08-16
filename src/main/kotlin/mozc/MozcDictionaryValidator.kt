@@ -13,7 +13,7 @@ object MozcDictionaryValidator {
             Files.newBufferedReader(path).use { reader ->
                 reader.lineSequence().forEachIndexed { index, rawLine ->
                     val lineNumber = index + 1
-                    if (rawLine.isEmpty()) {
+                    if (rawLine.trim().isEmpty() || rawLine.trimStart().startsWith("#")) {
                         return@forEachIndexed
                     }
                     val columns = rawLine.split('\t')

@@ -5,13 +5,28 @@ import java.text.Normalizer
 
 object NgramSourceParser {
     fun parseDirectory(directory: File): List<NgramRule> {
+        return parseDirectory(directory, DEFAULT_ALLOWED_ORDERS, requireSingleWord = false)
+    }
+
+    fun parseUnigramDirectory(directory: File): List<NgramRule> {
+        return parseDirectory(directory, setOf(1), requireSingleWord = true)
+    }
+
+    private fun parseDirectory(
+        directory: File,
+        allowedOrders: Set<Int>,
+        requireSingleWord: Boolean,
+    ): List<NgramRule> {
         require(directory.isDirectory) { "Missing n-gram source directory: ${directory.path}" }
+        require(allowedOrders.isNotEmpty()) { "At least one n-gram order must be allowed" }
         val sourceRoot = directory.canonicalFile
         val wordListLoader = WordListLoader(sourceRoot)
         val rules = directory.walkTopDown()
             .filter { it.isFile && it.extension == "ngram" }
             .sortedBy { it.relativeTo(directory).invariantSeparatorsPath }
-            .flatMap { parseFile(it, wordListLoader).asSequence() }
+            .flatMap {
+                parseFile(it, wordListLoader, allowedOrders, requireSingleWord).asSequence()
+            }
             .toList()
         require(rules.isNotEmpty()) { "No .ngram rules found in ${directory.path}" }
         val duplicates = rules.groupBy { canonical(it) }.filterValues { it.size > 1 }
@@ -24,9 +39,19 @@ object NgramSourceParser {
     }
 
     fun parseFile(file: File): List<NgramRule> =
-        parseFile(file, WordListLoader(requireNotNull(file.parentFile).canonicalFile))
+        parseFile(
+            file,
+            WordListLoader(requireNotNull(file.parentFile).canonicalFile),
+            DEFAULT_ALLOWED_ORDERS,
+            requireSingleWord = false,
+        )
 
-    private fun parseFile(file: File, wordListLoader: WordListLoader): List<NgramRule> = buildList {
+    private fun parseFile(
+        file: File,
+        wordListLoader: WordListLoader,
+        allowedOrders: Set<Int>,
+        requireSingleWord: Boolean,
+    ): List<NgramRule> = buildList {
         file.readLines(Charsets.UTF_8).forEachIndexed { index, raw ->
             val line = raw.trim()
             if (line.isEmpty() || line.startsWith("#")) return@forEachIndexed
@@ -34,11 +59,17 @@ object NgramSourceParser {
                 "Scores are forbidden in system n-gram sources: ${file.path}:${index + 1}"
             }
             val parts = splitFeatures(line)
-            require(parts.size in 2..5) {
-                "N-gram order must be 2..5 at ${file.path}:${index + 1}: $line"
+            require(parts.size in allowedOrders) {
+                "N-gram order must be one of ${allowedOrders.sorted().joinToString()} " +
+                    "at ${file.path}:${index + 1}: $line"
             }
             val alternatives = parts.map {
                 parseFeatureAlternatives(it, file, index + 1, wordListLoader)
+            }
+            if (requireSingleWord) {
+                require(alternatives.flatten().all { it is NgramFeature.Word }) {
+                    "Unigram rules must contain words only at ${file.path}:${index + 1}: $line"
+                }
             }
             var expandedFeatures = listOf(emptyList<NgramFeature>())
             alternatives.forEach { choices ->
@@ -215,5 +246,6 @@ object NgramSourceParser {
 
     private val WORDS_PATTERN = Regex("words\\(\\s*(\"(?:\\\\.|[^\"])*\")\\s*\\)")
     private val INCLUDE_PATTERN = Regex("@include\\s+(\"(?:\\\\.|[^\"])*\")")
+    private val DEFAULT_ALLOWED_ORDERS = setOf(2, 3, 4, 5)
     private const val MAX_EXPANDED_RULES_PER_LINE = 100_000
 }

@@ -50,13 +50,14 @@ fun main() {
         "/suffix.txt",
     )
     val dicUtils = DicUtils()
-    val dictionaryList = dicUtils.getListDictionary(fileList).toMutableList()
+    val dictionaryList = dicUtils.getListDictionary(fileList)
+    val atokUnigramDictionaryList = dicUtils.getListDictionary(listOf("/atok-unigram-dictionary.txt"))
     val englishDictionarySource = EnglishDictionaryBuilder().parseResource(
         resourcePath = "/english-dictionary.txt",
         expectedContextId = IdDefConstants.`名詞,一般,*,*,*,*,*`.toInt(),
     )
     val englishDictionaryList = EnglishDictionaryQuality.runtimeEntries(englishDictionarySource)
-    val finalList =
+    val baseDictionaryList =
         (dictionaryList +
                 DIC_LIST + CUSTOM_LIST +
                 NAME_LIST + FIXED_LIST +
@@ -66,10 +67,21 @@ fun main() {
                 WORDS + ZENKANKU_LIST + ADDS_NEW_WORDS + PHISIC_NOUN_LIST
                 + FIGHT_NAME + FOOD_NAME + ENTERTAIMENT_NAME + RESCORE_WORDS
                 )
+    val existingPairs = baseDictionaryList.asSequence()
+        .map { it.yomi to it.tango }
+        .toHashSet()
+    val atokUnigramMissing = atokUnigramDictionaryList.filter { (it.yomi to it.tango) !in existingPairs }
+    val finalList =
+        (baseDictionaryList + atokUnigramMissing)
             .groupBy { it.yomi }
             .toSortedMap(compareBy({ it.length }, { it }))
 
     println("finalList size: ${finalList.size}")
+    println(
+        "ATOK unigram dictionary: source=${atokUnigramDictionaryList.size}, " +
+                "alreadyPresent=${atokUnigramDictionaryList.size - atokUnigramMissing.size}, " +
+                "added=${atokUnigramMissing.size}",
+    )
     println(
         "English dictionary entries: source=${englishDictionarySource.size}, " +
                 "runtime=${englishDictionaryList.size}",

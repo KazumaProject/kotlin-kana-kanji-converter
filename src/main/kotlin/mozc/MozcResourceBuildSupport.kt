@@ -3,7 +3,8 @@ package com.kazumaproject.mozc
 import java.nio.file.Path
 import kotlin.io.path.isRegularFile
 
-private val mozcDictionaryResourceNames = (0..9).map { "dictionary%02d.txt".format(it) } + "suffix.txt"
+private val mozcDictionaryResourceNames =
+    (0..9).map { "dictionary%02d.txt".format(it) } + listOf("suffix.txt", "atok-unigram-dictionary.txt")
 
 fun validateBundledMozcDictionaryResources(
     resourcesDirectory: Path = Path.of("src/main/resources"),

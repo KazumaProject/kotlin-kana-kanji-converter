@@ -150,7 +150,8 @@ val mozcIdDefFileProvider = providers.gradleProperty("mozcIdDefFile")
     .orElse(layout.projectDirectory.file("src/main/resources/id.def"))
 val mozcConnectionFileProvider = layout.projectDirectory.file("src/main/resources/connection_single_column.txt")
 val mozcDictionaryFilesProvider = files(
-    (0..9).map { "src/main/resources/dictionary%02d.txt".format(it) } + "src/main/resources/suffix.txt"
+    (0..9).map { "src/main/resources/dictionary%02d.txt".format(it) } +
+            listOf("src/main/resources/suffix.txt", "src/main/resources/atok-unigram-dictionary.txt")
 )
 val dictionaryResourcesDir = layout.projectDirectory.dir("src/main/resources")
 // Build input: JapaneseCorpus's dedicated direct-loanword artifact. This is
@@ -162,6 +163,8 @@ val japaneseKeyboardAssetsStagingDir = layout.buildDirectory.dir("japaneseKeyboa
 val japaneseKeyboardAssetsReleaseDir = layout.projectDirectory.dir("release_zips")
 val japaneseKeyboardAssetsReleaseZip = japaneseKeyboardAssetsReleaseDir.file("japanese_keyboard_dictionary_assets.zip")
 val systemNgramDictionaryFile = dictionaryResourcesDir.file("ngram/system_ngram.dat")
+val systemNgramUnigramSourceDir = layout.projectDirectory.dir("src/main/ngram-unigram")
+val systemNgramUnigramDictionaryFile = dictionaryResourcesDir.file("ngram/system_ngram_unigram.dat")
 val buildSystemNgramDictionary = tasks.register<JavaExec>("buildSystemNgramDictionary") {
     group = "distribution"
     description = "Compiles editable scoreless n-gram sources into the JapaneseKeyboard binary asset."
@@ -179,11 +182,31 @@ val buildSystemNgramDictionary = tasks.register<JavaExec>("buildSystemNgramDicti
     outputs.file(systemNgramDictionaryFile)
     outputs.file(layout.buildDirectory.file("reports/ngram/build.txt"))
 }
+val buildSystemUnigramDictionary = tasks.register<JavaExec>("buildSystemUnigramDictionary") {
+    group = "distribution"
+    description = "Compiles unigram-only scoreless sources into a separate JapaneseKeyboard binary asset."
+    dependsOn("classes")
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.ngram.BuildSystemNgramDictionaryKt")
+    args(
+        "--source", systemNgramUnigramSourceDir.asFile.path,
+        "--source-mode", "unigram",
+        "--format-version", "4",
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
+        "--output", systemNgramUnigramDictionaryFile.asFile.path,
+        "--report", layout.buildDirectory.file("reports/ngram/unigram-build.txt").get().asFile.path,
+    )
+    inputs.dir(systemNgramUnigramSourceDir)
+    inputs.file(mozcIdDefFileProvider)
+    outputs.file(systemNgramUnigramDictionaryFile)
+    outputs.file(layout.buildDirectory.file("reports/ngram/unigram-build.txt"))
+}
 val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("connectionId.dat", "connectionId.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("pos_table.dat", "pos_table.dat"),
     JapaneseKeyboardAssetSpec("id.def", "id.def"),
     JapaneseKeyboardAssetSpec("ngram/system_ngram.dat", "ngram/system_ngram.dat"),
+    JapaneseKeyboardAssetSpec("ngram/system_ngram_unigram.dat", "ngram/system_ngram_unigram.dat"),
     JapaneseKeyboardAssetSpec("yomi.dat", "system/yomi.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("tango.dat", "system/tango.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("token.dat", "system/token.dat.zip", zipped = true),
@@ -472,7 +495,7 @@ val validateDictionaryIds = tasks.register("validateDictionaryIds") {
             }
             file.useLines { lines ->
                 lines.forEachIndexed { index, rawLine ->
-                    if (rawLine.isEmpty()) return@forEachIndexed
+                    if (rawLine.trim().isEmpty() || rawLine.trimStart().startsWith("#")) return@forEachIndexed
                     val lineNumber = index + 1
                     val columns = rawLine.split('\t')
                     val leftId = columns.getOrNull(1)?.toIntOrNull()
@@ -852,6 +875,7 @@ val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeybo
         "runMozcUTWikiNeologdCommon",
         generateMozcZeroQueryData,
         buildSystemNgramDictionary,
+        buildSystemUnigramDictionary,
     )
 }
 
