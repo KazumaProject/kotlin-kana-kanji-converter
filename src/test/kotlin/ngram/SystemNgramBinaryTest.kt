@@ -167,6 +167,28 @@ class SystemNgramBinaryTest {
     }
 
     @Test
+    fun checkedInTrajectoryPreferenceRulesArePresent() {
+        val root = File(System.getProperty("user.dir"))
+        val rules = NgramSourceParser.parseDirectory(root.resolve("src/main/ngram"))
+
+        val expectedRules = setOf(
+            listOf(
+                NgramFeature.Pos("名詞"),
+                NgramFeature.Word("の"),
+                NgramFeature.Word("軌跡"),
+            ),
+            listOf(
+                NgramFeature.Word("軌跡"),
+                NgramFeature.Word("に"),
+                NgramFeature.Word("沿っ"),
+            ),
+        )
+        expectedRules.forEach { expected ->
+            assertTrue(expected in rules.map { it.features }, "Missing trajectory rule: $expected")
+        }
+    }
+
+    @Test
     fun checkedInUnigramSourceIsAvailable() {
         val root = File(System.getProperty("user.dir"))
         val rules = NgramSourceParser.parseUnigramDirectory(root.resolve("src/main/ngram-unigram"))

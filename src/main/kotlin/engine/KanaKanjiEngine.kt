@@ -6,13 +6,20 @@ import com.kazumaproject.connection_id.ConnectionIdBuilder
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.graph.GraphBuilder
 import com.kazumaproject.mozc.ConnectionMatrix
+import com.kazumaproject.ngram.EmptySystemNgramDictionary
+import com.kazumaproject.ngram.EmptySystemUnigramDictionary
+import com.kazumaproject.ngram.SystemNgramDictionary
+import com.kazumaproject.ngram.SystemUnigramDictionary
 import com.kazumaproject.viterbi.FindPath
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.ObjectInputStream
 
-class KanaKanjiEngine {
+class KanaKanjiEngine(
+    private val systemNgramDictionary: SystemNgramDictionary = EmptySystemNgramDictionary,
+    private val systemUnigramDictionary: SystemUnigramDictionary = EmptySystemUnigramDictionary,
+) {
 
     private lateinit var graphBuilder: GraphBuilder
     private lateinit var yomiTrie: LOUDSWithTermId
@@ -94,7 +101,7 @@ class KanaKanjiEngine {
         tokenArray.readExternalNotCompress(objectInputTokenArray)
         tokenArray.readPOSTable(mode)
         connectionMatrix = ConnectionIdBuilder().readMatrix(objectInputConnectionId, "$resourceDirectory/connectionId.dat")
-        findPath = FindPath()
+        findPath = FindPath(systemNgramDictionary, systemUnigramDictionary)
     }
 
 }

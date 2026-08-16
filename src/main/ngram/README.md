@@ -64,6 +64,20 @@ cost `9000`. The separate unigram binary supplies the actual priority, while
 the conservative cost prevents these additions from globally replacing normal
 context scoring when no ATOK rule matches.
 
+The JVM converter can load the same packed assets for an end-to-end candidate
+test. `KanaKanjiEngine` keeps the normal Viterbi result unchanged and promotes
+only candidates whose node path matches a loaded scoreless rule:
+
+```kotlin
+val ngram = PackedSystemNgramDictionary.fromFile(File("system_ngram.dat"))
+val unigram = PackedSystemUnigramDictionary.fromFile(File("system_ngram_unigram.dat"))
+val engine = KanaKanjiEngine(ngram, unigram).apply { buildEngine() }
+```
+
+The runtime tests build temporary v3/v4 assets from the checked-in sources,
+then verify the actual candidate order. This also keeps tests independent of
+ignored generated files under `src/main/resources/ngram`.
+
 Build and verify:
 
 ```shell
