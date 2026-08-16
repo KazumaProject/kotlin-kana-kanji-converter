@@ -172,20 +172,32 @@ class SystemNgramBinaryTest {
         val rules = NgramSourceParser.parseDirectory(root.resolve("src/main/ngram"))
 
         val expectedRules = setOf(
-            listOf(
-                NgramFeature.Pos("名詞"),
-                NgramFeature.Word("の"),
-                NgramFeature.Word("軌跡"),
-            ),
-            listOf(
-                NgramFeature.Word("軌跡"),
-                NgramFeature.Word("に"),
-                NgramFeature.Word("沿っ"),
-            ),
+            listOf("指", "の", "軌跡"),
+            listOf("タイヤ", "の", "軌跡"),
+            listOf("手", "の", "軌跡"),
+            listOf("車輪", "の", "軌跡"),
+            listOf("弾道", "の", "軌跡"),
+            listOf("ボール", "の", "軌跡"),
+            listOf("打球", "の", "軌跡"),
+            listOf("飛行機", "の", "軌跡"),
+            listOf("衛星", "の", "軌跡"),
+            listOf("軌跡", "を", "描く"),
+            listOf("軌跡", "を", "たどる"),
+            listOf("軌跡", "を", "追う"),
+            listOf("軌跡", "を", "残す"),
+            listOf("軌跡", "が", "残る"),
+            listOf("軌跡", "に", "沿っ"),
         )
         expectedRules.forEach { expected ->
-            assertTrue(expected in rules.map { it.features }, "Missing trajectory rule: $expected")
+            val actual = expected.map(NgramFeature::Word)
+            assertTrue(actual in rules.map { it.features }, "Missing trajectory rule: $expected")
         }
+        assertTrue(
+            rules.none {
+                it.features.any { feature -> feature is NgramFeature.Pos } &&
+                    it.features.lastOrNull() == NgramFeature.Word("軌跡")
+            },
+        )
     }
 
     @Test
