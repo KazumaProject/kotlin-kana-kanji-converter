@@ -149,3 +149,40 @@ jobs:
           artifactErrorsFailBuild: true
           removeArtifacts: true
           replacesArtifacts: true
+
+      # Keep the release records and tags for history, but retain downloadable
+      # files only for the five newest published v* releases.
+      - name: Retain assets for the latest five releases
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const releases = await github.paginate(github.rest.repos.listReleases, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100,
+            });
+            const publishedVersionReleases = releases
+              .filter((release) =>
+                !release.draft &&
+                !release.prerelease &&
+                release.tag_name.startsWith('v'))
+              .sort((left, right) =>
+                new Date(right.published_at || right.created_at) -
+                new Date(left.published_at || left.created_at));
+            const expiredReleases = publishedVersionReleases.slice(5);
+            for (const release of expiredReleases) {
+              for (const asset of release.assets) {
+                core.info(`Deleting ${asset.name} from ${release.tag_name}`);
+                await github.rest.repos.deleteReleaseAsset({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  asset_id: asset.id,
+                });
+              }
+            }
+            core.info(
+              `Retained assets for ${Math.min(publishedVersionReleases.length, 5)} releases; ` +
+              `processed ${expiredReleases.length} older releases.`,
+            );

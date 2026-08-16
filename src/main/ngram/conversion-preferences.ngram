@@ -4,3 +4,8 @@
 "で" + "いう" + "と"
 "いり" + "ます"
 "インクジェット" + "紙"
+# Prefer the trajectory sense in noun + の + 軌跡 phrases without making
+# 軌跡 the global default for the ambiguous reading きせき.
+pos("名詞") + "の" + "軌跡"
+# The inflected verb is a separate conversion node in the system dictionary.
+"軌跡" + "に" + "沿っ"

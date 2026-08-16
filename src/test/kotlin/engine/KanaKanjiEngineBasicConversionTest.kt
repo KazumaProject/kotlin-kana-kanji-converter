@@ -77,6 +77,20 @@ class KanaKanjiEngineBasicConversionTest {
     }
 
     @Test
+    fun trajectoryCandidatesExistForSystemNgramReranking() {
+        mapOf(
+            "ゆびのきせき" to "指の軌跡",
+            "たいやのきせき" to "タイヤの軌跡",
+            "きせきにそって" to "軌跡に沿って",
+        ).forEach { (input, expected) ->
+            assertTrue(
+                expected in engine.nBestPath(input, 64),
+                "Candidate must remain available for system n-gram reranking: $input -> $expected",
+            )
+        }
+    }
+
+    @Test
     fun englishReadingCandidatesAreNotMergedIntoTheSystemDictionary() {
         assertTrue("car" !in engine.nBestPath("かー", 64))
     }

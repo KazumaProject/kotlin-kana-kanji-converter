@@ -2,16 +2,29 @@ package com.kazumaproject.viterbi
 
 import com.kazumaproject.graph.Node
 import com.kazumaproject.mozc.ConnectionMatrix
+import com.kazumaproject.ngram.EmptySystemNgramDictionary
+import com.kazumaproject.ngram.EmptySystemUnigramDictionary
+import com.kazumaproject.ngram.SystemNgramDictionary
+import com.kazumaproject.ngram.SystemUnigramDictionary
 import java.util.PriorityQueue
 import kotlin.math.sqrt
 
-class FindPath {
+class FindPath(
+    private val systemNgramDictionary: SystemNgramDictionary = EmptySystemNgramDictionary,
+    private val systemUnigramDictionary: SystemUnigramDictionary = EmptySystemUnigramDictionary,
+) {
 
     private data class PathState(
         val node: Node,
         val path: List<Node>,
         val cost: Int,
         val endPosition: Int,
+    )
+
+    private data class CandidatePath(
+        val value: String,
+        val cost: Int,
+        val matchedBySystemDictionary: Boolean,
     )
 
     fun viterbi(
@@ -62,21 +75,38 @@ class FindPath {
         connectionMatrix: ConnectionMatrix,
         n: Int
     ): MutableList<String> {
-        val resultFinal: MutableList<String> = mutableListOf()
-        if (n <= 0) return resultFinal
+        if (n <= 0) return mutableListOf()
         val outgoing = buildOutgoingNodes(graph, length)
         val queue = PriorityQueue(compareBy<PathState> { it.cost })
-        val bos = graph[0].flatten().firstOrNull { it.tango == "BOS" } ?: return resultFinal
+        val bos = graph[0].flatten().firstOrNull { it.tango == "BOS" } ?: return mutableListOf()
         queue.add(PathState(node = bos, path = emptyList(), cost = 0, endPosition = 0))
+
+        val hasSystemRules =
+            systemNgramDictionary.ruleCount > 0 || systemUnigramDictionary.ruleCount > 0
+        val internalCandidateCount = if (hasSystemRules) {
+            maxOf(n, n.saturatingMultiply(4).coerceAtMost(64), 32)
+        } else {
+            n
+        }
+        val resultFinal = mutableListOf<CandidatePath>()
+        val foundStrings = HashSet<String>()
 
         while (queue.isNotEmpty()) {
             val state = queue.poll()
             if (state.node.tango == "EOS") {
                 val value = state.path.joinToString(separator = "") { it.tango }
-                if (value !in resultFinal) {
-                    resultFinal.add(value)
+                if (foundStrings.add(value)) {
+                    resultFinal += CandidatePath(
+                        value = value,
+                        cost = state.cost,
+                        matchedBySystemDictionary =
+                            pathMatchesSystemNgram(state.path) || pathMatchesSystemUnigram(state.path),
+                    )
                 }
-                if (resultFinal.size >= n) return resultFinal
+                if (
+                    resultFinal.size >= internalCandidateCount ||
+                    (resultFinal.size >= n && resultFinal.any { it.matchedBySystemDictionary })
+                ) break
                 continue
             }
 
@@ -103,7 +133,34 @@ class FindPath {
             }
         }
         return resultFinal
+            .sortedWith(
+                compareByDescending<CandidatePath> { it.matchedBySystemDictionary }
+                    .thenBy { it.cost },
+            )
+            .take(n)
+            .mapTo(mutableListOf()) { it.value }
     }
+
+    private fun pathMatchesSystemNgram(path: List<Node>): Boolean {
+        if (systemNgramDictionary.ruleCount == 0) return false
+        for (start in path.indices) {
+            val secondIndex = start + 1
+            if (secondIndex >= path.size) break
+            if (
+                systemNgramDictionary.matches(
+                    node0 = path[start],
+                    node1 = path[secondIndex],
+                    node2 = path.getOrNull(start + 2),
+                    node3 = path.getOrNull(start + 3),
+                    node4 = path.getOrNull(start + 4),
+                )
+            ) return true
+        }
+        return false
+    }
+
+    private fun pathMatchesSystemUnigram(path: List<Node>): Boolean =
+        systemUnigramDictionary.ruleCount > 0 && path.any(systemUnigramDictionary::matches)
 
     private fun buildViterbi(
         graph: List<MutableList<MutableList<Node>>>,
@@ -208,5 +265,8 @@ class FindPath {
         val total = costs.fold(0L) { acc, cost -> acc + cost.toLong() }
         return total.coerceIn(Int.MIN_VALUE.toLong(), Int.MAX_VALUE.toLong()).toInt()
     }
+
+    private fun Int.saturatingMultiply(multiplier: Int): Int =
+        if (this > Int.MAX_VALUE / multiplier) Int.MAX_VALUE else this * multiplier
 
 }
