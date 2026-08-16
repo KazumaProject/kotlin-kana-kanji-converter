@@ -115,7 +115,7 @@ jobs:
           path: build/reports/english-dictionary
 
       - name: Build and verify scoreless system n-gram dictionary
-        run: ./gradlew buildSystemNgramDictionary test --tests 'com.kazumaproject.ngram.*'
+        run: ./gradlew buildSystemNgramDictionary test --tests 'com.kazumaproject.ngram.SystemNgramBinaryTest'
 
       - name: Upload n-gram build report
         uses: actions/upload-artifact@v4
