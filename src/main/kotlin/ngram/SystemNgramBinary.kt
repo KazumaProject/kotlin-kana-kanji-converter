@@ -10,6 +10,7 @@ data class NgramBuildReport(
     val ruleCount: Int,
     val posClassCount: Int,
     val signatureCount: Int,
+    val formatVersion: Int = NgramEncoding.VERSION,
     val stateCount: Int = 0,
     val edgeCount: Int = 0,
     val bytes: Int,
@@ -79,7 +80,13 @@ object NgramV3 {
 object SystemNgramBinaryBuilder {
     private data class HashEntry(val remainder: Long, val recordId: Int)
 
-    fun build(rules: List<NgramRule>, idDef: File, output: File): NgramBuildReport {
+    fun build(
+        rules: List<NgramRule>,
+        idDef: File,
+        output: File,
+        formatVersion: Int = NgramEncoding.VERSION,
+    ): NgramBuildReport {
+        validateRules(rules, formatVersion)
         val contextNames = parseIdDef(idDef)
         val posNames = contextNames.map { it.substringBefore(',') }.distinct().sorted()
         require(posNames.size < 256) { "Too many coarse POS classes: ${posNames.size}" }
@@ -146,7 +153,7 @@ object SystemNgramBinaryBuilder {
         val bytes = ByteArray(fileSize)
         val buffer = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
         buffer.putInt(0, NgramEncoding.MAGIC)
-        buffer.putInt(4, NgramEncoding.VERSION)
+        buffer.putInt(4, formatVersion)
         buffer.putInt(8, keys.size)
         buffer.putInt(12, contextClasses.size)
         buffer.putInt(16, posNames.size)
@@ -186,6 +193,7 @@ object SystemNgramBinaryBuilder {
             ruleCount = keys.size,
             posClassCount = posNames.size,
             signatureCount = signatures.size,
+            formatVersion = formatVersion,
             bytes = bytes.size,
             hashIndexBytes = (bucketCount + 1) * 4 + keys.size * NgramEncoding.HASH_ENTRY_SIZE,
             exactDataBytes = exactBytes.size,
@@ -199,6 +207,24 @@ object SystemNgramBinaryBuilder {
             require(split > 0) { "Invalid id.def line ${index + 1}: $line" }
             require(line.substring(0, split).toInt() == index) { "Non-contiguous id.def at line ${index + 1}" }
             line.substring(split + 1)
+        }
+    }
+
+    private fun validateRules(rules: List<NgramRule>, formatVersion: Int) {
+        require(rules.isNotEmpty()) { "Cannot build an empty n-gram dictionary" }
+        require(formatVersion == NgramEncoding.VERSION || formatVersion == NgramEncoding.UNIGRAM_VERSION) {
+            "Unsupported n-gram format version: $formatVersion"
+        }
+        if (formatVersion == NgramEncoding.VERSION) {
+            require(rules.all { it.features.size in 2..5 }) {
+                "Version ${NgramEncoding.VERSION} supports only 2- to 5-gram rules"
+            }
+        } else {
+            require(rules.all { rule ->
+                rule.features.size == 1 && rule.features.single() is NgramFeature.Word
+            }) {
+                "Version ${NgramEncoding.UNIGRAM_VERSION} supports only single-word unigram rules"
+            }
         }
     }
 
@@ -222,25 +248,40 @@ class SystemNgramBinaryReader(private val bytes: ByteArray) {
     fun verify() {
         require(bytes.size >= NgramEncoding.HEADER_SIZE) { "Truncated n-gram header" }
         require(buffer.getInt(0) == NgramEncoding.MAGIC) { "Invalid n-gram magic" }
-        require(buffer.getInt(4) == NgramEncoding.VERSION) { "Unsupported n-gram version" }
+        val version = buffer.getInt(4)
+        require(version == NgramEncoding.VERSION || version == NgramEncoding.UNIGRAM_VERSION) {
+            "Unsupported n-gram version: $version"
+        }
         require(buffer.getInt(56) == bytes.size) { "Invalid n-gram file size" }
+        val ruleCount = buffer.getInt(8)
+        val signatureCount = buffer.getInt(20)
+        val signaturesOffset = buffer.getInt(32)
+        require(signaturesOffset == NgramEncoding.HEADER_SIZE) { "Invalid signatures offset" }
+        require(signatureCount > 0) { "N-gram dictionary has no signatures" }
+        repeat(signatureCount) { index ->
+            val order = NgramEncoding.order(buffer.getInt(signaturesOffset + index * 4))
+            if (version == NgramEncoding.VERSION) {
+                require(order in 2..5) { "Invalid v3 n-gram order: $order" }
+            } else {
+                require(order == 1) { "Invalid v4 n-gram order: $order" }
+            }
+        }
         val bucketCount = buffer.getInt(64)
         require(bucketCount in 256..NgramEncoding.BUCKET_COUNT && bucketCount.countOneBits() == 1) {
             "Invalid bucket count"
         }
         val crc = CRC32().apply { update(bytes, NgramEncoding.HEADER_SIZE, bytes.size - NgramEncoding.HEADER_SIZE) }
         require(buffer.getInt(60).toUInt().toLong() == crc.value) { "Invalid n-gram checksum" }
-        val rules = buffer.getInt(8)
         val bucketOffsetsOffset = buffer.getInt(40)
         val hashEntriesOffset = buffer.getInt(44)
         val blockOffsetsOffset = buffer.getInt(48)
         val recordsOffset = buffer.getInt(52)
         val blockCount = buffer.getInt(68)
         require(hashEntriesOffset == bucketOffsetsOffset + (bucketCount + 1) * 4)
-        require(blockOffsetsOffset == hashEntriesOffset + rules * NgramEncoding.HASH_ENTRY_SIZE)
+        require(blockOffsetsOffset == hashEntriesOffset + ruleCount * NgramEncoding.HASH_ENTRY_SIZE)
         require(recordsOffset == blockOffsetsOffset + (blockCount + 1) * 4)
         require(buffer.getInt(bucketOffsetsOffset) == 0)
-        require(buffer.getInt(bucketOffsetsOffset + bucketCount * 4) == rules)
+        require(buffer.getInt(bucketOffsetsOffset + bucketCount * 4) == ruleCount)
         require(recordsOffset <= bytes.size)
     }
 }

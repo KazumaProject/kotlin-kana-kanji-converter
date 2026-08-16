@@ -48,6 +48,7 @@ bin/
 !/src/test/resources/perf/
 /src/test/resources/perf/*
 !/src/test/resources/perf/dictionary-build-baseline.properties
-/src/main/resources
+/src/main/resources/*
+!/src/main/resources/atok-unigram-dictionary.txt
 .gradle-user-home
 release_zips

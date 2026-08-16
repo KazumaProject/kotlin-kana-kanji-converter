@@ -15,6 +15,7 @@ data class NgramRule(
 object NgramEncoding {
     const val MAGIC = 0x4A4B4E47 // JKNG
     const val VERSION = 3
+    const val UNIGRAM_VERSION = 4
     const val HEADER_SIZE = 80
     const val BLOCK_SIZE = 16
     const val BUCKET_COUNT = 65536

@@ -8,11 +8,19 @@ fun main(args: Array<String>) {
     val idDef = File(values["--id-def"] ?: "src/main/resources/id.def")
     val output = File(values["--output"] ?: "src/main/resources/ngram/system_ngram.dat")
     val reportFile = File(values["--report"] ?: "build/reports/ngram/build.txt")
-    val rules = NgramSourceParser.parseDirectory(source)
-    val report = SystemNgramBinaryBuilder.build(rules, idDef, output)
+    val sourceMode = values["--source-mode"] ?: "ngram"
+    val formatVersion = values["--format-version"]?.toInt() ?: NgramEncoding.VERSION
+    val rules = when (sourceMode) {
+        "ngram" -> NgramSourceParser.parseDirectory(source)
+        "unigram" -> NgramSourceParser.parseUnigramDirectory(source)
+        else -> error("Unsupported n-gram source mode: $sourceMode")
+    }
+    val report = SystemNgramBinaryBuilder.build(rules, idDef, output, formatVersion)
     reportFile.parentFile.mkdirs()
     reportFile.writeText(
         buildString {
+            appendLine("sourceMode=$sourceMode")
+            appendLine("formatVersion=${report.formatVersion}")
             appendLine("ruleCount=${report.ruleCount}")
             appendLine("posClassCount=${report.posClassCount}")
             appendLine("signatureCount=${report.signatureCount}")
