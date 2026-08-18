@@ -3,7 +3,7 @@ name: Build and Release JapaneseKeyboard Dictionary Assets
 on:
   push:
     tags:
-      - 'v*'  # Trigger only when a tag starting with "v" is pushed
+      - 'v*'
   workflow_dispatch:
     inputs:
       mozc_ref:
@@ -13,10 +13,15 @@ on:
 
 env:
   MOZC_REF: ${{ github.event.inputs.mozc_ref || 'master' }}
-  JAPANESE_CORPUS_TAG: 'v2026.0814.8'
+
+  # JapaneseCorpus:
+  # Do NOT pin a release tag or SHA256 here.
+  # The workflow automatically resolves the latest published release
+  # and verifies the downloaded asset against that same release.
+  JAPANESE_CORPUS_REPOSITORY: 'KazumaProject/JapaneseCorpus'
   JAPANESE_CORPUS_ENGLISH_ASSET: 'mozc-english-reading-unigram-00000.txt.zst'
   JAPANESE_CORPUS_ENGLISH_MANIFEST: 'english-dictionary-manifest.json'
-  JAPANESE_CORPUS_ENGLISH_SHA256: 'b34b9c630ecf4d3f404049ef6580d8f4d5d5b13e1197e083d51b8ea3f064cd6e'
+  JAPANESE_CORPUS_ENGLISH_SHA256SUMS: 'ENGLISH-DICTIONARY-SHA256SUMS'
 
 permissions:
   contents: write
@@ -26,11 +31,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the code
+      # ----------------------------------------------------------------------
+      # Checkout
+      # ----------------------------------------------------------------------
+
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Checkout Mozc once so id.def, dictionary, suffix, connection, and single_kanji files share one revision.
+      # Checkout Mozc once so id.def, dictionary, suffix, connection,
+      # zero-query, emoji, emoticon, symbol, and single-kanji resources all
+      # come from the same Mozc revision.
       - name: Checkout google/mozc
         uses: actions/checkout@v4
         with:
@@ -38,32 +48,74 @@ jobs:
           ref: ${{ env.MOZC_REF }}
           path: mozc-src
 
-      # Set up JDK 17 for Kotlin
+      # ----------------------------------------------------------------------
+      # Java
+      # ----------------------------------------------------------------------
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # Copy base dictionary files
+      # ----------------------------------------------------------------------
+      # Mozc resources
+      # ----------------------------------------------------------------------
+
       - name: Copy Mozc dictionary resources
+        shell: bash
         run: |
+          set -euo pipefail
+
           mkdir -p ./src/main/resources
-          cp ./mozc-src/src/data/dictionary_oss/id.def ./src/main/resources/id.def
+
+          cp \
+            ./mozc-src/src/data/dictionary_oss/id.def \
+            ./src/main/resources/id.def
+
           for i in $(seq -w 00 09); do
-            cp ./mozc-src/src/data/dictionary_oss/dictionary${i}.txt ./src/main/resources/dictionary${i}.txt
+            cp \
+              "./mozc-src/src/data/dictionary_oss/dictionary${i}.txt" \
+              "./src/main/resources/dictionary${i}.txt"
           done
-          cp ./mozc-src/src/data/dictionary_oss/connection_single_column.txt ./src/main/resources/connection_single_column.txt
-          cp ./mozc-src/src/data/dictionary_oss/suffix.txt ./src/main/resources/suffix.txt
-          cp ./mozc-src/src/data/single_kanji/single_kanji.tsv ./src/main/resources/single_kanji.tsv
-          cp ./mozc-src/src/data/zero_query/zero_query.def ./src/main/resources/zero_query.def
-          cp ./mozc-src/src/data/zero_query/zero_query_number.def ./src/main/resources/zero_query_number.def
-          cp ./mozc-src/src/data/emoji/emoji_data.tsv ./src/main/resources/mozc_emoji_data.tsv
-          cp ./mozc-src/src/data/emoticon/categorized.tsv ./src/main/resources/mozc_emoticon_categorized.tsv
-          cp ./mozc-src/src/data/symbol/symbol.tsv ./src/main/resources/mozc_symbol.tsv
+
+          cp \
+            ./mozc-src/src/data/dictionary_oss/connection_single_column.txt \
+            ./src/main/resources/connection_single_column.txt
+
+          cp \
+            ./mozc-src/src/data/dictionary_oss/suffix.txt \
+            ./src/main/resources/suffix.txt
+
+          cp \
+            ./mozc-src/src/data/single_kanji/single_kanji.tsv \
+            ./src/main/resources/single_kanji.tsv
+
+          cp \
+            ./mozc-src/src/data/zero_query/zero_query.def \
+            ./src/main/resources/zero_query.def
+
+          cp \
+            ./mozc-src/src/data/zero_query/zero_query_number.def \
+            ./src/main/resources/zero_query_number.def
+
+          cp \
+            ./mozc-src/src/data/emoji/emoji_data.tsv \
+            ./src/main/resources/mozc_emoji_data.tsv
+
+          cp \
+            ./mozc-src/src/data/emoticon/categorized.tsv \
+            ./src/main/resources/mozc_emoticon_categorized.tsv
+
+          cp \
+            ./mozc-src/src/data/symbol/symbol.tsv \
+            ./src/main/resources/mozc_symbol.tsv
 
       - name: Verify Mozc resources exist
+        shell: bash
         run: |
+          set -euo pipefail
+
           test -s ./src/main/resources/id.def
           test -s ./src/main/resources/connection_single_column.txt
           test -s ./src/main/resources/suffix.txt
@@ -73,37 +125,180 @@ jobs:
           test -s ./src/main/resources/mozc_emoji_data.tsv
           test -s ./src/main/resources/mozc_emoticon_categorized.tsv
           test -s ./src/main/resources/mozc_symbol.tsv
+
           test -f ./src/main/custom_zero_query.def
+
           for i in $(seq -w 00 09); do
-            test -s ./src/main/resources/dictionary${i}.txt
+            test -s "./src/main/resources/dictionary${i}.txt"
           done
 
-      - name: Download JapaneseCorpus English dictionary
+      # ----------------------------------------------------------------------
+      # JapaneseCorpus English dictionary
+      #
+      # JapaneseCorpus is automatically rebuilt and its release version
+      # changes over time.
+      #
+      # Therefore:
+      #   - Never pin JAPANESE_CORPUS_TAG
+      #   - Never pin the dictionary SHA256
+      #   - Resolve one published release first
+      #   - Download every required file from that exact release
+      #   - Verify the asset against SHA256SUMS from that exact release
+      #   - Verify the manifest describes the same asset/checksum
+      #
+      # This also prevents a race where "latest" changes between downloads.
+      # ----------------------------------------------------------------------
+
+      - name: Download and verify latest JapaneseCorpus English dictionary
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          corpus_url="https://github.com/KazumaProject/JapaneseCorpus/releases/download/${JAPANESE_CORPUS_TAG}/${JAPANESE_CORPUS_ENGLISH_ASSET}"
-          curl --fail --location --retry 3 --retry-delay 2 "$corpus_url" --output "/tmp/${JAPANESE_CORPUS_ENGLISH_ASSET}"
-          echo "${JAPANESE_CORPUS_ENGLISH_SHA256}  /tmp/${JAPANESE_CORPUS_ENGLISH_ASSET}" | sha256sum --check
-          manifest_url="https://github.com/KazumaProject/JapaneseCorpus/releases/download/${JAPANESE_CORPUS_TAG}/${JAPANESE_CORPUS_ENGLISH_MANIFEST}"
-          curl --fail --location --retry 3 --retry-delay 2 "$manifest_url" --output "/tmp/${JAPANESE_CORPUS_ENGLISH_MANIFEST}"
-          jq -e --arg asset "$JAPANESE_CORPUS_ENGLISH_ASSET" --arg sha "$JAPANESE_CORPUS_ENGLISH_SHA256" '
-            .parameters.dictionary_kind == "direct-loanword" and
-            (.assets[] | select(.name == $asset) | .sha256) == $sha
-          ' "/tmp/${JAPANESE_CORPUS_ENGLISH_MANIFEST}" >/dev/null
-          zstd --decompress --stdout "/tmp/${JAPANESE_CORPUS_ENGLISH_ASSET}" > ./src/main/resources/english-dictionary.txt
+          set -euo pipefail
+
+          echo "Resolving latest published JapaneseCorpus release..."
+
+          JAPANESE_CORPUS_TAG="$(
+            gh api \
+              "repos/${JAPANESE_CORPUS_REPOSITORY}/releases/latest" \
+              --jq '.tag_name'
+          )"
+
+          if [[ -z "${JAPANESE_CORPUS_TAG}" || "${JAPANESE_CORPUS_TAG}" == "null" ]]; then
+            echo "Failed to resolve latest JapaneseCorpus release tag." >&2
+            exit 1
+          fi
+
+          echo "JapaneseCorpus repository: ${JAPANESE_CORPUS_REPOSITORY}"
+          echo "JapaneseCorpus release:    ${JAPANESE_CORPUS_TAG}"
+          echo "English asset:             ${JAPANESE_CORPUS_ENGLISH_ASSET}"
+          echo "Manifest:                  ${JAPANESE_CORPUS_ENGLISH_MANIFEST}"
+          echo "SHA256SUMS:                ${JAPANESE_CORPUS_ENGLISH_SHA256SUMS}"
+
+          DOWNLOAD_DIR="${RUNNER_TEMP}/japanese-corpus"
+          mkdir -p "${DOWNLOAD_DIR}"
+
+          echo "Downloading files from the same JapaneseCorpus release..."
+
+          gh release download "${JAPANESE_CORPUS_TAG}" \
+            --repo "${JAPANESE_CORPUS_REPOSITORY}" \
+            --pattern "${JAPANESE_CORPUS_ENGLISH_ASSET}" \
+            --pattern "${JAPANESE_CORPUS_ENGLISH_MANIFEST}" \
+            --pattern "${JAPANESE_CORPUS_ENGLISH_SHA256SUMS}" \
+            --dir "${DOWNLOAD_DIR}"
+
+          ASSET_PATH="${DOWNLOAD_DIR}/${JAPANESE_CORPUS_ENGLISH_ASSET}"
+          MANIFEST_PATH="${DOWNLOAD_DIR}/${JAPANESE_CORPUS_ENGLISH_MANIFEST}"
+          SHA256SUMS_PATH="${DOWNLOAD_DIR}/${JAPANESE_CORPUS_ENGLISH_SHA256SUMS}"
+
+          echo "Verifying downloaded files exist..."
+
+          test -s "${ASSET_PATH}"
+          test -s "${MANIFEST_PATH}"
+          test -s "${SHA256SUMS_PATH}"
+
+          echo "Extracting expected SHA256 from ${JAPANESE_CORPUS_ENGLISH_SHA256SUMS}..."
+
+          EXPECTED_SHA256="$(
+            awk \
+              -v asset="${JAPANESE_CORPUS_ENGLISH_ASSET}" \
+              '$2 == asset || $2 == ("*" asset) { print $1; exit }' \
+              "${SHA256SUMS_PATH}"
+          )"
+
+          if [[ -z "${EXPECTED_SHA256}" ]]; then
+            echo \
+              "Could not find ${JAPANESE_CORPUS_ENGLISH_ASSET} in ${JAPANESE_CORPUS_ENGLISH_SHA256SUMS}." \
+              >&2
+            echo "Available checksum entries:" >&2
+            cat "${SHA256SUMS_PATH}" >&2
+            exit 1
+          fi
+
+          if [[ ! "${EXPECTED_SHA256}" =~ ^[0-9a-fA-F]{64}$ ]]; then
+            echo "Invalid SHA256 in checksum file: ${EXPECTED_SHA256}" >&2
+            exit 1
+          fi
+
+          echo "Expected SHA256: ${EXPECTED_SHA256}"
+
+          ACTUAL_SHA256="$(
+            sha256sum "${ASSET_PATH}" | awk '{print $1}'
+          )"
+
+          echo "Actual SHA256:   ${ACTUAL_SHA256}"
+
+          if [[ "${ACTUAL_SHA256}" != "${EXPECTED_SHA256}" ]]; then
+            echo "JapaneseCorpus English dictionary SHA256 mismatch." >&2
+            exit 1
+          fi
+
+          echo "SHA256 verification passed."
+
+          echo "Validating English dictionary manifest..."
+
+          jq -e \
+            --arg asset "${JAPANESE_CORPUS_ENGLISH_ASSET}" \
+            --arg sha "${EXPECTED_SHA256}" \
+            '
+              .parameters.dictionary_kind == "direct-loanword"
+              and
+              (
+                .assets[]
+                | select(.name == $asset)
+                | .sha256
+              ) == $sha
+            ' \
+            "${MANIFEST_PATH}" \
+            >/dev/null
+
+          echo "Manifest verification passed."
+
+          echo "Testing zstd archive..."
+
+          zstd --test "${ASSET_PATH}"
+
+          echo "Decompressing English dictionary..."
+
+          zstd \
+            --decompress \
+            --stdout \
+            "${ASSET_PATH}" \
+            > ./src/main/resources/english-dictionary.txt
+
           test -s ./src/main/resources/english-dictionary.txt
+
+          echo "JapaneseCorpus English dictionary successfully installed."
+          echo "Source release: ${JAPANESE_CORPUS_TAG}"
+
+      # ----------------------------------------------------------------------
+      # Source validation
+      # ----------------------------------------------------------------------
 
       - name: Verify English dictionary source
         run: ./gradlew validateEnglishDictionary
 
       - name: Validate Mozc resource consistency
-        run: ./gradlew validateMozcIdDef validateConnectionMatrix validateDictionaryIds validateIdDefReferences
+        run: |
+          ./gradlew \
+            validateMozcIdDef \
+            validateConnectionMatrix \
+            validateDictionaryIds \
+            validateIdDefReferences
 
       - name: Validate Mozc zero query resources
         run: ./gradlew validateMozcZeroQueryResources
 
-      # Build the project with Gradle
+      # ----------------------------------------------------------------------
+      # Kotlin compilation
+      # ----------------------------------------------------------------------
+
       - name: Compile Kotlin
         run: ./gradlew clean compileKotlin
+
+      # ----------------------------------------------------------------------
+      # English dictionary report
+      # ----------------------------------------------------------------------
 
       - name: Generate English dictionary report
         run: ./gradlew analyzeEnglishDictionary
@@ -114,8 +309,16 @@ jobs:
           name: english-dictionary-report
           path: build/reports/english-dictionary
 
+      # ----------------------------------------------------------------------
+      # N-gram dictionary
+      # ----------------------------------------------------------------------
+
       - name: Build and verify scoreless system n-gram dictionary
-        run: ./gradlew buildSystemNgramDictionary test --tests 'com.kazumaproject.ngram.SystemNgramBinaryTest'
+        run: |
+          ./gradlew \
+            buildSystemNgramDictionary \
+            test \
+            --tests 'com.kazumaproject.ngram.SystemNgramBinaryTest'
 
       - name: Upload n-gram build report
         uses: actions/upload-artifact@v4
@@ -123,20 +326,41 @@ jobs:
           name: ngram-build-report
           path: build/reports/ngram/build.txt
 
+      # ----------------------------------------------------------------------
+      # Zero-query parity / generation
+      # ----------------------------------------------------------------------
+
       - name: Verify Mozc zero query parity
-        run: ./gradlew verifyMozcZeroQueryParity -PmozcSourceDir=./mozc-src
+        run: |
+          ./gradlew \
+            verifyMozcZeroQueryParity \
+            -PmozcSourceDir=./mozc-src
 
       - name: Generate and verify Mozc zero query data
-        run: ./gradlew generateMozcZeroQueryData verifyMozcZeroQueryData
+        run: |
+          ./gradlew \
+            generateMozcZeroQueryData \
+            verifyMozcZeroQueryData
+
+      # ----------------------------------------------------------------------
+      # Package dictionary assets
+      # ----------------------------------------------------------------------
 
       - name: Generate dictionaries, package assets, and verify
-        run: ./gradlew packageJapaneseKeyboardDictionaryAssets verifyJapaneseKeyboardDictionaryAssets
+        run: |
+          ./gradlew \
+            packageJapaneseKeyboardDictionaryAssets \
+            verifyJapaneseKeyboardDictionaryAssets
 
-      # Engine tests load the generated dictionary .dat files, so run them after packaging.
+      # Engine tests load the generated dictionary .dat files,
+      # so run them after packaging.
       - name: Test with Gradle
         run: ./gradlew test
 
-      # --- Create a single release with the JapaneseKeyboard-ready assets zip ---
+      # ----------------------------------------------------------------------
+      # GitHub Release
+      # ----------------------------------------------------------------------
+
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: ncipollo/release-action@v1
@@ -158,37 +382,54 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const releases = await github.paginate(github.rest.repos.listReleases, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              per_page: 100,
-            });
+            const releases = await github.paginate(
+              github.rest.repos.listReleases,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                per_page: 100,
+              }
+            );
+
             const publishedVersionReleases = releases
-              .filter((release) =>
-                !release.draft &&
-                !release.prerelease &&
-                release.tag_name.startsWith('v'))
-              .sort((left, right) =>
-                new Date(right.published_at || right.created_at) -
-                new Date(left.published_at || left.created_at));
+              .filter(
+                (release) =>
+                  !release.draft &&
+                  !release.prerelease &&
+                  release.tag_name.startsWith('v')
+              )
+              .sort(
+                (left, right) =>
+                  new Date(right.published_at || right.created_at) -
+                  new Date(left.published_at || left.created_at)
+              );
+
             const expiredReleases = publishedVersionReleases.slice(5);
+
             for (const release of expiredReleases) {
               for (const asset of release.assets) {
-                core.info(`Deleting ${asset.name} from ${release.tag_name}`);
+                core.info(
+                  `Deleting ${asset.name} from ${release.tag_name}`
+                );
+
                 await github.rest.repos.deleteReleaseAsset({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   asset_id: asset.id,
                 });
               }
+
               const tagRef = `tags/${release.tag_name}`;
+
               try {
                 await github.rest.git.getRef({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   ref: tagRef,
                 });
+
                 core.info(`Deleting tag ${release.tag_name}`);
+
                 await github.rest.git.deleteRef({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
@@ -198,10 +439,17 @@ jobs:
                 if (error.status !== 404) {
                   throw error;
                 }
-                core.info(`Tag ${release.tag_name} is already absent`);
+
+                core.info(
+                  `Tag ${release.tag_name} is already absent`
+                );
               }
             }
+
             core.info(
-              `Retained assets and tags for ${Math.min(publishedVersionReleases.length, 5)} releases; ` +
-              `processed ${expiredReleases.length} older releases.`,
+              `Retained assets and tags for ${
+                Math.min(publishedVersionReleases.length, 5)
+              } releases; processed ${
+                expiredReleases.length
+              } older releases.`
             );
