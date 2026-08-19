@@ -588,7 +588,7 @@ object Constants {
             yomi = "わけ",
             leftId = `名詞,一般,*,*,*,*,*`,
             rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 5600,
+            cost = 6600,
             tango = "理由"
         ),
         Dictionary(
