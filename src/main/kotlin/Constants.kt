@@ -8,6 +8,8 @@ import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段・ワ行促音
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,連用タ接続,*`
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段動詞,基本形,*`
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段動詞,連用形,*`
+import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,サ変・スル,連用形,*`
+import com.kazumaproject.IdDefConstants.`助動詞,*,*,*,特殊・タ,基本形,た`
 import com.kazumaproject.IdDefConstants.`名詞,サ変接続,*,*,*,*,*`
 import com.kazumaproject.IdDefConstants.`名詞,一般,*,*,*,*,*`
 import com.kazumaproject.IdDefConstants.`名詞,一般,*,*,*,*,目`
@@ -3344,6 +3346,16 @@ object Constants {
     )
 
     val RESCORE_WORDS = listOf(
+        // Keep the literal hiragana ahead of the low-cost homograph "下".
+        // Use the same POS context as Mozc's existing "した" suffix entry so
+        // the spelling is promoted without removing "下" from the candidates.
+        Dictionary(
+            yomi = "した",
+            leftId = `動詞,自立,*,*,サ変・スル,連用形,*`,
+            rightId = `助動詞,*,*,*,特殊・タ,基本形,た`,
+            cost = 0,
+            tango = "した"
+        ),
         // Keep the standard spelling ahead of the literary alternative "眼の前".
         // The bundled Mozc row currently has cost 4115; 3500 clears the current
         // BOS/connection-cost disadvantage without changing the source dictionary.
