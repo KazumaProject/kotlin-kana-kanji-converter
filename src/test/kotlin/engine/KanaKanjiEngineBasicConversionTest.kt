@@ -70,6 +70,11 @@ class KanaKanjiEngineBasicConversionTest {
     }
 
     @Test
+    fun shitaIsFirstAndShitaDownIsSecond() {
+        assertEquals(listOf("した", "下"), engine.nBestPath("した", 2))
+    }
+
+    @Test
     fun houseDemolitionExistsInTheSystemCandidatePool() {
         val candidates = engine.nBestPath("いえをかいたい", 64)
 
