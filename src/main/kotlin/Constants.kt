@@ -3502,6 +3502,18 @@ object Constants {
     )
 
     val ADDS_NEW_WORDS = listOf(
+        // Treat Kansai-dialect "ねん" as an explanatory sentence-ending particle.
+        // Its incoming context follows terminal "の", while its outgoing context
+        // stays compatible with the existing "ねん" entry based on terminal "ね".
+        // Keeping this as a separate analysis preserves 年 and the original 423/423
+        // particle candidate for contexts where either of those paths is preferable.
+        Dictionary(
+            yomi = "ねん",
+            leftId = IdDefConstants.`助詞,終助詞,*,*,*,*,の`,
+            rightId = IdDefConstants.`助詞,終助詞,*,*,*,*,ね`,
+            cost = 400,
+            tango = "ねん"
+        ),
         Dictionary(
             yomi = "たこわさ",
             leftId = `名詞,一般,*,*,*,*,*`,

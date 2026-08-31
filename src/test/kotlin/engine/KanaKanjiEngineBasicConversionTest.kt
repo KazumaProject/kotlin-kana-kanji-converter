@@ -61,6 +61,51 @@ class KanaKanjiEngineBasicConversionTest {
     }
 
     @Test
+    fun kansaiNenUsesAnExplanatoryParticleAnalysisAfterPredicates() {
+        mapOf(
+            "やめるねん" to "やめるねん",
+            "とめるねん" to "止めるねん",
+            "するねん" to "するねん",
+            "くるねん" to "くるねん",
+            "いくねん" to "行くねん",
+            "よむねん" to "読むねん",
+            "たかいねん" to "高いねん",
+        ).forEach { (input, expected) ->
+            assertEquals(expected, engine.viterbiAlgorithm(input), input)
+        }
+
+        val particle = engine.convert("やめるねん").bestPath.last()
+        assertEquals("ねん", particle.key)
+        assertEquals("ねん", particle.value)
+        assertEquals(424, particle.lid)
+        assertEquals(423, particle.rid)
+        assertEquals(400, particle.wcost)
+    }
+
+    @Test
+    fun kansaiNenAnalysisPreservesYearAndLexicalNenConversions() {
+        mapOf(
+            "ねん" to "年",
+            "さんねん" to "3年",
+            "きょねん" to "去年",
+            "らいねん" to "来年",
+            "ねんど" to "年度",
+            "ねんかん" to "年間",
+            "ねんきん" to "年金",
+            "ねんれい" to "年齢",
+            "やめるねんど" to "やめる年度",
+            "やめるねんかん" to "やめる年間",
+            "しねん" to "思念",
+            "じゃねん" to "邪念",
+        ).forEach { (input, expected) ->
+            assertEquals(expected, engine.viterbiAlgorithm(input), input)
+        }
+
+        assertTrue("やめる年" in engine.nBestPath("やめるねん", 64))
+        assertTrue("止める年" in engine.nBestPath("とめるねん", 64))
+    }
+
+    @Test
     fun nBestReturnsBasicCandidatesInCostOrder() {
         assertEquals(
             listOf("変換", "返還", "偏官"),
