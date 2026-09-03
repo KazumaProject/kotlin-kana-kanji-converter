@@ -50,6 +50,21 @@ class SystemNgramRuntimeTest {
     }
 
     @Test
+    fun exactPhraseCandidateRemainsFirstWhenSystemNgramRerankingIsEnabled() {
+        val root = File(System.getProperty("user.dir"))
+        val output = createTempDirectory("system-ngram-exact-phrase").resolve("system_ngram.dat").toFile()
+        SystemNgramBinaryBuilder.build(
+            rules = NgramSourceParser.parseDirectory(root.resolve("src/main/ngram")),
+            idDef = root.resolve("src/main/resources/id.def"),
+            output = output,
+        )
+        val dictionary = PackedSystemNgramDictionary.fromFile(output)
+        val engine = KanaKanjiEngine(systemNgramDictionary = dictionary).apply { buildEngine() }
+
+        assertTrue(engine.nBestPath("とはなに", 1).single() in setOf("とはなに", "とは何"))
+    }
+
+    @Test
     fun packedUnigramDictionaryReranksAnExistingOneNodeCandidate() {
         val root = File(System.getProperty("user.dir"))
         val source = createTempDirectory("system-unigram-runtime").toFile()
