@@ -95,6 +95,7 @@ class LOUDSWithTermId {
     }
 
     fun getNodeIndex(s: String): Int{
+        if (s.isEmpty()) return -1
         return search(2, s.toCharArray(), 0)
     }
 
@@ -103,13 +104,17 @@ class LOUDSWithTermId {
     }
 
     fun getTermId(nodeIndex: Int): Int {
+        if (!isTerminalNodeIndex(nodeIndex)) return -1
         val firstNodeId = isLeafSuccinct().rank1(nodeIndex) - 1
-        if (firstNodeId < 0) return -1
+        if (firstNodeId !in termIdsSave.indices) return -1
 
         //val firstTermId = termIds[firstNodeId]
         val firstTermId = termIdsSave[firstNodeId]
         return firstTermId
     }
+
+    private fun isTerminalNodeIndex(nodeIndex: Int): Boolean =
+        nodeIndex in 0 until LBS.size() && isLeaf[nodeIndex]
 
     private fun firstChild(pos: Int): Int {
         val succinct = lbsSuccinct()
@@ -162,10 +167,8 @@ class LOUDSWithTermId {
         var charIndex = succinct.rank1(index2)
         while (LBS[index2]) {
             if (chars[wordOffset2] == labels[charIndex]) {
-                if (isLeaf[index2] && wordOffset2 + 1 == chars.size) {
-                    return index2
-                } else if (wordOffset2 + 1 == chars.size) {
-                    return index2
+                if (wordOffset2 + 1 == chars.size) {
+                    return if (isLeaf[index2]) index2 else -1
                 }
                 return search(succinct.select0(charIndex) + 1, chars, ++wordOffset2)
             } else {

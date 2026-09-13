@@ -5,6 +5,7 @@ import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段・カ行イ音
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段・ラ行,連用タ接続,ある`
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段・ワ行ウ音便,連用形,*`
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,基本形,*`
+import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,基本形,言う`
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段・ワ行促音便,連用タ接続,*`
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段動詞,基本形,*`
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段動詞,連用形,*`
@@ -3346,6 +3347,15 @@ object Constants {
     )
 
     val RESCORE_WORDS = listOf(
+        // Keep the literal hiragana ahead of the dictionary spelling "言う"
+        // in compounds such as "いうこと" without removing "言う".
+        Dictionary(
+            yomi = "いう",
+            leftId = `動詞,自立,*,*,五段・ワ行促音便,基本形,言う`,
+            rightId = `動詞,自立,*,*,五段・ワ行促音便,基本形,言う`,
+            cost = 0,
+            tango = "いう"
+        ),
         // Keep the literal hiragana ahead of the low-cost homograph "下".
         // Use the same POS context as Mozc's existing "した" suffix entry so
         // the spelling is promoted without removing "下" from the candidates.
