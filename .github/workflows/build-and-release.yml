@@ -1,6 +1,8 @@
 name: Build and Release JapaneseKeyboard Dictionary Assets
 
 on:
+  pull_request:
+    branches: [main]
   push:
     tags:
       - 'v*'
