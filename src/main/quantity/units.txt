@@ -54,3 +54,4 @@
 階
 頭
 頭分
+@registered分

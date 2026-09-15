@@ -17,7 +17,7 @@ class QuantityDictionary(val rules: List<List<Feature>>, val suffixes: List<Suff
     private val firstQuantities = rules.filter { it.first() is Feature.Quantity }
 
     /** Each quantity consumes a contiguous, verified span; word conditions retain dictionary boundaries. */
-    fun matchStrength(tokens: List<Token>, verify: (Int, Int, String, String, String) -> Boolean): Int {
+    fun matchStrength(tokens: List<Token>, ruleFilter: (List<Feature>) -> Boolean = { true }, verify: (Int, Int, String, String, String) -> Boolean): Int {
         if (rules.isEmpty()) return 0
         val memo = HashMap<Triple<Int, Int, String>, Boolean>()
         fun match(rule: List<Feature>, feature: Int, at: Int): Boolean {
@@ -40,7 +40,7 @@ class QuantityDictionary(val rules: List<List<Feature>>, val suffixes: List<Suff
         }
         var strength = 0
         for (start in tokens.indices) for (rule in firstWords[tokens[start].text].orEmpty() + firstQuantities) {
-            if (rule.size > strength && match(rule, 0, start)) strength = rule.size
+            if (rule.size > strength && ruleFilter(rule) && match(rule, 0, start)) strength = rule.size
         }
         return strength
     }

@@ -27,4 +27,20 @@ class QuantityDictionaryTest {
         assertFalse(dictionary.matches(listOf(QuantityDictionary.Token("日本語", "にほんご"))) { _, _, _ -> false })
         assertTrue(dictionary.rules.all { rule -> rule.any { it is QuantityDictionary.Feature.Quantity } })
     }
+    @Test fun lexicalAliasesCopyMetadataWithoutReplacingNames() {
+        val name = com.kazumaproject.dictionary.models.Dictionary("さんぼん", 1923, 1923, 6144, "三本")
+        val number = com.kazumaproject.dictionary.models.Dictionary("さんぽん", 2046, 2011, 5712, "三本")
+        val aliases = QuantityLexicalAliases.build(listOf(name, number),
+            listOf(QuantityLexicalAliases.Reading(3, "本", "さんぼん")), setOf(2046))
+        assertEquals(listOf(number.copy(yomi = "さんぼん")), aliases)
+        assertTrue(QuantityLexicalAliases.build(listOf(name, number) + aliases,
+            listOf(QuantityLexicalAliases.Reading(3, "本", "さんぼん")), setOf(2046)).isEmpty())
+    }
+    @Test fun ruleFilterSeparatesSemanticContextFromGenericSuffixes() {
+        val generic = listOf(QuantityDictionary.Token("8件", "はっけん"), QuantityDictionary.Token("だけ", "だけ"))
+        val semantic = listOf(QuantityDictionary.Token("事件", "じけん"), QuantityDictionary.Token("が", "が"), QuantityDictionary.Token("8件", "はっけん"))
+        val contextual: (List<QuantityDictionary.Feature>) -> Boolean = { it.first() is QuantityDictionary.Feature.Word }
+        assertEquals(0, dictionary.matchStrength(generic, contextual) { _, _, _, _, _ -> true })
+        assertEquals(3, dictionary.matchStrength(semantic, contextual) { _, _, _, _, unit -> unit == "件" })
+    }
 }

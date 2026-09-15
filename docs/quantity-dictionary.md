@@ -13,6 +13,12 @@ entries must not be reinterpreted as numeric forms.
 * `suffixes.tsv`: base unit, appended reading, appended output, separated by tabs.
   `分 / かん / 間` is distinct from `足 / ぶん / 分`; arbitrary suffix concatenation
   is not allowed. Inflected base readings remain the consumer's responsibility.
+* `counter-readings.tsv`: reviewed readings for 1–10 across all counter classes.
+  Missing readings reuse an existing numeric lexeme's output, POS and word cost.
+  For example, Mozc has numeric 三本 under さんぽん and a surname 三本 under
+  さんぼん; the alias adds the numeric analysis without removing the surname.
+  No row is synthesized when the upstream dictionary lacks a numeric lexeme.
+  Arbitrary larger quantities are composed by the consumer using lexical metadata.
 * `counters.ngram`: two to five literal word or quantity conditions. Unknown
   units, malformed syntax and duplicate rules fail compilation. No score column.
 * `id.def`: numeric and counter POS context IDs come from the same Mozc checkout
@@ -30,7 +36,9 @@ ignore this extra asset; new consumers must keep a fallback for an absent asset.
 A quantity may span multiple adjacent lexical nodes. Word conditions retain their
 lexical boundaries. Rules describe contexts, not numeric spelling priorities.
 When several rules match, the most specific rule (number of conditions) wins;
-ordinary lexical/connection/N-gram cost breaks ties. Numeric forms are expanded
+ordinary lexical/connection/N-gram cost breaks ties. Generic quantity-first
+rules must not replace a complete ordinary lexical reading (e.g. 発見だけ with
+8件だけ). Literal semantic context before a quantity may disambiguate it. Numeric forms are expanded
 only after path selection, in the user's configured order. They must not occupy
 three independent slots during N-best search.
 
