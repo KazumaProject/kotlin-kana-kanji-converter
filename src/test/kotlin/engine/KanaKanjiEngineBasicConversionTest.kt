@@ -120,6 +120,12 @@ class KanaKanjiEngineBasicConversionTest {
     }
 
     @Test
+    fun literalIuKotoPrecedesDictionaryIuKoto() {
+        assertEquals(listOf("いうこと", "言うこと"), engine.nBestPath("いうこと", 2))
+        assertEquals("いうこと", engine.viterbiAlgorithm("いうこと"))
+    }
+
+    @Test
     fun houseDemolitionExistsInTheSystemCandidatePool() {
         val candidates = engine.nBestPath("いえをかいたい", 64)
 
