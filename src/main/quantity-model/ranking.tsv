@@ -1,0 +1,49 @@
+# split / predicate-template group / prefix / quantity reading / suffix / cardinal / unit reading / unit / desired text / preferred interpretation
+train	payment		さんびゃくごじゅうえん	をはらう	さんびゃくごじゅう	えん	円	350円を払う	quantity
+train	payment		にじゅうにえん	をはらった	にじゅうに	えん	円	22円を払った	quantity
+train	payment		ごじゅうにえん	はらいます	ごじゅうに	えん	円	52円払います	quantity
+train	buy_books		にじゅうにさつ	をかう	にじゅうに	さつ	冊	22冊を買う	quantity
+train	buy_books		さんびゃくごじゅうにさつ	かう	さんびゃくごじゅうに	さつ	冊	352冊買う	quantity
+test	vehicle_split	くるま	にだい	にわかれる	に	だい	台	車2台に分かれる	quantity
+test	cargo_ride	とらっくの	にだい	にのる	に	だい	台	トラックの荷台に乗る	ordinary
+train	misunderstanding		ごかい	した	ご	かい	回	誤解した	ordinary
+train	discovery		はっけん	した	はち	けん	件	発見した	ordinary
+train	weak_books		にじゅうにさつ	だけ	にじゅうに	さつ	冊	22冊だけ	quantity
+train	weak_days		ごにち	だけ	ご	にち	日	5日だけ	quantity
+test	spend_money		さんびゃくごじゅうえん	つかう	さんびゃくごじゅう	えん	円	350円使う	quantity
+test	spend_money		さんびゃくごじゅうにえん	をつかった	さんびゃくごじゅうに	えん	円	352円を使った	quantity
+test	use_objects		じゅうにほん	をつかう	じゅうに	ほん	本	12本を使う	quantity
+test	use_objects		にじゅうにまい	つかいます	にじゅうに	まい	枚	22枚使います	quantity
+test	vehicle_split	くるま	にだい	にわかれてのる	に	だい	台	車2台に分かれて乗る	quantity
+test	cargo_ride	くるまの	にだい	にのった	に	だい	台	車の荷台に乗った	ordinary
+test	weak_distribution		ごじゅうにほん	ずつ	ごじゅうに	ほん	本	52本ずつ	quantity
+train	buy_books		ごじゅうにほん	をかう	ごじゅうに	ほん	本	52本を買う	quantity
+train	buy_books		じゅうにほん	かう	じゅうに	ほん	本	12本買う	quantity
+train	vehicle_inventory	くるま	にだい	ある	に	だい	台	車2台ある	quantity
+train	cargo_truck	とらっくの	にだい	につむ	に	だい	台	トラックの荷台に積む	ordinary
+train	weak_books		じゅうにほん	だけ	じゅうに	ほん	本	12本だけ	quantity
+train	buy_books		じゅうにほん	をかう	じゅうに	ほん	本	12本を買う	quantity
+train	buy_books		にじゅうにほん	をかう	にじゅうに	ほん	本	22本を買う	quantity
+train	buy_books		さんびゃくごじゅうにほん	をかう	さんびゃくごじゅうに	ほん	本	352本を買う	quantity
+test	rescue		きゅうえん	する	きゅう	えん	円	救援する	ordinary
+train	cargo_sale	とらっくの	にだい	をうる	に	だい	台	トラックの荷台を売る	ordinary
+train	quantity_request		さんぞくぶん	ください	さん	そく+ぶん	足+分	3足分ください	quantity
+train	quantity_request		にけんぶん	ください	に	けん+ぶん	件+分	2件分ください	quantity
+test	quantity_requirement		じゅうにほんぶん	がひつよう	じゅうに	ほん+ぶん	本+分	12本分が必要	quantity
+train	weak_native		とお	だけ	じゅう	つ	つ	10つだけ	quantity
+train	weak_misunderstanding		ごかい	だけ	ご	かい	回	誤解だけ	ordinary
+train	weak_discovery		はっけん	だけ	はち	けん	件	発見だけ	ordinary
+train	weak_country		にほん	だけ	に	ほん	本	日本だけ	ordinary
+train	weak_indefinite		いつか	だけ	ご	にち	日	いつかだけ	ordinary
+train	animal_presence		じゅうにひき	いる	じゅうに	ひき	匹	12匹いる	quantity
+train	animal_presence		にじゅうにとう	がいる	にじゅうに	とう	頭	22頭がいる	quantity
+train	wait_interval		じゅうにかげつかん	まつ	じゅうに	かげつ+かん	か月+間	12か月間待つ	quantity
+train	wait_interval		とおかかん	まつ	じゅう	にち+かん	日+間	10日間待つ	quantity
+train	weak_misunderstanding		ごかい	だけ	ご	かい	階	誤解だけ	ordinary
+train	weak_discovery		はっけん	だけ	はち	けん	軒	発見だけ	ordinary
+train	weak_calendar		はつか	まで	にじゅう	にち	日	20日まで	quantity
+train	wait_interval		ななふん	だけまつ	なな	ふん	分	7分だけ待つ	quantity
+train	coordinate_objects		にほん|と|さんぼん		に|さん	ほん|ほん	本|本	2本と3本	quantity
+train	coordinate_vehicles		にだい|と|さんだい		に|さん	だい|だい	台|台	2台と3台	quantity
+test	coordinate_clock		くじ|と|にじ	にでる	きゅう|に	じ|じ	時|時	9時と2時に出る	quantity
+test	coordinate_clock		しちじ|と|にじ	にでる	しち|に	じ|じ	時|時	7時と2時に出る	quantity

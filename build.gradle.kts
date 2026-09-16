@@ -175,6 +175,20 @@ val buildQuantityDictionary = tasks.register<JavaExec>("buildQuantityDictionary"
     outputs.file("src/main/resources/quantity/quantity.dat")
 }
 
+val buildQuantityScoringModel = tasks.register<JavaExec>("buildQuantityScoringModel") {
+    group = "distribution"
+    description = "Calibrates typed quantity grammar and verifies held-out ranking examples."
+    dependsOn("classes")
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.quantity.BuildQuantityScoringModelKt")
+    args("src/main/resources", "src/main/quantity", "src/main/resources/quantity/scoring-v1.dat")
+    inputs.dir("src/main/quantity")
+    inputs.dir("src/main/quantity-model")
+    inputs.files((0..9).map { "src/main/resources/dictionary%02d.txt".format(it) })
+    inputs.files("src/main/resources/id.def", "src/main/resources/suffix.txt", "src/main/resources/connection_single_column.txt")
+    outputs.file("src/main/resources/quantity/scoring-v1.dat")
+}
+
 val buildSystemNgramDictionary = tasks.register<JavaExec>("buildSystemNgramDictionary") {
     group = "distribution"
     description = "Compiles editable scoreless n-gram sources into the JapaneseKeyboard binary asset."
@@ -217,6 +231,7 @@ val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("id.def", "id.def"),
     JapaneseKeyboardAssetSpec("ngram/system_ngram.dat", "ngram/system_ngram.dat"),
     JapaneseKeyboardAssetSpec("quantity/quantity.dat", "quantity/quantity.dat"),
+    JapaneseKeyboardAssetSpec("quantity/scoring-v1.dat", "quantity/scoring-v1.dat"),
     JapaneseKeyboardAssetSpec("ngram/system_ngram_unigram.dat", "ngram/system_ngram_unigram.dat"),
     JapaneseKeyboardAssetSpec("yomi.dat", "system/yomi.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("tango.dat", "system/tango.dat.zip", zipped = true),
@@ -887,6 +902,7 @@ val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeybo
         generateMozcZeroQueryData,
         buildSystemNgramDictionary,
         buildQuantityDictionary,
+        buildQuantityScoringModel,
         buildSystemUnigramDictionary,
     )
 }
@@ -1002,5 +1018,7 @@ tasks.register<Test>("quantityTest") {
     filter {
         includeTestsMatching("com.kazumaproject.quantity.QuantityDictionaryTest")
         includeTestsMatching("com.kazumaproject.quantity.QuantityRuleMatchingTest")
+        includeTestsMatching("com.kazumaproject.quantity.CardinalGrammarTest")
+        includeTestsMatching("com.kazumaproject.quantity.QuantityScoringModelTest")
     }
 }
