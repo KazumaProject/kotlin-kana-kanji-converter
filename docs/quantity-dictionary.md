@@ -39,6 +39,10 @@ ignore this extra asset; new consumers must keep a fallback for an absent asset.
 
 ## Consumer contract and ranking
 
+The consumer supplies recognized quantity end positions to the matcher, avoiding
+a quadratic scan of unrelated word spans on long input. The fallback matcher
+without that index remains available for small standalone uses.
+
 A quantity may span multiple adjacent lexical nodes. Word conditions retain their
 lexical boundaries. Rules describe contexts, not numeric spelling priorities.
 When several rules match, the most specific rule (number of conditions) wins;
