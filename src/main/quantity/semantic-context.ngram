@@ -1,0 +1,17 @@
+# Semantic noun classes; expanded into ordinary word features at build time.
+words("objects.words") + "を" + quantity("個")
+words("objects.words") + "を" + quantity("つ")
+words("children.words") + "が" + quantity("歳")
+words("controls.words") + "を" + quantity("回")
+words("buildings.words") + "の" + quantity("階")
+words("ammunition.words") + "を" + quantity("発")
+words("tests.words") + "で" + quantity("点")
+"あと" + quantity("日") + "待つ"
+"あと" + quantity("時間") + "待つ"
+"あと" + quantity("年") + "待つ"
+"あと" + quantity("か月") + "待つ"
+"あと" + quantity("分") + "待つ"
+"あと" + quantity("日間") + "待つ"
+"あと" + quantity("年間") + "待つ"
+"あと" + quantity("か月間") + "待つ"
+"あと" + quantity("分間") + "待つ"

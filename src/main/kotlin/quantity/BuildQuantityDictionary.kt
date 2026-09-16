@@ -14,19 +14,28 @@ object QuantitySource {
             QuantityDictionary.Suffix(fields[0], fields[1], fields[2])
         }
         val rules = dir.listFiles().orEmpty().filter { it.extension == "ngram" }.sortedBy { it.name }.flatMap { file ->
-            file.readLines().mapIndexedNotNull { index, raw ->
-                val line = raw.trim(); if (line.isEmpty() || line.startsWith("#")) return@mapIndexedNotNull null
+            file.readLines().flatMapIndexed { index, raw ->
+                val line = raw.trim(); if (line.isEmpty() || line.startsWith("#")) return@flatMapIndexed emptyList()
                 val parts = line.split(Regex("\\s+\\+\\s+"))
                 require(parts.size in 2..5) { "${file.name}:${index + 1}: expected 2–5 conditions" }
-                parts.map { part ->
+                val alternatives = parts.map { part ->
                     val quantity = Regex("quantity\\(\"([^\"]+)\"\\)").matchEntire(part)
+                    val words = Regex("words\\(\"([a-z][a-z0-9-]*\\.words)\"\\)").matchEntire(part)
                     val word = Regex("\"([^\"]+)\"").matchEntire(part)
                     when {
-                        quantity != null -> QuantityDictionary.Feature.Quantity(quantity.groupValues[1].also { require(it in units) { "Unknown unit: $it" } })
-                        word != null -> QuantityDictionary.Feature.Word(word.groupValues[1])
-                        else -> error("${file.name}:${index + 1}: invalid feature: $part")
+                        quantity != null -> listOf(QuantityDictionary.Feature.Quantity(quantity.groupValues[1].also { require(it in units) { "Unknown unit: $it" } }))
+                        word != null -> listOf(QuantityDictionary.Feature.Word(word.groupValues[1]))
+                        words != null -> File(dir, words.groupValues[1]).readLines().map(String::trim)
+                            .filter { it.isNotEmpty() && !it.startsWith("#") }.distinct().also { values ->
+                                require(values.size in 1..256 && values.all { it.length <= 64 })
+                            }.map { QuantityDictionary.Feature.Word(it) }
+                        else -> throw IllegalArgumentException("${file.name}:${index + 1}: invalid feature: $part")
                     }
-                }.also { require(it.any { f -> f is QuantityDictionary.Feature.Quantity }) }
+                }
+                alternatives.fold(listOf(emptyList<QuantityDictionary.Feature>())) { prefixes, choices ->
+                    require(prefixes.size * choices.size <= 4096) { "Rule expansion too large" }
+                    prefixes.flatMap { prefix -> choices.map { prefix + it } }
+                }.onEach { require(it.any { f -> f is QuantityDictionary.Feature.Quantity }) }
             }
         }
         val numericIds = idDef.readLines().filter { it.substringAfter(' ').startsWith("名詞,数,") }
@@ -35,7 +44,7 @@ object QuantitySource {
         val counterIds = idDef.readLines().filter { it.substringAfter(' ').startsWith("名詞,接尾,助数詞,") }
             .map { it.substringBefore(' ').toInt() }.toSet()
         require(counterIds.isNotEmpty()) { "Missing counter POS contexts" }
-        val dictionary = QuantityDictionary(rules, suffixes, numericIds, counterIds)
+        val dictionary = QuantityDictionary(rules.distinct(), suffixes, numericIds, counterIds)
         return QuantityDictionary.read(dictionary.write()) // Same validation as the consumer.
     }
 }
