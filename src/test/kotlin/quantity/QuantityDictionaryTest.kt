@@ -5,6 +5,25 @@ import kotlin.test.*
 
 class QuantityDictionaryTest {
     private val dictionary = QuantitySource.parse(File("src/main/quantity"))
+    @Test fun wordClassesExpandIntoLiteralContexts() {
+        for (word in listOf("りんご", "卵", "おにぎり")) {
+            assertTrue(listOf(QuantityDictionary.Feature.Word(word), QuantityDictionary.Feature.Word("を"),
+                QuantityDictionary.Feature.Quantity("個")) in dictionary.rules)
+        }
+        assertEquals(dictionary.rules.size, dictionary.rules.distinct().size)
+    }
+    @Test fun wordClassSourcesRejectUnsafeNamesAndEmptyClasses() {
+        val dir = kotlin.io.path.createTempDirectory("quantity-source").toFile()
+        try {
+            File("src/main/quantity").copyRecursively(dir, overwrite = true)
+            val rule = File(dir, "invalid.ngram")
+            for (name in listOf("../objects.words", "/objects.words", "empty.words")) {
+                File(dir, "empty.words").writeText("# no words\n")
+                rule.writeText("words(\"$name\") + quantity(\"個\")")
+                assertFailsWith<IllegalArgumentException>(name) { QuantitySource.parse(dir) }
+            }
+        } finally { dir.deleteRecursively() }
+    }
     @Test fun roundTripAndChecksum() {
         assertContentEquals(dictionary.write(), QuantityDictionary.read(dictionary.write()).write())
         val broken = dictionary.write(); broken[broken.lastIndex] = (broken.last().toInt() xor 1).toByte()
