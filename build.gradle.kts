@@ -999,5 +999,8 @@ tasks.register<Test>("quantityTest") {
     testClassesDirs = sourceSets["test"].output.classesDirs
     classpath = sourceSets["test"].runtimeClasspath
     useJUnitPlatform()
-    filter { includeTestsMatching("com.kazumaproject.quantity.QuantityDictionaryTest") }
+    filter {
+        includeTestsMatching("com.kazumaproject.quantity.QuantityDictionaryTest")
+        includeTestsMatching("com.kazumaproject.quantity.QuantityRuleMatchingTest")
+    }
 }
