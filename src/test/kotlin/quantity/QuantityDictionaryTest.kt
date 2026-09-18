@@ -5,40 +5,6 @@ import kotlin.test.*
 
 class QuantityDictionaryTest {
     private val dictionary = QuantitySource.parse(File("src/main/quantity"))
-    @Test fun wordClassesExpandIntoLiteralContexts() {
-        for (word in listOf("りんご", "卵", "おにぎり")) {
-            assertTrue(listOf(QuantityDictionary.Feature.Word(word), QuantityDictionary.Feature.Word("を"),
-                QuantityDictionary.Feature.Quantity("個")) in dictionary.rules)
-        }
-        assertEquals(dictionary.rules.size, dictionary.rules.distinct().size)
-    }
-    @Test fun wordClassSourcesRejectUnsafeNamesAndEmptyClasses() {
-        val dir = kotlin.io.path.createTempDirectory("quantity-source").toFile()
-        try {
-            File("src/main/quantity").copyRecursively(dir, overwrite = true)
-            val rule = File(dir, "invalid.ngram")
-            for (name in listOf("../objects.words", "/objects.words", "empty.words")) {
-                File(dir, "empty.words").writeText("# no words\n")
-                rule.writeText("words(\"$name\") + quantity(\"個\")")
-                assertFailsWith<IllegalArgumentException>(name) { QuantitySource.parse(dir) }
-            }
-        } finally { dir.deleteRecursively() }
-    }
-    @Test fun indexedQuantityEndsPreserveMatchingWithoutScanningUnrelatedSpans() {
-        val tokens = List(249) { QuantityDictionary.Token("あ", "あ") } +
-            listOf(QuantityDictionary.Token("1個", "いっこ"), QuantityDictionary.Token("だけ", "だけ"))
-        var calls = 0
-        val strength = dictionary.matchStrength(tokens, quantityEnds = { if (it == 249) listOf(249) else emptyList() }) { at, end, _, text, unit ->
-            calls++
-            at == 249 && end == 249 && text == "1個" && unit == "個"
-        }
-        assertEquals(2, strength)
-        assertTrue(calls < 100, "Only verified quantity intervals should reach the verifier: $calls")
-        val short = tokens.takeLast(2)
-        assertEquals(strength, dictionary.matchStrength(short) { at, end, _, text, unit ->
-            at == 0 && end == 0 && text == "1個" && unit == "個"
-        })
-    }
     @Test fun roundTripAndChecksum() {
         assertContentEquals(dictionary.write(), QuantityDictionary.read(dictionary.write()).write())
         val broken = dictionary.write(); broken[broken.lastIndex] = (broken.last().toInt() xor 1).toByte()

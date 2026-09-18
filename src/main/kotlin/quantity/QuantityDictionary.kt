@@ -17,7 +17,7 @@ class QuantityDictionary(val rules: List<List<Feature>>, val suffixes: List<Suff
     private val firstQuantities = rules.filter { it.first() is Feature.Quantity }
 
     /** Each quantity consumes a contiguous, verified span; word conditions retain dictionary boundaries. */
-    fun matchStrength(tokens: List<Token>, ruleFilter: (List<Feature>) -> Boolean = { true }, quantityEnds: ((Int) -> List<Int>)? = null, verify: (Int, Int, String, String, String) -> Boolean): Int {
+    fun matchStrength(tokens: List<Token>, ruleFilter: (List<Feature>) -> Boolean = { true }, verify: (Int, Int, String, String, String) -> Boolean): Int {
         if (rules.isEmpty()) return 0
         val memo = HashMap<Triple<Int, Int, String>, Boolean>()
         fun match(rule: List<Feature>, feature: Int, at: Int): Boolean {
@@ -26,14 +26,11 @@ class QuantityDictionary(val rules: List<List<Feature>>, val suffixes: List<Suff
             return when (val f = rule[feature]) {
                 is Feature.Word -> tokens[at].text == f.text && match(rule, feature + 1, at + 1)
                 is Feature.Quantity -> {
-                    val allowedEnds = quantityEnds?.invoke(at)?.toSet()
-                    val lastEnd = allowedEnds?.maxOrNull() ?: if (allowedEnds == null) tokens.lastIndex else return false
                     val text = StringBuilder(); val reading = StringBuilder()
-                    for (end in at..lastEnd) {
+                    for (end in at until tokens.size) {
                         if (tokens[end].protected) break
                         text.append(tokens[end].text); reading.append(tokens[end].reading)
                         if (reading.length > 255) break
-                        if (allowedEnds != null && end !in allowedEnds) continue
                         if (memo.getOrPut(Triple(at, end, f.unit)) { verify(at, end, reading.toString(), text.toString(), f.unit) } &&
                             match(rule, feature + 1, end + 1)) return true
                     }

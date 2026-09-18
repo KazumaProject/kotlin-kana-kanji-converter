@@ -19,14 +19,8 @@ entries must not be reinterpreted as numeric forms.
   さんぼん; the alias adds the numeric analysis without removing the surname.
   No row is synthesized when the upstream dictionary lacks a numeric lexeme.
   Arbitrary larger quantities are composed by the consumer using lexical metadata.
-* `*.ngram`: two to five literal word, `words("objects.words")` or quantity
-  conditions. Word classes expand at build time; overlapping expansions are
-  deduplicated. Classes contain at most 256 words and each source rule expands
-  to at most 4096 rules. Unknown units, malformed syntax, empty classes and
-  directory traversal fail compilation. No score column.
-* `*.words`: reviewed semantic noun classes for quantity contexts. Classes supply
-  positive context for ambiguous readings, such as buildings followed by floors;
-  they do not change the lexical costs of ordinary homophones.
+* `counters.ngram`: two to five literal word or quantity conditions. Unknown
+  units, malformed syntax and duplicate rules fail compilation. No score column.
 * `id.def`: numeric and counter POS context IDs come from the same Mozc checkout
   as the lexical dictionary and connection matrix. Never copy numeric IDs from a
   different release into an existing bundle.
@@ -38,10 +32,6 @@ existing system n-gram v3 and unigram v4 formats are unchanged. Old consumers ca
 ignore this extra asset; new consumers must keep a fallback for an absent asset.
 
 ## Consumer contract and ranking
-
-The consumer supplies recognized quantity end positions to the matcher, avoiding
-a quadratic scan of unrelated word spans on long input. The fallback matcher
-without that index remains available for small standalone uses.
 
 A quantity may span multiple adjacent lexical nodes. Word conditions retain their
 lexical boundaries. Rules describe contexts, not numeric spelling priorities.
