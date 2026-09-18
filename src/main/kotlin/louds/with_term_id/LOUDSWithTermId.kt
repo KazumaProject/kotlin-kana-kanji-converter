@@ -119,8 +119,7 @@ class LOUDSWithTermId {
     private fun firstChild(pos: Int): Int {
         val succinct = lbsSuccinct()
         val y = succinct.select0(succinct.rank1(pos)) + 1
-        // Missing trailing zero words mean no children, not a link back to the root.
-        return if (y <= pos || !LBS[y]) -1 else y
+        return if (y < 0 || !LBS[y]) -1 else y
     }
 
     private fun traverse(pos: Int, c: Char): Int {

@@ -51,11 +51,6 @@ fun main() {
     )
     val dicUtils = DicUtils()
     val dictionaryList = dicUtils.getListDictionary(fileList)
-    val quantityMetadata = com.kazumaproject.quantity.QuantitySource.parse(File("src/main/quantity"))
-    val quantityAliases = com.kazumaproject.quantity.QuantityLexicalAliases.build(dictionaryList,
-        com.kazumaproject.quantity.QuantityLexicalAliases.read(File("src/main/quantity/counter-readings.tsv")),
-        quantityMetadata.numericContextIds)
-    println("Quantity lexical reading aliases: ${quantityAliases.size}")
     val atokUnigramDictionaryList = dicUtils.getListDictionary(listOf("/atok-unigram-dictionary.txt"))
     val englishDictionarySource = EnglishDictionaryBuilder().parseResource(
         resourcePath = "/english-dictionary.txt",
@@ -63,7 +58,7 @@ fun main() {
     )
     val englishDictionaryList = EnglishDictionaryQuality.runtimeEntries(englishDictionarySource)
     val baseDictionaryList =
-        (dictionaryList + quantityAliases +
+        (dictionaryList +
                 DIC_LIST + CUSTOM_LIST +
                 NAME_LIST + FIXED_LIST +
                 DIFFICULT_LIST + SYMBOL_LIST +
