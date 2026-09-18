@@ -165,16 +165,6 @@ val japaneseKeyboardAssetsReleaseZip = japaneseKeyboardAssetsReleaseDir.file("ja
 val systemNgramDictionaryFile = dictionaryResourcesDir.file("ngram/system_ngram.dat")
 val systemNgramUnigramSourceDir = layout.projectDirectory.dir("src/main/ngram-unigram")
 val systemNgramUnigramDictionaryFile = dictionaryResourcesDir.file("ngram/system_ngram_unigram.dat")
-val buildQuantityDictionary = tasks.register<JavaExec>("buildQuantityDictionary") {
-    dependsOn("classes")
-    classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("com.kazumaproject.quantity.BuildQuantityDictionaryKt")
-    args("src/main/quantity", "src/main/resources/quantity/quantity.dat")
-    inputs.dir("src/main/quantity")
-    inputs.file("src/main/resources/id.def")
-    outputs.file("src/main/resources/quantity/quantity.dat")
-}
-
 val buildSystemNgramDictionary = tasks.register<JavaExec>("buildSystemNgramDictionary") {
     group = "distribution"
     description = "Compiles editable scoreless n-gram sources into the JapaneseKeyboard binary asset."
@@ -216,7 +206,6 @@ val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("pos_table.dat", "pos_table.dat"),
     JapaneseKeyboardAssetSpec("id.def", "id.def"),
     JapaneseKeyboardAssetSpec("ngram/system_ngram.dat", "ngram/system_ngram.dat"),
-    JapaneseKeyboardAssetSpec("quantity/quantity.dat", "quantity/quantity.dat"),
     JapaneseKeyboardAssetSpec("ngram/system_ngram_unigram.dat", "ngram/system_ngram_unigram.dat"),
     JapaneseKeyboardAssetSpec("yomi.dat", "system/yomi.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("tango.dat", "system/tango.dat.zip", zipped = true),
@@ -886,7 +875,6 @@ val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeybo
         "runMozcUTWikiNeologdCommon",
         generateMozcZeroQueryData,
         buildSystemNgramDictionary,
-        buildQuantityDictionary,
         buildSystemUnigramDictionary,
     )
 }
@@ -992,12 +980,4 @@ tasks.register("verifyJapaneseKeyboardDictionaryAssets") {
 
         logger.lifecycle("Verified JapaneseKeyboard dictionary assets: ${releaseZip.path}")
     }
-}
-
-// Quantity format and source tests can run without building the full corpus.
-tasks.register<Test>("quantityTest") {
-    testClassesDirs = sourceSets["test"].output.classesDirs
-    classpath = sourceSets["test"].runtimeClasspath
-    useJUnitPlatform()
-    filter { includeTestsMatching("com.kazumaproject.quantity.QuantityDictionaryTest") }
 }
