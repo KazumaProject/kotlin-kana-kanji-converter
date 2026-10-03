@@ -232,6 +232,6 @@
   "initialSampleEntries": 500,
   "additionalReviewedEntries": 188,
   "snapshotDatabaseSha256": "0c31c588b48abca63926d2263960cdfc88f9614ba865f21238189e732368c952",
-  "finalSampleSha256": "9b9179d0cb9ecd9b6a2c5caf798b9e54a3417f5e00c2c0045a68c274ab3aa9f9",
-  "correctionsSampleSha256": "d93ac87f85ee1f6fff873567664ca243d7cd36a4a6657f9df462c617b845ddd9"
+  "finalSampleSha256": "cb82fa862bd2352d2e2108f74726a65a7acff091d2e97cf26f8282f37cd46c1a",
+  "correctionsSampleSha256": "11520398b4c849521d24a1a345bdd8bec4e3ac86bc661ad59ba5e263a35625eb"
 }

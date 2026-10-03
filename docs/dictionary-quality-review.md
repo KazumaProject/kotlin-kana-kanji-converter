@@ -32,7 +32,7 @@
 
 ## 入力と固定データ
 
-Mozcは `c7538e6f8ee56ff94789494106ad5d6d658cd4f6` のdictionary00〜09、suffix、id.defの12ファイルと、ローカル入力のSHA-256がすべて一致することを確認しました。Linux CIでも同じcommitを指定して照合します。生成manifestは入力ファイル、固定DB、確認済み対応、実装、37バイナリのハッシュを保存します。CIではソースcommit・English Releaseの実版も記録します。
+Mozcは `c7538e6f8ee56ff94789494106ad5d6d658cd4f6` のdictionary00〜09、suffix、id.defの12ファイルと、ローカル入力のSHA-256がすべて一致することを確認しました。Linux CIでも同じcommitを指定して照合しました。生成manifestは入力ファイル、固定DB、確認済み対応、実装、37バイナリのハッシュを保存します。CIではソースcommit・English Releaseの実版も記録します。
 
 固定データは[専用Release](https://github.com/KazumaProject/kotlin-kana-kanji-converter/releases/tag/dictionary-metadata-024ae060e380b327)へ公開しました。圧縮79,599,495 bytes、展開273,362,944 bytesで、展開後512 MiBの上限内です。空の保存先から公開URLを使って取得し、圧縮・展開後のチェックサムを検証しました。通常Releaseのlatestは維持しています。
 
@@ -48,4 +48,4 @@ Mozcは `c7538e6f8ee56ff94789494106ad5d6d658cd4f6` のdictionary00〜09、suffix
 - 元DB・展開済みスナップショット・Mozcの通常辞書を置かず、id.defだけを追加したコピー環境でPR用fixtureを実行。
 - 3つのGitHub Actions workflow：actionlintによる構文検証を通過。
 
-Linux CIの実行結果と、ローカルバイナリとの比較はCI実行後に追記します。タグの通常Releaseを作成する検証は、手動CIとPR検証の完了後に運用するため、今回新しい `v*` タグは作成していません。
+[LinuxのPR用fixture](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/runs/37115158225)でも専用30テストが通過しました。[Linuxの配布ビルド](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/runs/37115162429)も成功しました。既存辞書生成・テスト、固定データ取得・検証、カテゴリ生成、辞書引き26ケース、変換9ケース、ZIP検証が通過しています。取得したカテゴリZIPの37バイナリのSHA-256は、ローカル生成物とすべて一致しました。CIの生成ソースcommitは `2b858145441dee98f7540925964133a38f00fc0c`、English Releaseは `v2026.0928.17` です。タグの通常Releaseを作成する検証は、手動CIとPR検証の完了後に運用するため、今回新しい `v*` タグは作成していません。
