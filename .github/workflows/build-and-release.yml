@@ -427,6 +427,15 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
+          body: |
+            このReleaseには2種類の辞書ZIPを同梱しています。
+
+            - `japanese_keyboard_dictionary_assets.zip`: システム辞書、従来の出典別補助辞書、接続行列・id.def等。内部は `app/src/main/assets/` です。
+            - `categorized-dictionaries.zip`: 読みと意味分類を確認できた12カテゴリの補助辞書。ルートの `pos_table.dat` を共有し、各カテゴリに `yomi.dat`・`tango.dat`・`token.dat` を格納します。
+
+            カテゴリZIPだけでは通常の文章変換に必要なシステム辞書・接続行列はそろいません。同じReleaseの既存ZIPと併用してください。2つのPOS表は交換できません。従来の出典別補助辞書を追加で読むと、カテゴリ側で保留した語も候補になる場合があります。
+
+            収録範囲、カテゴリ別内訳、全ファイル一覧、読み込み手順、検証済み範囲は [配布辞書の詳細](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/docs/dictionary-distribution.md) を参照してください。実際の版の件数・入力・ハッシュはカテゴリZIPの `manifest.json` に記録しています。CLIと監査TSVは辞書ZIPに含めません。
           artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./build/category-release/categorized-dictionaries.zip
           allowUpdates: true
           artifactErrorsFailBuild: true

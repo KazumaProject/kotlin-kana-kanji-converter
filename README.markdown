@@ -41,6 +41,8 @@ MozcUT・Wiki・Neologdの候補を検証し、人名・地名・施設・作品
 ./build/install/kana-kanji-converter/bin/dictionary-cli --help
 ```
 
+収録件数・出典別の採否・利用上の制限・Releaseの全ファイル一覧と読み込み手順は [配布辞書の詳細](docs/dictionary-distribution.md) を参照してください。
+
 生成手順、外部メタデータ、容量上限と後処理、カテゴリ選択は [辞書品質CLIの説明](docs/dictionary-quality-cli.md) を参照してください。
 
 ## ライセンス
