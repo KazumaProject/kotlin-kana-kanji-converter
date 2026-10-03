@@ -1018,5 +1018,8 @@ tasks.register<Test>("dictionaryQualityTest") {
     classpath = sourceSets["test"].runtimeClasspath
     useJUnitPlatform()
     maxHeapSize = "2g"
-    filter { includeTestsMatching("quality.*") }
+    filter {
+        includeTestsMatching("quality.*")
+        includeTestsMatching("engine.FindPathSentenceTest")
+    }
 }

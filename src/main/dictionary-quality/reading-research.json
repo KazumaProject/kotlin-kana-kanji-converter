@@ -152,7 +152,7 @@
       "sourceUrl": "https://ja.wikipedia.org/wiki/気仙沼市立新城小学校",
       "checkedAt": "2026-10-03",
       "method": "assistant inspected explicit Wikipedia pronunciation and name boundary",
-      "finding": "学校は記事中の短称を確認し、冒頭の読みの空白で設置者名との境界を確認。作品は本文の対象表記・読みと情報欄の短いタイトルを照合。括弧の作品種別はタイトルの一部としない。"
+      "finding": "記事の短称「新城小学校」と、正式名称の冒頭読み「けせんぬましりつ しんじょうしょうがっこう」を照合。空白境界と短称の存在を両方確認。"
     },
     {
       "reading": "こいでしょうがっこう",
@@ -161,7 +161,7 @@
       "sourceUrl": "https://ja.wikipedia.org/wiki/茅ヶ崎市立小出小学校",
       "checkedAt": "2026-10-03",
       "method": "assistant inspected explicit Wikipedia pronunciation and name boundary",
-      "finding": "学校は記事中の短称を確認し、冒頭の読みの空白で設置者名との境界を確認。作品は本文の対象表記・読みと情報欄の短いタイトルを照合。括弧の作品種別はタイトルの一部としない。"
+      "finding": "記事の短称「小出小学校」と、正式名称の冒頭読み「ちがさきしりつ こいでしょうがっこう」を照合。空白境界と短称の存在を両方確認。"
     },
     {
       "reading": "おばたしょうがっこう",
@@ -170,7 +170,7 @@
       "sourceUrl": "https://ja.wikipedia.org/wiki/伊勢市立小俣小学校",
       "checkedAt": "2026-10-03",
       "method": "assistant inspected explicit Wikipedia pronunciation and name boundary",
-      "finding": "学校は記事中の短称を確認し、冒頭の読みの空白で設置者名との境界を確認。作品は本文の対象表記・読みと情報欄の短いタイトルを照合。括弧の作品種別はタイトルの一部としない。"
+      "finding": "記事の短称「小俣小学校」と、正式名称の冒頭読み「いせしりつ おばたしょうがっこう」を照合。空白境界と短称の存在を両方確認。"
     },
     {
       "reading": "きみだけにあいを",
@@ -179,7 +179,7 @@
       "sourceUrl": "https://ja.wikipedia.org/wiki/君だけに愛を_(テレビドラマ)",
       "checkedAt": "2026-10-03",
       "method": "assistant inspected explicit Wikipedia pronunciation and name boundary",
-      "finding": "学校は記事中の短称を確認し、冒頭の読みの空白で設置者名との境界を確認。作品は本文の対象表記・読みと情報欄の短いタイトルを照合。括弧の作品種別はタイトルの一部としない。"
+      "finding": "ドラマ記事の冒頭読み「きみだけにあいを」と情報欄のタイトル「君だけに愛を」を照合。括弧のテレビドラマは対象識別情報として扱う。"
     },
     {
       "reading": "らいず",
@@ -188,7 +188,7 @@
       "sourceUrl": "https://ja.wikipedia.org/wiki/RIZE",
       "checkedAt": "2026-10-03",
       "method": "targeted external investigation of the frozen 500 held samples",
-      "finding": "対象表記の明示された読み・語義を確認。元入力に同一ペアがある場合だけ採用し、参照語を新規入力しない。来迎寺駅はらいこうじ、鎌田安里紗はかまだありさ。濁点の異なる元入力ペアは除外。"
+      "finding": "記事冒頭の対象名RIZEと読み「ライズ」、ロックバンドという役割を確認。ソニー等の英字名だけの掲載は読み確認の証拠として使用しない。"
     },
     {
       "reading": "でぃーぷしーく",
@@ -197,7 +197,7 @@
       "sourceUrl": "https://ja.wikipedia.org/wiki/DeepSeek",
       "checkedAt": "2026-10-03",
       "method": "targeted external investigation of the frozen 500 held samples",
-      "finding": "対象表記の明示された読み・語義を確認。元入力に同一ペアがある場合だけ採用し、参照語を新規入力しない。来迎寺駅はらいこうじ、鎌田安里紗はかまだありさ。濁点の異なる元入力ペアは除外。"
+      "finding": "記事冒頭の対象名DeepSeekと読み「ディープシーク」、AI研究企業という役割を確認。人名入力にあることはpersonの根拠にしない。"
     },
     {
       "reading": "たてばやしじょう",
@@ -206,7 +206,7 @@
       "sourceUrl": "https://ja.wikipedia.org/wiki/館林城",
       "checkedAt": "2026-10-03",
       "method": "targeted external investigation of the frozen 500 held samples",
-      "finding": "対象表記の明示された読み・語義を確認。元入力に同一ペアがある場合だけ採用し、参照語を新規入力しない。来迎寺駅はらいこうじ、鎌田安里紗はかまだありさ。濁点の異なる元入力ペアは除外。"
+      "finding": "記事冒頭の館林城と読み「たてばやしじょう」、城という役割を確認。"
     },
     {
       "reading": "よこすかよしみ",
@@ -215,7 +215,7 @@
       "sourceUrl": "https://ja.wikipedia.org/wiki/横須賀昌美",
       "checkedAt": "2026-10-03",
       "method": "targeted external investigation of the frozen 500 held samples",
-      "finding": "対象表記の明示された読み・語義を確認。元入力に同一ペアがある場合だけ採用し、参照語を新規入力しない。来迎寺駅はらいこうじ、鎌田安里紗はかまだありさ。濁点の異なる元入力ペアは除外。"
+      "finding": "現在の対象名「横須賀昌美」と読み「よこすかよしみ」を確認。表記の異なる旧芸名へ現在名の読みを流用しない。"
     },
     {
       "reading": "らいこうじえき",
@@ -224,7 +224,7 @@
       "sourceUrl": "https://timetables.jreast.co.jp/timetable/list1656.html",
       "checkedAt": "2026-10-03",
       "method": "targeted external investigation of the frozen 500 held samples",
-      "finding": "対象表記の明示された読み・語義を確認。元入力に同一ペアがある場合だけ採用し、参照語を新規入力しない。来迎寺駅はらいこうじ、鎌田安里紗はかまだありさ。濁点の異なる元入力ペアは除外。"
+      "finding": "JR東日本の駅時刻表見出しで「来迎寺駅」「らいこうじ」を確認。元入力の「らいごうじえき」は濁点が異なるため除外する。駅という明示単位を保持。"
     },
     {
       "reading": "かまだありさ",
@@ -233,7 +233,7 @@
       "sourceUrl": "https://platinumproduction.jp/talent/kamadaarisa/",
       "checkedAt": "2026-10-03",
       "method": "targeted external investigation of the frozen 500 held samples",
-      "finding": "対象表記の明示された読み・語義を確認。元入力に同一ペアがある場合だけ採用し、参照語を新規入力しない。来迎寺駅はらいこうじ、鎌田安里紗はかまだありさ。濁点の異なる元入力ペアは除外。"
+      "finding": "所属事務所のプロフィールで「鎌田安里紗」「Kamada Arisa」を確認。「かまたありさ」の元入力ペアは姓の濁点が異なるため除外する。"
     }
   ]
 }
