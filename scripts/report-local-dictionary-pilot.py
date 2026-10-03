@@ -6,6 +6,22 @@ def pair(y,s):
     y=unicodedata.normalize('NFKC',y)
     return ''.join(chr(ord(c)-96) if 'ァ'<=c<='ヶ' else c for c in y),unicodedata.normalize('NFKC',s)
 
+def capture_bulk_baseline(ledger,destination):
+    """Bulk providers are immutable inputs, not discoveries from online research."""
+    with sqlite3.connect('file:'+str(ledger.resolve())+'?mode=ro',uri=True) as db:
+        db.row_factory=sqlite3.Row;cases=[]
+        for r in db.execute('SELECT c.* FROM candidates c JOIN pilot p ON p.candidate_id=c.id ORDER BY c.id'):
+            y,s=pair(r['reading'],r['surface'])
+            facts=db.execute("SELECT id,kind FROM facts WHERE active=1 AND surface=? AND reading=? AND json_extract(body,'$.source') IN ('Mozc','JMdict','JMnedict','Japan Post')",(s,y)).fetchall()
+            cases.append({'id':r['id'],'readingEvidenceIds':sorted(f['id'] for f in facts if f['kind']=='reading'),'meaningEvidenceIds':sorted(f['id'] for f in facts if f['kind']=='meaning')})
+        if not cases: raise ValueError('Pilot selection has not been prepared')
+        receipt=db.execute("SELECT value FROM info WHERE key='bulkComplete'").fetchone()
+        if not receipt or not json.loads(receipt[0]): raise ValueError('Mandatory bulk validation incomplete')
+        value={'schemaVersion':1,'capturedAt':time.time(),'basis':'Mandatory offline bulk facts only; excludes additional online research. Not independent gold.',
+            'bulkReceipt':json.loads(receipt[0]),'pilotIdsSha256':hashlib.sha256('\n'.join(v['id'] for v in cases).encode()).hexdigest(),'cases':cases}
+        destination.parent.mkdir(parents=True,exist_ok=True)
+        destination.write_bytes(gzip.compress(json.dumps(value,ensure_ascii=False,sort_keys=True).encode(),mtime=0))
+
 def report(ledger,baseline):
     base=json.loads(gzip.decompress(baseline.read_bytes()))
     with sqlite3.connect('file:'+str(ledger.resolve())+'?mode=ro',uri=True) as db:
@@ -39,7 +55,12 @@ def report(ledger,baseline):
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--ledger',type=pathlib.Path,default=pathlib.Path('build/research/ledger.sqlite'))
     p.add_argument('--baseline',type=pathlib.Path,default=pathlib.Path('build/research/pilot-bulk-baseline.json.gz'));p.add_argument('--output',type=pathlib.Path)
-    args=p.parse_args();value=report(args.ledger,args.baseline);text=json.dumps(value,ensure_ascii=False,indent=2)+'\n'
+    p.add_argument('--capture-bulk-baseline',action='store_true')
+    args=p.parse_args()
+    if args.capture_bulk_baseline:
+        if args.baseline.exists(): raise ValueError('Refusing to overwrite frozen baseline; select another path')
+        capture_bulk_baseline(args.ledger,args.baseline)
+    value=report(args.ledger,args.baseline);text=json.dumps(value,ensure_ascii=False,indent=2)+'\n'
     if args.output: args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(text)
     print(text,end='')
 

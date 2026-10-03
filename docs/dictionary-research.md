@@ -157,6 +157,9 @@ $CLI research explain --surface 高畑
 今回の2,000件では一括照合で831件の読みを確認しています。これは分類・採用の確定数ではありません。
 
 ```sh
+# pilotが対象を固定した後、一括照合の基準を一度保存する
+python3 scripts/report-local-dictionary-pilot.py --capture-bulk-baseline
+# 以後は保存済みの同じ基準と比較する
 python3 scripts/report-local-dictionary-pilot.py \
   --baseline build/research/pilot-bulk-baseline.json.gz \
   --output build/research/pilot-progress.json
