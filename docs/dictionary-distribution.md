@@ -12,7 +12,7 @@ MozcUT人名・地名、Wiki、Neologd、共通の**既存5入力**から、読�
 
 ## 全件比較と採否
 
-2026-10-03の固定入力での実測です。Mozcは `c7538e6f8ee56ff94789494106ad5d6d658cd4f6`。各版の入力・成果物ハッシュはZIPのmanifestが正本です。
+2026-10-03の固定入力での実測です。[Linux全量ビルド](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/runs/37137583663)と[PR fixture](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/runs/37137911007)が成功し、37バイナリがローカルと一致しました。Mozcは `c7538e6f8ee56ff94789494106ad5d6d658cd4f6`。各版の入力・成果物ハッシュはZIPのmanifestが正本です。
 
 | 指標 | 今回 |
 |---|---:|
@@ -287,3 +287,5 @@ $CLI explain --reports build/downloaded-reports   --reading ぎふはぶ --surfa
 ```sh
 python3 scripts/report-category-inventory.py   --reports build/reports/dictionary-quality   --category-zip build/category-release/categorized-dictionaries.zip   --legacy-zip release_zips/japanese_keyboard_dictionary_assets.zip   --output docs/dictionary-inventory.json
 ```
+
+[追加カテゴリの検討](dictionary-category-expansion.md)には、生物名・競技語・宗教語の候補と、既存の地名・作品分類で救済すべき語を区別して記載しています。

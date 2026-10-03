@@ -101,7 +101,7 @@ scripts/publish-dictionary-metadata.sh
 
 初期作成だけ元DBの `titles(title,entity_ids)`・`entity_searches(title,entity_ids)`・`entities(id,body)` を読み取り専用で参照します。元DBをコピーせず、旧分類結果も使用しません。必要な日本語・英語の名前、読み、型、3段までの型の祖先、直接対応の由来、revisionだけを新DBへ保存します。日本郵便は市区町村・町域・読みの各列を区別して取り込みます。
 
-JMdictは参照専用です。既存5入力にある正規化済みペアだけを照合し、参照辞書の見出しを出力へ追加しません。`re_restr`・`re_nokanji`・`stagk`・`stagr`と継承POSを保存・検証します。語義ID・語釈・分野・版・URLを固定DBに保持します。JMdict由来データにはCC BY-SA 4.0の表示・継承条件があり、ライセンス本文もZIPへ同梱します。
+JMdictは参照専用です。既存5入力にある正規化済みペアだけを照合し、参照辞書の見出しを出力へ追加しません。`re_restr`・`re_nokanji`・`stagk`・`stagr`を適用してペアを限定し、継承POS・語義等を保存します。元の制約タグ一覧そのものは語義詳細へ保存せず、制約を適用した読み・表記・語義の組を保存します。語義ID・語釈・分野・版・URLを固定DBに保持します。JMdict由来データにはCC BY-SA 4.0の表示・継承条件があり、ライセンス本文もZIPへ同梱します。
 
 ```sh
 $CLI metadata import-lexicon --jmdict /path/to/JMdict_e.gz \

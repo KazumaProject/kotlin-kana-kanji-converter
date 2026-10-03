@@ -73,7 +73,7 @@ CC BY-SA 4.0、EDRDGの利用条件、各入力の出典条件をカテゴリZIP
 ## ローカル検証・公開ゲート
 
 - test：135テスト、失敗0、エラー0、スキップ1。
-- dictionaryQualityTest：41テスト、失敗0、エラー0、スキップ0。
+- dictionaryQualityTest：43テスト、失敗0、エラー0、スキップ0。
 - 辞書引き49ケース、変換9ケース：全て成功。
 - カテゴリZIP41ファイル（37バイナリ＋manifest・利用条件・2ライセンス）：内容・SHA検証成功。
 - explainで実際の名称別読み・対象ID・語義・不足情報を表示することを確認。
@@ -82,6 +82,14 @@ CC BY-SA 4.0、EDRDGの利用条件、各入力の出典条件をカテゴリZIP
 
 Actionsは4カテゴリ目安、600語95%、最良・上位10の後退0、固定データSHA、標本記録と監査SHA一致を強制します。監査版が変わったら再確認が必要です。未レビューの版で通常Releaseへ進むことはできません。
 
-Linuxの新版全量ビルド・PR fixtureと37バイナリ一致は実行結果確認後に追記します。過去のV1 run 37115162429/37115158225を今回のCI成功の証拠として流用していません。
+[新版Linux全量ビルド](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/runs/37137583663)と[修正後PR fixture](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/runs/37137911007)が成功しました。全量ビルドのコードcommitは `71d152d8f4be53dfa0cee2bd198ff78365ea62a1`、fixtureは `146632f768352ea0437d28e8d861536b923d8662`。その間の変更はfixtureタスク・文書・調査説明で、辞書生成実装・固定データ・採用ルールは同じです。
+
+LinuxのカテゴリZIPを取得し、37バイナリのSHAがローカルと全一致、監査SHAも一致しました。既存ZIP48ファイル・新ZIP41ファイルを検証し、ZIPから読み込んだlookup49/convert9ケースも全成功。ローカルの別出力先への再生成でも37バイナリと監査が一致しました。English Releaseは `v2026.0928.17`、Mozcは上記固定commitです。
+
+最初のPR fixture run 37137586027は、経路探索fixtureから通常testタスクの全量接続行列検証を呼んでしまい失敗しました。専用dictionaryQualityTestに経路探索2テストを組み込んで修正し、43テストを全量辞書なしで再確認しました。未レビューの監査を入力した場合に公開ゲートが失敗することも確認しました。
+
+通常辞書のvタグは作成していません。配布ZIPは上記全量ビルドの `dictionary-release-packages` Artifactから取得できます。
 
 実端末の速度・メモリ、自然文の順位、全語の専門家レビューは未実施です。全件に判定を付けたことと、全語を人手確認したことを区別します。
+
+カテゴリをさらに増やす検討結果と追加時の受入条件は[カテゴリ拡張の調査](dictionary-category-expansion.md)へ記録しました。候補型の件数を採用数として報告していません。

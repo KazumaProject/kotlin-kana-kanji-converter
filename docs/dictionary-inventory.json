@@ -1,6 +1,11 @@
 {
   "generatedFrom": {
-    "inputManifest": null,
+    "inputManifest": {
+      "sourceCommit": "71d152d8f4be53dfa0cee2bd198ff78365ea62a1",
+      "mozcCommit": "c7538e6f8ee56ff94789494106ad5d6d658cd4f6",
+      "englishRelease": "v2026.0928.17",
+      "englishAssetSha256": "b34b9c630ecf4d3f404049ef6580d8f4d5d5b13e1197e083d51b8ea3f064cd6e"
+    },
     "auditFile": "audit.tsv.gz"
   },
   "auditSha256": "a4e7b9d0044e1ab0de144fd57f22b1ef94831819b9a5e7b4cdedaf492aa866fa",
@@ -325,8 +330,8 @@
   },
   "categoryArchive": {
     "name": "categorized-dictionaries.zip",
-    "bytes": 5000550,
-    "sha256": "717d2b8f6c8cc9eb675b0fa7a40c0fbf96c3857570e0dae9b8dd6b7a9c6fd8c4",
+    "bytes": 5000689,
+    "sha256": "f47c36074c89a10c0108398c92cb9da073108b4090231db382dcd1ac88cbb1c3",
     "files": [
       {
         "path": "LICENSE-CC-BY-SA-4.0.txt",
@@ -402,7 +407,7 @@
       },
       {
         "path": "manifest.json",
-        "bytes": 7787
+        "bytes": 8064
       },
       {
         "path": "organization/tango.dat",
@@ -537,7 +542,12 @@
       "overridesSha256": "6e24e2ebea4124c16b28211ce6708592adff9ff25ddaa95f55df10579bc02099",
       "snapshotSha256": "464cefa914990d434dbd25f5811bb48dacbebf876bec53f995893f646dd5a0ce",
       "confirmedSha256": "5f3d441471aba6264992c7ad68f9db6394fe81b695e537a4969ac3408641a9a3",
-      "inputManifest": null,
+      "inputManifest": {
+        "sourceCommit": "71d152d8f4be53dfa0cee2bd198ff78365ea62a1",
+        "mozcCommit": "c7538e6f8ee56ff94789494106ad5d6d658cd4f6",
+        "englishRelease": "v2026.0928.17",
+        "englishAssetSha256": "b34b9c630ecf4d3f404049ef6580d8f4d5d5b13e1197e083d51b8ea3f064cd6e"
+      },
       "referenceSha256": null,
       "cacheSha256": null,
       "categories": {
@@ -602,8 +612,8 @@
   },
   "legacyArchive": {
     "name": "japanese_keyboard_dictionary_assets.zip",
-    "bytes": 28396970,
-    "sha256": "2c079081fa78e62e2391a1fdb2bfa86db15201547beed7f211124c9272057ad0",
+    "bytes": 28398800,
+    "sha256": "19784cedc92f2dd524cf50a53ffcb26a0c40975b7e1f51f48d8ab9edf64d18a6",
     "files": [
       {
         "path": "app/src/main/assets/connectionId.dat.zip",
@@ -679,15 +689,15 @@
       },
       {
         "path": "app/src/main/assets/neologd/tango_neologd.dat.zip",
-        "bytes": 1776867
+        "bytes": 1776602
       },
       {
         "path": "app/src/main/assets/neologd/token_neologd.dat.zip",
-        "bytes": 1390944
+        "bytes": 1390804
       },
       {
         "path": "app/src/main/assets/neologd/yomi_neologd.dat.zip",
-        "bytes": 2095034
+        "bytes": 2094868
       },
       {
         "path": "app/src/main/assets/ngram/system_ngram.dat",
@@ -699,15 +709,15 @@
       },
       {
         "path": "app/src/main/assets/person_name/tango_person_names.dat",
-        "bytes": 453061
+        "bytes": 453053
       },
       {
         "path": "app/src/main/assets/person_name/token_person_names.dat",
-        "bytes": 580577
+        "bytes": 580561
       },
       {
         "path": "app/src/main/assets/person_name/yomi_person_names.dat",
-        "bytes": 744402
+        "bytes": 744370
       },
       {
         "path": "app/src/main/assets/places/tango_places.dat.zip",
