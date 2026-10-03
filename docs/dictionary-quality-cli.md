@@ -31,7 +31,7 @@ $CLI metadata fetch --archive build/dictionary-metadata/snapshot.sqlite.gz
 
 品質状態は `accepted`（読み・表記の根拠あり）、`held`（根拠不足・不一致）、`excluded`（案内文・壊れた住所断片など）。カテゴリが不明という理由だけで語を不適切と判断しません。品質がacceptedでも意味分類が未確定なら標準辞書へ収録せず、確認用データに残します。利用頻度は採否の基準にしていません。
 
-読みの根拠は、同一読み・表記の通常Mozc入力、日本郵便の正式町域・読み、外部エンティティの読み、根拠URL付き確認済み対応です。補助入力どうしの一致だけで独立した読みの証拠とはしません。Wikidataに読みがない場合、タイトルが一致するだけで品質をacceptedにはしません。
+読みの根拠は、同一読み・表記の通常Mozc入力、日本郵便の正式町域・読み、JMdictの制約付き読み・表記ペア、表記に結び付いたWikidataの読み、根拠URL付き確認済み対応です。補助入力どうしの一致だけで独立した読みの証拠とはしません。Wikidataに読みがない場合、タイトルが一致するだけで品質をacceptedにはしません。
 
 カテゴリは次の12個です。
 
@@ -50,7 +50,7 @@ $CLI metadata fetch --archive build/dictionary-metadata/snapshot.sqlite.gz
 | technical | IT・科学・数学・医療・工学の専門概念 |
 | general | 確認済みの一般語 |
 
-Wikidataの直接タイトル対応と別名検索を区別し、直接対応を優先します。検索由来の同名項目は読み一致が必要です。型は具体性・包含関係を考慮し、言語型は一般的なソフトウェア型より優先します。サービス兼企業などの裏付けられた独立役割は複数カテゴリへ収録します。人名入力に含まれる団体を出典名だけで人名にしません。一般名詞IDや「概念」「用語」という広い型だけでは一般語へ分類せず、確認済み対応を必要とします。
+Wikidataの直接タイトル対応と別名検索を区別し、直接対応を優先します。検索由来の同名項目は、独立したペア根拠と対象同定が必要です。名称に付いたP1814のP5168修飾子を保存し、別名と本名の読みを区別します。修飾子がない読みは主名称に限定し、同じ完全名称の空白・ASCII大小文字・限定した旧字体の違いだけを照合します。元の出力表記は変更しません。型は具体性・包含関係を考慮し、言語型は一般的なソフトウェア型より優先します。サービス兼企業などの裏付けられた独立役割は複数カテゴリへ収録します。人名入力に含まれる団体を出典名だけで人名にしません。一般名詞IDや「概念」「用語」という広い型だけでは一般語へ分類しません。JMdictの読み制約・語義制約・継承POSを守り、一般名詞の語義を確認したペアを一般語、具体的分野タグのあるペアを専門語や食品へ分類します。固有名詞タグ・廃用語を一般語の受け皿にしません。
 
 出力は `person/yomi.dat`・`person/tango.dat`・`person/token.dat` の既存形式です。ルートの専用 `pos_table.dat` を共有します。エントリへカテゴリを追加せず、実行時に辞書名から判断します。複数カテゴリの同じ解析候補とN-best表記は重複させません。かな表記が読みと異なる場合も元の表記を保存します。
 
@@ -77,7 +77,7 @@ $CLI test --cases src/main/dictionary-quality/lookup-cases.tsv --no-system
 $CLI test --cases src/main/dictionary-quality/conversion-cases.tsv
 ```
 
-`explain` は生成時のauditから元候補・修正先・品質状態・読みの根拠・カテゴリ根拠を表示します。辞書に収録されなかった語も確認できます。
+`explain` は生成時のauditから元候補・修正先・品質状態・読みの根拠・カテゴリ根拠を表示します。`--snapshot`（既定はbuild/dictionary-metadata/snapshot.sqlite）があれば、名称別の読み・対象ID・JMdictの語義詳細とDBハッシュも表示します。DBがない場合は詳細が利用できないことを明示します。辞書に収録されなかった語も確認できます。
 
 読みの検索は完全一致が既定です。前方一致・表記検索は読みを列挙するため時間がかかります。`--format json` に対応します。`--categories person,place`、`--exclude-categories product`、システムのみの `--categories none`、カテゴリのみの `--no-system` を指定できます。システムと各カテゴリのPOS表を正しく選び、カテゴリmanifestと成果物チェックサム、変換時のid.def互換性を検証します。
 
@@ -101,13 +101,30 @@ scripts/publish-dictionary-metadata.sh
 
 初期作成だけ元DBの `titles(title,entity_ids)`・`entity_searches(title,entity_ids)`・`entities(id,body)` を読み取り専用で参照します。元DBをコピーせず、旧分類結果も使用しません。必要な日本語・英語の名前、読み、型、3段までの型の祖先、直接対応の由来、revisionだけを新DBへ保存します。日本郵便は市区町村・町域・読みの各列を区別して取り込みます。
 
+JMdictは参照専用です。既存5入力にある正規化済みペアだけを照合し、参照辞書の見出しを出力へ追加しません。`re_restr`・`re_nokanji`・`stagk`・`stagr`と継承POSを保存・検証します。語義ID・語釈・分野・版・URLを固定DBに保持します。JMdict由来データにはCC BY-SA 4.0の表示・継承条件があり、ライセンス本文もZIPへ同梱します。
+
+```sh
+$CLI metadata import-lexicon --jmdict /path/to/JMdict_e.gz \
+  --snapshot build/dictionary-metadata/snapshot.sqlite \
+  --output build/metadata-candidate/snapshot.sqlite.gz \
+  --lock build/metadata-candidate/snapshot.lock.json
+$CLI compare --before /path/to/baseline-audit.tsv.gz \
+  --after build/reports/dictionary-quality/audit.tsv.gz
+$CLI evaluate --baseline src/main/dictionary-quality/evaluation-baseline.json --enforce
+python3 scripts/sample-dictionary-review.py --before /path/to/baseline-audit.tsv.gz
+python3 scripts/report-dictionary-research-queue.py
+python3 scripts/verify-dictionary-review.py
+```
+
+`compare`は旧版の未収録719,520エントリすべての現在の採否・理由を圧縮TSVへ保存し、欠落があれば失敗します。`evaluate`は固定600語・200文の期待カテゴリ、最良候補、上位10候補、旧版からの後退を記録し、95%・最良/上位10の後退ゼロ・4カテゴリの下限を強制します。評価入力・旧版結果のハッシュは`evaluation.lock.json`で固定します。`explain`には読みの不足と対象・分類の不足を別の列で表示します。
+
 更新は上限200リクエスト・30分が既定です。途中終了では未処理キューを維持します。新しい郵便データは `--postal-zip` で追加できます。取得した確認済み事実だけを保存し、通常ビルドのロックを変更しません。`refresh` の既定出力は `build/metadata-candidate/snapshot.sqlite.gz` と、その隣の候補lockです。読み・型が不足する項目も更新キューへ入れ、取得失敗・予算終了による未処理項目を保持します。
 
 スナップショットのタグは `dictionary-metadata-<SHA prefix>` とし、古い `v*` Releaseの削除対象から外します。公開済みスナップショットを上書きせず、通常の辞書Releaseに代わるlatestにも設定しません。新しい版の採用は候補lockをレビューしてコミットすることで行います。公開用スクリプトは認証済みGitHub CLIを必要とします。
 
 ## CI・報告・ストレージ
 
-既存のタグ・手動ビルドはロック済みデータを取得し、オフラインで生成・CLI回帰テスト・ZIP検証を行います。タグReleaseには既存ZIPと別の `categorized-dictionaries.zip` を公開します。手動ビルドでも辞書・報告をArtifactsから取得できます。公開権限はpublish jobだけに付与します。
+既存のタグ・手動ビルドはロック済みデータを取得し、オフラインで生成・CLI回帰テスト・ZIP検証を行います。タグReleaseには既存ZIPと別の `categorized-dictionaries.zip` を公開します。手動ビルドでも辞書・報告をArtifactsから取得できます。公開権限はpublish jobだけに付与します。全件比較・固定評価・カテゴリ下限と、レビュー記録に固定した監査SHAを検証し、未達や未レビューの版では公開を停止します。
 
 PR・mainへのpushは `dictionaryQualityTest` の独立したfixtureテストを実行します。全Mozc辞書やEnglish入力は不要です。メタデータ更新workflowは手動実行し、検証した候補スナップショットを別Releaseへ公開します。現在のlockを自動変更しません。
 
@@ -115,4 +132,4 @@ PR・mainへのpushは `dictionaryQualityTest` の独立したfixtureテスト�
 
 展開後のスナップショットは512 MiB以内です。巨大なダンプ・元DBのコピー・生APIレスポンスは保存しません。作業用DB・展開・ビルド用POS表は成功・失敗時とも削除します。Actionsキャッシュは必須入力の原本にはしません。出典と利用条件はカテゴリZIP内のNOTICES.mdを参照してください。
 
-分類改善の集計、500件の層化確認と修正結果、ローカルとLinux CIの検証結果は [検証記録](dictionary-quality-review.md) にまとめています。
+分類改善の全件比較、新規採用のカテゴリ別標本と保留500件の確認結果、ローカルとLinux CIの検証結果は [検証記録](dictionary-quality-review.md) にまとめています。

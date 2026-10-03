@@ -25,3 +25,26 @@ lookup	あけのはいつ	contains	明野ハイツ	place
 surface	赤坂赤坂Bizタワー	excludes	赤坂赤坂Bizタワー	
 surface	渋谷渋谷スクランブルスクエア	excludes	渋谷渋谷スクランブルスクエア	
 surface	岡谷市岡谷市の次に番地がくる場合	excludes	岡谷市岡谷市の次に番地がくる場合	
+lookup	ちょうじゃばるおんせん	contains	長者原温泉	place
+lookup	やなぎばしちゅうおうしじょう	contains	柳橋中央市場	facility
+lookup	いとうもももも	excludes	伊藤桃々	all
+lookup	すみっこぐらし	contains	すみっコぐらし	character
+lookup	ぁぃぁぃ	contains	ぁぃぁぃ	person
+lookup	ひでぼー	contains	HIDEBOH	person
+lookup	えんてつほーる	contains	えんてつホール	facility
+lookup	えんてつほーる	excludes	えんてつホール	organization
+lookup	しょうちょうしゅぎ	excludes	象徴主義	organization
+lookup	りんざいろく	contains	臨済録	work
+lookup	りんざいろく	excludes	臨済録	product
+lookup	あすきー	contains	ASCII	technical
+lookup	あすきー	excludes	ASCII	product
+lookup	ろんりごうせい	contains	論理合成	technical
+lookup	ろんりごうせい	excludes	論理合成	product
+lookup	なんぼくあめりか	contains	南北アメリカ	place
+lookup	なんぼくあめりか	excludes	南北アメリカ	event
+lookup	ことざ	excludes	こと座	place
+lookup	かかおまめ	contains	カカオ豆	food
+lookup	でぃーぷしーく	contains	DeepSeek	organization
+lookup	でぃーぷしーく	excludes	DeepSeek	person
+lookup	らいごうじえき	excludes	来迎寺駅	station
+lookup	かまたありさ	excludes	鎌田安里紗	person

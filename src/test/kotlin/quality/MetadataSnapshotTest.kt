@@ -38,6 +38,7 @@ class MetadataSnapshotTest {
         CategoryDictionaryBuilder().build(options)
         assertEquals(hashes, File(output,"manifest.json").readText())
         assertFalse(File(output,"unclassified").exists())
+        listOf("LICENSE-JMDICT.html","LICENSE-CC-BY-SA-4.0.txt").forEach { File(root,it).writeText("fixture license\n") }
         val notices = File(root,"NOTICES.md").apply { writeText("fixture source notices\n") }
         val zip = File(root,"pack.zip")
         CategoryPackage.write(output,zip,notices); CategoryPackage.verify(zip)

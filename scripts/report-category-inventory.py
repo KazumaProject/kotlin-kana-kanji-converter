@@ -43,7 +43,7 @@ with gzip.open(root / 'audit.tsv.gz', 'rt', encoding='utf-8') as f:
         if len(cs) > 1:
             multi[r['categories']] += 1
         proof = r['reading_evidence']
-        for name, found in [('Mozc同一読み・表記', 'mozc-exact-reading-surface' in proof), ('日本郵便', 'post.japanpost.jp' in proof), ('Wikidata読み', '#P1814' in proof), ('確認済み対応表', 'post.japanpost.jp' not in proof and 'mozc-exact-reading-surface' not in proof and '#P1814' not in proof)]:
+        for name, found in [('Mozc同一読み・表記', 'mozc-exact-reading-surface' in proof), ('日本郵便', 'post.japanpost.jp' in proof), ('Wikidata読み', '#P1814' in proof), ('JMdict制約付きペア', 'edrdg.org' in proof), ('かな表記と対象確認', 'orthographic-kana' in proof), ('確認済み対応表', all(v not in proof for v in ['post.japanpost.jp','mozc-exact-reading-surface','#P1814','edrdg.org','orthographic-kana']))]:
             if found: reading_proofs[name] += 1
         for c in cs:
             item = categories.setdefault(c, {'entries': 0, 'pairs': set(), 'surfaces': set(), 'readings': set()})

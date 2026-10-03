@@ -15,7 +15,7 @@ import java.time.Duration
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
-/** Immutable, reduced facts. Semantic decisions are deliberately not persisted here. */
+/** Immutable source facts and restricted lexical senses; no legacy candidate decisions. */
 object MetadataSnapshot {
     private val json = Json { prettyPrint = true }
     const val MAX_BYTES = 512L * 1024 * 1024
@@ -29,12 +29,20 @@ object MetadataSnapshot {
                 statement.executeQuery("SELECT value FROM info WHERE key='manifest'").use { result ->
                     require(result.next()) { "Missing snapshot manifest" }
                     val manifest = Json.parseToJsonElement(result.getString(1)).jsonObject
-                    require(manifest["schemaVersion"]?.jsonPrimitive?.int == 2) { "Unsupported metadata snapshot" }
+                    require(manifest["schemaVersion"]?.jsonPrimitive?.int in setOf(2, 3)) { "Unsupported metadata snapshot" }
                     if (source != null) {
                         require(manifest.getValue("sources") == sourceHashes(source)) { "Snapshot source hashes differ; export/refresh a new snapshot" }
                         require(manifest["postalParserVersion"]?.jsonPrimitive?.int == 2) { "Snapshot postal parser is outdated; refresh postal data" }
                     }
                     listOf("lookup", "entities", "lexical", "pending").forEach { table -> statement.connection.prepareStatement("SELECT 1 FROM $table LIMIT 1").use { it.executeQuery().close() } }
+                    if (manifest["schemaVersion"]?.jsonPrimitive?.int == 3) {
+                        val expected=(manifest["lexicalSenseRows"] ?: manifest.getValue("lexicalFacts")).jsonPrimitive.int
+                        statement.executeQuery("SELECT COUNT(*) FROM lexical_details").use { rows -> require(rows.next() && (if ("lexicalSenseRows" in manifest) rows.getInt(1)==expected else rows.getInt(1) in 1..expected)) { "Missing lexical sense facts" } }
+                        val version=manifest.getValue("jmdictSha256").jsonPrimitive.content
+                        connection.prepareStatement("SELECT COUNT(*) FROM lexical_details WHERE json_extract(body,'$.reading') IS NOT reading OR json_extract(body,'$.surface') IS NOT surface OR json_extract(body,'$.evidence') IS NOT evidence OR json_extract(body,'$.version') IS NOT ? OR json_extract(body,'$.source') IS NOT 'JMdict'").use { query ->
+                            query.setString(1,version);query.executeQuery().use { rows -> require(rows.next() && rows.getInt(1)==0) { "Inconsistent lexical sense provenance" } }
+                        }
+                    }
                     manifest
                 }
             }
@@ -42,7 +50,7 @@ object MetadataSnapshot {
     }
     fun fetch(lock: File, output: File, archive: File? = null) {
         val spec = Json.parseToJsonElement(lock.readText()).jsonObject
-        require(spec.getValue("schemaVersion").jsonPrimitive.int == 2) { "Unsupported snapshot lock" }
+        require(spec.getValue("schemaVersion").jsonPrimitive.int in setOf(2, 3)) { "Unsupported snapshot lock" }
         if (output.isFile && sha256(output) == spec.getValue("databaseSha256").jsonPrimitive.content) { verify(output, lock); return }
         output.absoluteFile.parentFile.mkdirs()
         val work = Files.createTempDirectory(output.absoluteFile.parentFile.toPath(), ".snapshot-fetch-").toFile()
@@ -140,16 +148,68 @@ object MetadataSnapshot {
         } finally { check(work.deleteRecursively()) }
     }
     private fun saveManifest(connection: Connection, manifest: JsonObject) = connection.prepareStatement("INSERT OR REPLACE INTO info VALUES('manifest',?)").use { it.setString(1, manifest.toString()); it.executeUpdate() }
-    private fun archive(database: File, output: File, lock: File) {
+    internal fun archive(database: File, output: File, lock: File) {
         GZIPOutputStream(output.outputStream().buffered()).use { compressed -> database.inputStream().use { it.copyTo(compressed) } }
         val archiveHash = sha256(output); val tag = "dictionary-metadata-${archiveHash.take(16)}"
         val spec = buildJsonObject {
-            put("schemaVersion", 2); put("tag", tag); put("asset", "snapshot.sqlite.gz"); put("archiveSha256", archiveHash); put("databaseSha256", sha256(database)); put("databaseBytes", database.length())
+            put("schemaVersion", verify(database).getValue("schemaVersion")); put("tag", tag); put("asset", "snapshot.sqlite.gz"); put("archiveSha256", archiveHash); put("databaseSha256", sha256(database)); put("databaseBytes", database.length())
             put("url", "https://github.com/KazumaProject/kotlin-kana-kanji-converter/releases/download/$tag/snapshot.sqlite.gz")
         }
         lock.absoluteFile.parentFile.mkdirs(); lock.writeText(json.encodeToString(JsonObject.serializer(), spec) + "\n")
         println("Snapshot archive=${output.length()} bytes, database=${database.length()} bytes, lock=$lock")
     }
+    fun importLexicon(snapshot: File, lexicon: File, source: File, base: File, output: File, lock: File, reference: File? = null) {
+        verify(snapshot, source = source)
+        output.absoluteFile.parentFile.mkdirs()
+        val work = Files.createTempDirectory(output.absoluteFile.parentFile.toPath(), ".lexicon-import-").toFile()
+        try {
+            val database = snapshot.copyTo(File(work,"snapshot.sqlite"))
+            val lexical = LexicalEvidence.load(snapshot)
+            val readings = ReadingEvidence.load(base, source).toMutableMap().apply { lexical.readings.forEach { (surface, ys) -> put(surface,get(surface).orEmpty()+ys) } }
+            val normalizer = CandidateNormalizer(readings, ManualOverrides(File("src/main/dictionary-quality/overrides.tsv")), lexical)
+            val wanted = hashSetOf<Pair<String,String>>()
+            SupplementalSources.files.keys.forEach { id -> SupplementalSources.read(id,source) { row -> normalizer.normalize(row).entries.forEach { wanted.add(JmdictLexicon.pair(it.yomi,it.tango)) } } }
+            DriverManager.getConnection("jdbc:sqlite:${database.absolutePath}").use { connection ->
+                connection.createStatement().use { s ->
+                    s.execute("CREATE TABLE IF NOT EXISTS lexical_details(reading TEXT,surface TEXT,evidence TEXT,body TEXT,PRIMARY KEY(reading,surface,evidence))")
+                    s.execute("DELETE FROM lexical WHERE evidence LIKE 'https://www.edrdg.org/%'")
+                    s.execute("DELETE FROM lexical_details WHERE evidence LIKE 'https://www.edrdg.org/%'")
+                }
+                connection.autoCommit = false
+                var facts = 0
+                connection.prepareStatement("INSERT OR REPLACE INTO lexical VALUES(?,?,?,?)").use { insert ->
+                    connection.prepareStatement("INSERT OR REPLACE INTO lexical_details VALUES(?,?,?,?)").use { details ->
+                        JmdictLexicon.read(lexicon,wanted) { fact ->
+                            insert.setString(1,fact.reading); insert.setString(2,fact.surface); insert.setString(3,fact.categories.sorted().joinToString(",")); insert.setString(4,fact.evidence); insert.executeUpdate()
+                            details.setString(1,fact.reading); details.setString(2,fact.surface); details.setString(3,fact.evidence); details.setString(4,Json.encodeToString(fact)); details.executeUpdate(); facts++
+                        }
+                    }
+                }
+                connection.commit()
+                if (reference != null) {
+                    MetadataCatalog(reference,File(work,"unused.sqlite"),offline=true).use { catalog ->
+                        val ids = connection.createStatement().use { s -> s.executeQuery("SELECT id FROM entities ORDER BY id").use { r -> buildList { while(r.next()) add(r.getString(1)) } } }
+                        connection.prepareStatement("UPDATE entities SET body=? WHERE id=?").use { update ->
+                            ids.forEach { id -> catalog.entity(id)?.let { entity -> update.setString(1,Json.encodeToString(entity));update.setString(2,id);update.executeUpdate() } }
+                        }
+                    }
+                    connection.commit()
+                }
+                val previous = connection.createStatement().use { s -> s.executeQuery("SELECT value FROM info WHERE key='manifest'").use { r ->r.next();Json.parseToJsonElement(r.getString(1)).jsonObject } }
+                saveManifest(connection,buildJsonObject {
+                    previous.forEach { (k,v) -> put(k,v) }; put("schemaVersion",3);put("lexicalParserVersion",4)
+                    put("jmdictSha256",sha256(lexicon));put("jmdictUrl","https://www.edrdg.org/pub/Nihongo/JMdict_e.gz");put("lexicalFacts",facts);put("lexicalSenseRows",connection.createStatement().use { q -> q.executeQuery("SELECT COUNT(*) FROM lexical_details").use { r ->r.next();r.getInt(1) } })
+                    put("readingBindingVersion",2)
+                    put("nameProvenance",if(reference != null) JsonPrimitive("label-alias-title") else previous["nameProvenance"] ?: JsonPrimitive("legacy-title-fallback"))
+                })
+                connection.commit(); connection.autoCommit=true
+                connection.createStatement().use { it.execute("VACUUM") }
+                println("Reference lexical facts=$facts; candidate pairs=${wanted.size}")
+            }
+            verify(database,source=source); archive(database,output,lock)
+        } finally { check(work.deleteRecursively()) }
+    }
+
     fun refresh(snapshot: File, postal: File?, output: File, lock: File, budget: Int = 200, minutes: Int = 30) {
         verify(snapshot); output.absoluteFile.parentFile.mkdirs()
         val work = Files.createTempDirectory(output.absoluteFile.parentFile.toPath(), ".snapshot-refresh-").toFile()

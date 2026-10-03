@@ -1,0 +1,20 @@
+{
+  "baselineAuditSha256": "aaa2b6d7c544ba01d7c2a816e53a27ef2413a4f729e9bfedbdaef8c6ab6d60fd",
+  "wordsSha256": "7b1239efac2a8591a9600649e100118a2b1dbb84799ba53905bd36a0c829c713",
+  "sentencesSha256": "6c4445382a773e791502540194647fe552fe0a4343a4629a6f539f6391f409c6",
+  "selection": "Deterministic SHA ordering of existing source pairs with v1 accepted evidence or restricted JMdict matching; frozen before v2 dictionary generation. Evidence to be rechecked against lexical sense details.",
+  "wordCases": 600,
+  "wordsPerCategory": 50,
+  "sentenceCases": 200,
+  "sentenceKind": "Fixed composed contextual probes, not a natural corpus.",
+  "baselineIncluded": {
+    "included": 464,
+    "not-included": 136
+  },
+  "prebuildReviewCorrections": "Removed v1 hot-spring/market category errors from representative probes; added corrected-category regression cases separately.",
+  "baselineEngine": "v2 path search fix applied to both v1 and v2 dictionary comparisons; original v1 search exhausted heap on sentence evaluation",
+  "baselineAuditUrl": "https://github.com/KazumaProject/kotlin-kana-kanji-converter/releases/download/dictionary-metadata-841246a60a852ed8/baseline-audit.tsv.gz",
+  "probeVersion": 2,
+  "goldCorrection": "See evaluation-corrections.json; initial result was 599/600 and passed the same 95% threshold. Both dictionary versions re-evaluated.",
+  "baselineSha256": "121343aea7439d2cb91a042dec742ffb088f4066c9351cfe2d10855791f68d6d"
+}

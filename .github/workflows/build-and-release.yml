@@ -387,6 +387,19 @@ jobs:
           "$CLI" build --input-manifest build/dictionary-inputs.json
           "$CLI" test --cases src/main/dictionary-quality/lookup-cases.tsv --no-system
           "$CLI" test --cases src/main/dictionary-quality/conversion-cases.tsv
+          python3 - <<'PYCODE'
+          import json,hashlib,urllib.request
+          from pathlib import Path
+          lock=json.loads(Path("src/main/dictionary-quality/evaluation.lock.json").read_text())
+          output=Path("build/evaluation-baseline-audit.tsv.gz")
+          urllib.request.urlretrieve(lock["baselineAuditUrl"],output)
+          assert hashlib.file_digest(output.open("rb"),"sha256").hexdigest()==lock["baselineAuditSha256"], "Baseline checksum mismatch"
+          PYCODE
+          "$CLI" compare --before build/evaluation-baseline-audit.tsv.gz --after build/reports/dictionary-quality/audit.tsv.gz
+          python3 scripts/report-dictionary-retention.py --before build/evaluation-baseline-audit.tsv.gz --after build/reports/dictionary-quality/audit.tsv.gz --output build/reports/dictionary-quality/comparison
+          "$CLI" evaluate --baseline src/main/dictionary-quality/evaluation-baseline.json --enforce
+          python3 scripts/verify-dictionary-review.py
+          python3 scripts/report-dictionary-research-queue.py
           "$CLI" package
           "$CLI" verify-package
 

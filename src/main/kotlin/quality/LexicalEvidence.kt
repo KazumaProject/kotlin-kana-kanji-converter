@@ -5,7 +5,8 @@ import java.sql.DriverManager
 import java.text.Normalizer
 import java.util.zip.ZipFile
 
-data class LexicalFact(val reading: String, val surface: String, val categories: Set<String>, val evidence: String)
+@kotlinx.serialization.Serializable
+data class LexicalFact(val reading: String, val surface: String, val categories: Set<String>, val evidence: String, val entryId: String? = null, val fields: Set<String> = emptySet(), val pos: Set<String> = emptySet(), val version: String? = null, val source: String? = null, val misc: Set<String> = emptySet(), val glosses: List<String> = emptyList())
 
 class LexicalEvidence(facts: Iterable<LexicalFact> = emptyList()) {
     private val pairs = facts.groupBy { key(it.reading, it.surface) }
@@ -14,13 +15,18 @@ class LexicalEvidence(facts: Iterable<LexicalFact> = emptyList()) {
     fun has(reading: String, surface: String, category: String) = facts(reading, surface).any { category in it.categories }
     fun all(): Sequence<LexicalFact> = pairs.values.asSequence().flatten()
     companion object {
-        private fun key(reading: String, surface: String) = SemanticClassifier.normalizeReading(reading) to Normalizer.normalize(surface, Normalizer.Form.NFKC)
+        private fun key(reading: String, surface: String) = JmdictLexicon.pair(reading, surface)
         fun load(snapshot: File? = null, confirmed: File? = File("src/main/dictionary-quality/confirmed.tsv").takeIf { it.isFile }): LexicalEvidence {
             val facts = mutableListOf<LexicalFact>()
             if (snapshot != null) DriverManager.getConnection("jdbc:sqlite:${snapshot.toURI()}?mode=ro").use { connection ->
                 connection.createStatement().use { statement ->
-                    statement.executeQuery("SELECT reading,surface,categories,evidence FROM lexical ORDER BY surface,reading").use { r ->
-                        while (r.next()) facts.add(LexicalFact(r.getString(1), r.getString(2), r.getString(3).split(',').toSet(), r.getString(4)))
+                    val hasDetails = statement.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='lexical_details'").use { it.next() }
+                    if (hasDetails) statement.executeQuery("SELECT body FROM lexical_details ORDER BY surface,reading,evidence").use { r ->
+                        val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
+                        while(r.next()) facts.add(json.decodeFromString<LexicalFact>(r.getString(1)))
+                    }
+                    statement.executeQuery("SELECT reading,surface,categories,evidence FROM lexical ${if(hasDetails) "WHERE evidence NOT LIKE 'https://www.edrdg.org/%'" else ""} ORDER BY surface,reading").use { r ->
+                        while (r.next()) facts.add(LexicalFact(r.getString(1), r.getString(2), r.getString(3).split(',').filter { it.isNotBlank() }.toSet(), r.getString(4)))
                     }
                 }
             }
@@ -90,16 +96,20 @@ object PostalLexicon {
     }
 }
 
-data class QualityDecision(val state: String, val evidence: String)
+data class QualityDecision(val state: String, val evidence: String, val issue: String = "")
 class QualityEvaluator(private val catalog: MetadataCatalog, private val readings: Map<String, Set<String>>, private val lexical: LexicalEvidence) {
     fun evaluate(row: SourceRow): QualityDecision {
         val word = row.word
         lexical.facts(word.yomi, word.tango).takeIf { it.isNotEmpty() }?.let { return QualityDecision("accepted", it.joinToString(";") { f -> f.evidence }) }
-        val entities = catalog.matched(word.tango, word.yomi)
-        if (entities.any { entity -> entity.readings.any { SemanticClassifier.normalizeReading(it) == SemanticClassifier.normalizeReading(word.yomi) } })
-            return QualityDecision("accepted", entities.filter { it.readings.isNotEmpty() }.joinToString(";") { "https://www.wikidata.org/wiki/${it.id}#P1814" })
-        if (entities.isEmpty() && catalog.forSurface(word.tango).any { it.readings.isNotEmpty() }) return QualityDecision("held", "reading-unconfirmed-or-mismatch")
+        // Pair evidence is independent of whether a similarly named QID has a different name.
         if (word.yomi in readings[word.tango].orEmpty()) return QualityDecision("accepted", "mozc-exact-reading-surface")
-        return QualityDecision("held", if (catalog.forSurface(word.tango).any { it.readings.isNotEmpty() }) "reading-unconfirmed-or-mismatch" else "no-independent-reading-evidence")
+        val attested = catalog.attested(word.tango)
+        if (word.tango.isNotEmpty() && word.tango.all { it in 'ぁ'..'ゖ' || it in 'ァ'..'ヶ' || it == 'ー' } &&
+            JmdictLexicon.reading(word.tango) == JmdictLexicon.reading(word.yomi) && attested.isNotEmpty())
+            return QualityDecision("accepted", "orthographic-kana;" + attested.joinToString(";") { "https://www.wikidata.org/wiki/${it.id}#name" })
+        val entities = catalog.matched(word.tango, word.yomi)
+        val withReading = entities.filter { it.readingAppliesTo(word.tango) && it.readingsFor(word.tango).any { r -> SemanticClassifier.normalizeReading(r) == SemanticClassifier.normalizeReading(word.yomi) } }
+        if (withReading.isNotEmpty()) return QualityDecision("accepted", withReading.joinToString(";") { "https://www.wikidata.org/wiki/${it.id}#P1814;name-bound-written-variant" })
+        return QualityDecision("held", "no-independent-reading-evidence", if (catalog.forSurface(word.tango).any { it.readings.isNotEmpty() }) "entity-reading-unresolved-not-pair-error" else "reading-evidence-missing")
     }
 }

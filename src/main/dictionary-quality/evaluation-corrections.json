@@ -1,0 +1,35 @@
+{
+  "reason": "Initial gold mislabeled a hot spring as an organization. Dictionary category remains place. Replace the organization probe with a source-existing organization backed by restricted JMdict reading and organization sense. Recompute both baseline and current results.",
+  "before": "organization\tせっつきょうおんせん\t摂津峡温泉\thttps://www.wikidata.org/wiki/Q11498556#P1814;classification:https://www.wikidata.org/wiki/Q11498556\tincluded",
+  "after": "organization\tせかいぶっきょうとれんめい\t世界仏教徒連盟\thttps://www.edrdg.org/jmdict/edict_doc.html#entry-5429181-sense-1;classification:https://www.wikidata.org/wiki/Q477716\tnot-included",
+  "initialWordsSha256": "657ae2cb2870365c52e589bcfcd9dc71d87ca916bda98b06968b621ff1557ee0",
+  "correctedWordsSha256": "7b1239efac2a8591a9600649e100118a2b1dbb84799ba53905bd36a0c829c713",
+  "initialCurrentSummary": {
+    "wordCases": 600,
+    "wordMatches": 599,
+    "wordCoverage": 0.9983333333333333,
+    "sentenceCases": 200,
+    "sentenceTop10Matches": 199,
+    "sentenceBestMatches": 164,
+    "sentenceRegressions": 0,
+    "categoryCounts": {
+      "person": 168399,
+      "place": 168940,
+      "facility": 4812,
+      "station": 5081,
+      "organization": 5585,
+      "product": 361,
+      "work": 4177,
+      "character": 1619,
+      "event": 329,
+      "food": 651,
+      "technical": 2923,
+      "general": 15834
+    },
+    "countGatePassed": true,
+    "passed": true,
+    "wordsSha256": "657ae2cb2870365c52e589bcfcd9dc71d87ca916bda98b06968b621ff1557ee0",
+    "sentencesSha256": "6c4445382a773e791502540194647fe552fe0a4343a4629a6f539f6391f409c6"
+  },
+  "criteriaUnchanged": true
+}

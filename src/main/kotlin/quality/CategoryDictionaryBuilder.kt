@@ -50,10 +50,10 @@ class CategoryDictionaryBuilder {
             var requests = 0; var unavailable = false; var capacity = false
             GZIPOutputStream(File(reports, "review.tsv.gz").outputStream()).bufferedWriter(Charsets.UTF_8).use { review ->
                 GZIPOutputStream(File(reports, "audit.tsv.gz").outputStream()).bufferedWriter(Charsets.UTF_8).use { audit ->
-                    val header = "phase\tsources\tline\treading\tsurface\toutput_reading\toutput_surface\tcategories\treason\tleft_id\tright_id\tcost\tquality_status\treading_evidence"
+                    val header = "phase\tsources\tline\treading\tsurface\toutput_reading\toutput_surface\tcategories\treason\tleft_id\tright_id\tcost\tquality_status\treading_evidence\tverification_issue\tsemantic_issue"
                     audit.appendLine(header); review.appendLine(header)
-                    fun record(phase: String, sources: String, line: Int, original: Dictionary, output: Dictionary?, categories: String, reason: String, quality: String = "", readingEvidence: String = "") {
-                        val record = listOf(phase, sources, line.toString(), original.yomi, original.tango, output?.yomi.orEmpty(), output?.tango.orEmpty(), categories, reason, original.leftId.toString(), original.rightId.toString(), original.cost.toString(), quality, readingEvidence).joinToString("\t") { it.replace("\t", "\\t").replace("\n", "\\n").replace("\r", "\\r") }
+                    fun record(phase: String, sources: String, line: Int, original: Dictionary, output: Dictionary?, categories: String, reason: String, quality: String = "", readingEvidence: String = "", verificationIssue: String = "") {
+                        val record = listOf(phase, sources, line.toString(), original.yomi, original.tango, output?.yomi.orEmpty(), output?.tango.orEmpty(), categories, reason, original.leftId.toString(), original.rightId.toString(), original.cost.toString(), quality, readingEvidence, verificationIssue, if (categories == "unclassified") "semantic-evidence-missing" else "").joinToString("\t") { it.replace("\t", "\\t").replace("\n", "\\n").replace("\r", "\\r") }
                         audit.appendLine(record)
                         if (quality in setOf("held", "excluded") || categories == "unclassified") review.appendLine(record)
                     }
@@ -88,27 +88,28 @@ class CategoryDictionaryBuilder {
                         entries.values.toList().chunked(500).forEachIndexed { index, chunk ->
                             catalog.prepare(chunk.map { it.word.tango })
                             chunk.forEach { entry ->
+                                val first = SourceRow(entry.sources.first(), 0, entry.word)
+                                val qualityCheck = qualityEvaluator.evaluate(first)
                                 val decisions = entry.sources.map { source ->
                                     val row = SourceRow(source, 0, entry.word)
-                                    overrides.classification(row) ?: classifier.classify(row).let { decision ->
+                                    overrides.classification(row) ?: classifier.classify(row, qualityCheck.state == "accepted").let { decision ->
                                         val facts = lexical.facts(row.word.yomi, row.word.tango)
-                                        if (facts.isEmpty()) decision else {
-                                            val confirmed = classifier.confirmedCategories(row)
+                                        if (facts.flatMap { it.categories }.isEmpty()) decision else {
+                                            val confirmed = classifier.confirmedCategories(row, qualityCheck.state == "accepted")
                                             Classification((confirmed.categories - "unclassified") + facts.flatMap { it.categories }, (listOf(confirmed.evidence, "lexical-and-confirmed-referents") + facts.map { it.evidence }).filter { it.isNotBlank() }.distinct().joinToString(";"))
                                         }
                                     }
                                 }
                                 val categories = decisions.flatMap { it.categories }.toMutableSet()
                                 if (categories.size > 1) categories.remove("unclassified")
-                                val first = SourceRow(entry.sources.first(), 0, entry.word)
                                 val manual = entry.sources.mapNotNull { overrides.classification(SourceRow(it, 0, entry.word)) }
-                                val quality = if (manual.isNotEmpty()) QualityDecision("accepted", manual.joinToString(";") { it.evidence }) else qualityEvaluator.evaluate(first)
+                                val quality = if (manual.isNotEmpty()) QualityDecision("accepted", manual.joinToString(";") { it.evidence }) else qualityCheck
                                 if (quality.state != "accepted") qualityHeld++
                                 if (categories == setOf("unclassified")) unclassifiedCount++
                                 if (quality.state == "accepted" && categories != setOf("unclassified")) {
                                     acceptedCount++; categories.forEach { grouped.getValue(it).add(entry.word) }
                                 }
-                                record("classification", entry.sources.joinToString(","), 0, entry.word, entry.word, categories.sorted().joinToString(","), decisions.map { it.evidence }.distinct().joinToString(";"), quality.state, quality.evidence)
+                                record("classification", entry.sources.joinToString(","), 0, entry.word, entry.word, categories.sorted().joinToString(","), decisions.map { it.evidence }.distinct().joinToString(";"), quality.state, quality.evidence, quality.issue)
                             }
                             if (index % 40 == 0) println("Classified ${minOf((index + 1) * 500, entries.size)}/${entries.size}; API=${catalog.requests}")
                         }
@@ -139,7 +140,7 @@ class CategoryDictionaryBuilder {
                 put("cacheBytes", if (options.snapshot == null) options.cache.length() else 0); put("dictionaryBytes", packs.walkTopDown().filter { it.isFile }.sumOf { it.length() })
             }
             val manifest = buildJsonObject {
-                put("format", "legacy-louds-triplets-v1"); put("taxonomyVersion", 2); put("normalizationVersion", 2); put("qualityVersion", 1)
+                put("format", "legacy-louds-triplets-v1"); put("taxonomyVersion", 3); put("normalizationVersion", 2); put("qualityVersion", 2)
                 put("implementationSha256", implementationHash())
                 put("implementation", buildJsonObject {
                     listOf(CandidateNormalizer::class.java, SemanticClassifier::class.java, ManualOverrides::class.java, SupplementalSources::class.java, ReadingEvidence::class.java, MetadataEntity::class.java, MetadataCatalog::class.java, LexicalEvidence::class.java, QualityEvaluator::class.java, PostalLexicon::class.java, MetadataSnapshot::class.java, TokenArray::class.java, Class.forName("com.kazumaproject.DictionaryBuilderKt"), CategoryDictionaryBuilder::class.java).forEach { type ->

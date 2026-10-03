@@ -14,15 +14,17 @@ import kotlin.system.exitProcess
 fun main(args: Array<String>) { exitProcess(DictionaryCli.run(args, PrintWriter(System.out, true), PrintWriter(System.err, true))) }
 
 object DictionaryCli {
-    private val flags = setOf("offline", "prefix", "no-system")
+    private val flags = setOf("offline", "prefix", "no-system", "enforce")
     private val common = setOf("dict-dir", "base-dir", "categories", "exclude-categories", "no-system", "format")
     private val allowed = mapOf(
         "build" to setOf("source-dir", "base-dir", "dict-dir", "reports", "metadata-db", "cache", "cache-limit-mib", "api-budget", "offline", "overrides", "snapshot", "lock", "confirmed", "input-manifest"),
         "lookup" to common + setOf("reading", "surface", "prefix", "limit"),
         "convert" to common + setOf("input", "nbest"),
         "test" to common + setOf("cases", "nbest"),
-        "metadata" to setOf("metadata-db", "postal-zip", "source-dir", "base-dir", "output", "snapshot", "lock", "archive", "confirmed", "api-budget", "minutes"),
-        "explain" to setOf("reading", "surface", "reports", "format"),
+        "compare" to setOf("before", "after", "output"),
+        "evaluate" to common + setOf("words", "sentences", "output", "baseline", "enforce", "evaluation-lock"),
+        "metadata" to setOf("metadata-db", "postal-zip", "source-dir", "base-dir", "output", "snapshot", "lock", "archive", "confirmed", "api-budget", "minutes", "jmdict"),
+        "explain" to setOf("reading", "surface", "reports", "format", "snapshot"),
         "package" to setOf("dict-dir", "output", "notices"),
         "verify-package" to setOf("output"),
         "cache" to setOf("cache", "cache-limit-mib"),
@@ -49,7 +51,7 @@ object DictionaryCli {
         val values = linkedMapOf<String, String>()
         var index = 1
         if (args[0] == "metadata") {
-            require(args.getOrNull(index) in setOf("export", "refresh", "verify", "fetch")) { "metadata requires export, refresh, verify or fetch" }
+            require(args.getOrNull(index) in setOf("export", "refresh", "verify", "fetch", "import-lexicon")) { "metadata requires export, refresh, verify or fetch" }
             values["action"] = args[index++]
         }
         if (args[0] == "cache") {
@@ -114,6 +116,8 @@ object DictionaryCli {
                     if (detailed.result.bestPath.isEmpty()) { err.println("No complete conversion path for: $input"); 1 } else 0
                 }
                 "test" -> regression(options, out)
+                "compare" -> { out.println(DictionaryComparison.compare(File(options.required("before")),File(options.required("after")),options.file("output","build/reports/dictionary-quality/comparison")));0 }
+                "evaluate" -> { val dictionaries=load(options);out.println(DictionaryEvaluation.evaluate(dictionaries,engine(options,dictionaries),options.file("words","src/main/dictionary-quality/evaluation-words.tsv"),options.file("sentences","src/main/dictionary-quality/evaluation-sentences.tsv"),options.file("output","build/reports/dictionary-quality/evaluation.json"),options.values["baseline"]?.let(::File),options.flag("enforce"),options.file("evaluation-lock","src/main/dictionary-quality/evaluation.lock.json")));0 }
                 "metadata" -> { metadata(options, out); 0 }
                 "explain" -> { explain(options, out); 0 }
                 "package" -> { CategoryPackage.write(options.file("dict-dir", "build/dictionaries/categories"), options.file("output", "build/category-release/categorized-dictionaries.zip"), options.file("notices", "src/main/dictionary-quality/NOTICES.md")); 0 }
@@ -215,12 +219,13 @@ object DictionaryCli {
     private fun metadata(options: Arguments, out: PrintWriter) {
         val snapshot = options.file("snapshot", "build/dictionary-metadata/snapshot.sqlite")
         val action = options.required("action")
-        val output = options.file("output", if (action == "refresh") "build/metadata-candidate/snapshot.sqlite.gz" else "build/dictionary-metadata/snapshot.sqlite.gz")
-        val lock = options.values["lock"]?.let(::File) ?: if (action == "refresh") File(output.absoluteFile.parentFile, "snapshot.lock.json") else File("src/main/dictionary-quality/snapshot.lock.json")
+        val output = options.file("output", if (action in setOf("refresh", "import-lexicon")) "build/metadata-candidate/snapshot.sqlite.gz" else "build/dictionary-metadata/snapshot.sqlite.gz")
+        val lock = options.values["lock"]?.let(::File) ?: if (action in setOf("refresh", "import-lexicon")) File(output.absoluteFile.parentFile, "snapshot.lock.json") else File("src/main/dictionary-quality/snapshot.lock.json")
         when (options.required("action")) {
             "fetch" -> MetadataSnapshot.fetch(lock, snapshot, options.values["archive"]?.let(::File))
             "verify" -> out.println(MetadataSnapshot.verify(snapshot, options.values["lock"]?.let(::File)))
             "export" -> MetadataSnapshot.export(File(options.required("metadata-db")), File(options.required("postal-zip")), options.file("source-dir", "src/main/bin"), options.file("base-dir", "src/main/resources"), options.file("output", "build/dictionary-metadata/snapshot.sqlite.gz"), lock, options.values["confirmed"]?.let(::File) ?: File("src/main/dictionary-quality/confirmed.tsv").takeIf { it.isFile })
+            "import-lexicon" -> MetadataSnapshot.importLexicon(snapshot, File(options.required("jmdict")), options.file("source-dir","src/main/bin"), options.file("base-dir","src/main/resources"), output, lock, options.values["metadata-db"]?.let(::File))
             "refresh" -> MetadataSnapshot.refresh(snapshot, options.values["postal-zip"]?.let(::File), output, lock, options.number("api-budget", 200, 0..100000), options.number("minutes", 30, 1..30))
         }
     }
@@ -239,8 +244,27 @@ object DictionaryCli {
                 }
             }
         }
-        if (options.value("format", "table") == "json") out.println(JsonArray(records)) else {
-            records.forEach { record -> out.println(record.entries.joinToString("\t") { "${it.key}=${it.value.jsonPrimitive.content}" }) }
+        val snapshot=options.file("snapshot","build/dictionary-metadata/snapshot.sqlite")
+        val explained=if(snapshot.isFile) DriverManager.getConnection("jdbc:sqlite:${snapshot.toURI()}?mode=ro").use { c ->
+            val snapshotHash=sha256(snapshot)
+            val hasDetails=c.createStatement().use { q ->q.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='lexical_details'").use { it.next() } }
+            records.map { record ->
+                val names=listOf(record.getValue("surface").jsonPrimitive.content,record.getValue("output_surface").jsonPrimitive.content).filter { it.isNotEmpty() }.distinct()
+                val ids=linkedSetOf<String>()
+                c.prepareStatement("SELECT ids FROM lookup WHERE surface=?").use { q -> names.forEach { name -> q.setString(1,name);q.executeQuery().use { r -> if(r.next()) ids.addAll(Json.parseToJsonElement(r.getString(1)).jsonArray.map { it.jsonPrimitive.content }) } } }
+                val entities=mutableListOf<JsonElement>()
+                c.prepareStatement("SELECT body FROM entities WHERE id=?").use { q -> ids.forEach { id -> q.setString(1,id);q.executeQuery().use { r -> if(r.next()) entities.add(Json.parseToJsonElement(r.getString(1))) } } }
+                val facts=mutableListOf<JsonElement>()
+                if(hasDetails) c.prepareStatement("SELECT body FROM lexical_details WHERE reading=? AND surface=?").use { q ->
+                    q.setString(1,record.getValue("output_reading").jsonPrimitive.content.ifEmpty { record.getValue("reading").jsonPrimitive.content })
+                    q.setString(2,record.getValue("output_surface").jsonPrimitive.content.ifEmpty { record.getValue("surface").jsonPrimitive.content })
+                    q.executeQuery().use { r -> while(r.next()) facts.add(Json.parseToJsonElement(r.getString(1))) }
+                }
+                buildJsonObject { record.forEach { (k,v)->put(k,v) };put("referenceFacts",JsonArray(entities));put("lexicalSenseFacts",JsonArray(facts));put("factsSnapshotSha256",snapshotHash) }
+            }
+        } else records.map { r -> buildJsonObject { r.forEach { (k,v)->put(k,v) };put("referenceFactsUnavailable",true) } }
+        if (options.value("format", "table") == "json") out.println(JsonArray(explained)) else {
+            explained.forEach { record -> out.println(record.entries.joinToString("\t") { "${it.key}=${if(it.value is JsonPrimitive) it.value.jsonPrimitive.content else it.value.toString()}" }) }
             out.println("records=${records.size}")
         }
     }
@@ -270,13 +294,16 @@ object DictionaryCli {
           metadata export --metadata-db FILE --postal-zip ZIP [--output ARCHIVE] [--lock FILE]
           metadata fetch  [--lock FILE] [--snapshot FILE] [--archive LOCAL_ARCHIVE]
           metadata verify [--snapshot FILE] [--lock FILE]
+          metadata import-lexicon --jmdict GZIP [--metadata-db ORIGINAL] [--snapshot FILE] [--output ARCHIVE] [--lock CANDIDATE_LOCK]
           metadata refresh [--snapshot FILE] [--output ARCHIVE] [--lock CANDIDATE_LOCK] [--api-budget 200] [--minutes 30]
-          explain  --reading TEXT | --surface TEXT [--reports DIR] [--format json]
+          explain  --reading TEXT | --surface TEXT [--reports DIR] [--snapshot FILE] [--format json]
           package  [--dict-dir DIR] [--output ZIP] [--notices FILE]
           verify-package [--output ZIP]
           lookup   --reading TEXT [--prefix] | --surface TEXT [--limit 50]
           convert  --input TEXT [--nbest 10]
           test     --cases TSV [--nbest 64]
+          compare --before AUDIT.gz --after AUDIT.gz [--output DIR]
+          evaluate [--words TSV] [--sentences TSV] [--baseline JSON] [--output JSON] [--enforce]
           cache    prune|clear [--cache FILE] [--cache-limit-mib 512]
         lookup/convert/test: [--base-dir DIR] [--dict-dir DIR]
           [--categories all|none|person,place,...] [--exclude-categories unclassified]

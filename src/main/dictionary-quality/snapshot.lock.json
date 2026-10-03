@@ -1,9 +1,9 @@
 {
-    "schemaVersion": 2,
-    "tag": "dictionary-metadata-024ae060e380b327",
+    "schemaVersion": 3,
+    "tag": "dictionary-metadata-841246a60a852ed8",
     "asset": "snapshot.sqlite.gz",
-    "archiveSha256": "024ae060e380b32784729fda9568fb2c405fa4bc3da2464622f62e84b3466188",
-    "databaseSha256": "0c31c588b48abca63926d2263960cdfc88f9614ba865f21238189e732368c952",
-    "databaseBytes": 273362944,
-    "url": "https://github.com/KazumaProject/kotlin-kana-kanji-converter/releases/download/dictionary-metadata-024ae060e380b327/snapshot.sqlite.gz"
+    "archiveSha256": "841246a60a852ed86e8d2d864d97c13a43f9adc1ce27fdfa8ba48be39c26c358",
+    "databaseSha256": "464cefa914990d434dbd25f5811bb48dacbebf876bec53f995893f646dd5a0ce",
+    "databaseBytes": 404365312,
+    "url": "https://github.com/KazumaProject/kotlin-kana-kanji-converter/releases/download/dictionary-metadata-841246a60a852ed8/snapshot.sqlite.gz"
 }

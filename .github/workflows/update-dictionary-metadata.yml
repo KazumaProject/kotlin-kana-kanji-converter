@@ -9,6 +9,10 @@ on:
         description: Download current Japan Post UTF-8 address data
         type: boolean
         default: true
+      refresh_jmdict:
+        description: Download JMdict and rematch existing source pairs only
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -26,18 +30,20 @@ jobs:
         with:
           repository: google/mozc
           path: mozc-src
-          sparse-checkout: src/data/dictionary_oss/id.def
+          sparse-checkout: src/data/dictionary_oss
           sparse-checkout-cone-mode: false
       - name: Prepare compiler context IDs
         run: |
           mkdir -p src/main/resources
           cp mozc-src/src/data/dictionary_oss/id.def src/main/resources/id.def
+          cp mozc-src/src/data/dictionary_oss/dictionary*.txt src/main/resources/
       - run: ./gradlew installDist dictionaryQualityTest
       - name: Download locked snapshot
         run: ./build/install/kana-kanji-converter/bin/dictionary-cli metadata fetch
       - name: Update metadata within budget
         env:
           API_BUDGET: ${{ inputs.api_budget }}
+          REFRESH_JMDICT: ${{ inputs.refresh_jmdict }}
           REFRESH_POSTAL: ${{ inputs.refresh_postal }}
         shell: bash
         run: |
@@ -51,6 +57,13 @@ jobs:
           "$CLI" "${args[@]}"
           "$CLI" metadata fetch --archive build/metadata-candidate/snapshot.sqlite.gz --lock build/metadata-candidate/snapshot.lock.json --snapshot build/metadata-candidate/verified.sqlite
           "$CLI" metadata verify --snapshot build/metadata-candidate/verified.sqlite --lock build/metadata-candidate/snapshot.lock.json
+          if [[ "$REFRESH_JMDICT" == true ]]; then
+            curl --fail --location --retry 2 --output build/metadata-candidate/JMdict_e.gz https://www.edrdg.org/pub/Nihongo/JMdict_e.gz
+            "$CLI" metadata import-lexicon --snapshot build/metadata-candidate/verified.sqlite --jmdict build/metadata-candidate/JMdict_e.gz --output build/metadata-candidate/snapshot.sqlite.gz --lock build/metadata-candidate/snapshot.lock.json
+            "$CLI" metadata fetch --archive build/metadata-candidate/snapshot.sqlite.gz --lock build/metadata-candidate/snapshot.lock.json --snapshot build/metadata-candidate/lexical-verified.sqlite
+            "$CLI" metadata verify --snapshot build/metadata-candidate/lexical-verified.sqlite --lock build/metadata-candidate/snapshot.lock.json
+            rm build/metadata-candidate/lexical-verified.sqlite build/metadata-candidate/JMdict_e.gz
+          fi
           rm build/metadata-candidate/verified.sqlite
       - uses: actions/upload-artifact@v4
         with:

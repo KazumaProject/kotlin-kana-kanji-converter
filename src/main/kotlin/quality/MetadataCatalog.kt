@@ -17,7 +17,19 @@ import java.time.Duration
 import java.util.zip.GZIPInputStream
 
 @Serializable
-data class MetadataEntity(val id: String, val names: Set<String>, val types: Set<String>, val parents: Set<String>, val readings: Set<String>, val revision: String? = null, val title: String? = null)
+data class MetadataEntity(val id: String, val names: Set<String>, val types: Set<String>, val parents: Set<String>, val readings: Set<String>, val revision: String? = null, val title: String? = null, val nameKinds: Map<String, Set<String>> = emptyMap(), val readingNames: Set<String> = emptySet(), val readingPairs: Map<String, Set<String>> = emptyMap(), val primaryReadings: Set<String>? = null) {
+    /** Only writing variants of the same complete name; never arbitrary aliases. */
+    fun readingAppliesTo(surface: String): Boolean = surface in names &&
+        (readingNames.ifEmpty { setOfNotNull(title) }.any { writtenName(it) == writtenName(surface) } || readingPairs.keys.any { writtenName(it) == writtenName(surface) })
+    fun readingsFor(surface: String): Set<String> = readingPairs.filterKeys { writtenName(it) == writtenName(surface) }.values.flatten().toSet() +
+        if (readingNames.ifEmpty { setOfNotNull(title) }.any { writtenName(it) == writtenName(surface) }) primaryReadings ?: readings else emptySet()
+    companion object {
+        fun writtenName(value: String): String = java.text.Normalizer.normalize(value, java.text.Normalizer.Form.NFKC)
+            .filterNot { it.isWhitespace() }.map { c ->
+                when(c) { '傳' -> '伝'; '應' -> '応'; '學' -> '学'; '濵' -> '濱'; '國' -> '国'; '寶' -> '宝'; '藏' -> '蔵'; '髙' -> '高'; '﨑' -> '崎'; else -> if(c in 'A'..'Z') c.lowercaseChar() else c }
+            }.joinToString("")
+    }
+}
 
 /** Reads the older full catalog without changing it. New data is reduced before caching. */
 class MetadataCatalog(
@@ -138,11 +150,32 @@ class MetadataCatalog(
 
     fun forSurface(surface: String): List<MetadataEntity> = ids(surface).orEmpty().mapNotNull(::entity)
 
-    fun matched(surface: String, reading: String): List<MetadataEntity> {
+    /** An exact, unambiguous name link establishes existence, not its pronunciation. */
+    fun attested(surface: String): List<MetadataEntity> {
         val links = links(surface) ?: return emptyList()
-        fun compatible(entity: MetadataEntity) = surface in entity.names && (entity.readings.isEmpty() || entity.readings.any { SemanticClassifier.normalizeReading(it) == SemanticClassifier.normalizeReading(reading) })
+        fun usable(e: MetadataEntity) = surface in e.names && e.types.none { it in setOf("Q4167410", "Q4167836", "Q13406463") }
+        val direct = links.direct.mapNotNull(::entity).filter(::usable)
+        if (direct.isNotEmpty()) return direct
+        if (links.direct.isNotEmpty()) return emptyList() // A disambiguation page does not identify a searched referent.
+        val searched = links.searched.mapNotNull(::entity).filter { e ->
+            val primary=e.nameKinds.filterValues { kinds -> kinds.any { it in setOf("label:ja", "title:jawiki") } }.keys.ifEmpty { setOfNotNull(e.title) }
+            usable(e) && surface in primary
+        }
+        return searched.takeIf { it.size == 1 }.orEmpty()
+    }
+
+    fun matched(surface: String, reading: String, pairVerified: Boolean = false): List<MetadataEntity> {
+        val links = links(surface) ?: return emptyList()
+        fun compatible(entity: MetadataEntity): Boolean {
+            if (surface !in entity.names) return false
+            val primary = entity.readingNames.ifEmpty { setOfNotNull(entity.title) }
+            val readingMatch = entity.readingsFor(surface).any { SemanticClassifier.normalizeReading(it) == SemanticClassifier.normalizeReading(reading) }
+            if (entity.readings.isEmpty() || readingMatch) return true
+            // A primary-name reading does not contradict a separately verified alias reading.
+            return pairVerified && surface !in primary
+        }
         val direct = links.direct.mapNotNull(::entity).filter { compatible(it) && it.types.none { type -> type in setOf("Q4167410", "Q4167836", "Q13406463") } }
-        val searched = links.searched.mapNotNull(::entity).filter { compatible(it) && it.readings.any { r -> SemanticClassifier.normalizeReading(r) == SemanticClassifier.normalizeReading(reading) } }
+        val searched = links.searched.mapNotNull(::entity).filter { compatible(it) && ((it.readingAppliesTo(surface) && it.readingsFor(surface).any { r -> SemanticClassifier.normalizeReading(r) == SemanticClassifier.normalizeReading(reading) }) || (pairVerified && attested(surface).any { e -> e.id == it.id })) }
         return (direct + searched).distinctBy { it.id }
     }
 
@@ -233,6 +266,12 @@ class MetadataCatalog(
             if (obj.containsKey("missing")) return null
             val id = obj["id"]?.jsonPrimitive?.content ?: return null
             val names = linkedSetOf<String>()
+            val nameKinds = linkedMapOf<String, MutableSet<String>>()
+            val readingNames = linkedSetOf<String>()
+            fun name(value: String, kind: String) { names.add(value); nameKinds.getOrPut(value) { linkedSetOf() }.add(kind) }
+            obj["labels"]?.jsonObject?.filterKeys { it in setOf("ja", "en") }?.forEach { (language, value) -> value.jsonObject["value"]?.jsonPrimitive?.content?.let { name(it, "label:$language"); if (language == "ja") readingNames.add(it) } }
+            obj["aliases"]?.jsonObject?.filterKeys { it in setOf("ja", "en") }?.forEach { (language, aliases) -> aliases.jsonArray.forEach { it.jsonObject["value"]?.jsonPrimitive?.content?.let { name(it, "alias:$language") } } }
+            obj["sitelinks"]?.jsonObject?.get("jawiki")?.jsonObject?.get("title")?.jsonPrimitive?.content?.let { name(it, "title:jawiki") }
             obj["labels"]?.jsonObject?.filterKeys { it in setOf("ja", "en") }?.values?.forEach { it.jsonObject["value"]?.jsonPrimitive?.content?.let(names::add) }
             obj["aliases"]?.jsonObject?.filterKeys { it in setOf("ja", "en") }?.values?.forEach { aliases -> aliases.jsonArray.forEach { it.jsonObject["value"]?.jsonPrimitive?.content?.let(names::add) } }
             obj["sitelinks"]?.jsonObject?.get("jawiki")?.jsonObject?.get("title")?.jsonPrimitive?.content?.let(names::add)
@@ -242,8 +281,20 @@ class MetadataCatalog(
             }
             values("P1476").forEach { (it as? JsonObject)?.get("text")?.jsonPrimitive?.content?.let(names::add) }
             fun qids(property: String) = values(property).mapNotNull { (it as? JsonObject)?.get("id")?.jsonPrimitive?.content }.toSet()
-            val readings = values("P1814").mapNotNull { (it as? JsonPrimitive)?.content }.toSet()
-            return MetadataEntity(id, names, qids("P31"), qids("P279"), readings, obj["lastrevid"]?.jsonPrimitive?.contentOrNull, obj["sitelinks"]?.jsonObject?.get("jawiki")?.jsonObject?.get("title")?.jsonPrimitive?.contentOrNull)
+            val readingPairs = linkedMapOf<String, MutableSet<String>>()
+            val unqualified = linkedSetOf<String>()
+            claims["P1814"]?.jsonArray.orEmpty().filter { it.jsonObject["rank"]?.jsonPrimitive?.content != "deprecated" }.forEach { statement ->
+                val row=statement.jsonObject
+                val reading=row["mainsnak"]?.jsonObject?.get("datavalue")?.jsonObject?.get("value")?.jsonPrimitive?.contentOrNull ?: return@forEach
+                val spellings=row["qualifiers"]?.jsonObject?.get("P5168")?.jsonArray.orEmpty().mapNotNull { q ->
+                    val value=q.jsonObject["datavalue"]?.jsonObject?.get("value") as? JsonObject
+                    value?.takeIf { it["language"]?.jsonPrimitive?.content == "ja" }?.get("text")?.jsonPrimitive?.content
+                }
+                if(spellings.isEmpty()) unqualified.add(reading)
+                else spellings.forEach { spelling -> name(spelling,"reading-qualified:ja");readingPairs.getOrPut(spelling) { linkedSetOf() }.add(reading) }
+            }
+            val readings = unqualified + readingPairs.values.flatten()
+            return MetadataEntity(id, names, qids("P31"), qids("P279"), readings, obj["lastrevid"]?.jsonPrimitive?.contentOrNull, obj["sitelinks"]?.jsonObject?.get("jawiki")?.jsonObject?.get("title")?.jsonPrimitive?.contentOrNull, nameKinds, readingNames, readingPairs, unqualified)
         }
     }
 }
