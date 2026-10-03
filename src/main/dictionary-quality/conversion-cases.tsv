@@ -1,0 +1,10 @@
+operation	input	assertion	expected	categories
+convert	へんかん	equals	変換	
+convert	わたしは	equals	私は	
+convert	やまだたろう	equals	山田太郎	
+convert	あかさかとらすとたわー	contains	赤坂トラストタワー	facility
+convert	あかさかびずたわー	contains	赤坂Bizタワー	facility
+convert	あかさかびずたわー	excludes	赤坂赤坂Bizタワー	facility
+convert	しぶやすくらんぶるすくえあ	contains	渋谷スクランブルスクエア	facility
+convert	しぶやすくらんぶるすくえあ	excludes	渋谷渋谷スクランブルスクエア	facility
+convert	ぱいそん	contains	Python	technical

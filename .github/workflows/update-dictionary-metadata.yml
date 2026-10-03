@@ -1,0 +1,78 @@
+name: Update dictionary metadata candidate
+on:
+  workflow_dispatch:
+    inputs:
+      api_budget:
+        description: Maximum Wikidata requests (default 200)
+        default: '200'
+      refresh_postal:
+        description: Download current Japan Post UTF-8 address data
+        type: boolean
+        default: true
+permissions:
+  contents: read
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+      - uses: actions/checkout@v4
+        with:
+          repository: google/mozc
+          path: mozc-src
+          sparse-checkout: src/data/dictionary_oss/id.def
+          sparse-checkout-cone-mode: false
+      - name: Prepare compiler context IDs
+        run: |
+          mkdir -p src/main/resources
+          cp mozc-src/src/data/dictionary_oss/id.def src/main/resources/id.def
+      - run: ./gradlew installDist dictionaryQualityTest
+      - name: Download locked snapshot
+        run: ./build/install/kana-kanji-converter/bin/dictionary-cli metadata fetch
+      - name: Update metadata within budget
+        env:
+          API_BUDGET: ${{ inputs.api_budget }}
+          REFRESH_POSTAL: ${{ inputs.refresh_postal }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          CLI=./build/install/kana-kanji-converter/bin/dictionary-cli
+          args=(metadata refresh --snapshot build/dictionary-metadata/snapshot.sqlite --output build/metadata-candidate/snapshot.sqlite.gz --lock build/metadata-candidate/snapshot.lock.json --api-budget "$API_BUDGET" --minutes 30)
+          if [[ "$REFRESH_POSTAL" == true ]]; then
+            curl --fail --location --retry 2 --output build/dictionary-metadata/postal.zip https://www.post.japanpost.jp/service/search/zipcode/download/utf/zip/utf_ken_all.zip
+            args+=(--postal-zip build/dictionary-metadata/postal.zip)
+          fi
+          "$CLI" "${args[@]}"
+          "$CLI" metadata fetch --archive build/metadata-candidate/snapshot.sqlite.gz --lock build/metadata-candidate/snapshot.lock.json --snapshot build/metadata-candidate/verified.sqlite
+          "$CLI" metadata verify --snapshot build/metadata-candidate/verified.sqlite --lock build/metadata-candidate/snapshot.lock.json
+          rm build/metadata-candidate/verified.sqlite
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dictionary-metadata-candidate
+          path: build/metadata-candidate
+          retention-days: 30
+  publish:
+    needs: update
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: dictionary-metadata-candidate
+          path: build/metadata-candidate
+      - name: Publish immutable candidate snapshot
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/publish-dictionary-metadata.sh build/metadata-candidate/snapshot.sqlite.gz build/metadata-candidate/snapshot.lock.json
+      - name: Report candidate lock
+        run: |
+          echo 'Snapshot candidate was published. The committed lock was not changed.' >> "$GITHUB_STEP_SUMMARY"
+          cat build/metadata-candidate/snapshot.lock.json >> "$GITHUB_STEP_SUMMARY"

@@ -32,6 +32,17 @@ cd kotlin-kana-kanji-converter
 1. 辞書ファイルを準備し、プログラムを実行します。
 2. ひらがな文字列を入力すると漢字に変換されます。
 
+## 辞書品質・カテゴリ辞書・CLI
+
+MozcUT・Wiki・Neologdの候補を検証し、人名・地名・施設・作品など12カテゴリの辞書を生成できます。読みと分類の根拠が確認できた語を収録し、未分類・保留・除外は圧縮された確認用データへ残します。辞書引きと変換、TSVによる回帰テストはCLIから実行できます。
+
+```sh
+./gradlew installDist
+./build/install/kana-kanji-converter/bin/dictionary-cli --help
+```
+
+生成手順、外部メタデータ、容量上限と後処理、カテゴリ選択は [辞書品質CLIの説明](docs/dictionary-quality-cli.md) を参照してください。
+
 ## ライセンス
 
 このプロジェクトは [MIT ライセンス](LICENSE) のもとで提供されています。

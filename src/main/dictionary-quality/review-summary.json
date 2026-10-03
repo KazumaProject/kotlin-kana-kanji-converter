@@ -1,0 +1,237 @@
+{
+  "eligibleNewEntries": 151215,
+  "selectedEntries": 500,
+  "beforeSha256": "82f54207edc0b621f17c0255b31d35dbb7b1f426cb912cd768512e35d3256fb2",
+  "afterSha256": "aaa2b6d7c544ba01d7c2a816e53a27ef2413a4f729e9bfedbdaef8c6ab6d60fd",
+  "strata": [
+    {
+      "categories": "character,person",
+      "sources": "person",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "event",
+      "sources": "common",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "facility",
+      "sources": "common",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "facility",
+      "sources": "place",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "facility",
+      "sources": "place,neologd",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "facility,person",
+      "sources": "common",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "facility,place",
+      "sources": "place",
+      "eligible": 9,
+      "selected": 9
+    },
+    {
+      "categories": "general",
+      "sources": "neologd",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "general",
+      "sources": "wiki",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "organization",
+      "sources": "common",
+      "eligible": 4,
+      "selected": 4
+    },
+    {
+      "categories": "organization",
+      "sources": "neologd",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "organization",
+      "sources": "wiki",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "organization,person,place",
+      "sources": "place",
+      "eligible": 14,
+      "selected": 14
+    },
+    {
+      "categories": "organization,place",
+      "sources": "place",
+      "eligible": 10,
+      "selected": 10
+    },
+    {
+      "categories": "organization,place",
+      "sources": "place,common",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "organization,place,work",
+      "sources": "place",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "organization,product",
+      "sources": "common",
+      "eligible": 2,
+      "selected": 2
+    },
+    {
+      "categories": "organization,product",
+      "sources": "neologd",
+      "eligible": 6,
+      "selected": 6
+    },
+    {
+      "categories": "organization,product",
+      "sources": "person",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "organization,product",
+      "sources": "wiki",
+      "eligible": 2,
+      "selected": 2
+    },
+    {
+      "categories": "person",
+      "sources": "common",
+      "eligible": 8,
+      "selected": 8
+    },
+    {
+      "categories": "person",
+      "sources": "neologd",
+      "eligible": 104,
+      "selected": 59
+    },
+    {
+      "categories": "person",
+      "sources": "person",
+      "eligible": 68,
+      "selected": 59
+    },
+    {
+      "categories": "person",
+      "sources": "person,common",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "person",
+      "sources": "wiki",
+      "eligible": 7,
+      "selected": 7
+    },
+    {
+      "categories": "person,place",
+      "sources": "place",
+      "eligible": 215,
+      "selected": 59
+    },
+    {
+      "categories": "place",
+      "sources": "common",
+      "eligible": 3,
+      "selected": 3
+    },
+    {
+      "categories": "place",
+      "sources": "neologd",
+      "eligible": 4,
+      "selected": 4
+    },
+    {
+      "categories": "place",
+      "sources": "place",
+      "eligible": 149161,
+      "selected": 59
+    },
+    {
+      "categories": "place",
+      "sources": "place,common",
+      "eligible": 167,
+      "selected": 58
+    },
+    {
+      "categories": "place",
+      "sources": "place,neologd",
+      "eligible": 454,
+      "selected": 58
+    },
+    {
+      "categories": "place",
+      "sources": "place,wiki",
+      "eligible": 956,
+      "selected": 58
+    },
+    {
+      "categories": "product",
+      "sources": "neologd",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "technical",
+      "sources": "neologd",
+      "eligible": 4,
+      "selected": 4
+    },
+    {
+      "categories": "work",
+      "sources": "common",
+      "eligible": 1,
+      "selected": 1
+    },
+    {
+      "categories": "work",
+      "sources": "wiki",
+      "eligible": 1,
+      "selected": 1
+    }
+  ],
+  "reviewDate": "2026-10-03",
+  "reviewMethod": "Agent inspected normalized readings, surface/category pairs and structured source evidence. Independent reading proof was checked against the locked snapshot, confirmed pairs and exact Mozc input. This is a stratified sample, not a complete dictionary audit.",
+  "finalReviewedAcceptedEntries": 500,
+  "initialSampleDispositions": {
+    "categories_restricted": 72,
+    "retained": 312,
+    "review_data": 116
+  },
+  "initialSampleEntries": 500,
+  "additionalReviewedEntries": 188,
+  "snapshotDatabaseSha256": "0c31c588b48abca63926d2263960cdfc88f9614ba865f21238189e732368c952",
+  "finalSampleSha256": "9b9179d0cb9ecd9b6a2c5caf798b9e54a3417f5e00c2c0045a68c274ab3aa9f9",
+  "correctionsSampleSha256": "d93ac87f85ee1f6fff873567664ca243d7cd36a4a6657f9df462c617b845ddd9"
+}

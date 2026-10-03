@@ -1,9 +1,7 @@
 package com.kazumaproject.engine
 
-import com.kazumaproject.Louds.LOUDS
-import com.kazumaproject.Louds.with_term_id.LOUDSWithTermId
 import com.kazumaproject.connection_id.ConnectionIdBuilder
-import com.kazumaproject.dictionary.TokenArray
+import com.kazumaproject.dictionary.LoadedDictionary
 import com.kazumaproject.graph.GraphBuilder
 import com.kazumaproject.mozc.ConnectionMatrix
 import com.kazumaproject.ngram.EmptySystemNgramDictionary
@@ -11,10 +9,7 @@ import com.kazumaproject.ngram.EmptySystemUnigramDictionary
 import com.kazumaproject.ngram.SystemNgramDictionary
 import com.kazumaproject.ngram.SystemUnigramDictionary
 import com.kazumaproject.viterbi.FindPath
-import java.io.BufferedInputStream
 import java.io.File
-import java.io.FileInputStream
-import java.io.ObjectInputStream
 
 class KanaKanjiEngine(
     private val systemNgramDictionary: SystemNgramDictionary = EmptySystemNgramDictionary,
@@ -22,14 +17,12 @@ class KanaKanjiEngine(
 ) {
 
     private lateinit var graphBuilder: GraphBuilder
-    private lateinit var yomiTrie: LOUDSWithTermId
-    private lateinit var tangoTrie: LOUDS
     private lateinit var connectionMatrix: ConnectionMatrix
     private lateinit var findPath: FindPath
-    private lateinit var tokenArray: TokenArray
+    private var dictionaries: List<LoadedDictionary> = emptyList()
 
     fun buildEngine(){
-        buildEngineFromResourceDirectory("src/main/resources", mode = 1)
+        buildEngineFromResourceDirectory("src/main/resources")
     }
 
     fun buildEngineForTest(){
@@ -42,7 +35,7 @@ class KanaKanjiEngine(
             "pos_table.dat",
         ).all { File("$testResources/$it").isFile }
         if (hasTestResources) {
-            buildEngineFromResourceDirectory(testResources, mode = 0)
+            buildEngineFromResourceDirectory(testResources)
         } else {
             buildEngine()
         }
@@ -54,9 +47,7 @@ class KanaKanjiEngine(
     ): List<String>{
         val graph = graphBuilder.constructGraph(
             input,
-            yomiTrie,
-            tangoTrie,
-            tokenArray,
+            dictionaries,
         )
         val result = findPath.backwardAStar(graph,input.length, connectionMatrix,n)
         return result
@@ -67,9 +58,7 @@ class KanaKanjiEngine(
     ): ConversionResult {
         val graph = graphBuilder.constructGraph(
             input,
-            yomiTrie,
-            tangoTrie,
-            tokenArray,
+            dictionaries,
         )
         val bestPath = findPath.findBestPath(graph, input.length, connectionMatrix)
         return ConversionResult(
@@ -84,24 +73,27 @@ class KanaKanjiEngine(
         return convert(input).value
     }
 
-    private fun buildEngineFromResourceDirectory(
-        resourceDirectory: String,
-        mode: Int,
-    ) {
-        val objectInputYomi = ObjectInputStream(BufferedInputStream(FileInputStream("$resourceDirectory/yomi.dat")))
-        val objectInputTango = ObjectInputStream(BufferedInputStream(FileInputStream("$resourceDirectory/tango.dat")))
-        val objectInputTokenArray =
-            ObjectInputStream(BufferedInputStream(FileInputStream("$resourceDirectory/token.dat")))
-        val objectInputConnectionId = BufferedInputStream(FileInputStream("$resourceDirectory/connectionId.dat"))
-
-        yomiTrie = LOUDSWithTermId().readExternalNotCompress(objectInputYomi)
-        tangoTrie = LOUDS().readExternalNotCompress(objectInputTango)
+    fun loadDictionaries(loaded: List<LoadedDictionary>, matrixFile: File) {
+        require(loaded.isNotEmpty()) { "At least one dictionary is required" }
+        dictionaries = loaded
         graphBuilder = GraphBuilder()
-        tokenArray = TokenArray()
-        tokenArray.readExternalNotCompress(objectInputTokenArray)
-        tokenArray.readPOSTable(mode)
-        connectionMatrix = ConnectionIdBuilder().readMatrix(objectInputConnectionId, "$resourceDirectory/connectionId.dat")
+        connectionMatrix = matrixFile.inputStream().buffered().use {
+            ConnectionIdBuilder().readMatrix(it, matrixFile.path)
+        }
+        require(loaded.all { dictionary -> (dictionary.tokenArray.leftIds + dictionary.tokenArray.rightIds).all { it.toInt() in 0 until connectionMatrix.size } }) {
+            "Dictionary context IDs do not match the connection matrix"
+        }
         findPath = FindPath(systemNgramDictionary, systemUnigramDictionary)
     }
 
+    fun convertDetailed(input: String): DetailedConversionResult {
+        val graph = graphBuilder.constructGraph(input, dictionaries)
+        val path = findPath.findBestPath(graph, input.length, connectionMatrix)
+        return DetailedConversionResult(ConversionResult(input, path.map { it.toConversionPathNode() }), path.map { it.dictionaryId })
+    }
+
+    private fun buildEngineFromResourceDirectory(resourceDirectory: String) {
+        val directory = File(resourceDirectory)
+        loadDictionaries(listOf(LoadedDictionary.load("system", directory)), File(directory, "connectionId.dat"))
+    }
 }

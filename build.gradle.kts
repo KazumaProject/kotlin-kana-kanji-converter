@@ -142,6 +142,9 @@ repositories {
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC.2")
+    implementation("org.xerial:sqlite-jdbc:3.46.1.0")
+    runtimeOnly("org.slf4j:slf4j-nop:1.7.36")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 }
 
 val generatedMozcIdDefDir = layout.buildDirectory.dir("generated/source/mozcIdDef/main/kotlin")
@@ -980,4 +983,40 @@ tasks.register("verifyJapaneseKeyboardDictionaryAssets") {
 
         logger.lifecycle("Verified JapaneseKeyboard dictionary assets: ${releaseZip.path}")
     }
+}
+
+// Keep `run` as the legacy generator; the interactive CLI has its own launcher.
+tasks.register<JavaExec>("dictionaryCli") {
+    group = "application"
+    description = "Build, inspect and test normalized category dictionaries."
+    dependsOn("classes")
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.cli.DictionaryCliKt")
+    maxHeapSize = "3g"
+}
+val dictionaryCliScripts = tasks.register<CreateStartScripts>("dictionaryCliScripts") {
+    applicationName = "dictionary-cli"
+    mainClass.set("com.kazumaproject.cli.DictionaryCliKt")
+    classpath = tasks.named<Jar>("jar").get().outputs.files + configurations.runtimeClasspath.get()
+    outputDir = layout.buildDirectory.dir("dictionaryCliScripts").get().asFile
+    defaultJvmOpts = listOf("-Xmx3g")
+}
+distributions {
+    main {
+        contents {
+            from(dictionaryCliScripts) { into("bin"); filePermissions { unix("rwxr-xr-x") } }
+        }
+    }
+}
+
+// These fixture tests do not depend on downloaded English, matrix, or full dictionaries.
+tasks.register<Test>("dictionaryQualityTest") {
+    group = "verification"
+    description = "Tests quality, metadata snapshots, classification and category packages with offline fixtures."
+    dependsOn("testClasses")
+    testClassesDirs = sourceSets["test"].output.classesDirs
+    classpath = sourceSets["test"].runtimeClasspath
+    useJUnitPlatform()
+    maxHeapSize = "2g"
+    filter { includeTestsMatching("quality.*") }
 }

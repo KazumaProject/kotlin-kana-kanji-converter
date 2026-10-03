@@ -1,0 +1,35 @@
+name: Dictionary quality fixtures
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  fixtures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+      - uses: actions/checkout@v4
+        with:
+          repository: google/mozc
+          path: mozc-src
+          sparse-checkout: src/data/dictionary_oss/id.def
+          sparse-checkout-cone-mode: false
+      - name: Prepare compiler context IDs
+        run: |
+          mkdir -p src/main/resources
+          cp mozc-src/src/data/dictionary_oss/id.def src/main/resources/id.def
+      - name: Run offline quality fixtures
+        run: ./gradlew dictionaryQualityTest
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dictionary-quality-fixture-tests
+          path: build/reports/tests/dictionaryQualityTest

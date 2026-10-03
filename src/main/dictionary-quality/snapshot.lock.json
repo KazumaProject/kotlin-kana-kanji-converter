@@ -1,0 +1,9 @@
+{
+    "schemaVersion": 2,
+    "tag": "dictionary-metadata-024ae060e380b327",
+    "asset": "snapshot.sqlite.gz",
+    "archiveSha256": "024ae060e380b32784729fda9568fb2c405fa4bc3da2464622f62e84b3466188",
+    "databaseSha256": "0c31c588b48abca63926d2263960cdfc88f9614ba865f21238189e732368c952",
+    "databaseBytes": 273362944,
+    "url": "https://github.com/KazumaProject/kotlin-kana-kanji-converter/releases/download/dictionary-metadata-024ae060e380b327/snapshot.sqlite.gz"
+}

@@ -25,10 +25,7 @@ import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.mozc.buildConnectionIdsFromResource
 import com.kazumaproject.mozc.validateBundledMozcDictionaryResources
-import com.kazumaproject.reading_correction.ReadingCorrectionBuilder
-import java.io.*
 import java.util.*
-import java.util.zip.ZipInputStream
 
 fun main() {
     validateBundledMozcDictionaryResources()
@@ -81,9 +78,8 @@ private fun buildConnectionIds() {
 
 private fun buildDictionaryForPersonNames() {
     println("start build person names dictionary")
-    val readingCorrectionBuilder = ReadingCorrectionBuilder()
 
-    val dictionaryList = readingCorrectionBuilder.parseMozcUTDictionary("src/main/bin/names.txt")
+    val dictionaryList = com.kazumaproject.quality.SupplementalSources.normalized("person")
         .groupBy { it.yomi }
         .toSortedMap(compareBy({ it.length }, { it }))
     buildAndWriteDictionaryArtifacts(
@@ -97,14 +93,8 @@ private fun buildDictionaryForPersonNames() {
 private fun buildDictionaryForPlaces() {
     println("start build places dictionary")
 
-    val readingCorrectionBuilder = ReadingCorrectionBuilder()
 
-    val dictionaryList = readingCorrectionBuilder.parseMozcUTDictionaryCompressedDictionary(
-        readTextFromZip(
-            filePath = "src/main/bin/place.txt.zip",
-            fileName = "place.txt"
-        )
-    )
+    val dictionaryList = com.kazumaproject.quality.SupplementalSources.normalized("place")
         .groupBy { it.yomi }
         .toSortedMap(compareBy({ it.length }, { it }))
     buildAndWriteDictionaryArtifacts(
@@ -113,19 +103,4 @@ private fun buildDictionaryForPlaces() {
         tangoOutputPath = "./src/main/resources/tango_places.dat",
         tokenOutputPath = "./src/main/resources/token_places.dat",
     )
-}
-
-private fun readTextFromZip(filePath: String, fileName: String): InputStream {
-    val zipFile = File(filePath)
-    val zipInputStream = ZipInputStream(BufferedInputStream(FileInputStream(zipFile)))
-
-    var entry = zipInputStream.nextEntry
-    while (entry != null) {
-        if (!entry.isDirectory && entry.name == fileName) {
-            return zipInputStream
-        }
-        entry = zipInputStream.nextEntry
-    }
-
-    throw FileNotFoundException("$fileName not found in $filePath")
 }

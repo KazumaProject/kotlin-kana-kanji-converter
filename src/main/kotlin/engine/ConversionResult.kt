@@ -31,3 +31,6 @@ internal fun Node.toConversionPathNode(): ConversionPathNode =
         start = sPos,
         end = sPos + len.toInt(),
     )
+
+/** Runtime provenance; does not change the legacy conversion result. */
+data class DetailedConversionResult(val result: ConversionResult, val dictionaries: List<String?>)

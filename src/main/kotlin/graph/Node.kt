@@ -14,6 +14,7 @@ data class Node(
     var totalCost: Int = Int.MAX_VALUE,
     var prev: Node? = null,
     var next: Node? = null,
+    val dictionaryId: String? = null,
 ){
     override fun toString(): String {
         return this.tango

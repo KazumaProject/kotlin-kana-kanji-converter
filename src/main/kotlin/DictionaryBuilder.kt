@@ -10,6 +10,7 @@ import java.io.BufferedOutputStream
 import java.io.FileOutputStream
 import java.io.ObjectOutputStream
 import java.util.SortedMap
+import java.text.Normalizer
 
 internal fun buildAndWriteDictionaryArtifacts(
     dictionaryList: SortedMap<String, List<Dictionary>>,
@@ -26,8 +27,9 @@ internal fun buildAndWriteDictionaryArtifacts(
     dictionaryList.forEach { (yomi, dictionaries) ->
         yomiTree.insert(yomi)
         dictionaries.forEach { dictionary ->
-            if (!skipKanaOnlyTango || !dictionary.tango.isHiraganaOrKatakana()) {
-                tangoTree.insert(dictionary.tango)
+            val surface = Normalizer.normalize(dictionary.tango, Normalizer.Form.NFC)
+            if (!skipKanaOnlyTango || (surface != yomi && surface != yomi.hiraToKata())) {
+                tangoTree.insert(surface)
             }
         }
     }
