@@ -153,6 +153,18 @@ $CLI research explain --surface 高畑
 同じ台帳を2ワーカーで操作することはロックで拒否します。
 `--max-batches`は診断用であり、通常のpilot/runには時間・バッチ数の打切りを付けません。
 
+試験の進捗と追加調査による読み発見は、読みの一括照合時点の基準と比較できます。
+今回の2,000件では一括照合で831件の読みを確認しています。これは分類・採用の確定数ではありません。
+
+```sh
+python3 scripts/report-local-dictionary-pilot.py \
+  --baseline build/research/pilot-bulk-baseline.json.gz \
+  --output build/research/pilot-progress.json
+```
+
+この集計は台帳を変更せず、対象集合のハッシュを検査します。独立正解が未確認なら精度は
+未測定として出力し、未完了の試験から全件の所要時間を計算しません。
+
 ```sh
 $CLI research freeze-gold --gold build/research/independent-gold.json
 $CLI research run
