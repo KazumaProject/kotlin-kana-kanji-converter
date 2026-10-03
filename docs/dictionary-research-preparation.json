@@ -40,6 +40,7 @@
       "proposer": "3642cb3f8981682598b5ad8e6527f3986bb134a76f908e1e7e2e1f3fa8bf6433",
       "reviewer": "3f4e8b1422dc0e4c5d444db5bdf0a18f632f8e447b1b0dfd7834458604a9f33a"
     },
+    "researchParserVersion": 2,
     "taxonomy": {
       "categories": [
         {
@@ -147,7 +148,7 @@
       ],
       "version": 4
     },
-    "worker": "9f87ac338e69977b78d4014d653859b27ecf00f1bcccc04d82fd83e4e73c5435"
+    "worker": "c3a83f4a41c01f20d909323c3b218330530568c51bee78f3bf9ec8ee67e0a22a"
   },
   "bulkReceipt": {
     "completedAt": 1791069928.363109,
@@ -169,9 +170,14 @@
   "fullResearchComplete": false,
   "releaseReady": false,
   "tests": {
-    "python": 28,
+    "python": 33,
     "kotlin": 140,
-    "failures": 0
+    "failures": 0,
+    "kotlinSkipped": 1,
+    "linuxFixtureRun": "https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/runs/37161862279"
   },
-  "baselineAuditSha256": "a4e7b9d0044e1ab0de144fd57f22b1ef94831819b9a5e7b4cdedaf492aa866fa"
+  "baselineAuditSha256": "a4e7b9d0044e1ab0de144fd57f22b1ef94831819b9a5e7b4cdedaf492aa866fa",
+  "updatedAt": "2026-10-03T23:39:55.584192+00:00",
+  "pilotRestartReason": "Fix subject-scoped official links, gzip HTML/Shift_JIS parsing and archive previous research-parser bindings; no failed candidate was classified as non-distribution.",
+  "pilotRestarted": true
 }

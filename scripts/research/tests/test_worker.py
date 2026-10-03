@@ -200,4 +200,51 @@ class ResearchTest(unittest.TestCase):
         self.assertEqual(46,len(calls))
         self.assertEqual(len(calls),self.db.execute('SELECT COUNT(*) FROM model_calls').fetchone()[0])
 
+    def test_compressed_html_and_japanese_web_charset(self):
+        page='<html><meta charset="Shift_JIS"><body>山田Ⅰ</body></html>'
+        data=page.encode('cp932')
+        self.assertEqual(page,worker.decode_official_page(data))
+        self.assertEqual(page,worker.decode_official_page(gzip.compress(data)))
+        with self.assertRaisesRegex(ValueError,'Unsupported'):
+            worker.decode_official_page(gzip.compress(b'%PDF-1.4 source'))
+
+    def test_research_parser_upgrade_archives_old_bindings(self):
+        cfg=worker.info(self.db,'configuration');cfg['researchParserVersion']=1;worker.info(self.db,'configuration',cfg)
+        self.e.fact('やまだ','山田','reading',[],'JapanPost:1',self.doc,{'source':'Japan Post','row':1})
+        worker.pin_config(self.db,self.args)
+        self.assertEqual(0,self.db.execute('SELECT active FROM facts WHERE id=?',(self.fid,)).fetchone()[0])
+        self.assertEqual(1,self.db.execute("SELECT active FROM facts WHERE target='JapanPost:1'").fetchone()[0])
+
+    def test_direct_subject_is_prioritized_and_unrelated_official_link_is_not_followed(self):
+        import wikidata,urllib.parse
+        self.db.execute('DELETE FROM facts')
+        self.e.fact('','山田','context',[],'Q1',self.doc,{'source':'seed','directTitle':False})
+        self.e.fact('','山田','context',[],'Q2',self.doc,{'source':'seed','directTitle':True})
+        fetched=[]
+        def get(url,*args,**kwargs):
+            q=urllib.parse.parse_qs(urllib.parse.urlparse(url).query)['ids'][0];fetched.append(q)
+            entity={'lastrevid':1,'labels':{'ja':{'value':'山田' if q=='Q2' else '無関係'}},'claims':{'P856':[{'mainsnak':{'datavalue':{'value':'https://example.org/'+q}}}]}}
+            return self.doc,json.dumps({'entities':{q:entity}}).encode()
+        with mock.patch.object(self.e,'fetch',side_effect=get):
+            websites=wikidata.fetch(self.db,self.args,self.e,self.row,1,worker.pair,worker.reading,worker.extract_readings)
+        self.assertEqual(['Q2','Q1'],fetched)
+        self.assertEqual(['https://example.org/Q2'],websites)
+
+    def test_dns_failure_is_logged_and_remains_unprocessed(self):
+        with mock.patch.object(worker,'check_public_url',side_effect=OSError('DNS unavailable')):
+            with self.assertRaises(OSError): self.e.fetch('https://example.org/profile',self.cid,1)
+        attempt=self.db.execute('SELECT url,result,error FROM attempts ORDER BY id DESC LIMIT 1').fetchone()
+        self.assertEqual(('https://example.org/profile','error','DNS unavailable'),tuple(attempt))
+        self.assertEqual('queued',self.db.execute('SELECT state FROM candidates').fetchone()[0])
+
+    def test_official_floor_structure_does_not_require_bad_floor_pronunciation(self):
+        import bulk
+        surface='赤坂赤坂Bizタワー(31階)'
+        cid=worker.insert_candidate(self.db,'あかさかあかさかびずたわーさんじゅういっかい',surface,1,1,10,normalization='original:floor')
+        self.db.execute('INSERT INTO origins VALUES(?,?,?,?,?,?,?,?,?)',('o','place',1,'あかさかあかさかびずたわーさんじゅういっかい',surface,1,1,10,'raw'))
+        self.db.execute('INSERT INTO origin_candidates VALUES(?,?)',('o',cid))
+        self.e.fact('あかさかあかさかびずたわー(31かい)',surface,'address-structure',[],'JapanPost:floor',self.doc,{'source':'Japan Post'})
+        with contextlib.redirect_stdout(io.StringIO()): bulk.normalization(self.db,self.e,worker.fact_rows,worker.canonical,worker.info,worker.emit)
+        self.assertTrue(self.db.execute("SELECT 1 FROM facts WHERE kind='invalid' AND target=?",(cid,)).fetchone())
+
 if __name__=='__main__': unittest.main()

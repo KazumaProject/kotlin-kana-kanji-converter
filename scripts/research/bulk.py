@@ -72,6 +72,10 @@ def normalization(db,e,fact_rows,canonical,info,emit):
     for row in db.execute("SELECT * FROM candidates WHERE normalization LIKE 'original:%'").fetchall():
         origins=db.execute('SELECT o.* FROM origins o JOIN origin_candidates m ON o.id=m.origin_id WHERE m.candidate_id=?',(row['id'],)).fetchall()
         facts=fact_rows(db,row);postal=[f for f in facts if f['kind']=='address-structure']
+        if not postal:
+            # A floor annotation's spelling is independently attested by the
+            # postal structure even if the input's discarded floor reading differs.
+            postal=[dict(f) for f in db.execute("SELECT * FROM facts WHERE active=1 AND kind='address-structure' AND surface=?",(row['surface'],))]
         floor=bool(re.search(r'[（(](?:(?:地下|地上|第)?[0-9０-９一二三四五六七八九十百]+階|(?:地階・)?階層不明)[)）]',row['surface']))
         guide='以下に掲載がない場合' in row['surface'] or 'の次に番地がくる場合' in row['surface'] or row['surface'].endswith('全域')
         if postal and (floor or guide) and any(o['source']=='place' for o in origins):

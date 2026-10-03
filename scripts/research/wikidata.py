@@ -12,7 +12,11 @@ def values(entity,prop):
 def fetch(db,args,e,row,round,pair,reading,extract_readings):
     ids=[]
     for f in db.execute("SELECT target,body FROM facts WHERE surface=? AND kind='context' AND active=1 ORDER BY id",(row['surface'],)):
-        if re.fullmatch('Q[0-9]+',f['target']): ids.append(f['target'])
+        if re.fullmatch('Q[0-9]+',f['target']):
+            b=json.loads(f['body']);kinds=b.get('nameKinds',{}).get(row['surface'],[])
+            priority=0 if b.get('directTitle') or b.get('label')==row['surface'] or b.get('title')==row['surface'] or any(k in ('label:ja','title:jawiki') for k in kinds) else 1
+            ids.append((priority,f['target']))
+    ids=list(dict.fromkeys(qid for _,qid in sorted(ids)))
     if not ids:
         url='https://www.wikidata.org/w/api.php?'+urllib.parse.urlencode({'action':'wbsearchentities','format':'json','language':'ja','search':row['surface'],'limit':3})
         did,data=e.fetch(url,row['id'],round,license='Wikidata CC0')
@@ -56,6 +60,8 @@ def fetch(db,args,e,row,round,pair,reading,extract_readings):
                     e.fact(row['reading'],row['surface'],'reading',[],qid,did,{'source':'Wikidata','revision':revision,'property':'P1814','name':name,'reading':y,'binding':'qualified-name' if name not in primary else 'primary-name'})
         if row['surface'] in primary and row['surface'] and all('ぁ'<=c<='ゖ' or 'ァ'<=c<='ヶ' or c=='ー' for c in row['surface']) and reading(row['surface'])==reading(row['reading']):
             e.fact(row['reading'],row['surface'],'reading',[],qid,did,{'source':'attested-canonical-kana','name':row['surface'],'binding':'Wikidata primary Japanese name','revision':revision})
-        for website,_ in values(entity,'P856'):
-            if isinstance(website,str) and website.startswith(('https://','http://')): official.append(website)
+        named_subject=row['surface'] in primary or row['surface'] in bound or row['surface'] in body['aliases']
+        if named_subject:
+            for website,_ in values(entity,'P856'):
+                if isinstance(website,str) and website.startswith(('https://','http://')): official.append(website)
     return official

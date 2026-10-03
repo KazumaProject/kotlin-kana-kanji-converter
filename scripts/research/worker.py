@@ -99,13 +99,15 @@ def configuration(args):
     taxonomy=json.loads((p/'categories.json').read_text())
     endpoint=local_url(models['endpoint'])
     prompts={r:(p/(r+'.txt')).read_text() for r in ('proposer','reviewer')}
-    identity={'models':models,'taxonomy':taxonomy,'prompts':{k:digest(v) for k,v in prompts.items()},'worker':digest(canonical({f.name:sha(f) for f in pathlib.Path(__file__).parent.glob('*.py')}))}
+    identity={'models':models,'taxonomy':taxonomy,'researchParserVersion':2,'prompts':{k:digest(v) for k,v in prompts.items()},'worker':digest(canonical({f.name:sha(f) for f in pathlib.Path(__file__).parent.glob('*.py')}))}
     return models,taxonomy,prompts,endpoint,identity
 
 def pin_config(db,args):
     cfg=configuration(args);stored=info(db,'configuration')
     if stored is not None and stored!=cfg[-1]:
         info(db,'previousConfiguration',stored)
+        if stored.get('researchParserVersion')!=cfg[-1]['researchParserVersion']:
+            db.execute("UPDATE facts SET active=0 WHERE active=1 AND COALESCE(json_extract(body,'$.seedOnly'),0)!=1 AND json_extract(body,'$.source') IN ('Wikidata','Wikipedia','official-link','explicit-name-reading','attested-canonical-kana')")
         db.execute("UPDATE candidates SET state='queued',decision=NULL,reason='configuration-changed',error=NULL,research_round=0,error_count=0,next_retry=0 WHERE state!='queued' OR research_round!=0")
         db.execute("DELETE FROM info WHERE key IN ('finalized','acceptance')")
         if stored.get('taxonomy')!=cfg[-1].get('taxonomy'): db.execute("DELETE FROM info WHERE key='goldFrozen'")
@@ -226,7 +228,10 @@ class Evidence:
             self.db.execute("DELETE FROM info WHERE key IN ('finalized','acceptance')")
         return fid
     def fetch(self,url,cid,round,revision='retrieved',license='source-specific'):
-        check_public_url(url)
+        try: check_public_url(url)
+        except Exception as ex:
+            self.db.execute('INSERT INTO attempts(candidate_id,round,url,result,error) VALUES(?,?,?,?,?)',(cid,round,url,'error',str(ex)))
+            self.db.commit();raise
         old=self.db.execute('SELECT d.* FROM attempts a JOIN documents d ON d.id=a.document_id WHERE a.url=? AND a.result=\'success\' ORDER BY a.id DESC LIMIT 1',(url,)).fetchone()
         if old:
             p=pathlib.Path(old['path'])
@@ -618,9 +623,13 @@ def article_primary_name(content,surface):
 
 def decode_official_page(data):
     # Unsupported document formats/encodings are parser failures, never negative evidence.
-    if data.startswith((b'%PDF',b'PK\x03\x04',b'\x1f\x8b')) or b'\x00' in data[:4096]: raise ValueError('Unsupported official document format; parser work remains queued')
+    if data.startswith(b'\x1f\x8b'):
+        with gzip.GzipFile(fileobj=io.BytesIO(data)) as source: data=source.read(2*1024*1024+1)
+        if len(data)>2*1024*1024: raise ValueError('Expanded official page exceeds size limit')
+    if data.startswith((b'%PDF',b'PK\x03\x04')) or b'\x00' in data[:4096]: raise ValueError('Unsupported official document format; parser work remains queued')
     match=re.search(br'charset\s*=\s*["\']?([A-Za-z0-9_-]+)',data[:8192],re.I)
     charset=match.group(1).decode('ascii') if match else 'utf-8'
+    if charset.lower().replace('-','_') in ('shift_jis','sjis','x_sjis','windows_31j'): charset='cp932'
     try: return data.decode(charset,errors='strict')
     except (LookupError,UnicodeDecodeError) as ex: raise ValueError('Official page encoding could not be parsed') from ex
 
@@ -659,10 +668,12 @@ def research(db,args,row,proposal,round):
                         target=page.get('pageprops',{}).get('wikibase_item',title)
                         e.fact(row['reading'],row['surface'],'reading',[],target,did,{'source':'attested-canonical-kana','name':name,'field':field.group(1),'quotation':field.group(0),'revision':rev['revid']})
             # Only article-declared official links, never URLs invented by a model.
-            for candidate in re.findall(r'\{\{\s*(?:Official website|公式ウェブサイト|公式サイト)\s*\|\s*(https?://[^\s|}]+)',content,re.I):
-                if candidate in [v['*'] for v in page.get('extlinks',[])]: official.append(candidate)
-            for candidate in re.findall(r'(?:公式サイト|公式ウェブサイト)\s*=\s*(https?://[^\s|}]+)',content):
-                if candidate in [v['*'] for v in page.get('extlinks',[])]: official.append(candidate)
+            alias_declared=any(m[2].strip()==row['surface'] for m in re.finditer(r'\|\s*(別名|芸名|名義|通称|名前)\s*=\s*([^\n|}]+)',content))
+            if primary or alias_declared:
+                for candidate in re.findall(r'\{\{\s*(?:Official website|公式ウェブサイト|公式サイト)\s*\|\s*(https?://[^\s|}]+)',content,re.I):
+                    if candidate in [v['*'] for v in page.get('extlinks',[])]: official.append(candidate)
+                for candidate in re.findall(r'(?:公式サイト|公式ウェブサイト)\s*=\s*(https?://[^\s|}]+)',content):
+                    if candidate in [v['*'] for v in page.get('extlinks',[])]: official.append(candidate)
     for url in list(dict.fromkeys(official))[:3]:
         did,data=e.fetch(url,row['id'],round)
         text=decode_official_page(data);extract_readings(db,e,row,did,text,url)
