@@ -30,6 +30,9 @@ class ManualOverrides(file: File? = null) {
         }
     }
     fun normalization(row: SourceRow): CandidateNormalizer.Result? = decisions[Triple(row.source, row.word.yomi, row.word.tango)]?.let { rows ->
+        if (rows.any { it.action == "include" && (it.reading != row.word.yomi || it.surface != row.word.tango) }) {
+            return@let CandidateNormalizer.Result(emptyList(), "manual-transformation-needs-independent-boundary-proof", "held")
+        }
         CandidateNormalizer.Result(rows.filter { it.action == "include" }.map { row.word.copy(yomi = it.reading, tango = it.surface) }, "manual-${rows.first().action}:${rows.joinToString(",") { it.evidence }}", if (rows.any { it.action == "include" }) "accepted" else if (rows.all { it.action == "exclude" }) "excluded" else "held")
     }
     fun classification(row: SourceRow) = classifications[Triple(row.source, row.word.yomi, row.word.tango)]

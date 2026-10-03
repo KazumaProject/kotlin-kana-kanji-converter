@@ -3,9 +3,10 @@ package com.kazumaproject.quality
 import java.io.File
 import java.text.Normalizer
 
-val dictionaryCategories = listOf("person", "place", "facility", "station", "organization", "product", "work", "character", "event", "food", "technical", "general", "unclassified")
+val dictionaryCategories = CategoryRegistry.all + "unclassified"
 
-val publishedCategories = dictionaryCategories.filter { it != "unclassified" }
+// Schema-3 compatibility; schema-4 publication reads the active manifest.
+val publishedCategories = CategoryRegistry.core
 
 data class Classification(val categories: Set<String>, val evidence: String)
 

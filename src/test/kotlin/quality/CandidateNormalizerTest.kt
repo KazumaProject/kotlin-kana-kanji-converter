@@ -5,7 +5,7 @@ import com.kazumaproject.quality.*
 import kotlin.test.*
 
 class CandidateNormalizerTest {
-    private val normalizer = CandidateNormalizer(mapOf("赤坂" to setOf("あかさか"), "渋谷" to setOf("しぶや"), "藍畑" to setOf("あいはた"), "高畑" to setOf("たかばたけ", "たかはた", "たかばた")))
+    private val normalizer = CandidateNormalizer(mapOf("赤坂" to setOf("あかさか"), "渋谷" to setOf("しぶや"), "藍畑" to setOf("あいはた"), "高畑" to setOf("たかばたけ", "たかはた", "たかばた"), "第十" to setOf("だいじゅう")))
     private fun row(reading: String, surface: String, source: String = "place") = SourceRow(source, 1, Dictionary(reading, 1, 1, 8000, surface))
     @Test fun splitsSpellingAndReadingTogether() {
         val result = normalizer.normalize(row("あいはたたかばたけ", "藍畑(高畑)"))
@@ -45,6 +45,21 @@ class CandidateNormalizerTest {
         val cleaner = CandidateNormalizer(mapOf("大阪市北区中之島" to setOf("おおさかしきたくなかのしま")), lexical = lexical)
         assertEquals("中之島ダイビル", cleaner.normalize(row("おおさかしきたくなかのしまなかのしまだいびる", "大阪市北区中之島中之島ダイビル")).entries.single().tango)
         assertTrue(cleaner.normalize(row("おおさかしきたくなかのしままちがい", "大阪市北区中之島中之島ダイビル")).entries.isEmpty())
+    }
+    @Test fun neverTreatsUnverifiedFinalReadingAsEvidence() {
+        val cleaner = CandidateNormalizer(mapOf("藍畑" to setOf("あいはた")), lexical = LexicalEvidence())
+        val result = cleaner.normalize(row("あいはたなぞ", "藍畑(未知)") )
+        assertEquals(listOf("藍畑"), result.entries.map { it.tango })
+        assertEquals("split-with-unresolved-alias", result.reason)
+    }
+    @Test fun manualClassificationCannotAuthorizeAnUnprovedTransformation() {
+        val file=java.nio.file.Files.createTempFile("overrides-", ".tsv").toFile()
+        try {
+            file.writeText("place\tあいはたなぞ\t藍畑(未知)\tinclude\tなぞ\t未知\tplace\thttps://example.org/classification\n")
+            val result=CandidateNormalizer(emptyMap(),ManualOverrides(file)).normalize(row("あいはたなぞ","藍畑(未知)"))
+            assertEquals("held",result.state);assertTrue(result.entries.isEmpty())
+            assertEquals("manual-transformation-needs-independent-boundary-proof",result.reason)
+        } finally { file.delete() }
     }
     @Test fun neverEmitsAnnotationAsPlace() {
         assertEquals(listOf("藍畑"), normalizer.normalize(row("あいはたちょうめ", "藍畑(丁目)")).entries.map { it.tango })

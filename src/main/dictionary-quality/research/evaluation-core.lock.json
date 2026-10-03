@@ -1,0 +1,11 @@
+{
+  "probeVersion": 2,
+  "baselineEdition": "c98c1080a665196dde5a73a73c45c1bd3aa793d8",
+  "wordsSha256": "7b1239efac2a8591a9600649e100118a2b1dbb84799ba53905bd36a0c829c713",
+  "sentencesSha256": "6c4445382a773e791502540194647fe552fe0a4343a4629a6f539f6391f409c6",
+  "baselineSha256": "a5bae0bfb0b0600dbe55546e94c4bd455ee990182d9b39f631a5352e79ef465d",
+  "baselineAuditSha256": "a4e7b9d0044e1ab0de144fd57f22b1ef94831819b9a5e7b4cdedaf492aa866fa",
+  "wordCases": 600,
+  "sentenceCases": 200,
+  "sentenceKind": "Existing composed regression probes. Additional 200 natural contexts are required separately."
+}

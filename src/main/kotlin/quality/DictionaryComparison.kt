@@ -17,13 +17,20 @@ object DictionaryComparison {
         fun key(r: Map<String,String>)=Key(r.getValue("reading"),r.getValue("surface"),r.getValue("left_id"),r.getValue("right_id"))
         fun decision(r: Map<String,String>): Decision {
             val categories=r.getValue("categories")
-            val state=when { r["quality_status"]=="excluded" -> "excluded"; r["quality_status"]!="accepted" -> "held"; categories=="unclassified" -> "unclassified"; else -> "adopted" }
+            val state=when (r["quality_status"]) {
+                "adopted" -> "adopted"
+                "excluded_confirmed" -> "excluded_confirmed"
+                "not_distributed" -> "not_distributed"
+                "excluded" -> "excluded"
+                "accepted" -> if(categories=="unclassified") "unclassified" else "adopted"
+                else -> "held"
+            }
             return Decision(state,categories,r.getValue("reason"),r["reading_evidence"].orEmpty())
         }
         val pending=linkedMapOf<Key,Decision>()
         rows(before) { r -> if(r["phase"]=="classification") { val d=decision(r); if(d.state!="adopted") require(pending.put(key(r),d)==null) { "Duplicate baseline key" } } }
         val current=HashMap<Key,Decision>()
-        rows(after) { r -> if(r["phase"]=="classification" || r["quality_status"]=="excluded") { val k=key(r); if(k in pending) current[k]=decision(r) } }
+        rows(after) { r -> if(r["phase"]=="classification" || r["quality_status"] in setOf("excluded","excluded_confirmed")) { val k=key(r); if(k in pending) current[k]=decision(r) } }
         output.mkdirs();val counts=sortedMapOf<String,Int>();var missing=0
         GZIPOutputStream(File(output,"reassessment.tsv.gz").outputStream()).bufferedWriter().use { writer ->
             writer.appendLine("reading\tsurface\tleft_id\tright_id\tbefore_status\tafter_status\tcategories\treason\treading_evidence")

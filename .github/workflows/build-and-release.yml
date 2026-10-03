@@ -381,6 +381,11 @@ jobs:
       - name: Test with Gradle
         run: ./gradlew test
 
+      - name: Require completed research before a versioned release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          python3 scripts/research/verify_release.py --snapshot build/dictionary-metadata/snapshot.sqlite
+
       - name: Build and verify categorized dictionaries
         run: |
           CLI=./build/install/kana-kanji-converter/bin/dictionary-cli
@@ -397,8 +402,24 @@ jobs:
           PYCODE
           "$CLI" compare --before build/evaluation-baseline-audit.tsv.gz --after build/reports/dictionary-quality/audit.tsv.gz
           python3 scripts/report-dictionary-retention.py --before build/evaluation-baseline-audit.tsv.gz --after build/reports/dictionary-quality/audit.tsv.gz --output build/reports/dictionary-quality/comparison
-          "$CLI" evaluate --baseline src/main/dictionary-quality/evaluation-baseline.json --enforce
-          python3 scripts/verify-dictionary-review.py
+          SCHEMA=$(python3 - <<'PYCODE'
+          import json,sqlite3
+          with sqlite3.connect('file:build/dictionary-metadata/snapshot.sqlite?mode=ro',uri=True) as c:
+            print(json.loads(c.execute("SELECT value FROM info WHERE key='manifest'").fetchone()[0])['schemaVersion'])
+          PYCODE
+          )
+          if [ "$SCHEMA" = "4" ]; then
+            "$CLI" evaluate --baseline src/main/dictionary-quality/research/evaluation-baseline-v2.json \
+              --evaluation-lock src/main/dictionary-quality/research/evaluation-core.lock.json \
+              --extra-words src/main/dictionary-quality/research/evaluation-extra-words.tsv \
+              --extra-sentences src/main/dictionary-quality/research/evaluation-extra-sentences.tsv \
+              --extra-lock src/main/dictionary-quality/research/evaluation-extra.lock.json --enforce
+            python3 scripts/research/verify_release.py --snapshot build/dictionary-metadata/snapshot.sqlite \
+              --manifest build/dictionaries/categories/manifest.json
+          else
+            "$CLI" evaluate --baseline src/main/dictionary-quality/evaluation-baseline.json --enforce
+            python3 scripts/verify-dictionary-review.py
+          fi
           python3 scripts/report-dictionary-research-queue.py
           "$CLI" package
           "$CLI" verify-package

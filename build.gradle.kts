@@ -1005,6 +1005,8 @@ distributions {
     main {
         contents {
             from(dictionaryCliScripts) { into("bin"); filePermissions { unix("rwxr-xr-x") } }
+            from("scripts/research") { into("libexec/research"); exclude("__pycache__/**") }
+            from("src/main/dictionary-quality/research") { into("libexec/research/config") }
         }
     }
 }
@@ -1022,4 +1024,9 @@ tasks.register<Test>("dictionaryQualityTest") {
         includeTestsMatching("quality.*")
         includeTestsMatching("engine.FindPathSentenceTest")
     }
+}
+
+// Shared taxonomy is bundled in the JVM CLI and the Python research distribution.
+tasks.named<ProcessResources>("processResources") {
+    from("src/main/dictionary-quality/research/categories.json") { into("dictionary-quality") }
 }

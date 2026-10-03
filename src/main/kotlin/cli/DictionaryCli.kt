@@ -14,20 +14,21 @@ import kotlin.system.exitProcess
 fun main(args: Array<String>) { exitProcess(DictionaryCli.run(args, PrintWriter(System.out, true), PrintWriter(System.err, true))) }
 
 object DictionaryCli {
-    private val flags = setOf("offline", "prefix", "no-system", "enforce")
+    private val flags = setOf("offline", "prefix", "no-system", "enforce", "candidate")
     private val common = setOf("dict-dir", "base-dir", "categories", "exclude-categories", "no-system", "format")
     private val allowed = mapOf(
-        "build" to setOf("source-dir", "base-dir", "dict-dir", "reports", "metadata-db", "cache", "cache-limit-mib", "api-budget", "offline", "overrides", "snapshot", "lock", "confirmed", "input-manifest"),
+        "build" to setOf("source-dir", "base-dir", "dict-dir", "reports", "metadata-db", "cache", "cache-limit-mib", "api-budget", "offline", "overrides", "snapshot", "lock", "confirmed", "input-manifest", "candidate"),
         "lookup" to common + setOf("reading", "surface", "prefix", "limit"),
         "convert" to common + setOf("input", "nbest"),
         "test" to common + setOf("cases", "nbest"),
         "compare" to setOf("before", "after", "output"),
-        "evaluate" to common + setOf("words", "sentences", "output", "baseline", "enforce", "evaluation-lock"),
+        "evaluate" to common + setOf("words", "sentences", "output", "baseline", "enforce", "evaluation-lock", "extra-words", "extra-sentences", "extra-lock"),
         "metadata" to setOf("metadata-db", "postal-zip", "source-dir", "base-dir", "output", "snapshot", "lock", "archive", "confirmed", "api-budget", "minutes", "jmdict"),
         "explain" to setOf("reading", "surface", "reports", "format", "snapshot"),
         "package" to setOf("dict-dir", "output", "notices"),
         "verify-package" to setOf("output"),
         "cache" to setOf("cache", "cache-limit-mib"),
+        "research" to setOf("ledger", "config", "source-dir", "base-dir", "audit", "snapshot", "documents", "jmnedict", "jmdict", "postal-zip", "mozc-commit", "id", "surface", "gold", "output", "batch-size", "pilot-size", "max-batches", "acceptance", "candidate"),
     )
     private class Arguments(val command: String, val values: Map<String, String>) {
         fun value(name: String, default: String): String = values[name] ?: default
@@ -38,9 +39,11 @@ object DictionaryCli {
             ?: throw IllegalArgumentException("--$name must be in $range")
         fun selected(): List<String> {
             val specified = value("categories", "all")
-            val selected = if (specified == "all") publishedCategories else if (specified == "none") emptyList() else specified.split(',').distinct()
+            val root = file("dict-dir", "build/dictionaries/categories")
+            val available = if (File(root, "manifest.json").isFile) CategoryRegistry.active(Json.parseToJsonElement(File(root, "manifest.json").readText()).jsonObject) else publishedCategories
+            val selected = if (specified == "all") available else if (specified == "none") emptyList() else specified.split(',').distinct()
             val excluded = values["exclude-categories"]?.split(',').orEmpty()
-            require((selected + excluded).all { it in publishedCategories }) { "Unknown category; choose ${publishedCategories.joinToString(",")}" }
+            require((selected + excluded).all { it in available }) { "Unknown category; choose ${available.joinToString(",")}" }
             return selected.filter { it !in excluded }
         }
         fun withCategories(categories: String) = Arguments(command, values + ("categories" to categories))
@@ -52,6 +55,10 @@ object DictionaryCli {
         var index = 1
         if (args[0] == "metadata") {
             require(args.getOrNull(index) in setOf("export", "refresh", "verify", "fetch", "import-lexicon")) { "metadata requires export, refresh, verify or fetch" }
+            values["action"] = args[index++]
+        }
+        if (args[0] == "research") {
+            require(args.getOrNull(index) in setOf("prepare", "bulk", "pilot", "run", "status", "explain", "freeze-gold", "accept", "finalize", "export")) { "research requires a valid action" }
             values["action"] = args[index++]
         }
         if (args[0] == "cache") {
@@ -85,14 +92,14 @@ object DictionaryCli {
                     val lock = options.values["lock"]?.let(::File) ?: File("src/main/dictionary-quality/snapshot.lock.json").takeIf { it.isFile && !options.values.containsKey("snapshot") }
                     if (snapshot != null) {
                         if (lock != null) MetadataSnapshot.fetch(lock, snapshot)
-                        MetadataSnapshot.verify(snapshot, lock)
+                        MetadataSnapshot.verify(snapshot, lock, allowCandidate = options.flag("candidate"))
                     }
                     CategoryDictionaryBuilder().build(CategoryDictionaryBuilder.Options(
                         source = options.file("source-dir", "src/main/bin"), base = options.file("base-dir", "src/main/resources"),
                         output = options.file("dict-dir", "build/dictionaries/categories"), reports = options.file("reports", "build/reports/dictionary-quality"),
                         reference = options.values["metadata-db"]?.let(::File), cache = options.file("cache", "build/dictionary-metadata/cache.sqlite"),
                         cacheLimitMiB = options.number("cache-limit-mib", 512, 2..65536), apiBudget = 0,
-                        offline = true, snapshot = snapshot, confirmed = options.values["confirmed"]?.let(::File) ?: File("src/main/dictionary-quality/confirmed.tsv").takeIf { it.isFile }, inputManifest = options.values["input-manifest"]?.let(::File), overrides = options.values["overrides"]?.let(::File) ?: File("src/main/dictionary-quality/overrides.tsv").takeIf { it.isFile },
+                        offline = true, snapshot = snapshot, confirmed = options.values["confirmed"]?.let(::File) ?: File("src/main/dictionary-quality/confirmed.tsv").takeIf { it.isFile }, inputManifest = options.values["input-manifest"]?.let(::File), candidate = options.flag("candidate"), overrides = options.values["overrides"]?.let(::File) ?: File("src/main/dictionary-quality/overrides.tsv").takeIf { it.isFile },
                     )); 0
                 }
                 "lookup" -> { printMatches(lookup(options, load(options)), options, out); 0 }
@@ -117,12 +124,13 @@ object DictionaryCli {
                 }
                 "test" -> regression(options, out)
                 "compare" -> { out.println(DictionaryComparison.compare(File(options.required("before")),File(options.required("after")),options.file("output","build/reports/dictionary-quality/comparison")));0 }
-                "evaluate" -> { val dictionaries=load(options);out.println(DictionaryEvaluation.evaluate(dictionaries,engine(options,dictionaries),options.file("words","src/main/dictionary-quality/evaluation-words.tsv"),options.file("sentences","src/main/dictionary-quality/evaluation-sentences.tsv"),options.file("output","build/reports/dictionary-quality/evaluation.json"),options.values["baseline"]?.let(::File),options.flag("enforce"),options.file("evaluation-lock","src/main/dictionary-quality/evaluation.lock.json")));0 }
+                "evaluate" -> { val dictionaries=load(options);out.println(DictionaryEvaluation.evaluate(dictionaries,engine(options,dictionaries),options.file("words","src/main/dictionary-quality/evaluation-words.tsv"),options.file("sentences","src/main/dictionary-quality/evaluation-sentences.tsv"),options.file("output","build/reports/dictionary-quality/evaluation.json"),options.values["baseline"]?.let(::File),options.flag("enforce"),options.file("evaluation-lock","src/main/dictionary-quality/evaluation.lock.json"),options.values["extra-words"]?.let(::File),options.values["extra-sentences"]?.let(::File),options.values["extra-lock"]?.let(::File)));0 }
                 "metadata" -> { metadata(options, out); 0 }
                 "explain" -> { explain(options, out); 0 }
                 "package" -> { CategoryPackage.write(options.file("dict-dir", "build/dictionaries/categories"), options.file("output", "build/category-release/categorized-dictionaries.zip"), options.file("notices", "src/main/dictionary-quality/NOTICES.md")); 0 }
                 "verify-package" -> { CategoryPackage.verify(options.file("output", "build/category-release/categorized-dictionaries.zip")); 0 }
                 "cache" -> { manageCache(options, out); 0 }
+                "research" -> ResearchRunner.run(options.values, out, err)
                 else -> error("Unknown command")
             }
             out.flush(); result
@@ -248,7 +256,27 @@ object DictionaryCli {
         val explained=if(snapshot.isFile) DriverManager.getConnection("jdbc:sqlite:${snapshot.toURI()}?mode=ro").use { c ->
             val snapshotHash=sha256(snapshot)
             val hasDetails=c.createStatement().use { q ->q.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='lexical_details'").use { it.next() } }
+            val resolved=c.createStatement().use { q ->q.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='resolutions'").use { it.next() } }
             records.map { record ->
+                if(resolved) {
+                    val facts=mutableListOf<JsonElement>()
+                    val decisions=mutableListOf<JsonElement>()
+                    c.prepareStatement("SELECT * FROM resolutions WHERE reading=? AND surface=? AND left_id=? AND right_id=?").use { q ->
+                        q.setString(1,record.getValue("reading").jsonPrimitive.content);q.setString(2,record.getValue("surface").jsonPrimitive.content)
+                        q.setInt(3,record.getValue("left_id").jsonPrimitive.int);q.setInt(4,record.getValue("right_id").jsonPrimitive.int)
+                        q.executeQuery().use { r -> while(r.next()) {
+                            decisions.add(buildJsonObject { put("id",r.getString("id"));put("status",r.getString("status"));put("reason",r.getString("reason"));put("roles",Json.parseToJsonElement(r.getString("roles"))) })
+                            val references=listOf("reading_facts" to Json.parseToJsonElement(r.getString("reading_ids")).jsonArray,"semantic_facts" to Json.parseToJsonElement(r.getString("roles")).jsonArray.flatMap { it.jsonObject.getValue("evidenceIds").jsonArray },"quality_facts" to (Json.parseToJsonElement(r.getString("normalization_ids")).jsonArray+Json.parseToJsonElement(r.getString("exclusion_ids")).jsonArray))
+                            for((table,refs) in references) c.prepareStatement("SELECT * FROM $table WHERE id=?").use { f -> refs.distinct().forEach { ref ->
+                                f.setString(1,ref.jsonPrimitive.content);f.executeQuery().use { x -> if(x.next()) {
+                                    val body=if(table=="reading_facts") x.getString("body") else GZIPInputStream(x.getBytes("body").inputStream()).bufferedReader().use { it.readText() }
+                                    facts.add(buildJsonObject { put("id",x.getString("id"));put("kind",if(table=="reading_facts") "reading" else x.getString("kind"));put("target",x.getString("target"));put("url",x.getString("url"));put("revision",x.getString("revision"));put("sha256",x.getString("sha256"));put("body",Json.parseToJsonElement(body)) })
+                                } }
+                            } }
+                        } }
+                    }
+                    return@map buildJsonObject { record.forEach { (k,v)->put(k,v) };put("resolutions",JsonArray(decisions));put("referenceFacts",JsonArray(facts));put("factsSnapshotSha256",snapshotHash) }
+                }
                 val names=listOf(record.getValue("surface").jsonPrimitive.content,record.getValue("output_surface").jsonPrimitive.content).filter { it.isNotEmpty() }.distinct()
                 val ids=linkedSetOf<String>()
                 c.prepareStatement("SELECT ids FROM lookup WHERE surface=?").use { q -> names.forEach { name -> q.setString(1,name);q.executeQuery().use { r -> if(r.next()) ids.addAll(Json.parseToJsonElement(r.getString(1)).jsonArray.map { it.jsonPrimitive.content }) } } }
@@ -308,6 +336,8 @@ object DictionaryCli {
         lookup/convert/test: [--base-dir DIR] [--dict-dir DIR]
           [--categories all|none|person,place,...] [--exclude-categories unclassified]
           [--no-system] [--format table|json]
+        research prepare|bulk|pilot|run|status|explain|freeze-gold|accept|finalize|export [--ledger path]
+          Local Ollama only; regular build/lookup/convert never run AI.
         Categories: ${publishedCategories.joinToString(",")}
         Exit codes: 0 success, 1 test mismatch/no conversion, 2 input/configuration error.
     """.trimIndent()

@@ -26,6 +26,8 @@ jobs:
         run: |
           mkdir -p src/main/resources
           cp mozc-src/src/data/dictionary_oss/id.def src/main/resources/id.def
+      - name: Test resumable research without Ollama or network
+        run: python3 -m unittest discover -s scripts/research/tests -v
       - name: Run offline quality fixtures
         run: ./gradlew dictionaryQualityTest
       - uses: actions/upload-artifact@v4

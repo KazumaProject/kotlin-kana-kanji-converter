@@ -19,7 +19,10 @@ with gzip.open(a.audit, 'rt') as source, gzip.open(out / 'pending.tsv.gz', 'wt')
     writer = csv.DictWriter(target, fieldnames=fields, delimiter='\t', lineterminator='\n')
     writer.writeheader()
     for row in csv.DictReader(source, delimiter='\t'):
-        if row['phase'] != 'classification' or (row['quality_status'] == 'accepted' and row['categories'] != 'unclassified'):
+        if row['phase'] != 'classification' or (row['quality_status'] in ('accepted','adopted') and row['categories'] != 'unclassified'):
+            continue
+        if row['quality_status'] in ('excluded_confirmed','not_distributed'):
+            # Terminal records are archived separately; they are not an unfinished queue.
             continue
         if row['quality_status'] == 'accepted':
             group = 'classification-missing'

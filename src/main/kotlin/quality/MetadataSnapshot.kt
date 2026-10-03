@@ -20,7 +20,7 @@ object MetadataSnapshot {
     private val json = Json { prettyPrint = true }
     const val MAX_BYTES = 512L * 1024 * 1024
     fun sourceHashes(source: File): JsonObject = buildJsonObject { SupplementalSources.files.forEach { (id, name) -> put(id, sha256(File(source, name))) } }
-    fun verify(file: File, lock: File? = null, source: File? = null): JsonObject {
+    fun verify(file: File, lock: File? = null, source: File? = null, allowCandidate: Boolean = false): JsonObject {
         require(file.isFile && file.length() in 1..MAX_BYTES) { "Missing or oversized metadata snapshot: $file" }
         if (lock != null) require(sha256(file) == Json.parseToJsonElement(lock.readText()).jsonObject.getValue("databaseSha256").jsonPrimitive.content) { "Snapshot database checksum mismatch" }
         return DriverManager.getConnection("jdbc:sqlite:${file.toURI()}?mode=ro").use { connection ->
@@ -29,12 +29,13 @@ object MetadataSnapshot {
                 statement.executeQuery("SELECT value FROM info WHERE key='manifest'").use { result ->
                     require(result.next()) { "Missing snapshot manifest" }
                     val manifest = Json.parseToJsonElement(result.getString(1)).jsonObject
-                    require(manifest["schemaVersion"]?.jsonPrimitive?.int in setOf(2, 3)) { "Unsupported metadata snapshot" }
+                    require(manifest["schemaVersion"]?.jsonPrimitive?.int in setOf(2, 3, 4)) { "Unsupported metadata snapshot" }
                     if (source != null) {
                         require(manifest.getValue("sources") == sourceHashes(source)) { "Snapshot source hashes differ; export/refresh a new snapshot" }
-                        require(manifest["postalParserVersion"]?.jsonPrimitive?.int == 2) { "Snapshot postal parser is outdated; refresh postal data" }
+                        require(manifest["postalParserVersion"]?.jsonPrimitive?.int == (if (manifest["schemaVersion"]?.jsonPrimitive?.int == 4) 7 else 2)) { "Snapshot postal parser is outdated; refresh postal data" }
                     }
                     listOf("lookup", "entities", "lexical", "pending").forEach { table -> statement.connection.prepareStatement("SELECT 1 FROM $table LIMIT 1").use { it.executeQuery().close() } }
+                    if (manifest["schemaVersion"]?.jsonPrimitive?.int == 4) ResearchSnapshot.verify(connection, manifest, allowCandidate)
                     if (manifest["schemaVersion"]?.jsonPrimitive?.int == 3) {
                         val expected=(manifest["lexicalSenseRows"] ?: manifest.getValue("lexicalFacts")).jsonPrimitive.int
                         statement.executeQuery("SELECT COUNT(*) FROM lexical_details").use { rows -> require(rows.next() && (if ("lexicalSenseRows" in manifest) rows.getInt(1)==expected else rows.getInt(1) in 1..expected)) { "Missing lexical sense facts" } }
@@ -50,7 +51,7 @@ object MetadataSnapshot {
     }
     fun fetch(lock: File, output: File, archive: File? = null) {
         val spec = Json.parseToJsonElement(lock.readText()).jsonObject
-        require(spec.getValue("schemaVersion").jsonPrimitive.int in setOf(2, 3)) { "Unsupported snapshot lock" }
+        require(spec.getValue("schemaVersion").jsonPrimitive.int in setOf(2, 3, 4)) { "Unsupported snapshot lock" }
         if (output.isFile && sha256(output) == spec.getValue("databaseSha256").jsonPrimitive.content) { verify(output, lock); return }
         output.absoluteFile.parentFile.mkdirs()
         val work = Files.createTempDirectory(output.absoluteFile.parentFile.toPath(), ".snapshot-fetch-").toFile()
@@ -159,7 +160,7 @@ object MetadataSnapshot {
         println("Snapshot archive=${output.length()} bytes, database=${database.length()} bytes, lock=$lock")
     }
     fun importLexicon(snapshot: File, lexicon: File, source: File, base: File, output: File, lock: File, reference: File? = null) {
-        verify(snapshot, source = source)
+        require(verify(snapshot, source = source).getValue("schemaVersion").jsonPrimitive.int < 4) { "Schema 4 must be updated through the research ledger" }
         output.absoluteFile.parentFile.mkdirs()
         val work = Files.createTempDirectory(output.absoluteFile.parentFile.toPath(), ".lexicon-import-").toFile()
         try {
@@ -211,7 +212,8 @@ object MetadataSnapshot {
     }
 
     fun refresh(snapshot: File, postal: File?, output: File, lock: File, budget: Int = 200, minutes: Int = 30) {
-        verify(snapshot); output.absoluteFile.parentFile.mkdirs()
+        require(verify(snapshot).getValue("schemaVersion").jsonPrimitive.int < 4) { "Schema 4 must be updated through the research ledger" }
+        output.absoluteFile.parentFile.mkdirs()
         val work = Files.createTempDirectory(output.absoluteFile.parentFile.toPath(), ".snapshot-refresh-").toFile()
         try {
             val database = File(work, "snapshot.sqlite"); snapshot.copyTo(database)

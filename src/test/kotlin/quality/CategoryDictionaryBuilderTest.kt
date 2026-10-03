@@ -41,6 +41,17 @@ class CategoryDictionaryBuilderTest {
         CategoryDictionaryBuilder().build(CategoryDictionaryBuilder.Options(sources, base, output, reports, reference, cache, offline = true))
         assertEquals(hashes, Json.parseToJsonElement(File(output, "manifest.json").readText()).jsonObject.getValue("artifacts"))
     }
+    @Test fun semanticIncludeCannotBypassReadingVerification() = temporary { root ->
+        val base = File(root, "base"); val sources = File(root, "sources"); inputFixture(base, sources)
+        File(sources, "names.txt").writeText("まちがったよみ\t1\t1\t10\t確かな人物\n")
+        val overrides = File(root, "overrides.tsv").apply {
+            writeText("person\tまちがったよみ\t確かな人物\tinclude\tまちがったよみ\t確かな人物\tperson\thttps://example.org/name-only\n")
+        }
+        val output = File(root, "out/categories")
+        CategoryDictionaryBuilder().build(CategoryDictionaryBuilder.Options(source = sources, base = base, output = output, reports = File(root, "reports"), overrides = overrides, confirmed = null))
+        val person = LoadedDictionary.load("person", File(output, "person"), File(output, "pos_table.dat"))
+        assertTrue(person.lookup("まちがったよみ").isEmpty())
+    }
     @Test fun failedBuildCleansTemporaryFilesAndLeavesPublishedOutput() = temporary { root ->
         val base = File(root, "base"); val sources = File(root, "sources"); inputFixture(base, sources)
         File(sources, "names.txt").writeText("broken\n")

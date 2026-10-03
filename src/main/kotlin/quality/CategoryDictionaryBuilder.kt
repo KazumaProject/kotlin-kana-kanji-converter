@@ -21,6 +21,7 @@ class CategoryDictionaryBuilder {
         val snapshot: File? = null,
         val confirmed: File? = File("src/main/dictionary-quality/confirmed.tsv").takeIf { it.isFile },
         val inputManifest: File? = null,
+        val candidate: Boolean = false,
     )
     private data class Entry(var word: Dictionary, val sources: MutableSet<String>)
 
@@ -28,10 +29,11 @@ class CategoryDictionaryBuilder {
         require(options.output.canonicalFile != options.base.canonicalFile) { "Category output must be separate from system resources" }
         val ids = MozcIdDefParser.parse(File(options.base, "id.def").toPath()).map { it.id }.toSet()
         val overrides = ManualOverrides(options.overrides)
-        options.snapshot?.let { MetadataSnapshot.verify(it, source = options.source) }
+        val metadata = options.snapshot?.let { MetadataSnapshot.verify(it, source = options.source, allowCandidate = options.candidate) }
+        if (metadata?.get("schemaVersion")?.jsonPrimitive?.int == 4) { ResolvedDictionaryBuilder.build(options, metadata); return }
         val lexical = LexicalEvidence.load(options.snapshot, options.confirmed)
         val independentReadings = ReadingEvidence.load(options.base)
-        val readings = ReadingEvidence.load(options.base, options.source).toMutableMap().apply {
+        val readings = independentReadings.toMutableMap().apply {
             lexical.readings.forEach { (surface, values) -> put(surface, get(surface).orEmpty() + values) }
         }
         val catalog = MetadataCatalog(options.reference, options.snapshot ?: options.cache, options.cacheLimitMiB, options.apiBudget, options.offline)
@@ -102,8 +104,8 @@ class CategoryDictionaryBuilder {
                                 }
                                 val categories = decisions.flatMap { it.categories }.toMutableSet()
                                 if (categories.size > 1) categories.remove("unclassified")
-                                val manual = entry.sources.mapNotNull { overrides.classification(SourceRow(it, 0, entry.word)) }
-                                val quality = if (manual.isNotEmpty()) QualityDecision("accepted", manual.joinToString(";") { it.evidence }) else qualityCheck
+                                // Semantic overrides never establish a reading.
+                                val quality = qualityCheck
                                 if (quality.state != "accepted") qualityHeld++
                                 if (categories == setOf("unclassified")) unclassifiedCount++
                                 if (quality.state == "accepted" && categories != setOf("unclassified")) {

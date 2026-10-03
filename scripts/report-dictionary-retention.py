@@ -6,13 +6,13 @@ p=argparse.ArgumentParser();p.add_argument('--before',required=True);p.add_argum
 def rows(path):
  with gzip.open(path,'rt',encoding='utf-8') as f:yield from csv.DictReader(f,delimiter='\t')
 def key(r):return tuple(r[k] for k in ('reading','surface','left_id','right_id'))
-def adopted(r):return r['phase']=='classification' and r['quality_status']=='accepted' and r['categories']!='unclassified'
+def adopted(r):return r['phase']=='classification' and r['quality_status'] in ('accepted','adopted') and r['categories']!='unclassified'
 old={key(r):r for r in rows(a.before) if adopted(r)};total=len(old);current={};retained=0
 for r in rows(a.after):
  k=key(r)
  if k in old:
   if adopted(r):retained+=1;del old[k];current.pop(k,None)
-  elif r['phase']=='classification' or r['quality_status']=='excluded':current[k]=r
+  elif r['phase']=='classification' or r['quality_status'] in ('excluded','excluded_confirmed'):current[k]=r
 out=Path(a.output);out.mkdir(parents=True,exist_ok=True);reasons=collections.Counter()
 with gzip.open(out/'previously-published-losses.tsv.gz','wt',encoding='utf-8') as f:
  w=csv.writer(f,delimiter='\t',lineterminator='\n');w.writerow(['reading','surface','left_id','right_id','before_categories','after_status','verification_issue','semantic_issue','reading_evidence'])

@@ -38,7 +38,7 @@ object CategoryPackage {
         val manifest = Json.parseToJsonElement(zip.getInputStream(zip.getEntry("manifest.json") ?: error("Missing manifest")).bufferedReader().use { it.readText() }).jsonObject
         require(manifest.getValue("format").jsonPrimitive.content == "legacy-louds-triplets-v1") { "Invalid dictionary format" }
         val artifacts = manifest.getValue("artifacts").jsonObject
-        val expected = setOf("pos_table.dat") + publishedCategories.flatMap { c -> listOf("yomi.dat", "tango.dat", "token.dat").map { "$c/$it" } }
+        val expected = setOf("pos_table.dat") + CategoryRegistry.active(manifest, requireCore = true).flatMap { c -> listOf("yomi.dat", "tango.dat", "token.dat").map { "$c/$it" } }
         require(artifacts.keys == expected && names.toSet() == expected + setOf("manifest.json", "NOTICES.md", "LICENSE-JMDICT.html", "LICENSE-CC-BY-SA-4.0.txt")) { "Unexpected category package entries" }
         require(zip.getEntry("NOTICES.md").size > 0) { "Empty notices" }
         val noticeHashes=manifest.getValue("packageNotices").jsonObject

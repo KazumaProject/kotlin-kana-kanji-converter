@@ -35,7 +35,7 @@ object SupplementalSources {
 
     fun normalized(source: String, directory: File = File("src/main/bin"), base: File = File("src/main/resources")): List<Dictionary> {
         val lexical = if (source == "place") LexicalEvidence.load(File("build/dictionary-metadata/snapshot.sqlite").takeIf { it.isFile }) else LexicalEvidence()
-        val evidence = if (source == "place") ReadingEvidence.load(base, directory).toMutableMap().apply { lexical.readings.forEach { (surface, readings) -> put(surface, get(surface).orEmpty() + readings) } } else emptyMap()
+        val evidence = if (source == "place") ReadingEvidence.load(base).toMutableMap().apply { lexical.readings.forEach { (surface, readings) -> put(surface, get(surface).orEmpty() + readings) } } else emptyMap()
         val normalizer = CandidateNormalizer(evidence, ManualOverrides(File("src/main/dictionary-quality/overrides.tsv").takeIf { it.isFile }), lexical)
         val result = linkedMapOf<WordKey, Dictionary>()
         var held = 0

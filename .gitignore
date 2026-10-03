@@ -52,3 +52,7 @@ bin/
 !/src/main/resources/atok-unigram-dictionary.txt
 .gradle-user-home
 release_zips
+
+# Local Python research bytecode (source and tests are tracked).
+__pycache__/
+*.pyc

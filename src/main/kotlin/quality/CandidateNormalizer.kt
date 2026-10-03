@@ -69,7 +69,7 @@ class CandidateNormalizer(
                     // The final component must consume the complete remainder.
                     // A shorter known variant (たかばた) is not a competing split
                     // of the single remaining component (たかばたけ).
-                    index == groups.lastIndex && remaining.isNotEmpty() && remaining.all { it in 'ぁ'..'ゖ' || it == 'ー' } -> remaining
+                    index == groups.lastIndex && remaining in known -> remaining
                     known.size == 1 -> known.single()
                     else -> null
                 }
