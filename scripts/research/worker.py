@@ -452,6 +452,16 @@ def model_fact(f,row):
 
 def target_supported(role,facts):
     selected=[f for f in facts if f['id'] in role['evidenceIds'] and f['target']==role['target'] and f['kind'] in ('meaning','context')]
+    # A pair of agreeing models cannot turn an explicit fictional-person tag
+    # into a real person, or add an ordinary-word sense to a name-only entry.
+    for fact in facts:
+        if fact['target']!=role['target'] or fact['kind']!='meaning': continue
+        body=json.loads(fact['body'])
+        if body.get('source')!='JMnedict': continue
+        allowed=set(name_categories(body.get('nameTypes',[])))
+        if 'place' in allowed: allowed.update(('facility','station'))
+        if 'product' in allowed and 'programming language' in canonical(body.get('translations',[])).lower(): allowed.add('technical')
+        if role.get('category')=='general' or (allowed and role.get('category') not in allowed): return False
     if re.fullmatch(r'Q[0-9]+',role['target']) and not any(f['kind']=='reading' and f['target']==role['target'] for f in facts):
         # A dictionary pronunciation for a homograph is not proof of this entity.
         return False

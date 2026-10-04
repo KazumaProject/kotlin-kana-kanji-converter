@@ -138,6 +138,13 @@ class ResearchTest(unittest.TestCase):
         worker.decide(self.db,self.row,v,v)
         dec=json.loads(self.db.execute('SELECT decision FROM candidates').fetchone()[0])
         self.assertEqual(['person'],[r['category'] for r in dec['roles']])
+
+    def test_model_agreement_cannot_override_explicit_fictional_person(self):
+        mid=self.e.fact('やまだ','山田','meaning',['character'],'JMnedict:1:0',self.doc,{'source':'JMnedict','nameTypes':['masc','fict'],'sense':0})
+        v=self.value();v['roles']=[{'category':'person','target':'JMnedict:1:0','sense':'実在人','evidenceIds':[mid]}]
+        worker.decide(self.db,self.row,v,v)
+        roles=json.loads(self.db.execute('SELECT decision FROM candidates').fetchone()[0])['roles']
+        self.assertEqual(['character'],[r['category'] for r in roles])
     def test_homonym_reading_conflict_is_scoped_to_its_target(self):
         self.e.fact('','山田','context',[],'Q999',self.doc,{'source':'Wikidata','label':'山田','nameBoundReadings':{'山田':['さんでん']}})
         facts=worker.fact_rows(self.db,self.row)

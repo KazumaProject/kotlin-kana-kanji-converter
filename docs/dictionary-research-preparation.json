@@ -148,11 +148,11 @@
       ],
       "version": 4
     },
-    "worker": "e69107498314bdca5a68dab2d5c4c0d51f2a4ed5e849c3663f2d049f4bb271f3"
+    "worker": "18ca3ceaae1464b66237cc7e3d4ee81a5172cef24ae66a4b912e9897083af379"
   },
   "bulkReceipt": {
-    "completedAt": 1791092010.747168,
-    "configurationSha256": "f802f7c45dc00e9c62e51067f910dfa5fbcc97cfe01fb52e9ea1bbc1f447dac0"
+    "completedAt": 1791092502.39788,
+    "configurationSha256": "451f2a7173a092e83606a3f99363cafabec893530540f24b91eef4c4e4fb9174"
   },
   "inputs": {
     "audit": "a4e7b9d0044e1ab0de144fd57f22b1ef94831819b9a5e7b4cdedaf492aa866fa",
@@ -170,14 +170,14 @@
   "fullResearchComplete": false,
   "releaseReady": false,
   "tests": {
-    "python": 38,
+    "python": 39,
     "kotlin": 140,
     "failures": 0,
     "kotlinSkipped": 1,
     "linuxFixtureRun": "https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/runs/37161862279"
   },
   "baselineAuditSha256": "a4e7b9d0044e1ab0de144fd57f22b1ef94831819b9a5e7b4cdedaf492aa866fa",
-  "updatedAt": "2026-10-04T05:35:06.398956+00:00",
+  "updatedAt": "2026-10-04T05:44:28.508574+00:00",
   "pilotRestartReason": "Fix compound proper-name tags, all explicit name-bound pronunciations and per-original transformation bindings; old parser evidence is archived. No execution/parser failure was finalized as non-distribution.",
   "pilotRestarted": true
 }
