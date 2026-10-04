@@ -13,7 +13,7 @@ object ResearchRunner {
         val config = if (bundled.isFile) File(bundled.parentFile, "config") else File("src/main/dictionary-quality/research")
         val command = mutableListOf("python3", worker.absolutePath, values.getValue("action"))
         if (!values.containsKey("config")) command.addAll(listOf("--config", config.absolutePath))
-        values.filterKeys { it != "action" }.forEach { (key, value) -> if (key == "candidate") command.add("--candidate") else command.addAll(listOf("--$key", value)) }
+        values.filterKeys { it != "action" }.forEach { (key, value) -> if (key in setOf("candidate", "online")) command.add("--candidate") else command.addAll(listOf("--$key", value)) }
         val process = ProcessBuilder(command).redirectErrorStream(true).start()
         val shutdown = Thread { process.destroy() }
         Runtime.getRuntime().addShutdownHook(shutdown)

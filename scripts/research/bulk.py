@@ -9,7 +9,8 @@ def postal(db,args,e,pair,reading,sha,info,emit):
     import rescue
     wanted_surfaces=rescue.targets(db)
     did=e.save('https://www.post.japanpost.jp/zipcode/dl/utf/zip/utf_ken_all.zip',version,path.read_bytes(),'Japan Post postal data')
-    db.execute('UPDATE facts SET active=0 WHERE document_id=?',(did,))
+    import direct_review
+    direct_review.retire_provider(db,'Japan Post')
     def annotation(s): return bool(re.fullmatch(r'(?:地下|地上|第)?[0-9０-９一二三四五六七八九十百]+(?:階|丁目|番地)(?:以上|以下)?',s)) or s in ('その他','丁目','番地','区','一部','階層不明','地階・階層不明') or any(t in s for t in ('除く','番地','階層','丁目'))
     def instruction(s): return 'の次に番地がくる場合' in s or '以下に掲載がない場合' in s or s=='その他' or s.endswith('全域')
     count=0;seen=set()

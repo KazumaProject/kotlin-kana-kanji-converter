@@ -5,6 +5,7 @@ Operational failures remain errors. AI outputs never create reading evidence.
 import argparse, contextlib, csv, gzip, hashlib, html, io, json, math, os, pathlib
 import re, socket, sqlite3, sys, time, unicodedata, urllib.parse, urllib.request, urllib.error, zipfile
 import xml.etree.ElementTree as ET
+sys.modules.setdefault("worker", sys.modules[__name__])
 
 FILES = {'person':'names.txt','place':'place.txt.zip','wiki':'only_wiki.txt.zip',
          'neologd':'only_neologd.txt.zip','common':'wiki_neologd_common.txt.zip'}
@@ -24,6 +25,7 @@ CREATE TABLE normalization(source TEXT,line INTEGER,reading TEXT,surface TEXT,le
 CREATE TABLE documents(id TEXT PRIMARY KEY,url TEXT NOT NULL,revision TEXT NOT NULL,sha256 TEXT NOT NULL,path TEXT NOT NULL,bytes INTEGER NOT NULL,license TEXT NOT NULL);
 CREATE TABLE facts(id TEXT PRIMARY KEY,reading TEXT,surface TEXT,kind TEXT NOT NULL,categories TEXT NOT NULL,target TEXT NOT NULL,document_id TEXT NOT NULL,body TEXT NOT NULL,active INTEGER NOT NULL DEFAULT 1,FOREIGN KEY(document_id) REFERENCES documents(id));
 CREATE INDEX fact_pair ON facts(surface,reading);
+CREATE INDEX fact_status ON facts(active,kind);
 CREATE INDEX fact_document ON facts(document_id);
 CREATE TABLE attempts(id INTEGER PRIMARY KEY,candidate_id TEXT,round INTEGER,url TEXT,result TEXT NOT NULL,error TEXT,document_id TEXT);
 CREATE TABLE inferences(id INTEGER PRIMARY KEY,candidate_id TEXT,role TEXT,cache_key TEXT,model_digest TEXT,prompt_sha256 TEXT,input_sha256 TEXT,output TEXT,seconds REAL,tokens INTEGER,error TEXT,created REAL);
@@ -32,6 +34,8 @@ CREATE TABLE pilot(candidate_id TEXT PRIMARY KEY,stratum TEXT NOT NULL);
 CREATE TABLE evaluations(id TEXT PRIMARY KEY,body TEXT NOT NULL);
 CREATE TABLE model_calls(id INTEGER PRIMARY KEY,role TEXT,model_digest TEXT,configuration_sha256 TEXT,input_sha256 TEXT,request BLOB,response BLOB,aliases TEXT,error TEXT,seconds REAL,created REAL);
 CREATE TABLE configuration_history(sha256 TEXT PRIMARY KEY,body TEXT NOT NULL,created REAL NOT NULL);
+CREATE TABLE decision_history(id INTEGER PRIMARY KEY,candidate_id TEXT,state TEXT,reason TEXT,decision TEXT,change TEXT,created REAL);
+CREATE INDEX attempt_cache ON attempts(url,result,id);
 '''
 
 def canonical(x): return json.dumps(x,ensure_ascii=False,sort_keys=True,separators=(',',':'))
@@ -44,6 +48,10 @@ def sha(path):
 def reading(x):
     x=unicodedata.normalize('NFKC',x)
     return ''.join(chr(ord(c)-96) if 'ァ'<=c<='ヶ' else c for c in x)
+def bound_reading(x):
+    # Wikidata writes Japanese family/given-name readings with a display space;
+    # it separates name components and does not change the pronunciation.
+    return re.sub(r'\s+','',reading(x))
 def pair(y,s): return reading(y),unicodedata.normalize('NFKC',s)
 def candidate_id(y,s,l,r): return digest(canonical([y,s,l,r]))[:32]
 def emit(x): print(canonical(x),flush=True)
@@ -52,8 +60,10 @@ class LedgerConnection(sqlite3.Connection):
         try: return super().__exit__(*args)
         finally: self.close()
 
-def connect(path):
-    db=sqlite3.connect(path,timeout=30,factory=LedgerConnection);db.row_factory=sqlite3.Row
+def connect(path,readonly=False):
+    target="file:"+str(pathlib.Path(path).resolve())+"?mode=ro" if readonly else path
+    db=sqlite3.connect(target,uri=readonly,timeout=30,factory=LedgerConnection);db.row_factory=sqlite3.Row
+    if readonly: return db
     db.execute('PRAGMA foreign_keys=ON');db.execute('PRAGMA journal_mode=WAL')
     columns={r[1] for r in db.execute('PRAGMA table_info(candidates)')}
     if columns:
@@ -63,6 +73,9 @@ def connect(path):
         db.execute('CREATE TABLE IF NOT EXISTS configuration_history(sha256 TEXT PRIMARY KEY,body TEXT NOT NULL,created REAL NOT NULL)')
         if 'active' not in {r[1] for r in db.execute('PRAGMA table_info(facts)')}: db.execute('ALTER TABLE facts ADD COLUMN active INTEGER NOT NULL DEFAULT 1')
         db.execute('CREATE INDEX IF NOT EXISTS fact_document ON facts(document_id)')
+        db.execute('CREATE INDEX IF NOT EXISTS fact_status ON facts(active,kind)')
+        db.execute('CREATE INDEX IF NOT EXISTS attempt_cache ON attempts(url,result,id)')
+        db.execute('CREATE TABLE IF NOT EXISTS decision_history(id INTEGER PRIMARY KEY,candidate_id TEXT,state TEXT,reason TEXT,decision TEXT,change TEXT,created REAL)')
         db.commit()
     return db
 
@@ -99,18 +112,15 @@ def configuration(args):
     taxonomy=json.loads((p/'categories.json').read_text())
     endpoint=local_url(models['endpoint'])
     prompts={r:(p/(r+'.txt')).read_text() for r in ('proposer','reviewer')}
-    identity={'models':models,'taxonomy':taxonomy,'researchParserVersion':3,'prompts':{k:digest(v) for k,v in prompts.items()},'worker':digest(canonical({f.name:sha(f) for f in pathlib.Path(__file__).parent.glob('*.py')}))}
+    identity={'models':models,'taxonomy':taxonomy,'researchParserVersion':4,'prompts':{k:digest(v) for k,v in prompts.items()},'stages':{'onlineReadingParser':4,'directRules':7,'publication':2}}
     return models,taxonomy,prompts,endpoint,identity
 
 def pin_config(db,args):
+    import direct_review
     cfg=configuration(args);stored=info(db,'configuration')
     if stored is not None and stored!=cfg[-1]:
         info(db,'previousConfiguration',stored)
-        if stored.get('researchParserVersion')!=cfg[-1]['researchParserVersion']:
-            db.execute("UPDATE facts SET active=0 WHERE active=1 AND COALESCE(json_extract(body,'$.seedOnly'),0)!=1 AND json_extract(body,'$.source') IN ('Wikidata','Wikipedia','official-link','explicit-name-reading','attested-canonical-kana')")
-        db.execute("UPDATE candidates SET state='queued',decision=NULL,reason='configuration-changed',error=NULL,research_round=0,error_count=0,next_retry=0 WHERE state!='queued' OR research_round!=0")
-        db.execute("DELETE FROM info WHERE key IN ('finalized','acceptance')")
-        if stored.get('taxonomy')!=cfg[-1].get('taxonomy'): db.execute("DELETE FROM info WHERE key='goldFrozen'")
+        direct_review.invalidate_configuration(db,stored,cfg[-1])
     db.execute('INSERT OR IGNORE INTO configuration_history VALUES(?,?,?)',(digest(canonical(cfg[-1])),canonical(cfg[-1]),time.time()))
     info(db,'configuration',cfg[-1]);db.commit();return cfg
 
@@ -209,22 +219,31 @@ class Evidence:
         self.db=db;self.root=pathlib.Path(args.documents);self.root.mkdir(parents=True,exist_ok=True)
         self.limit=configuration(args)[0]['documentLimitBytes']
         storage=str(self.root.resolve())
-        if storage not in DOCUMENT_USAGE: DOCUMENT_USAGE[storage]=sum(f.stat().st_size for f in self.root.iterdir() if f.is_file())
         self.storage=storage
+    def document_usage(self):
+        if self.storage not in DOCUMENT_USAGE:
+            # Load only when writing a new file; most direct-review imports add facts for saved documents.
+            prefix=self.storage+os.sep
+            row=self.db.execute("SELECT COALESCE(SUM(bytes),0) FROM (SELECT path,MAX(bytes) AS bytes FROM documents WHERE substr(path,1,?)=? GROUP BY path)",(len(prefix),prefix)).fetchone()
+            DOCUMENT_USAGE[self.storage]=row[0]
+        return DOCUMENT_USAGE[self.storage]
     def save(self,url,revision,data,license):
         h=digest(data);did=digest(canonical([url,revision,h]))[:32];p=self.root/h
         if not p.exists():
-            total=DOCUMENT_USAGE[self.storage]
+            total=self.document_usage()
             if total+len(data)>self.limit: raise OSError('Document storage limit exceeded; no candidate decision changed')
             tmp=self.root/(h+'.tmp');tmp.write_bytes(data);os.replace(tmp,p);DOCUMENT_USAGE[self.storage]+=len(data)
         self.db.execute('INSERT OR IGNORE INTO documents VALUES(?,?,?,?,?,?,?)',(did,url,revision,h,str(p.resolve()),len(data),license))
         return did
-    def fact(self,y,s,kind,categories,target,doc,body):
+    def fact(self,y,s,kind,categories,target,doc,body,*,append_inspection=False):
+        if append_inspection and (kind!='context' or body.get('source')!='Wikidata' or not body.get('classPaths') or not body.get('componentFacts')):
+            raise ValueError('Append-only inspection requires a bound class-path context')
         y,s=pair(y,s);value=(y,s,kind,canonical(sorted(categories)),target,doc,canonical(body));fid=digest(canonical(value))[:32]
         inserted=self.db.execute('INSERT OR IGNORE INTO facts(id,reading,surface,kind,categories,target,document_id,body) VALUES(?,?,?,?,?,?,?,?)',(fid,*value)).rowcount
         inserted+=self.db.execute('UPDATE facts SET active=1 WHERE id=? AND active=0',(fid,)).rowcount
-        if inserted:
-            self.db.execute("UPDATE candidates SET state='queued',reason='evidence-changed',decision=NULL,error=NULL WHERE surface=? AND (reading=? OR ?='') AND decision IS NOT NULL",(s,y,y))
+        if inserted and not append_inspection:
+            self.db.execute("INSERT INTO decision_history(candidate_id,state,reason,decision,change,created) SELECT id,state,reason,decision,'evidence-changed',? FROM candidates WHERE surface=? AND (reading=? OR ?='') AND decision IS NOT NULL",(time.time(),s,y,y))
+            self.db.execute("UPDATE candidates SET state=CASE WHEN error IS NOT NULL AND state IN ('blocked','error') THEN state ELSE 'queued' END,reason='evidence-changed',decision=NULL WHERE surface=? AND (reading=? OR ?='') AND decision IS NOT NULL",(s,y,y))
             self.db.execute("DELETE FROM info WHERE key IN ('finalized','acceptance')")
         return fid
     def fetch(self,url,cid,round,revision='retrieved',license='source-specific'):
@@ -232,12 +251,18 @@ class Evidence:
         except Exception as ex:
             self.db.execute('INSERT INTO attempts(candidate_id,round,url,result,error) VALUES(?,?,?,?,?)',(cid,round,url,'error',str(ex)))
             self.db.commit();raise
-        old=self.db.execute('SELECT d.* FROM attempts a JOIN documents d ON d.id=a.document_id WHERE a.url=? AND a.result=\'success\' ORDER BY a.id DESC LIMIT 1',(url,)).fetchone()
+        old=self.db.execute("SELECT d.* FROM attempts a JOIN documents d ON d.id=a.document_id WHERE a.url=? AND a.result='success' AND NOT EXISTS (SELECT 1 FROM attempts bad WHERE bad.document_id=a.document_id AND bad.result='invalid-api') ORDER BY a.id DESC LIMIT 1",(url,)).fetchone()
         if old:
             p=pathlib.Path(old['path'])
             if sha(p)!=old['sha256']: raise ValueError('Cached document checksum mismatch')
-            self.db.execute('INSERT INTO attempts(candidate_id,round,url,result,document_id) VALUES(?,?,?,?,?)',(cid,round,url,'success',old['id']))
-            return old['id'],p.read_bytes()
+            data=p.read_bytes()
+            try: validate_mediawiki_payload(url,data)
+            except (ValueError,OSError) as ex:
+                self.db.execute('INSERT INTO attempts(candidate_id,round,url,result,error,document_id) VALUES(?,?,?,?,?,?)',(cid,round,url,'invalid-api',str(ex),old['id']))
+                self.db.commit()
+            else:
+                self.db.execute('INSERT INTO attempts(candidate_id,round,url,result,document_id) VALUES(?,?,?,?,?)',(cid,round,url,'success',old['id']))
+                return old['id'],data
         try:
             host=urllib.parse.urlparse(url).hostname;last=info(self.db,'lastFetch:'+host) or 0
             blocked=info(self.db,'blockedUntil:'+host) or 0
@@ -250,6 +275,7 @@ class Evidence:
                 check_public_url(f.url);data=f.read(2*1024*1024+1)
                 if len(data)>2*1024*1024: raise ValueError('Oversized page')
             did=self.save(url,revision if revision!='retrieved' else 'sha256:'+digest(data),data,license)
+            validate_mediawiki_payload(url, data)
             self.db.execute('INSERT INTO attempts(candidate_id,round,url,result,document_id) VALUES(?,?,?,?,?)',(cid,round,url,'success',did))
             return did,data
         except Exception as e:
@@ -263,6 +289,18 @@ class Evidence:
                 info(self.db,'blockedUntil:'+urllib.parse.urlparse(url).hostname,until)
             self.db.execute('INSERT INTO attempts(candidate_id,round,url,result,error) VALUES(?,?,?,?,?)',(cid,round,url,'error',str(e)))
             self.db.commit();raise
+
+def validate_mediawiki_payload(url, data):
+    # HTTP 200 can still carry a temporary API failure. Preserve the raw document,
+    # but do not cache that response as a successfully usable research result.
+    u=urllib.parse.urlparse(url)
+    if u.hostname not in ('ja.wikipedia.org','www.wikidata.org') or u.path!='/w/api.php': return
+    value=json.loads(data)
+    if isinstance(value,dict) and 'error' in value:
+        failure=value['error'];code=failure.get('code') if isinstance(failure,dict) else None
+        message='MediaWiki API failure: '+canonical(failure)
+        if code in ('maxlag','ratelimited','readonly','internal_api_error_DBConnectionError'): raise OSError(message)
+        raise ValueError(message)
 
 def check_public_url(url):
     import ipaddress
@@ -278,6 +316,8 @@ def import_mozc(db,args,e):
     for name in ['dictionary%02d.txt'%i for i in range(10)]+['suffix.txt']:
         path=base/name;version=sha(path);key='import:'+name
         if info(db,key)==version: continue
+        import direct_review
+        direct_review.retire_provider(db,'Mozc',name)
         did=e.save('https://github.com/google/mozc/blob/'+args.mozc_commit+'/src/data/dictionary_oss/'+name,args.mozc_commit,path.read_bytes(),'Mozc BSD-3-Clause')
         with path.open() as f:
             for line,raw in enumerate(f,1):
@@ -304,7 +344,8 @@ def import_jmnedict(db,args,e):
     import rescue
     wanted_surfaces=rescue.targets(db)
     data=path.read_bytes();did=e.save('https://www.edrdg.org/pub/Nihongo/JMnedict.xml.gz',version,data,'EDRDG / CC-BY-SA-4.0')
-    db.execute('UPDATE facts SET active=0 WHERE document_id=?',(did,))
+    import direct_review
+    direct_review.retire_provider(db,'JMnedict')
     with gzip.open(path,'rb') as f:
         header=f.read(20000)
     if b'<!ENTITY %' in header or re.search(br'<!ENTITY\s+[^>]+\b(?:SYSTEM|PUBLIC)\b',header): raise ValueError('External XML entities prohibited')
@@ -337,7 +378,7 @@ def import_jmnedict(db,args,e):
 def import_jmdict(db,args,e):
     """Consume schema3 pair-restricted senses only after checking their raw entry constraints."""
     path=pathlib.Path(args.jmdict);version=sha(path)
-    if info(db,'import:JMdict')=={'sha256':version,'policy':5}: return
+    if info(db,'import:JMdict')=={'sha256':version,'policy':6}: return
     snapshot=sqlite3.connect('file:'+str(pathlib.Path(args.snapshot).resolve())+'?mode=ro',uri=True)
     facts={}
     for y,s,body in snapshot.execute('SELECT reading,surface,body FROM lexical_details'):
@@ -346,7 +387,8 @@ def import_jmdict(db,args,e):
             facts.setdefault(b['entryId'].split(':')[0],[]).append((y,s,b))
     did=e.save('https://www.edrdg.org/pub/Nihongo/JMdict_e.gz',version,path.read_bytes(),'EDRDG / CC-BY-SA-4.0')
     checked=0
-    db.execute('UPDATE facts SET active=0 WHERE document_id=?',(did,))
+    import direct_review
+    direct_review.retire_provider(db,'JMdict')
     with gzip.open(path,'rb') as f:
         header=f.read(20000)
     if b'<!ENTITY %' in header or re.search(br'<!ENTITY\s+[^>]+\b(?:SYSTEM|PUBLIC)\b',header): raise ValueError('External XML entities prohibited')
@@ -364,22 +406,20 @@ def import_jmdict(db,args,e):
                 index=int(re.search(r'sense-(\d+)',b['evidence']).group(1))-1
                 sense=node.findall('sense')[index]
                 if not readings or (sense.findall('stagk') and s not in [pair('',n.text)[1] for n in sense.findall('stagk')]) or (sense.findall('stagr') and reading(y) not in [reading(n.text) for n in sense.findall('stagr')]): raise ValueError('JMdict stored pair violates raw constraints: '+canonical([y,s,b['evidence']]))
-                pos=misc=set()
+                pos=set()
                 for prior in node.findall('sense')[:index+1]:
-                    pos=tags(prior,'pos') or pos;misc=tags(prior,'misc') or misc
+                    pos=tags(prior,'pos') or pos
+                misc=tags(sense,'misc')
                 fields=tags(sense,'field');cats=set()
                 for name,cat in NAME_TYPES.items():
                     if name in misc: cats.add(cat)
-                if 'food' in fields: cats.add('food')
-                if fields & {'comp','chem','math','med','pharm','physics','biol','bot','anat','engr','elec','electr','telec','stat','logic','geol','astron','law'}: cats.add('technical')
-                if not fields and pos & {'n','n-adv','n-t'} and not pos & {'n-pr','unc'} and not misc & (set(NAME_TYPES)|{'unclass','rare','fict','myth','creat'}): cats.add('general')
-                evidence={**b,'pos':sorted(pos),'misc':sorted(misc),'fields':sorted(fields),'categories':sorted(cats),'classificationPolicy':4,'re_restr':[n.text for r in readings for n in r.findall('re_restr')],
+                evidence={**b,'pos':sorted(pos),'misc':sorted(misc),'fields':sorted(fields),'categories':sorted(cats),'classificationPolicy':6,'re_restr':[n.text for r in readings for n in r.findall('re_restr')],
                           'stagk':[n.text for n in sense.findall('stagk')],'stagr':[n.text for n in sense.findall('stagr')]}
                 e.fact(y,s,'reading',[],b['entryId'],did,evidence)
                 e.fact(y,s,'meaning',cats,'JMdict:'+b['entryId']+':sense:'+str(index+1),did,evidence)
                 checked+=1
             node.clear();root.clear()
-    snapshot.close();info(db,'import:JMdict',{'sha256':version,'policy':5});db.commit();emit({'phase':'JMdict','rawConstraintsChecked':checked})
+    snapshot.close();info(db,'import:JMdict',{'sha256':version,'policy':6});db.commit();emit({'phase':'JMdict','rawConstraintsChecked':checked})
 
 def bulk(args):
     if not all((args.base_dir,args.jmdict,args.jmnedict,args.postal_zip)): raise ValueError('bulk requires Mozc resources, JMdict, JMnedict, and postal ZIP; partial reference fallback is forbidden')
@@ -398,9 +438,11 @@ def bulk(args):
         info(db,'bulkComplete',{'configurationSha256':digest(canonical(configuration(args)[-1])),'completedAt':time.time()});db.commit()
     status(args)
 
+FACT_ROWS_SQL = "SELECT f.*,d.url,d.revision,d.sha256 FROM facts f INDEXED BY fact_pair JOIN documents d ON d.id=f.document_id WHERE f.active=1 AND (f.reading=? OR f.reading='') AND f.surface=? ORDER BY f.id"
+
 def fact_rows(db,row):
     y,s=pair(row['reading'],row['surface'])
-    return [dict(r) for r in db.execute("SELECT f.*,d.url,d.revision,d.sha256 FROM facts f JOIN documents d ON d.id=f.document_id WHERE f.active=1 AND (f.reading=? OR f.reading='') AND f.surface=? ORDER BY f.id",(y,s))]
+    return [dict(r) for r in db.execute(FACT_ROWS_SQL,(y,s))]
 
 def response_schema(ids,categories,fids):
     strings={'type':'array','items':{'type':'string'},'maxItems':8}
@@ -452,6 +494,24 @@ def model_fact(f,row):
 
 def target_supported(role,facts):
     selected=[f for f in facts if f['id'] in role['evidenceIds'] and f['target']==role['target'] and f['kind'] in ('meaning','context')]
+    # Wikidata type facts classify only the exact Japanese label whose reading is
+    # independently bound to the same item. A homograph's dictionary reading is
+    # not enough to turn an entity type into a classification.
+    for fact in selected:
+        body=json.loads(fact['body'])
+        if body.get('source')=='Wikidata' and body.get('id')==role['target'] and (
+                'Q5' in body.get('types',[]) or 'Q95074' in body.get('types',[])):
+            name=fact['surface']; bound=body.get('nameBoundReadings',{}).get(name,[])
+            if not bound and name in (body.get('label'),body.get('title')):
+                bound=body.get('primaryReadings',[])
+            if not bound or not any(g['kind']=='reading' and g['target']==role['target'] and
+                       g['surface']==name and any(bound_reading(v)==bound_reading(g['reading']) for v in bound) for g in facts):
+                return False
+        if (body.get('source')=='JMnedict' and
+                ((role.get('category')=='place' and jmnedict_geographic_fact(fact)) or
+                 (role.get('category')=='character' and jmnedict_mythic_character_fact(fact))) and
+                not jmnedict_entry_reading_supported(fact,facts)):
+            return False
     # A pair of agreeing models cannot turn an explicit fictional-person tag
     # into a real person, or add an ordinary-word sense to a name-only entry.
     for fact in facts:
@@ -479,8 +539,20 @@ def target_supported(role,facts):
             primary=(b.get('label'),b.get('title'))
             named=f['surface'] in primary or f['surface'] in b.get('nameBoundReadings',{})
             readings=b.get('nameBoundReadings',{}).get(f['surface'],[])
-            if named and (not readings or any(reading(v) in [g['reading'] for g in facts if g['kind']=='reading'] for v in readings)): return True
-        if b.get('source')=='Wikipedia' and (b.get('title')==f['surface'] or any(g['kind']=='reading' and g['target']==f['target'] and g['document_id']==f['document_id'] for g in facts)): return True
+            if named and (not readings or any(bound_reading(v)==bound_reading(g['reading']) for v in readings for g in facts if g['kind']=='reading')): return True
+        if b.get('source')=='Wikipedia':
+            def binds_page_reading(g):
+                if g['kind']!='reading' or g['target']!=f['target'] or g['surface']!=f['surface']:
+                    return False
+                if g['document_id']==f['document_id']:
+                    return True
+                rb=json.loads(g['body']); ra=rb.get('acquisition',{}); fa=b.get('acquisition',{})
+                return (rb.get('source')=='explicit-name-reading'
+                        and str(rb.get('revision',''))==str(b.get('revision',''))
+                        and bool(ra.get('sourceDumpSha256'))
+                        and ra.get('sourceDumpSha256')==fa.get('sourceDumpSha256')
+                        and str(ra.get('sourcePageId',''))==str(fa.get('sourcePageId','')))
+            if b.get('title')==f['surface'] or any(binds_page_reading(g) for g in facts): return True
         if b.get('source')=='official-link' and any(g['kind']=='reading' and g['document_id']==f['document_id'] for g in facts): return True
         if b.get('seedOnly'):
             surface=f['surface'];kinds=b.get('nameKinds',{}).get(surface,[])
@@ -588,29 +660,49 @@ def inference(db,args,rows,role,cfg,evidence_override=None,partition=True):
         db.commit();raise
 
 def wiki_lead(content):
-    depth=0;out=[];i=0
-    while i<len(content):
-        if content[i:i+2]=='{{': depth+=1;i+=2
-        elif content[i:i+2]=='}}' and depth: depth-=1;i+=2
-        else:
-            if not depth: out.append(content[i])
-            i+=1
+    depth=0;out=[]
+    # Process template delimiters as tokens rather than scanning every article
+    # character in Python. Full-body reading search remains separate.
+    for token in re.split(r'(\{\{|\}\})',content):
+        if token=='{{': depth+=1
+        elif token=='}}' and depth: depth-=1
+        elif not depth: out.append(token)
     text=''.join(out);text=re.sub(r'<!--.*?-->','',text,flags=re.S)
     text=re.sub(r'\[\[([^]\n]+)\]\]',lambda m:m.group(1).split('|')[-1],text)
     return text.split('\n==')[0][:8000]
 
+def literal_name_reading_bindings(text):
+    """Return the literal whole-name readings used by online and dump parsers."""
+    kana=r'([ぁ-ゖァ-ヶー 　・]+(?:[、,][ぁ-ゖァ-ヶー 　・]+)*)(?=[、,)）])'
+    # Preserve the WHOLE written name. Searching for the input as a substring
+    # would attach 井上太郎's pronunciation to the separate name 太郎.
+    marked=r"'''([^\n]{1,256}?)'''\s*[（(]"+kana
+    plain=html.unescape(re.sub(r'<[^>]+>','',re.sub(marked,' ',text))).replace("''",'')
+    bindings=[(m[1],m[2],m[0]) for m in re.finditer(marked,text[:12000])]
+    names=r"(?<![\w々〆])([\w々〆ー・'’=＝\- 　]{1,256})\s*[（(]"+kana
+    bindings.extend((m[1].strip(),m[2],m[0]) for m in re.finditer(names,plain[:12000]))
+    result=[]
+    for name,readings,quote in bindings:
+        for i,explicit in enumerate(re.split('[、,]',readings)):
+            if i: explicit=re.sub(r'^(?:または|もしくは)','',explicit.strip())
+            result.append((name,explicit.replace(' ','').replace('　','').replace('・',''),quote))
+    return result+explicit_reading_bindings(text)
+
 def extract_readings(db,e,row,did,text,target,canonical_name=None):
     """Only explicit name-bound readings. No text-to-reading model or alias Cartesian product."""
-    s=row['surface'];plain=html.unescape(re.sub(r'<[^>]+>','',text)).replace("'''",'').replace("''",'')
-    for match in re.finditer(re.escape(s)+r'\s*[（(]([ぁ-ゖァ-ヶー 　・]+(?:[、,][ぁ-ゖァ-ヶー 　・]+)*)(?=[、,)）])',plain[:12000]):
-        for explicit in re.split('[、,]',match.group(1)):
-            y=reading(explicit.replace(' ','').replace('　','').replace('・',''))
-            if y==reading(row['reading']): e.fact(y,s,'reading',[],target,did,{'source':'explicit-name-reading','quotation':match.group(0),'start':match.start(),'reading':explicit})
-    for name,y,quote in explicit_reading_bindings(text):
-        if pair('',name)[1]==pair('',s)[1] and reading(y)==reading(row['reading']):
+    s=row['surface']
+    for name,y,quote in literal_name_reading_bindings(text):
+        if same_name(name,s) and reading(y)==reading(row['reading']):
             e.fact(row['reading'],s,'reading',[],target,did,{'source':'explicit-name-reading','quotation':quote,'name':name,'reading':y})
     if all('ぁ'<=c<='ゖ' or 'ァ'<=c<='ヶ' or c=='ー' for c in s) and reading(s)==reading(row['reading']) and (canonical_name or target)==s:
         e.fact(row['reading'],s,'reading',[],target,did,{'source':'attested-canonical-kana','name':s})
+
+def same_name(a,b):
+    # Japanese family/given-name spacing is display style, not a shorter alias.
+    def normalized(value):
+        value=unicodedata.normalize('NFKC',value)
+        return re.sub(r'(?<=[\u3040-\u30ff\u3400-\u9fff々]) +(?=[\u3040-\u30ff\u3400-\u9fff々])','',value)
+    return normalized(a)==normalized(b)
 
 def explicit_reading_bindings(text):
     """Literal ruby/reading fields only; never infer a pronunciation from prose."""
@@ -636,7 +728,7 @@ def article_primary_name(content,surface):
     # A disambiguating page-title suffix is not part of a person's stated name.
     # Keep literal parentheses in names; only the article's explicit subject counts.
     first=re.search(r"'''([^'\n]+)'''",wiki_lead(content))
-    return bool(first and pair('',first[1])[1]==pair('',surface)[1])
+    return bool(first and same_name(first[1],surface))
 
 def decode_official_page(data):
     # Unsupported document formats/encodings are parser failures, never negative evidence.
@@ -702,18 +794,112 @@ def agreement(proposal,review):
     # Stable published target IDs are needed. Free prose descriptions cannot establish identity.
     return proposal['quality']==review['quality']=='appropriate' and {(v['category'],v['target']) for v in proposal['roles']}=={(v['category'],v['target']) for v in review['roles']} and bool(proposal['roles'])
 
-def direct_category_fact(f,category):
+JM_NEDICT_GEOGRAPHICAL_TYPES={'bay','city','island','lake','mountain','mountain range','peninsula','river'}
+JM_NEDICT_MYTHIC_CHARACTER_DESCRIPTIONS={
+    'mother goddess of chinese mythology',
+    'spiritual dragon in chinese mythology',
+    'dragon-god in chinese mythology',
+}
+
+def _normalization_is_original(normalization):
+    return isinstance(normalization,str) and (normalization=='unchanged' or normalization.startswith('original:'))
+
+def _jmnedict_selected_sense(f):
+    if f.get('kind')!='meaning':
+        return None,None
+    try:
+        body=json.loads(f['body'])
+        sense=body.get('sense');entry=str(body.get('entryId',''))
+        translations=body.get('translations')
+        if (not entry or type(sense) is not int or not isinstance(translations,list) or
+                sense<0 or sense>=len(translations) or f.get('target')!=f'JMnedict:{entry}:{sense}'):
+            return None,None
+        selected=translations[sense]
+        if not isinstance(selected,list):
+            return None,None
+        return body,[value.strip() for value in selected if isinstance(value,str) and value.strip()]
+    except (KeyError,TypeError,ValueError):
+        return None,None
+
+def jmnedict_geographic_fact(f):
+    body,translations=_jmnedict_selected_sense(f)
+    if body is None or body.get('nameTypes')!=['place']:
+        return False
+    pattern=r'.+\((?:'+ '|'.join(re.escape(v) for v in sorted(JM_NEDICT_GEOGRAPHICAL_TYPES,key=len,reverse=True))+r')\)'
+    return any(re.fullmatch(pattern,value,re.IGNORECASE) for value in translations)
+
+def jmnedict_mythic_character_fact(f):
+    body,translations=_jmnedict_selected_sense(f)
+    if body is None or body.get('nameTypes')!=['myth']:
+        return False
+    pattern=r'.+\((?:'+ '|'.join(re.escape(v) for v in sorted(JM_NEDICT_MYTHIC_CHARACTER_DESCRIPTIONS,key=len,reverse=True))+r')\)'
+    return any(re.fullmatch(pattern,value,re.IGNORECASE) for value in translations)
+
+def jmnedict_entry_reading_supported(meaning,facts):
+    body,_=_jmnedict_selected_sense(meaning)
+    if body is None:
+        return False
+    entry=str(body['entryId']);target='JMnedict:'+entry
+    for fact in facts:
+        if (fact.get('kind')!='reading' or fact.get('target')!=target or
+                fact.get('document_id')!=meaning.get('document_id') or
+                pair(fact.get('reading',''),fact.get('surface',''))!=pair(meaning.get('reading',''),meaning.get('surface',''))):
+            continue
+        try:
+            reading_body=json.loads(fact['body'])
+        except (KeyError,TypeError,ValueError):
+            continue
+        if reading_body.get('source')!='JMnedict' or str(reading_body.get('entryId',''))!=entry:
+            continue
+        restrictions=reading_body.get('re_restr',[])
+        if restrictions and not any(pair('',value)[1]==pair('',meaning['surface'])[1] for value in restrictions):
+            continue
+        return True
+    return False
+
+def direct_category_fact(f,category,normalization=None):
+    if f['kind']=='context':
+        b=json.loads(f['body'])
+        if b.get('source')!='Wikidata' or b.get('id')!=f['target']:
+            return False
+        types=set(b.get('types',[]))
+        # Prefer the explicit fictional-character type over the broader human type.
+        if 'Q95074' in types:
+            return category=='character'
+        return 'Q5' in types and category=='person'
     if f['kind']!='meaning': return False
     b=json.loads(f['body']);source=b.get('source')
     if source=='Japan Post': return category=='place'
     # JMnedict place-name covers buildings too; it is not a precise place category.
-    if source=='JMnedict': return category!='place' and category in name_categories(b.get('nameTypes',[]))
-    if source=='JMdict': return any(NAME_TYPES.get(t)==category for t in b.get('misc',[]))
+    if source=='JMnedict':
+        if category!='place' and category in name_categories(b.get('nameTypes',[])):
+            return True
+        if category not in ('place','character'):
+            return False
+        if category=='place':
+            return _normalization_is_original(normalization) and jmnedict_geographic_fact(f)
+        return _normalization_is_original(normalization) and jmnedict_mythic_character_fact(f)
+    if source=='JMdict':
+        if any(NAME_TYPES.get(t)==category for t in b.get('misc',[])):
+            return True
+        # XML constraints attest the pair and sense, not its taxonomy. Legacy
+        # policy 4 assigned every unscoped noun to general and biological fields
+        # to technical; those assignments require source review and validation.
+        return False
     return False
 
 def decide(db,row,p,r):
     facts=fact_rows(db,row);reading_facts=[f for f in facts if f['kind']=='reading'];byid={f['id']:f for f in facts}
-    direct={(c,f['target']) for f in facts for c in json.loads(f['categories']) if direct_category_fact(f,c)}
+    direct=set()
+    for f in facts:
+        categories=set(json.loads(f['categories']))
+        if f['kind']=='context':
+            for category in ('person','character'):
+                if direct_category_fact(f,category,row['normalization']): categories.add(category)
+        if f['kind']=='meaning' and json.loads(f['body']).get('source')=='JMnedict':
+            for category in ('place','character'):
+                if direct_category_fact(f,category,row['normalization']): categories.add(category)
+        direct.update((category,f['target']) for category in categories if direct_category_fact(f,category,row['normalization']))
     ai_roles=p['roles'] if agreement(p,r) else []
     supported=[v for v in ai_roles if v['evidenceIds'] and all(i in byid for i in v['evidenceIds']) and target_supported(v,facts)]
     correction=any((v['reading'],v['surface'])!=(row['reading'],row['surface']) for v in p['corrections']+r['corrections'])
@@ -721,9 +907,16 @@ def decide(db,row,p,r):
     # Only facts rechecked against raw reference data participate; seed classifications do not.
     source_roles=[]
     for f in facts:
-        cats=json.loads(f['categories']);b=json.loads(f['body'])
+        cats=set(json.loads(f['categories']))
+        if f['kind']=='context':
+            for category in ('person','character'):
+                if direct_category_fact(f,category,row['normalization']): cats.add(category)
+        if f['kind']=='meaning' and json.loads(f['body']).get('source')=='JMnedict':
+            for category in ('place','character'):
+                if direct_category_fact(f,category,row['normalization']): cats.add(category)
+        b=json.loads(f['body'])
         for category in cats:
-            if direct_category_fact(f,category):
+            if direct_category_fact(f,category,row['normalization']):
                 source_roles.append({'category':category,'target':f['target'],'sense':str(b.get('sense',b.get('entryId',b.get('row',''))))+':'+category,'evidenceIds':[f['id']],'method':'direct'})
     for role in supported:
         role['method']='direct' if (role['category'],role['target']) in direct else 'ai'
@@ -783,9 +976,8 @@ def capacity_failure(ex):
     return (isinstance(ex,OSError) and (getattr(ex,'errno',None) in (28,122) or 'storage limit' in str(ex))) or (isinstance(ex,sqlite3.OperationalError) and any(t in str(ex).lower() for t in ('disk is full','database or disk is full')))
 
 def retry_error(db,cid,ex):
-    count=db.execute('SELECT error_count FROM candidates WHERE id=?',(cid,)).fetchone()[0]+1
-    delay=min(3600,30*2**min(count,7))
-    db.execute("UPDATE candidates SET state='error',error=?,error_count=?,next_retry=? WHERE id=?",(str(ex),count,time.time()+delay,cid))
+    import direct_review
+    return direct_review.mark_error(db,cid,ex)
 
 @contextlib.contextmanager
 def coordinator_lock(path):
@@ -798,76 +990,13 @@ def coordinator_lock(path):
         finally: fcntl.flock(f,fcntl.LOCK_UN)
 
 def _run(args,pilot=False):
+    import direct_review
     with connect(args.ledger) as db:
-        cfg=pin_config(db,args);validate_models(cfg[0],cfg[3])
-        if not info(db,'prepared') or not info(db,'bulkComplete'): raise ValueError('Prepare all inputs and complete mandatory bulk validation before inference')
-        if pilot: select_pilot(db,args.pilot_size)
-        if not pilot and info(db,'goldFrozen') is None: raise ValueError('Full research requires independently verified calibration/validation sets; use pilot first')
-        filter=' AND EXISTS (SELECT 1 FROM pilot p WHERE p.candidate_id=c.id)' if pilot else ''
-        total=0;batches=0;batch=args.batch_size or cfg[0]['batchSize'];start=time.monotonic();window=cfg[0].get('reviewWindow',128)
-        proposing=True
-        while True:
-            ready_count=db.execute("SELECT COUNT(*) FROM candidates c WHERE state='ready_review'"+filter).fetchone()[0]
-            queued_count=db.execute("SELECT COUNT(*) FROM candidates c WHERE (state='queued' OR (state='error' AND next_retry<=?))"+filter,(time.time(),)).fetchone()[0]
-            if ready_count>=window or (ready_count and not queued_count): proposing=False
-            if not ready_count: proposing=True
-            if not queued_count and not ready_count:
-                remaining=db.execute("SELECT COUNT(*) FROM candidates c WHERE state IN ('queued','error')"+filter).fetchone()[0]
-                if not remaining: break
-                emit({'waitingForRetry':remaining,'processedThisRun':total});time.sleep(10);continue
-            selector="(state='queued' OR (state='error' AND next_retry<=?))" if proposing else "state='ready_review'"
-            params=(time.time(),batch) if proposing else (batch,)
-            rows=[dict(r) for r in db.execute("SELECT * FROM candidates c WHERE "+selector+filter+" ORDER BY id LIMIT ?",params)]
-            if not rows: proposing=not proposing;continue
-            batches+=1
-            if proposing:
-                try: p=inference(db,args,rows,'proposer',cfg)
-                except Exception as ex:
-                    if capacity_failure(ex): raise
-                    emit({'phase':'proposal-error','error':str(ex),'retryable':True})
-                    if args.max_batches and batches>=args.max_batches: break
-                    continue
-                ready=[]
-                for row in rows:
-                    try:
-                        facts=fact_rows(db,row);cats={c for f in facts if f['kind']=='meaning' for c in json.loads(f['categories'])}
-                        insufficient=not any(f['kind']=='reading' for f in facts) or not cats
-                        proposed={v['category'] for v in p[row['id']]['roles']}
-                        needs_research=insufficient or row['normalization']!='unchanged' or len(proposed)>1 or row['reason']=='additional-research-for-blind-disagreement' or (row['old_status']=='accepted' and set(row['old_categories'].split(','))!=proposed)
-                        if needs_research:
-                            for research_round in range(row['research_round']+1,3): research(db,args,row,p[row['id']],research_round)
-                        ready.append(row)
-                    except Exception as ex:
-                        retry_error(db,row['id'],ex);db.commit();emit({'phase':'research-error','candidateId':row['id'],'error':str(ex),'retryable':True})
-                        if capacity_failure(ex): raise
-                if ready:
-                    try:
-                        p=inference(db,args,ready,'proposer',cfg)
-                        for row in ready: db.execute("UPDATE candidates SET state='ready_review',decision=?,error=NULL WHERE id=?",(canonical({'proposal':p[row['id']]}),row['id']))
-                        db.commit()
-                    except Exception as ex:
-                        if capacity_failure(ex): raise
-                        emit({'phase':'proposal-refresh-error','error':str(ex),'retryable':True})
-            else:
-                try:
-                    r=inference(db,args,rows,'reviewer',cfg)
-                    for row in rows:
-                        p=json.loads(row['decision'])['proposal']
-                        current=db.execute('SELECT research_round FROM candidates WHERE id=?',(row['id'],)).fetchone()[0]
-                        if not agreement(p,r[row['id']]) and current<2:
-                            db.execute("UPDATE candidates SET state='queued',decision=NULL,reason='additional-research-for-blind-disagreement' WHERE id=?",(row['id'],))
-                        else:
-                            import bulk as reference_bulk
-                            reference_bulk.check_normalization_row(db,Evidence(db,args),row,fact_rows)
-                            decide(db,row,p,r[row['id']]);total+=1
-                    db.commit()
-                except Exception as ex:
-                    if capacity_failure(ex): raise
-                    emit({'phase':'review-error','error':str(ex),'retryable':True})
-            emit({'phase':'proposal' if proposing else 'review','processedThisRun':total,'batches':batches,'seconds':round(time.monotonic()-start,2)})
-            if args.max_batches and batches>=args.max_batches: break
-        info(db,'lastRun',{'seconds':time.monotonic()-start,'processed':total,'pilot':pilot});db.commit()
-    status(args)
+        pin_config(db,args)
+        direct_review.reparse_saved_readings(db,args)
+        direct_review.repair_derived_proofs(db,args)
+        code=direct_review.run(db,args,pilot)
+    return code
 
 def run(args,pilot=False):
     started=time.time()
@@ -882,20 +1011,39 @@ def run(args,pilot=False):
     finally:
         with connect(args.ledger) as db:
             filt=' AND id IN (SELECT candidate_id FROM pilot)' if pilot else ''
-            pending=db.execute("SELECT COUNT(*) FROM candidates WHERE state IN ('queued','error','ready_review')"+filt).fetchone()[0]
+            pending=db.execute("SELECT COUNT(*) FROM candidates WHERE state NOT IN ('reviewed','adopted','excluded_confirmed','not_distributed')"+filt).fetchone()[0]
             state='failed' if error is not None else ('paused' if pending else 'review-finished')
             db.execute('UPDATE execution_runs SET ended=?,state=?,error=? WHERE id=?',(time.time(),state,error,rid));db.commit()
+        status(args)
+
+def direct_reading_discoveries(db):
+    baseline=pathlib.Path('build/research/pilot-bulk-baseline.json.gz')
+    if not baseline.is_file(): return None
+    try:
+        value=json.loads(gzip.decompress(baseline.read_bytes()))
+        # Report only immutable cohort-compatible baselines; never invent a zero.
+        import direct_review
+        return direct_review.reading_discoveries(db,value)
+    except (KeyError,ValueError,TypeError): return None
 
 def status(args):
-    with connect(args.ledger) as db:
+    with connect(args.ledger,readonly=True) as db:
         has_runs=db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='execution_runs'").fetchone()
         last=db.execute('SELECT * FROM execution_runs ORDER BY id DESC LIMIT 1').fetchone() if has_runs else None
         run_info=dict(last) if last else None
         if run_info: run_info['elapsedSeconds']=round((run_info['ended'] or time.time())-run_info['started'],2)
+        states=dict(db.execute('SELECT state,COUNT(*) FROM candidates GROUP BY state').fetchall())
         value={'prepared':info(db,'prepared'),'sourceRows':db.execute('SELECT COUNT(*) FROM origins').fetchone()[0],
-               'candidates':db.execute('SELECT COUNT(*) FROM candidates').fetchone()[0],
-               'states':dict(db.execute('SELECT state,COUNT(*) FROM candidates GROUP BY state').fetchall()),
+               'candidates':sum(states.values()),
+               'states':states,
                'facts':dict(db.execute('SELECT kind,COUNT(*) FROM facts WHERE active=1 GROUP BY kind').fetchall()),
+               'confirmed':sum(states.get(s,0) for s in ('adopted','excluded_confirmed','not_distributed')),
+               'sourceVerified':sum(states.get(s,0) for s in ('reviewed','adopted')),
+               'awaitingValidation':states.get('reviewed',0),
+               'inspectionWaiting':states.get('needs_review',0),
+               'waitingByReason':dict(db.execute("SELECT reason,COUNT(*) FROM candidates WHERE state='needs_review' GROUP BY reason")),
+               'blocked':states.get('blocked',0),
+               'additionalReadingDiscovered':direct_reading_discoveries(db),
                'archivedFacts':db.execute('SELECT COUNT(*) FROM facts WHERE active=0').fetchone()[0],
                'pilot':dict(db.execute('SELECT c.state,COUNT(*) FROM candidates c JOIN pilot p ON p.candidate_id=c.id GROUP BY c.state').fetchall()),
                'failedRequests':db.execute('SELECT COUNT(*) FROM attempts WHERE result=\'error\'').fetchone()[0],
@@ -904,15 +1052,15 @@ def status(args):
         emit(value);return value
 
 def explain(args):
-    with connect(args.ledger) as db:
+    with connect(args.ledger,readonly=True) as db:
         query='SELECT * FROM candidates WHERE '+('id=?' if args.id else 'surface=?')
         for row in db.execute(query,(args.id or args.surface,)):
             emit({'candidate':dict(row),'origins':[dict(r) for r in db.execute('SELECT o.* FROM origins o JOIN origin_candidates c ON c.origin_id=o.id WHERE c.candidate_id=?',(row['id'],))],
                   'facts':fact_rows(db,row),'attempts':[dict(r) for r in db.execute('SELECT * FROM attempts WHERE candidate_id=?',(row['id'],))],
                   'inferences':[dict(r) for r in db.execute('SELECT role,model_digest,prompt_sha256,output,error FROM inferences WHERE candidate_id=?',(row['id'],))]})
 
-def source_text(path):
-    data=pathlib.Path(path).read_bytes()
+def source_text(path, data=None):
+    if data is None:data=pathlib.Path(path).read_bytes()
     if data.startswith(b'\x1f\x8b'): data=gzip.decompress(data)
     elif data.startswith(b'PK\x03\x04'):
         with zipfile.ZipFile(io.BytesIO(data)) as z:
@@ -920,8 +1068,22 @@ def source_text(path):
             if len(names)!=1: raise ValueError('Gold document ZIP has multiple files')
             data=z.read(names[0])
     if len(data)>512*1024*1024: raise ValueError('Oversized expanded evidence document')
-    text=data.decode('utf-8',errors='strict')
-    try: return canonical(json.loads(text))
+    # Wikimedia page_props contains binary blobs in unrelated properties.
+    # Identity quotes are ASCII SQL tuples; the reversible byte representation
+    # preserves those exact bytes without treating arbitrary blobs as readings.
+    if b'CREATE TABLE `page_props`' in data[:65536]:
+        text=data.decode('latin-1',errors='strict')
+    else:
+        text=data.decode('utf-8',errors='strict')
+    try:
+        value=json.loads(text)
+        def strings(v):
+            if isinstance(v,str): yield v
+            elif isinstance(v,dict):
+                for x in v.values(): yield from strings(x)
+            elif isinstance(v,list):
+                for x in v: yield from strings(x)
+        return canonical(value)+'\n'+'\n'.join(strings(value))
     except json.JSONDecodeError: return text
 
 def confidence_lower(correct,n,alpha=.05):
@@ -939,17 +1101,67 @@ def confidence_lower(correct,n,alpha=.05):
         else: hi=mid
     return (lo+hi)/2
 
+def gold_selection_pairs(cases):
+    return sorted({(item['candidateId'],item['split']) for item in cases})
+
+def check_gold_selection(db,cases):
+    selection=info(db,'goldSelection')
+    if selection and gold_selection_pairs(cases)!=gold_selection_pairs(selection['cases']):
+        raise ValueError('Gold labels do not match the frozen candidate/split selection')
+    return selection
+
+def inferred_outside_pilot(db):
+    """Include history and failed model calls, so resetting a row cannot erase tuning."""
+    for table in ('candidates','decision_history'):
+        identifier='id' if table=='candidates' else 'candidate_id'
+        query="SELECT 1 FROM "+table+" d WHERE d."+identifier+" NOT IN (SELECT candidate_id FROM pilot) AND d.decision IS NOT NULL AND ((json_extract(d.decision,'$.classificationRoute') IS NOT NULL AND json_extract(d.decision,'$.classificationRoute')!='direct') OR EXISTS (SELECT 1 FROM json_each(d.decision,'$.roles') role WHERE COALESCE(json_extract(role.value,'$.method'),json_extract(d.decision,'$.classificationRoute'),'')!='direct')) LIMIT 1"
+        if db.execute(query).fetchone(): return True
+    if db.execute('SELECT 1 FROM inferences WHERE candidate_id NOT IN (SELECT candidate_id FROM pilot) LIMIT 1').fetchone(): return True
+    if db.execute("SELECT 1 FROM model_calls m,json_each(m.aliases,'$.candidates') c WHERE c.key NOT IN (SELECT candidate_id FROM pilot) LIMIT 1").fetchone(): return True
+    return False
+
+def gold_selection_record(cases,file_sha,mode):
+    frozen=[{'candidateId':cid,'split':split} for cid,split in gold_selection_pairs(cases)]
+    return {'schemaVersion':1,'cases':frozen,'selectionSha256':digest(canonical(frozen)),
+            'fileSha256':file_sha,'mode':mode,'recordedAt':time.time()}
+
+def select_gold(args):
+    """Record a label-free independently drawn cohort before inferred full decisions."""
+    path=pathlib.Path(args.input);value=json.loads(path.read_text())
+    if not isinstance(value,dict) or set(value)!={'schemaVersion','cases'} or value['schemaVersion']!=1 or not isinstance(value['cases'],list) or not value['cases']:
+        raise ValueError('Gold selection needs schemaVersion 1 and nonempty cases')
+    with connect(args.ledger) as db:
+        pin_config(db,args);seen=set();surfaces={};splits=set()
+        for item in value['cases']:
+            if not isinstance(item,dict) or set(item)!={'candidateId','split'} or not isinstance(item['candidateId'],str) or item['split'] not in ('calibration','validation'):
+                raise ValueError('Gold selection must contain only candidateId/split, never labels')
+            cid=item['candidateId'];split=item['split']
+            row=db.execute('SELECT surface FROM candidates WHERE id=?',(cid,)).fetchone()
+            if row is None or cid in seen: raise ValueError('Unknown/duplicate gold selection candidate')
+            if row['surface'] in surfaces and surfaces[row['surface']]!=split: raise ValueError('Calibration/validation surface leakage in selection')
+            seen.add(cid);surfaces[row['surface']]=split;splits.add(split)
+        if splits!={'calibration','validation'}: raise ValueError('Gold selection requires calibration and validation splits')
+        record=gold_selection_record(value['cases'],sha(path),'independent-selection')
+        old=info(db,'goldSelection')
+        if old:
+            if old['selectionSha256']!=record['selectionSha256']: raise ValueError('Frozen gold selection is immutable')
+            emit(old);return old
+        if info(db,'goldFrozen') or inferred_outside_pilot(db):
+            raise ValueError('Independent selection must precede gold labels and inferred full decisions/calibration tuning')
+        info(db,'goldSelection',record);db.commit();emit(record);return record
+
 def validate_gold(db,args):
     """Ground truth must have bound quotations and document hashes; model output isn't accepted."""
-    path=pathlib.Path(args.gold);value=json.loads(path.read_text());surface_seen={};target_seen={};counts={};cases_seen=set()
+    path=pathlib.Path(args.gold);value=json.loads(path.read_text());surface_seen={};target_seen={};counts={};cases_seen=set();checked_documents={}
+    check_gold_selection(db,value['cases'])
     for item in value['cases']:
         required={'candidateId','split','categories','target','readingEvidence','meaningEvidence','eligible'}
         if set(item)!=required or item['split'] not in ('calibration','validation'): raise ValueError('Invalid gold fields')
-        if not isinstance(item['eligible'],bool) or not item['target'] or not item['categories'] or len(set(item['categories']))!=len(item['categories']) or not set(item['categories'])<=set(c['id'] for c in configuration(args)[1]['categories']): raise ValueError('Gold labels/type invalid')
+        if not isinstance(item['eligible'],bool) or not item['target'] or not isinstance(item['categories'],list) or (item['eligible'] and not item['categories']) or len(set(item['categories']))!=len(item['categories']) or not set(item['categories'])<=set(c['id'] for c in configuration(args)[1]['categories']): raise ValueError('Gold labels/type invalid')
         row=db.execute('SELECT * FROM candidates WHERE id=?',(item['candidateId'],)).fetchone()
         if row is None: raise ValueError('Gold candidate not in inputs')
-        key=(row['surface'],item['target'],item['split'])
-        if key in cases_seen: raise ValueError('Duplicate surface/target gold case')
+        key=(row['surface'],row['reading'],item['target'],item['split'])
+        if key in cases_seen: raise ValueError('Duplicate input pair/target gold case')
         cases_seen.add(key)
         if (row['surface'] in surface_seen and surface_seen[row['surface']]!=item['split']) or (item['target'] in target_seen and target_seen[item['target']]!=item['split']): raise ValueError('Calibration/validation surface or entity leakage')
         surface_seen[row['surface']]=item['split'];target_seen[item['target']]=item['split']
@@ -957,12 +1169,19 @@ def validate_gold(db,args):
             for evidence in item[field]:
                 if set(evidence)!= {'documentId','quotation','sha256'}: raise ValueError('Gold provenance fields invalid')
                 doc=db.execute('SELECT * FROM documents WHERE id=?',(evidence['documentId'],)).fetchone()
-                if doc is None or sha(doc['path'])!=evidence['sha256'] or doc['sha256']!=evidence['sha256']: raise ValueError('Gold source checksum mismatch')
-                text=source_text(doc['path'])
+                if doc is None or doc['sha256']!=evidence['sha256']: raise ValueError('Gold source checksum mismatch')
+                source_key=(doc['path'],doc['sha256'])
+                if source_key not in checked_documents:
+                    raw=pathlib.Path(doc['path']).read_bytes()
+                    if digest(raw)!=evidence['sha256']:raise ValueError('Gold source checksum mismatch')
+                    checked_documents[source_key]=source_text(doc['path'],raw)
+                text=checked_documents[source_key]
                 if not evidence['quotation'] or evidence['quotation'] not in text: raise ValueError('Gold quotation absent from source')
         if not item['readingEvidence'] or not item['meaningEvidence']: raise ValueError('Gold needs independently checked reading and meaning sources')
         observed=fact_rows(db,dict(row))
-        for field,kinds in [('readingEvidence',('reading',) if item['eligible'] else ('reading','context')),('meaningEvidence',('meaning','context'))]:
+        # A negative's original reference entry can document a search-only form;
+        # it must never become an affirmative reading proof.
+        for field,kinds in [('readingEvidence',('reading',) if item['eligible'] else ('reading','context','meaning')),('meaningEvidence',('meaning','context'))]:
             for ref in item[field]:
                 related=[f for f in observed if f['document_id']==ref['documentId'] and f['kind'] in kinds and (field=='readingEvidence' or f['target']==item['target'])]
                 if not related: raise ValueError('Gold source is not bound to this input pair/target')
@@ -972,11 +1191,79 @@ def validate_gold(db,args):
         if any(counts.get((cat['id'],split),0)<minimum for split in ('calibration','validation')): raise ValueError('Insufficient gold examples: '+cat['id'])
     return value,sha(path)
 
+def archive_frozen_gold(db,frozen):
+    history=info(db,'goldFrozenHistory') or []
+    identity=(frozen['sha256'],frozen.get('selectionSha256'))
+    if not any((entry['sha256'],entry.get('selectionSha256'))==identity for entry in history):
+        history.append({**frozen,'archivedAt':time.time()});info(db,'goldFrozenHistory',history)
+    return history
+
+def isolated_source_reviews(db, selection):
+    """Permit preselected, source-only gold after disjoint individual inspections.
+
+    This is not a waiver for model inference or classifier tuning: the selected
+    names and every evidence-linked target remain quarantined, including history.
+    Only citation-bearing import-review records may precede the first freeze.
+    """
+    if not selection or selection.get('mode') != 'independent-selection': return False
+    if db.execute('SELECT 1 FROM inferences WHERE candidate_id NOT IN (SELECT candidate_id FROM pilot) LIMIT 1').fetchone(): return False
+    if db.execute("SELECT 1 FROM model_calls m,json_each(m.aliases,'$.candidates') c WHERE c.key NOT IN (SELECT candidate_id FROM pilot) LIMIT 1").fetchone(): return False
+    selected = {item['candidateId'] for item in selection['cases']}
+    surfaces = set(); targets = set()
+    for cid in selected:
+        row = db.execute('SELECT surface,reading FROM candidates WHERE id=?', (cid,)).fetchone()
+        if row is None: return False
+        surfaces.add(row['surface'])
+        targets.update(r[0] for r in db.execute("SELECT target FROM facts INDEXED BY fact_pair WHERE surface=? AND reading IN (?, '') AND active=1 AND kind IN ('reading','meaning','context')", (row['surface'], row['reading'])))
+    non_direct = "(COALESCE(json_extract(decision,'$.classificationRoute'),'direct')!='direct' OR EXISTS (SELECT 1 FROM json_each(decision,'$.roles') role WHERE COALESCE(json_extract(role.value,'$.method'),json_extract(decision,'$.classificationRoute'),'')!='direct'))"
+    query = "SELECT id candidate_id,decision,NULL created FROM candidates WHERE id NOT IN (SELECT candidate_id FROM pilot) AND decision IS NOT NULL AND " + non_direct
+    query += " UNION ALL SELECT candidate_id,decision,created FROM decision_history WHERE candidate_id NOT IN (SELECT candidate_id FROM pilot) AND decision IS NOT NULL AND " + non_direct
+    inspected = 0
+    for record in db.execute(query):
+        decision = json.loads(record['decision']); roles = decision.get('roles', [])
+        methods = {role.get('method', decision.get('classificationRoute')) for role in roles}
+        if decision.get('classificationRoute') in (None, 'direct') and methods <= {'direct'}: continue
+        cid = record['candidate_id']
+        row = db.execute('SELECT surface FROM candidates WHERE id=?', (cid,)).fetchone()
+        if (cid in selected or row is None or row['surface'] in surfaces
+                or any(role.get('target') in targets for role in roles)
+                or (record['created'] is not None and record['created'] < selection['recordedAt'])): return False
+        if (decision.get('classificationRoute') != 'source_review'
+                or not methods <= {'direct', 'source_review'} or not roles
+                or not re.fullmatch('[0-9a-f]{64}', decision.get('reviewFileSha256', ''))
+                or not re.fullmatch('[0-9a-f]{64}', decision.get('evidenceSha256', ''))
+                or not decision.get('citations')): return False
+        inspected += 1
+    return bool(inspected)
+
 def freeze_gold(args):
     with connect(args.ledger) as db:
-        pin_config(db,args);value,h=validate_gold(db,args)
-        if db.execute('SELECT COUNT(*) FROM candidates WHERE state!=\'queued\' AND id NOT IN (SELECT candidate_id FROM pilot)').fetchone()[0]: raise ValueError('Gold must be frozen before full run')
-        info(db,'goldFrozen',{'sha256':h,'cases':value['cases']});db.commit();emit({'goldFrozen':h,'cases':len(value['cases'])})
+        pin_config(db,args)
+        previous=info(db,'goldFrozen')
+        if previous:
+            if sha(args.gold)!=previous['sha256']: raise ValueError('Frozen gold labels are immutable; existing evaluation cannot be overwritten')
+            validate_gold(db,args)
+            archive_frozen_gold(db,previous);db.commit()
+            emit({'goldFrozen':previous['sha256'],'cases':len(previous['cases']),'selectionSha256':previous.get('selectionSha256'),'unchanged':True})
+            return
+        progress=db.execute("SELECT COUNT(*) FROM candidates WHERE state!='queued' AND id NOT IN (SELECT candidate_id FROM pilot)").fetchone()[0]
+        selection=info(db,'goldSelection')
+        # Reject late labels before even loading them. Source-only inspection may
+        # precede cohort selection, but inferred full decisions may not.
+        if progress and not selection: raise ValueError('Full source inspection requires a separately recorded gold selection before labels')
+        inferred = inferred_outside_pilot(db)
+        isolated = inferred and isolated_source_reviews(db, selection)
+        if inferred and not isolated: raise ValueError('Gold must be frozen before inferred full decisions/calibration tuning')
+        value,h=validate_gold(db,args)
+        if not selection:
+            # Preserve the original pre-full-run path and fix its cohort at the
+            # same point as the labels, before any full-population decisions.
+            selection=gold_selection_record(value['cases'],h,'pre-full-gold')
+            info(db,'goldSelection',selection)
+        frozen={'sha256':h,'cases':value['cases'],'selectionSha256':selection['selectionSha256']}
+        if isolated: frozen['priorInspectionBasis']='Citation-bearing individual source reviews disjoint from every selected name and evidence-linked target; no model inference outside pilot'
+        info(db,'goldFrozen',frozen);archive_frozen_gold(db,frozen);db.commit()
+        emit({'goldFrozen':h,'cases':len(value['cases']),'selectionSha256':selection['selectionSha256']})
 
 def finalize(args):
     import distribution
@@ -1002,30 +1289,43 @@ def accept(args):
 
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('action',choices=['prepare','bulk','pilot','run','status','explain','freeze-gold','accept','finalize','export'])
+    p.add_argument('action',choices=['prepare','bulk','pilot','run','status','explain','review-export','import-review','complete-source-search','select-gold','freeze-gold','accept','finalize','export'])
     p.add_argument('--ledger',default='build/research/ledger.sqlite');p.add_argument('--config',default=str(DEFAULT_CONFIG))
     p.add_argument('--source-dir',default='src/main/bin');p.add_argument('--base-dir')
     p.add_argument('--audit',default='build/research/baseline-v2/audit.tsv.gz');p.add_argument('--snapshot',default='build/dictionary-metadata/snapshot.sqlite')
     p.add_argument('--postal-zip');p.add_argument('--documents',default='build/research/documents');p.add_argument('--jmnedict');p.add_argument('--jmdict')
     p.add_argument('--mozc-commit',default='c7538e6f8ee56ff94789494106ad5d6d658cd4f6')
-    p.add_argument('--acceptance');p.add_argument('--candidate',action='store_true');p.add_argument('--id');p.add_argument('--surface');p.add_argument('--gold');p.add_argument('--output')
-    p.add_argument('--batch-size',type=int);p.add_argument('--pilot-size',type=int,default=2000);p.add_argument('--max-batches',type=int)
+    p.add_argument('--input');p.add_argument('--online',action='store_true');p.add_argument('--acceptance');p.add_argument('--candidate',action='store_true');p.add_argument('--id');p.add_argument('--surface');p.add_argument('--reason');p.add_argument('--after-id');p.add_argument('--gold');p.add_argument('--output')
+    p.add_argument('--source-staging')
+    p.add_argument('--batch-size',type=int);p.add_argument('--pilot-size',type=int,default=100);p.add_argument('--max-batches',type=int)
     args=p.parse_args(argv)
-    if args.batch_size is not None and not 1<=args.batch_size<=16: p.error('batch-size must be 1..16')
+    if args.batch_size is not None and not 1<=args.batch_size<=1000: p.error('batch-size must be 1..1000')
     if args.max_batches is not None and args.max_batches<1: p.error('max-batches must be positive')
     with (contextlib.nullcontext() if args.action in ('status','explain') else coordinator_lock(args.ledger)):
         if args.action=='prepare': prepare(args)
         elif args.action=='bulk': bulk(args)
-        elif args.action in ('pilot','run'): run(args,args.action=='pilot')
+        elif args.action in ('pilot','run'): return run(args,args.action=='pilot')
         elif args.action=='status': status(args)
         elif args.action=='explain':
             if not args.id and not args.surface: p.error('explain needs --id or --surface')
             explain(args)
+        elif args.action in ('review-export','import-review','complete-source-search'):
+            import direct_review
+            if args.action=='import-review' and not args.input: p.error('import-review needs --input')
+            if args.action=='complete-source-search' and not args.source_staging: p.error('complete-source-search needs --source-staging')
+            with connect(args.ledger) as db:
+                pin_config(db,args)
+                if args.action=='review-export': direct_review.export_reviews(db,args)
+                elif args.action=='import-review': direct_review.import_reviews(db,args)
+                else: return direct_review.complete_source_search(db,args)
+        elif args.action=='select-gold':
+            if not args.input: p.error('select-gold needs --input')
+            select_gold(args)
         elif args.action=='freeze-gold': freeze_gold(args)
         elif args.action=='accept': accept(args)
         elif args.action=='finalize': finalize(args)
         elif args.action=='export': export(args)
 
 if __name__=='__main__':
-    try: main()
+    try: sys.exit(main() or 0)
     except Exception as ex: print('research: '+str(ex),file=sys.stderr);sys.exit(2)

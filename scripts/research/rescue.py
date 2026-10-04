@@ -1,5 +1,5 @@
 """Recover source-contained components using independently attested readings only."""
-import itertools,json,re
+import hashlib,itertools,json,re
 
 def targets(db):
     names=set()
@@ -39,7 +39,10 @@ def apply(db,args,e,insert_candidate,info,emit):
         if source_doc is None:
             import pathlib
             path=pathlib.Path(args.source_dir)/'place.txt.zip'
-            source_doc=e.save('https://github.com/KazumaProject/kotlin-kana-kanji-converter/blob/c98c1080a665196dde5a73a73c45c1bd3aa793d8/src/main/bin/place.txt.zip',inputs['place'],path.read_bytes(),'MozcUT supplementary input; see distribution notices')
+            data=path.read_bytes()
+            if hashlib.sha256(data).hexdigest()!=inputs['place']:
+                raise ValueError('Original place input checksum changed; preserve the prepared source before boundary reinspection')
+            source_doc=e.save('https://github.com/KazumaProject/kotlin-kana-kanji-converter/blob/c98c1080a665196dde5a73a73c45c1bd3aa793d8/src/main/bin/place.txt.zip',inputs['place'],data,'MozcUT supplementary input; see distribution notices')
         for name,proof in zip(names,matches[0]):
             cid=insert_candidate(db,proof['reading'],name,row['left_id'],row['right_id'],row['cost'],normalization='source-bound-parenthesis-rescue')
             db.execute('INSERT OR IGNORE INTO origin_candidates VALUES(?,?)',(row['id'],cid))

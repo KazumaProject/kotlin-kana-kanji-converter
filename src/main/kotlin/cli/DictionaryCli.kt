@@ -14,7 +14,7 @@ import kotlin.system.exitProcess
 fun main(args: Array<String>) { exitProcess(DictionaryCli.run(args, PrintWriter(System.out, true), PrintWriter(System.err, true))) }
 
 object DictionaryCli {
-    private val flags = setOf("offline", "prefix", "no-system", "enforce", "candidate")
+    private val flags = setOf("offline", "online", "prefix", "no-system", "enforce", "candidate")
     private val common = setOf("dict-dir", "base-dir", "categories", "exclude-categories", "no-system", "format")
     private val allowed = mapOf(
         "build" to setOf("source-dir", "base-dir", "dict-dir", "reports", "metadata-db", "cache", "cache-limit-mib", "api-budget", "offline", "overrides", "snapshot", "lock", "confirmed", "input-manifest", "candidate"),
@@ -28,7 +28,7 @@ object DictionaryCli {
         "package" to setOf("dict-dir", "output", "notices"),
         "verify-package" to setOf("output"),
         "cache" to setOf("cache", "cache-limit-mib"),
-        "research" to setOf("ledger", "config", "source-dir", "base-dir", "audit", "snapshot", "documents", "jmnedict", "jmdict", "postal-zip", "mozc-commit", "id", "surface", "gold", "output", "batch-size", "pilot-size", "max-batches", "acceptance", "candidate"),
+        "research" to setOf("ledger", "config", "source-dir", "base-dir", "audit", "snapshot", "documents", "jmnedict", "jmdict", "postal-zip", "mozc-commit", "id", "surface", "reason", "after-id", "gold", "input", "output", "source-staging", "batch-size", "pilot-size", "max-batches", "acceptance", "candidate", "online"),
     )
     private class Arguments(val command: String, val values: Map<String, String>) {
         fun value(name: String, default: String): String = values[name] ?: default
@@ -58,7 +58,7 @@ object DictionaryCli {
             values["action"] = args[index++]
         }
         if (args[0] == "research") {
-            require(args.getOrNull(index) in setOf("prepare", "bulk", "pilot", "run", "status", "explain", "freeze-gold", "accept", "finalize", "export")) { "research requires a valid action" }
+            require(args.getOrNull(index) in setOf("prepare", "bulk", "pilot", "run", "status", "explain", "review-export", "import-review", "complete-source-search", "select-gold", "freeze-gold", "accept", "finalize", "export")) { "research requires a valid action" }
             values["action"] = args[index++]
         }
         if (args[0] == "cache") {
@@ -336,9 +336,15 @@ object DictionaryCli {
         lookup/convert/test: [--base-dir DIR] [--dict-dir DIR]
           [--categories all|none|person,place,...] [--exclude-categories unclassified]
           [--no-system] [--format table|json]
-        research prepare|bulk|pilot|run|status|explain|freeze-gold|accept|finalize|export [--ledger path]
-          Local Ollama only; regular build/lookup/convert never run AI.
+        research prepare|bulk|pilot|run|status|explain|review-export|import-review|complete-source-search|select-gold|freeze-gold|accept|finalize|export [--ledger path]
+          pilot|run: direct reference checks offline by default [--online] [--batch-size 100]
+          review-export --output JSON [--batch-size 100] [--id ID] [--surface TEXT] [--reason REASON] [--after-id ID]
+          import-review --input JSON
+          complete-source-search --source-staging SQLITE (requires complete imported corpus coverage)
+          select-gold --input JSON (independent candidateId/split cohort before labels)
+          Additional online research is bounded; local models are not required.
         Categories: ${publishedCategories.joinToString(",")}
-        Exit codes: 0 success, 1 test mismatch/no conversion, 2 input/configuration error.
+        Exit codes: 0 success, 1 test mismatch/no conversion, 2 input/configuration error,
+          3 research has unresolved review or processing failures.
     """.trimIndent()
 }

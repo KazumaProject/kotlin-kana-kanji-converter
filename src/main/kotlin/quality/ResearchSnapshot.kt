@@ -2,17 +2,69 @@ package com.kazumaproject.quality
 
 import java.sql.Connection
 import java.security.MessageDigest
+import java.io.ByteArrayInputStream
+import java.util.zip.GZIPInputStream
 import kotlinx.serialization.json.*
 
 object ResearchSnapshot {
+    fun verifyProofDependencies(connection: Connection) {
+        val known=mutableSetOf<String>()
+        val graph=mutableMapOf<String,List<String>>()
+        connection.createStatement().use { statement ->
+            for(table in listOf("reading_facts","semantic_facts","quality_facts")) {
+                statement.executeQuery("SELECT id,body FROM $table").use { rows ->
+                    while(rows.next()) {
+                        val id=rows.getString(1)
+                        require(known.add(id)) { "Duplicate exported proof identity" }
+                        val raw=rows.getBytes(2)
+                        require(raw!=null) { "Missing exported proof body" }
+                        val text=if(table=="reading_facts") raw.toString(Charsets.UTF_8) else GZIPInputStream(ByteArrayInputStream(raw)).bufferedReader(Charsets.UTF_8).use { it.readText() }
+                        val body=Json.parseToJsonElement(text).jsonObject
+                        val refs=(body["componentFacts"]?.jsonArray?.map { it.jsonPrimitive.content } ?: emptyList()) +
+                            listOf("fullAddressEvidence","outputEvidence","prefixEvidence","addressFact","sourceEvidence").mapNotNull { body[it]?.jsonPrimitive?.content }
+                        require(refs.all { it.isNotBlank() }) { "Invalid exported proof dependency" }
+                        if(refs.isNotEmpty()) graph[id]=refs
+                    }
+                }
+            }
+        }
+        require(graph.values.flatten().all { it in known }) { "Missing exported proof dependency" }
+        val checked=mutableSetOf<String>()
+        for(root in graph.keys) {
+            val path=mutableSetOf<String>();val stack=ArrayDeque<Pair<String,Boolean>>();stack.add(root to false)
+            while(stack.isNotEmpty()) {
+                val (id,leaving)=stack.removeLast()
+                if(leaving) { path.remove(id);checked.add(id);continue }
+                require(id !in path) { "Cyclic exported proof dependency" }
+                if(id in checked)continue
+                path.add(id);stack.add(id to true);graph[id]?.forEach { stack.add(it to false) }
+            }
+        }
+    }
     fun verify(connection: Connection, manifest: JsonObject, allowCandidate: Boolean) {
         val research = manifest.getValue("research").jsonObject
         require(allowCandidate || research.getValue("releaseReady").jsonPrimitive.boolean) { "Research candidate is not approved for release" }
         require(research.getValue("unprocessed").jsonPrimitive.int == 0 && research.getValue("errors").jsonPrimitive.int == 0) { "Incomplete research snapshot" }
         val validation = research.getValue("validation").jsonObject
-        require(validation.getValue("adoptable").jsonPrimitive.double / validation.getValue("eligible").jsonPrimitive.double >= 0.95) { "Adoption coverage gate failed" }
-        val precision = validation.getValue("precision").jsonObject.getValue("ai").jsonObject
-        require(precision.getValue("n").jsonPrimitive.int > 0 && precision.getValue("correct").jsonPrimitive.double / precision.getValue("n").jsonPrimitive.double >= 0.995 && precision.getValue("lower95").jsonPrimitive.double >= 0.99) { "AI precision gate failed" }
+        val eligible = validation.getValue("eligible").jsonPrimitive.int
+        val adoptable = validation.getValue("adoptable").jsonPrimitive.int
+        require(eligible > 0 && adoptable in 0..eligible && adoptable.toDouble() / eligible >= 0.95) { "Adoption coverage gate failed" }
+        require(validation.getValue("goldSha256").jsonPrimitive.content.matches(Regex("[a-f0-9]{64}"))) { "Independent frozen gold checksum missing" }
+        val methods = setOf("direct", "source_review", "ai")
+        val precision = validation.getValue("precision").jsonObject
+        require(precision.keys == methods) { "Invalid classification methods in validation" }
+        val populations = methods.associateWith { method ->
+            val stats = precision.getValue(method).jsonObject
+            val n = stats.getValue("n").jsonPrimitive.int
+            val correct = stats.getValue("correct").jsonPrimitive.int
+            val population = stats.getValue("population").jsonPrimitive.int
+            require(population >= 0 && n in 0..population && correct in 0..n) { "Invalid classification population/validation: $method" }
+            if (method != "direct" && population > 0) {
+                val lower = stats.getValue("lower95").jsonPrimitive.double
+                require(n > 0 && correct.toDouble() / n >= 0.995 && lower in 0.99..1.0) { "$method precision gate failed" }
+            }
+            population
+        }
         if (!allowCandidate) {
             val acceptance=research.getValue("acceptance").jsonObject
             require(listOf("categoryReviews","nonDistributedReview","conversionRegression","linuxBinaryParity","zipVerified").all { acceptance[it]?.jsonPrimitive?.boolean==true }) { "Required release acceptance records missing" }
@@ -51,14 +103,21 @@ object ResearchSnapshot {
                 }
             }
             s.executeQuery("SELECT COUNT(*) FROM resolutions WHERE status='excluded_confirmed' AND json_array_length(exclusion_ids)=0").use { r -> require(r.next() && r.getInt(1)==0) { "Confirmed exclusion has no evidence" } }
+            val publishedMethods = mutableMapOf<String, Int>()
             s.executeQuery("SELECT categories,roles FROM resolutions WHERE status='adopted'").use { r ->
                 while (r.next()) {
                     val cats = r.getString(1).split(',')
                     val roles = Json.parseToJsonElement(r.getString(2)).jsonArray.map { it.jsonObject }
+                    for (role in roles) {
+                        val method = role["method"]?.jsonPrimitive?.content
+                        require(method in methods) { "Invalid exported classification method" }
+                        publishedMethods[method!!] = publishedMethods.getOrDefault(method, 0) + 1
+                    }
                     require(cats.all { it in active } && cats.distinct().size == cats.size && roles.isNotEmpty()) { "Invalid publication category" }
                     require(cats.all { c -> roles.any { role -> role.getValue("category").jsonPrimitive.content == c && role.getValue("target").jsonPrimitive.content.isNotBlank() && role.getValue("evidenceIds").jsonArray.isNotEmpty() } }) { "Role has no target/sense evidence" }
                 }
             }
+            require(publishedMethods.all { (method, count) -> count <= populations.getValue(method) }) { "Published classification route has no validated population" }
             val counts=mutableMapOf<String,Int>()
             s.executeQuery("SELECT categories FROM resolutions WHERE status='adopted'").use { r -> while(r.next()) r.getString(1).split(',').forEach { counts[it]=counts.getOrDefault(it,0)+1 } }
             CategoryRegistry.definition.getValue("categories").jsonArray.map { it.jsonObject }.filter { it.getValue("id").jsonPrimitive.content in active }.forEach { category ->
@@ -66,5 +125,6 @@ object ResearchSnapshot {
                 require((counts[name] ?: 0)>=maxOf(1,category.getValue("minimum").jsonPrimitive.int)) { "Publication floor not met: $name" }
             }
         }
+        verifyProofDependencies(connection)
     }
 }

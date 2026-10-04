@@ -74,7 +74,7 @@ class ResearchTest(unittest.TestCase):
         def api(url,body=None,**kwargs): return self.model_inventory(url) or {'message':{'content':'broken JSON'}}
         with mock.patch.object(worker,'request_json',side_effect=api):
             with self.assertRaises(ValueError): worker.inference(self.db,self.args,[self.row],'proposer',worker.configuration(self.args))
-        self.assertEqual('error',self.db.execute('SELECT state FROM candidates').fetchone()[0])
+        self.assertEqual('blocked',self.db.execute('SELECT state FROM candidates').fetchone()[0])
     def test_model_digest_is_pinned(self):
         with mock.patch.object(worker,'request_json',return_value={'models':[]}):
             with self.assertRaises(ValueError): worker.validate_models(*[worker.configuration(self.args)[i] for i in (0,3)])
@@ -84,10 +84,41 @@ class ResearchTest(unittest.TestCase):
         self.assertGreater(worker.confidence_lower(300,300),.99)
     def test_finalize_rejects_unprocessed(self):
         with self.assertRaisesRegex(ValueError,'Unfinished'): distribution.precision(self.db,worker.info,worker.confidence_lower,worker.canonical)
+
+    def test_status_derives_live_totals_from_single_state_aggregate(self):
+        reviewed=worker.insert_candidate(self.db,'あゆみ','歩',1,1,10)
+        waiting=worker.insert_candidate(self.db,'かな','仮名',1,1,10)
+        excluded=worker.insert_candidate(self.db,'むこう','向こう',1,1,10)
+        self.db.execute("UPDATE candidates SET state='reviewed' WHERE id=?",(reviewed,))
+        self.db.execute("UPDATE candidates SET state='needs_review',reason='meaning-or-target-unresolved' WHERE id=?",(waiting,))
+        self.db.execute("UPDATE candidates SET state='excluded_confirmed' WHERE id=?",(excluded,))
+        self.db.commit()
+        with mock.patch.object(worker,'emit'):
+            value=worker.status(self.args)
+        self.assertEqual(4,value['candidates'])
+        self.assertEqual(1,value['confirmed'])
+        self.assertEqual(1,value['sourceVerified'])
+        self.assertEqual(1,value['inspectionWaiting'])
+        self.assertEqual({'meaning-or-target-unresolved':1},value['waitingByReason'])
     def test_storage_full_is_an_error_not_a_decision(self):
         self.e.limit=1
         with self.assertRaises(OSError): self.e.save('https://example.org/new','v1',b'too large','CC0')
         self.assertEqual('queued',self.db.execute('SELECT state FROM candidates').fetchone()[0])
+
+    def test_document_usage_comes_from_unique_ledger_paths_without_scanning_directory(self):
+        root=self.root/'indexed-documents';root.mkdir()
+        duplicate=str((root/'same').resolve());other=str((root/'other').resolve());outside=str((self.root/'outside').resolve())
+        self.db.executemany('INSERT INTO documents VALUES(?,?,?,?,?,?,?)',[
+            ('usage-a','https://example.org/a','v1','sha-a',duplicate,17,'CC0'),
+            ('usage-b','https://example.org/b','v1','sha-b',duplicate,17,'CC0'),
+            ('usage-c','https://example.org/c','v1','sha-c',other,23,'CC0'),
+            ('usage-outside','https://example.org/o','v1','sha-o',outside,101,'CC0')])
+        args=argparse.Namespace(config=str(worker.DEFAULT_CONFIG),documents=str(root))
+        with mock.patch.object(pathlib.Path,'iterdir',side_effect=AssertionError('document directory must not be scanned')):
+            evidence=worker.Evidence(self.db,args)
+            self.assertNotIn(evidence.storage,worker.DOCUMENT_USAGE)
+            evidence.save('https://example.org/new','v1',b'new','CC0')
+        self.assertEqual(43,worker.DOCUMENT_USAGE[evidence.storage])
     def test_new_fact_invalidates_only_affected_candidates(self):
         other=worker.insert_candidate(self.db,'べつ','別',1,1,10)
         self.db.execute("UPDATE candidates SET state='reviewed',decision='{}'")
@@ -122,6 +153,72 @@ class ResearchTest(unittest.TestCase):
         for source,category,extra in [('JMnedict','place',{'nameTypes':['place']}),('JMdict','general',{'pos':['n'],'misc':[]}),('JMdict','technical',{'fields':['astron'],'misc':[]})]:
             f={'kind':'meaning','body':json.dumps({'source':source,**extra})}
             self.assertFalse(worker.direct_category_fact(f,category))
+
+    def test_jmnedict_place_requires_selected_geographic_translation_and_original_form(self):
+        fact={'id':'meaning','kind':'meaning','target':'JMnedict:5008476:0','reading':'あいおんとう',
+              'surface':'アイオン島','document_id':'doc','categories':'["place"]',
+              'body':json.dumps({'source':'JMnedict','entryId':'5008476','sense':0,'nameTypes':['place'],
+                                 'translations':[['Ostrov Aion (island)']]})}
+        self.assertTrue(worker.direct_category_fact(fact,'place','unchanged'))
+        self.assertFalse(worker.direct_category_fact(fact,'place','split-derived'))
+        wrong_sense={**fact,'target':'JMnedict:5008476:1','body':json.dumps({'source':'JMnedict','entryId':'5008476','sense':1,
+                     'nameTypes':['place'],'translations':[['Ostrov Aion (island)'],['Aion']]})}
+        self.assertFalse(worker.direct_category_fact(wrong_sense,'place','unchanged'))
+        broad_name_type={**fact,'body':json.dumps({'source':'JMnedict','entryId':'5008476','sense':0,
+                             'nameTypes':['place','surname'],'translations':[['Ostrov Aion (island)']]})}
+        self.assertFalse(worker.direct_category_fact(broad_name_type,'place','unchanged'))
+
+    def test_jmnedict_mythic_character_needs_explicit_original_definition(self):
+        fact={'id':'meaning','kind':'meaning','target':'JMnedict:5740220:0','reading':'じょか','surface':'女媧',
+              'document_id':'doc','categories':'[]','body':json.dumps({'source':'JMnedict','entryId':'5740220','sense':0,
+              'nameTypes':['myth'],'translations':[['Nüwa (mother goddess of Chinese mythology)']]})}
+        self.assertTrue(worker.direct_category_fact(fact,'character','unchanged'))
+        vague={**fact,'body':json.dumps({'source':'JMnedict','entryId':'5740220','sense':0,'nameTypes':['myth'],
+                                         'translations':[['Nüwa (mythological name)']]})}
+        self.assertFalse(worker.direct_category_fact(vague,'character','unchanged'))
+
+    def test_jmnedict_explicit_role_requires_same_entry_reading_fact(self):
+        meaning={'id':'meaning','kind':'meaning','target':'JMnedict:5008476:0','reading':'あいおんとう',
+                 'surface':'アイオン島','document_id':'doc','categories':'["place"]',
+                 'body':json.dumps({'source':'JMnedict','entryId':'5008476','sense':0,'nameTypes':['place'],
+                                    'translations':[['Ostrov Aion (island)']]})}
+        reading={'id':'reading','kind':'reading','target':'JMnedict:5008476','reading':'あいおんとう',
+                 'surface':'アイオン島','document_id':'doc','body':json.dumps({'source':'JMnedict','entryId':'5008476',
+                 're_restr':['アイオン島']})}
+        role={'category':'place','target':'JMnedict:5008476:0','evidenceIds':['meaning']}
+        self.assertTrue(worker.target_supported(role,[meaning,reading]))
+        other_entry={**reading,'target':'JMnedict:5000000','body':json.dumps({'source':'JMnedict','entryId':'5000000'})}
+        self.assertFalse(worker.target_supported(role,[meaning,other_entry]))
+        other_document={**reading,'document_id':'another-document'}
+        self.assertFalse(worker.target_supported(role,[meaning,other_document]))
+
+    def test_raw_constraint_marker_and_field_cannot_claim_direct_taxonomy(self):
+        body={'source':'JMdict','entryId':'12345','classificationPolicy':4,
+              'evidence':'https://www.edrdg.org/jmdict/edict_doc.html#entry-12345-sense-2',
+              'categories':['food'],'fields':['food']}
+        fact={'kind':'meaning','target':'JMdict:12345:sense:2','categories':'["food"]','body':json.dumps(body)}
+        self.assertFalse(worker.direct_category_fact(fact,'food'))
+        fact['target']='JMdict:12345:sense:1'
+        self.assertFalse(worker.direct_category_fact(fact,'food'))
+        fact['target']='JMdict:12345:sense:2';fact['categories']='[]'
+        self.assertFalse(worker.direct_category_fact(fact,'food'))
+
+    def test_wikipedia_mention_binds_to_reading_in_same_saved_page_revision(self):
+        acquisition={'sourceDumpSha256':'dump-sha','sourcePageId':123}
+        reading={'id':'read','kind':'reading','target':'Q123','surface':'同名','reading':'どうめい',
+                 'document_id':'chunk-a','body':json.dumps({'source':'explicit-name-reading','revision':456,
+                 'acquisition':acquisition})}
+        meaning={'id':'meaning','kind':'context','target':'Q123','surface':'同名','document_id':'chunk-b',
+                 'body':json.dumps({'source':'Wikipedia','title':'作品記事','pageId':123,'revision':456,
+                 'acquisition':acquisition})}
+        role={'target':'Q123','evidenceIds':['meaning']}
+        self.assertTrue(worker.target_supported(role,[reading,meaning]))
+        wrong_page={**meaning,'body':json.dumps({'source':'Wikipedia','title':'作品記事','pageId':124,
+                    'revision':456,'acquisition':{**acquisition,'sourcePageId':124}})}
+        self.assertFalse(worker.target_supported(role,[reading,wrong_page]))
+        wrong_revision={**meaning,'body':json.dumps({'source':'Wikipedia','title':'作品記事','pageId':123,
+                        'revision':457,'acquisition':acquisition})}
+        self.assertFalse(worker.target_supported(role,[reading,wrong_revision]))
 
     def test_fictional_given_names_do_not_force_real_person_adoption(self):
         for types in (['masc','fict'],['fem','fict'],['surname','fict'],['given','myth']):
@@ -242,7 +339,7 @@ class ResearchTest(unittest.TestCase):
             worker.decode_official_page(gzip.compress(b'%PDF-1.4 source'))
 
     def test_research_parser_upgrade_archives_old_bindings(self):
-        cfg=worker.info(self.db,'configuration');cfg['researchParserVersion']=1;worker.info(self.db,'configuration',cfg)
+        cfg=worker.info(self.db,'configuration');cfg['stages']['onlineReadingParser']=1;worker.info(self.db,'configuration',cfg)
         self.e.fact('やまだ','山田','reading',[],'JapanPost:1',self.doc,{'source':'Japan Post','row':1})
         worker.pin_config(self.db,self.args)
         self.assertEqual(0,self.db.execute('SELECT active FROM facts WHERE id=?',(self.fid,)).fetchone()[0])
