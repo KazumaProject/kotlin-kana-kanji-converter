@@ -1,0 +1,50 @@
+operation	input	assertion	expected	categories
+lookup	あいはた	contains	藍畑	
+lookup	たかばたけ	contains	高畑	
+lookup	たかばたけ	contains	高畑	person
+lookup	たかばたけ	contains	高畑	place
+lookup	あかさかとらすとたわー	contains	赤坂トラストタワー	facility
+lookup	あいはたたかばたけ	excludes	藍畑(高畑)	
+lookup	あかさかあかさかとらすとたわーさんじゅういちかい	excludes	赤坂赤坂トラストタワー(31階)	
+surface	藍畑(高畑)	excludes	藍畑(高畑)	
+surface	赤坂赤坂トラストタワー(31階)	excludes	赤坂赤坂トラストタワー(31階)	
+lookup	だいじゅう	contains	第十	place
+lookup	あかさかびずたわー	contains	赤坂Bizタワー	facility
+lookup	しぶやすくらんぶるすくえあ	contains	渋谷スクランブルスクエア	facility
+lookup	ぱいそん	contains	Python	technical
+lookup	じゃば	contains	Java	technical
+lookup	ぎっとはぶ	contains	GitHub	product
+lookup	ぎっとはぶ	contains	GitHub	organization
+lookup	ぎふはぶ	excludes	GitHub	
+lookup	あまぞんうぇぶさーびす	contains	AWS	product
+lookup	つうきんらっしゅ	contains	通勤ラッシュ	general
+lookup	かじょうしょうひ	contains	過剰消費	general
+lookup	いちはらしはらだ	contains	市原市原田	place
+lookup	いぬかみぐんたがちょういちえん	contains	犬上郡多賀町一円	place
+lookup	あけのはいつ	contains	明野ハイツ	place
+surface	赤坂赤坂Bizタワー	excludes	赤坂赤坂Bizタワー	
+surface	渋谷渋谷スクランブルスクエア	excludes	渋谷渋谷スクランブルスクエア	
+surface	岡谷市岡谷市の次に番地がくる場合	excludes	岡谷市岡谷市の次に番地がくる場合	
+lookup	ちょうじゃばるおんせん	contains	長者原温泉	place
+lookup	やなぎばしちゅうおうしじょう	contains	柳橋中央市場	facility
+lookup	いとうもももも	excludes	伊藤桃々	all
+lookup	すみっこぐらし	contains	すみっコぐらし	character
+lookup	ぁぃぁぃ	contains	ぁぃぁぃ	person
+lookup	ひでぼー	contains	HIDEBOH	person
+lookup	えんてつほーる	contains	えんてつホール	facility
+lookup	えんてつほーる	excludes	えんてつホール	organization
+lookup	しょうちょうしゅぎ	excludes	象徴主義	organization
+lookup	りんざいろく	contains	臨済録	work
+lookup	りんざいろく	excludes	臨済録	product
+lookup	あすきー	contains	ASCII	technical
+lookup	あすきー	excludes	ASCII	product
+lookup	ろんりごうせい	contains	論理合成	technical
+lookup	ろんりごうせい	excludes	論理合成	product
+lookup	なんぼくあめりか	contains	南北アメリカ	place
+lookup	なんぼくあめりか	excludes	南北アメリカ	event
+lookup	ことざ	excludes	こと座	place
+lookup	かかおまめ	contains	カカオ豆	food
+lookup	でぃーぷしーく	contains	DeepSeek	organization
+lookup	でぃーぷしーく	excludes	DeepSeek	person
+lookup	らいごうじえき	excludes	来迎寺駅	station
+lookup	かまたありさ	excludes	鎌田安里紗	person

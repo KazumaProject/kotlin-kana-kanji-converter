@@ -1,0 +1,183 @@
+{
+  "reportVersion": 1,
+  "recordedAt": "2026-10-03T23:27:39.907088+00:00",
+  "state": "pilot-running-not-release-ready",
+  "sourceRows": 1103684,
+  "candidates": 1074028,
+  "baselineNormalized": 1064924,
+  "baselineAdopted": 372438,
+  "baselineNotPublished": 692486,
+  "inputTraceOrphans": 0,
+  "candidateTraceOrphans": 0,
+  "pilotCases": 2000,
+  "pilotStrata": 289,
+  "configuration": {
+    "models": {
+      "articlesPerRound": 3,
+      "batchSize": 16,
+      "documentLimitBytes": 68719476736,
+      "endpoint": "http://127.0.0.1:11434",
+      "officialPagesPerRound": 3,
+      "options": {
+        "num_ctx": 8192,
+        "num_predict": 2048,
+        "seed": 17,
+        "temperature": 0
+      },
+      "proposer": {
+        "digest": "6488c96fa5faab64bb65cbd30d4289e20e6130ef535a93ef9a49f42eda893ea7",
+        "name": "qwen3.5:9b"
+      },
+      "researchRounds": 2,
+      "reviewWindow": 128,
+      "reviewer": {
+        "digest": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
+        "name": "qwen3:8b"
+      },
+      "version": 1
+    },
+    "prompts": {
+      "proposer": "3642cb3f8981682598b5ad8e6527f3986bb134a76f908e1e7e2e1f3fa8bf6433",
+      "reviewer": "3f4e8b1422dc0e4c5d444db5bdf0a18f632f8e447b1b0dfd7834458604a9f33a"
+    },
+    "researchParserVersion": 3,
+    "taxonomy": {
+      "categories": [
+        {
+          "core": true,
+          "definition": "実在の人、姓、名。団体・競走馬は含めない",
+          "id": "person",
+          "minimum": 0
+        },
+        {
+          "core": true,
+          "definition": "行政区画、町域、山、河川などの地名。城・建物はfacility",
+          "id": "place",
+          "minimum": 0
+        },
+        {
+          "core": true,
+          "definition": "建物、城、店舗、施設。鉄道駅はstation",
+          "id": "facility",
+          "minimum": 0
+        },
+        {
+          "core": true,
+          "definition": "鉄道・バス等の駅、停留所",
+          "id": "station",
+          "minimum": 0
+        },
+        {
+          "core": true,
+          "definition": "会社、学校、団体、スポーツチーム",
+          "id": "organization",
+          "minimum": 0
+        },
+        {
+          "core": true,
+          "definition": "商品、ブランド、ソフトウェア、製品モデル",
+          "id": "product",
+          "minimum": 200
+        },
+        {
+          "core": true,
+          "definition": "作品、書籍、番組、楽曲、経典、文書",
+          "id": "work",
+          "minimum": 0
+        },
+        {
+          "core": true,
+          "definition": "架空人物、神、神話の個体。実在人はperson",
+          "id": "character",
+          "minimum": 0
+        },
+        {
+          "core": true,
+          "definition": "出来事、祭り、大会、賞、催事",
+          "id": "event",
+          "minimum": 0
+        },
+        {
+          "core": true,
+          "definition": "食材、食品、料理、飲料",
+          "id": "food",
+          "minimum": 250
+        },
+        {
+          "core": true,
+          "definition": "IT、数学、科学、医療、工学の専門用語。広い概念というだけでは含めない",
+          "id": "technical",
+          "minimum": 1500
+        },
+        {
+          "core": true,
+          "definition": "独立した通常の一般語の語義。未分類の受け皿にしない",
+          "id": "general",
+          "minimum": 10000
+        },
+        {
+          "core": false,
+          "definition": "生物の分類群、種、品種、化石、実在動物の個体名。解剖用語はtechnical",
+          "id": "organism",
+          "minimum": 500
+        },
+        {
+          "core": false,
+          "definition": "競技、技、競技上の地位、ルール。大会はevent、チームはorganization",
+          "id": "sports",
+          "minimum": 100
+        },
+        {
+          "core": false,
+          "definition": "教義、儀礼、宗教用具、制度。人はperson、神はcharacter、経典はwork",
+          "id": "religion",
+          "minimum": 100
+        },
+        {
+          "core": false,
+          "definition": "天体、宇宙構造、天文現象の名称。一般的科学理論はtechnical",
+          "id": "astronomy",
+          "minimum": 100
+        },
+        {
+          "core": false,
+          "definition": "乗り物の種類、個別の船、車両、航空機。商品モデルはproduct、駅はstation",
+          "id": "transport",
+          "minimum": 100
+        }
+      ],
+      "version": 4
+    },
+    "worker": "18ca3ceaae1464b66237cc7e3d4ee81a5172cef24ae66a4b912e9897083af379"
+  },
+  "bulkReceipt": {
+    "completedAt": 1791092502.39788,
+    "configurationSha256": "451f2a7173a092e83606a3f99363cafabec893530540f24b91eef4c4e4fb9174"
+  },
+  "inputs": {
+    "audit": "a4e7b9d0044e1ab0de144fd57f22b1ef94831819b9a5e7b4cdedaf492aa866fa",
+    "snapshot": "464cefa914990d434dbd25f5811bb48dacbebf876bec53f995893f646dd5a0ce",
+    "sources": {
+      "common": "1b0638f24e057077c1b1471dc30e741670b547979db458eb447af5cc7221283c",
+      "neologd": "64222fa806e424556b662619fb7cba9ac9683f89959afee909dadb112027458e",
+      "person": "7978c66a0ca26ee94170b508cf14c5eba16cbb41d7be5a3675474adc95ac6727",
+      "place": "bae15eb6755a2e6aa30d1d9ece7970c7d97d761b6e430c59bc11222f8e2e6f01",
+      "wiki": "2c3ca451484900edee55ae4ebe79284e1301b077572f64e9100889a5755bed10"
+    }
+  },
+  "countsAreNotAdoptions": true,
+  "independentValidationComplete": false,
+  "fullResearchComplete": false,
+  "releaseReady": false,
+  "tests": {
+    "python": 39,
+    "kotlin": 140,
+    "failures": 0,
+    "kotlinSkipped": 1,
+    "linuxFixtureRun": "https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/runs/37161862279"
+  },
+  "baselineAuditSha256": "a4e7b9d0044e1ab0de144fd57f22b1ef94831819b9a5e7b4cdedaf492aa866fa",
+  "updatedAt": "2026-10-04T05:44:28.508574+00:00",
+  "pilotRestartReason": "Fix compound proper-name tags, all explicit name-bound pronunciations and per-original transformation bindings; old parser evidence is archived. No execution/parser failure was finalized as non-distribution.",
+  "pilotRestarted": true
+}

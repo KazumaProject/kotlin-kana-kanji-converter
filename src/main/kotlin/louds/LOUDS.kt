@@ -184,7 +184,7 @@ class LOUDS {
                 close()
             }
         }catch (e: IOException){
-            println(e.stackTraceToString())
+            throw IllegalStateException("Trie serialization failed", e)
         }
     }
 
@@ -198,7 +198,7 @@ class LOUDS {
                 rebuildCache()
                 close()
             }catch (e: Exception){
-                println(e.stackTraceToString())
+                throw IllegalStateException("Trie serialization failed", e)
             }
         }
         return LOUDS(LBS, labels, isLeaf)
@@ -214,7 +214,7 @@ class LOUDS {
                 close()
             }
         }catch (e: IOException){
-            println(e.stackTraceToString())
+            throw IllegalStateException("Trie serialization failed", e)
         }
     }
 
@@ -227,7 +227,7 @@ class LOUDS {
                 rebuildCache()
                 close()
             }catch (e: Exception){
-                println(e.stackTraceToString())
+                throw IllegalStateException("Trie serialization failed", e)
             }
         }
         return LOUDS(LBS, labels, isLeaf)

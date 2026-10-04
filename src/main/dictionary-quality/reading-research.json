@@ -1,0 +1,239 @@
+{
+  "scope": "Only validation of existing input pairs; no reference headwords appended",
+  "facts": [
+    {
+      "reading": "なつひりんこ",
+      "surface": "夏陽りんこ",
+      "categories": "person",
+      "sourceUrl": "https://ameblo.jp/riririncall/",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "本人の公式ブログに、現在の表記と「なつひりんこ」を併記。旧芸名の読みの流用を避けた。"
+    },
+    {
+      "reading": "えふえむあきた",
+      "surface": "FM秋田",
+      "categories": "organization",
+      "sourceUrl": "https://ja.wikipedia.org/wiki/エフエム秋田",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "Wikipediaの法人名「エフエム秋田（エフエムあきた）」と通称FM秋田を同一記事で確認。FM部分の文字表記と音の対応、秋田部分の読みを独立に確認。"
+    },
+    {
+      "reading": "えいこす",
+      "surface": "ACOS",
+      "categories": "product",
+      "sourceUrl": "https://museum.ipsj.or.jp/computer/os/nec/index.html",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "情報処理学会コンピュータ博物館が、NECのOS名ACOSをエイコスと読むことを明示。"
+    },
+    {
+      "reading": "ねっとびーんず",
+      "surface": "NetBeans",
+      "categories": "product",
+      "sourceUrl": "https://ja.wikipedia.org/wiki/NetBeans",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "日本語Wikipediaの先頭にNetBeansとネットビーンズを併記。Apache NetBeans全体の読みを流用していない。"
+    },
+    {
+      "reading": "なんだ",
+      "surface": "難陀",
+      "categories": "person,character",
+      "sourceUrl": "https://k-dic.sokanet.jp/難陀（なんだ）/",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "創価学会の公式教学用語集で「なんだ」と、人物および八大竜王の語義を確認。シェーシャという別名の読みとしては使用しない。"
+    },
+    {
+      "reading": "かみむすひのかみ",
+      "surface": "神産巣日神",
+      "categories": "character",
+      "sourceUrl": "https://kokuryo-jinja.jp/yuisyo/",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "國領神社の主祭神名に対象表記と「かみむすひのかみ」を併記。國學院の「かむむすひのかみ」は別の正しい読みであり矛盾と断定しない。"
+    },
+    {
+      "reading": "あうとれいじ",
+      "surface": "OUTRAGE",
+      "categories": "organization",
+      "sourceUrl": "https://www.universal-music.co.jp/outrage/biography/",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "所属レーベルの公式BIOGRAPHYに英字表記とアウトレイジを併記。"
+    },
+    {
+      "reading": "のはらひろし",
+      "surface": "のはらひろし",
+      "categories": "character",
+      "sourceUrl": "https://ex-maniacs.tv-asahi.co.jp/ch/ex_maniacs/post-32065/",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "放送元テレビ朝日の解説で、この全かな表記を登場人物名として確認。かなの読みは表記と完全一致。"
+    },
+    {
+      "reading": "あまつまら",
+      "surface": "アマツマラ",
+      "categories": "character",
+      "sourceUrl": "https://ja.wikipedia.org/wiki/天津麻羅",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "日本語Wikipediaに独立した神名としてカタカナ表記を掲載。読みはかな表記と完全一致。"
+    },
+    {
+      "reading": "しろうねり",
+      "surface": "白うねり",
+      "categories": "character",
+      "sourceUrl": "https://ja.wikipedia.org/w/index.php?title=白溶裔&oldid=105338663",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "日本語Wikipedia oldid=105338663の冒頭で、この表記にしろうねりを明示。"
+    },
+    {
+      "reading": "いしこりどめのみこと",
+      "surface": "伊斯許理度売命",
+      "categories": "character",
+      "sourceUrl": "https://kojiki.kokugakuin.ac.jp/shinmei/ishikoridomenomikoto/",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "國學院大學の神名DBで、この表記といしこりどめのみことを明示。"
+    },
+    {
+      "reading": "かまたまうどん",
+      "surface": "かまたまうどん",
+      "categories": "food",
+      "sourceUrl": "https://www.jleague.jp/club/sanuki/profile/?navicode=j3",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "Jリーグ公式クラブ紹介で、香川県の名物として全かな表記を掲載。かな表記と読みの完全一致を確認。"
+    },
+    {
+      "reading": "ないのかみ",
+      "surface": "ナイノカミ",
+      "categories": "character",
+      "sourceUrl": "https://www.metsoc.jp/tenki/pdf/1976/1976_09_0499.pdf",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "日本気象学会刊行誌1976年9月の本文に地震の神名として全カタカナ表記を掲載。"
+    },
+    {
+      "reading": "ぶんと",
+      "surface": "BUND",
+      "categories": "organization",
+      "sourceUrl": "https://ja.wikipedia.org/wiki/ブント_(市民団体)",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "日本語Wikipediaの団体記事でブント(BUND)という対応を明示。"
+    },
+    {
+      "reading": "かむおおいちひめ",
+      "surface": "神大市比売",
+      "categories": "character",
+      "sourceUrl": "https://ja.wikipedia.org/wiki/神大市比売",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "日本語Wikipediaの神名欄に対象表記とカムオオイチヒメを併記。"
+    },
+    {
+      "reading": "ちたしこくれいじょう",
+      "surface": "知多四国霊場",
+      "categories": "event",
+      "sourceUrl": "https://ja.wikipedia.org/wiki/知多四国霊場",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected published page; no pronunciation generation",
+      "finding": "日本語Wikipediaの冒頭に対象表記の読みを明示。霊場巡礼としての役割を確認。"
+    },
+    {
+      "reading": "しんじょうしょうがっこう",
+      "surface": "新城小学校",
+      "categories": "organization",
+      "sourceUrl": "https://ja.wikipedia.org/wiki/気仙沼市立新城小学校",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected explicit Wikipedia pronunciation and name boundary",
+      "finding": "記事の短称「新城小学校」と、正式名称の冒頭読み「けせんぬましりつ しんじょうしょうがっこう」を照合。空白境界と短称の存在を両方確認。"
+    },
+    {
+      "reading": "こいでしょうがっこう",
+      "surface": "小出小学校",
+      "categories": "organization",
+      "sourceUrl": "https://ja.wikipedia.org/wiki/茅ヶ崎市立小出小学校",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected explicit Wikipedia pronunciation and name boundary",
+      "finding": "記事の短称「小出小学校」と、正式名称の冒頭読み「ちがさきしりつ こいでしょうがっこう」を照合。空白境界と短称の存在を両方確認。"
+    },
+    {
+      "reading": "おばたしょうがっこう",
+      "surface": "小俣小学校",
+      "categories": "organization",
+      "sourceUrl": "https://ja.wikipedia.org/wiki/伊勢市立小俣小学校",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected explicit Wikipedia pronunciation and name boundary",
+      "finding": "記事の短称「小俣小学校」と、正式名称の冒頭読み「いせしりつ おばたしょうがっこう」を照合。空白境界と短称の存在を両方確認。"
+    },
+    {
+      "reading": "きみだけにあいを",
+      "surface": "君だけに愛を",
+      "categories": "work",
+      "sourceUrl": "https://ja.wikipedia.org/wiki/君だけに愛を_(テレビドラマ)",
+      "checkedAt": "2026-10-03",
+      "method": "assistant inspected explicit Wikipedia pronunciation and name boundary",
+      "finding": "ドラマ記事の冒頭読み「きみだけにあいを」と情報欄のタイトル「君だけに愛を」を照合。括弧のテレビドラマは対象識別情報として扱う。"
+    },
+    {
+      "reading": "らいず",
+      "surface": "RIZE",
+      "categories": "organization",
+      "sourceUrl": "https://ja.wikipedia.org/wiki/RIZE",
+      "checkedAt": "2026-10-03",
+      "method": "targeted external investigation of the frozen 500 held samples",
+      "finding": "記事冒頭の対象名RIZEと読み「ライズ」、ロックバンドという役割を確認。ソニー等の英字名だけの掲載は読み確認の証拠として使用しない。"
+    },
+    {
+      "reading": "でぃーぷしーく",
+      "surface": "DeepSeek",
+      "categories": "organization",
+      "sourceUrl": "https://ja.wikipedia.org/wiki/DeepSeek",
+      "checkedAt": "2026-10-03",
+      "method": "targeted external investigation of the frozen 500 held samples",
+      "finding": "記事冒頭の対象名DeepSeekと読み「ディープシーク」、AI研究企業という役割を確認。人名入力にあることはpersonの根拠にしない。"
+    },
+    {
+      "reading": "たてばやしじょう",
+      "surface": "館林城",
+      "categories": "facility",
+      "sourceUrl": "https://ja.wikipedia.org/wiki/館林城",
+      "checkedAt": "2026-10-03",
+      "method": "targeted external investigation of the frozen 500 held samples",
+      "finding": "記事冒頭の館林城と読み「たてばやしじょう」、城という役割を確認。"
+    },
+    {
+      "reading": "よこすかよしみ",
+      "surface": "横須賀昌美",
+      "categories": "person",
+      "sourceUrl": "https://ja.wikipedia.org/wiki/横須賀昌美",
+      "checkedAt": "2026-10-03",
+      "method": "targeted external investigation of the frozen 500 held samples",
+      "finding": "現在の対象名「横須賀昌美」と読み「よこすかよしみ」を確認。表記の異なる旧芸名へ現在名の読みを流用しない。"
+    },
+    {
+      "reading": "らいこうじえき",
+      "surface": "来迎寺駅",
+      "categories": "station",
+      "sourceUrl": "https://timetables.jreast.co.jp/timetable/list1656.html",
+      "checkedAt": "2026-10-03",
+      "method": "targeted external investigation of the frozen 500 held samples",
+      "finding": "JR東日本の駅時刻表見出しで「来迎寺駅」「らいこうじ」を確認。元入力の「らいごうじえき」は濁点が異なるため除外する。駅という明示単位を保持。"
+    },
+    {
+      "reading": "かまだありさ",
+      "surface": "鎌田安里紗",
+      "categories": "person",
+      "sourceUrl": "https://platinumproduction.jp/talent/kamadaarisa/",
+      "checkedAt": "2026-10-03",
+      "method": "targeted external investigation of the frozen 500 held samples",
+      "finding": "所属事務所のプロフィールで「鎌田安里紗」「Kamada Arisa」を確認。「かまたありさ」の元入力ペアは姓の濁点が異なるため除外する。"
+    }
+  ]
+}

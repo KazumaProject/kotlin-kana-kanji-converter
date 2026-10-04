@@ -1,0 +1,107 @@
+{
+  "version": 4,
+  "categories": [
+    {
+      "id": "person",
+      "definition": "実在の人、姓、名。団体・競走馬は含めない",
+      "core": true,
+      "minimum": 0
+    },
+    {
+      "id": "place",
+      "definition": "行政区画、町域、山、河川などの地名。城・建物はfacility",
+      "core": true,
+      "minimum": 0
+    },
+    {
+      "id": "facility",
+      "definition": "建物、城、店舗、施設。鉄道駅はstation",
+      "core": true,
+      "minimum": 0
+    },
+    {
+      "id": "station",
+      "definition": "鉄道・バス等の駅、停留所",
+      "core": true,
+      "minimum": 0
+    },
+    {
+      "id": "organization",
+      "definition": "会社、学校、団体、スポーツチーム",
+      "core": true,
+      "minimum": 0
+    },
+    {
+      "id": "product",
+      "definition": "商品、ブランド、ソフトウェア、製品モデル",
+      "core": true,
+      "minimum": 200
+    },
+    {
+      "id": "work",
+      "definition": "作品、書籍、番組、楽曲、経典、文書",
+      "core": true,
+      "minimum": 0
+    },
+    {
+      "id": "character",
+      "definition": "架空人物、神、神話の個体。実在人はperson",
+      "core": true,
+      "minimum": 0
+    },
+    {
+      "id": "event",
+      "definition": "出来事、祭り、大会、賞、催事",
+      "core": true,
+      "minimum": 0
+    },
+    {
+      "id": "food",
+      "definition": "食材、食品、料理、飲料",
+      "core": true,
+      "minimum": 250
+    },
+    {
+      "id": "technical",
+      "definition": "IT、数学、科学、医療、工学の専門用語。広い概念というだけでは含めない",
+      "core": true,
+      "minimum": 1500
+    },
+    {
+      "id": "general",
+      "definition": "独立した通常の一般語の語義。未分類の受け皿にしない",
+      "core": true,
+      "minimum": 10000
+    },
+    {
+      "id": "organism",
+      "definition": "生物の分類群、種、品種、化石、実在動物の個体名。解剖用語はtechnical",
+      "core": false,
+      "minimum": 500
+    },
+    {
+      "id": "sports",
+      "definition": "競技、技、競技上の地位、ルール。大会はevent、チームはorganization",
+      "core": false,
+      "minimum": 100
+    },
+    {
+      "id": "religion",
+      "definition": "教義、儀礼、宗教用具、制度。人はperson、神はcharacter、経典はwork",
+      "core": false,
+      "minimum": 100
+    },
+    {
+      "id": "astronomy",
+      "definition": "天体、宇宙構造、天文現象の名称。一般的科学理論はtechnical",
+      "core": false,
+      "minimum": 100
+    },
+    {
+      "id": "transport",
+      "definition": "乗り物の種類、個別の船、車両、航空機。商品モデルはproduct、駅はstation",
+      "core": false,
+      "minimum": 100
+    }
+  ]
+}

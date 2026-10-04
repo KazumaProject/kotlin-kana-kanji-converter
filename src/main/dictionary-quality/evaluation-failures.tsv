@@ -1,0 +1,21 @@
+category	reading	surface	status	current_categories	verification_issue	explanation
+person	まつしまひろのり	松島ひろのり	held	unclassified	entity-reading-unresolved-not-pair-error	別名・表記変更に対する読みの結び付け不足。本名の読みを流用しない。
+person	きたはらりえ	北原理絵	held	unclassified	entity-reading-unresolved-not-pair-error	別名・表記変更に対する読みの結び付け不足。本名の読みを流用しない。
+facility	たいえいぱーきんぐえりあ	大栄PA	held	unclassified	entity-reading-unresolved-not-pair-error	略称または別名に対する独立した読みの根拠不足。
+organization	ねぎしちゅうがっこう	根岸中学校	held	unclassified	entity-reading-unresolved-not-pair-error	短い学校名等に対する読みと同名対象の結び付けが未確認。正式名称の読みを無条件に切り詰めない。
+organization	かくだちゅうがっこう	角田中学校	held	unclassified	entity-reading-unresolved-not-pair-error	短い学校名等に対する読みと同名対象の結び付けが未確認。正式名称の読みを無条件に切り詰めない。
+organization	かわはら	川原	accepted	person,place		対象の同定不足。地名・姓等の同名語があり、organizationという役割を確定できない。
+organization	はちほんまつしょうがっこう	八本松小学校	held	unclassified	entity-reading-unresolved-not-pair-error	短い学校名等に対する読みと同名対象の結び付けが未確認。正式名称の読みを無条件に切り詰めない。
+organization	あさひこうとうがっこう	旭高等学校	held	unclassified	entity-reading-unresolved-not-pair-error	短い学校名等に対する読みと同名対象の結び付けが未確認。正式名称の読みを無条件に切り詰めない。
+organization	ふるかわしょうがっこう	古川小学校	held	unclassified	entity-reading-unresolved-not-pair-error	短い学校名等に対する読みと同名対象の結び付けが未確認。正式名称の読みを無条件に切り詰めない。
+organization	とみおかちゅうがっこう	富岡中学校	held	unclassified	entity-reading-unresolved-not-pair-error	短い学校名等に対する読みと同名対象の結び付けが未確認。正式名称の読みを無条件に切り詰めない。
+organization	いしのまきちゅうがっこう	石巻中学校	held	unclassified	entity-reading-unresolved-not-pair-error	短い学校名等に対する読みと同名対象の結び付けが未確認。正式名称の読みを無条件に切り詰めない。
+organization	あめりかへいわけんきゅうじょ	アメリカ平和研究所	held	unclassified	entity-reading-unresolved-not-pair-error	短い学校名等に対する読みと同名対象の結び付けが未確認。正式名称の読みを無条件に切り詰めない。
+organization	かほくちゅうがっこう	河北中学校	held	unclassified	entity-reading-unresolved-not-pair-error	短い学校名等に対する読みと同名対象の結び付けが未確認。正式名称の読みを無条件に切り詰めない。
+organization	やまぐちしょうがっこう	山口小学校	held	unclassified	entity-reading-unresolved-not-pair-error	短い学校名等に対する読みと同名対象の結び付けが未確認。正式名称の読みを無条件に切り詰めない。
+organization	みつかいどうちゅうがっこう	水海道中学校	held	unclassified	entity-reading-unresolved-not-pair-error	短い学校名等に対する読みと同名対象の結び付けが未確認。正式名称の読みを無条件に切り詰めない。
+organization	やまのうちしょうがっこう	山ノ内小学校	held	unclassified	entity-reading-unresolved-not-pair-error	短い学校名等に対する読みと同名対象の結び付けが未確認。正式名称の読みを無条件に切り詰めない。
+organization	かわにししょうがっこう	川西小学校	held	unclassified	entity-reading-unresolved-not-pair-error	短い学校名等に対する読みと同名対象の結び付けが未確認。正式名称の読みを無条件に切り詰めない。
+product	あらーも	アラーモ	held	unclassified	entity-reading-unresolved-not-pair-error	略称または別名に対する独立した読みの根拠不足。
+event	まなびやえくすたしー	学舎エクスタシー	accepted	work		作品として収録されるが、期待したevent分類は未確認。評価の期待カテゴリを変更して成功扱いにしていない。
+event	みやこをどり	都をどり	accepted	general,work		作品として収録されるが、期待したevent分類は未確認。評価の期待カテゴリを変更して成功扱いにしていない。

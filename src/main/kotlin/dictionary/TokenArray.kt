@@ -73,18 +73,14 @@ class TokenArray {
     private fun getNodeIdForDictionary(
         dictionary: Dictionary,
         tangoTrie: LOUDS,
-        key: String // 使わない（判定には不要）
+        key: String
     ): Int {
-        val t = dictionary.tango
-
-        // まず「かなだけ」かどうかを判定（あなたの Pure 系ユーティリティを採用）
-        return when {
-            key == t -> HIRAGANA_SENTINEL
-            t.isHiraganaOnlyPure() -> HIRAGANA_SENTINEL
-            t.isKatakanaOnlyPure() -> KATAKANA_SENTINEL
-            else -> {
-                val normalized = Normalizer.normalize(t, Normalizer.Form.NFC)
-                tangoTrie.getNodeIndex(normalized)
+        val surface = Normalizer.normalize(dictionary.tango, Normalizer.Form.NFC)
+        return when (surface) {
+            key -> HIRAGANA_SENTINEL
+            key.hiraToKata() -> KATAKANA_SENTINEL
+            else -> tangoTrie.getNodeIndex(surface).also {
+                require(it >= 0) { "Surface missing from dictionary trie: $surface ($key)" }
             }
         }
     }
@@ -107,7 +103,7 @@ class TokenArray {
                 close()
             }
         } catch (e: IOException) {
-            println(e.stackTraceToString())
+            throw IllegalStateException("Token serialization failed", e)
         }
     }
 
@@ -127,7 +123,7 @@ class TokenArray {
                 rebuildCache()
                 close()
             } catch (e: Exception) {
-                println(e.stackTraceToString())
+                throw IllegalStateException("Token serialization failed", e)
             }
         }
         return TokenArray()
@@ -146,7 +142,7 @@ class TokenArray {
                 close()
             }
         } catch (e: IOException) {
-            println(e.stackTraceToString())
+            throw IllegalStateException("Token serialization failed", e)
         }
     }
 
@@ -160,7 +156,7 @@ class TokenArray {
                 rebuildCache()
                 close()
             } catch (e: Exception) {
-                println(e.stackTraceToString())
+                throw IllegalStateException("Token serialization failed", e)
             }
         }
         return TokenArray()
@@ -208,7 +204,7 @@ class TokenArray {
                 objectOutput.writeObject(rightIds2)
             }
         } catch (e: Exception) {
-            println(e.stackTraceToString())
+            throw IllegalStateException("Token serialization failed", e)
         }
     }
 
@@ -252,7 +248,7 @@ class TokenArray {
                 objectOutput.writeObject(mapToSave)
             }
         } catch (e: Exception) {
-            println(e.stackTraceToString())
+            throw IllegalStateException("Token serialization failed", e)
         }
     }
 
@@ -261,11 +257,13 @@ class TokenArray {
      * @param mode 0:test else:main
      *
      **/
-    fun readPOSTable(mode: Int) {
-        val objectInput = ObjectInputStream(BufferedInputStream(FileInputStream(defaultPosTablePath(mode))))
-        objectInput.apply {
-            leftIds = (readObject() as ShortArray).toList()
-            rightIds = (readObject() as ShortArray).toList()
+    fun readPOSTable(mode: Int) = readPOSTable(defaultPosTablePath(mode))
+
+    fun readPOSTable(path: String) {
+        ObjectInputStream(BufferedInputStream(FileInputStream(path))).use {
+            leftIds = (it.readObject() as ShortArray).toList()
+            rightIds = (it.readObject() as ShortArray).toList()
+            require(leftIds.size == rightIds.size) { "Mismatched POS arrays: $path" }
         }
     }
 
@@ -278,12 +276,10 @@ class TokenArray {
         mode: Int,
         inputPath: String? = null,
     ): Map<Pair<Short, Short>, Int> {
-        val objectInput = ObjectInputStream(FileInputStream(inputPath ?: defaultPosTableForBuildPath(mode)))
-        var a: Map<Pair<Short, Short>, Int>
-        objectInput.apply {
-            a = (readObject() as Map<Pair<Short, Short>, Int>)
+        ObjectInputStream(FileInputStream(inputPath ?: defaultPosTableForBuildPath(mode))).use {
+            @Suppress("UNCHECKED_CAST")
+            return it.readObject() as Map<Pair<Short, Short>, Int>
         }
-        return a
     }
 
     private fun postingsSuccinct(): SuccinctBitVector {

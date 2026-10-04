@@ -25,10 +25,7 @@ import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.mozc.buildConnectionIdsFromResource
 import com.kazumaproject.mozc.validateBundledMozcDictionaryResources
-import com.kazumaproject.reading_correction.ReadingCorrectionBuilder
-import java.io.*
 import java.util.*
-import java.util.zip.ZipInputStream
 
 fun main() {
     validateBundledMozcDictionaryResources()
@@ -80,14 +77,8 @@ private fun buildConnectionIds() {
 private fun buildDictionaryForNeologd() {
     println("start build Neologd dictionary")
 
-    val readingCorrectionBuilder = ReadingCorrectionBuilder()
 
-    val dictionaryList = readingCorrectionBuilder.parseMozcUTDictionaryCompressedDictionary(
-        readTextFromZip(
-            filePath = "src/main/bin/only_neologd.txt.zip",
-            fileName = "only_neologd.txt"
-        )
-    )
+    val dictionaryList = com.kazumaproject.quality.SupplementalSources.normalized("neologd")
         .groupBy { it.yomi }
         .toSortedMap(compareBy({ it.length }, { it }))
     buildAndWriteDictionaryArtifacts(
@@ -96,19 +87,4 @@ private fun buildDictionaryForNeologd() {
         tangoOutputPath = "./src/main/resources/tango_neologd.dat",
         tokenOutputPath = "./src/main/resources/token_neologd.dat",
     )
-}
-
-private fun readTextFromZip(filePath: String, fileName: String): InputStream {
-    val zipFile = File(filePath)
-    val zipInputStream = ZipInputStream(BufferedInputStream(FileInputStream(zipFile)))
-
-    var entry = zipInputStream.nextEntry
-    while (entry != null) {
-        if (!entry.isDirectory && entry.name == fileName) {
-            return zipInputStream
-        }
-        entry = zipInputStream.nextEntry
-    }
-
-    throw FileNotFoundException("$fileName not found in $filePath")
 }

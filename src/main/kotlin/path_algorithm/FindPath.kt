@@ -19,6 +19,7 @@ class FindPath(
         val path: List<Node>,
         val cost: Int,
         val endPosition: Int,
+        val value: String = "",
     )
 
     private data class CandidatePath(
@@ -77,8 +78,23 @@ class FindPath(
     ): MutableList<String> {
         if (n <= 0) return mutableListOf()
         val outgoing = buildOutgoingNodes(graph, length)
-        val queue = PriorityQueue(compareBy<PathState> { it.cost })
+        // Exact minimum remaining cost on this acyclic lattice. Uniform-cost
+        // enumeration without this potential explodes on ordinary sentences
+        // and is not valid when dictionary/connection costs are negative.
+        val remaining = java.util.IdentityHashMap<Node, Int>()
+        graph[length + 1].flatten().forEach { remaining[it] = 0 }
+        for (start in length downTo 0) {
+            outgoing[start].filter { it.tango != "EOS" }.forEach { node ->
+                val end = node.sPos + node.len.toInt()
+                remaining[node] = outgoing.getOrElse(end) { emptyList() }.mapNotNull { next ->
+                    remaining[next]?.takeIf { it != Int.MAX_VALUE }?.let { addCosts(getEdgeCost(node.r.toInt(),next.l.toInt(),connectionMatrix),next.wcost,it) }
+                }.minOrNull() ?: Int.MAX_VALUE
+            }
+        }
+        val queue = PriorityQueue(compareBy<PathState> { it.cost.toLong() + (remaining[it.node] ?: 0).toLong() })
         val bos = graph[0].flatten().firstOrNull { it.tango == "BOS" } ?: return mutableListOf()
+        remaining[bos] = outgoing[0].mapNotNull { next -> remaining[next]?.takeIf { it != Int.MAX_VALUE }?.let { addCosts(getEdgeCost(bos.r.toInt(),next.l.toInt(),connectionMatrix),next.wcost,it) } }.minOrNull() ?: Int.MAX_VALUE
+        if (remaining[bos] == Int.MAX_VALUE) return mutableListOf()
         queue.add(PathState(node = bos, path = emptyList(), cost = 0, endPosition = 0))
 
         val hasSystemRules =
@@ -90,11 +106,13 @@ class FindPath(
         }
         val resultFinal = mutableListOf<CandidatePath>()
         val foundStrings = HashSet<String>()
+        data class PrefixKey(val end: Int, val right: Short, val value: String)
+        val bestPrefixes = hashMapOf<PrefixKey, Int>()
 
         while (queue.isNotEmpty()) {
             val state = queue.poll()
             if (state.node.tango == "EOS") {
-                val value = state.path.joinToString(separator = "") { it.tango }
+                val value = state.value
                 if (foundStrings.add(value)) {
                     resultFinal += CandidatePath(
                         value = value,
@@ -110,7 +128,9 @@ class FindPath(
                 continue
             }
 
+            if (!hasSystemRules && bestPrefixes[PrefixKey(state.endPosition,state.node.r,state.value)]?.let { it < state.cost } == true) continue
             for (nextNode in outgoing.getOrElse(state.endPosition) { emptyList() }) {
+                if (remaining[nextNode] == Int.MAX_VALUE) continue
                 val edgeScore = getEdgeCost(
                     state.node.r.toInt(),
                     nextNode.l.toInt(),
@@ -122,12 +142,20 @@ class FindPath(
                     "EOS" -> length + 1
                     else -> nextNode.sPos + nextNode.len.toInt()
                 }
+                val nextValue = if(nextNode.tango=="EOS") state.value else state.value+nextNode.tango
+                if (!hasSystemRules) {
+                    val key=PrefixKey(nextEnd,nextNode.r,nextValue)
+                    val old=bestPrefixes[key]
+                    if(old!=null && old<=nextCost) continue
+                    bestPrefixes[key]=nextCost
+                }
                 queue.add(
                     PathState(
                         node = nextNode,
                         path = nextPath,
                         cost = nextCost,
                         endPosition = nextEnd,
+                        value = nextValue,
                     )
                 )
             }

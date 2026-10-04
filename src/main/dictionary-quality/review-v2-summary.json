@@ -1,0 +1,55 @@
+{
+  "edition": "v2-2026-10-03",
+  "currentAuditSha256": "a4e7b9d0044e1ab0de144fd57f22b1ef94831819b9a5e7b4cdedaf492aa866fa",
+  "baselineAuditSha256": "aaa2b6d7c544ba01d7c2a816e53a27ef2413a4f729e9bfedbdaef8c6ab6d60fd",
+  "adoptedReviewCounts": {
+    "character": 100,
+    "event": 100,
+    "facility": 100,
+    "food": 100,
+    "general": 100,
+    "organization": 100,
+    "person": 100,
+    "place": 100,
+    "product": 100,
+    "station": 10,
+    "technical": 100,
+    "work": 100
+  },
+  "newAdoptedByCategory": {
+    "person": 2776,
+    "organization": 3208,
+    "work": 3539,
+    "general": 15546,
+    "food": 606,
+    "character": 1062,
+    "place": 2123,
+    "technical": 2889,
+    "product": 250,
+    "facility": 329,
+    "event": 247,
+    "station": 10
+  },
+  "adoptedReviewRows": 1110,
+  "heldReviewRows": 500,
+  "heldSampleFinalOutcomes": {
+    "adopted": 6,
+    "held": 481,
+    "unclassified": 11,
+    "excluded": 2
+  },
+  "selection": "SHA-ranked newly adopted candidates per category; held500 stratified by source/status/missing fact, frozen before targeted corrections",
+  "method": "Assistant inspected stored reading/type/sense facts for all selected rows, with targeted public-page checks. This is neither all-entry human review nor an unbiased population error-rate estimate.",
+  "corrections": [
+    "Reject alias/main-name cross-product; preserve P5168 name-bound readings",
+    "Hot springs place; markets facility; OS product; deity character; performing-art production work",
+    "Art movements not organizations; sumo ranks not events; ASCII and logical synthesis technical",
+    "JMdict concrete reviewed corrections: 日本三代実録/臨済録 work; うながっぱ sushi food versus mascot character",
+    "Official wrong pairs 伊藤桃々/いとうもももも, 来迎寺駅/らいごうじえき, 鎌田安里紗/かまたありさ excluded",
+    "Targeted research RIZE/DeepSeek organization, 館林城 facility, 横須賀昌美 person; explicit reading evidence recorded separately"
+  ],
+  "files": {
+    "review-v2-adopted.tsv": "b012c1e505886287cf6f5d9349b49dea2ae1463b39c55c2b455f4dcc9ee2973f",
+    "review-v2-held.tsv": "3d529460e75c1afa019e29734a4a5e5343c0eef34706b376e3e77a24bbda4606"
+  }
+}

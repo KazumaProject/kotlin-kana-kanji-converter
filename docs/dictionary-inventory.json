@@ -1,0 +1,812 @@
+{
+  "generatedFrom": {
+    "inputManifest": {
+      "sourceCommit": "71d152d8f4be53dfa0cee2bd198ff78365ea62a1",
+      "mozcCommit": "c7538e6f8ee56ff94789494106ad5d6d658cd4f6",
+      "englishRelease": "v2026.0928.17",
+      "englishAssetSha256": "b34b9c630ecf4d3f404049ef6580d8f4d5d5b13e1197e083d51b8ea3f064cd6e"
+    },
+    "auditFile": "audit.tsv.gz"
+  },
+  "auditSha256": "a4e7b9d0044e1ab0de144fd57f22b1ef94831819b9a5e7b4cdedaf492aa866fa",
+  "summary": {
+    "sourceRows": 1103684,
+    "normalizedEntries": 1064924,
+    "acceptedEntries": 372438,
+    "qualityHeldEntries": 676126,
+    "unclassifiedEntries": 534784,
+    "excludedRows": 119,
+    "heldRows": 1594,
+    "changedRows": 7379,
+    "categories": {
+      "person": 165089,
+      "place": 168832,
+      "facility": 4633,
+      "station": 5070,
+      "organization": 4605,
+      "product": 346,
+      "work": 4165,
+      "character": 1554,
+      "event": 321,
+      "food": 648,
+      "technical": 2926,
+      "general": 15829
+    },
+    "apiRequests": 0,
+    "metadataUnavailable": false,
+    "cacheCapacityReached": false,
+    "cacheBytes": 0,
+    "dictionaryBytes": 10001893
+  },
+  "units": "entries=reading/surface/left_id/right_id; pairs=reading/surface; source and category totals overlap",
+  "uniqueIncluded": {
+    "pairs": 372438,
+    "surfaces": 369899,
+    "readings": 357775
+  },
+  "qualityCategoryMatrix": {
+    "accepted/classified": 372438,
+    "accepted/unclassified": 16360,
+    "held/unclassified": 518424,
+    "held/classified": 157702
+  },
+  "heldReasons": {
+    "no-independent-reading-evidence": 676126
+  },
+  "sourceStats": {
+    "person": {
+      "normalizedEntries": 70403,
+      "includedEntries": 16109,
+      "reviewEntries": 54294
+    },
+    "place": {
+      "normalizedEntries": 162921,
+      "includedEntries": 159163,
+      "reviewEntries": 3758
+    },
+    "wiki": {
+      "normalizedEntries": 150132,
+      "includedEntries": 41403,
+      "reviewEntries": 108729
+    },
+    "neologd": {
+      "normalizedEntries": 404816,
+      "includedEntries": 18207,
+      "reviewEntries": 386609
+    },
+    "common": {
+      "normalizedEntries": 308185,
+      "includedEntries": 159248,
+      "reviewEntries": 148937
+    }
+  },
+  "categories": {
+    "person": {
+      "entries": 165089,
+      "pairs": 165089,
+      "surfaces": 164736,
+      "readings": 153237,
+      "sources": {
+        "person": 15451,
+        "wiki": 23631,
+        "neologd": 5987,
+        "common": 134284,
+        "place": 254
+      },
+      "binaryBytes": 3884150
+    },
+    "organization": {
+      "entries": 4605,
+      "pairs": 4605,
+      "surfaces": 4599,
+      "readings": 4598,
+      "sources": {
+        "person": 311,
+        "wiki": 825,
+        "common": 2699,
+        "neologd": 892,
+        "place": 10
+      },
+      "binaryBytes": 181008
+    },
+    "work": {
+      "entries": 4165,
+      "pairs": 4165,
+      "surfaces": 4164,
+      "readings": 4146,
+      "sources": {
+        "person": 29,
+        "common": 3193,
+        "place": 5,
+        "wiki": 729,
+        "neologd": 218
+      },
+      "binaryBytes": 158614
+    },
+    "general": {
+      "entries": 15829,
+      "pairs": 15829,
+      "surfaces": 15781,
+      "readings": 15240,
+      "sources": {
+        "person": 221,
+        "neologd": 8683,
+        "common": 5302,
+        "wiki": 1495,
+        "place": 152
+      },
+      "binaryBytes": 448834
+    },
+    "character": {
+      "entries": 1554,
+      "pairs": 1554,
+      "surfaces": 1552,
+      "readings": 1551,
+      "sources": {
+        "person": 140,
+        "common": 916,
+        "neologd": 277,
+        "wiki": 292,
+        "place": 4
+      },
+      "binaryBytes": 50888
+    },
+    "food": {
+      "entries": 648,
+      "pairs": 648,
+      "surfaces": 647,
+      "readings": 613,
+      "sources": {
+        "person": 14,
+        "common": 291,
+        "neologd": 160,
+        "place": 2,
+        "wiki": 185
+      },
+      "binaryBytes": 20876
+    },
+    "place": {
+      "entries": 168832,
+      "pairs": 168832,
+      "surfaces": 166743,
+      "readings": 167248,
+      "sources": {
+        "person": 6,
+        "neologd": 701,
+        "place": 159158,
+        "wiki": 11592,
+        "common": 4318
+      },
+      "binaryBytes": 4796102
+    },
+    "product": {
+      "entries": 346,
+      "pairs": 346,
+      "surfaces": 345,
+      "readings": 344,
+      "sources": {
+        "person": 5,
+        "common": 192,
+        "wiki": 54,
+        "neologd": 98
+      },
+      "binaryBytes": 13860
+    },
+    "technical": {
+      "entries": 2926,
+      "pairs": 2926,
+      "surfaces": 2920,
+      "readings": 2901,
+      "sources": {
+        "person": 7,
+        "common": 1642,
+        "place": 3,
+        "wiki": 486,
+        "neologd": 789
+      },
+      "binaryBytes": 102752
+    },
+    "facility": {
+      "entries": 4633,
+      "pairs": 4633,
+      "surfaces": 4612,
+      "readings": 4268,
+      "sources": {
+        "person": 2,
+        "place": 24,
+        "neologd": 594,
+        "wiki": 2050,
+        "common": 1972
+      },
+      "binaryBytes": 162006
+    },
+    "station": {
+      "entries": 5070,
+      "pairs": 5070,
+      "surfaces": 5051,
+      "readings": 5020,
+      "sources": {
+        "place": 1,
+        "wiki": 152,
+        "neologd": 40,
+        "common": 4877
+      },
+      "binaryBytes": 167356
+    },
+    "event": {
+      "entries": 321,
+      "pairs": 321,
+      "surfaces": 321,
+      "readings": 321,
+      "sources": {
+        "wiki": 61,
+        "neologd": 12,
+        "common": 248
+      },
+      "binaryBytes": 15406
+    }
+  },
+  "multipleCategoryEntries": 1512,
+  "multipleCategoryCombinations": {
+    "general,person": 57,
+    "general,product": 26,
+    "general,technical": 174,
+    "general,organization": 183,
+    "food,general": 85,
+    "general,work": 225,
+    "food,person": 2,
+    "general,person,work": 3,
+    "character,general,person": 1,
+    "general,person,technical": 3,
+    "character,person": 7,
+    "food,work": 3,
+    "organization,technical": 8,
+    "organization,product": 44,
+    "organization,person": 5,
+    "person,place": 210,
+    "general,place": 187,
+    "general,person,place": 42,
+    "organization,place": 7,
+    "facility,place": 21,
+    "food,place": 2,
+    "general,place,technical": 3,
+    "organization,person,place": 2,
+    "general,organization,place": 3,
+    "place,work": 3,
+    "character,general,place": 2,
+    "character,place": 2,
+    "general,place,work": 2,
+    "general,organization,place,work": 1,
+    "place,technical": 5,
+    "food,general,place": 1,
+    "place,station": 1,
+    "technical,work": 5,
+    "character,general": 30,
+    "person,technical": 1,
+    "facility,organization": 41,
+    "person,work": 3,
+    "event,general": 47,
+    "facility,general": 27,
+    "event,work": 1,
+    "product,work": 8,
+    "general,organization,work": 1,
+    "product,technical": 9,
+    "organization,work": 3,
+    "facility,technical": 2,
+    "character,food": 1,
+    "character,general,work": 1,
+    "character,general,technical": 1,
+    "character,work": 1,
+    "event,organization": 2,
+    "facility,person": 5,
+    "food,technical": 1,
+    "food,general,technical": 1,
+    "food,product": 1
+  },
+  "readingProofsOverlapping": {
+    "確認済み対応表": 33,
+    "かな表記と対象確認": 13630,
+    "Wikidata読み": 174384,
+    "JMdict制約付きペア": 19738,
+    "Mozc同一読み・表記": 5657,
+    "日本郵便": 159151
+  },
+  "normalizationAuditReasons": {
+    "manual-exclude:https://styolo0307.official.ec/items/107402270": 1,
+    "manual-exclude:https://platinumproduction.jp/talent/kamadaarisa/": 1,
+    "split-or-remove-annotation": 10047,
+    "canonical-building:attested-town-and-facility": 253,
+    "unresolved-facility-concatenation": 1519,
+    "postal-instruction": 34,
+    "malformed-parentheses": 82,
+    "ambiguous-head-reading": 75,
+    "manual-include:https://www.edrdg.org/jmdict/edict_doc.html#entry-1980260-sense-1": 1,
+    "manual-include:https://www.edrdg.org/jmdict/edict_doc.html#entry-2700090-sense-1": 1,
+    "manual-include:https://www.edrdg.org/jmdict/edict_doc.html#entry-2858620-sense-1": 1,
+    "manual-exclude:https://timetables.jreast.co.jp/timetable/list1656.html": 1,
+    "manual-include:https://hall.entetsu.co.jp/facility/": 1,
+    "manual-include:https://www.edrdg.org/jmdict/edict_doc.html#entry-2864366-sense-1": 1,
+    "manual-include:https://www.edrdg.org/jmdict/edict_doc.html#entry-2394390-sense-1": 1
+  },
+  "categoryArchive": {
+    "name": "categorized-dictionaries.zip",
+    "bytes": 5000689,
+    "sha256": "f47c36074c89a10c0108398c92cb9da073108b4090231db382dcd1ac88cbb1c3",
+    "files": [
+      {
+        "path": "LICENSE-CC-BY-SA-4.0.txt",
+        "bytes": 20138
+      },
+      {
+        "path": "LICENSE-JMDICT.html",
+        "bytes": 13587
+      },
+      {
+        "path": "NOTICES.md",
+        "bytes": 3692
+      },
+      {
+        "path": "character/tango.dat",
+        "bytes": 15291
+      },
+      {
+        "path": "character/token.dat",
+        "bytes": 12953
+      },
+      {
+        "path": "character/yomi.dat",
+        "bytes": 22644
+      },
+      {
+        "path": "event/tango.dat",
+        "bytes": 5257
+      },
+      {
+        "path": "event/token.dat",
+        "bytes": 2785
+      },
+      {
+        "path": "event/yomi.dat",
+        "bytes": 7364
+      },
+      {
+        "path": "facility/tango.dat",
+        "bytes": 42495
+      },
+      {
+        "path": "facility/token.dat",
+        "bytes": 38313
+      },
+      {
+        "path": "facility/yomi.dat",
+        "bytes": 81198
+      },
+      {
+        "path": "food/tango.dat",
+        "bytes": 6379
+      },
+      {
+        "path": "food/token.dat",
+        "bytes": 5473
+      },
+      {
+        "path": "food/yomi.dat",
+        "bytes": 9024
+      },
+      {
+        "path": "general/tango.dat",
+        "bytes": 106863
+      },
+      {
+        "path": "general/token.dat",
+        "bytes": 130649
+      },
+      {
+        "path": "general/yomi.dat",
+        "bytes": 211322
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 8064
+      },
+      {
+        "path": "organization/tango.dat",
+        "bytes": 54021
+      },
+      {
+        "path": "organization/token.dat",
+        "bytes": 38121
+      },
+      {
+        "path": "organization/yomi.dat",
+        "bytes": 88866
+      },
+      {
+        "path": "person/tango.dat",
+        "bytes": 838691
+      },
+      {
+        "path": "person/token.dat",
+        "bytes": 1360633
+      },
+      {
+        "path": "person/yomi.dat",
+        "bytes": 1684826
+      },
+      {
+        "path": "place/tango.dat",
+        "bytes": 991353
+      },
+      {
+        "path": "place/token.dat",
+        "bytes": 1392801
+      },
+      {
+        "path": "place/yomi.dat",
+        "bytes": 2411948
+      },
+      {
+        "path": "pos_table.dat",
+        "bytes": 41
+      },
+      {
+        "path": "product/tango.dat",
+        "bytes": 4697
+      },
+      {
+        "path": "product/token.dat",
+        "bytes": 2985
+      },
+      {
+        "path": "product/yomi.dat",
+        "bytes": 6178
+      },
+      {
+        "path": "station/tango.dat",
+        "bytes": 39111
+      },
+      {
+        "path": "station/token.dat",
+        "bytes": 41953
+      },
+      {
+        "path": "station/yomi.dat",
+        "bytes": 86292
+      },
+      {
+        "path": "technical/tango.dat",
+        "bytes": 27547
+      },
+      {
+        "path": "technical/token.dat",
+        "bytes": 24273
+      },
+      {
+        "path": "technical/yomi.dat",
+        "bytes": 50932
+      },
+      {
+        "path": "work/tango.dat",
+        "bytes": 52967
+      },
+      {
+        "path": "work/token.dat",
+        "bytes": 34489
+      },
+      {
+        "path": "work/yomi.dat",
+        "bytes": 71158
+      }
+    ],
+    "manifest": {
+      "format": "legacy-louds-triplets-v1",
+      "taxonomyVersion": 3,
+      "normalizationVersion": 2,
+      "qualityVersion": 2,
+      "implementationSha256": "1dc5ed83666d93d662c211e3c56e0312ee9b4162e1ea4e74bc6280aedee1732c",
+      "implementation": {
+        "CandidateNormalizer": "b134e0e244418de5acff2b0a4c2e163ea5c8a6f1cad2773375a4169895d82079",
+        "SemanticClassifier": "7ffe135e6c6f88552f36aab1c4b7fe32ee41e99ed1e29740a4af5abfc3df2c88",
+        "ManualOverrides": "d9242164d6e2814900be3998eedae8209785c976e037b51a053cac96bfcafb08",
+        "SupplementalSources": "b0e26a32cb71026b11e736a5719a048b82cbd4f72e965e954b3481bdeadbad2c",
+        "ReadingEvidence": "fb11c67aa5a7076f30361b559ea6c8472e1e1703d21baf9bcb27f8ec40d6ce5e",
+        "MetadataEntity": "b9ea59b61a5a6032129c22aad00fd440f0bb62b73daa83ba2997a8d205b8980f",
+        "MetadataCatalog": "d00845755f2ffa8b6dbf0133107098b13f55cd2f7ff07aaf6c293ac1a5a0bb9c",
+        "LexicalEvidence": "fae507da1eff8b28f299278a8fe8aa0b93b509316ff8bee50d727318877d637f",
+        "QualityEvaluator": "2ff3e5491b8b338f91e25b6daa66a7a37e7fbc630a9fbe33163745060a0c6e48",
+        "PostalLexicon": "52849d0447915a01af0796c57618cf54d2a1da8b895653c541c4461c5f945d69",
+        "MetadataSnapshot": "22bf34758d91f2d8123a4099497bbba59acafc935e0d371631375cbfe61ee984",
+        "TokenArray": "b7ccd2dad0025041e38d25743b6feccfbbd1a8dddbe7a721808e45b1cfcfa8b3",
+        "DictionaryBuilderKt": "e576b01329ebb02b125a25e0199069bade56585cda0fc234808a3020bd5285ed",
+        "CategoryDictionaryBuilder": "24a0b63f19acfb854eeecdb37e294cee370f3a57dddee861d26b6fb7b4f838d5"
+      },
+      "sources": {
+        "person": "7978c66a0ca26ee94170b508cf14c5eba16cbb41d7be5a3675474adc95ac6727",
+        "place": "bae15eb6755a2e6aa30d1d9ece7970c7d97d761b6e430c59bc11222f8e2e6f01",
+        "wiki": "2c3ca451484900edee55ae4ebe79284e1301b077572f64e9100889a5755bed10",
+        "neologd": "64222fa806e424556b662619fb7cba9ac9683f89959afee909dadb112027458e",
+        "common": "1b0638f24e057077c1b1471dc30e741670b547979db458eb447af5cc7221283c",
+        "dictionary00.txt": "9e07ce292932c4fff327ed8cb06274c09acca556bd8bdf7c7ef1f6173eae3b61",
+        "dictionary01.txt": "836fd5fd8399510de0d8ef7b33be913cca6bbaee7b712cc8045fba03f4c75a89",
+        "dictionary02.txt": "93943858d0cfd092b849a78def6901eaf228177e1ac5663544e865a3a1e45a9e",
+        "dictionary03.txt": "cb9f1b0b4a7550d682d86244a021cd17e0b15366328819e69135b5f183a1a24b",
+        "dictionary04.txt": "9fdc4e3948d03463de13ab5782adffbc11dd06e934cb80138c5920029cd3d2f6",
+        "dictionary05.txt": "199e3b0f050b691823ae7ba943090d437f51af6436b27c5f3dc69cafa12000e4",
+        "dictionary06.txt": "b95b14f7770ae2a824bc8e9fad8b03c1bc45c504f93a36554b8b56daa0368d2a",
+        "dictionary07.txt": "7f53649b529d4c8c495d3a8dd9c4d489dfe7696080f7423107ff01331174be48",
+        "dictionary08.txt": "50a31bb5fc1646721b00be371a5695dffab1292bda143e1e59cc70cbbdd8643f",
+        "dictionary09.txt": "4e5fcd4cbfbf11395166a37b506f547fc54d20edc0884f5184ecd3fc705f0d9a",
+        "suffix.txt": "37ace4c057615a10c2e06e19e57010916390b0709f0156d1ee17ce82f3272dd9",
+        "id.def": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d"
+      },
+      "overridesSha256": "6e24e2ebea4124c16b28211ce6708592adff9ff25ddaa95f55df10579bc02099",
+      "snapshotSha256": "464cefa914990d434dbd25f5811bb48dacbebf876bec53f995893f646dd5a0ce",
+      "confirmedSha256": "5f3d441471aba6264992c7ad68f9db6394fe81b695e537a4969ac3408641a9a3",
+      "inputManifest": {
+        "sourceCommit": "71d152d8f4be53dfa0cee2bd198ff78365ea62a1",
+        "mozcCommit": "c7538e6f8ee56ff94789494106ad5d6d658cd4f6",
+        "englishRelease": "v2026.0928.17",
+        "englishAssetSha256": "b34b9c630ecf4d3f404049ef6580d8f4d5d5b13e1197e083d51b8ea3f064cd6e"
+      },
+      "referenceSha256": null,
+      "cacheSha256": null,
+      "categories": {
+        "person": 165089,
+        "place": 168832,
+        "facility": 4633,
+        "station": 5070,
+        "organization": 4605,
+        "product": 346,
+        "work": 4165,
+        "character": 1554,
+        "event": 321,
+        "food": 648,
+        "technical": 2926,
+        "general": 15829
+      },
+      "artifacts": {
+        "character/tango.dat": "c3982c7144bb971b5ad5180c022bfc91f1b7b89cc399cc769679d9d4c805e303",
+        "character/token.dat": "095f0d8d38bdffc81d06952542c5e46460d1375b8424fc1c2d35da905b05b7b0",
+        "character/yomi.dat": "43f7a2cf39461bb7a75f53c6b3c7ce4896cbd8efde10b2cea3254d4069739428",
+        "event/tango.dat": "bfae3dbd6f08f07906b9f7a11eaf0a52acc3717be1399a0e5d35a20827bb29a0",
+        "event/token.dat": "6ce0d7bcba60183299f8454ac4de059145b2d7be3722fe54345c88fc9099094c",
+        "event/yomi.dat": "b092cef6880333ce0f4a48e71f45cc7e2488a011d4840ced78c736c2f3d7d573",
+        "facility/tango.dat": "e147c0fcc9749e1d6f9ab22a5814b563c46a1d03c0d2bf46089814fb6bd44859",
+        "facility/token.dat": "3b1d044d971755bee95112c8ce41dff37e16d4df3f1d74f843f6f1bfcff0b231",
+        "facility/yomi.dat": "74047687c35ed795d73c0f555f75136e58a6912bb342b9c2ba357b44d8db8f41",
+        "food/tango.dat": "4291ae4ab68440da3a3ff0f1305a50fdd5ad9413db1b4f1396f252b7ba315605",
+        "food/token.dat": "32c90d6cf83c3eab608452217cd074b9e0c825b9acad64349633a7e0dce0f9be",
+        "food/yomi.dat": "c610ad27ea78f47d40f86c8df2597de8dcb5ed37b74439bdd73a822dd810b265",
+        "general/tango.dat": "f430db80f6a62910c9d53968d88329ec48fc8ea715aa2e97ad192435361724be",
+        "general/token.dat": "165d852d9f845396414a2892177a20d50a95798d26193c9e5c753c125c1d4b0d",
+        "general/yomi.dat": "d55921ee9ff48cf895af33667f12a65fd53f60ac48dfb65bb293ef3d8052933f",
+        "organization/tango.dat": "142824773d4ea42bfbbefee593f04e997ab06bceb7bf867da5bcb8c59a7349fb",
+        "organization/token.dat": "c08551fe8e881ad0ce86a2ec715203c6d2429d4af359c18652a29c6b19793dcf",
+        "organization/yomi.dat": "1cff1a86ac5bb9ec2f82262ea39660fb37bf7aedbe53651bc76d893fd2635c93",
+        "person/tango.dat": "0168f1179dfc598fde2a1de46c17b0b67e6c60ed7843664ef85ccab76649f888",
+        "person/token.dat": "7b12373867c24b95ef30ca78e46ee2f59ed8bde7ccf390ebee7ec9c49bbfbf07",
+        "person/yomi.dat": "1147d39ca78586d128934651f210665cf04478e51a195c2f7d09bf5420442d17",
+        "place/tango.dat": "4d1dcb9fbd3f8419b01cb5260f8c274228230d574d8da24518c455f3344af9ba",
+        "place/token.dat": "5454b534ba5ebee6beac42b61aa5ec379b29c587c0434be160eaa58254062828",
+        "place/yomi.dat": "6d367daa72f21e1fcc2366769f9c97315ec0162daf2901183dd13c6ee0088ed0",
+        "pos_table.dat": "f7ae820ecc5ab39cfd3fc5995f9fde9859b713dce8a91ca385c767c10aa93b45",
+        "product/tango.dat": "12cce7ed99126deacd3a030cd58723bad09d928a83ba47312396e288f2ad1af5",
+        "product/token.dat": "2bf4f3bbfff9cb4fed4f0b2cf618ea11de067107055196b9eafe89574bb187fe",
+        "product/yomi.dat": "8b9a88ab5cc0bfd6b897dfb461bf9227e7f3a83c49cf5df7d283c4b9ebb92ec3",
+        "station/tango.dat": "77096d6f0c89cb3ce0965725f729e405dd5eae9dfbca0e22aca7ba91ce315879",
+        "station/token.dat": "1d345e72036fd443bb4f8cf6558a423d7dc4b85b0db0a9ae3069471dc5dd05c0",
+        "station/yomi.dat": "fbe2603748d21b8410fa21ea9436dcc658478a5cb9d704cbdd703bcaf18fdc0e",
+        "technical/tango.dat": "16e34a1f877d3ac64a285a8aa571fce35a14ecbbf727653e7225f5a6ae3651f3",
+        "technical/token.dat": "8d1dbac95a11f32433322e7025c29c73003e4fdc43099e73780948e3644353b0",
+        "technical/yomi.dat": "f14e5d0cb9d83b8ad1ca285bd8ad382b028469e63d1ae1c6ff41eaddf526ce79",
+        "work/tango.dat": "a40e9653298e657dd1b88a76fba471061b3218c3618e50e2fa5d10339e0d1df7",
+        "work/token.dat": "4c511a1f46203e8262c8ca52b27da20b6452f670cc109a56a6641791dc45aa1d",
+        "work/yomi.dat": "f358cda3e136a60c5526b53e6a0b5688c720469cbab86bf7e2dc3d48dabb7109"
+      },
+      "packageNotices": {
+        "NOTICES.md": "3528c2be9449535f8f76e8e4b19b25e08269effe21795bdbce7a03b10fbf6de4",
+        "LICENSE-JMDICT.html": "52f60ea9ca68170a2f0663d7dba381ebf1bd57c17a3347dfe21153865c156692",
+        "LICENSE-CC-BY-SA-4.0.txt": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5"
+      }
+    }
+  },
+  "legacyArchive": {
+    "name": "japanese_keyboard_dictionary_assets.zip",
+    "bytes": 28398800,
+    "sha256": "19784cedc92f2dd524cf50a53ffcb26a0c40975b7e1f51f48d8ab9edf64d18a6",
+    "files": [
+      {
+        "path": "app/src/main/assets/connectionId.dat.zip",
+        "bytes": 1937683
+      },
+      {
+        "path": "app/src/main/assets/emoji/tango_emoji.dat",
+        "bytes": 6775
+      },
+      {
+        "path": "app/src/main/assets/emoji/token_emoji.dat",
+        "bytes": 63633
+      },
+      {
+        "path": "app/src/main/assets/emoji/yomi_emoji.dat",
+        "bytes": 46018
+      },
+      {
+        "path": "app/src/main/assets/emoticon/tango_emoticon.dat",
+        "bytes": 5927
+      },
+      {
+        "path": "app/src/main/assets/emoticon/token_emoticon.dat",
+        "bytes": 8153
+      },
+      {
+        "path": "app/src/main/assets/emoticon/yomi_emoticon.dat",
+        "bytes": 2616
+      },
+      {
+        "path": "app/src/main/assets/english_reading/tango.dat.zip",
+        "bytes": 3864
+      },
+      {
+        "path": "app/src/main/assets/english_reading/token.dat.zip",
+        "bytes": 2809
+      },
+      {
+        "path": "app/src/main/assets/english_reading/yomi.dat.zip",
+        "bytes": 4880
+      },
+      {
+        "path": "app/src/main/assets/id.def",
+        "bytes": 151747
+      },
+      {
+        "path": "app/src/main/assets/kotowaza/tango_kotowaza.dat",
+        "bytes": 8549
+      },
+      {
+        "path": "app/src/main/assets/kotowaza/token_kotowaza.dat",
+        "bytes": 4481
+      },
+      {
+        "path": "app/src/main/assets/kotowaza/yomi_kotowaza.dat",
+        "bytes": 13364
+      },
+      {
+        "path": "app/src/main/assets/mozc/zero_query/zero_query_number_string.data",
+        "bytes": 12715
+      },
+      {
+        "path": "app/src/main/assets/mozc/zero_query/zero_query_number_token.data",
+        "bytes": 128592
+      },
+      {
+        "path": "app/src/main/assets/mozc/zero_query/zero_query_string.data",
+        "bytes": 243955
+      },
+      {
+        "path": "app/src/main/assets/mozc/zero_query/zero_query_token.data",
+        "bytes": 187104
+      },
+      {
+        "path": "app/src/main/assets/neologd/tango_neologd.dat.zip",
+        "bytes": 1776602
+      },
+      {
+        "path": "app/src/main/assets/neologd/token_neologd.dat.zip",
+        "bytes": 1390804
+      },
+      {
+        "path": "app/src/main/assets/neologd/yomi_neologd.dat.zip",
+        "bytes": 2094868
+      },
+      {
+        "path": "app/src/main/assets/ngram/system_ngram.dat",
+        "bytes": 57376
+      },
+      {
+        "path": "app/src/main/assets/ngram/system_ngram_unigram.dat",
+        "bytes": 15191
+      },
+      {
+        "path": "app/src/main/assets/person_name/tango_person_names.dat",
+        "bytes": 453053
+      },
+      {
+        "path": "app/src/main/assets/person_name/token_person_names.dat",
+        "bytes": 580561
+      },
+      {
+        "path": "app/src/main/assets/person_name/yomi_person_names.dat",
+        "bytes": 744370
+      },
+      {
+        "path": "app/src/main/assets/places/tango_places.dat.zip",
+        "bytes": 656490
+      },
+      {
+        "path": "app/src/main/assets/places/token_places.dat.zip",
+        "bytes": 433794
+      },
+      {
+        "path": "app/src/main/assets/places/yomi_places.dat.zip",
+        "bytes": 1159731
+      },
+      {
+        "path": "app/src/main/assets/pos_table.dat",
+        "bytes": 48169
+      },
+      {
+        "path": "app/src/main/assets/reading_correction/tango_reading_correction.dat",
+        "bytes": 13667
+      },
+      {
+        "path": "app/src/main/assets/reading_correction/token_reading_correction.dat",
+        "bytes": 6329
+      },
+      {
+        "path": "app/src/main/assets/reading_correction/yomi_reading_correction.dat",
+        "bytes": 8878
+      },
+      {
+        "path": "app/src/main/assets/single_kanji/tango_singleKanji.dat",
+        "bytes": 16323
+      },
+      {
+        "path": "app/src/main/assets/single_kanji/token_singleKanji.dat",
+        "bytes": 193753
+      },
+      {
+        "path": "app/src/main/assets/single_kanji/yomi_singleKanji.dat",
+        "bytes": 26710
+      },
+      {
+        "path": "app/src/main/assets/symbol/tango_symbol.dat",
+        "bytes": 5653
+      },
+      {
+        "path": "app/src/main/assets/symbol/token_symbol.dat",
+        "bytes": 50473
+      },
+      {
+        "path": "app/src/main/assets/symbol/yomi_symbol.dat",
+        "bytes": 17054
+      },
+      {
+        "path": "app/src/main/assets/system/tango.dat.zip",
+        "bytes": 2181212
+      },
+      {
+        "path": "app/src/main/assets/system/token.dat.zip",
+        "bytes": 5468770
+      },
+      {
+        "path": "app/src/main/assets/system/yomi.dat.zip",
+        "bytes": 3928907
+      },
+      {
+        "path": "app/src/main/assets/web/tango_web.dat.zip",
+        "bytes": 1556252
+      },
+      {
+        "path": "app/src/main/assets/web/token_web.dat.zip",
+        "bytes": 837259
+      },
+      {
+        "path": "app/src/main/assets/web/yomi_web.dat.zip",
+        "bytes": 2011494
+      },
+      {
+        "path": "app/src/main/assets/wiki/tango_wiki.dat.zip",
+        "bytes": 861290
+      },
+      {
+        "path": "app/src/main/assets/wiki/token_wiki.dat.zip",
+        "bytes": 395272
+      },
+      {
+        "path": "app/src/main/assets/wiki/yomi_wiki.dat.zip",
+        "bytes": 1087377
+      }
+    ]
+  }
+}

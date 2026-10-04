@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "endpoint": "http://127.0.0.1:11434",
+  "proposer": {
+    "name": "qwen3.5:9b",
+    "digest": "6488c96fa5faab64bb65cbd30d4289e20e6130ef535a93ef9a49f42eda893ea7"
+  },
+  "reviewer": {
+    "name": "qwen3:8b",
+    "digest": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41"
+  },
+  "options": {
+    "temperature": 0,
+    "seed": 17,
+    "num_ctx": 8192,
+    "num_predict": 2048
+  },
+  "batchSize": 16,
+  "documentLimitBytes": 68719476736,
+  "researchRounds": 2,
+  "articlesPerRound": 3,
+  "officialPagesPerRound": 3,
+  "reviewWindow": 128
+}

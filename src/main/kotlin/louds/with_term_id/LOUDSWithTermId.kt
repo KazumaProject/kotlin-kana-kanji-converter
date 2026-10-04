@@ -206,7 +206,7 @@ class LOUDSWithTermId {
                 close()
             }
         }catch (e: IOException){
-            println(e.stackTraceToString())
+            throw IllegalStateException("Trie serialization failed", e)
         }
     }
 
@@ -222,7 +222,7 @@ class LOUDSWithTermId {
                 rebuildCache()
                 close()
             }catch (e: Exception){
-                println(e.stackTraceToString())
+                throw IllegalStateException("Trie serialization failed", e)
             }
         }
         return LOUDSWithTermId()
@@ -239,7 +239,7 @@ class LOUDSWithTermId {
                 close()
             }
         }catch (e: IOException){
-            println(e.stackTraceToString())
+            throw IllegalStateException("Trie serialization failed", e)
         }
     }
 
@@ -253,7 +253,7 @@ class LOUDSWithTermId {
                 rebuildCache()
                 close()
             }catch (e: Exception){
-                println(e.stackTraceToString())
+                throw IllegalStateException("Trie serialization failed", e)
             }
         }
         return LOUDSWithTermId(LBS, labels, isLeaf, termIdsSave)
