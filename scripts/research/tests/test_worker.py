@@ -122,6 +122,22 @@ class ResearchTest(unittest.TestCase):
         for source,category,extra in [('JMnedict','place',{'nameTypes':['place']}),('JMdict','general',{'pos':['n'],'misc':[]}),('JMdict','technical',{'fields':['astron'],'misc':[]})]:
             f={'kind':'meaning','body':json.dumps({'source':source,**extra})}
             self.assertFalse(worker.direct_category_fact(f,category))
+
+    def test_fictional_given_names_do_not_force_real_person_adoption(self):
+        for types in (['masc','fict'],['fem','fict'],['surname','fict'],['given','myth']):
+            self.assertEqual(['character'],worker.name_categories(types))
+            f={'kind':'meaning','body':json.dumps({'source':'JMnedict','nameTypes':types})}
+            self.assertFalse(worker.direct_category_fact(f,'person'))
+            self.assertTrue(worker.direct_category_fact(f,'character'))
+        self.assertEqual(['organization'],worker.name_categories(['org']))
+        self.assertEqual(['organization'],worker.name_categories(['company','fict']))
+
+    def test_explicit_surname_survives_broad_place_tag(self):
+        self.e.fact('やまだ','山田','meaning',['person','place'],'JMnedict:1:0',self.doc,{'source':'JMnedict','nameTypes':['place','surname'],'sense':0})
+        v=self.value();v['quality']='uncertain';v['roles']=[]
+        worker.decide(self.db,self.row,v,v)
+        dec=json.loads(self.db.execute('SELECT decision FROM candidates').fetchone()[0])
+        self.assertEqual(['person'],[r['category'] for r in dec['roles']])
     def test_homonym_reading_conflict_is_scoped_to_its_target(self):
         self.e.fact('','山田','context',[],'Q999',self.doc,{'source':'Wikidata','label':'山田','nameBoundReadings':{'山田':['さんでん']}})
         facts=worker.fact_rows(self.db,self.row)
@@ -146,7 +162,7 @@ class ResearchTest(unittest.TestCase):
         gate={'eligible':300,'adoptable':300,'precision':{'ai':{'correct':300,'n':300,'lower95':.99}}}
         with mock.patch.object(distribution,'precision',return_value=gate),contextlib.redirect_stdout(io.StringIO()):
             distribution.export(self.db,self.args,lambda args:cfg,worker.info,worker.confidence_lower,worker.canonical,worker.digest,worker.sha,worker.emit)
-        with sqlite3.connect(self.args.output) as snapshot:
+        with contextlib.closing(sqlite3.connect(self.args.output)) as snapshot:
             self.assertEqual('adopted',snapshot.execute('SELECT status FROM resolutions').fetchone()[0])
             self.assertEqual(self.fid,snapshot.execute('SELECT id FROM reading_facts').fetchone()[0])
             self.assertEqual(self.mean,snapshot.execute('SELECT id FROM semantic_facts').fetchone()[0])
@@ -171,6 +187,16 @@ class ResearchTest(unittest.TestCase):
         self.assertEqual([],worker.explicit_reading_bindings(ambiguous))
         self.assertTrue(worker.article_primary_name("'''山田'''（やまだ）は人物。",'山田'))
         self.assertFalse(worker.article_primary_name("'''別人'''は山田の友人。",'山田'))
+
+    def test_multiple_explicit_pronunciations_remain_name_bound(self):
+        self.db.execute("DELETE FROM facts WHERE kind='reading'")
+        self.row['reading']='やまた'
+        worker.extract_readings(self.db,self.e,self.row,self.doc,'山田（やまだ、やまた）は地名。','Q1')
+        self.assertTrue(self.db.execute("SELECT 1 FROM facts WHERE reading='やまた' AND kind='reading'").fetchone())
+        self.db.execute("DELETE FROM facts WHERE kind='reading'")
+        self.row['reading']='たなか'
+        worker.extract_readings(self.db,self.e,self.row,self.doc,'山田（やまだ、別名：田中（たなか））','Q1')
+        self.assertFalse(self.db.execute("SELECT 1 FROM facts WHERE kind='reading'").fetchone())
 
     def test_unqualified_wikidata_reading_is_not_alias_pronunciation(self):
         import wikidata
@@ -246,5 +272,33 @@ class ResearchTest(unittest.TestCase):
         self.e.fact('あかさかあかさかびずたわー(31かい)',surface,'address-structure',[],'JapanPost:floor',self.doc,{'source':'Japan Post'})
         with contextlib.redirect_stdout(io.StringIO()): bulk.normalization(self.db,self.e,worker.fact_rows,worker.canonical,worker.info,worker.emit)
         self.assertTrue(self.db.execute("SELECT 1 FROM facts WHERE kind='invalid' AND target=?",(cid,)).fetchone())
+
+    def test_every_original_boundary_is_verified_even_if_output_already_exists(self):
+        import bulk
+        for line,(y,s) in enumerate([('やまだしんまち','山田(新町)'),('やまだかわ','山田(川)')],1):
+            oid='origin'+str(line)
+            self.db.execute('INSERT INTO origins VALUES(?,?,?,?,?,?,?,?,?)',(oid,'place',line,y,s,1,1,10,'raw'))
+            self.db.execute('INSERT INTO origin_candidates VALUES(?,?)',(oid,self.cid))
+            self.e.fact(y,s,'address-structure',[],'JapanPost:'+str(line),self.doc,{'source':'Japan Post'})
+        self.assertEqual(2,bulk.check_normalization_row(self.db,self.e,self.row,worker.fact_rows))
+        self.assertEqual(2,self.db.execute("SELECT COUNT(*) FROM facts WHERE kind='normalization'").fetchone()[0])
+
+    def test_export_does_not_borrow_a_boundary_from_another_original(self):
+        v=self.value();worker.decide(self.db,self.row,v,v)
+        for line,(y,s) in enumerate([('やまだかわ','山田(川)'),('まえやまだ','前山田')],1):
+            oid='origin'+str(line);cid=worker.insert_candidate(self.db,y,s,1,1,10,normalization='original:split')
+            self.db.execute('INSERT INTO origins VALUES(?,?,?,?,?,?,?,?,?)',(oid,'place',line,y,s,1,1,10,'raw'))
+            self.db.executemany('INSERT INTO origin_candidates VALUES(?,?)',[(oid,cid),(oid,self.cid)])
+            self.db.execute("UPDATE candidates SET state='not_distributed',decision=?,reason='unresolved' WHERE id=?",(json.dumps({'roles':[],'readingEvidence':[]}),cid))
+        self.e.fact('やまだ','山田','normalization',[],self.cid,self.doc,{'originalReading':'やまだかわ','originalSurface':'山田(川)'})
+        worker.decide(self.db,self.row,v,v)
+        worker.info(self.db,'inputs',{'sources':{'place':'0'*64}});worker.info(self.db,'baseIdDefSha256','1'*64);self.args.candidate=True
+        cfg=worker.configuration(self.args);cfg=(cfg[0],{'categories':[{'id':'person','core':True,'minimum':1}]},*cfg[2:])
+        gate={'eligible':300,'adoptable':300,'precision':{'ai':{'correct':300,'n':300,'lower95':.99}}}
+        with mock.patch.object(distribution,'precision',return_value=gate),contextlib.redirect_stdout(io.StringIO()):
+            distribution.export(self.db,self.args,lambda args:cfg,worker.info,worker.confidence_lower,worker.canonical,worker.digest,worker.sha,worker.emit)
+        with contextlib.closing(sqlite3.connect(self.args.output)) as snapshot:
+            self.assertEqual([1],[r[0] for r in snapshot.execute('SELECT line FROM source_map WHERE candidate_id=?',(self.cid,))])
+            self.assertEqual(2,snapshot.execute('SELECT COUNT(DISTINCT line) FROM source_map').fetchone()[0])
 
 if __name__=='__main__': unittest.main()

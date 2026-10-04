@@ -99,7 +99,7 @@ def configuration(args):
     taxonomy=json.loads((p/'categories.json').read_text())
     endpoint=local_url(models['endpoint'])
     prompts={r:(p/(r+'.txt')).read_text() for r in ('proposer','reviewer')}
-    identity={'models':models,'taxonomy':taxonomy,'researchParserVersion':2,'prompts':{k:digest(v) for k,v in prompts.items()},'worker':digest(canonical({f.name:sha(f) for f in pathlib.Path(__file__).parent.glob('*.py')}))}
+    identity={'models':models,'taxonomy':taxonomy,'researchParserVersion':3,'prompts':{k:digest(v) for k,v in prompts.items()},'worker':digest(canonical({f.name:sha(f) for f in pathlib.Path(__file__).parent.glob('*.py')}))}
     return models,taxonomy,prompts,endpoint,identity
 
 def pin_config(db,args):
@@ -287,13 +287,19 @@ def import_mozc(db,args,e):
         info(db,key,version);db.commit()
 
 NAME_TYPES={'surname':'person','given':'person','fem':'person','masc':'person','person':'person',
-            'company':'organization','organization':'organization','group':'organization','place':'place',
+            'company':'organization','organization':'organization','org':'organization','group':'organization','place':'place',
             'station':'station','product':'product','work':'work','doc':'work','ev':'event','char':'character',
             'dei':'character','ship':'transport'}
 
+def name_categories(types):
+    cats={NAME_TYPES[t] for t in types if t in NAME_TYPES}
+    if 'person' in cats and set(types)&{'fict','myth','leg','dei'}:
+        cats.remove('person');cats.add('character')
+    return sorted(cats)
+
 def import_jmnedict(db,args,e):
     path=pathlib.Path(args.jmnedict);version=sha(path)
-    if info(db,'import:JMnedict')=={'sha256':version,'parser':4}: return
+    if info(db,'import:JMnedict')=={'sha256':version,'parser':5}: return
     wanted={pair(r[0],r[1]) for r in db.execute('SELECT reading,surface FROM candidates')}
     import rescue
     wanted_surfaces=rescue.targets(db)
@@ -321,12 +327,12 @@ def import_jmnedict(db,args,e):
                     # Each translation keeps its own sense/name-type; no unconstrained union.
                     for i,tr in enumerate(node.findall('trans')):
                         ts=[names.get(n.text,n.text) for n in tr.findall('name_type')]
-                        cats=sorted({NAME_TYPES[t] for t in ts if t in NAME_TYPES})
+                        cats=name_categories(ts)
                         e.fact(y,s,'meaning',cats,'JMnedict:'+seq+':'+str(i),did,{**evidence,'nameTypes':ts,'sense':i})
                     hits+=1
             node.clear();root.clear()
             if hits and hits%10000==0: db.commit()
-    info(db,'import:JMnedict',{'sha256':version,'parser':4});db.commit();emit({'phase':'JMnedict','matchedPairs':hits,'sha256':version})
+    info(db,'import:JMnedict',{'sha256':version,'parser':5});db.commit();emit({'phase':'JMnedict','matchedPairs':hits,'sha256':version})
 
 def import_jmdict(db,args,e):
     """Consume schema3 pair-restricted senses only after checking their raw entry constraints."""
@@ -586,9 +592,10 @@ def wiki_lead(content):
 def extract_readings(db,e,row,did,text,target,canonical_name=None):
     """Only explicit name-bound readings. No text-to-reading model or alias Cartesian product."""
     s=row['surface'];plain=html.unescape(re.sub(r'<[^>]+>','',text)).replace("'''",'').replace("''",'')
-    for match in re.finditer(re.escape(s)+r'\s*[（(]([ぁ-ゖァ-ヶー 　・]+)(?:[、,)）])',plain[:12000]):
-        y=reading(match.group(1).replace(' ','').replace('　','').replace('・',''))
-        if y==reading(row['reading']): e.fact(y,s,'reading',[],target,did,{'source':'explicit-name-reading','quotation':match.group(0),'start':match.start()})
+    for match in re.finditer(re.escape(s)+r'\s*[（(]([ぁ-ゖァ-ヶー 　・]+(?:[、,][ぁ-ゖァ-ヶー 　・]+)*)(?=[、,)）])',plain[:12000]):
+        for explicit in re.split('[、,]',match.group(1)):
+            y=reading(explicit.replace(' ','').replace('　','').replace('・',''))
+            if y==reading(row['reading']): e.fact(y,s,'reading',[],target,did,{'source':'explicit-name-reading','quotation':match.group(0),'start':match.start(),'reading':explicit})
     for name,y,quote in explicit_reading_bindings(text):
         if pair('',name)[1]==pair('',s)[1] and reading(y)==reading(row['reading']):
             e.fact(row['reading'],s,'reading',[],target,did,{'source':'explicit-name-reading','quotation':quote,'name':name,'reading':y})
@@ -658,7 +665,8 @@ def research(db,args,row,proposal,round):
             db.execute('UPDATE documents SET revision=? WHERE id=?',(str(rev['revid']),did))
             e.fact(row['reading'],row['surface'],'context',[],page.get('pageprops',{}).get('wikibase_item',title),did,{'source':'Wikipedia','title':title,'revision':rev['revid'],'lead':wiki_lead(content)})
             primary=title==row['surface'] or article_primary_name(content,row['surface'])
-            reading_target=page.get('pageprops',{}).get('wikibase_item',title) if primary else title+'#mentioned-name:'+row['surface']
+            alias_declared=any(m[2].strip()==row['surface'] for m in re.finditer(r'\|\s*(別名|芸名|名義|通称|名前)\s*=\s*([^\n|}]+)',content))
+            reading_target=page.get('pageprops',{}).get('wikibase_item',title) if primary or alias_declared else title+'#mentioned-name:'+row['surface']
             extract_readings(db,e,row,did,content,reading_target,canonical_name=row['surface'] if primary else title)
             # Kana aliases need an explicit name field, not a search-alias match.
             if row['surface'] and all('ぁ'<=c<='ゖ' or 'ァ'<=c<='ヶ' or c=='ー' for c in row['surface']) and reading(row['surface'])==reading(row['reading']):
@@ -668,7 +676,6 @@ def research(db,args,row,proposal,round):
                         target=page.get('pageprops',{}).get('wikibase_item',title)
                         e.fact(row['reading'],row['surface'],'reading',[],target,did,{'source':'attested-canonical-kana','name':name,'field':field.group(1),'quotation':field.group(0),'revision':rev['revid']})
             # Only article-declared official links, never URLs invented by a model.
-            alias_declared=any(m[2].strip()==row['surface'] for m in re.finditer(r'\|\s*(別名|芸名|名義|通称|名前)\s*=\s*([^\n|}]+)',content))
             if primary or alias_declared:
                 for candidate in re.findall(r'\{\{\s*(?:Official website|公式ウェブサイト|公式サイト)\s*\|\s*(https?://[^\s|}]+)',content,re.I):
                     if candidate in [v['*'] for v in page.get('extlinks',[])]: official.append(candidate)
@@ -690,7 +697,7 @@ def direct_category_fact(f,category):
     b=json.loads(f['body']);source=b.get('source')
     if source=='Japan Post': return category=='place'
     # JMnedict place-name covers buildings too; it is not a precise place category.
-    if source=='JMnedict': return category!='place' and any(NAME_TYPES.get(t)==category for t in b.get('nameTypes',[]))
+    if source=='JMnedict': return category!='place' and category in name_categories(b.get('nameTypes',[]))
     if source=='JMdict': return any(NAME_TYPES.get(t)==category for t in b.get('misc',[]))
     return False
 
@@ -705,8 +712,9 @@ def decide(db,row,p,r):
     source_roles=[]
     for f in facts:
         cats=json.loads(f['categories']);b=json.loads(f['body'])
-        if len(cats)==1 and direct_category_fact(f,cats[0]):
-            source_roles.append({'category':cats[0],'target':f['target'],'sense':str(b.get('sense',b.get('entryId',b.get('row','')))),'evidenceIds':[f['id']],'method':'direct'})
+        for category in cats:
+            if direct_category_fact(f,category):
+                source_roles.append({'category':category,'target':f['target'],'sense':str(b.get('sense',b.get('entryId',b.get('row',''))))+':'+category,'evidenceIds':[f['id']],'method':'direct'})
     for role in supported:
         role['method']='direct' if (role['category'],role['target']) in direct else 'ai'
         role['evidenceIds']=[i for i in role['evidenceIds'] if byid[i]['target']==role['target'] and byid[i]['kind'] in ('context','meaning')]

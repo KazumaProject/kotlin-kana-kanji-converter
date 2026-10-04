@@ -10,6 +10,7 @@ import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.sql.DriverManager
 import java.util.zip.GZIPOutputStream
+import java.util.zip.GZIPInputStream
 
 /** Schema 4 consumes reviewed resolutions. No semantic/reading fallback or network access. */
 object ResolvedDictionaryBuilder {
@@ -24,6 +25,7 @@ object ResolvedDictionaryBuilder {
         try {
             DriverManager.getConnection("jdbc:sqlite:${options.snapshot!!.toURI()}?mode=ro").use { db ->
                 var sourceRows = 0
+                val boundaries=mutableMapOf<String,Set<Pair<String,String>>>()
                 db.prepareStatement("SELECT r.* FROM source_map m JOIN resolutions r ON r.id=m.candidate_id WHERE m.source=? AND m.line=? ORDER BY r.id").use { q ->
                     SupplementalSources.files.keys.forEach { source ->
                         SupplementalSources.read(source, options.source) { original ->
@@ -34,8 +36,25 @@ object ResolvedDictionaryBuilder {
                                     found = true
                                     require(rows.getInt("left_id") == original.word.leftId.toInt() && rows.getInt("right_id") == original.word.rightId.toInt()) { "Reviewed context IDs changed at $source:${original.line}" }
                                     if (rows.getString("status") == "adopted") {
-                                        val changed=rows.getString("reading")!=original.word.yomi || rows.getString("surface")!=original.word.tango
-                                        require(!changed || Json.parseToJsonElement(rows.getString("normalization_ids")).jsonArray.isNotEmpty()) { "Changed candidate has no independent transformation proof at $source:${original.line}" }
+                                        val originalPair=JmdictLexicon.pair(original.word.yomi,original.word.tango)
+                                        val changed=JmdictLexicon.pair(rows.getString("reading"),rows.getString("surface"))!=originalPair
+                                        if(changed) {
+                                            val allowed=boundaries.getOrPut(rows.getString("id")) {
+                                                Json.parseToJsonElement(rows.getString("normalization_ids")).jsonArray.mapNotNull { ref ->
+                                                    db.prepareStatement("SELECT body FROM quality_facts WHERE id=?").use { proof ->
+                                                        proof.setString(1,ref.jsonPrimitive.content)
+                                                        proof.executeQuery().use { result ->
+                                                            if(!result.next()) null else {
+                                                                val b=Json.parseToJsonElement(GZIPInputStream(result.getBytes(1).inputStream()).bufferedReader().use { it.readText() }).jsonObject
+                                                                val y=b["originalReading"]?.jsonPrimitive?.content;val s=b["originalSurface"]?.jsonPrimitive?.content
+                                                                if(y==null || s==null) null else JmdictLexicon.pair(y,s)
+                                                            }
+                                                        }
+                                                    }
+                                                }.toSet()
+                                            }
+                                            require(originalPair in allowed) { "Changed input mapping has no independently bound transformation proof at $source:${original.line}" }
+                                        }
                                         val word = Dictionary(rows.getString("reading"), rows.getShort("left_id"), rows.getShort("right_id"), rows.getShort("cost"), rows.getString("surface"))
                                         require(word.leftId.toInt() in ids && word.rightId.toInt() in ids) { "Unknown context ID" }
                                         rows.getString("categories").split(',').forEach { category -> words.getValue(category)[word.key()] = word }

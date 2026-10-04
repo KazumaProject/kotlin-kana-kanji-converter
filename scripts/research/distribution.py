@@ -1,7 +1,11 @@
 """Compact schema-4 snapshots. Full pages and model responses remain in the ledger."""
-import gzip,json,os,pathlib,sqlite3,time
+import gzip,json,os,pathlib,sqlite3,time,unicodedata
 
 MAX_BYTES=512*1024*1024
+
+def bound_pair(y,s):
+    y=unicodedata.normalize('NFKC',y)
+    return ''.join(chr(ord(c)-96) if 'ァ'<=c<='ヶ' else c for c in y),unicodedata.normalize('NFKC',s)
 
 def compact_meaning(raw):
     """Keep factual bindings, not cached article bodies or official-page prose."""
@@ -68,7 +72,7 @@ def export(db,args,configuration,info,confidence_lower,canonical,digest,sha,emit
     CREATE TABLE semantic_facts(id TEXT PRIMARY KEY,target TEXT,kind TEXT,url TEXT,revision TEXT,sha256 TEXT,body BLOB);
     CREATE TABLE quality_facts(id TEXT PRIMARY KEY,reading TEXT,surface TEXT,target TEXT,kind TEXT,url TEXT,revision TEXT,sha256 TEXT,body BLOB);
     ''')
-    h=__import__('hashlib').sha256();accepted=excluded=non=0;needed=set();semantic_needed=set();quality_needed=set()
+    h=__import__('hashlib').sha256();accepted=excluded=non=0;needed=set();semantic_needed=set();quality_needed=set();published_ids=set();omitted_links=0
     try:
         for r in db.execute('SELECT * FROM candidates ORDER BY id'):
             dec=json.loads(r['decision']);roles=[v for v in dec.get('roles',[]) if v['category'] in active];cats=sorted({v['category'] for v in roles})
@@ -76,7 +80,7 @@ def export(db,args,configuration,info,confidence_lower,canonical,digest,sha,emit
             if state in ('reviewed','adopted'):
                 state='adopted' if cats else 'not_distributed';reason='verified-reading-semantics-eligibility' if cats else 'category-publication-criteria-not-met'
             if state=='adopted':
-                accepted+=1;needed.update(dec['readingEvidence']);semantic_needed.update(i for v in roles for i in v['evidenceIds'])
+                accepted+=1;published_ids.add(r['id']);needed.update(dec['readingEvidence']);semantic_needed.update(i for v in roles for i in v['evidenceIds'])
             elif state=='excluded_confirmed': excluded+=1
             else: non+=1
             norm=[f[0] for f in db.execute("SELECT id FROM facts WHERE reading=? AND surface=? AND target=? AND kind='normalization' AND active=1 ORDER BY id",(r['reading'],r['surface'],r['id']))] if state=='adopted' else []
@@ -84,8 +88,18 @@ def export(db,args,configuration,info,confidence_lower,canonical,digest,sha,emit
             quality_needed.update(norm+exclusion)
             value=(r['id'],r['reading'],r['surface'],r['left_id'],r['right_id'],r['cost'],state,','.join(cats) if state=='adopted' else '',canonical(dec['readingEvidence']) if state=='adopted' else '[]',canonical(roles) if state=='adopted' else '[]',reason,canonical(norm),canonical(exclusion))
             h.update(canonical(value).encode());h.update(b'\n');out.execute('INSERT INTO resolutions VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',value)
-        for r in db.execute('SELECT o.source,o.line,c.candidate_id FROM origin_candidates c JOIN origins o ON o.id=c.origin_id ORDER BY o.source,o.line,c.candidate_id'):
-            out.execute('INSERT INTO source_map VALUES(?,?,?)',tuple(r))
+        proven={}
+        for target,raw in db.execute("SELECT target,body FROM facts WHERE active=1 AND kind='normalization'"):
+            if target in published_ids:
+                b=json.loads(raw)
+                if 'originalReading' in b and 'originalSurface' in b: proven.setdefault(target,set()).add(bound_pair(b['originalReading'],b['originalSurface']))
+        for r in db.execute('SELECT o.source,o.line,m.candidate_id,o.reading,o.surface,c.reading,c.surface FROM origin_candidates m JOIN origins o ON o.id=m.origin_id JOIN candidates c ON c.id=m.candidate_id ORDER BY o.source,o.line,m.candidate_id'):
+            original=bound_pair(r[3],r[4]);output=bound_pair(r[5],r[6])
+            if r[2] in published_ids and original!=output and original not in proven.get(r[2],set()):
+                # The full original remains in its own resolution. A verified
+                # reuse of this output elsewhere cannot validate THIS mapping.
+                omitted_links+=1;continue
+            out.execute('INSERT INTO source_map VALUES(?,?,?)',tuple(r[:3]))
         for fid in sorted(needed):
             r=db.execute('SELECT f.*,d.url,d.revision,d.sha256 FROM facts f JOIN documents d ON d.id=f.document_id WHERE f.id=?',(fid,)).fetchone()
             if r is None or r['kind']!='reading': raise ValueError('Missing independent reading fact')
@@ -102,7 +116,7 @@ def export(db,args,configuration,info,confidence_lower,canonical,digest,sha,emit
             out.execute('INSERT INTO quality_facts VALUES(?,?,?,?,?,?,?,?,?)',(fid,r['reading'],r['surface'],r['target'],r['kind'],r['url'],r['revision'],r['sha256'],gzip.compress(r['body'].encode(),mtime=0)))
         manifest={'schemaVersion':4,'postalParserVersion':7,'sources':info(db,'inputs')['sources'],
             'research':{'releaseReady':bool(final),'sourceRows':db.execute('SELECT COUNT(*) FROM origins').fetchone()[0],
-                'candidates':accepted+excluded+non,'adopted':accepted,'excludedConfirmed':excluded,'notDistributed':non,'unprocessed':0,'errors':0,
+                'candidates':accepted+excluded+non,'adopted':accepted,'excludedConfirmed':excluded,'notDistributed':non,'unprocessed':0,'errors':0,'unprovenDerivedLinksOmitted':omitted_links,
                 'resolutionSha256':h.hexdigest(),'configurationSha256':digest(canonical(cfg[-1])),'validation':gate,'acceptance':info(db,'acceptance')},
             'taxonomy':cfg[1],'activeCategories':active,'categoryCounts':counts,'models':cfg[0],
             'baseIdDefSha256':info(db,'baseIdDefSha256')}

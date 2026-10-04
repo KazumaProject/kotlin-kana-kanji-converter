@@ -81,15 +81,15 @@ def normalization(db,e,fact_rows,canonical,info,emit):
         if postal and (floor or guide) and any(o['source']=='place' for o in origins):
             e.fact(row['reading'],row['surface'],'invalid',[],row['id'],postal[0]['document_id'],{'issue':'postal-annotation-not-independent-candidate','addressFact':postal[0]['id']});excluded+=1
     # Reuse the same proof checker after additional source acquisition.
-    for row in db.execute("SELECT * FROM candidates WHERE normalization!='unchanged' AND normalization NOT LIKE 'original:%'").fetchall():
+    for row in db.execute("SELECT c.* FROM candidates c WHERE EXISTS (SELECT 1 FROM origin_candidates m JOIN origins o ON o.id=m.origin_id WHERE m.candidate_id=c.id AND (o.reading!=c.reading OR o.surface!=c.surface))").fetchall():
         verified+=check_normalization_row(db,e,row,fact_rows)
     info(db,'normalizationCheck',{'verified':verified,'excluded':excluded});db.commit();emit({'phase':'normalizationEvidence','verified':verified,'excluded':excluded})
 
 def check_normalization_row(db,e,row,fact_rows):
-    if row['normalization']=='unchanged' or row['normalization'].startswith('original:'): return 0
     facts=fact_rows(db,row);read=[f for f in facts if f['kind']=='reading']
     if not read: return 0
-    origins=db.execute('SELECT o.* FROM origins o JOIN origin_candidates m ON o.id=m.origin_id WHERE m.candidate_id=?',(row['id'],)).fetchall()
+    origins=db.execute('SELECT o.* FROM origins o JOIN origin_candidates m ON o.id=m.origin_id WHERE m.candidate_id=? AND (o.reading!=? OR o.surface!=?)',(row['id'],row['reading'],row['surface'])).fetchall()
+    verified=0
     for original in origins:
         address=[f for f in fact_rows(db,original) if f['kind']=='address-structure']
         if not address:
@@ -114,5 +114,5 @@ def check_normalization_row(db,e,row,fact_rows):
             body={'originalSource':original['source'],'originalLine':original['line'],'originalSurface':s,'originalReading':y,'outputSurface':out_s,'outputReading':out_y,'fullAddressEvidence':address[0]['id'],'outputEvidence':read[0]['id']}
             if prefix_proof: body['prefixEvidence']=prefix_proof['id']
             e.fact(out_y,out_s,'normalization',[],row['id'],address[0]['document_id'],body)
-            return 1
-    return 0
+            verified+=1
+    return verified
