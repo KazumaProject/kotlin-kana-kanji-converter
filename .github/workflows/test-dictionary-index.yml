@@ -1,0 +1,20 @@
+name: Test dictionary entry index
+on:
+  pull_request:
+  push:
+    branches: ['codex/export-dictionary-index']
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Prepare Mozc POS definitions
+        run: curl --fail --location --retry 3 https://raw.githubusercontent.com/google/mozc/master/src/data/dictionary_oss/id.def --output src/main/resources/id.def
+      - name: Test decoded dictionary export
+        run: ./gradlew dictionaryIndexTest

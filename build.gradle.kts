@@ -672,6 +672,15 @@ tasks.test {
     )
 }
 
+tasks.register<Test>("dictionaryIndexTest") {
+    group = "verification"
+    description = "Tests dictionary-index decoding without requiring external dictionary source datasets."
+    useJUnitPlatform()
+    testClassesDirs = sourceSets["test"].output.classesDirs
+    classpath = sourceSets["test"].runtimeClasspath
+    filter { includeTestsMatching("com.kazumaproject.index.DictionaryIndexExporterTest") }
+}
+
 tasks.register<Test>("dictionaryBuildTest") {
     description = "Runs the full real-dictionary build integration test."
     group = "verification"
@@ -912,6 +921,29 @@ val packageJapaneseKeyboardDictionaryAssets = tasks.register("packageJapaneseKey
 
         writeDirectoryZip(stagingDirectory, releaseZip)
         logger.lifecycle("Wrote JapaneseKeyboard dictionary assets: ${releaseZip.path}")
+    }
+}
+
+tasks.register<JavaExec>("exportDictionaryIndex") {
+    group = "distribution"
+    description = "Exports decoded conversion entries for every packaged dictionary, with build provenance and matching Mozc POS IDs."
+    dependsOn(packageJapaneseKeyboardDictionaryAssets, "classes")
+    mainClass.set("com.kazumaproject.index.DictionaryIndexExporter")
+    classpath = sourceSets["main"].runtimeClasspath
+    maxHeapSize = "3g"
+    args(
+        japaneseKeyboardAssetsReleaseZip.asFile.path,
+        japaneseKeyboardAssetsReleaseDir.asFile.path,
+        providers.gradleProperty("dictionaryRelease").orElse(providers.environmentVariable("GITHUB_REF_NAME")).orElse("local").get(),
+        providers.gradleProperty("converterCommit").orElse(providers.environmentVariable("GITHUB_SHA")).orElse("local").get(),
+        providers.gradleProperty("mozcCommit").orElse(providers.environmentVariable("MOZC_COMMIT")).orElse("local").get(),
+    )
+    doLast {
+        copy {
+            from("src/main/resources/THIRD-PARTY-NOTICES.md")
+            into(japaneseKeyboardAssetsReleaseDir)
+            rename { "dictionary-index-NOTICES.md" }
+        }
     }
 }
 

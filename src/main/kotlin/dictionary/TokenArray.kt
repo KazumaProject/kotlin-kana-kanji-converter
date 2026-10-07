@@ -14,6 +14,11 @@ import java.text.Normalizer
 import java.util.*
 
 class TokenArray {
+    internal fun validateForIndex(): Int {
+        require(nodeIdList.isNotEmpty() && nodeIdList.size == wordCostList.size &&
+            nodeIdList.size == posTableIndexList.size) { "Invalid or empty token array" }
+        return nodeIdList.size
+    }
     private var posTableIndexList: MutableList<Short> = arrayListOf()
     private var wordCostList: MutableList<Short> = arrayListOf()
     private var nodeIdList: MutableList<Int> = arrayListOf()

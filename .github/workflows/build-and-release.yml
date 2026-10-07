@@ -58,6 +58,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Record dictionary build revisions
+        shell: bash
+        run: echo "MOZC_COMMIT=$(git -C mozc-src rev-parse HEAD)" >> "$GITHUB_ENV"
+
       # ----------------------------------------------------------------------
       # Mozc resources
       # ----------------------------------------------------------------------
@@ -350,7 +354,15 @@ jobs:
         run: |
           ./gradlew \
             packageJapaneseKeyboardDictionaryAssets \
-            verifyJapaneseKeyboardDictionaryAssets
+            verifyJapaneseKeyboardDictionaryAssets \
+            exportDictionaryIndex
+
+      - name: Upload verified dictionary bundle and entry index
+        uses: actions/upload-artifact@v4
+        with:
+          name: japanese-keyboard-dictionaries-with-index
+          path: release_zips/
+          if-no-files-found: error
 
       # Engine tests load the generated dictionary .dat files,
       # so run them after packaging.
@@ -368,7 +380,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip
+          artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./release_zips/dictionary-index.tsv.gz,./release_zips/dictionary-index-manifest.json,./release_zips/dictionary-index-NOTICES.md
           allowUpdates: true
           artifactErrorsFailBuild: true
           removeArtifacts: true
