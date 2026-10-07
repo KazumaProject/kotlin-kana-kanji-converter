@@ -26,6 +26,10 @@ revisions. `./gradlew dictionaryIndexTest` checks fixture decoding, kana,
 pack coverage, and corrupt-token rejection. Normal release CI also runs the
 existing full resource validations and engine tests.
 
+Token postings now include an explicit closing zero separator. This preserves
+lookup of the final reading when its postings end exactly on a 64-bit boundary;
+the existing binary serialization and reader format remain compatible.
+
 For New-word rollout, publish a version release containing the complete index,
 then run its `check_dictionary_only` manual workflow. Enable the
 `IME_COLLECTION_ENABLED` repository variable only after that check succeeds.

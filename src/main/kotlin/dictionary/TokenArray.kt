@@ -69,6 +69,9 @@ class TokenArray {
                 nodeIdList.add(nodeId)
             }
         }
+        // select0(termId + 1) needs a closing separator even when the last
+        // posting ends exactly at the BitSet's 64-bit storage boundary.
+        bitListTemp.add(false)
         writeExternalNotCompress(out)
     }
 

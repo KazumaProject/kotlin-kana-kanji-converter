@@ -15,13 +15,15 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 
 class DictionaryIndexExporterTest {
-    private fun fixture(directory: File, omit: String? = null, corrupt: String? = null): File {
-        val dictionaries = listOf(
+    private fun fixture(directory: File, omit: String? = null, corrupt: String? = null, boundary: Boolean = false): File {
+        val dictionaries = (if (boundary) (0 until 32).map {
+            Dictionary("よみ%02d".format(it), 1, 1, 100, "単語%02d".format(it))
+        } else listOf(
             Dictionary("かんじ", 1, 1, 100, "漢字"),
             Dictionary("かな", 1, 1, 100, "カナ"),
             Dictionary("ひらがな", 1, 1, 100, "ひらがな"),
             Dictionary("せつめい", 1, 1, 100, "説明\t表示用注記"),
-        ).groupBy { it.yomi }.toSortedMap(compareBy({ it.length }, { it }))
+        )).groupBy { it.yomi }.toSortedMap(compareBy({ it.length }, { it }))
         val pos = File(directory, "pos-for-build.dat")
         TokenArray().buildPOSTableWithIndex(dictionaries, 1, pos.path)
         val paths = listOf("yomi.dat", "tango.dat", "token.dat").map { File(directory, it) }
@@ -65,6 +67,18 @@ class DictionaryIndexExporterTest {
             assertContains(rows, "reading_correction\tせつめい\t説明")
             assertContains(rows, "wiki\tかんじ\t漢字")
             assertContains(File(output, "dictionary-index-manifest.json").readText(), "\"dictionaryRelease\": \"v-test\"")
+        } finally { directory.deleteRecursively() }
+    }
+
+    @Test
+    fun finalReadingAtExact64BitBoundaryRemainsRetrievable() {
+        val directory = Files.createTempDirectory("index-boundary-").toFile()
+        try {
+            val output = File(directory, "release")
+            DictionaryIndexExporter.export(fixture(directory, boundary = true), output, "v-test", "a".repeat(40), "b".repeat(40))
+            val rows = GZIPInputStream(File(output, "dictionary-index.tsv.gz").inputStream()).bufferedReader().use { it.readLines() }
+            assertContains(rows, "neologd\tよみ31\t単語31")
+            assertEquals(1 + DictionaryIndexExporter.packs.size * 32, rows.size)
         } finally { directory.deleteRecursively() }
     }
 
