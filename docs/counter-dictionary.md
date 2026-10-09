@@ -146,6 +146,19 @@ val result = converter.convert("ごごさんじはん", includeAliases = true, l
 数量・時刻の結果をJapaneseKeyboardの候補へどう統合するかは利用側の実装で扱います。
 生成した辞書は既存配布ZIPの`app/src/main/assets/counter/counter_rules.dat`に追加します。
 
+## マージ前の検証用配布
+
+GitHub Actionsの`Build and Release JapaneseKeyboard Dictionary Assets`を対象ブランチで手動実行し、
+`counter_preview=true`を指定すると、助数詞辞書を生成・テストして検証用Prereleaseを公開します。
+タグは`counter-preview-<コミットSHA先頭12桁>`です。通常の`v*`リリースとは別に保存します。
+
+配布ファイルは辞書本体`counter_rules.dat`、調査用の`counter_dictionary_preview.zip`、
+生成元・実行URL・テスト結果を含む`manifest.json`、`SHA256SUMS`です。
+調査用ZIPには同じ辞書、Kotlinソース、編集用TSV、説明資料、Actionsの検証レポートを含めます。
+ZIP内の辞書の場所は`app/src/main/assets/counter/counter_rules.dat`です。
+同じ成果物をActions artifactにも30日間保存します。
+CLIの再現実行は、manifestに記録したコミットのリポジトリを取得して行ってください。
+
 ## 性能の評価
 
 初期実装の測定値と検証結果は[性能測定記録](counter-performance.md)に記載しています。
