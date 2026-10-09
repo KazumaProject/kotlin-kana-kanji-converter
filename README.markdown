@@ -32,6 +32,12 @@ cd kotlin-kana-kanji-converter
 1. 辞書ファイルを準備し、プログラムを実行します。
 2. ひらがな文字列を入力すると漢字に変換されます。
 
+助数詞・時刻には、全件列挙をしない専用の規則辞書と確認用CLIも用意しています。
+`./gradlew buildCounterDictionary counterTest` で生成・検証し、
+`./gradlew -q counterCli --args='convert --input ひゃくにじゅうさんぼん --input ごごさんじはん'`
+でJSONの候補を確認できます。形式、収録データ、Androidでの読み込み方法、測定条件は
+[助数詞・時刻の規則辞書](docs/counter-dictionary.md)を参照してください。
+
 ## ライセンス
 
 このプロジェクトは [MIT ライセンス](LICENSE) のもとで提供されています。

@@ -346,6 +346,15 @@ jobs:
       # Package dictionary assets
       # ----------------------------------------------------------------------
 
+      - name: Build and verify counter and time rules
+        run: ./gradlew buildCounterDictionary counterTest
+
+      - name: Upload counter build report
+        uses: actions/upload-artifact@v4
+        with:
+          name: counter-build-report
+          path: build/reports/counter/*.json
+
       - name: Generate dictionaries, package assets, and verify
         run: |
           ./gradlew \

@@ -1,0 +1,142 @@
+id	surface	plain	voiced	semi	profile	category	min	max	priority
+hon	本	ほん	ぼん	ぽん	H_P_B	object	0	*	10
+mai	枚	まい			REGULAR	object	0	*	10
+nin	人	にん			PERSON	person	0	*	10
+mei	名	めい			REGULAR	person	0	*	20
+hiki	匹	ひき	びき	ぴき	H_P_B	animal	0	*	20
+tou	頭	とう			T	animal	0	*	20
+wa	羽	わ			REGULAR	animal	0	*	20
+bi	尾	び			REGULAR	animal	0	*	20
+ko	個	こ			K	object	0	*	10
+satsu	冊	さつ			S	book	0	*	20
+kan	巻	かん	がん		K	book	0	*	20
+bu	部	ぶ			REGULAR	book	0	*	20
+dai	台	だい			REGULAR	machine	0	*	20
+ki_base	基	き			K	machine	0	*	20
+ki_machine	機	き			K	machine	0	*	20
+ken_case	件	けん	げん		K	event	0	*	20
+kai	回	かい	がい		K	event	0	*	10
+do	度	ど			REGULAR	angle	0	*	20
+kai_floor	階	かい	がい		FLOOR	building	0	*	20
+ken_house	軒	けん	げん		HOUSE	building	0	*	20
+tou_building	棟	とう			T	building	0	*	20
+ko_house	戸	こ			K	building	0	*	20
+shitsu	室	しつ			S	building	0	*	20
+kasho	か所	かしょ	がしょ		K	place	0	*	20
+chaku	着	ちゃく			T	clothing	0	*	20
+soku	足	そく			S	clothing	0	*	20
+kumi	組	くみ			REGULAR	object	0	*	20
+tai	対	つい			T	object	0	*	20
+sou_pair	双	そう			S	object	0	*	20
+ten	点	てん			T	object	0	*	20
+hai	杯	はい	ばい	ぱい	H_P_B	food	0	*	20
+sara	皿	さら			REGULAR	food	0	*	20
+tsubu	粒	つぶ			REGULAR	food	0	*	20
+jou_pill	錠	じょう			REGULAR	medicine	0	*	20
+fukuro	袋	ふくろ	ぶくろ	ぷくろ	REGULAR	container	0	*	20
+hako	箱	はこ	ばこ	ぱこ	REGULAR	container	0	*	20
+kan_can	缶	かん	がん		K	container	0	*	20
+bin	瓶	びん			REGULAR	container	0	*	20
+tsutsumi	包	つつみ			REGULAR	container	0	*	20
+kire	切れ	きれ			REGULAR	food	0	*	20
+tama	玉	たま			REGULAR	food	0	*	20
+kabu	株	かぶ	がぶ		REGULAR	plant	0	*	20
+hachi	鉢	はち	ばち	ぱち	H_P_B	plant	0	*	20
+taba	束	たば			REGULAR	plant	0	*	20
+rin	輪	りん			REGULAR	plant	0	*	20
+sou_ship	艘	そう			S	ship	0	*	20
+seki	隻	せき			S	ship	0	*	20
+tei	艇	てい			T	ship	0	*	20
+kyaku	脚	きゃく			K	furniture	0	*	20
+zen	膳	ぜん			REGULAR	food	0	*	20
+sao	棹	さお			REGULAR	tool	0	*	20
+chou	張	ちょう			T	tool	0	*	20
+furi	振	ふり	ぶり	ぷり	REGULAR	tool	0	*	20
+chou_tool	挺	ちょう			T	tool	0	*	20
+kan_pipe	管	かん	がん		K	tool	0	*	20
+fuku	幅	ふく	ぶく	ぷく	H_P	art	0	*	20
+ku	躯	く			K	art	0	*	20
+za	座	ざ			REGULAR	art	0	*	20
+mon	門	もん			REGULAR	tool	0	*	20
+hatsu	発	はつ	ばつ	ぱつ	H_P	event	0	*	20
+sen_match	戦	せん			S	event	0	*	20
+shiai	試合	しあい			S	event	0	*	20
+ji_letter	字	じ			REGULAR	text	0	*	20
+moji	文字	もじ			REGULAR	text	0	*	20
+go_word	語	ご			REGULAR	text	0	*	20
+gyou	行	ぎょう			REGULAR	text	0	*	20
+page	ページ	ぺーじ			P_LOAN	text	0	*	20
+shou	章	しょう			S	text	0	*	20
+setsu	節	せつ			S	text	0	*	20
+kou	項	こう			K	text	0	*	20
+wa_story	話	わ			REGULAR	text	0	*	20
+ku_poem	句	く			K	text	0	*	20
+shu_poem	首	しゅ			S	text	0	*	20
+kyoku	曲	きょく			K	music	0	*	20
+hen	編	へん	べん	ぺん	H_P_B	text	0	*	20
+hen_essay	篇	へん	べん	ぺん	H_P_B	text	0	*	20
+you	葉	よう			REGULAR	text	0	*	20
+ban	番	ばん			REGULAR	order	0	*	20
+banme	番目	ばんめ			REGULAR	order	0	*	20
+i_rank	位	い			REGULAR	order	0	*	20
+kyuu	級	きゅう			K	order	0	*	20
+tou_rank	等	とう			T	order	0	*	20
+dan	段	だん			REGULAR	order	0	*	20
+gou	号	ごう			REGULAR	order	0	*	20
+jou_clause	条	じょう			REGULAR	order	0	*	20
+minute	分	ふん	ぶん	ぷん	MINUTE	time	0	*	10
+second	秒	びょう			REGULAR	time	0	*	10
+nen	年	ねん			YEAR	calendar	0	*	10
+nendo	年度	ねんど			YEAR	calendar	0	*	20
+hour_duration	時間	じかん			CLOCK_DURATION	duration	0	*	20
+minute_duration	分間	ふんかん	ぶんかん	ぷんかん	MINUTE	duration	0	*	20
+second_duration	秒間	びょうかん			REGULAR	duration	0	*	20
+shuu	週	しゅう			S	duration	0	*	20
+shuukan	週間	しゅうかん			S	duration	0	*	20
+kagetsu	か月	かげつ	がげつ		K	duration	0	*	20
+kagetsukan	か月間	かげつかん	がげつかん		K	duration	0	*	20
+nenkan	年間	ねんかん			YEAR	duration	0	*	20
+haku	泊	はく	ばく	ぱく	H_P	duration	0	*	20
+sai	歳	さい			S	age	0	*	20
+sai_alt	才	さい			S	age	0	*	20
+en	円	えん			REGULAR	money	0	*	20
+sen_money	銭	せん			S	money	0	*	20
+dollar	ドル	どる			REGULAR	money	0	*	20
+euro	ユーロ	ゆーろ			REGULAR	money	0	*	20
+meter	メートル	めーとる			REGULAR	length	0	*	20
+centimeter	センチメートル	せんちめーとる			S_LOAN	length	0	*	20
+millimeter	ミリメートル	みりめーとる			REGULAR	length	0	*	20
+kilometer	キロメートル	きろめーとる			K_LOAN	length	0	*	20
+inch	インチ	いんち			REGULAR	length	0	*	20
+feet	フィート	ふぃーと	ぶぃーと	ぷぃーと	REGULAR	length	0	*	20
+gram	グラム	ぐらむ			REGULAR	mass	0	*	20
+kilogram	キログラム	きろぐらむ			K_LOAN	mass	0	*	20
+milligram	ミリグラム	みりぐらむ			REGULAR	mass	0	*	20
+ton	トン	とん			T_LOAN	mass	0	*	20
+liter	リットル	りっとる			REGULAR	volume	0	*	20
+milliliter	ミリリットル	みりりっとる			REGULAR	volume	0	*	20
+square_meter	平方メートル	へいほうめーとる	べいほうめーとる	ぺいほうめーとる	REGULAR	area	0	*	20
+cubic_meter	立方メートル	りっぽうめーとる			REGULAR	volume	0	*	20
+hectare	ヘクタール	へくたーる	べくたーる	ぺくたーる	REGULAR	area	0	*	20
+jou_tatami	畳	じょう			REGULAR	area	0	*	20
+tsubo	坪	つぼ			REGULAR	area	0	*	20
+percent	％	ぱーせんと			P_LOAN	ratio	0	*	20
+bai	倍	ばい			REGULAR	ratio	0	*	20
+wari	割	わり			REGULAR	ratio	0	*	20
+bu_ratio	分	ぶ			REGULAR	ratio	0	*	20
+rin_ratio	厘	りん			REGULAR	ratio	0	*	20
+byte	バイト	ばいと			REGULAR	data	0	*	20
+kilobyte	キロバイト	きろばいと			K_LOAN	data	0	*	20
+megabyte	メガバイト	めがばいと			REGULAR	data	0	*	20
+gigabyte	ギガバイト	ぎがばいと			REGULAR	data	0	*	20
+hertz	ヘルツ	へるつ	べるつ	ぺるつ	REGULAR	frequency	0	*	20
+watt	ワット	わっと			REGULAR	power	0	*	20
+volt	ボルト	ぼると			REGULAR	electricity	0	*	20
+ampere	アンペア	あんぺあ			REGULAR	electricity	0	*	20
+clock_hour	時	じ			CLOCK	clock	0	23	0
+month	月	がつ			MONTH	calendar	1	12	20
+day_calendar	日	にち			REGULAR	calendar	1	31	20
+day_duration	日	にち			REGULAR	duration	0	*	20
+day_interval	日間	にちかん			REGULAR	duration	0	*	20
+tsu	つ				EXCEPTION_ONLY	object	1	10	20
+temperature_degrees	度	ど			REGULAR	temperature	0	*	20

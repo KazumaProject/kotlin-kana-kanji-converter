@@ -1,6 +1,7 @@
 import org.gradle.api.GradleException
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
 import java.nio.file.Files
@@ -141,6 +142,7 @@ repositories {
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("org.openjdk.jol:jol-core:0.17")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC.2")
 }
 
@@ -165,6 +167,41 @@ val japaneseKeyboardAssetsReleaseZip = japaneseKeyboardAssetsReleaseDir.file("ja
 val systemNgramDictionaryFile = dictionaryResourcesDir.file("ngram/system_ngram.dat")
 val systemNgramUnigramSourceDir = layout.projectDirectory.dir("src/main/ngram-unigram")
 val systemNgramUnigramDictionaryFile = dictionaryResourcesDir.file("ngram/system_ngram_unigram.dat")
+val counterSourceDir = layout.projectDirectory.dir("src/main/counter")
+val counterDictionaryFile = dictionaryResourcesDir.file("counter/counter_rules.dat")
+val buildCounterDictionary = tasks.register<JavaExec>("buildCounterDictionary") {
+    group = "distribution"
+    description = "Builds the compact quantity/time rule dictionary and verifies independent golden cases."
+    dependsOn("classes")
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.counter.CounterCli")
+    args("build", "--source", counterSourceDir.asFile.path, "--dictionary", counterDictionaryFile.asFile.path,
+        "--cases", counterSourceDir.file("cases.tsv").asFile.path,
+        "--report", layout.buildDirectory.file("reports/counter/build.json").get().asFile.path)
+    inputs.dir(counterSourceDir)
+    outputs.file(counterDictionaryFile)
+    outputs.file(layout.buildDirectory.file("reports/counter/build.json"))
+    // Preserve JSONL stdout for counterCli even on its first invocation.
+    standardOutput = ByteArrayOutputStream()
+}
+tasks.register<JavaExec>("counterCli") {
+    group = "application"
+    description = "JSON CLI for quantity/time conversion, golden checks, inspection and benchmarks."
+    dependsOn(buildCounterDictionary)
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.counter.CounterCli")
+    standardInput = System.`in`
+}
+tasks.register<Test>("counterTest") {
+    group = "verification"
+    description = "Runs isolated counter/time format and conversion tests without downloaded corpora."
+    dependsOn("testClasses")
+    testClassesDirs = sourceSets["test"].output.classesDirs
+    classpath = sourceSets["test"].runtimeClasspath
+    inputs.dir(counterSourceDir)
+    useJUnitPlatform()
+    filter { includeTestsMatching("com.kazumaproject.counter.*") }
+}
 val buildSystemNgramDictionary = tasks.register<JavaExec>("buildSystemNgramDictionary") {
     group = "distribution"
     description = "Compiles editable scoreless n-gram sources into the JapaneseKeyboard binary asset."
@@ -207,6 +244,7 @@ val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("id.def", "id.def"),
     JapaneseKeyboardAssetSpec("ngram/system_ngram.dat", "ngram/system_ngram.dat"),
     JapaneseKeyboardAssetSpec("ngram/system_ngram_unigram.dat", "ngram/system_ngram_unigram.dat"),
+    JapaneseKeyboardAssetSpec("counter/counter_rules.dat", "counter/counter_rules.dat"),
     JapaneseKeyboardAssetSpec("yomi.dat", "system/yomi.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("tango.dat", "system/tango.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("token.dat", "system/token.dat.zip", zipped = true),
@@ -661,6 +699,7 @@ val validateMozcZeroQueryResources = tasks.register("validateMozcZeroQueryResour
 }
 
 tasks.test {
+    inputs.dir(counterSourceDir)
     useJUnitPlatform()
     dependsOn(
         validateMozcIdDef,
@@ -876,13 +915,14 @@ val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeybo
         generateMozcZeroQueryData,
         buildSystemNgramDictionary,
         buildSystemUnigramDictionary,
+        buildCounterDictionary,
     )
 }
 
 val packageJapaneseKeyboardDictionaryAssets = tasks.register("packageJapaneseKeyboardDictionaryAssets") {
     group = "distribution"
     description = "Packages generated dictionaries as app/src/main/assets for JapaneseKeyboard."
-    dependsOn(generateJapaneseKeyboardDictionaries)
+    dependsOn(generateJapaneseKeyboardDictionaries, buildCounterDictionary)
     inputs.files(japaneseKeyboardAssetSpecs.map { dictionaryResourcesDir.file(it.sourceRelativePath) })
     outputs.dir(japaneseKeyboardAssetsStagingDir)
     outputs.file(japaneseKeyboardAssetsReleaseZip)
