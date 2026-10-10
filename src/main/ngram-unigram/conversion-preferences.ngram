@@ -1,0 +1,4 @@
+# JapaneseKeyboard applies unigram rules only to a whole-input, one-node path.
+# Prefer these standalone hiragana spellings without changing dictionary costs.
+"なのか"
+"しろ"

@@ -725,6 +725,14 @@ tasks.named<JavaExec>("run") {
     dependsOn(validateDictionaryIds, validateEnglishDictionary)
 }
 
+tasks.register<JavaExec>("convertCandidates") {
+    group = "application"
+    description = "Converts one or more readings and prints candidates as JSON Lines."
+    mainClass.set("ConvertCandidatesKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("classes")
+}
+
 tasks.register<JavaExec>("runMozcUT") {
     mainClass.set("com.kazumaproject.MozcUTKt")
     classpath = sourceSets["main"].runtimeClasspath
