@@ -204,7 +204,9 @@ class SystemNgramBinaryTest {
     fun checkedInUnigramSourceIsAvailable() {
         val root = File(System.getProperty("user.dir"))
         val rules = NgramSourceParser.parseUnigramDirectory(root.resolve("src/main/ngram-unigram"))
-        assertEquals(471, rules.size)
+        assertEquals(473, rules.size)
+        assertTrue(rules.any { it.features == listOf(NgramFeature.Word("なのか")) })
+        assertTrue(rules.any { it.features == listOf(NgramFeature.Word("しろ")) })
         assertTrue(rules.any { it.features == listOf(NgramFeature.Word("エモ散らかす")) })
         assertTrue(rules.any { it.features == listOf(NgramFeature.Word("リジェネレーション")) })
         assertTrue(rules.any { it.features == listOf(NgramFeature.Word("吸引量")) })
@@ -224,7 +226,8 @@ class SystemNgramBinaryTest {
                 fields[0] to fields[4]
             }
         val sourceRules = NgramSourceParser.parseUnigramDirectory(root.resolve("src/main/ngram-unigram"))
-        val sourceSurfaces = sourceRules.map { (it.features.single() as NgramFeature.Word).value }.toSet()
+        val sourceSurfaces = sourceRules.filter { File(it.source).name == "atok-unigram.ngram" }
+            .map { (it.features.single() as NgramFeature.Word).value }.toSet()
         val commentedPairs = root.resolve("src/main/ngram-unigram/atok-unigram.ngram")
             .readLines(Charsets.UTF_8)
             .mapNotNull { line ->

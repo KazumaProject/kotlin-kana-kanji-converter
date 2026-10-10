@@ -1,5 +1,7 @@
 package com.kazumaproject.ngram
 
+import SingleNodeUnigramDictionary
+
 import com.kazumaproject.engine.KanaKanjiEngine
 import com.kazumaproject.graph.Node
 import java.io.File
@@ -94,11 +96,46 @@ class SystemNgramRuntimeTest {
         )
         val dictionary = PackedSystemUnigramDictionary.fromFile(output)
 
-        assertEquals(471, dictionary.ruleCount)
+        assertEquals(473, dictionary.ruleCount)
         assertTrue(dictionary.matches(node("カワボ")))
         assertFalse(dictionary.matches(node("存在しない候補")))
         val engine = KanaKanjiEngine(systemUnigramDictionary = dictionary).apply { buildEngine() }
         assertEquals("カワボ", engine.nBestPath("かわぼ", 1).single())
+    }
+
+    @Test
+    fun standaloneHiraganaRulesMatchJapaneseKeyboardSingleNodePolicy() {
+        val root = File(System.getProperty("user.dir"))
+        val output = createTempDirectory("standalone-hiragana").resolve("system_ngram_unigram.dat").toFile()
+        SystemNgramBinaryBuilder.build(
+            rules = NgramSourceParser.parseUnigramDirectory(root.resolve("src/main/ngram-unigram")),
+            idDef = root.resolve("src/main/resources/id.def"),
+            output = output,
+            formatVersion = NgramEncoding.UNIGRAM_VERSION,
+        )
+        val dictionary = SingleNodeUnigramDictionary(PackedSystemUnigramDictionary.fromFile(output))
+        val engine = KanaKanjiEngine(systemUnigramDictionary = dictionary).apply { buildEngine() }
+        val baseline = KanaKanjiEngine().apply { buildEngine() }
+
+        mapOf("なのか" to "七日", "しろ" to "白").forEach { (input, alternative) ->
+            dictionary.inputLength = input.length
+            assertEquals(listOf(input), engine.nBestPath(input, 1))
+            val candidates = engine.nBestPath(input, 10)
+            assertEquals(input, candidates.first())
+            assertEquals(1, candidates.count { it == input })
+            assertTrue(alternative in candidates)
+            assertEquals(emptyList(), engine.nBestPath(input, 0))
+        }
+
+        listOf("しろい", "しろくろ", "しろあり", "しろのなか", "なのかな", "なのかもしれない")
+            .forEach { input ->
+                dictionary.inputLength = input.length
+                assertEquals(baseline.nBestPath(input, 10), engine.nBestPath(input, 10), input)
+            }
+
+        dictionary.inputLength = 3
+        assertFalse(dictionary.matches(node("しろ").copy(len = 2)))
+        assertFalse(dictionary.matches(node("しろ").copy(len = 3, sPos = 1)))
     }
 
     private fun node(tango: String, contextId: Int = 1851): Node = Node(

@@ -120,17 +120,6 @@ class KanaKanjiEngineBasicConversionTest {
     }
 
     @Test
-    fun hiraganaCandidatesAreFirstForNanokaAndShiro() {
-        val nanokaCandidates = engine.nBestPath("なのか", 64)
-        assertEquals("なのか", nanokaCandidates.first())
-        assertTrue("七日" in nanokaCandidates)
-
-        val shiroCandidates = engine.nBestPath("しろ", 64)
-        assertEquals("しろ", shiroCandidates.first())
-        assertTrue("白" in shiroCandidates)
-    }
-
-    @Test
     fun hiraganaPreferencesPreserveCompoundConversions() {
         mapOf(
             "しろい" to "白い",

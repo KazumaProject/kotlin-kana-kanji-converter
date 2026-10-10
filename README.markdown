@@ -34,6 +34,8 @@ cd kotlin-kana-kanji-converter
 
 候補をターミナルから確認するには、次のコマンドを使います。複数の読みを一度に渡せます。
 
+「なのか」「しろ」の優先はunigram辞書に収録しています。JapaneseKeyboardの既存処理により、入力全体を1つの辞書語で変換した候補だけに適用されます。文中の一部分には適用されず、通常辞書の品詞・コストは変更しません。CLIもこのunigramの適用条件に合わせて検証します。
+
 ```bash
 ./gradlew --quiet convertCandidates --args='--count 5 なのか しろ'
 ```
@@ -48,6 +50,10 @@ cd kotlin-kana-kanji-converter
 `--count` を省略すると候補を10件まで返します。生成済みの変換辞書がない環境では、Mozc辞書リソースを準備したうえで先に `./gradlew run` を実行してください。使い方は `./gradlew --quiet convertCandidates --args='--help'` で確認できます。
 
 `src/main/resources/ngram` に生成済みの `system_ngram.dat` と `system_ngram_unigram.dat` がある場合は、それぞれ候補の再順位付けに使います。生成するには `./gradlew buildSystemNgramDictionary buildSystemUnigramDictionary` を実行してください。
+
+「なのか」「しろ」の優先を確認するには、更新した `system_ngram_unigram.dat` が必要です。JapaneseKeyboardで利用するときも、生成したファイルを `app/src/main/assets/ngram/system_ngram_unigram.dat` として配置してください。
+
+解析したJapaneseKeyboardの文節モードは、この優先順を最終候補にも維持します。一方、通常モードは最終候補をコスト順に並べ直すため、unigram辞書だけでは表示上の1位を保証できません。CLIは辞書ルールの適用条件を検証するもので、アプリ全体の表示順位を再現するものではありません。
 
 ## ライセンス
 
@@ -105,6 +111,10 @@ To inspect ranked candidates from a terminal, pass one or more readings:
 The command prints one JSON object per reading, with one-based candidate ranks. The default limit is 10 candidates. If generated conversion dictionaries are missing, prepare the Mozc dictionary resources and run `./gradlew run` first. Use `./gradlew --quiet convertCandidates --args='--help'` for usage.
 
 Generated `system_ngram.dat` and `system_ngram_unigram.dat` files under `src/main/resources/ngram` are loaded when present for candidate reranking. Generate them with `./gradlew buildSystemNgramDictionary buildSystemUnigramDictionary`.
+
+The hiragana preferences are stored in the unigram asset. JapaneseKeyboard applies them only to a whole-input, single-node candidate, and the CLI follows that condition. Normal dictionary costs and POS IDs are unchanged. Rebuild the unigram asset for verification and ship it as `app/src/main/assets/ngram/system_ngram_unigram.dat` in JapaneseKeyboard.
+
+In the inspected JapaneseKeyboard source, bunsetsu mode preserves that priority in its final candidates. Normal mode sorts final candidates by cost again, so the unigram asset alone cannot guarantee first place in that mode. The CLI verifies the dictionary rule's matching condition rather than reproducing all app ranking stages.
 
 ## License
 
