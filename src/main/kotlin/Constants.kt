@@ -11,6 +11,8 @@ import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段動詞,基本�
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,五段動詞,連用形,*`
 import com.kazumaproject.IdDefConstants.`動詞,自立,*,*,サ変・スル,連用形,*`
 import com.kazumaproject.IdDefConstants.`助動詞,*,*,*,特殊・タ,基本形,た`
+import com.kazumaproject.IdDefConstants.`助動詞,*,*,*,特殊・ダ,体言接続,だ`
+import com.kazumaproject.IdDefConstants.`助詞,副助詞／並立助詞／終助詞,*,*,*,*,か`
 import com.kazumaproject.IdDefConstants.`名詞,サ変接続,*,*,*,*,*`
 import com.kazumaproject.IdDefConstants.`名詞,一般,*,*,*,*,*`
 import com.kazumaproject.IdDefConstants.`名詞,一般,*,*,*,*,目`
@@ -3347,6 +3349,24 @@ object Constants {
     )
 
     val RESCORE_WORDS = listOf(
+        // Preserve the existing grammatical analysis of "なのか" while
+        // preferring its hiragana spelling over date and name alternatives.
+        Dictionary(
+            yomi = "なのか",
+            leftId = `助動詞,*,*,*,特殊・ダ,体言接続,だ`,
+            rightId = `助詞,副助詞／並立助詞／終助詞,*,*,*,*,か`,
+            cost = 2000,
+            tango = "なのか"
+        ),
+        // The noun spelling "白" has cost 4137. A small preference preserves
+        // compounds such as "白黒" and "シロアリ" instead of splitting them.
+        Dictionary(
+            yomi = "しろ",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 4000,
+            tango = "しろ"
+        ),
         // Keep the literal hiragana ahead of the dictionary spelling "言う"
         // in compounds such as "いうこと" without removing "言う".
         Dictionary(

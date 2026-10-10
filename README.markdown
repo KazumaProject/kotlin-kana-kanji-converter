@@ -32,6 +32,23 @@ cd kotlin-kana-kanji-converter
 1. 辞書ファイルを準備し、プログラムを実行します。
 2. ひらがな文字列を入力すると漢字に変換されます。
 
+候補をターミナルから確認するには、次のコマンドを使います。複数の読みを一度に渡せます。
+
+```bash
+./gradlew --quiet convertCandidates --args='--count 5 なのか しろ'
+```
+
+読みごとに1行のJSONを出力します。`rank` は1から始まります。以下は先頭2件の出力例です。
+
+```json
+{"input":"なのか","candidates":[{"rank":1,"text":"なのか"},{"rank":2,"text":"七日"}]}
+{"input":"しろ","candidates":[{"rank":1,"text":"しろ"},{"rank":2,"text":"白"}]}
+```
+
+`--count` を省略すると候補を10件まで返します。生成済みの変換辞書がない環境では、Mozc辞書リソースを準備したうえで先に `./gradlew run` を実行してください。使い方は `./gradlew --quiet convertCandidates --args='--help'` で確認できます。
+
+`src/main/resources/ngram` に生成済みの `system_ngram.dat` と `system_ngram_unigram.dat` がある場合は、それぞれ候補の再順位付けに使います。生成するには `./gradlew buildSystemNgramDictionary buildSystemUnigramDictionary` を実行してください。
+
 ## ライセンス
 
 このプロジェクトは [MIT ライセンス](LICENSE) のもとで提供されています。
@@ -78,6 +95,16 @@ cd kotlin-kana-kanji-converter
 
 1. Prepare the dictionary files and run the program.
 2. Input a hiragana string to convert it to kanji.
+
+To inspect ranked candidates from a terminal, pass one or more readings:
+
+```bash
+./gradlew --quiet convertCandidates --args='--count 5 なのか しろ'
+```
+
+The command prints one JSON object per reading, with one-based candidate ranks. The default limit is 10 candidates. If generated conversion dictionaries are missing, prepare the Mozc dictionary resources and run `./gradlew run` first. Use `./gradlew --quiet convertCandidates --args='--help'` for usage.
+
+Generated `system_ngram.dat` and `system_ngram_unigram.dat` files under `src/main/resources/ngram` are loaded when present for candidate reranking. Generate them with `./gradlew buildSystemNgramDictionary buildSystemUnigramDictionary`.
 
 ## License
 

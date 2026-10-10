@@ -120,6 +120,30 @@ class KanaKanjiEngineBasicConversionTest {
     }
 
     @Test
+    fun hiraganaCandidatesAreFirstForNanokaAndShiro() {
+        val nanokaCandidates = engine.nBestPath("なのか", 64)
+        assertEquals("なのか", nanokaCandidates.first())
+        assertTrue("七日" in nanokaCandidates)
+
+        val shiroCandidates = engine.nBestPath("しろ", 64)
+        assertEquals("しろ", shiroCandidates.first())
+        assertTrue("白" in shiroCandidates)
+    }
+
+    @Test
+    fun hiraganaPreferencesPreserveCompoundConversions() {
+        mapOf(
+            "しろい" to "白い",
+            "しろくろ" to "白黒",
+            "しろあり" to "シロアリ",
+            "なのかな" to "なのかな",
+            "なのかもしれない" to "なのかもしれない",
+        ).forEach { (input, expected) ->
+            assertEquals(expected, engine.nBestPath(input, 1).single(), input)
+        }
+    }
+
+    @Test
     fun literalIuKotoPrecedesDictionaryIuKoto() {
         assertEquals(listOf("いうこと", "言うこと"), engine.nBestPath("いうこと", 2))
         assertEquals("いうこと", engine.viterbiAlgorithm("いうこと"))
