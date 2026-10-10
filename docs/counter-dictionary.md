@@ -92,6 +92,7 @@ JKCR v1、リトルエンディアン。JavaのObjectInputStream/ObjectOutputStr
 | 例外 | 助数詞ID:u32、値:i64、読みID:u32、replace:u32、出力接尾辞ID:u32 |
 | 表記揺れ | 助数詞ID:u32、表記ID:u32、優先度:u32 |
 | 3つの索引 | 数部品、逆向きの接続、例外。それぞれedges:u32配列、labels:u16配列、targets:u32配列、postings:u32配列、outputs:u32配列 |
+| 末尾文字索引（追加セクション） | 要素数:u32=1024、1024個のリトルエンディアン64ビット値。8,196バイト |
 
 各テーブル・配列は要素数:u32を先頭に持ちます。文字列・レコード参照は0起点です。
 数部品のkindはzero=0、part=1、scale=2、before_scale=3、before_k_scale=4です。
@@ -180,3 +181,62 @@ Pixel 4の実機は用意されていません。PCの速度はAndroid上の速�
 利用側では同じ辞書・入力集合を使い、通常の実行環境に加えて
 [Jetpack Microbenchmark](https://developer.android.com/topic/performance/benchmarking/microbenchmark-overview)で
 ウォームアップと割当量を測ります。[実機測定](https://developer.android.com/training/testing/instrumented-tests/performance)を最終判断に使用します。
+
+## 出力表記の末尾文字索引 / Output-surface ending index
+
+正式リリース前のためversionは1のまま、3本のトライの後に追加セクションを格納します。
+ヘッダーは16バイトのまま、追加部分もpayloadLengthとpayloadCRC32に含めます。
+読み込み時にトライ後の残りが0バイトなら旧データ、8,196バイトなら索引付きデータです。
+索引付きでは件数1024を検査し、他の長さ・不正な件数・不足・余剰・未知version・CRC不一致を拒否します。
+正しい長さとCRCを持つ索引なしデータは旧データとして受理します。
+旧読み込みコードは追加データを拒否するため、新しい辞書とともに読み込みコードも更新してください。
+
+生成時にunitsのsurface、surfacesのsurface、exceptionsのsuffixの最後のUTF-16 Charと、
+`0123456789０１２３４５６７８９〇零一二三四五六七八九十百千万億兆京半`を登録します。
+空の表記は登録しません。登録文字数を固定せず、現在の元データでは167文字です。
+配列位置は`Char.code ushr 6`、ビット位置は`Char.code and 63`です。
+文字コードポイントではなくUTF-16の最後のCharを使います。
+意味の照合はビルドCLIと生成されたデータのテストで全65,536値について行い、実行時に索引を再構築・照合しません。
+辞書のprivateフィールドに1つのLongArrayを保持し、各変換器は辞書へ委譲します。
+変換器作成時の配列コピー・再生成はなく、変更可能な配列APIも公開しません。
+
+```kotlin
+val dictionary = assets.open("counter/counter_rules.dat").use(CounterDictionary::read)
+val converter = dictionary.converter()
+converter.mayEndQuantitySurface("123本") // true
+converter.mayEndQuantitySurface("午後3時半") // true
+converter.mayEndQuantitySurface("12:30") // true
+converter.mayEndQuantitySurface("買う") // false (indexed dictionary)
+```
+
+空文字は常にfalse、索引なし旧データでは非空文字列をすべてtrueにします。
+これは出力表記の事前フィルターであり、trueだけで数量と確定しません。
+「日本」「本」もtrueとなり、その後の詳細解析が必要です。
+`convert`にはこの判定を挿入せず、入力の読みを除外しません。
+`read(ByteArray)`と`read(InputStream)`の呼び出し方は変わりません。
+索引は`counter/counter_rules.dat`内で、通常辞書と同じ
+`japanese_keyboard_dictionary_assets.zip`の
+`app/src/main/assets/counter/counter_rules.dat`として配布します。
+独立した索引ファイルはありません。JapaneseKeyboardへの組み込みは別作業です。
+
+JKCR stays at version 1 before its first formal release. The unchanged 16-byte little-endian
+header and existing payload are followed by a count of 1024 (u32) and 1024 little-endian
+64-bit words after the three tries. The 8,196-byte extension participates in payload length
+and CRC32. Zero remaining bytes means a legacy dictionary; exactly 8,196 remaining bytes
+requires count 1024. Other lengths/counts, truncation, trailing bytes, unknown versions and
+CRC errors are rejected. Valid legacy data remains accepted. Existing readers reject the
+extension, so consumers must update the reader alongside the asset.
+
+The generator collects the last UTF-16 Char of unit surfaces, alternate surfaces and exception
+suffixes, plus the literal digits/kanji/half-hour characters specified above. Empty suffixes
+contribute no character. Character count is derived, never fixed. Word index is `code ushr 6`,
+bit index is `code and 63`. Runtime loading only reads the stored array: no regeneration or
+semantic comparison. One private array belongs to the dictionary and is shared indirectly
+by converters without copying or exposing mutable storage.
+
+`CounterConverter.mayEndQuantitySurface(String): Boolean` returns false for empty strings.
+Legacy dictionaries return true for every nonempty string. With an index, it tests the last
+UTF-16 Char. This output-surface prefilter does not establish a quantity and is not inserted
+into `convert`; true for ordinary words such as 日本 is expected. Both existing `read` overloads
+retain their signatures. The index ships inside the counter asset in the existing full ZIP,
+with no separate index file. JapaneseKeyboard integration is outside this change.

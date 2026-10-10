@@ -99,3 +99,60 @@ allprojects {
 JUnitの結果は`build/test-results/test`と`build/test-results/dictionaryBuildTest`に保存されています。
 容量・速度・保持量の測定値と限界は[性能測定記録](counter-performance.md)を参照してください。
 今回の確認範囲では不具合を検出していませんが、全ての助数詞の読み・方言・古い読みを網羅するものではありません。
+
+## 末尾文字索引追加の検証 / Ending-index extension validation
+
+JKCRのversionは1のままです。索引付き49,523 bytes、SHA-256：
+`c1a470c655692ed3eb95ece7a16c6babf7916fef69192b2601498b931417a4c0`。
+追加8,196 bytesを除いてヘッダーを旧長さ・CRCへ戻したバイト列は、旧41,327 bytesの
+SHA-256 `7decaa2574df37bd341898f08a655afed0a7987f956ce7fef3bfa5a42f732e08`と一致します。
+TSV、語彙・読み・例外・優先度、既存ペイロードは変更していません。
+
+- 通常JUnit：121件、失敗0・エラー0・スキップ1。助数詞関連29件は全件成功。
+- 通常実行でスキップする全辞書生成を別途有効化：2件、失敗0・エラー0・スキップ0。
+- CLIの別Javaプロセス21通り、旧・新辞書の106正解例、JSONL、終了コード0/1/2、生成失敗時の既存出力保持を確認。
+- UTF-16全65,536値を、元データから独立に作った文字集合と照合。旧データは全非空入力true、空文字false。
+- 123本・二粒・午後3時半・12:30・日本・本はtrue、買う・出会う・空文字はfalse。
+- ビット境界0/63/64/127/128/65535とサロゲートを確認。判定はコードポイントではなく最後のUTF-16 Char。
+- 全例外、接尾辞なし例外、全別表記、数字3表記、Long.MAX_VALUE、時刻・半・時計表記を確認。
+- 全接続読み、正解例、時間・分境界、時・分・秒86,400通りについて旧・新の解析結果と候補内容・順序が一致。
+- 既存の独立した数量・音変化・大きな数・時刻の網羅テストでも、生成された各候補がフィルターを通ることを追加確認。
+- 索引件数0/1023/1025/-1/Int.MAX_VALUE、正しいCRCを持つ不足・余剰、未知version 0/2/99、CRC破損・切り詰めを拒否。
+- private配列が1本、変換器は同じ辞書を参照、索引を返す公開APIなし、入力ByteArrayを変更しても判定は不変。
+- 同じ元データの複数回ビルドで完全一致。ビルドCLIも全65,536値の意味を確認してから書き込み。
+- 配布ZIPの49ファイル構成とcounter辞書のバイト一致を確認。Gradle配布検証にもバイト一致チェックを追加。
+
+```sh
+./gradlew buildCounterDictionary counterTest test
+./gradlew packageJapaneseKeyboardDictionaryAssets verifyJapaneseKeyboardDictionaryAssets -x generateJapaneseKeyboardDictionaries
+# 実辞書の全生成はdictionaryBuildTestへテスト出力/classpathを補う既存の一時init scriptで実行
+./gradlew -I build/reports/counter/full-build-test.init.gradle dictionaryBuildTest
+```
+
+ローカルZIP生成は既存の通常辞書資源を再利用し、counterを新規生成しました。
+全辞書生成テストは別に実行しています。Actionsでは通常の配布フローで全辞書を生成・検証します。
+公開ZIPの確認結果はPRに記載します。新しいコミットの検証用タグを使用し、既存タグ・成果物は上書きしません。
+
+Android実機・実アプリの初期化、JapaneseKeyboardへの組み込み、文章解析・文法判定・設定画面は未検証・対象外です。
+時間・割当・保持量の測定条件と限界は[性能記録](counter-performance.md)を参照してください。
+
+**English:** Standard suite: 121 tests, zero failures/errors, one intentionally skipped full-build case;
+29 counter tests passed. The separate full-dictionary build suite passed both tests with no skips.
+Twenty-one separate-process CLI scenarios and all 106 golden cases passed, including legacy loading,
+JSONL, exit codes and preservation of existing output on failed builds.
+
+All 65,536 UTF-16 values match an independently derived character set. Representative positive/negative
+cases, boundary bits, surrogates, all exceptions (including empty suffixes), alternate surfaces,
+three numeric notations and time/half-hour/clock surfaces are covered. Legacy and indexed dictionaries
+produce identical analyses and ordered candidates, including 86,400 hour/minute/second combinations.
+Existing independent exhaustive conversion tests also assert that generated candidates pass the filter.
+
+Correct-CRC malformed counts/lengths, truncation, surplus bytes, unknown versions and CRC corruption
+are rejected. Tests establish private single-array ownership, shared dictionary references and independence
+from caller buffers. Repeated builds are deterministic. Removing the extension and restoring the header
+reproduces the original dictionary SHA-256 exactly. Build-time validation checks every UTF-16 value before
+writing. The 49-asset ZIP is validated and its counter bytes match the generated asset; this byte check is
+also part of Gradle distribution verification. Local ZIP checks reused legacy assets, with full legacy
+regeneration tested separately. The normal Actions workflow generates and validates the complete bundle.
+Published-download verification is reported in the PR. Android/application-path performance and
+JapaneseKeyboard integration remain outside this validation.

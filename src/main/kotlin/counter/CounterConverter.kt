@@ -7,6 +7,9 @@ data class CounterConversion(val input: String, val quantities: List<QuantityAna
 
 /** Thread-safe exact quantity/time reader; no sentence lattice, disk I/O, or global result cache. */
 class CounterConverter internal constructor(private val dictionary: CounterDictionary) {
+    /** Output-surface prefilter only: true does not establish a quantity; legacy nonempty surfaces return true. */
+    fun mayEndQuantitySurface(surface: String): Boolean = dictionary.mayEndQuantitySurface(surface)
+
     private data class Numeric(val value: Long, val terminal: Int, val literal: Boolean = false)
     private data class Match(val unit: Int, val number: Long, val suffix: String, val source: String)
     private val aliases = dictionary.units.indices.map { unit -> dictionary.surfaces.filter { it.unit == unit } }

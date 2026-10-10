@@ -960,6 +960,7 @@ tasks.register("verifyJapaneseKeyboardDictionaryAssets") {
     description = "Verifies the JapaneseKeyboard dictionary assets zip layout and nested .dat.zip files."
     dependsOn(packageJapaneseKeyboardDictionaryAssets)
     inputs.file(japaneseKeyboardAssetsReleaseZip)
+    inputs.file(dictionaryResourcesDir.file("counter/counter_rules.dat"))
 
     doLast {
         val releaseZip = japaneseKeyboardAssetsReleaseZip.asFile
@@ -1010,6 +1011,13 @@ tasks.register("verifyJapaneseKeyboardDictionaryAssets") {
                     throw GradleException("Required zip entry is a directory: $entryName")
                 }
                 ensureNonEmptyZipEntry(zipFile, entry, releaseZip.path)
+                if (spec.sourceRelativePath == "counter/counter_rules.dat") {
+                    val generated = dictionaryResourcesDir.file(spec.sourceRelativePath).asFile.readBytes()
+                    val packaged = zipFile.getInputStream(entry).use { it.readBytes() }
+                    if (!packaged.contentEquals(generated)) {
+                        throw GradleException("Packaged counter dictionary differs from the verified generated asset")
+                    }
+                }
                 if (spec.zipped) {
                     zipFile.getInputStream(entry).use { input ->
                         verifySingleEntryZip(input, entryName, spec.innerEntryName)

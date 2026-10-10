@@ -62,6 +62,7 @@ class CounterDetailedTest {
         val converter = converter()
         for (value in 0..9999) {
             val result = converter.convert(reading(value.toLong()) + "まい")
+            result.candidates.forEach { assertTrue(converter.mayEndQuantitySurface(it.value), it.value) }
             assertEquals(value.toLong(), result.quantities.single { it.counterId == "mai" }.number, "value=$value")
             assertEquals("${value}枚", result.candidates.first().value)
             assertEquals(listOf("ascii", "kanji", "fullwidth"), result.candidates.map { it.notation })
@@ -84,6 +85,7 @@ class CounterDetailedTest {
         for (value in values) {
             val input = reading(value) + "まい"
             val result = converter.convert(input)
+            result.candidates.forEach { assertTrue(converter.mayEndQuantitySurface(it.value), it.value) }
             assertEquals(value, result.quantities.singleOrNull { it.counterId == "mai" }?.number, "$value: $input")
             assertEquals("${value}枚", result.candidates.first().value)
         }
@@ -94,6 +96,7 @@ class CounterDetailedTest {
         for (h in 0..23) for (m in 0..59) for (s in 0..59) {
             val input = hour(h) + minute(m) + reading(s.toLong()) + "びょう"
             val result = converter.convert(input)
+            result.candidates.forEach { assertTrue(converter.mayEndQuantitySurface(it.value), it.value) }
             assertEquals(h, result.time?.hour, input)
             assertEquals(m, result.time?.minute, input)
             assertEquals(s, result.time?.second, input)
@@ -107,6 +110,7 @@ class CounterDetailedTest {
         for ((prefix, adjustment) in listOf("ごぜん" to 0, "ごご" to 12)) for (h in 0..12) for (s in 0..59) {
             val input = prefix + hour(h) + "はん" + reading(s.toLong()) + "びょう"
             val result = converter.convert(input)
+            result.candidates.forEach { assertTrue(converter.mayEndQuantitySurface(it.value), it.value) }
             assertEquals(h % 12 + adjustment, result.time?.hour, input)
             assertEquals(30, result.time?.minute, input)
             assertEquals(s, result.time?.second, input)
@@ -137,6 +141,7 @@ class CounterDetailedTest {
                 else -> text + stem
             }
             val result = converter.convert(input)
+            result.candidates.forEach { assertTrue(converter.mayEndQuantitySurface(it.value), it.value) }
             assertTrue(result.quantities.any { it.counterId == id && it.number == value.toLong() }, input)
             assertTrue(result.candidates.any { it.value == "$value$surface" }, input)
             if (value % 10 == 8) assertTrue(converter.convert(text + stem).quantities.any { it.counterId == id && it.number == value.toLong() }, text + stem)
@@ -154,6 +159,7 @@ class CounterDetailedTest {
             for (value in values) {
                 val input = "$value${row[2]}"
                 val result = converter.convert(input)
+                result.candidates.forEach { assertTrue(converter.mayEndQuantitySurface(it.value), it.value) }
                 val matched = result.quantities.any { it.counterId == row[0] && it.number == value }
                 assertEquals(value in min..max, matched, "${row[0]}: $input")
                 if (matched) {
@@ -189,6 +195,7 @@ class CounterDetailedTest {
             val number = row[1].toLong()
             val suffix = when (row[4]) { "@inherit" -> surfaces.getValue(row[0]); "@empty" -> ""; else -> row[4] }
             val result = converter.convert(row[2])
+            result.candidates.forEach { assertTrue(converter.mayEndQuantitySurface(it.value), it.value) }
             assertTrue(result.quantities.any { it.counterId == row[0] && it.number == number && it.source == "exception" }, line)
             assertTrue(result.candidates.any { it.value == "$number$suffix" }, line)
         }

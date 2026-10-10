@@ -384,14 +384,15 @@ jobs:
           set -euo pipefail
           preview_tag="dictionary-preview-${GITHUB_SHA:0:12}"
           asset="release_zips/japanese_keyboard_dictionary_assets.zip"
-          if gh release view "$preview_tag" >/dev/null 2>&1; then
-            gh release upload "$preview_tag" "$asset" --clobber
-          else
-            gh release create "$preview_tag" "$asset" \
+          if git ls-remote --exit-code --tags origin "refs/tags/$preview_tag" >/dev/null 2>&1 ||
+             gh release view "$preview_tag" >/dev/null 2>&1; then
+            echo "Refusing to overwrite existing preview tag or release: $preview_tag" >&2
+            exit 1
+          fi
+          gh release create "$preview_tag" "$asset" \
               --target "$GITHUB_SHA" --prerelease --latest=false \
               --title "辞書一式の検証用配布 / Dictionary assets preview (${GITHUB_SHA:0:12})" \
               --notes "マージ前の辞書一式です。 / Pre-merge dictionary asset bundle. Source: ${GITHUB_SHA}. Actions: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-          fi
           gh release view "$preview_tag" --json url --jq '.url' >> "$GITHUB_STEP_SUMMARY"
 
       # ----------------------------------------------------------------------

@@ -53,10 +53,20 @@ object CounterCli {
             val source = CounterSourceParser.parse(File(options["--source"] ?: "src/main/counter"))
             val bytes = CounterDictionary.compile(source)
             val dictionary = CounterDictionary.read(bytes)
+            // Build-time semantic check against a character set, independent of the bitset writer.
+            val expectedEndings = (source.units.map { it.surface } + source.surfaces.map { it.surface } +
+                source.exceptions.map { it.suffix }).mapNotNull { it.lastOrNull() }.toSet() +
+                "0123456789０１２３４５６７８９〇零一二三四五六七八九十百千万億兆京半".toSet()
+            val compiledConverter = dictionary.converter()
+            for (code in 0..65535) {
+                require(compiledConverter.mayEndQuantitySurface(code.toChar().toString()) == (code.toChar() in expectedEndings)) {
+                    "Compiled surface ending index mismatch: $code"
+                }
+            }
             // Verify the source contract before publishing a build output.
             require(casesFile.isFile) { "Missing golden cases: ${casesFile.path}" }
             run {
-                val validation = check(dictionary.converter(), casesFile)
+                val validation = check(compiledConverter, casesFile)
                 if (validation.getValue("failed") != 0) System.err.println(json(validation))
                 require(validation.getValue("failed") == 0) { "Golden cases failed; dictionary was not written" }
             }
