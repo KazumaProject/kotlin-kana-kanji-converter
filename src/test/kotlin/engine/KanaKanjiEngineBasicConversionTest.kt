@@ -160,6 +160,14 @@ class KanaKanjiEngineBasicConversionTest {
     }
 
     @Test
+    fun aiAndOaAreAvailableForTheirReadings() {
+        val candidates = engine.nBestPath("えーあい", 64)
+        assertTrue("AI" in candidates)
+        assertTrue("OA" !in candidates)
+        assertTrue("OA" in engine.nBestPath("おーえい", 64))
+    }
+
+    @Test
     fun englishReadingCandidatesAreNotMergedIntoTheSystemDictionary() {
         assertTrue("car" !in engine.nBestPath("かー", 64))
     }
