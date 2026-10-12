@@ -204,7 +204,10 @@ class SystemNgramBinaryTest {
     fun checkedInUnigramSourceIsAvailable() {
         val root = File(System.getProperty("user.dir"))
         val rules = NgramSourceParser.parseUnigramDirectory(root.resolve("src/main/ngram-unigram"))
-        assertEquals(473, rules.size)
+        assertEquals(476, rules.size)
+        listOf("ごと", "したい", "なら").forEach { word ->
+            assertTrue(rules.any { it.features == listOf(NgramFeature.Word(word)) }, word)
+        }
         assertTrue(rules.any { it.features == listOf(NgramFeature.Word("なのか")) })
         assertTrue(rules.any { it.features == listOf(NgramFeature.Word("しろ")) })
         assertTrue(rules.any { it.features == listOf(NgramFeature.Word("エモ散らかす")) })

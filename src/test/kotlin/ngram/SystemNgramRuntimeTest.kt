@@ -85,6 +85,41 @@ class SystemNgramRuntimeTest {
     }
 
     @Test
+    fun packedUnigramPriorityDoesNotLeakIntoMultiNodeCandidates() {
+        val root = File(System.getProperty("user.dir"))
+        val source = createTempDirectory("unigram-whole-candidate").toFile()
+        try {
+            source.resolve("priority.ngram").writeText("\"ごと\"\n\"したい\"\n\"なら\"\n")
+            val output = source.resolve("system_ngram_unigram.dat")
+            SystemNgramBinaryBuilder.build(
+                rules = NgramSourceParser.parseUnigramDirectory(source),
+                idDef = root.resolve("src/main/resources/id.def"),
+                output = output,
+                formatVersion = NgramEncoding.UNIGRAM_VERSION,
+            )
+            val baseline = KanaKanjiEngine().apply { buildEngine() }
+            val engine = KanaKanjiEngine(
+                systemUnigramDictionary = PackedSystemUnigramDictionary.fromFile(output),
+            ).apply { buildEngine() }
+
+            assertEquals("事", baseline.nBestPath("ごと", 1).single())
+            listOf("ごと", "したい", "なら").forEach { input ->
+                assertEquals(input, engine.nBestPath(input, 1).single(), input)
+            }
+            listOf(
+                "しごと", "まるごと", "ものごと", "ねごと", "さんねんごと",
+                "ならけん", "ならし", "ならえき", "ならこうえん", "ならへいく",
+                "それなら", "かならず", "ならう", "ならぶ", "さよなら", "おなら",
+                "したいです", "べんきょうしたい",
+            ).forEach { input ->
+                assertEquals(baseline.nBestPath(input, 8), engine.nBestPath(input, 8), input)
+            }
+        } finally {
+            source.deleteRecursively()
+        }
+    }
+
+    @Test
     fun packedReadersMatchTheCheckedInAtokUnigramAssetSource() {
         val root = File(System.getProperty("user.dir"))
         val output = createTempDirectory("atok-unigram-runtime").resolve("system_ngram_unigram.dat").toFile()
@@ -96,11 +131,18 @@ class SystemNgramRuntimeTest {
         )
         val dictionary = PackedSystemUnigramDictionary.fromFile(output)
 
-        assertEquals(473, dictionary.ruleCount)
+        assertEquals(476, dictionary.ruleCount)
         assertTrue(dictionary.matches(node("カワボ")))
         assertFalse(dictionary.matches(node("存在しない候補")))
         val engine = KanaKanjiEngine(systemUnigramDictionary = dictionary).apply { buildEngine() }
         assertEquals("カワボ", engine.nBestPath("かわぼ", 1).single())
+        mapOf("ごと" to "事", "したい" to "死体", "なら" to "奈良").forEach { (input, alternative) ->
+            assertEquals(input, engine.nBestPath(input, 1).single(), input)
+            val candidates = engine.nBestPath(input, 10)
+            assertEquals(input, candidates.first(), input)
+            assertEquals(1, candidates.count { it == input }, input)
+            assertTrue(alternative in candidates, "$input must retain $alternative")
+        }
     }
 
     @Test
