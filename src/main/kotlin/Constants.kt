@@ -1815,6 +1815,13 @@ object Constants {
             tango = "GitHub"
         ),
         Dictionary(
+            yomi = "えーあい",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 3000,
+            tango = "AI"
+        ),
+        Dictionary(
             yomi = "おーぷんえーあい",
             leftId = `名詞,固有名詞,一般,*,*,*,*`,
             rightId = `名詞,固有名詞,一般,*,*,*,*`,
