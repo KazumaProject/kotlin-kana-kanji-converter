@@ -20,7 +20,7 @@ class FindPathUnigramScopeTest {
     }
 
     @Test
-    fun unigramDoesNotPromoteAMatchingNodeInsideAMultiNodeCandidate() {
+    fun unigramPromotesAMatchingNodeInsideAMultiNodeCandidateLikeJapaneseKeyboard() {
         val graph = graph(
             length = 3,
             node("仕事", start = 0, length = 3, cost = 0),
@@ -28,7 +28,7 @@ class FindPathUnigramScopeTest {
             node("ごと", start = 1, length = 2, cost = 100),
         )
 
-        assertEquals(listOf("仕事", "しごと"), candidates(graph, length = 3, word = "ごと", n = 2))
+        assertEquals(listOf("しごと", "仕事"), candidates(graph, length = 3, word = "ごと", n = 2))
     }
 
     @Test
@@ -43,7 +43,7 @@ class FindPathUnigramScopeTest {
     }
 
     @Test
-    fun oneNodeMatchPromotesTheSurfaceEvenWhenACheaperMultiNodePathWasSeenFirst() {
+    fun firstDistinctSurfacePathDeterminesItsUnigramMatchLikeJapaneseKeyboard() {
         val graph = graph(
             length = 3,
             node("時代", start = 0, length = 3, cost = 0),
@@ -52,7 +52,29 @@ class FindPathUnigramScopeTest {
             node("したい", start = 0, length = 3, cost = 100),
         )
 
-        assertEquals(listOf("したい"), candidates(graph, length = 3, word = "したい", n = 1))
+        assertEquals(listOf("時代"), candidates(graph, length = 3, word = "したい", n = 1))
+    }
+
+    @Test
+    fun shiroRulePromotesShiroPlusMedicalKanjiDespiteCheaperShiroiCandidate() {
+        val graph = graph(
+            length = 3,
+            node("白い", start = 0, length = 3, cost = 100),
+            node("しろ", start = 0, length = 2, cost = 200),
+            node("医", start = 2, length = 1, cost = 300),
+        )
+        assertEquals(listOf("しろ医", "白い"), candidates(graph, length = 3, word = "しろ", n = 2))
+    }
+
+    @Test
+    fun removingShiroRuleRestoresWhiteAdjectiveAndRetainsOtherCandidates() {
+        val graph = graph(
+            length = 3,
+            node("白い", start = 0, length = 3, cost = 100),
+            node("しろ", start = 0, length = 2, cost = 200),
+            node("医", start = 2, length = 1, cost = 300),
+        )
+        assertEquals(listOf("白い", "しろ医"), candidates(graph, length = 3, word = "なのか", n = 2))
     }
 
     @Test

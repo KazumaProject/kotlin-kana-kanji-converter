@@ -1,9 +1,8 @@
-# JapaneseKeyboard applies unigram rules only to a whole-input, one-node path.
-# Prefer these standalone hiragana spellings without changing dictionary costs.
+# JapaneseKeyboard matches unigram rules against each node in a candidate path.
+# These rules can promote compound candidates as well as standalone candidates.
+# "しろ" was removed because it also promoted "しろ" + "医" etc.
+# "したい" and "なら" were also withdrawn at the user's request.
 "なのか"
-"しろ"
 
-# Prefer these standalone hiragana candidates without changing compound costs.
+# Existing hiragana priorities; these also apply within compound paths.
 "ごと"
-"したい"
-"なら"
