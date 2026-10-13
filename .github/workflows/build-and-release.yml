@@ -275,6 +275,11 @@ jobs:
       # Source validation
       # ----------------------------------------------------------------------
 
+      - name: Verify frozen classified distribution
+        run: |
+          python3 -m unittest discover -s scripts -p 'test_classified_distribution.py' -v
+          python3 scripts/classified_distribution.py verify
+
       - name: Verify English dictionary source
         run: ./gradlew validateEnglishDictionary
 
@@ -350,7 +355,18 @@ jobs:
         run: |
           ./gradlew \
             packageJapaneseKeyboardDictionaryAssets \
-            verifyJapaneseKeyboardDictionaryAssets
+            verifyJapaneseKeyboardDictionaryAssets \
+            buildDictionaryDistributionManifest
+
+      - name: Upload verified dictionary distribution
+        uses: actions/upload-artifact@v4
+        with:
+          name: japanese-keyboard-dictionary-assets
+          path: |
+            release_zips/japanese_keyboard_dictionary_assets.zip
+            release_zips/dictionary-distribution-manifest.json
+            release_zips/DICTIONARY-SHA256SUMS
+          if-no-files-found: error
 
       # Engine tests load the generated dictionary .dat files,
       # so run them after packaging.
@@ -368,7 +384,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip
+          artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./release_zips/dictionary-distribution-manifest.json,./release_zips/DICTIONARY-SHA256SUMS
           allowUpdates: true
           artifactErrorsFailBuild: true
           removeArtifacts: true

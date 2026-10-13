@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "precedence": [
+    "verified",
+    "manual",
+    "gemini"
+  ],
+  "provenance": {
+    "acceptedSha256": "dd5bb556894771b751c64c38bf11c1f3ce6ad509c4239ba3277889edcc19bae0",
+    "dispositionsSha256": "ce5f91032f49f9cdf2cf8e1433186dc5189c54583c66981125e9becaaa37b714",
+    "databaseReadSnapshotSha256": "9dbd95e39e022382d32b6082bf2e99c6575b5028ebef1b16ffa88af76ae64135",
+    "manualSha256": "424933a57e13d3093e600ed69e3c8a72c58e965888d442ea6d73422f1f04cc47",
+    "manualCandidates": 4901,
+    "baselineVerifiedPairs": 252174
+  },
+  "inputs": {
+    "src/main/bin/names.txt": "7978c66a0ca26ee94170b508cf14c5eba16cbb41d7be5a3675474adc95ac6727",
+    "src/main/bin/place.txt.zip": "bae15eb6755a2e6aa30d1d9ece7970c7d97d761b6e430c59bc11222f8e2e6f01",
+    "src/main/bin/only_wiki.txt.zip": "2c3ca451484900edee55ae4ebe79284e1301b077572f64e9100889a5755bed10",
+    "src/main/bin/only_neologd.txt.zip": "64222fa806e424556b662619fb7cba9ac9683f89959afee909dadb112027458e",
+    "src/main/bin/wiki_neologd_common.txt.zip": "1b0638f24e057077c1b1471dc30e741670b547979db458eb447af5cc7221283c"
+  },
+  "files": {
+    "categories.json": "4fd9d1c05f21789bffe2622ec7269abaff8b7904d2ae2485e072a35df1d10556",
+    "distribution-candidates.tsv.gz": "82e10eef85dccc9e981a841eac4d719b658b31128f4d73f8f52942eb4382e9b3",
+    "distribution-decisions.tsv.gz": "934b03faa27197ea4e668c9de6658918104fd1ab508d7b6de918954c1a2fc901"
+  },
+  "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
+  "sourceRows": {
+    "person": 70405,
+    "place": 170145,
+    "wiki": 150132,
+    "neologd": 404817,
+    "web": 308185
+  },
+  "admittedPairsByOrigin": {
+    "verified": 257001,
+    "gemini": 472165,
+    "manual": 4328
+  },
+  "uniqueAdmittedPairs": 733494,
+  "excludedCandidatePairs": 5725,
+  "excludedClassifiedPairs": 0,
+  "unclassifiedPairs": 10730,
+  "noResultPairs": 52467,
+  "conflicts": {
+    "verified_over_gemini": 30,
+    "manual_over_gemini": 4321,
+    "verified_over_manual": 8
+  },
+  "categoryRows": {
+    "person": 276536,
+    "character": 8870,
+    "mythological_figure": 3629,
+    "place": 85399,
+    "address": 122248,
+    "station": 6816,
+    "facility": 28669,
+    "transport_route": 3211,
+    "organization": 47185,
+    "lineage": 2986,
+    "product": 13629,
+    "vehicle": 3403,
+    "event": 9955,
+    "award": 1004,
+    "agreement": 1744,
+    "initiative": 1540,
+    "term": 127770,
+    "work_franchise": 270,
+    "work_manga": 1003,
+    "work_anime": 642,
+    "work_film": 1180,
+    "work_program": 2381,
+    "work_book": 5353,
+    "work_game": 1506,
+    "work_music": 3789,
+    "work_stage": 354,
+    "work_periodical": 1029,
+    "work_other": 5173
+  },
+  "dictionaryRows": 767274,
+  "limitations": [
+    "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified."
+  ]
+}

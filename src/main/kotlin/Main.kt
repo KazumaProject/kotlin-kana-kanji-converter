@@ -23,6 +23,7 @@ import com.kazumaproject.Constants.ZENKANKU_LIST
 import com.kazumaproject.dictionary.DicUtils
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
+import com.kazumaproject.classification.ClassifiedDictionaryData
 import com.kazumaproject.emoji.EmojiDictionaryBuilder
 import com.kazumaproject.emoticon.EmoticonDictionaryBuilder
 import com.kazumaproject.english.EnglishDictionaryBuilder
@@ -88,7 +89,10 @@ fun main() {
     )
 
     buildConnectionIds()
-    buildPOSTable(finalList)
+    val classified = ClassifiedDictionaryData()
+    val sharedPosInputs = (finalList.values.flatten() + englishDictionaryList + classified.records.values.flatten())
+        .groupBy { it.yomi }.toSortedMap(compareBy({ it.length }, { it }))
+    buildPOSTable(sharedPosInputs)
     buildTriesAndTokenArray(finalList)
     buildEnglishDictionary(englishDictionaryList)
     buildDictionaryForSingleKanji()
@@ -97,6 +101,7 @@ fun main() {
     buildDictionaryForSymbol()
     buildDictionaryForReadingCorrection()
     buildDictionaryForKotowaza()
+    classified.build()
 }
 
 private fun buildPOSTable(finalList: SortedMap<String, List<Dictionary>>) {

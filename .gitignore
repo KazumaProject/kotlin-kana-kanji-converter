@@ -41,6 +41,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+__pycache__/
 
 /src/test/resources
 !/src/test/resources/
