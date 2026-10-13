@@ -105,7 +105,9 @@ app/src/main/assets/english_reading/token.dat.zip
 ```
 
 共有POS表とセットで使用してください。Release ZIPは従来どおりコンパイル済み辞書データのみです。
-原本、補完TSV、監査レポートは含めません。監査は Actions artifact に保存します。
+原本、補完TSV、監査レポートは含めません。既存の候補・品質監査 `english-dictionary` は
+Actions artifact に保存します。一般見出し語の `english-word-coverage` 監査は後述の
+ローカル再実行で生成します。
 
 初期補完の参照資料は JapaneseCorpus `v2026.1012.19` にある `JMdict_e-20261012.xml.gz`
 （SHA-256 `5004ad9c777db2188baaa51554d4bb3e1ef3781725c4b38467723886b5d47d9e`）です。
@@ -161,6 +163,8 @@ costやIMEの最終順位を推測する数値には使いません。
 追加前の基準は、同じJapaneseCorpus `v2026.1012.19` の上流入力と同じ `id.def`
 （今回の一般名詞POS IDは1851）で再生成できます。現在の上流取得が別のリリースなら、
 先に基準配布のchecksumを照合して `english-dictionary.txt` を準備してください。
+基準commitがローカルにない場合は、先に
+`git fetch origin 980eea5be020aa3c783f20cd593032e51bc697f6` で取得します。
 
 ```bash
 mkdir -p build/english-source/general-words
