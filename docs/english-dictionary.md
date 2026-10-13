@@ -124,8 +124,12 @@ Actions artifact に保存します。一般見出し語の `english-word-covera
 `b34b9c630ecf4d3f404049ef6580d8f4d5d5b13e1197e083d51b8ea3f064cd6e`です。
 通常のCIではタグを固定せず、実際に解決したリリースとchecksumをログで確認します。
 
-JMdict由来の補完辞書と生成データは CC BY-SA 4.0 です。出典・ライセンス表示は
-`src/main/resources/THIRD-PARTY-NOTICES.md` と `third-party/JMDICT-LICENSE.html` を参照してください。
+補完辞書の編集・追加部分とJMdict由来データは CC BY-SA 4.0 です。
+CMUdict由来部分の著作権表示・条件・免責も維持します。適用範囲と出典は
+[LICENSE-DATA.md](../LICENSE-DATA.md)、
+[第三者表記](../src/main/resources/THIRD-PARTY-NOTICES.md)、
+[JMdictの公式表記](../src/main/resources/third-party/JMDICT-LICENSE.html)、
+[CMUdictのLICENSE全文](../src/main/resources/third-party/CMUDICT-LICENSE) を参照してください。
 利用側のアプリでも必要な表示を維持してください。
 
 ## 一般英単語の調査資料

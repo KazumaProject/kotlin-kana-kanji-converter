@@ -5,11 +5,16 @@ generated dictionary data keeps the license and notice requirements of its
 upstream data sources. Do not treat the complete release archive as a single
 MIT-licensed work.
 
+Repository license scope is described in [LICENSE-DATA.md](../../../LICENSE-DATA.md).
+The upstream documents in `third-party/LICENSE-DATA.md` and `third-party/NOTICE.md`
+are preserved JapaneseCorpus notices: references to "this repository" in those
+documents describe JapaneseCorpus, not this converter project.
+
 ## Project source code
 
 The Kotlin conversion program source files are distributed
 under the MIT License. The complete project license is in the repository
-[LICENSE](https://github.com/KazumaProject/kotlin-kana-kanji-converter/blob/main/LICENSE).
+[LICENSE](../../../LICENSE).
 
 ## JapaneseCorpus / JMdict English data
 
@@ -31,14 +36,14 @@ and Development Group. The JMdict-derived source, curated supplement, and
 adapted database data are licensed under
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 The authoritative attribution and license notice is preserved in
-[`src/main/resources/third-party/JMDICT-LICENSE.html`](https://github.com/KazumaProject/kotlin-kana-kanji-converter/blob/main/src/main/resources/third-party/JMDICT-LICENSE.html),
+[`third-party/JMDICT-LICENSE.html`](third-party/JMDICT-LICENSE.html),
 with current [EDRDG terms](https://www.edrdg.org/edrdg/licence.html).
 This data license is separate from the MIT-licensed Kotlin program.
 
 Modifications include selecting direct English loanword pairs, converting
 Katakana readings to hiragana, adding individually checked full-reading pairs
 and attested variants, and applying the defensive quality filter documented in
-[`docs/english-dictionary.md`](https://github.com/KazumaProject/kotlin-kana-kanji-converter/blob/main/docs/english-dictionary.md).
+[`docs/english-dictionary.md`](../../../docs/english-dictionary.md).
 Only `primary` candidates are emitted. Source explanations and unapproved
 compounds remain in audit reports rather than being trimmed automatically.
 Redistribution of the JMdict-derived portion must preserve attribution and
@@ -62,12 +67,17 @@ pronunciations from [CMUdict](https://github.com/cmusphinx/cmudict), commit
 `74790861f652b15e4ac49015a90074ad62a27690`.
 CMUdict is Copyright (C) 1993-2015 Carnegie Mellon University. All rights reserved.
 Its redistribution conditions and disclaimer are preserved verbatim in
-`src/main/resources/third-party/CMUDICT-LICENSE`; source and binary
+[`third-party/CMUDICT-LICENSE`](third-party/CMUDICT-LICENSE); source and binary
 redistributions of the derived material must reproduce the required notice.
 Rows distinguish these reviewed pronunciation-derived readings from readings
 attested in Japanese sources, and record the original ARPAbet pronunciation.
 The curated combined supplement remains distributed under CC BY-SA 4.0, with
 the CMUdict notice retained for its portion. The Kotlin code remains MIT.
+The CC BY-SA [legal code](https://creativecommons.org/licenses/by-sa/4.0/legalcode.en)
+applies to the project-owned editorial contributions and the relevant adapted
+data; this does not replace the original CMUdict conditions or claim ownership
+of the upstream material. Changes include selection, hiragana normalization,
+reviewed pronunciation-derived kana, costs, de-duplication, and binary encoding.
 
 The binary-only ZIP does not include notice files. Downstream distributions must
 include the CMUdict notice alongside the existing JMdict attribution.
