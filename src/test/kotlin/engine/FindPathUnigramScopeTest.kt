@@ -78,6 +78,26 @@ class FindPathUnigramScopeTest {
     }
 
     @Test
+    fun gotoUnigramAlsoPromotesAWholeInputOmissionCandidateForKoto() {
+        val graph = graph(
+            length = 2,
+            node("こと", start = 0, length = 2, cost = 100),
+            node("ごと", start = 0, length = 2, cost = 2000),
+        )
+        assertEquals(listOf("ごと", "こと"), candidates(graph, length = 2, word = "ごと", n = 2))
+    }
+
+    @Test
+    fun removingGotoUnigramPreservesTheOmissionPenaltyForKoto() {
+        val graph = graph(
+            length = 2,
+            node("こと", start = 0, length = 2, cost = 100),
+            node("ごと", start = 0, length = 2, cost = 2000),
+        )
+        assertEquals(listOf("こと", "ごと"), candidates(graph, length = 2, word = "なのか", n = 2))
+    }
+
+    @Test
     fun emptyCandidateIsNotAUnigramMatch() {
         assertEquals(listOf(""), candidates(graph(length = 0), length = 0, word = "", n = 1))
     }

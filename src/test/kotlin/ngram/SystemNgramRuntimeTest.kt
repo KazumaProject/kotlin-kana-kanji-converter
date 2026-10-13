@@ -94,12 +94,12 @@ class SystemNgramRuntimeTest {
         )
         val dictionary = PackedSystemUnigramDictionary.fromFile(output)
 
-        assertEquals(473, dictionary.ruleCount)
+        assertEquals(472, dictionary.ruleCount)
         assertTrue(dictionary.matches(node("カワボ")))
         assertFalse(dictionary.matches(node("存在しない候補")))
         val engine = KanaKanjiEngine(systemUnigramDictionary = dictionary).apply { buildEngine() }
         assertEquals("カワボ", engine.nBestPath("かわぼ", 1).single())
-        mapOf("ごと" to "事", "なのか" to "七日").forEach { (input, alternative) ->
+        mapOf("なのか" to "七日").forEach { (input, alternative) ->
             assertEquals(input, engine.nBestPath(input, 1).single(), input)
             val candidates = engine.nBestPath(input, 10)
             assertEquals(input, candidates.first(), input)
@@ -120,7 +120,7 @@ class SystemNgramRuntimeTest {
                 formatVersion = NgramEncoding.UNIGRAM_VERSION,
             )
             val dictionary = PackedSystemUnigramDictionary.fromFile(output)
-            listOf("しろ", "したい", "なら").forEach { word ->
+            listOf("しろ", "したい", "なら", "ごと").forEach { word ->
                 assertFalse(dictionary.matches(node(word)), word)
             }
             val engine = KanaKanjiEngine(systemUnigramDictionary = dictionary).apply { buildEngine() }
@@ -129,7 +129,7 @@ class SystemNgramRuntimeTest {
                 .forEach { (input, expected) ->
                     assertEquals(expected, engine.nBestPath(input, 1).single(), input)
                 }
-            listOf("しろ", "しろい", "しろくろ", "しろあり", "しろのなか", "しろかった", "したい", "したいです", "べんきょうしたい", "なら", "ならけん", "ならし", "それなら")
+            listOf("しろ", "しろい", "しろくろ", "しろあり", "しろのなか", "しろかった", "したい", "したいです", "べんきょうしたい", "なら", "ならけん", "ならし", "それなら", "こと", "ごと", "しごと", "ものごと", "まるごと")
                 .forEach { input ->
                     listOf(1, 4, 10).forEach { count ->
                         assertEquals(baseline.nBestPath(input, count), engine.nBestPath(input, count), "$input count=$count")
