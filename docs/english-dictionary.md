@@ -5,6 +5,10 @@ JapaneseCorpus の direct-loanword 配布と、このリポジトリの確認済
 合流させ、通常のかな漢字辞書とは別の LOUDS / TokenArray 3点を生成します。
 `りんご → apple` のような意味による英訳は対象にしません。
 
+実際に採用された全表記と読みは [収録一覧](english-dictionary-catalog.md) に掲載しています。
+`./gradlew generateEnglishDictionaryCatalog` で同じ統合処理から再生成できます。
+一覧は入力のSHA-256を記録したスナップショットで、通常ビルドや配布処理では書き換えません。
+
 ## 補完辞書の作成・追加
 
 編集する入力は `src/main/english/reading-supplement.tsv` です。UTF-8 / LF、

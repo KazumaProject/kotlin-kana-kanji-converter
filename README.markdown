@@ -14,6 +14,9 @@
 - トライ構造による柔軟なデータ処理
 - ビタビアルゴリズムを使用した最適な経路選択
 
+かな→英語辞書の収録内容は、[英語表記・かな読みの全一覧](docs/english-dictionary-catalog.md)
+で確認できます。上流と補完辞書を統合した採用結果を掲載しています。
+
 ## 自動ビルドとリリース
 
 GitHub Actions を使用して、プッシュされたタグに基づいてビルドとリリースを自動化しています。このプロセスには、辞書ファイルのダウンロード、Kotlin
@@ -84,6 +87,9 @@ various uses.
 - Customizable dictionary files
 - Flexible trie-based data processing
 - Optimal path selection using the Viterbi algorithm
+
+Browse the [complete English surface and kana reading catalog](docs/english-dictionary-catalog.md)
+for the adopted entries from the upstream dictionary and curated supplement.
 
 ## Automated Build and Release
 

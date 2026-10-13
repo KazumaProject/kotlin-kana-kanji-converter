@@ -557,6 +557,23 @@ val analyzeEnglishDictionary = tasks.register<JavaExec>("analyzeEnglishDictionar
     outputs.dir(englishDictionaryReportDir)
 }
 
+tasks.register<JavaExec>("generateEnglishDictionaryCatalog") {
+    group = "documentation"
+    description = "Updates the checked-in English surface/reading catalog from the shared adopted dictionary entries."
+    dependsOn(validateEnglishDictionary)
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.english.GenerateEnglishDictionaryCatalogKt")
+    val output = layout.projectDirectory.file("docs/english-dictionary-catalog.md")
+    args(
+        "--input", englishDictionaryFile.asFile.path,
+        "--supplement", englishSupplementFile.asFile.path,
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
+        "--output", output.asFile.path,
+    )
+    inputs.files(englishDictionaryFile, englishSupplementFile, mozcIdDefFileProvider)
+    outputs.file(output)
+}
+
 val analyzeEnglishWordCoverage = tasks.register<JavaExec>("analyzeEnglishWordCoverage") {
     group = "reporting"
     description = "Audits all pinned NGSL 1.2 headwords and selected development/work words against a runtime baseline."
