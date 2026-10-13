@@ -277,8 +277,8 @@ jobs:
 
       - name: Verify frozen classified distribution
         run: |
-          python3 -m unittest discover -s scripts -p 'test_classified_distribution.py' -v
-          python3 scripts/classified_distribution.py verify
+          python3 -m unittest discover -s scripts -p 'test_*.py' -v
+          python3 scripts/write_classified_dictionary_catalog.py --check
 
       - name: Verify English dictionary source
         run: ./gradlew validateEnglishDictionary

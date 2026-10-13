@@ -4,6 +4,8 @@
 
 Web・Person・Place・Neologd・wikiの5辞書は28カテゴリ辞書に置き換えます。固定した分類結果から生成する配布形式、更新手順、利用側IMEで必要な変更は[分類辞書の生成と配布](docs/classified-dictionary-distribution.md)を参照してください。
 
+各カテゴリの件数と全収録レコードの読み・表記・品詞ID・コストは[分類辞書の収録一覧](docs/classified-dictionary-catalog/index.md)で確認できます。
+
 ## 概要
 
 このプログラムは、Kotlin
