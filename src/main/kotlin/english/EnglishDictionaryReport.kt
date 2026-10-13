@@ -176,7 +176,7 @@ object EnglishDictionaryReport {
             writer.appendLine("## 変換できる読みの条件")
             writer.appendLine()
             writer.appendLine("上流は JapaneseCorpus の direct-loanword 辞書、補完は出典を記録した読み全体に対応するペアです。")
-            writer.appendLine("そのため、日本語文全体の英訳辞書ではなく、カタカナ系の読みを入力したときの発音・外来語に対応する英語候補です。")
+            writer.appendLine("一般英単語も英語発音から確認したかな読みで補完します。日本語の意味から英訳する辞書ではなく、英語の発音または外来語の読みを入力したときの候補です。")
             writer.appendLine()
             writer.appendLine("全読みごとの候補は同じディレクトリの `english-dictionary-candidates.tsv` に出力し、全${summary.entries}件の個別判定は `english-dictionary-quality.tsv` に出力します。")
         }

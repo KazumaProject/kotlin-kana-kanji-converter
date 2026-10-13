@@ -21,6 +21,11 @@ object EnglishReadingSupplement {
     private val readingPattern = Regex("[ぁ-ゔー]+")
     private val surfacePattern = Regex("[A-Za-z.][A-Za-z0-9 .+#'/-]*")
     private val jmdictSourcePattern = Regex("jmdict:[0-9]+(?:;jmdict:[0-9]+)*")
+    private val cmuPathPattern = Regex("/cmusphinx/cmudict/blob/[0-9a-f]{40}/cmudict\\.dict")
+    private val cmuRawPathPattern = Regex("/cmusphinx/cmudict/[0-9a-f]{40}/cmudict\\.dict")
+    private val cmuPronunciationPattern = Regex("(?:^|; )ARPAbet=([^;]+)(?:;|$)")
+    private val cmuVowels = setOf("AA", "AE", "AH", "AO", "AW", "AY", "EH", "ER", "EY", "IH", "IY", "OW", "OY", "UH", "UW")
+    private val cmuConsonants = setOf("B", "CH", "D", "DH", "F", "G", "HH", "JH", "K", "L", "M", "N", "NG", "P", "R", "S", "SH", "T", "TH", "V", "W", "Y", "Z", "ZH")
 
     fun parse(path: Path, contextId: Int): List<EnglishSupplementEntry> =
         Files.newInputStream(path).use { parse(it, path.toString(), contextId) }
@@ -61,6 +66,22 @@ object EnglishReadingSupplement {
                 val cost = costText.toIntOrNull()
                 check(cost != null && cost in 1..Short.MAX_VALUE, "cost must be in the positive Short range")
                 check(isValidSource(source), "source must be jmdict:<entry ID> or an HTTPS source URL")
+                if (isCmuSource(source)) {
+                    val uri = URI(source)
+                    val pinnedPath = when (uri.host.lowercase(Locale.ROOT)) {
+                        "github.com" -> cmuPathPattern.matches(uri.path)
+                        "raw.githubusercontent.com" -> cmuRawPathPattern.matches(uri.path)
+                        else -> false
+                    }
+                    check(pinnedPath && uri.query == null &&
+                            (uri.fragment == null || uri.fragment.matches(Regex("L[1-9][0-9]*"))),
+                        "CMUdict source must identify a fixed commit and an optional source line")
+                    check(note.startsWith("英語発音から作成・確認した読み; "),
+                        "CMUdict-derived reading must record its explicit pronunciation review")
+                    val phones = cmuPronunciationPattern.find(note)?.groupValues?.get(1)?.split(' ')
+                    check(!phones.isNullOrEmpty() && phones.all(::isCmuPhone),
+                        "CMUdict-derived reading must record valid stressed ARPAbet phonemes")
+                }
                 check(pairs.add(reading to surface.lowercase(Locale.ROOT)), "duplicate reading/surface pair")
                 val dictionary = Dictionary(reading, contextId.toShort(), contextId.toShort(), cost!!.toShort(), surface)
                 // Approval only relaxes the compound rule. All lexical/explanation exclusions remain in force.
@@ -79,5 +100,15 @@ object EnglishReadingSupplement {
         return runCatching { URI(source) }.getOrNull()?.let {
             it.scheme == "https" && !it.host.isNullOrBlank() && it.userInfo == null
         } == true
+    }
+
+    private fun isCmuPhone(phone: String): Boolean = phone in cmuConsonants ||
+        (phone.length == 3 && phone.take(2) in cmuVowels && phone.last() in '0'..'2')
+
+    private fun isCmuSource(source: String): Boolean {
+        val uri = URI(source)
+        val path = uri.path?.lowercase(Locale.ROOT) ?: return false
+        return uri.host?.lowercase(Locale.ROOT) in setOf("github.com", "raw.githubusercontent.com") &&
+            (path == "/cmusphinx/cmudict" || path.startsWith("/cmusphinx/cmudict/"))
     }
 }

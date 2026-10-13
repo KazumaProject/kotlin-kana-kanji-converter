@@ -46,6 +46,32 @@ ShareAlike requirements. The binary-only assets ZIP does not include these
 notices; downstream distributions must provide the required source and license
 information, for example through the application's source/license screen.
 
+## NGSL and CMUdict general English supplement
+
+General English headwords were prioritized using the New General Service List
+(NGSL) 1.2 by Charles Browne, Brent Culligan, and Joseph Phillips, licensed under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+The [official NGSL site](https://www.newgeneralservicelist.com/new-general-service-list)
+provides the frequency list. The raw list and frequency statistics are not
+included in the binary assets; its version and checksum are recorded in the
+dictionary creation documentation. Frequency rankings are used for selection,
+not as measured IME candidate costs.
+
+Some supplemental kana readings are editorial adaptations of full US English
+pronunciations from [CMUdict](https://github.com/cmusphinx/cmudict), commit
+`74790861f652b15e4ac49015a90074ad62a27690`.
+CMUdict is Copyright (C) 1993-2015 Carnegie Mellon University. All rights reserved.
+Its redistribution conditions and disclaimer are preserved verbatim in
+`src/main/resources/third-party/CMUDICT-LICENSE`; source and binary
+redistributions of the derived material must reproduce the required notice.
+Rows distinguish these reviewed pronunciation-derived readings from readings
+attested in Japanese sources, and record the original ARPAbet pronunciation.
+The curated combined supplement remains distributed under CC BY-SA 4.0, with
+the CMUdict notice retained for its portion. The Kotlin code remains MIT.
+
+The binary-only ZIP does not include notice files. Downstream distributions must
+include the CMUdict notice alongside the existing JMdict attribution.
+
 ## Google Mozc resources
 
 The Japanese dictionary and related resources are derived from

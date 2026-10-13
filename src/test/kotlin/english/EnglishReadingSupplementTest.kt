@@ -53,6 +53,31 @@ class EnglishReadingSupplementTest {
     }
 
     @Test
+    fun pronunciationDerivedReadingsRequireFixedSourceAndReviewRecord() {
+        val url = "https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L1"
+        val note = "英語発音から作成・確認した読み; ARPAbet=R IH0 V Y UW1; 全発音を確認"
+        assertEquals("review", parse("りびゅー\treview\t12500\t$url\t$note\n").single().dictionary.tango)
+        val rawUrl = url.replace("github.com/cmusphinx/cmudict/blob/", "raw.githubusercontent.com/cmusphinx/cmudict/")
+        assertEquals("review", parse("りびゅー\treview\t12500\t$rawUrl\t$note\n").single().dictionary.tango)
+        for ((source, record) in listOf(
+            url.replace("74790861f652b15e4ac49015a90074ad62a27690", "master") to note,
+            url.replace("github.com", "GITHUB.COM").replace("74790861f652b15e4ac49015a90074ad62a27690", "master") to note,
+            rawUrl.replace("74790861f652b15e4ac49015a90074ad62a27690", "master") to "自動生成・未確認",
+            rawUrl to "自動生成・未確認",
+            "https://github.com/cmusphinx/cmudict" to note,
+            url to "自動生成・未確認; ARPAbet=R IH0 V Y UW1",
+            url to "英語発音から作成・確認した読み; 発音未記録",
+            url to "英語発音から作成・確認した読み; ARPAbet=R IH V Y UW1",
+            url to "英語発音から作成・確認した読み; ARPAbet=R IH0 UNKNOWN UW1",
+        )) {
+            val error = assertFailsWith<IllegalArgumentException> {
+                parse("りびゅー\treview\t12500\t$source\t$record\n")
+            }
+            assertTrue(error.message!!.contains("line=2"))
+        }
+    }
+
+    @Test
     fun approvalDoesNotBypassNumericFunctionWordOrExplanatoryExclusions() {
         for ((reading, surface) in listOf("ぜろ" to "zero", "あんど" to "and", "えー" to "A",
             "でばいす" to "device used for writing", "めそっど" to "method of writing")) {
@@ -75,6 +100,16 @@ class EnglishReadingSupplementTest {
         assertEquals(listOf("さうんどかーど"), source.runtimeEntries.map { it.yomi })
         for (surface in listOf("sound of a bell", "sound produced by a bell")) {
             assertFailsWith<IllegalArgumentException> { parse("べる\t$surface\t12500\tjmdict:1\t説明文\n") }
+        }
+    }
+
+    @Test
+    fun acceptsTheWordIndicateWhileKeepingItsExplanatorySentencesOut() {
+        assertEquals("indicate", parse("いんでぃけいと\tindicate\t12500\tjmdict:1\t全単語の読み\n").single().dictionary.tango)
+        for (surface in listOf("indicates interest", "indicate a condition")) {
+            assertFailsWith<IllegalArgumentException> {
+                parse("いんでぃけいと\t$surface\t12500\tjmdict:1\t説明文\n")
+            }
         }
     }
 
@@ -195,6 +230,43 @@ class EnglishReadingSupplementTest {
             "きゃんせる" to "cancel",
         )
         samples.forEach { assertTrue(it in pairs, "Missing usage example: $it") }
+    }
+
+    @Test
+    fun coversGeneralHeadwordsAndAllSevenAdditionalDomainWords() {
+        val pairs = EnglishReadingSupplement.parseResource(1851).associateBy { it.dictionary.yomi to it.dictionary.tango }
+        for (pair in listOf(
+            "いんぽーたんと" to "important", "あべいらぶる" to "available", "あんだーすたんど" to "understand",
+            "れびゅー" to "review", "せーぶ" to "save", "こぴー" to "copy", "えんばいろんめんと" to "environment",
+            "どきゅめんと" to "document", "えすてぃめーと" to "estimate", "あぷるーばる" to "approval",
+            "でぃぷろい" to "deploy", "でぃぺんでんしー" to "dependency", "おーせんてぃけーしょん" to "authentication",
+            "おーそらいぜーしょん" to "authorization", "こるーちん" to "coroutine", "べんだー" to "vendor",
+            "すてーくほるだー" to "stakeholder", "えこのみっく" to "economic", "でぃれくりー" to "directly",
+        )) {
+            assertEquals(12500, pairs.getValue(pair).dictionary.cost.toInt(), "Missing standard word: $pair")
+        }
+    }
+
+    @Test
+    fun preservesDistinctPronunciationsAndTheExistingStemAbbreviation() {
+        val supplement = EnglishReadingSupplement.parseResource(1851)
+        val source = EnglishDictionarySource(listOf(dictionary("すてむ", "STEM", 18501)), supplement)
+        val pairs = source.runtimeEntries.map { it.yomi to it.tango }.toSet()
+        for ((surface, first, second) in listOf(
+            Triple("read", "りーど", "れっど"), Triple("lead", "りーど", "れっど"),
+            Triple("wind", "うぃんど", "わいんど"), Triple("minute", "みにっと", "まいぬーと"),
+        )) {
+            assertTrue(first to surface in pairs)
+            assertTrue(second to surface in pairs)
+        }
+        assertTrue("すてむ" to "STEM" in pairs)
+        assertTrue(source.runtimeEntries.none { it.tango == "stem" })
+        assertTrue("えーぴーあい" to "API" in pairs)
+        assertTrue("じぇいそん" to "JSON" in pairs)
+        val newRows = supplement.filter { it.note.startsWith("日本語資料で確認した読み") ||
+            it.note.startsWith("英語発音から作成・確認した読み") }
+        assertTrue(newRows.all { it.dictionary.tango.matches(Regex("[a-z]+")) })
+        assertTrue("いそんかんけい" to "dependency" !in pairs)
     }
 
     @Test

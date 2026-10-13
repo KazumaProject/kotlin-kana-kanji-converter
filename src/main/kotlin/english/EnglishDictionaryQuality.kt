@@ -8,8 +8,10 @@ import java.util.Locale
  *
  * The published source is already a direct-loanword artifact: its generator
  * requires the complete Japanese reading to match an English pronunciation.
- * This class remains a defensive runtime gate for malformed rows, gloss
- * explanations, and legacy source files.
+ * Curated supplements can also contain ordinary English words with reviewed
+ * pronunciation-derived readings. Full phonetic correspondence is established
+ * during source review; this class is a defensive lexical/format gate, not a
+ * pronunciation verifier or frequency score.
  */
 enum class EnglishCandidateStatus {
     PRIMARY,
@@ -85,7 +87,7 @@ object EnglishDictionaryQuality {
      * the clean runtime dictionary.
      */
     private val explanatoryGlossPattern = Regex(
-        """(?:^\s*(?:used\s+(?:to|after|with|for|as)|indicates?\b|counter\s+(?:for|used)\b|softens?\b|regardless\s+of\b|whether\b|no\s+matter\b|followed\s+by\b|preceded\s+by\b|person\s+(?:who|with|of)\b|people\s+(?:who|with)\b|someone\s+who\b|something\s+(?:that|which)\b|thing\s+(?:or|that|which)\b|device\s+used\b|method\s+(?:of|used)\b|sound\s+(?:of|used)\b|one's\b|to\s+be\b|in\s+(?:a|the)\b|with\s+(?:a|the)\b|for\s+(?:a|the)\b|by\s+(?:a|the)\b|any\b|(?:type|kind|form|group|member|species|variety|family|genus)\s+of\b)|\b(?:used\s+(?:to|for|as|with)|person\s+(?:who|with|of)|people\s+(?:who|with))\b)""",
+        """(?:^\s*(?:used\s+(?:to|after|with|for|as)|indicates?\s+|counter\s+(?:for|used)\b|softens?\b|regardless\s+of\b|whether\b|no\s+matter\b|followed\s+by\b|preceded\s+by\b|person\s+(?:who|with|of)\b|people\s+(?:who|with)\b|someone\s+who\b|something\s+(?:that|which)\b|thing\s+(?:or|that|which)\b|device\s+used\b|method\s+(?:of|used)\b|sound\s+(?:of|used)\b|one's\b|to\s+be\b|in\s+(?:a|the)\b|with\s+(?:a|the)\b|for\s+(?:a|the)\b|by\s+(?:a|the)\b|any\b|(?:type|kind|form|group|member|species|variety|family|genus)\s+of\b)|\b(?:used\s+(?:to|for|as|with)|person\s+(?:who|with|of)|people\s+(?:who|with))\b)""",
         RegexOption.IGNORE_CASE,
     )
 

@@ -557,6 +557,38 @@ val analyzeEnglishDictionary = tasks.register<JavaExec>("analyzeEnglishDictionar
     outputs.dir(englishDictionaryReportDir)
 }
 
+val analyzeEnglishWordCoverage = tasks.register<JavaExec>("analyzeEnglishWordCoverage") {
+    group = "reporting"
+    description = "Audits all pinned NGSL 1.2 headwords and selected development/work words against a runtime baseline."
+    dependsOn(validateEnglishDictionary)
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.english.AnalyzeEnglishWordCoverageKt")
+    val wordList = providers.gradleProperty("englishWordListFile")
+        .map { layout.projectDirectory.file(it) }
+        .orElse(layout.buildDirectory.file("english-source/general-words/ngsl.csv"))
+    val baseline = providers.gradleProperty("englishWordCoverageBaselineFile")
+        .map { layout.projectDirectory.file(it) }
+        .orElse(layout.buildDirectory.file("english-source/general-words/baseline-runtime.tsv"))
+    val reviewDecisions = providers.gradleProperty("englishWordReviewDecisionsFile")
+        .map { layout.projectDirectory.file(it) }
+        .orElse(layout.buildDirectory.file("english-source/general-words/review-decisions.tsv"))
+    val reportDirectory = layout.buildDirectory.dir("reports/english-word-coverage")
+    args(
+        "--word-list", wordList.get().asFile.path,
+        "--baseline-runtime", baseline.get().asFile.path,
+        "--input", englishDictionaryFile.asFile.path,
+        "--supplement", englishSupplementFile.asFile.path,
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
+        "--output", reportDirectory.get().asFile.path,
+    )
+    if (providers.gradleProperty("englishWordReviewDecisionsFile").isPresent || reviewDecisions.get().asFile.exists()) {
+        args("--review-decisions", reviewDecisions.get().asFile.path)
+        inputs.file(reviewDecisions)
+    }
+    inputs.files(wordList, baseline, englishDictionaryFile, englishSupplementFile, mozcIdDefFileProvider)
+    outputs.dir(reportDirectory)
+}
+
 val validateIdDefReferences = tasks.register("validateIdDefReferences") {
     group = "verification"
     description = "Validates IdDefConstants references in Kotlin files against Mozc id.def."
