@@ -1,8 +1,6 @@
 # JapaneseKeyboard matches unigram rules against each node in a candidate path.
 # These rules can promote compound candidates as well as standalone candidates.
 # "しろ" was removed because it also promoted "しろ" + "医" etc.
-# "したい" and "なら" were also withdrawn at the user's request.
+# "したい", "なら", and "ごと" were also withdrawn.
+# An omission-search candidate can match a word rule despite a different input reading.
 "なのか"
-
-# Existing hiragana priorities; these also apply within compound paths.
-"ごと"
