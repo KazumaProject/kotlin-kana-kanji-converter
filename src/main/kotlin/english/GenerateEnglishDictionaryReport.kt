@@ -1,36 +1,45 @@
 package com.kazumaproject.english
 
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.StandardOpenOption.APPEND
 
 fun main(args: Array<String>) {
-    val input = requiredReportOption(args, "--input")
-    val output = requiredReportOption(args, "--output")
-    val summary = requiredReportOption(args, "--summary")
-    val quality = optionalReportOption(args, "--quality-output")
-        ?: Path.of(output).parent?.resolve("english-dictionary-quality.tsv")
-        ?: Path.of("english-dictionary-quality.tsv")
-    val entries = EnglishDictionaryBuilder().parse(Path.of(input))
+    val source = loadEnglishDictionarySource(args)
+    val output = Path.of(englishOption(args, "--output") ?: error("Missing required option: --output"))
+    val summary = Path.of(englishOption(args, "--summary") ?: error("Missing required option: --summary"))
+    val quality = Path.of(englishOption(args, "--quality-output")
+        ?: output.resolveSibling("english-dictionary-quality.tsv").toString())
+    EnglishDictionaryReport.writeCandidates(source.entries, output, source.allowedCompounds)
+    EnglishDictionaryReport.writeQuality(source.entries, quality, source.allowedCompounds)
+    EnglishDictionaryReport.writeSummary(source.entries, summary, "upstream + reading-supplement.tsv", source.allowedCompounds)
+    Files.writeString(summary, """
 
-    EnglishDictionaryReport.writeCandidates(entries, Path.of(output))
-    EnglishDictionaryReport.writeQuality(entries, quality)
-    EnglishDictionaryReport.writeSummary(entries, Path.of(summary), input)
+        ## 補完辞書の差分
 
-    val report = EnglishDictionaryReport.summarize(entries)
-    println(
-        "Wrote English dictionary report: entries=${report.entries}, " +
-                "uniqueReadings=${report.uniqueReadings}, output=$output, quality=$quality, summary=$summary",
-    )
-}
+        - upstream source entries: ${source.upstream.size}
+        - supplemental source entries: ${source.supplement.size}
+        - baseline runtime entries: ${source.baselineRuntime.size}
+        - merged runtime entries: ${source.runtimeEntries.size}
+        - added reading/surface pairs: ${source.addedEntries.size}
+        - existing pairs with changed cost or surface: ${source.changedExistingEntries.size}
+        - new English surfaces (case insensitive): ${source.newEnglishSurfaces}
+        - added readings for existing English surfaces: ${source.addedReadingsForExistingSurfaces}
+        - explicitly registered variant rows (cost 12800): ${source.supplement.count { it.dictionary.cost.toInt() == 12800 }}
 
-private fun requiredReportOption(args: Array<String>, name: String): String {
-    val index = args.indexOf(name)
-    return args.getOrNull(index + 1)?.takeUnless { it.startsWith("--") }
-        ?: error("Missing required option: $name")
-}
-
-private fun optionalReportOption(args: Array<String>, name: String): Path? {
-    val index = args.indexOf(name)
-    if (index < 0) return null
-    return args.getOrNull(index + 1)?.takeUnless { it.startsWith("--") }?.let(Path::of)
-        ?: error("Missing value for option: $name")
+        追加ペアと新しい英語表記の数は異なります。同じ表記の読み揺れは個別のペアとして数えます。
+        採用された全行は merged-runtime.tsv、補完の根拠は supplement-sources.tsv に記録します。
+        これらは辞書内容の確認結果であり、実端末のIME表示・最終順位の検証結果ではありません。
+        """.trimIndent() + "\n", APPEND)
+    Files.newBufferedWriter(output.resolveSibling("merged-runtime.tsv")).use { writer ->
+        writer.appendLine("reading\tleft_id\tright_id\tcost\tsurface")
+        source.runtimeEntries.forEach { writer.appendLine("${it.yomi}\t${it.leftId}\t${it.rightId}\t${it.cost}\t${it.tango}") }
+    }
+    Files.newBufferedWriter(output.resolveSibling("supplement-sources.tsv")).use { writer ->
+        writer.appendLine("reading\tsurface\tcost\tsource\tnote")
+        source.supplement.forEach {
+            writer.appendLine("${it.dictionary.yomi}\t${it.dictionary.tango}\t${it.dictionary.cost}\t${it.source}\t${it.note}")
+        }
+    }
+    println("Wrote merged English dictionary report: runtime=${source.runtimeEntries.size}, addedPairs=${source.addedEntries.size}, output=$output")
 }

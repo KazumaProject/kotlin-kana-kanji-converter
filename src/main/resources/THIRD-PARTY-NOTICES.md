@@ -1,39 +1,50 @@
 # Third-party notices
 
-This release is a combined work. The project source code is MIT, but the
+The generated dictionaries combine data sources. The Kotlin program is MIT, but the
 generated dictionary data keeps the license and notice requirements of its
 upstream data sources. Do not treat the complete release archive as a single
 MIT-licensed work.
 
 ## Project source code
 
-The Kotlin conversion program and project-owned source files are distributed
+The Kotlin conversion program source files are distributed
 under the MIT License. The complete project license is in the repository
 [LICENSE](https://github.com/KazumaProject/kotlin-kana-kanji-converter/blob/main/LICENSE).
 
 ## JapaneseCorpus / JMdict English data
 
-The hiragana-to-English source is generated from JMdict_e by
-[JapaneseCorpus v2026.0803.6](https://github.com/KazumaProject/JapaneseCorpus/releases/tag/v2026.0803.6).
-The source archive is:
+The hiragana-to-English source combines the JapaneseCorpus direct-loanword
+asset `mozc-english-reading-unigram-00000.txt.zst` with the curated full-reading
+pairs in `src/main/english/reading-supplement.tsv`. The CI resolves one latest
+published [JapaneseCorpus release](https://github.com/KazumaProject/JapaneseCorpus/releases)
+and records its tag and dictionary checksum; all downloaded inputs come from
+that same release. The manifest records the CMUdict pronunciation source.
 
-<https://github.com/KazumaProject/JapaneseCorpus/releases/download/v2026.0803.6/mozc-english-unigram-00000.txt.zst>
+The initial supplement was checked against JMdict_e-20261012 from
+[JapaneseCorpus v2026.1012.19](https://github.com/KazumaProject/JapaneseCorpus/releases/tag/v2026.1012.19),
+SHA-256 `5004ad9c777db2188baaa51554d4bb3e1ef3781725c4b38467723886b5d47d9e`.
+Each supplemental row records its JMdict entry ID or official reference URL
+and the reason for accepting the complete reading/surface pair.
 
-The JMdict-derived database data is licensed under
-[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The
-file `licenses/JMDICT-LICENSE.html` in this archive is the authoritative
-attribution and license notice for that source data. The corresponding
-JapaneseCorpus release is the fixed source snapshot listed above.
+JMdict is copyright James William BREEN and the Electronic Dictionary Research
+and Development Group. The JMdict-derived source, curated supplement, and
+adapted database data are licensed under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+The authoritative attribution and license notice is preserved in
+[`src/main/resources/third-party/JMDICT-LICENSE.html`](https://github.com/KazumaProject/kotlin-kana-kanji-converter/blob/main/src/main/resources/third-party/JMDICT-LICENSE.html),
+with current [EDRDG terms](https://www.edrdg.org/edrdg/licence.html).
+This data license is separate from the MIT-licensed Kotlin program.
 
-This release is an adapted database. Its modifications include selecting
-English glosses and complete English `lsource` values, converting the selected
-Katakana readings to hiragana, normalizing small `ゕ`/`ゖ` readings, and applying
-the noise filter documented in
+Modifications include selecting direct English loanword pairs, converting
+Katakana readings to hiragana, adding individually checked full-reading pairs
+and attested variants, and applying the defensive quality filter documented in
 [`docs/english-dictionary.md`](https://github.com/KazumaProject/kotlin-kana-kanji-converter/blob/main/docs/english-dictionary.md).
-Only `primary` candidates are included in the runtime English dictionary;
-`review` and `excluded` candidates remain in the quality report for audit.
-Redistribution of the JMdict-derived portion must preserve the CC BY-SA 4.0
-attribution and ShareAlike requirements.
+Only `primary` candidates are emitted. Source explanations and unapproved
+compounds remain in audit reports rather than being trimmed automatically.
+Redistribution of the JMdict-derived portion must preserve attribution and
+ShareAlike requirements. The binary-only assets ZIP does not include these
+notices; downstream distributions must provide the required source and license
+information, for example through the application's source/license screen.
 
 ## Google Mozc resources
 
@@ -41,9 +52,9 @@ The Japanese dictionary and related resources are derived from
 [google/mozc](https://github.com/google/mozc). Mozc's code license and binary
 redistribution notice are in its
 [`LICENSE`](https://github.com/google/mozc/blob/master/LICENSE). The bundled
-`src/data/dictionary*` resources are mixed-license data; the complete upstream
-notice is included in this archive as `licenses/MOZC-LICENSE`, alongside
-`licenses/IPADIC-COPYING` and `licenses/IPADIC-NOTICE`. The upstream source
+`src/data/dictionary*` resources are mixed-license data. The upstream notice is
+preserved in this repository as `src/main/resources/third-party/MOZC-LICENSE`,
+alongside `src/main/resources/third-party/IPADIC-NOTICE`. The upstream source
 notice is also available at
 [`src/data/dictionary_oss/README.txt`](https://raw.githubusercontent.com/google/mozc/master/src/data/dictionary_oss/README.txt).
 
@@ -59,9 +70,9 @@ this project.
 
 ## Practical redistribution rule
 
-When redistributing the release archive or extracted dictionary assets, keep
-this file and the `licenses/` directory with the assets and preserve the
-upstream notices. `licenses/LICENSE-DATA.md` and `licenses/NOTICE.md` document
-the JapaneseCorpus data provenance and terms.
-License questions about a particular downstream use should be reviewed by a
-qualified legal professional.
+When redistributing the generated assets, preserve the attribution and license
+information required by each data source. The binary-only assets ZIP does not
+carry notice files. This repository preserves them under
+`src/main/resources/third-party/`; downstream packages must provide the required
+information or links in their own distribution. `LICENSE-DATA.md` and `NOTICE.md`
+in that directory provide additional JapaneseCorpus data provenance.

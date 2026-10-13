@@ -4,65 +4,43 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 fun main(args: Array<String>) {
-    val input = requiredOption(args, "--input")
-    val idDef = optionalOption(args, "--id-def")?.let(Path::of)
-    val expectedContextId = idDef?.let(::findGenericNounId)
-    val entries = EnglishDictionaryBuilder().parse(Path.of(input), expectedContextId)
-    require(entries.isNotEmpty()) { "English dictionary source is empty: $input" }
-
-    val summary = EnglishDictionaryReport.summarize(entries)
+    val source = loadEnglishDictionarySource(args)
+    require(source.upstream.isNotEmpty()) { "English upstream dictionary is empty" }
+    val summary = EnglishDictionaryReport.summarize(source.upstream)
     require(summary.uniqueReadingSurfacePairs == summary.entries) {
-        "English dictionary contains duplicate reading/surface rows: " +
-                "entries=${summary.entries}, uniquePairs=${summary.uniqueReadingSurfacePairs}"
+        "English upstream dictionary contains duplicate reading/surface rows"
     }
-    val quality = EnglishDictionaryQuality.summarize(entries)
-    val runtimeEntries = EnglishDictionaryQuality.runtimeEntries(entries)
-    require(runtimeEntries.isNotEmpty()) {
-        "English dictionary has no usable runtime entries after quality filtering: input=$input"
-    }
-    require(runtimeEntries.all { EnglishDictionaryQuality.assess(it).status == EnglishCandidateStatus.PRIMARY }) {
-        "Noise-removed runtime dictionary contains a non-primary candidate: input=$input"
-    }
-    require(runtimeEntries.size == quality.runtimeEntries) {
-        "English dictionary quality summary disagrees with runtime selection: " +
-                "summary=${quality.runtimeEntries}, runtime=${runtimeEntries.size}"
-    }
-
+    require(source.runtimeEntries.isNotEmpty()) { "English dictionary has no usable runtime entries" }
+    require(source.runtimeEntries.all {
+        EnglishDictionaryQuality.assess(it, source.allowedCompounds).status == EnglishCandidateStatus.PRIMARY
+    }) { "Merged runtime dictionary contains a non-primary candidate" }
     println(
-        "Validated English dictionary: entries=${summary.entries}, " +
-                "uniqueReadings=${summary.uniqueReadings}, uniqueSurfaces=${summary.uniqueSurfaces}, " +
-                "primary=${quality.primaryEntries}, review=${quality.reviewEntries}, " +
-                "excluded=${quality.excludedEntries}, cleanRuntime=${quality.runtimeEntries}, " +
-                "contextId=${expectedContextId ?: "not checked"}",
+        "Validated English dictionary: upstream=${source.upstream.size}, supplement=${source.supplement.size}, " +
+            "baselineRuntime=${source.baselineRuntime.size}, runtime=${source.runtimeEntries.size}, " +
+            "addedPairs=${source.addedEntries.size}, newEnglishSurfaces=${source.newEnglishSurfaces}, " +
+            "addedReadingsForExistingSurfaces=${source.addedReadingsForExistingSurfaces}",
     )
 }
 
-private fun findGenericNounId(idDef: Path): Int {
+internal fun loadEnglishDictionarySource(args: Array<String>): EnglishDictionarySource = EnglishDictionarySource.load(
+    Path.of(englishOption(args, "--input") ?: error("Missing required option: --input")),
+    Path.of(englishOption(args, "--supplement") ?: "src/main/english/reading-supplement.tsv"),
+    findGenericNounId(Path.of(englishOption(args, "--id-def") ?: "src/main/resources/id.def")),
+)
+
+internal fun findGenericNounId(idDef: Path): Int {
     require(Files.isRegularFile(idDef)) { "Mozc id.def was not found: $idDef" }
-    var firstNounId: Int? = null
-    var genericNounId: Int? = null
-    Files.newBufferedReader(idDef).useLines { lines ->
-        lines.forEach { rawLine ->
-            val trimmed = rawLine.trim()
-            if (trimmed.isEmpty() || trimmed.startsWith("#")) return@forEach
-            val separator = trimmed.indexOfFirst(Char::isWhitespace)
-            require(separator > 0) { "Malformed id.def line: $rawLine" }
-            val id = trimmed.substring(0, separator).toIntOrNull()
-                ?: error("Invalid id.def ID: $rawLine")
-            val feature = trimmed.substring(separator + 1).split(',')
-            if (feature.firstOrNull() == "名詞") {
-                firstNounId ?: run { firstNounId = id }
-                if (genericNounId == null && feature.getOrNull(1) == "一般") genericNounId = id
-            }
-        }
+    return Files.newBufferedReader(idDef).useLines { lines ->
+        lines.map { it.trim() }.filter { it.isNotEmpty() && !it.startsWith('#') }.mapNotNull { line ->
+            val separator = line.indexOfFirst(Char::isWhitespace)
+            require(separator > 0) { "Malformed id.def line: $line" }
+            val id = line.substring(0, separator).toIntOrNull() ?: error("Invalid id.def ID: $line")
+            id.takeIf { line.substring(separator + 1).trim() == "名詞,一般,*,*,*,*,*" }
+        }.firstOrNull() ?: error("No generic-noun context was found in id.def: $idDef")
     }
-    return genericNounId ?: firstNounId ?: error("No noun context was found in id.def: $idDef")
 }
 
-private fun requiredOption(args: Array<String>, name: String): String =
-    optionalOption(args, name) ?: error("Missing required option: $name")
-
-private fun optionalOption(args: Array<String>, name: String): String? {
+internal fun englishOption(args: Array<String>, name: String): String? {
     val index = args.indexOf(name)
     if (index < 0) return null
     return args.getOrNull(index + 1)?.takeUnless { it.startsWith("--") }

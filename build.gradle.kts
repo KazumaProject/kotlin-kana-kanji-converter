@@ -157,6 +157,8 @@ val dictionaryResourcesDir = layout.projectDirectory.dir("src/main/resources")
 // Build input: JapaneseCorpus's dedicated direct-loanword artifact. This is
 // intentionally kept separate from the normal system dictionary sources.
 val englishDictionaryFile = dictionaryResourcesDir.file("english-dictionary.txt")
+val englishSupplementFile = layout.projectDirectory.file("src/main/english/reading-supplement.tsv")
+sourceSets["main"].resources.srcDir("src/main/english")
 val englishDictionaryReportDir = layout.buildDirectory.dir("reports/english-dictionary")
 val japaneseKeyboardAssetsRootPath = "app/src/main/assets"
 val japaneseKeyboardAssetsStagingDir = layout.buildDirectory.dir("japaneseKeyboardDictionaryAssets")
@@ -520,32 +522,38 @@ val validateDictionaryIds = tasks.register("validateDictionaryIds") {
 
 val validateEnglishDictionary = tasks.register<JavaExec>("validateEnglishDictionary") {
     group = "verification"
-    description = "Validates the JapaneseCorpus direct-loanword hiragana-to-English source."
+    description = "Validates and merges the upstream and curated hiragana-to-English sources."
     dependsOn("classes")
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("com.kazumaproject.english.ValidateEnglishDictionaryKt")
     args(
         "--input", englishDictionaryFile.asFile.path,
+        "--supplement", englishSupplementFile.asFile.path,
         "--id-def", mozcIdDefFileProvider.get().asFile.path,
     )
     inputs.file(englishDictionaryFile)
+    inputs.file(englishSupplementFile)
     inputs.file(mozcIdDefFileProvider)
 }
 
 val analyzeEnglishDictionary = tasks.register<JavaExec>("analyzeEnglishDictionary") {
     group = "reporting"
-    description = "Writes a complete reading-to-English-candidate report from the JapaneseCorpus source."
+    description = "Reports upstream, curated, and merged English reading candidates."
     dependsOn(validateEnglishDictionary)
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("com.kazumaproject.english.GenerateEnglishDictionaryReportKt")
     val reportDirectory = englishDictionaryReportDir.get().asFile
     args(
         "--input", englishDictionaryFile.asFile.path,
+        "--supplement", englishSupplementFile.asFile.path,
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
         "--output", reportDirectory.resolve("english-dictionary-candidates.tsv").path,
         "--quality-output", reportDirectory.resolve("english-dictionary-quality.tsv").path,
         "--summary", reportDirectory.resolve("summary.md").path,
     )
     inputs.file(englishDictionaryFile)
+    inputs.file(englishSupplementFile)
+    inputs.file(mozcIdDefFileProvider)
     outputs.dir(englishDictionaryReportDir)
 }
 
@@ -923,10 +931,25 @@ val packageJapaneseKeyboardDictionaryAssets = tasks.register("packageJapaneseKey
     }
 }
 
+val verifyEnglishDictionaryBinary = tasks.register<JavaExec>("verifyEnglishDictionaryBinary") {
+    group = "verification"
+    description = "Reloads the packaged English reading dictionary and checks all merged source rows and shared POS IDs."
+    dependsOn(packageJapaneseKeyboardDictionaryAssets)
+    mainClass.set("com.kazumaproject.english.VerifyEnglishDictionaryBinaryKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    args(
+        "--input", englishDictionaryFile.asFile.path,
+        "--supplement", englishSupplementFile.asFile.path,
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
+        "--release-zip", japaneseKeyboardAssetsReleaseZip.asFile.path,
+    )
+    inputs.files(englishDictionaryFile, englishSupplementFile, mozcIdDefFileProvider, japaneseKeyboardAssetsReleaseZip)
+}
+
 tasks.register("verifyJapaneseKeyboardDictionaryAssets") {
     group = "verification"
     description = "Verifies the JapaneseKeyboard dictionary assets zip layout and nested .dat.zip files."
-    dependsOn(packageJapaneseKeyboardDictionaryAssets)
+    dependsOn(packageJapaneseKeyboardDictionaryAssets, verifyEnglishDictionaryBinary)
     inputs.file(japaneseKeyboardAssetsReleaseZip)
 
     doLast {
