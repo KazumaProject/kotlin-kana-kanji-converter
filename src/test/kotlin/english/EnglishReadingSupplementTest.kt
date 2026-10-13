@@ -145,6 +145,7 @@ class EnglishReadingSupplementTest {
             Triple("でぃれくとりつりー", "でぃれくとりーつりー", "directory tree"),
             Triple("しぇあーどらいぶらり", "しぇあーどらいぶらりー", "shared library"),
             Triple("きゃぷすろっく", "きゃっぷすろっく", "caps lock"),
+            Triple("ぷろきし", "ぷろきしー", "proxy"),
         )) {
             assertEquals(12500, rows.getValue(standard to surface).dictionary.cost.toInt())
             assertEquals(12800, rows.getValue(variant to surface).dictionary.cost.toInt())
@@ -239,11 +240,119 @@ class EnglishReadingSupplementTest {
             "いんぽーたんと" to "important", "あべいらぶる" to "available", "あんだーすたんど" to "understand",
             "れびゅー" to "review", "せーぶ" to "save", "こぴー" to "copy", "えんばいろんめんと" to "environment",
             "どきゅめんと" to "document", "えすてぃめーと" to "estimate", "あぷるーばる" to "approval",
-            "でぃぷろい" to "deploy", "でぃぺんでんしー" to "dependency", "おーせんてぃけーしょん" to "authentication",
+            "でぷろい" to "deploy", "でぃぺんでんしー" to "dependency", "おーせんてぃけーしょん" to "authentication",
             "おーそらいぜーしょん" to "authorization", "こるーちん" to "coroutine", "べんだー" to "vendor",
             "すてーくほるだー" to "stakeholder", "えこのみっく" to "economic", "でぃれくりー" to "directly",
         )) {
             assertEquals(12500, pairs.getValue(pair).dictionary.cost.toInt(), "Missing standard word: $pair")
+        }
+    }
+
+    @Test
+    fun coversAttestedJapaneseReadingsRatherThanOnlyEnglishPronunciations() {
+        // Check the adopted dictionary, including upstream rows; these are lexical regression examples,
+        // not a claim about frequency, complete Japanese spelling coverage, or final IME ranking.
+        val pairs = EnglishDictionarySource.loadResources(1851).runtimeEntries
+            .associateBy { it.yomi to it.tango.lowercase(Locale.ROOT) }
+        for (pair in listOf(
+            "でぷろい" to "deploy", "とらんすふぉーむ" to "transform",
+            "てーま" to "theme", "ふるーつ" to "fruit", "すぽーつ" to "sport",
+            "すとろーく" to "stroke", "ぴあの" to "piano", "ぷろでゅーさー" to "producer",
+            "しゃつ" to "shirt", "とれーす" to "trace", "すとーりー" to "story",
+            "ぷりてぃー" to "pretty", "ちゅーん" to "tune", "ぴりおど" to "period",
+            "ろー" to "raw", "きゃぴたる" to "capital", "めでぃあむ" to "medium",
+            "むーびー" to "movie", "りぎんぐ" to "rigging", "にゅーくりあ" to "nuclear",
+            "てくにっく" to "technique", "てきすたいる" to "textile",
+            "ほいーる" to "wheel", "ぽんど" to "pound", "たっくる" to "tackle",
+            "どらっぐ" to "drag", "ふりーくえんしー" to "frequency",
+        )) {
+            assertEquals(12500, pairs[pair]?.cost?.toInt(), "Missing Japanese input reading: $pair")
+        }
+        for (pair in listOf(
+            "でべろっぷめんと" to "development", "はっぴねす" to "happiness",
+            "いりゅーじょん" to "illusion", "でまんど" to "demand", "でぃれー" to "delay",
+            "りぽーと" to "report", "いんふぉーめーしょん" to "information",
+        )) {
+            assertEquals(12800, pairs[pair]?.cost?.toInt(), "Missing documented alternative: $pair")
+        }
+    }
+
+    @Test
+    fun keepsPronunciationReadingsAsAlternativesToAttestedJapaneseInput() {
+        val pairs = EnglishDictionarySource.loadResources(1851).runtimeEntries
+            .associateBy { it.yomi to it.tango.lowercase(Locale.ROOT) }
+        for ((standard, pronunciation, surface) in listOf(
+            Triple("でぷろい", "でぃぷろい", "deploy"),
+            Triple("てーま", "しーむ", "theme"),
+            Triple("ぴあの", "ぴあのー", "piano"),
+            Triple("ぷろでゅーさー", "ぷらどぅーさー", "producer"),
+            Triple("しゃつ", "しゃーと", "shirt"),
+        )) {
+            assertEquals(12500, pairs.getValue(standard to surface).cost.toInt())
+            assertEquals(12800, pairs.getValue(pronunciation to surface).cost.toInt(), surface)
+        }
+        // Movie's older spelling is upstream data; preserve its existing cost rather than rewriting it.
+        assertEquals(12500, pairs.getValue("むーびー" to "movie").cost.toInt())
+        assertEquals(18500, pairs.getValue("むーゔぃー" to "movie").cost.toInt())
+        // The shared trie can keep homophones: adding fruit must not remove flute.
+        assertTrue("ふるーつ" to "fruit" in pairs)
+        assertTrue("ふるーと" to "fruit" in pairs)
+        assertTrue("ふるーと" to "flute" in pairs)
+    }
+
+    @Test
+    fun readingAuditDoesNotAdmitMeaningOnlyOrPartialMatches() {
+        val pairs = EnglishDictionarySource.loadResources(1851).runtimeEntries
+            .map { it.yomi to it.tango.lowercase(Locale.ROOT) }.toSet()
+        for (pair in listOf(
+            "すといっく" to "strict", "こんつぇるん" to "combine",
+            "ふりーだむ" to "free", "ぷらいむれーと" to "prime",
+            "さいすたーと" to "restart", "さいはい" to "deploy",
+        )) {
+            assertTrue(pair !in pairs, "Meaning-only or partial match was adopted: $pair")
+        }
+    }
+
+    @Test
+    fun coversWholeWordReadingsFromQualifiedGlossesInfinitivesAndProperNames() {
+        val pairs = EnglishDictionarySource.loadResources(1851).runtimeEntries
+            .associateBy { it.yomi to it.tango }
+        for (pair in listOf(
+            "ぷろでゅーす" to "produce", "べてらん" to "veteran",
+            "うぃるす" to "virus", "おりおん" to "Orion", "さむすん" to "Samsung",
+            "すとりくと" to "strict", "らっぷ" to "wrap",
+            "えねるぎー" to "energy", "こらむ" to "column", "べくとる" to "vector",
+        )) {
+            assertEquals(12500, pairs[pair]?.cost?.toInt(), "Missing audited whole-word reading: $pair")
+        }
+        assertEquals(12800, pairs["れーべる" to "label"]?.cost?.toInt())
+        assertEquals(12800, pairs["びーるす" to "virus"]?.cost?.toInt())
+        assertTrue(pairs.keys.none { it.second == "samsung" || it.second == "orion" })
+        // Irregular/search-only forms are not newly promoted as ordinary missing readings.
+        assertTrue("ぷろでゅうす" to "produce" !in pairs)
+    }
+
+    @Test
+    fun preservesAuditedAlternatePhonemesWithTheirPinnedSource() {
+        val pairs = EnglishReadingSupplement.parseResource(1851)
+            .associateBy { it.dictionary.yomi to it.dictionary.tango }
+        for ((reading, surface, phonemes) in listOf(
+            Triple("いくすきゅーず", "excuse", "IH0 K S K Y UW1 Z"),
+            Triple("えすためっと", "estimate", "EH1 S T AH0 M AH0 T"),
+            Triple("まだれいと", "moderate", "M AA1 D ER0 EY2 T"),
+            Triple("ぷろーどぅーす", "produce", "P R OW1 D UW0 S"),
+            Triple("れふゅーず", "refuse", "R EH1 F Y UW2 Z"),
+            Triple("りーさいん", "resign", "R IY0 S AY1 N"),
+            Triple("でゅー", "due", "D Y UW1"),
+            Triple("でゅりんぐ", "during", "D Y UH1 R IH0 NG"),
+            Triple("まいにゅーと", "minute", "M AY0 N Y UW1 T"),
+            Triple("だいれくりー", "directly", "D AY0 R EH1 K L IY0"),
+            Triple("じぇにゅーわいん", "genuine", "JH EH1 N Y UW1 W AY2 N"),
+        )) {
+            val row = pairs.getValue(reading to surface)
+            assertEquals(12800, row.dictionary.cost.toInt())
+            assertTrue(row.source.contains("74790861f652b15e4ac49015a90074ad62a27690"))
+            assertTrue(row.note.contains("ARPAbet=$phonemes;"))
         }
     }
 

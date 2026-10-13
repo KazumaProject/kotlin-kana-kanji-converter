@@ -415,7 +415,7 @@ reading	surface	cost	source	note
 ぷらいす	price	12500	jmdict:1115360	仕事・会議・メールの実用語（読み全体と英語を確認）
 ぷりんた	printer	12800	jmdict:1116270	JMdict に明記された読み異表記。長音を機械的に削除したものではない。
 ぷれーと	plate	12500	jmdict:1116470	日常語・標準表記（読み全体と英語を確認）
-ぷろきし	proxy	12800	jmdict:1608190	JMdict に明記された読み異表記。長音を機械的に削除したものではない。
+ぷろきし	proxy	12500	jmdict:1608190	JMdict の通常の完全読みプロキシを確認し、検索専用のプロキシーより低コストで採用。
 ぷろくし	proxy	12800	jmdict:1608190	JMdict に明記された読み異表記。長音を機械的に削除したものではない。
 ぷろせす	process	12500	jmdict:1117310	JMdict の読みと英語表記を指定した IT 用語の完全一致ペア。
 へっだー	header	12500	jmdict:1118340	JMdict の限定注釈付き語義から本ペアの英単語と完全読みを個別選定。注釈の一括削除での採用はしない。
@@ -530,7 +530,7 @@ reading	surface	cost	source	note
 きゃぷちゃ	capture	12800	jmdict:1041840	JMdict に明記された読み異表記。長音を機械的に削除したものではない。
 きゃぷてん	captain	12500	jmdict:1041850	日常語・標準表記（読み全体と英語を確認）
 きゃろっと	carrot	12500	jmdict:2027500	日常語・標準表記（読み全体と英語を確認）
-きゃんせる	cancel	12500	jmdict:1042050	仕事・標準表記。英語借用元 lsource の cancel を確認し cancellation の意味訳は採用しない
+きゃんせる	cancel	12500	https://docs.aws.amazon.com/ja_jp/AmazonRDS/latest/UserGuide/Appendix.Oracle.CommonDBATasks.CancellingSQL.html	公式日本語資料の全件読み監査で確認; rdsadmin.rdsadmin_util.cancelとSQLステートメントのキャンセルの完全対応; 日本語入力用の優先読み
 きゃんどる	candle	12500	jmdict:1042100	日常語・標準表記（読み全体と英語を確認）
 きゃんばす	canvas	12500	jmdict:1042130	日常語・標準表記（読み全体と英語を確認）
 きーぼーど	keyboard	12500	jmdict:1040910	JMdict の読みと英語表記を指定した IT 用語の完全一致ペア。
@@ -664,7 +664,7 @@ reading	surface	cost	source	note
 ぷりんたー	printer	12500	jmdict:1116270	JMdict の読みと英語表記を指定した IT 用語の完全一致ペア。
 ぷれぜんと	present	12500	jmdict:1116840	日常語・標準表記。完全一致 gloss を確認し音の対応しない gift は採用しない
 ぷれびゅー	preview	12500	jmdict:1116930	JMdict の読みと英語表記を指定した IT 用語の完全一致ペア。
-ぷろきしー	proxy	12500	jmdict:1608190	JMdict の読みと英語表記を指定した IT 用語の完全一致ペア。
+ぷろきしー	proxy	12800	jmdict:1608190	JMdict の検索専用のかな異表記プロキシー。通常読みプロキシを優先する別読みとして維持。
 ぷろくしー	proxy	12800	jmdict:1608190	JMdict に明記された読み異表記。長音を機械的に削除したものではない。
 ぷろぐらま	programmer	12800	jmdict:1117060	JMdict に明記された読み異表記。長音を機械的に削除したものではない。
 ぷろぐらむ	program	12500	jmdict:1117080	JMdict の限定注釈付き語義から本ペアの英単語と完全読みを個別選定。注釈の一括削除での採用はしない。
@@ -1519,7 +1519,7 @@ reading	surface	cost	source	note
 いんぼるぶ	involve	12500	jmdict:1024740	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 りーち	reach	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L98801	英語発音から作成・確認した読み; ARPAbet=R IY1 CH; 全音節を個別確認した標準読み
 そーしゃる	social	12500	jmdict:2496750	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
-ぴりあど	period	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L91280	英語発音から作成・確認した読み; ARPAbet=P IH1 R IY0 AH0 D; 全音節を個別確認した標準読み
+ぴりあど	period	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L91280	英語発音から作成・確認した読み; ARPAbet=P IH1 R IY0 AH0 D; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 あくろす	across	12500	jmdict:2156230	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 ひすとりー	history	12500	jmdict:2487240	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 くりえいと	create	12500	jmdict:1044720	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
@@ -1536,7 +1536,7 @@ reading	surface	cost	source	note
 ぼでぃー	body	12500	jmdict:1123990	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 りくわいあー	require	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L101251	英語発音から作成・確認した読み; ARPAbet=R IY2 K W AY1 ER0; 全音節を個別確認した標準読み
 うぇいと	wait	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L129185	英語発音から作成・確認した読み; ARPAbet=W EY1 T; 全音節を個別確認した標準読み
-じぇねらる	general	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L47262	英語発音から作成・確認した読み; ARPAbet=JH EH1 N ER0 AH0 L; 全音節を個別確認した標準読み
+じぇねらる	general	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L47262	英語発音から作成・確認した読み; ARPAbet=JH EH1 N ER0 AH0 L; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 あぴあー	appear	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L4984	英語発音から作成・確認した読み; ARPAbet=AH0 P IH1 R; 全音節を個別確認した標準読み
 とぅうぉーど	toward	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L122834	英語発音から作成・確認した読み; ARPAbet=T AH0 W AO1 R D; 全音節を個別確認した標準読み
 いんでぃびじゅある	individual	12500	jmdict:1023710	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
@@ -1544,7 +1544,7 @@ reading	surface	cost	source	note
 ぱーはぷす	perhaps	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L91258	英語発音から作成・確認した読み; ARPAbet=P ER0 HH AE1 P S; 全音節を個別確認した標準読み
 あっど	add	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L1030	英語発音から作成・確認した読み; ARPAbet=AE1 D; 全音節を個別確認した標準読み
 ぱす	pass	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L90026	英語発音から作成・確認した読み; ARPAbet=P AE1 S; 全音節を個別確認した標準読み
-ぷろどぅーす	produce	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L95891	英語発音から作成・確認した読み; ARPAbet=P R AH0 D UW1 S; 全音節を個別確認した標準読み
+ぷろどぅーす	produce	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L95891	英語発音から作成・確認した読み; ARPAbet=P R AH0 D UW1 S; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 せる	sell	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L108721	英語発音から作成・確認した読み; ARPAbet=S EH1 L; 全音節を個別確認した標準読み
 しょーと	short	12500	jmdict:1062300	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 あぐりー	agree	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L1897	英語発音から作成・確認した読み; ARPAbet=AH0 G R IY1; 全音節を個別確認した標準読み
@@ -1565,9 +1565,9 @@ reading	surface	cost	source	note
 こんでぃしょん	condition	12500	jmdict:1052690	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 ちゅーず	choose	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L21314	英語発音から作成・確認した読み; ARPAbet=CH UW1 Z; 全音節を個別確認した標準読み
 ふぁーざー	father	12500	jmdict:2058850	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
-でぃしじょん	decision	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L29399	英語発音から作成・確認した読み; ARPAbet=D IH0 S IH1 ZH AH0 N; 全音節を個別確認した標準読み
+でぃしじょん	decision	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L29399	英語発音から作成・確認した読み; ARPAbet=D IH0 S IH1 ZH AH0 N; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 さーたん	certain	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L20022	英語発音から作成・確認した読み; ARPAbet=S ER1 T AH0 N; 全音節を個別確認した標準読み
-ふぉーわーど	forward	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L44439	英語発音から作成・確認した読み; ARPAbet=F AO1 R W ER0 D; 全音節を個別確認した標準読み
+ふぉーわーど	forward	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L44439	英語発音から作成・確認した読み; ARPAbet=F AO1 R W ER0 D; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 だい	die	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L31976	英語発音から作成・確認した読み; ARPAbet=D AY1; 全音節を個別確認した標準読み
 べあー	bear	12500	jmdict:2857072	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 かっと	cut	12500	jmdict:1037630	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
@@ -1593,7 +1593,7 @@ reading	surface	cost	source	note
 ふぉーん	phone	12500	jmdict:2492250	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 ぜむせるぶず	themselves	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L121020	英語発音から作成・確認した読み; ARPAbet=DH EH0 M S EH1 L V Z; 全音節を個別確認した標準読み
 どろー	draw	12500	jmdict:1089390	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
-でいと	date	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L28831	英語発音から作成・確認した読み; ARPAbet=D EY1 T; 全音節を個別確認した標準読み
+でいと	date	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L28831	英語発音から作成・確認した読み; ARPAbet=D EY1 T; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 ぷらくてぃす	practice	12500	jmdict:1115570	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 れいず	raise	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L98083	英語発音から作成・確認した読み; ARPAbet=R EY1 Z; 全音節を個別確認した標準読み
 ふろんと	front	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L45402	英語発音から作成・確認した読み; ARPAbet=F R AH1 N T; 全音節を個別確認した標準読み
@@ -1606,7 +1606,7 @@ reading	surface	cost	source	note
 らんど	land	12500	jmdict:1140190	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 ちゃーじ	charge	12500	jmdict:1077780	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 ふぁいなりー	finally	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L42607	英語発音から作成・確認した読み; ARPAbet=F AY1 N AH0 L IY0; 全音節を個別確認した標準読み
-くれいむ	claim	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L21953	英語発音から作成・確認した読み; ARPAbet=K L EY1 M; 全音節を個別確認した標準読み
+くれいむ	claim	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L21953	英語発音から作成・確認した読み; ARPAbet=K L EY1 M; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 りれーしょんしっぷ	relationship	12500	jmdict:2864981	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 えんじょい	enjoy	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L38281	英語発音から作成・確認した読み; ARPAbet=EH2 N JH OY1; 全音節を個別確認した標準読み
 です	death	12500	jmdict:1920060	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
@@ -1687,7 +1687,7 @@ reading	surface	cost	source	note
 ふぉーまー	former	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L44294	英語発音から作成・確認した読み; ARPAbet=F AO1 R M ER0; 全音節を個別確認した標準読み
 ぱーてぃきゅらーりー	particularly	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L89926	英語発音から作成・確認した読み; ARPAbet=P AA2 R T IH1 K Y AH0 L ER0 L IY0; 全音節を個別確認した標準読み
 わいふ	wife	12500	jmdict:1148710	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
-すぽーと	sport	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L114502	英語発音から作成・確認した読み; ARPAbet=S P AO1 R T; 全音節を個別確認した標準読み
+すぽーと	sport	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L114502	英語発音から作成・確認した読み; ARPAbet=S P AO1 R T; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 ぷりぺあー	prepare	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L95168	英語発音から作成・確認した読み; ARPAbet=P R IY0 P EH1 R; 全音節を個別確認した標準読み
 でぃすかす	discuss	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L32874	英語発音から作成・確認した読み; ARPAbet=D IH0 S K AH1 S; 全音節を個別確認した標準読み
 ぼいす	voice	12500	jmdict:1123690	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
@@ -1956,8 +1956,8 @@ reading	surface	cost	source	note
 りーがる	legal	12500	jmdict:1140440	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 かんばせーしょん	conversation	12500	jmdict:1039510	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 さむばでぃー	somebody	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L113346	英語発音から作成・確認した読み; ARPAbet=S AH1 M B AA2 D IY0; 全音節を個別確認した標準読み
-ぱうんど	pound	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L94648	英語発音から作成・確認した読み; ARPAbet=P AW1 N D; 全音節を個別確認した標準読み
-まがじーん	magazine	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L73461	英語発音から作成・確認した読み; ARPAbet=M AE1 G AH0 Z IY2 N; 全音節を個別確認した標準読み
+ぱうんど	pound	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L94648	英語発音から作成・確認した読み; ARPAbet=P AW1 N D; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
+まがじーん	magazine	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L73461	英語発音から作成・確認した読み; ARPAbet=M AE1 G AH0 Z IY2 N; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 しぇいぷ	shape	12500	jmdict:2073470	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 いみーでぃあとりー	immediately	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L58635	英語発音から作成・確認した読み; ARPAbet=IH2 M IY1 D IY2 AH0 T L IY0; 全音節を個別確認した標準読み
 うぇるかむ	welcome	12500	jmdict:1026290	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
@@ -2076,7 +2076,7 @@ reading	surface	cost	source	note
 ぱーせんてーじ	percentage	12500	jmdict:1100600	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 ぴーす	peace	12500	jmdict:1106220	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 でぃくらいん	decline	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L29441	英語発音から作成・確認した読み; ARPAbet=D IH0 K L AY1 N; 全音節を個別確認した標準読み
-でけいど	decade	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L29285	英語発音から作成・確認した読み; ARPAbet=D EH0 K EY1 D; 全音節を個別確認した標準読み
+でけいど	decade	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L29285	英語発音から作成・確認した読み; ARPAbet=D EH0 K EY1 D; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 ろーんち	launch	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L68845	英語発音から作成・確認した読み; ARPAbet=L AO1 N CH; 全音節を個別確認した標準読み
 うぉーん	warn	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L129651	英語発音から作成・確認した読み; ARPAbet=W AO1 R N; 全音節を個別確認した標準読み
 こんしゅーまー	consumer	12500	jmdict:1052110	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
@@ -2099,7 +2099,7 @@ reading	surface	cost	source	note
 さたすふぁい	satisfy	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L106214	英語発音から作成・確認した読み; ARPAbet=S AE1 T AH0 S F AY2; 全音節を個別確認した標準読み
 ちーふ	chief	12500	jmdict:1077340	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 くーる	cool	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L25203	英語発音から作成・確認した読み; ARPAbet=K UW1 L; 全音節を個別確認した標準読み
-うぇいぶ	wave	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L129945	英語発音から作成・確認した読み; ARPAbet=W EY1 V; 全音節を個別確認した標準読み
+うぇいぶ	wave	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L129945	英語発音から作成・確認した読み; ARPAbet=W EY1 V; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 さうす	south	12500	jmdict:2860356	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 さーふぇす	surface	12500	jmdict:2624000	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 えくせれんと	excellent	12500	jmdict:1028160	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
@@ -2110,7 +2110,7 @@ reading	surface	cost	source	note
 すとらっぐる	struggle	12500	jmdict:2497920	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 あどばーたいず	advertise	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L1421	英語発音から作成・確認した読み; ARPAbet=AE1 D V ER0 T AY2 Z; 全音節を個別確認した標準読み
 せれくと	select	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L108610	英語発音から作成・確認した読み; ARPAbet=S AH0 L EH1 K T; 全音節を個別確認した標準読み
-さーらうんど	surround	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L118260	英語発音から作成・確認した読み; ARPAbet=S ER0 AW1 N D; 全音節を個別確認した標準読み
+さーらうんど	surround	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L118260	英語発音から作成・確認した読み; ARPAbet=S ER0 AW1 N D; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 えくすてんと	extent	12500	jmdict:1028030	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 あにゅある	annual	12500	jmdict:2433530	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 ふりー	fully	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L45649	英語発音から作成・確認した読み; ARPAbet=F UH1 L IY0; 全音節を個別確認した標準読み
@@ -2161,7 +2161,7 @@ reading	surface	cost	source	note
 すもーく	smoke	12500	jmdict:1659980	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 りあくしょん	reaction	12500	jmdict:1140880	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 れっすん	lesson	12500	jmdict:1145510	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
-ぶれいん	brain	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L14494	英語発音から作成・確認した読み; ARPAbet=B R EY1 N; 全音節を個別確認した標準読み
+ぶれいん	brain	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L14494	英語発音から作成・確認した読み; ARPAbet=B R EY1 N; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 ます	mass	12500	jmdict:1127800	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 ふぁにー	funny	12500	jmdict:1108320	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 こんとりびゅーと	contribute	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L25038	英語発音から作成・確認した読み; ARPAbet=K AH0 N T R IH1 B Y UW0 T; 全音節を個別確認した標準読み
@@ -2201,7 +2201,7 @@ reading	surface	cost	source	note
 いにしゃる	initial	12500	jmdict:1021570	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 さじぇすちょん	suggestion	12500	jmdict:1056540	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 くりてぃかる	critical	12500	jmdict:1044960	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
-がざー	gather	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L46828	英語発音から作成・確認した読み; ARPAbet=G AE1 DH ER0; 全音節を個別確認した標準読み
+がざー	gather	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L46828	英語発音から作成・確認した読み; ARPAbet=G AE1 DH ER0; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 もーすとりー	mostly	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L81492	英語発音から作成・確認した読み; ARPAbet=M OW1 S T L IY0; 全音節を個別確認した標準読み
 あーす	earth	12500	jmdict:1013500	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 ぽっぷ	pop	12500	jmdict:1125300	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
@@ -2212,7 +2212,7 @@ reading	surface	cost	source	note
 えんぷろい	employ	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L37785	英語発音から作成・確認した読み; ARPAbet=EH0 M P L OY1; 全音節を個別確認した標準読み
 とぴっく	topic	12500	jmdict:1085350	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 あとらくと	attract	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L6706	英語発音から作成・確認した読み; ARPAbet=AH0 T R AE1 K T; 全音節を個別確認した標準読み
-えんげいじ	engage	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L38164	英語発音から作成・確認した読み; ARPAbet=EH0 N G EY1 JH; 全音節を個別確認した標準読み
+えんげいじ	engage	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L38164	英語発音から作成・確認した読み; ARPAbet=EH0 N G EY1 JH; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 ぱわふる	powerful	12500	jmdict:1103080	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 ふらわー	flower	12500	jmdict:2074310	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 くらいしす	crisis	12500	jmdict:1043880	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
@@ -2285,7 +2285,7 @@ reading	surface	cost	source	note
 ゆーじゅある	usual	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L126549	英語発音から作成・確認した読み; ARPAbet=Y UW1 ZH AH0 W AH0 L; 全音節を個別確認した標準読み
 けあふりー	carefully	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L18558	英語発音から作成・確認した読み; ARPAbet=K EH1 R F AH0 L IY0; 全音節を個別確認した標準読み
 ぱっく	pack	12500	jmdict:1101700	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
-りーこーる	recall	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L99143	英語発音から作成・確認した読み; ARPAbet=R IY1 K AO2 L; 全音節を個別確認した標準読み
+りーこーる	recall	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L99143	英語発音から作成・確認した読み; ARPAbet=R IY1 K AO2 L; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 かめら	camera	12500	jmdict:1038350	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 すいむ	swim	12500	jmdict:2850019	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 まにゅふぁくちゃー	manufacture	12500	jmdict:2502060	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
@@ -2327,7 +2327,7 @@ reading	surface	cost	source	note
 のいず	noise	12500	jmdict:1093720	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 まなー	manner	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L74395	英語発音から作成・確認した読み; ARPAbet=M AE1 N ER0; 全音節を個別確認した標準読み
 がん	gun	12500	jmdict:1040560	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
-すくうぇあー	square	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L114738	英語発音から作成・確認した読み; ARPAbet=S K W EH1 R; 全音節を個別確認した標準読み
+すくうぇあー	square	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L114738	英語発音から作成・確認した読み; ARPAbet=S K W EH1 R; 全音節を個別確認した発音由来の別読み; 日本語資料で確認した読みを優先
 あけいじょん	occasion	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L86259	英語発音から作成・確認した読み; ARPAbet=AH0 K EY1 ZH AH0 N; 全音節を個別確認した標準読み
 ふぁみりあー	familiar	12500	jmdict:1108470	日本語資料で確認した読み; 読み全体と単語を確認し読み・語義制限を照合; 標準読み
 いぐのー	ignore	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L58419	英語発音から作成・確認した読み; ARPAbet=IH2 G N AO1 R; 全音節を個別確認した標準読み
@@ -2399,7 +2399,7 @@ reading	surface	cost	source	note
 はいやー	hire	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L55564	英語発音から作成・確認した読み; ARPAbet=HH AY1 ER0; 全音節を確認した標準読み
 ほーる	hole	12500	jmdict:2841290	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 いんたーなる	internal	12500	jmdict:2436370	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
-ちぇいん	chain	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L20143	英語発音から作成・確認した読み; ARPAbet=CH EY1 N; 全音節を確認した標準読み
+ちぇいん	chain	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L20143	英語発音から作成・確認した読み; ARPAbet=CH EY1 N; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 りてらちゃー	literature	12500	jmdict:1141960	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 ゔぃくてぃむ	victim	12500	jmdict:2500540	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 びくてぃむ	victim	12800	jmdict:2500540	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 資料に確認できる別読み
@@ -2452,7 +2452,7 @@ reading	surface	cost	source	note
 ぎゃらんてぃー	guarantee	12500	jmdict:2469350	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 ぎゃらんてぃ	guarantee	12800	jmdict:2469350	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 資料に確認できる別読み
 てぃる	till	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L121805	英語発音から作成・確認した読み; ARPAbet=T IH1 L; 全音節を確認した標準読み
-しーむ	theme	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L121014	英語発音から作成・確認した読み; ARPAbet=TH IY1 M; 全音節を確認した標準読み
+しーむ	theme	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L121014	英語発音から作成・確認した読み; ARPAbet=TH IY1 M; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 じゃっじめんと	judgment	12500	jmdict:1065470	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 おっど	odd	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L86365	英語発音から作成・確認した読み; ARPAbet=AA1 D; 全音節を確認した標準読み
 あぷるーゔ	approve	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L5144	英語発音から作成・確認した読み; ARPAbet=AH0 P R UW1 V; 全音節を確認した標準読み
@@ -2515,7 +2515,7 @@ reading	surface	cost	source	note
 りたいあ	retire	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L101780	英語発音から作成・確認した読み; ARPAbet=R IH0 T AY1 R; 全音節を確認した標準読み
 けあふる	careful	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L18557	英語発音から作成・確認した読み; ARPAbet=K EH1 R F AH0 L; 全音節を確認した標準読み
 すーたぶる	suitable	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L117659	英語発音から作成・確認した読み; ARPAbet=S UW1 T AH0 B AH0 L; 全音節を確認した標準読み
-ふるーと	fruit	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L45460	英語発音から作成・確認した読み; ARPAbet=F R UW1 T; 全音節を確認した標準読み
+ふるーと	fruit	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L45460	英語発音から作成・確認した読み; ARPAbet=F R UW1 T; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 あならいず	analyze	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L3941	英語発音から作成・確認した読み; ARPAbet=AE1 N AH0 L AY2 Z; 全音節を確認した標準読み
 うぃとねす	witness	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L132540	英語発音から作成・確認した読み; ARPAbet=W IH1 T N AH0 S; 全音節を確認した標準読み
 てりぶる	terrible	12500	jmdict:2796160	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
@@ -2531,7 +2531,7 @@ reading	surface	cost	source	note
 ふぁっと	fat	12500	jmdict:2324170	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 ふぇろー	fellow	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L41835	英語発音から作成・確認した読み; ARPAbet=F EH1 L OW0; 全音節を確認した標準読み
 けみかる	chemical	12500	jmdict:1048150	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
-てぃっぷ	tip	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L121979	英語発音から作成・確認した読み; ARPAbet=T IH1 P; 全音節を確認した標準読み
+てぃっぷ	tip	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L121979	英語発音から作成・確認した読み; ARPAbet=T IH1 P; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 でぃすかうんと	discount	12500	jmdict:1081680	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 ぴーく	peak	12500	jmdict:1106180	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 ちぇあまん	chairman	12500	jmdict:1077450	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
@@ -2545,7 +2545,7 @@ reading	surface	cost	source	note
 しぐにふぃかんとりー	significantly	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L111173	英語発音から作成・確認した読み; ARPAbet=S IH0 G N IH1 F IH0 K AH0 N T L IY0; 全音節を確認した標準読み
 こんしだらぶる	considerable	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L24664	英語発音から作成・確認した読み; ARPAbet=K AH0 N S IH1 D ER0 AH0 B AH0 L; 全音節を確認した標準読み
 いんてりじぇんす	intelligence	12500	jmdict:1023490	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
-あいでぃーる	ideal	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L58287	英語発音から作成・確認した読み; ARPAbet=AY0 D IY1 L; 全音節を確認した標準読み
+あいでぃーる	ideal	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L58287	英語発音から作成・確認した読み; ARPAbet=AY0 D IY1 L; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 ふぉーく	folk	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L43840	英語発音から作成・確認した読み; ARPAbet=F OW1 K; 全音節を確認した標準読み
 しゅありー	surely	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L118158	英語発音から作成・確認した読み; ARPAbet=SH UH1 R L IY0; 全音節を確認した標準読み
 がーど	guard	12500	jmdict:1039710	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
@@ -2647,7 +2647,7 @@ reading	surface	cost	source	note
 りぞるゔ	resolve	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L101484	英語発音から作成・確認した読み; ARPAbet=R IY0 Z AA1 L V; 全音節を確認した標準読み
 くりてぃっく	critic	12500	jmdict:1044980	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 いのーます	enormous	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L38356	英語発音から作成・確認した読み; ARPAbet=IH0 N AO1 R M AH0 S; 全音節を確認した標準読み
-すうぃーと	sweet	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L118607	英語発音から作成・確認した読み; ARPAbet=S W IY1 T; 全音節を確認した標準読み
+すうぃーと	sweet	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L118607	英語発音から作成・確認した読み; ARPAbet=S W IY1 T; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 ぱーまねんと	permanent	12500	jmdict:1100940	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 えもーしょん	emotion	12500	jmdict:1030010	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 ぱーすー	pursue	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L97012	英語発音から作成・確認した読み; ARPAbet=P ER0 S UW1; 全音節を確認した標準読み
@@ -2666,7 +2666,7 @@ reading	surface	cost	source	note
 いんじゃりー	injury	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L59906	英語発音から作成・確認した読み; ARPAbet=IH1 N JH ER0 IY0; 全音節を確認した標準読み
 ゔぁすと	vast	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L127390	英語発音から作成・確認した読み; ARPAbet=V AE1 S T; 全音節を確認した標準読み
 えきしびしょん	exhibition	12500	jmdict:1027730	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
-ぷらどぅーさー	producer	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L95894	英語発音から作成・確認した読み; ARPAbet=P R AH0 D UW1 S ER0; 全音節を確認した標準読み
+ぷらどぅーさー	producer	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L95894	英語発音から作成・確認した読み; ARPAbet=P R AH0 D UW1 S ER0; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 りーじょなる	regional	12500	jmdict:1140510	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 いみでぃえいと	immediate	12500	jmdict:1021740	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 いんしでんと	incident	12500	jmdict:1022400	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
@@ -2760,7 +2760,7 @@ reading	surface	cost	source	note
 りぽーたー	reporter	12500	jmdict:1145980	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 れぽーたー	reporter	12800	jmdict:1145980	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 資料に確認できる別読み
 くらいめっと	climate	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L22364	英語発音から作成・確認した読み; ARPAbet=K L AY1 M AH0 T; 全音節を確認した標準読み
-しゃーと	shirt	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L110372	英語発音から作成・確認した読み; ARPAbet=SH ER1 T; 全音節を確認した標準読み
+しゃーと	shirt	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L110372	英語発音から作成・確認した読み; ARPAbet=SH ER1 T; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 こーぽれーしょん	corporation	12500	jmdict:1049310	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 ういなー	winner	12500	jmdict:1025410	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 えんかうんたー	encounter	12500	jmdict:1030800	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
@@ -2832,7 +2832,7 @@ reading	surface	cost	source	note
 でらいゔ	derive	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L30983	英語発音から作成・確認した読み; ARPAbet=D ER0 AY1 V; 全音節を確認した標準読み
 くるーしゃる	crucial	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L27240	英語発音から作成・確認した読み; ARPAbet=K R UW1 SH AH0 L; 全音節を確認した標準読み
 あんいんぷろいめんと	unemployment	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L125544	英語発音から作成・確認した読み; ARPAbet=AH2 N IH0 M P L OY1 M AH0 N T; 全音節を確認した標準読み
-うぃーる	wheel	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L130956	英語発音から作成・確認した読み; ARPAbet=W IY1 L; 全音節を確認した標準読み
+うぃーる	wheel	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L130956	英語発音から作成・確認した読み; ARPAbet=W IY1 L; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 くろっぷ	crop	12500	jmdict:2294420	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 まいのりてぃー	minority	12500	jmdict:1127020	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 まいのりてぃ	minority	12800	jmdict:1127020	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 資料に確認できる別読み
@@ -2869,7 +2869,7 @@ reading	surface	cost	source	note
 あるてぃまとりー	ultimately	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L124975	英語発音から作成・確認した読み; ARPAbet=AH1 L T AH0 M AH0 T L IY0; 全音節を確認した標準読み
 ぷるーふ	proof	12500	jmdict:1116350	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 すまーと	smart	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L112464	英語発音から作成・確認した読み; ARPAbet=S M AA1 R T; 全音節を確認した標準読み
-あぷせっと	upset	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L126325	英語発音から作成・確認した読み; ARPAbet=AH0 P S EH1 T; 全音節を確認した標準読み
+あぷせっと	upset	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L126325	英語発音から作成・確認した読み; ARPAbet=AH0 P S EH1 T; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 とぅーす	tooth	12500	jmdict:1919790	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 つーす	tooth	12800	jmdict:1919790	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 資料に確認できる別読み
 りぷれぜんてーしょん	representation	12500	jmdict:2503710	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
@@ -2892,7 +2892,7 @@ reading	surface	cost	source	note
 あんのうん	unknown	12800	jmdict:2435830	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 資料に確認できる別読み
 ぞーん	zone	12500	jmdict:1075690	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 りすとりくと	restrict	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L101640	英語発音から作成・確認した読み; ARPAbet=R IY0 S T R IH1 K T; 全音節を確認した標準読み
-とぅれいす	trace	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L122931	英語発音から作成・確認した読み; ARPAbet=T R EY1 S; 全音節を確認した標準読み
+とぅれいす	trace	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L122931	英語発音から作成・確認した読み; ARPAbet=T R EY1 S; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 いんち	inch	12500	jmdict:1023330	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 いくうぃゔぁらんと	equivalent	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L38860	英語発音から作成・確認した読み; ARPAbet=IH0 K W IH1 V AH0 L AH0 N T; 全音節を確認した標準読み
 そりっど	solid	12500	jmdict:1075590	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
@@ -3007,11 +3007,11 @@ reading	surface	cost	source	note
 しんぼる	symbol	12500	jmdict:1063940	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 でもんすとれーしょん	demonstration	12500	jmdict:1084080	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 あなりすと	analyst	12500	jmdict:1017470	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
-とぅらんすふぉーむ	transform	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L123180	英語発音から作成・確認した読み; ARPAbet=T R AE0 N S F AO1 R M; 全音節を確認した標準読み
+とぅらんすふぉーむ	transform	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L123180	英語発音から作成・確認した読み; ARPAbet=T R AE0 N S F AO1 R M; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 うーんど	wound	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L133147	英語発音から作成・確認した読み; ARPAbet=W UW1 N D; 全音節を確認した標準読み
 わうんど	wound	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L133146	英語発音から作成・確認した読み; ARPAbet=W AW1 N D; 全音節を確認した別発音の読み
 りすとりくしょん	restriction	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L101644	英語発音から作成・確認した読み; ARPAbet=R IY0 S T R IH1 K SH AH0 N; 全音節を確認した標準読み
-ふぁうんでいしょん	foundation	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L44505	英語発音から作成・確認した読み; ARPAbet=F AW0 N D EY1 SH AH0 N; 全音節を確認した標準読み
+ふぁうんでいしょん	foundation	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L44505	英語発音から作成・確認した読み; ARPAbet=F AW0 N D EY1 SH AH0 N; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 すとれいん	strain	12500	jmdict:2538670	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 いのべーしょん	innovation	12500	jmdict:1021630	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 とれいる	trail	12500	jmdict:2499830	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
@@ -3023,7 +3023,7 @@ reading	surface	cost	source	note
 たんく	tank	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L119561	英語発音から作成・確認した読み; ARPAbet=T AE1 NG K; 全音節を確認した標準読み
 いーびる	evil	12500	jmdict:1929730	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 りまーかぶる	remarkable	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L100648	英語発音から作成・確認した読み; ARPAbet=R IH0 M AA1 R K AH0 B AH0 L; 全音節を確認した標準読み
-とぅーん	tune	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L124337	英語発音から作成・確認した読み; ARPAbet=T UW1 N; 全音節を確認した標準読み
+とぅーん	tune	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L124337	英語発音から作成・確認した読み; ARPAbet=T UW1 N; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 ぐらす	grass	12500	jmdict:2847461	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 いんびてーしょん	invitation	12500	jmdict:1024070	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 とらんじしょん	transition	12500	jmdict:2025690	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
@@ -3046,7 +3046,7 @@ reading	surface	cost	source	note
 こんぺてぃたー	competitor	12500	jmdict:2739930	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 あるこーる	alcohol	12500	jmdict:1019280	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 あるこほる	alcohol	12800	jmdict:1019280	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 資料に確認できる別読み
-ふぇすてぃゔぁる	festival	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L42161	英語発音から作成・確認した読み; ARPAbet=F EH1 S T AH0 V AH0 L; 全音節を確認した標準読み
+ふぇすてぃゔぁる	festival	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L42161	英語発音から作成・確認した読み; ARPAbet=F EH1 S T AH0 V AH0 L; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 べじたぶる	vegetable	12500	jmdict:1119510	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 こんふぃでんと	confident	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L24311	英語発音から作成・確認した読み; ARPAbet=K AA1 N F AH0 D AH0 N T; 全音節を確認した標準読み
 ぷらねっと	planet	12500	jmdict:2492890	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
@@ -3055,7 +3055,7 @@ reading	surface	cost	source	note
 おーゔぁーかむ	overcome	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L88374	英語発音から作成・確認した読み; ARPAbet=OW1 V ER0 K AH2 M; 全音節を確認した標準読み
 でぷす	depth	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L30907	英語発音から作成・確認した読み; ARPAbet=D EH1 P TH; 全音節を確認した標準読み
 じゃいあんと	giant	12500	jmdict:1065040	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
-がっど	god	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L48873	英語発音から作成・確認した読み; ARPAbet=G AA1 D; 全音節を確認した標準読み
+がっど	god	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L48873	英語発音から作成・確認した読み; ARPAbet=G AA1 D; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 ぽーしょん	portion	12500	jmdict:2036790	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 さぶすたんす	substance	12500	jmdict:1057280	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 いくすてんしゔ	extensive	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L40461	英語発音から作成・確認した読み; ARPAbet=IH0 K S T EH1 N S IH0 V; 全音節を確認した標準読み
@@ -3110,8 +3110,8 @@ reading	surface	cost	source	note
 おけいじょなりー	occasionally	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L86261	英語発音から作成・確認した読み; ARPAbet=AH0 K EY1 ZH AH0 N AH0 L IY0; 全音節を確認した標準読み
 しぇあほーるだー	shareholder	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L109734	英語発音から作成・確認した読み; ARPAbet=SH EH1 R HH OW2 L D ER0; 全音節を確認した標準読み
 でぃすかばりー	discovery	12500	jmdict:2123680	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
-りじすたんす	resistance	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L101446	英語発音から作成・確認した読み; ARPAbet=R IH0 Z IH1 S T AH0 N S; 全音節を確認した標準読み
-ふりーくうぇんしー	frequency	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L45088	英語発音から作成・確認した読み; ARPAbet=F R IY1 K W AH0 N S IY0; 全音節を確認した標準読み
+りじすたんす	resistance	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L101446	英語発音から作成・確認した読み; ARPAbet=R IH0 Z IH1 S T AH0 N S; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
+ふりーくうぇんしー	frequency	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L45088	英語発音から作成・確認した読み; ARPAbet=F R IY1 K W AH0 N S IY0; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 くりてぃさいず	criticize	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L26973	英語発音から作成・確認した読み; ARPAbet=K R IH1 T IH0 S AY2 Z; 全音節を確認した標準読み
 たっぷ	tap	12500	jmdict:1076340	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 ふぃろそふぃー	philosophy	12500	jmdict:1109410	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
@@ -3142,9 +3142,9 @@ reading	surface	cost	source	note
 いぐざくと	exact	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L39939	英語発音から作成・確認した読み; ARPAbet=IH0 G Z AE1 K T; 全音節を確認した標準読み
 いんふぁんと	infant	12500	jmdict:1980070	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 でぃぐ	dig	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L32118	英語発音から作成・確認した読み; ARPAbet=D IH1 G; 全音節を確認した標準読み
-どらぐ	drag	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L34616	英語発音から作成・確認した読み; ARPAbet=D R AE1 G; 全音節を確認した標準読み
+どらぐ	drag	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L34616	英語発音から作成・確認した読み; ARPAbet=D R AE1 G; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 まうんと	mount	12500	jmdict:1127200	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
-らぷ	wrap	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L133183	英語発音から作成・確認した読み; ARPAbet=R AE1 P; 全音節を確認した標準読み
+らぷ	wrap	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L133183	英語発音から作成・確認した読み; ARPAbet=R AE1 P; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 あんてぃしぺいと	anticipate	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L4632	英語発音から作成・確認した読み; ARPAbet=AE0 N T IH1 S AH0 P EY2 T; 全音節を確認した標準読み
 でぃぺんでんと	dependent	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L30777	英語発音から作成・確認した読み; ARPAbet=D IH0 P EH1 N D AH0 N T; 全音節を確認した標準読み
 すぺしゃらいず	specialize	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L114020	英語発音から作成・確認した読み; ARPAbet=S P EH1 SH AH0 L AY2 Z; 全音節を確認した標準読み
@@ -3209,7 +3209,7 @@ reading	surface	cost	source	note
 けーぱびりてぃー	capability	12800	jmdict:1047980	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 資料に確認できる別読み
 あぶそるーと	absolute	12500	jmdict:2433900	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 こらすぽんど	correspond	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L25696	英語発音から作成・確認した読み; ARPAbet=K AO2 R AH0 S P AA1 N D; 全音節を確認した標準読み
-すとぅろーく	stroke	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L116929	英語発音から作成・確認した読み; ARPAbet=S T R OW1 K; 全音節を確認した標準読み
+すとぅろーく	stroke	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L116929	英語発音から作成・確認した読み; ARPAbet=S T R OW1 K; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 であ	dare	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L28642	英語発音から作成・確認した読み; ARPAbet=D EH1 R; 全音節を確認した標準読み
 ばりあー	barrier	12500	jmdict:1099720	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 りっど	rid	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L102454	英語発音から作成・確認した読み; ARPAbet=R IH1 D; 全音節を確認した標準読み
@@ -3231,7 +3231,7 @@ reading	surface	cost	source	note
 いんぷれっしぶ	impressive	12500	jmdict:1024540	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 あうぇあねす	awareness	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L7277	英語発音から作成・確認した読み; ARPAbet=AH0 W EH1 R N AH0 S; 全音節を確認した標準読み
 ゔぁいあらんと	violent	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L128374	英語発音から作成・確認した読み; ARPAbet=V AY1 AH0 L AH0 N T; 全音節を確認した標準読み
-すれいゔ	slave	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L112123	英語発音から作成・確認した読み; ARPAbet=S L EY1 V; 全音節を確認した標準読み
+すれいゔ	slave	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L112123	英語発音から作成・確認した読み; ARPAbet=S L EY1 V; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 うぇるしー	wealthy	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L130022	英語発音から作成・確認した読み; ARPAbet=W EH1 L TH IY0; 全音節を確認した標準読み
 あーきてくちゃー	architecture	12500	jmdict:1013420	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 あーきてくちゃ	architecture	12800	jmdict:1013420	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 資料に確認できる別読み
@@ -3246,7 +3246,7 @@ reading	surface	cost	source	note
 ぷりゔぃりっじ	privilege	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L95738	英語発音から作成・確認した読み; ARPAbet=P R IH1 V IH0 L IH0 JH; 全音節を確認した標準読み
 ばいやー	buyer	12500	jmdict:1098050	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 みゅーちゅある	mutual	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L82510	英語発音から作成・確認した読み; ARPAbet=M Y UW1 CH UW0 AH0 L; 全音節を確認した標準読み
-れいる	rail	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L98010	英語発音から作成・確認した読み; ARPAbet=R EY1 L; 全音節を確認した標準読み
+れいる	rail	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L98010	英語発音から作成・確認した読み; ARPAbet=R EY1 L; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 もーてぃゔぇいと	motivate	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L81547	英語発音から作成・確認した読み; ARPAbet=M OW1 T AH0 V EY2 T; 全音節を確認した標準読み
 らぼらとりー	laboratory	12500	jmdict:1139760	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 もーげっじ	mortgage	12500	jmdict:1134440	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
@@ -3293,13 +3293,13 @@ reading	surface	cost	source	note
 ひすとりっく	historic	12500	jmdict:2868752	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 いんじゃー	injure	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L59900	英語発音から作成・確認した読み; ARPAbet=IH1 N JH ER0; 全音節を確認した標準読み
 せらぴー	therapy	12500	jmdict:2134870	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
-とぅいすと	twist	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L124677	英語発音から作成・確認した読み; ARPAbet=T W IH1 S T; 全音節を確認した標準読み
+とぅいすと	twist	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L124677	英語発音から作成・確認した読み; ARPAbet=T W IH1 S T; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 ぱーそねる	personnel	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L91541	英語発音から作成・確認した読み; ARPAbet=P ER2 S AH0 N EH1 L; 全音節を確認した標準読み
 いまじねーしょん	imagination	12500	jmdict:1021710	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 でぃさぐりー	disagree	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L32655	英語発音から作成・確認した読み; ARPAbet=D IH0 S AH0 G R IY1; 全音節を確認した標準読み
 すろーと	throat	12500	jmdict:2846407	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 いんさいと	insight	12500	jmdict:2437710	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
-たくる	tackle	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L119175	英語発音から作成・確認した読み; ARPAbet=T AE1 K AH0 L; 全音節を確認した標準読み
+たくる	tackle	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L119175	英語発音から作成・確認した読み; ARPAbet=T AE1 K AH0 L; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 ふぉーえばー	forever	12500	jmdict:2862649	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 ふぉーえゔぁー	forever	12800	jmdict:2862649	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 資料に確認できる別読み
 いくしーど	exceed	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L39991	英語発音から作成・確認した読み; ARPAbet=IH0 K S IY1 D; 全音節を確認した標準読み
@@ -3355,7 +3355,7 @@ reading	surface	cost	source	note
 いんくわいありー	inquiry	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L60027	英語発音から作成・確認した読み; ARPAbet=IH2 N K W AY1 R IY2; 全音節を確認した標準読み
 りざいん	resign	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L101419	英語発音から作成・確認した読み; ARPAbet=R IH0 Z AY1 N; 全音節を確認した標準読み
 くらふと	craft	12500	jmdict:1044270	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
-すとぅりくと	strict	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L116833	英語発音から作成・確認した読み; ARPAbet=S T R IH1 K T; 全音節を確認した標準読み
+すとぅりくと	strict	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L116833	英語発音から作成・確認した読み; ARPAbet=S T R IH1 K T; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 こんくりーと	concrete	12500	jmdict:1051860	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 だむ	damn	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L28423	英語発音から作成・確認した読み; ARPAbet=D AE1 M; 全音節を確認した標準読み
 でぃすてぃんくと	distinct	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L33285	英語発音から作成・確認した読み; ARPAbet=D IH0 S T IH1 NG K T; 全音節を確認した標準読み
@@ -3370,7 +3370,7 @@ reading	surface	cost	source	note
 みあ	mere	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L78087	英語発音から作成・確認した読み; ARPAbet=M IH1 R; 全音節を確認した標準読み
 れぎゅれいと	regulate	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L100116	英語発音から作成・確認した読み; ARPAbet=R EH1 G Y AH0 L EY2 T; 全音節を確認した標準読み
 でぃすとらくしょん	destruction	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L31303	英語発音から作成・確認した読み; ARPAbet=D IH0 S T R AH1 K SH AH0 N; 全音節を確認した標準読み
-ぴあのー	piano	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L92303	英語発音から作成・確認した読み; ARPAbet=P IY0 AE1 N OW0; 全音節を確認した標準読み
+ぴあのー	piano	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L92303	英語発音から作成・確認した読み; ARPAbet=P IY0 AE1 N OW0; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 まじっく	magic	12500	jmdict:1127700	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 みすてりー	mystery	12500	jmdict:1130740	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 うぃすぱー	whisper	12500	jmdict:2440750	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
@@ -3442,14 +3442,14 @@ reading	surface	cost	source	note
 あとらくしょん	attraction	12500	jmdict:1016880	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 くわいあとりー	quietly	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L97496	英語発音から作成・確認した読み; ARPAbet=K W AY1 AH0 T L IY0; 全音節を確認した標準読み
 きゃっする	castle	12500	jmdict:1041520	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
-ゔぇたらん	veteran	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L127931	英語発音から作成・確認した読み; ARPAbet=V EH1 T ER0 AH0 N; 全音節を確認した標準読み
+ゔぇたらん	veteran	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L127931	英語発音から作成・確認した読み; ARPAbet=V EH1 T ER0 AH0 N; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 なーゔ	nerve	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L83671	英語発音から作成・確認した読み; ARPAbet=N ER1 V; 全音節を確認した標準読み
 でぃたーまねいしょん	determination	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L31365	英語発音から作成・確認した読み; ARPAbet=D IH0 T ER2 M AH0 N EY1 SH AH0 N; 全音節を確認した標準読み
 おーるたげざー	altogether	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L3270	英語発音から作成・確認した読み; ARPAbet=AO2 L T AH0 G EH1 DH ER0; 全音節を確認した標準読み
 こんふゅーじょん	confusion	12500	jmdict:2501680	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 はりー	hurry	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L57774	英語発音から作成・確認した読み; ARPAbet=HH ER1 IY0; 全音節を確認した標準読み
 こんとらゔぁーしゃる	controversial	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L25065	英語発音から作成・確認した読み; ARPAbet=K AA2 N T R AH0 V ER1 SH AH0 L; 全音節を確認した標準読み
-らー	raw	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L98707	英語発音から作成・確認した読み; ARPAbet=R AA1; 全音節を確認した標準読み
+らー	raw	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L98707	英語発音から作成・確認した読み; ARPAbet=R AA1; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 りゔぁいず	revise	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L102051	英語発音から作成・確認した読み; ARPAbet=R IH0 V AY1 Z; 全音節を確認した標準読み
 ひんと	hint	12500	jmdict:1104300	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 りきっど	liquid	12500	jmdict:1141130	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
@@ -3562,8 +3562,901 @@ reading	surface	cost	source	note
 こるーちん	coroutine	12500	jmdict:2297040	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 でぃぺんでんしー	dependency	12500	https://www.sidefx.com/ja/docs/houdini/network/dependencies.html	日本語資料で確認した読み; SideFX公式文書のディペンデンシーとDependency linksの対応を別レビューで照合; 標準読み
 でぃぺんだんしー	dependency	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L30776	英語発音から作成・確認した読み; ARPAbet=D IH0 P EH1 N D AH0 N S IY0; 日本語資料の標準読みに対する発音由来の別読みを別レビューで照合
-でぃぷろい	deploy	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L30811	英語発音から作成・確認した読み; ARPAbet=D IH0 P L OY1; 全音節を確認した標準読み
+でぃぷろい	deploy	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L30811	英語発音から作成・確認した読み; ARPAbet=D IH0 P L OY1; 全音節を確認した発音由来の別読み; 日本語資料で確認した読みを優先
 すてーくほるだー	stakeholder	12500	jmdict:2123270	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 すていくほるだー	stakeholder	12800	jmdict:2123270	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 資料に確認できる別読み
 べんだー	vendor	12500	jmdict:1120250	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 標準読み
 ゔぇんだー	vendor	12800	jmdict:1120250	日本語資料で確認した読み; 完全な語の発音に対応するJMdictの読みを選択; 資料に確認できる別読み
+
+# 日本語入力用の読み監査（日本語資料の完全な語の表記・語義を個別確認）
+てーま	theme	12500	jmdict:1078830	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+ふるーつ	fruit	12500	jmdict:1112040	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+すぽーつ	sport	12500	jmdict:1073210	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+すとろーく	stroke	12500	jmdict:1071550	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「stroke (of a racket, in swimming, etc.)」と単語の完全対応を個別確認
+ぴあの	piano	12500	jmdict:1106400	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「piano (instrument)」と単語の完全対応を個別確認
+ぷろでゅーさー	producer	12500	jmdict:1117630	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「producer (film, TV, etc.)」と単語の完全対応を個別確認
+しゃつ	shirt	12500	jmdict:1061520	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「shirt (undergarment)」と単語の完全対応を個別確認
+とれーす	trace	12500	jmdict:1086990	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「trace (of a matrix)」と単語の完全対応を個別確認
+すとーりー	story	12500	jmdict:1070830	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+ぷりてぃー	pretty	12500	jmdict:1116060	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+ちゅーん	tune	12500	jmdict:1078200	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+ぴりおど	period	12500	jmdict:1107000	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「period (esp. in European languages)」と単語の完全対応を個別確認
+ろー	raw	12500	jmdict:2835264	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「raw (image format)」と単語の完全対応を個別確認
+でべろっぷめんと	development	12800	jmdict:2448180	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+はっぴねす	happiness	12800	jmdict:2867759	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+いりゅーじょん	illusion	12800	jmdict:1022020	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+でまんど	demand	12800	jmdict:1083940	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+でぃれー	delay	12800	jmdict:1082420	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+あいでぃある	ideal	12500	jmdict:1014250	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+うぇーぶ	wave	12500	jmdict:1025950	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「wave (on water)」と単語の完全対応を個別確認
+えんげーじ	engage	12500	jmdict:1030830	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「engage (e.g. angle)」と単語の完全対応を個別確認
+ぎゃざー	gather	12500	jmdict:1043030	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「gather (dressmaking)」と単語の完全対応を個別確認
+くれーむ	claim	12500	jmdict:1045270	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「claim (for compensation)」と単語の完全対応を個別確認
+さらうんど	surround	12500	jmdict:1057840	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「surround (sound)」と単語の完全対応を個別確認
+すいーと	sweet	12500	jmdict:1067080	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「sweet (flavour)」と単語の完全対応を個別確認
+すくえあ	square	12500	jmdict:1068320	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「square (shape)」と単語の完全対応を個別確認
+すれーぶ	slave	12500	jmdict:1074010	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「slave (device)」と単語の完全対応を個別確認
+ちぇーん	chain	12500	jmdict:1077420	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「chain (bicycle, measuring, tire, etc.)」と単語の完全対応を個別確認
+ちっぷ	tip	12500	jmdict:1077740	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+でーと	date	12500	jmdict:1081430	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「date (with someone)」と単語の完全対応を個別確認
+でしじょん	decision	12500	jmdict:1082940	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+ふぁんでーしょん	foundation	12500	jmdict:1108730	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「foundation (makeup)」と単語の完全対応を個別確認
+ふぇすてぃばる	festival	12500	jmdict:1109820	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「festival (esp. music, film, etc.)」と単語の完全対応を個別確認
+ふぉわーど	forward	12500	jmdict:1110850	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「forward (position)」と単語の完全対応を個別確認
+ぶれーん	brain	12500	jmdict:1114710	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「brain (organ)」と単語の完全対応を個別確認
+ほいーる	wheel	12500	jmdict:1122200	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「wheel (esp. of a vehicle)」と単語の完全対応を個別確認
+ぽんど	pound	12500	jmdict:1126030	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「pound (unit of weight)」と単語の完全対応を個別確認
+まがじん	magazine	12500	jmdict:1127270	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「magazine (periodical)」と単語の完全対応を個別確認
+りこーる	recall	12500	jmdict:1141290	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「recall (of an elected official)」と単語の完全対応を個別確認
+れーる	rail	12500	jmdict:1144480	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「rail (track)」と単語の完全対応を個別確認
+れじすたんす	resistance	12500	jmdict:1145190	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「resistance (movement)」と単語の完全対応を個別確認
+ごっど	god	12500	jmdict:1920080	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「god (esp. the Christian God)」と単語の完全対応を個別確認
+たっくる	tackle	12500	jmdict:2071750	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「tackle (in rugby, hockey, etc.)」と単語の完全対応を個別確認
+ついすと	twist	12500	jmdict:2072330	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「twist (dance)」と単語の完全対応を個別確認
+ぜねらる	general	12500	jmdict:2150480	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「general (manager, strike, etc.)」と単語の完全対応を個別確認
+どらっぐ	drag	12500	jmdict:2845238	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「drag (wearing female clothing)」と単語の完全対応を個別確認
+ふりーくえんしー	frequency	12500	jmdict:2809520	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+でぃけーど	decade	12500	jmdict:2864994	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+あっぷせっと	upset	12500	jmdict:2866935	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み; 注釈付き語義「upset (in a contest)」と単語の完全対応を個別確認
+きゃぴたる	capital	12500	jmdict:2062330	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+めでぃあむ	medium	12500	jmdict:1131080	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+むーびー	movie	12500	jmdict:1132210	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+りぎんぐ	rigging	12500	jmdict:2754760	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+にゅーくりあ	nuclear	12500	jmdict:2211990	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+てくにっく	technique	12500	jmdict:1079450	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+てきすたいる	textile	12500	jmdict:1079270	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 日本語入力用の優先読み
+あぶそりゅーと	absolute	12800	jmdict:2433900	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+あきゅれいと	accurate	12800	jmdict:2155750	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+あともすふぇあ	atmosphere	12800	jmdict:1016870	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+あわーど	award	12800	jmdict:2435640	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+ばーすでー	birthday	12800	jmdict:1097140	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+ぶれーくだうん	breakdown	12800	jmdict:1114670	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+ぶれーくするー	breakthrough	12800	jmdict:2025840	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+いんふぉーめーしょん	information	12800	jmdict:1024190	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+まねーじめんと	management	12800	jmdict:1128980	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+もてぃべーしょん	motivation	12800	jmdict:1135080	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+ぽりてぃっくす	politics	12800	jmdict:1125830	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+ぷりふぁれんす	preference	12800	jmdict:1116080	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+ぷりふぃっくす	prefix	12800	jmdict:2327350	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+くぉりてぃー	quality	12800	jmdict:1043730	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+くえっしょん	question	12800	jmdict:1043590	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+りぽーと	report	12800	jmdict:1145990	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+りすぽんす	response	12800	jmdict:1145360	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+さんどうぃっち	sandwich	12800	jmdict:1058580	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+しぐにちゃー	signature	12800	jmdict:1060190	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+そさえてぃ	society	12800	jmdict:1075400	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+さーふぇいす	surface	12800	jmdict:2624000	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+てれほん	telephone	12800	jmdict:1080690	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+うぃすきー	whisky	12800	jmdict:1025140	日本語資料で確認した読み; JMdictの読み全体・語義制限を個別照合; 資料に確認できる別読み
+でぷろい	deploy	12500	https://learn.microsoft.com/ja-jp/azure/app-service/deploy-zip	日本語資料で確認した読み; Microsoft公式文書のaz webapp deployとデプロイの完全対応を確認; 日本語入力用の優先読み
+とらんすふぉーむ	transform	12500	https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/TemplateReference/intrinsic-function-reference-transform.html	日本語資料で確認した読み; AWS公式文書のFn::Transformとトランスフォームの完全対応を確認; 日本語入力用の優先読み
+
+
+
+# 全表記の出典・別読み監査（完全な読みと語義制限を照合、検索用・意味のみ・部分語を除外）
+せるん	CERN	12800	jmdict:5741800	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=CERN
+かえさる	Caesar	12800	jmdict:1037030	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=Caesar
+ふりーめーそん	Freemason	12800	jmdict:2074320	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=Freemason
+ふらいでー	Friday	12800	jmdict:2187930	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=Friday
+いすらむ	Islam	12800	jmdict:1021310	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=Islam
+じゃわ	Java	12800	jmdict:2142130	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=Java (Indonesian island)
+じゃゔぁ	Java	12800	jmdict:2142130	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=Java (Indonesian island)
+じゅん	June	12800	jmdict:2188140	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=June
+くるあーん	Koran	12800	jmdict:1049380	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=Koran
+こーらん	Koran	12800	jmdict:1049380	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=Koran
+れーにん	Lenin	12800	jmdict:1916560	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=Lenin
+おりおん	Orion	12500	jmdict:1035600	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 日本語入力用の優先読み; gloss=Orion
+さーみ	Sami	12800	jmdict:2841251	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=Sami (people)
+さーめ	Sami	12800	jmdict:2841251	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=Sami (people)
+さむすん	Samsung	12500	jmdict:5035418	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 日本語入力用の優先読み; gloss=Samsung
+てーざー	Taser	12800	jmdict:5742162	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=Taser
+さーずでー	Thursday	12800	jmdict:2187920	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=Thursday
+わいはい	Wi-Fi	12800	jmdict:2827637	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=Wi-Fi
+わいはい	WiFi	12800	jmdict:2827637	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=WiFi
+あこーでぃあん	accordion	12800	jmdict:1015630	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=accordion
+あこーでおん	accordion	12800	jmdict:1015630	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=accordion
+あくいじしょん	acquisition	12800	jmdict:2155820	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=acquisition
+えーかー	acre	12800	jmdict:1026910	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=acre
+あくた	actor	12800	jmdict:1015320	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=actor
+あくちゃる	actual	12800	jmdict:1015360	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=actual
+あくちゃり	actually	12800	jmdict:2155950	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=actually
+あくちゅあり	actually	12800	jmdict:2155950	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=actually
+あどばんてっじ	advantage	12800	jmdict:1017130	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=advantage
+あどゔぁんてーじ	advantage	12800	jmdict:1017130	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=advantage
+あふぇあ	affair	12800	jmdict:1017890	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=affair
+あふたぬーん	afternoon	12800	jmdict:1017990	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=afternoon
+あげいん	again	12800	jmdict:2156390	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=again
+あげーん	again	12800	jmdict:2156390	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=again
+あげぃんすと	against	12800	jmdict:2853278	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; donor=against
+あげいんすと	against	12800	jmdict:2853278	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; donor=against
+えーじ	age	12800	jmdict:1026920	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=age
+えいじぇんしー	agency	12800	jmdict:1026930	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=agency
+えーじんと	agent	12800	jmdict:2285330	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=agent
+あぐれしぶ	aggressive	12800	jmdict:1015570	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=aggressive
+あぐれしゔ	aggressive	12800	jmdict:1015570	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=aggressive
+あぐれっしゔ	aggressive	12800	jmdict:1015570	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=aggressive
+あぐりめんと	agreement	12800	jmdict:1015540	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=agreement
+えーど	aid	12800	jmdict:1920030	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=aid
+えやー	air	12800	jmdict:1027090	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=air
+おるたなてぃゔ	alternative	12800	jmdict:1035820	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=alternative
+あぱーちゃ	aperture	12800	jmdict:1017750	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=aperture
+あぱーちゅあ	aperture	12800	jmdict:1017750	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=aperture
+あぽじ	apogee	12800	jmdict:2783980	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=apogee
+あっぴーる	appeal	12800	jmdict:1017870	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=appeal (e.g. for peace)
+あぷるーぶ	approve	12800	jmdict:2499480	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=to approve
+あーちゃ	archer	12800	jmdict:2021160	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=archer
+あーちぇり	archery	12800	jmdict:1013540	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=archery
+あれんじ	arrange	12800	jmdict:1019750	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; donor=arrange
+あーてくる	article	12800	jmdict:1013590	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=article
+あーちすと	artist	12800	jmdict:1013560	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=artist
+あっせんぶりー	assembly	12800	jmdict:1016330	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=assembly
+あそしえーと	associate	12800	jmdict:2168490	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=associate
+あちちゅーど	attitude	12800	jmdict:2846152	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=attitude
+あてぃてゅーど	attitude	12800	jmdict:2846152	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=attitude
+あーんと	aunt	12800	jmdict:2539810	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=aunt
+おーそりぜーしょん	authorization	12800	jmdict:2835636	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=authorization
+あゔぇにゅ	avenue	12800	jmdict:1018320	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=avenue
+あゔぇにゅー	avenue	12800	jmdict:1018320	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=avenue
+べびー	baby	12800	jmdict:1119820	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=baby
+ばっくぐらんど	background	12800	jmdict:1098790	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=background (activity)
+ばげっじ	baggage	12800	jmdict:2478650	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=baggage
+ばっげーじ	baggage	12800	jmdict:2478650	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=baggage
+ばるむ	balm	12800	jmdict:2843529	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=balm
+ばんぐ	bang	12800	jmdict:2465600	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=bang
+ばーる	bar	12800	jmdict:1097410	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; donor=bar
+ばりあ	barrier	12800	jmdict:1099720	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=barrier
+ばりや	barrier	12800	jmdict:1099720	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=barrier
+ばりやー	barrier	12800	jmdict:1099720	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=barrier
+べいす	base	12800	jmdict:1119210	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=base
+ばってりぱっく	battery pack	12800	jmdict:2319170	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=battery pack
+びーか	beaker	12800	jmdict:1104320	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=beaker
+べあ	bear	12800	jmdict:2857072	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=bear
+びゅーてぃ	beauty	12800	jmdict:1105820	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=beauty
+びあ	beer	12800	jmdict:2852741	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=beer
+びあー	beer	12800	jmdict:2852741	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=beer
+びや	beer	12800	jmdict:2852741	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=beer
+びやー	beer	12800	jmdict:2852741	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=beer
+びーあ	beer	12800	jmdict:2852741	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=beer
+びふぉあ	before	12800	jmdict:2827224	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=before
+びふぉあー	before	12800	jmdict:2827224	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=before
+ばいやす	bias	12800	jmdict:1097460	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=bias
+びりあーど	billiards	12800	jmdict:1106000	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=billiards
+びんでぃんぐ	binding	12800	jmdict:1106160	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=binding
+ばーすでぃ	birthday	12800	jmdict:1097140	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=birthday
+ぼーるど	board	12800	jmdict:2869645	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; donor=board
+ぼでぃ	body	12800	jmdict:1123990	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=body
+ぼでー	body	12800	jmdict:1123990	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=body
+ぼいら	boiler	12800	jmdict:1123730	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=boiler
+ぼなす	bonus	12800	jmdict:1123520	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=bonus
+ぶーすた	booster	12800	jmdict:1113110	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=booster
+ぶーつ	boot	12800	jmdict:1113130	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=boot
+ぼあ	bore	12800	jmdict:2858995	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=(tidal) bore
+ばうんだり	boundary	12800	jmdict:2817580	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=boundary
+ばう	bow	12500	jmdict:2318630	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 日本語入力用の優先読み; gloss=bow (of boat)
+ぶれーんすとーみんぐ	brainstorming	12800	jmdict:1114720	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=brainstorming
+ぶらんで	brandy	12800	jmdict:1114080	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=brandy
+ぶらんでぃ	brandy	12800	jmdict:1114080	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=brandy
+ぶらんでぃー	brandy	12800	jmdict:1114080	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=brandy
+ぶれーく	break	12800	jmdict:1114740	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=break (rest)
+ぶれっくふぁーすと	breakfast	12800	jmdict:2181700	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=breakfast
+ぶれーくふぁすと	breakfast	12800	jmdict:2181700	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=breakfast
+ぶらいやー	briar	12800	jmdict:1113560	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=briar
+ぶろこり	broccoli	12800	jmdict:2005660	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=broccoli
+ぶろっこり	broccoli	12800	jmdict:2005660	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=broccoli
+ぶらっしゅ	brush	12800	jmdict:1611450	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=brush
+ばけつ	bucket	12800	jmdict:1098340	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=bucket
+ばふぇ	buffet	12800	jmdict:2853817	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=buffet
+びゅふぇ	buffet	12800	jmdict:1105960	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=buffet
+ぶっふぇ	buffet	12800	jmdict:1105960	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=buffet
+びるだ	builder	12800	jmdict:1106020	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=builder
+かれんだ	calendar	12800	jmdict:1039220	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=calendar
+かん	can	12800	jmdict:1214540	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=can; donor=can
+けーん	cane	12800	jmdict:2858080	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=cane
+かのん	canon	12800	jmdict:1037950	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=canon
+かんばす	canvas	12800	jmdict:1042130	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=canvas
+きゃんゔぁす	canvas	12800	jmdict:1042130	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=canvas
+けーぱびりてぃ	capability	12800	jmdict:1047980	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=capability
+かぴたる	capital	12800	jmdict:2480250	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=capital
+かーでがん	cardigan	12800	jmdict:1036340	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=cardigan
+かろる	carol	12800	jmdict:1042030	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=carol
+かすたー	caster	12800	jmdict:1037260	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=caster
+きゃすた	caster	12800	jmdict:1041330	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=caster
+かてごり	category	12800	jmdict:1037790	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=category
+せるりー	celery	12800	jmdict:1074960	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=celery
+せろ	cello	12800	jmdict:1077640	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=cello
+せんた	center	12800	jmdict:1075040	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=center
+ちぇあ	chair	12800	jmdict:1077440	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=chair
+しゃんぺん	champagne	12800	jmdict:1061910	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=champagne
+ちゃんぴぉん	champion	12800	jmdict:1078060	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=champion
+ちゃんぴょん	champion	12800	jmdict:1078060	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=champion
+ちゃんぴよん	champion	12800	jmdict:1078060	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=champion
+ちゃぷた	chapter	12800	jmdict:1077970	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=chapter
+ちゃーじゃ	charger	12800	jmdict:2157140	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=charger
+ちゃりてぃ	charity	12800	jmdict:1077990	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=charity
+ちぇーさー	chaser	12800	jmdict:2480720	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=chaser
+ちっき	check	12800	jmdict:1927040	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=check (token for left luggage); donor=check
+きー	chi	12800	jmdict:2173830	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=chi
+かいろぷらたー	chiropractor	12800	jmdict:1036850	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=chiropractor
+してぃ	city	12800	jmdict:1060700	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=city
+くらりおねっと	clarinet	12800	jmdict:2481420	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=clarinet
+くれー	clay	12800	jmdict:1045200	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=clay
+くりあー	clear	12800	jmdict:1044620	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=clear
+くろん	clone	12800	jmdict:1045570	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=clone
+くろぜっと	closet	12800	jmdict:1045550	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=closet
+ここなつ	coconut	12800	jmdict:2003050	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=coconut
+これくた	collector	12800	jmdict:1051560	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=collector
+こらむ	column	12500	jmdict:1051350	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 日本語入力用の優先読み; gloss=column (e.g. in newspaper)
+こめでぃ	comedy	12800	jmdict:1051200	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=comedy
+こんふぁたぶる	comfortable	12800	jmdict:2757950	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=comfortable
+こんふぉたぶる	comfortable	12800	jmdict:2757950	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=comfortable
+こんふぉーたぶる	comfortable	12800	jmdict:2757950	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=comfortable
+こまんどらいんいんたふぇーす	command line interface	12800	jmdict:2296710	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=command line interface
+こみってぃ	committee	12800	jmdict:2481890	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=committee
+こみゅにてぃ	community	12800	jmdict:1051040	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=community
+こんぱにー	company	12800	jmdict:1039530	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=company (i.e. business)
+こんぺちたー	competitor	12800	jmdict:2739930	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=competitor
+こんふぁれんす	conference	12800	jmdict:1053630	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=conference
+こんふぃぐれーしょん	configuration	12800	jmdict:1053650	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=configuration
+こんしゅーま	consumer	12800	jmdict:1052110	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=consumer
+こんてんつ	content	12500	jmdict:1052650	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 日本語入力用の優先読み; gloss=content
+こっく	cook	12800	jmdict:1050310	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=cook
+くーきー	cookie	12800	jmdict:1043260	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=cookie
+こぴーぺーすと	copy and paste	12800	jmdict:2296460	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=copy and paste
+こーな	corner	12800	jmdict:1049110	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=corner
+かうんた	counter	12800	jmdict:1036930	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=(service) counter (at a bank, store, etc.)
+かんつりー	country	12800	jmdict:1659770	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=country
+かゔぁー	cover	12800	jmdict:1037960	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=cover
+かばれーじ	coverage	12800	jmdict:1038030	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=coverage
+くれーどる	cradle	12800	jmdict:2294010	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=cradle
+くれーじー	crazy	12800	jmdict:1045220	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=crazy
+くりえーと	create	12800	jmdict:1044720	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=create
+くりむそん	crimson	12800	jmdict:1045050	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=crimson
+くろすぼー	crossbow	12800	jmdict:2619350	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=crossbow
+くるとん	crouton	12800	jmdict:1045160	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=crouton
+くるせいだー	crusader	12800	jmdict:2195070	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=crusader
+かすたまさーびす	customer service	12800	jmdict:1986390	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=customer service
+でーりー	daily	12800	jmdict:1081510	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=daily
+でーじー	daisy	12800	jmdict:1081180	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=daisy
+だーる	dal	12800	jmdict:2855155	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=dal
+でーたー	data	12800	jmdict:1081190	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=data
+でー	day	12800	jmdict:2430790	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=day (as in holiday)
+でーたいむ	daytime	12800	jmdict:2845990	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=daytime
+でじけーと	dedicate	12800	jmdict:1083420	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=to dedicate
+ででぃけーと	dedicate	12800	jmdict:1083420	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=to dedicate
+でぃふぃにしょん	definition	12800	jmdict:1083710	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=definition
+でぐりー	degree	12800	jmdict:1082740	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=degree
+でもくらちっく	democratic	12800	jmdict:1084040	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=democratic
+でぃざいあ	desire	12800	jmdict:1082870	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=desire
+でざいあ	desire	12800	jmdict:1082870	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=desire
+でざいあー	desire	12800	jmdict:1082870	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=desire
+でぃてぃーる	detail	12800	jmdict:1082090	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=detail
+でぃべろっぱー	developer	12800	jmdict:1083860	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=developer
+だいあろーぐ	dialog	12800	jmdict:1076720	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=dialog
+だいあもんど	diamond	12800	jmdict:1076890	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=diamond
+だいれくしょん	direction	12800	jmdict:2828551	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=direction
+でぃれくた	director	12800	jmdict:1082460	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=director
+だーてぃ	dirty	12800	jmdict:2092730	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=dirty
+どくとる	doctor	12800	jmdict:1088140	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=doctor
+どる	dollar	12800	jmdict:1089090	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=dollar
+どるらる	dollar	12800	jmdict:2826289	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=dollar
+どーなっつ	doughnut	12800	jmdict:1087690	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=doughnut
+だーす	dozen	12800	jmdict:1076650	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=dozen
+どらぁぐ	drag	12800	jmdict:2860845	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=drag (wearing female clothing)
+どれん	drain	12800	jmdict:2483710	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=drain
+どれーん	drain	12800	jmdict:2483710	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=drain
+どろあ	drawer	12800	jmdict:1924290	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=drawer
+どろあー	drawer	12800	jmdict:1924290	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=drawer
+どろわ	drawer	12800	jmdict:1924290	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=drawer
+どろーわー	drawer	12800	jmdict:1924290	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=drawer
+あーるだむ	earldom	12800	jmdict:2539800	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=earldom
+いありんぐ	earring	12800	jmdict:1021910	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=earring
+えこのみ	economy	12800	jmdict:1028320	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=economy
+いふぇくと	effect	12800	jmdict:1029700	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=effect
+えれべーた	elevator	12800	jmdict:1030630	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=elevator
+えんぱいや	empire	12800	jmdict:1031300	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=empire
+えんぷろいあ	employer	12800	jmdict:2829158	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=employer
+えんぷろいや	employer	12800	jmdict:2829158	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=employer
+いねーぶら	enabler	12800	jmdict:2837674	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=enabler
+いねーぶらー	enabler	12800	jmdict:2837674	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=enabler
+えなじー	energy	12800	jmdict:1029350	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=energy
+えねるぎー	energy	12500	jmdict:1029430	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 日本語入力用の優先読み; gloss=energy
+えんたていめんと	entertainment	12800	jmdict:1031070	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=entertainment
+えんたていんめんと	entertainment	12800	jmdict:1031070	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=entertainment
+えんたーていめんと	entertainment	12800	jmdict:1031070	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=entertainment
+えんばいろめんと	environment	12800	jmdict:2506110	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=environment
+えんゔぁいろめんと	environment	12800	jmdict:2506110	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=environment
+えくいっぷめんと	equipment	12800	jmdict:1021170	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=equipment
+えすかれーた	escalator	12800	jmdict:1028580	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=escalator
+えすくろー	escrow	12800	jmdict:2826605	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=escrow
+いゔにんぐ	evening	12800	jmdict:1021660	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=evening
+えば	ever	12800	jmdict:1029450	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=ever
+いびる	evil	12800	jmdict:1929730	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=evil
+いーぶる	evil	12800	jmdict:1929730	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=evil
+えびる	evil	12800	jmdict:1929730	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=evil
+えぼりゅーしょん	evolution	12800	jmdict:2458630	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=evolution
+えきささいず	exercise	12800	jmdict:1027710	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=exercise
+えきしびじょん	exhibition	12800	jmdict:1027730	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=exhibition
+えきじびしょん	exhibition	12800	jmdict:1027730	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=exhibition
+えきそん	exon	12800	jmdict:2422500	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=exon
+えくすぱーと	expert	12800	jmdict:1027790	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=expert
+えきすぷれす	express	12800	jmdict:1028050	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=express
+えきすとら	extra	12800	jmdict:1027760	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=extra
+あいしゃどー	eyeshadow	12800	jmdict:1013940	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=eyeshadow
+ふぇーす	face	12800	jmdict:1109710	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=face
+ふぁしりてーた	facilitator	12800	jmdict:2826653	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=facilitator
+ふぁしりてぃ	facility	12800	jmdict:1108100	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=facility
+ふぇーる	fail	12800	jmdict:1109760	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; donor=fail
+ふぇあー	fair	12800	jmdict:1109580	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=fair
+ふぇーす	faith	12800	jmdict:2846662	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=faith
+ふぉるす	false	12800	jmdict:2864929	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=false
+ふぁみりあ	familiar	12800	jmdict:1108470	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=familiar
+ふぁみり	family	12800	jmdict:1108370	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=family
+はん	fan	12800	jmdict:2833260	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=fan
+ふぁーすと	fast	12800	jmdict:2858155	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=fast
+ふぁざー	father	12800	jmdict:2058850	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=father
+ふぉると	fault	12800	jmdict:1110400	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=fault
+ふぇばりっと	favorite	12800	jmdict:2828721	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=favorite
+ふぇーばりっと	favorite	12800	jmdict:2828721	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=favorite
+ふぃあ	fear	12800	jmdict:2862966	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=fear
+ふぃーちゃ	feature	12800	jmdict:1108790	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=feature
+ふぃーちゅあ	feature	12800	jmdict:1108790	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=feature
+ふぃーだ	feeder	12800	jmdict:1108780	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=feeder
+ふぃめいる	female	12800	jmdict:2831488	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=female
+ふぃめーる	female	12800	jmdict:2831488	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=female
+ふぃーめる	female	12800	jmdict:2831488	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=female
+ふぃーめーる	female	12800	jmdict:2831488	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=female
+ふぁいば	fiber	12800	jmdict:1107750	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=fiber
+ふぁいば	fibre	12800	jmdict:1107750	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=fibre
+ふぃるだー	fielder	12800	jmdict:2846052	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=fielder
+ふぁいら	filer	12800	jmdict:2323110	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=filer
+ふいるむ	film	12800	jmdict:1109380	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=film
+ふぃなんす	finance	12800	jmdict:1107730	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=finance
+ふぁいなんしゃる	financial	12800	jmdict:2835102	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=financial
+ふぁいあ	fire	12800	jmdict:1107620	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=fire
+ふぁいやー	fire	12800	jmdict:1107620	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=fire
+ふぁいあーうぉーる	firewall	12800	jmdict:1958000	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=firewall
+ふぁーむうえあ	firmware	12800	jmdict:1107580	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=firmware
+ふぃくすちゃ	fixture	12800	jmdict:2846053	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=fixture
+ふれーむ	flame	12800	jmdict:2861840	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=flame
+ふらの	flannel	12800	jmdict:1111630	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=flannel
+ふれーばー	flavor	12800	jmdict:1112300	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=flavor
+ふろあー	floor	12800	jmdict:1112730	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=floor
+ふりゅーと	flute	12800	jmdict:1112100	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=flute
+ふぃーと	foot	12800	jmdict:1108820	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=foot
+ふーと	foot	12800	jmdict:2463540	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=foot (unit of linear measure)
+ふぉーれすと	forest	12800	jmdict:2872484	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=forest
+ほーく	fork	12800	jmdict:1110110	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=fork
+ふぉるむ	form	12800	jmdict:2855934	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=form
+ふぁーる	foul	12800	jmdict:1107920	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=foul
+ふぁうんでーしょん	foundation	12800	jmdict:1108730	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=foundation (makeup)
+ふぁにちゃ	furniture	12800	jmdict:1107550	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=furniture
+ふぁにちゅあ	furniture	12800	jmdict:1107550	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=furniture
+がる	gal	12800	jmdict:2258510	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=gal (unit of gravitational acceleration)
+がべーじ	garbage	12800	jmdict:1039780	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=garbage
+がーでなー	gardener	12800	jmdict:2668640	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=gardener
+げーとうえい	gateway	12800	jmdict:1048360	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=gateway
+げーとうえー	gateway	12800	jmdict:1048360	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=gateway
+ぎゃーざー	gather	12800	jmdict:2436700	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=gather (e.g. in cloth)
+ぎや	gear	12800	jmdict:1042770	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=gear
+げん	gene	12800	jmdict:1048750	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=gene
+ぜねれーしょん	generation	12800	jmdict:1064360	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=generation
+じぇすちゃ	gesture	12800	jmdict:1064170	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=gesture
+ぜすちゃー	gesture	12800	jmdict:1064170	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=gesture
+ぜすちゅあ	gesture	12800	jmdict:2469060	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=gesture
+がーだ	girder	12800	jmdict:2852370	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=girder
+がらす	glass	12800	jmdict:1040380	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=glass
+ぐー	good	12800	jmdict:1046070	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=good; donor=good
+ぐすべりー	gooseberry	12800	jmdict:2070270	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=gooseberry
+ぐーずべりー	gooseberry	12800	jmdict:2070270	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=gooseberry
+ぐれーん	grain	12800	jmdict:2426720	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=grain (1-7000 of a pound, approx. 64.80 mg)
+げれいん	grain	12800	jmdict:2426720	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=grain (1-7000 of a pound, approx. 64.80 mg)
+げれーん	grain	12800	jmdict:2426720	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=grain (1-7000 of a pound, approx. 64.80 mg)
+ぐらふぃかるゆーざいんたふぇーす	graphical user interface	12800	jmdict:2294570	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=graphical user interface
+ぐらふぃかるゆーざーいんたーふぇいす	graphical user interface	12800	jmdict:2294570	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=graphical user interface
+ぐらふぃくす	graphics	12800	jmdict:1046690	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=graphics
+ぐらふぃっくかーど	graphics card	12800	jmdict:2294640	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=graphics card
+ぐれーたー	grater	12800	jmdict:2842398	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=grater
+ぐれーと	great	12800	jmdict:1047520	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=great
+ぐれー	grey	12800	jmdict:1047480	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=grey
+ぐりっふぃん	griffin	12800	jmdict:2771990	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=griffin
+ぐるーびー	groovy	12800	jmdict:1047260	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=groovy
+ぐるーゔぃ	groovy	12800	jmdict:1047260	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=groovy
+ぐらんど	ground	12800	jmdict:1046340	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=(sports) ground
+ぎるてぃ	guilty	12800	jmdict:2832175	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=guilty (e.g. of a crime)
+がむ	gum	12500	jmdict:1040350	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 日本語入力用の優先読み; gloss=gum
+へあ	hair	12800	jmdict:1118100	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=hair (on the head)
+へや	hair	12800	jmdict:1118100	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=hair (on the head)
+へやー	hair	12800	jmdict:1118100	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=hair (on the head)
+ふぁん	han	12800	jmdict:2833260	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=han
+はーどうえあ	hardware	12800	jmdict:1094490	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=hardware
+はもにか	harmonica	12800	jmdict:1094860	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=harmonica
+へーと	hate	12800	jmdict:2830294	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=hate
+ひあ	hear	12800	jmdict:1103630	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=hear
+ひーた	heater	12800	jmdict:1103540	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=heater
+へゔぃ	heavy	12800	jmdict:1118610	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=heavy
+はいぶろー	highbrow	12800	jmdict:1095460	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=highbrow
+はいうぇー	highway	12800	jmdict:1094930	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=highway
+はいうえい	highway	12800	jmdict:1094930	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=highway
+はいうえー	highway	12800	jmdict:1094930	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=highway
+ひすとり	history	12800	jmdict:2487240	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=history
+ほりでい	holiday	12800	jmdict:1122830	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=holiday
+ほっく	hook	12800	jmdict:1122400	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=hook (esp. for clothing)
+ほーず	hose	12800	jmdict:2832170	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=hose
+ふもーる	humor	12800	jmdict:2843044	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=humor
+あいすぶれーかー	icebreaker	12800	jmdict:2430830	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=icebreaker
+いこん	icon	12800	jmdict:1021280	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=icon (religious)
+あいであ	idea	12800	jmdict:1014210	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=idea
+いであ	idea	12800	jmdict:1021470	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=idea (in Platonic thought)
+いでー	idea	12800	jmdict:1021460	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=idea
+いである	ideal	12800	jmdict:2531650	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=ideal
+あいでんてふぁい	identify	12800	jmdict:1014300	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=identify
+いぐにっしょん	ignition	12800	jmdict:2039610	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=ignition
+いまーじゅ	image	12800	jmdict:2423930	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=image
+いんぽしぶる	impossible	12800	jmdict:1024780	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=impossible
+いんせんてぃゔ	incentive	12800	jmdict:1022720	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=incentive
+いんだすとり	industry	12800	jmdict:1023280	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=industry
+いにしある	initial	12800	jmdict:1021570	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=initial
+いにしあらいず	initialize	12800	jmdict:1021560	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=initialize
+いにしあちぶ	initiative	12800	jmdict:1021520	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=initiative
+いんき	ink	12800	jmdict:2856157	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=ink
+いのべいたー	innovator	12800	jmdict:2740690	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=innovator
+いのべーたー	innovator	12800	jmdict:2740690	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=innovator
+いんすぱいあー	inspire	12800	jmdict:2436360	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=to inspire
+いんすぱいや	inspire	12800	jmdict:2436360	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=to inspire
+いんすぱいやー	inspire	12800	jmdict:2436360	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=to inspire
+いんすてぃてゅーしょん	institution	12800	jmdict:1022570	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=institution
+いんすつるめんと	instrument	12800	jmdict:2436350	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=instrument
+いんしゅらんす	insurance	12800	jmdict:1022420	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=insurance
+いんたーふぇいす	interface	12800	jmdict:1022940	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=interface
+いんたなしょなる	international	12800	jmdict:1022850	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=international
+いんたぷりと	interpret	12800	jmdict:1023180	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=interpret
+いんたぷりた	interpreter	12800	jmdict:1023160	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=interpreter
+いんたーらぷと	interrupt	12800	jmdict:1023220	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=interrupt
+あいろん	iron	12500	jmdict:1014590	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 日本語入力用の優先読み; gloss=iron (for pressing clothes)
+いろにー	irony	12800	jmdict:2865405	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=irony
+じゃけつ	jacket	12800	jmdict:1065170	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=jacket
+じんす	jeans	12800	jmdict:1064120	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=jeans
+じゃーじ	jersey	12800	jmdict:1064960	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=jersey
+じゅ	jus	12800	jmdict:2862611	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=jus
+かいぜる	kaiser	12800	jmdict:1648280	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=kaiser
+かーき	khaki	12800	jmdict:1036180	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=khaki
+きちん	kitchen	12800	jmdict:1041150	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=kitchen
+れーべる	label	12800	jmdict:1139720	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=(record) label
+らぼらとり	laboratory	12800	jmdict:1139760	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=laboratory
+れでぃ	lady	12800	jmdict:1145590	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=lady
+れーく	lake	12800	jmdict:1144280	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=lake
+らうんち	launch	12800	jmdict:2448600	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=launch (of a product, service, etc.)
+ろんち	launch	12800	jmdict:2448600	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=launch (of a product, service, etc.)
+りーだ	leader	12800	jmdict:1140590	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=leader
+れぐ	leg	12800	jmdict:2841228	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=leg
+らいた	lighter	12800	jmdict:1137880	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=lighter
+りてらちゅあ	literature	12800	jmdict:2470460	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=literature
+らいゔ	live	12800	jmdict:1138270	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=live (broadcasting, music, etc.)
+るーず	loose	12800	jmdict:1143590	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; donor=loose
+らゔ	love	12800	jmdict:1139550	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=love
+らばー	lover	12800	jmdict:1139390	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=lover
+らげっじ	luggage	12800	jmdict:2834782	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=luggage
+ましん	machine	12800	jmdict:1127600	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=machine
+めいら	mailer	12800	jmdict:1132840	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=mailer
+めーら	mailer	12800	jmdict:2333210	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=mailer
+めーらー	mailer	12800	jmdict:2333210	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=mailer
+めーん	main	12800	jmdict:1132680	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=main
+めじゃー	major	12800	jmdict:1133140	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=(oil) major
+めーじゃー	major	12800	jmdict:1133140	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=(oil) major
+めーかー	maker	12800	jmdict:1132420	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=maker
+めいきゃっぷ	makeup	12800	jmdict:1132450	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=makeup
+めーきゃっぷ	makeup	12800	jmdict:1132450	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=makeup
+めーくあっぷ	makeup	12800	jmdict:1132450	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=makeup
+まろー	mallow	12800	jmdict:2508140	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=mallow (any plant of genus Malva)
+まねーじゃ	manager	12800	jmdict:1129040	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=manager
+まにゅきあ	manicure	12800	jmdict:1128780	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=manicure
+まにゅきゅあ	manicure	12800	jmdict:1128780	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=manicure
+まにゅふぁくちゅあ	manufacture	12800	jmdict:2502060	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=manufacture
+まにふぁくちゃらー	manufacturer	12800	jmdict:2628620	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=manufacturer
+まるく	mark	12800	jmdict:1129530	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=mark (former currency of Germany)
+ますか	masker	12800	jmdict:1127820	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=masker
+まっす	mass	12800	jmdict:1127800	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=mass
+ますたーべーしょん	masturbation	12800	jmdict:1128060	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=masturbation
+まてぃりある	material	12800	jmdict:1128580	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=material
+まとりくす	matrix	12800	jmdict:1128610	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=matrix
+まくしまむ	maximum	12800	jmdict:2489350	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=maximum
+めでぃしん	medicine	12800	jmdict:2068920	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=medicine
+みーでぃあむ	medium	12800	jmdict:1131080	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=medium
+めじうむ	medium	12800	jmdict:1131080	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=medium
+めじゅーむ	medium	12800	jmdict:1131080	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=medium
+めでぃうむ	medium	12800	jmdict:1131080	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=medium
+めろー	mellow	12800	jmdict:2489480	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=mellow
+めろでぃ	melody	12800	jmdict:1134150	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=melody
+めんば	member	12800	jmdict:1134370	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=member
+めんばしっぷ	membership	12800	jmdict:1134380	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=membership
+めんず	men	12800	jmdict:2187360	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=men
+みあり	merely	12800	jmdict:2003910	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=merely
+めせーじ	message	12800	jmdict:1133570	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=message
+めーとる	meter	12800	jmdict:1132570	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=meter
+みどるうえあ	middleware	12800	jmdict:2332970	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=middleware
+みにっつ	minute	12800	jmdict:2848547	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=minute (unit of time)
+みすてーく	mistake	12800	jmdict:1130700	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=mistake
+みくすちゅあ	mixture	12800	jmdict:2471010	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=mixture
+もばいる	mobile	12800	jmdict:1135720	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=mobile
+もびる	mobile	12800	jmdict:1135720	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=mobile
+もびーる	mobile	12800	jmdict:1135720	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=mobile
+もだーん	modern	12800	jmdict:1134990	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=modern
+もめんと	moment	12800	jmdict:1134740	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=moment
+もあげーじ	mortgage	12800	jmdict:1134440	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=mortgage
+もーげーじ	mortgage	12800	jmdict:1134440	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=mortgage
+もてる	motel	12800	jmdict:1135150	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=motel
+もーた	motor	12800	jmdict:1134480	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=motor
+もーとる	motor	12800	jmdict:2831072	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=motor
+むーぶまん	movement	12800	jmdict:2826979	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=movement
+むーゔまん	movement	12800	jmdict:2826979	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=movement
+むーゔめんと	movement	12800	jmdict:1132220	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=movement
+まっふぃん	muffin	12800	jmdict:1128520	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=muffin
+まるてぃぷる	multiple	12800	jmdict:1129800	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=multiple
+みすてり	mystery	12800	jmdict:1130740	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=mystery
+ねーる	nail	12800	jmdict:2112430	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=nail
+なーん	nan	12800	jmdict:2186070	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=nan
+ならてぃゔ	narrative	12800	jmdict:2829425	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=narrative
+ねーしょん	nation	12800	jmdict:2490570	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=nation
+ねいてぃゔ	native	12800	jmdict:1092560	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=native
+ねーてぃぶ	native	12800	jmdict:1092560	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=native
+ねーちゃー	nature	12800	jmdict:2112420	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=nature
+ねーびー	navy	12800	jmdict:1092380	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=navy
+ねくたる	nectar	12800	jmdict:2846022	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=nectar (drink of the gods)
+ねくたーる	nectar	12800	jmdict:2846022	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=nectar (drink of the gods)
+にゅーずれたー	newsletter	12800	jmdict:1091640	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=newsletter
+のるまる	normal	12800	jmdict:2602750	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=normal (e.g. normal hexane)
+にゅーくれあ	nuclear	12800	jmdict:2211990	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=nuclear
+ぬーくれあ	nuclear	12800	jmdict:2211990	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=nuclear
+おっけー	okay	12800	jmdict:1031600	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=okay
+おりぶ	olive	12800	jmdict:2039820	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=olive
+おりーゔ	olive	12800	jmdict:2039820	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=olive
+おぽちゅにてぃ	opportunity	12800	jmdict:2838139	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=opportunity
+おーがにぜーしょん	organization	12800	jmdict:1031540	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=organization
+おるがないず	organize	12800	jmdict:1031530	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=organize
+あうた	outer	12800	jmdict:1014630	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=outer
+おーな	owner	12800	jmdict:1032320	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=owner (esp. of a business)
+ぺーじゃ	pager	12800	jmdict:2329400	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=pager
+ぺーじゃー	pager	12800	jmdict:2329400	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=pager
+ぺあー	pair	12800	jmdict:1120690	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=pair
+ぽぽー	papaw	12800	jmdict:2431680	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=papaw
+ぽーぽー	papaw	12800	jmdict:2431680	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=papaw
+ぱーつ	part	12800	jmdict:1100750	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=part
+ぱーてーしょん	partition	12800	jmdict:1100800	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=partition
+ぱーてぃ	party	12800	jmdict:1100760	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=(political) party
+ぱすてう	pastel	12800	jmdict:2856610	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=pastel (Brazilian fried fast-food dish)
+ぺーしぇんと	patient	12800	jmdict:2724360	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=patient
+ぱたん	pattern	12800	jmdict:1101600	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=pattern
+ぺいでー	payday	12800	jmdict:1120780	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=payday
+ぺなるてぃ	penalty	12800	jmdict:1121120	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=penalty
+ぴーぽー	people	12800	jmdict:2841747	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=people
+ぱひゅーむ	perfume	12800	jmdict:1102250	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=perfume
+ふぃー	phi	12800	jmdict:2173820	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=phi
+ふぉん	phone	12800	jmdict:2492250	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=phone
+ほーん	phone	12800	jmdict:2492250	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=phone
+ぴくちゃ	picture	12800	jmdict:1106510	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=picture
+ぴんぐ	ping	12800	jmdict:2322860	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=ping
+ぴっつぁ	pizza	12800	jmdict:1106620	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=pizza
+ぴっつあ	pizza	12800	jmdict:1106620	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=pizza
+ぷれーす	place	12800	jmdict:1116440	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=place
+ぷれーん	plain	12800	jmdict:1116550	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=plain
+ぷれーん	plane	12800	jmdict:2863812	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=plane
+ぷらすた	plaster	12800	jmdict:1115650	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=plaster
+ぷらた	platter	12800	jmdict:2326790	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=platter
+ぷらった	platter	12800	jmdict:2326790	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=platter
+ぷらったー	platter	12800	jmdict:2326790	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=platter
+ぷれー	play	12800	jmdict:1116400	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=play
+ぷれーやー	player	12800	jmdict:1116540	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=player
+ぷれじゃ	pleasure	12800	jmdict:2223100	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=pleasure
+ぷりゅーむ	plume	12800	jmdict:2472190	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=plume
+ぽえと	poet	12800	jmdict:2493050	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=poet
+ぽりし	policy	12800	jmdict:1125710	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=policy
+ぷあ	poor	12800	jmdict:1115170	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=poor
+ぷーあ	poor	12800	jmdict:1115170	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=poor
+ぽーとれいと	portrait	12800	jmdict:2074700	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=portrait
+ぽじてぃゔ	positive	12800	jmdict:1125070	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=positive
+ぽぜっしょん	possession	12800	jmdict:2858747	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=possession (of the ball)
+ぽしびりてぃ	possibility	12800	jmdict:1125020	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=possibility
+ぽしぶる	possible	12800	jmdict:2493360	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=possible
+ぽすた	poster	12800	jmdict:1125110	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=poster
+ぱうち	pouch	12800	jmdict:2857908	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=pouch
+ぷれふぃくす	prefix	12800	jmdict:2327350	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=prefix
+ぷれぜんつ	presence	12800	jmdict:1981310	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=presence
+ぷりてぃ	pretty	12800	jmdict:1116060	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=pretty
+ぷらいまり	primary	12800	jmdict:1115470	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=primary
+ぷらいおりてぃ	priority	12800	jmdict:1115340	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=priority
+ぷろばびりてぃ	probability	12800	jmdict:1117720	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=probability
+ぷろしーじゃ	procedure	12800	jmdict:1117150	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=procedure
+ぷろでゅーす	produce	12500	jmdict:1117650	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 日本語入力用の優先読み; gloss=to produce (e.g. movie, play, show, event, musical recording, etc.)
+ぷろふぃーる	profile	12500	jmdict:1117820	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 日本語入力用の優先読み; gloss=profile
+ぷろじぇくとまねーじゃ	project manager	12800	jmdict:2783960	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=project manager
+ぷろじぇくた	projector	12800	jmdict:1117200	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=projector
+ぷろぱ	proper	12800	jmdict:1117730	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=proper
+ぷろとこーる	protocol	12800	jmdict:1117670	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=protocol
+ぷろきしーさーばー	proxy server	12800	jmdict:1988010	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=proxy server
+ぷろくしさーば	proxy server	12800	jmdict:1988010	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=proxy server
+ぱぶりっくりれーしょん	public relations	12800	jmdict:1102380	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=public relations
+ぱぶりっしゃ	publisher	12800	jmdict:2320380	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=publisher
+ぷりん	pudding	12800	jmdict:1116190	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=pudding (esp. custard)
+ぴゅあー	pure	12800	jmdict:1106910	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=pure
+くぉりてぃ	quality	12800	jmdict:1043730	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=quality
+くおりてぃ	quality	12800	jmdict:1043730	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=quality
+くおんてぃてぃ	quantity	12800	jmdict:1043710	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=quantity
+くぉーた	quarter	12800	jmdict:1043610	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=quarter
+くおーた	quarter	12800	jmdict:1043610	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=quarter
+くおーたー	quarter	12800	jmdict:1043610	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=quarter
+くおーと	quote	12800	jmdict:2864997	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=quote
+れーん	rain	12800	jmdict:2850586	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=rain
+れいんじ	range	12800	jmdict:1144710	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=range
+らんさむうえあ	ransomware	12800	jmdict:2832151	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=ransomware
+れいと	rate	12800	jmdict:1144420	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=rate
+れいよん	rayon	12800	jmdict:1144470	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=rayon; donor=rayon
+りーだ	reader	12800	jmdict:2857529	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=reader (i.e. a person who reads)
+れでぃ	ready	12800	jmdict:2852728	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=ready
+りありてぃ	reality	12800	jmdict:1140980	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=reality
+りや	rear	12800	jmdict:1140850	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=rear
+りこーだ	recorder	12800	jmdict:1141280	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=recorder (musical instrument)
+りこーだー	recorder	12800	jmdict:1141280	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=recorder (musical instrument)
+りかばり	recovery	12800	jmdict:1141090	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=recovery
+りふれくた	reflector	12800	jmdict:1145860	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=reflector
+れふれくた	reflector	12800	jmdict:1145860	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=reflector
+れふれくたー	reflector	12800	jmdict:1145860	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=reflector
+りふれーん	refrain	12800	jmdict:1142580	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=refrain
+れぎゅらしおん	regulation	12800	jmdict:1144820	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=regulation
+れりーふ	relief	12800	jmdict:2868157	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=relief (sculptural method)
+りぴーた	repeater	12800	jmdict:1142450	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=repeater
+れざーぶ	reserve	12800	jmdict:2494600	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=reserve
+れじすと	resist	12800	jmdict:2227210	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; donor=resist
+れゔゅー	review	12800	jmdict:1145760	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=review
+れぼりゅーしょん	revolution	12800	jmdict:1145940	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=revolution
+りすくまねーじめんと	risk management	12800	jmdict:2472860	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=risk management
+ろっぷ	rope	12800	jmdict:1146750	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=rope
+るーてぃーん	routine	12800	jmdict:1143630	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=routine
+ろわいある	royal	12800	jmdict:2852865	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=royal
+ろわいやる	royal	12800	jmdict:2852865	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=royal
+ろーやる	royal	12800	jmdict:1147040	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=royal
+るび	ruby	12800	jmdict:1144130	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=ruby
+らっぐ	rug	12800	jmdict:1138670	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=rug
+るーら	ruler	12800	jmdict:1143890	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=ruler
+せーふてぃ	safety	12800	jmdict:2495230	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=safety
+さふぁいや	sapphire	12800	jmdict:1057110	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=sapphire
+さきそふぉん	saxophone	12800	jmdict:1056490	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=saxophone
+さきそほん	saxophone	12800	jmdict:1056490	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=saxophone
+さくそふぉーん	saxophone	12800	jmdict:1056490	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=saxophone
+しぇーま	schema	12800	jmdict:1059910	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=schema
+しざーす	scissors	12800	jmdict:2495510	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=scissors
+すくれいぱ	scraper	12800	jmdict:1068710	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=scraper
+すくれっぱー	scraper	12800	jmdict:1068710	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=scraper
+すくれーぱ	scraper	12800	jmdict:1068710	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=scraper
+すくれーぱー	scraper	12800	jmdict:1068710	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=scraper
+すくりーんせいばー	screen saver	12800	jmdict:2303330	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=screen saver
+せかんだり	secondary	12800	jmdict:1074420	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=secondary
+せくた	sector	12800	jmdict:1074500	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=(disk) sector
+せきゅりてぃーほーる	security hole	12800	jmdict:1074460	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=security hole
+せるふぃ	selfie	12800	jmdict:2833269	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=selfie
+ぜみなーる	seminar	12800	jmdict:2868757	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=seminar
+せぱれいと	separate	12800	jmdict:1984070	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=separate
+しびあ	severe	12800	jmdict:1061020	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=severe
+しびや	severe	12800	jmdict:1061020	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=severe
+しびやー	severe	12800	jmdict:1061020	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=severe
+しゃどー	shadow	12800	jmdict:1061610	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=shadow
+しぇーぷ	shape	12800	jmdict:2073470	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=shape
+しーつ	sheet	12800	jmdict:1059400	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=sheet
+せりー	sherry	12800	jmdict:1060010	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=sherry
+しょー	show	12800	jmdict:1062240	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=show
+しょーだうん	showdown	12800	jmdict:2856324	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=showdown
+しょーるーむ	showroom	12800	jmdict:1062590	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=showroom
+しょーたいむ	showtime	12800	jmdict:2853723	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=showtime
+しぐにちゃ	signature	12800	jmdict:1060190	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=signature
+しぐねちゃ	signature	12800	jmdict:1060190	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=signature
+さいほん	siphon	12800	jmdict:1056090	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=siphon
+すかいすくれーぱー	skyscraper	12800	jmdict:1067520	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=skyscraper
+すれいぶ	slave	12800	jmdict:1074010	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=slave (device)
+すれーゔ	slave	12800	jmdict:1074010	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=slave (device)
+すらいだ	slider	12800	jmdict:1073730	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=slider
+すまーとうおっち	smartwatch	12800	jmdict:2837044	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=smartwatch
+すむーす	smooth	12800	jmdict:1073660	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=smooth (i.e. without problems)
+すにっふぁー	sniffer	12800	jmdict:2304210	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=sniffer
+すにふぁ	sniffer	12800	jmdict:2304210	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=sniffer
+すのー	snow	12800	jmdict:1071770	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=snow
+そしある	social	12800	jmdict:2496750	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=social
+そしゃる	social	12800	jmdict:2496750	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=social
+そふぁ	sofa	12800	jmdict:1075480	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=sofa
+そふとうえあ	software	12800	jmdict:1075510	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=software
+そーる	soul	12800	jmdict:1075370	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=soul
+すぱな	spanner	12800	jmdict:1072140	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=spanner
+すぴーか	speaker	12800	jmdict:1072240	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=speaker
+すぴりっつ	spirit	12800	jmdict:1072460	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=spirit
+すぽんさ	sponsor	12800	jmdict:1073510	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=sponsor
+すぱっと	spot	12800	jmdict:1072130	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=spot
+すぱいうえあ	spyware	12800	jmdict:2067970	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=spyware
+すたびりてぃ	stability	12800	jmdict:1069790	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=stability
+すてーと	state	12800	jmdict:1070380	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=state
+すたちっく	static	12800	jmdict:1069750	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=static
+すていたす	status	12800	jmdict:1070330	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=status
+すてー	stay	12800	jmdict:2003170	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=stay
+すてでぃ	steady	12800	jmdict:1070610	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=steady
+すちーる	steal	12800	jmdict:2851496	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=steal (baseball, basketball)
+すてぃーる	steel	12800	jmdict:1070120	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=steel
+すてっき	stick	12800	jmdict:1070510	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=(walking) stick
+すちる	still	12800	jmdict:2851497	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=still (picture)
+すちーる	still	12800	jmdict:2851497	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=still (picture)
+すとあー	store	12800	jmdict:1070930	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=store
+すとーり	story	12800	jmdict:1070830	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=story
+すとらいき	strike	12800	jmdict:1071180	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=strike (i.e. industrial action)
+すとらくちゃ	structure	12800	jmdict:1071230	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=structure
+すとらぐる	struggle	12800	jmdict:2497920	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=struggle
+すたでぃ	study	12800	jmdict:1069760	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=study
+さぶすてぃちゅーと	substitute	12800	jmdict:2501750	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=substitute
+さぶうぇー	subway	12800	jmdict:1057200	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=subway
+さぶうえー	subway	12800	jmdict:1057200	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=subway
+さぜっしょん	suggestion	12800	jmdict:1056540	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=suggestion
+すーつ	suit	12800	jmdict:1066680	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=suit
+すうぃーと	suite	12800	jmdict:2862667	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=suite
+さまり	summary	12800	jmdict:1057750	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=summary
+すーぱ	super	12800	jmdict:1066710	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=super
+さぽーた	supporter	12800	jmdict:1057620	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=supporter (e.g. wrist supporter)
+しゅあ	sure	12800	jmdict:1062030	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=sure
+さーふぃす	surface	12800	jmdict:2624000	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=surface
+さーじゃん	surgeon	12800	jmdict:2782980	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=surgeon
+さーじゃりー	surgery	12800	jmdict:2833367	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=surgery
+さすてぃん	sustain	12800	jmdict:2393690	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=sustain
+さすてぃーん	sustain	12800	jmdict:2393690	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=sustain
+しんたくす	syntax	12800	jmdict:1063670	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=syntax
+しらっぷ	syrup	12800	jmdict:2498320	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=syrup
+たっぐ	tag	12800	jmdict:1076240	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=tag
+てーる	tail	12800	jmdict:1078940	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=tail
+てーく	take	12800	jmdict:1079180	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=take (e.g. in film-making)
+たくそのみ	taxonomy	12800	jmdict:2869032	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=taxonomy
+てぃ	tea	12800	jmdict:1079010	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=tea
+てぃーちゃ	teacher	12800	jmdict:2017690	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=teacher
+てぃあ	tear	12800	jmdict:2851567	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=tear
+てくのろじ	technology	12800	jmdict:1079670	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=technology
+てれこんふぁれんす	teleconference	12800	jmdict:1080260	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=teleconference
+てんぽらり	temporary	12800	jmdict:1081140	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=temporary
+たんだー	tender	12800	jmdict:1076570	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=tender
+てのーる	tenor	12800	jmdict:1080060	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=tenor
+てくすと	text	12800	jmdict:1079290	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=text
+てくすちゃ	texture	12800	jmdict:1079350	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=texture
+さんきゅ	thank you	12800	jmdict:1058250	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=thank you
+せんきゅ	thank you	12800	jmdict:1058250	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=thank you
+せおれていかる	theoretical	12800	jmdict:2394900	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=theoretical
+しっく	thick	12800	jmdict:2857525	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; donor=thick
+てぃけっと	ticket	12800	jmdict:1077720	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=ticket
+たいま	timer	12800	jmdict:1075990	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=timer
+ちーん	ting	12800	jmdict:1077380	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=ting
+つでー	today	12800	jmdict:2499580	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=today
+とぅ	toe	12800	jmdict:1084430	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=toe
+とー	toe	12800	jmdict:1084430	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=toe
+つもろー	tomorrow	12800	jmdict:2499640	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=tomorrow
+たん	tongue	12800	jmdict:1076480	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=tongue (beef, pork, etc.)
+とっぷす	top	12800	jmdict:2754520	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=top
+とぽろじ	topology	12800	jmdict:1085400	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=topology
+つーる	tour	12800	jmdict:2860546	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=tour (e.g. Tour de France)
+とぅーる	tour	12800	jmdict:2860546	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=tour (e.g. Tour de France)
+とーい	toy	12800	jmdict:2850358	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=toy
+とらひっく	traffic	12800	jmdict:1085900	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=traffic
+とれーん	train	12800	jmdict:1087200	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=train
+とらんずあくしょん	transaction	12800	jmdict:2314260	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=transaction
+とれー	tray	12800	jmdict:1086950	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=tray
+とるー	true	12800	jmdict:1649190	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=true
+たいぷらいた	typewriter	12800	jmdict:1075960	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=typewriter
+あんだーうえあ	underwear	12800	jmdict:1020080	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=underwear
+ゆにほーむ	uniform	12800	jmdict:1137430	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=uniform
+あぽん	upon	12800	jmdict:2826735	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=upon (in place names)
+ゆーざーいんたふぇーす	user interface	12800	jmdict:2335090	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=user interface
+ゆーざーいんたーふぇいす	user interface	12800	jmdict:1136610	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=user interface
+ゔぁるゔ	valve	12800	jmdict:1099930	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=valve
+わにら	vanilla	12800	jmdict:1099480	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=vanilla
+ゔぁにら	vanilla	12800	jmdict:1099480	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=vanilla
+ゔぁりあぶる	variable	12800	jmdict:2863121	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=variable
+ばらえてぃ	variety	12800	jmdict:1099600	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=variety
+べくとる	vector	12500	jmdict:1119470	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 日本語入力用の優先読み; gloss=vector
+びひくる	vehicle	12800	jmdict:2500450	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=(ink) vehicle
+ゔぃーくる	vehicle	12800	jmdict:1984180	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=vehicle
+ゔぇるゔぇっと	velvet	12800	jmdict:1120110	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=velvet
+べんだ	vendor	12800	jmdict:1120250	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=vendor
+べんちゃ	venture	12800	jmdict:1120330	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=venture
+ゔぇすと	vest	12800	jmdict:2856634	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=vest
+べてらん	veteran	12500	jmdict:1119700	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 日本語入力用の優先読み; gloss=veteran (in a particular field)
+ばいす	vice	12800	jmdict:2500530	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=vice
+びゅあ	viewer	12800	jmdict:1105810	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=(image) viewer
+びゅあー	viewer	12800	jmdict:1105810	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=(image) viewer
+びゅわー	viewer	12800	jmdict:1105810	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=(image) viewer
+ゔぃれっじ	village	12800	jmdict:1106100	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=village
+ゔぃねがー	vinegar	12800	jmdict:1105620	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=vinegar
+ゔぁいおれんす	violence	12800	jmdict:1097770	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=violence
+ゔぁいおれっと	violet	12800	jmdict:1097760	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=violet
+ばーじん	virgin	12800	jmdict:1097100	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=virgin
+ばーちゅ	virtue	12800	jmdict:2744140	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=virtue
+ばーちゅー	virtue	12800	jmdict:2744140	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=virtue
+ゔぁーちゅ	virtue	12800	jmdict:2744140	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=virtue
+うぃるす	virus	12500	jmdict:1025450	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 日本語入力用の優先読み; gloss=virus
+ういるす	virus	12800	jmdict:1025450	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=virus
+びーるす	virus	12800	jmdict:2843940	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=virus
+ゔぃーるす	virus	12800	jmdict:2843940	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=virus
+びじたー	visitor	12800	jmdict:1104750	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=visitor
+うおっか	vodka	12800	jmdict:1026610	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=vodka
+うおつか	vodka	12800	jmdict:1026610	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=vodka
+べりゅーむ	volume	12800	jmdict:1119990	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=volume
+うえいと	wait	12800	jmdict:2861660	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=wait (state)
+うぇーき	wake	12800	jmdict:2860865	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=wake (of a ship)
+うおーく	walk	12800	jmdict:2500800	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=walk
+うおーきんぐ	walking	12800	jmdict:2187680	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=walking
+うおーる	wall	12800	jmdict:1920100	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=wall
+われっと	wallet	12800	jmdict:2195350	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=wallet
+わーれっと	wallet	12800	jmdict:2195350	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=wallet
+うぇす	waste	12800	jmdict:1923170	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; donor=waste
+うえす	waste	12800	jmdict:1923170	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; donor=waste
+うえすと	waste	12800	jmdict:2847289	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=waste
+うおっち	watch	12800	jmdict:1026650	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=(one's) watch (on a ship)
+わっち	watch	12800	jmdict:1026650	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=(one's) watch (on a ship)
+うぉーた	water	12800	jmdict:2440940	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=water
+うおーたー	water	12800	jmdict:2440940	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=water
+うえーぶ	wave	12800	jmdict:1025950	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=wave (audience)
+うえぽん	weapon	12800	jmdict:1980410	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=weapon
+うぇざ	weather	12800	jmdict:1026000	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=weather
+うえざー	weather	12800	jmdict:1026000	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=weather
+ういーく	week	12800	jmdict:1025030	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=week
+ういーくえんど	weekend	12800	jmdict:1025040	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=weekend
+うぇーと	weight	12800	jmdict:1025680	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=weight
+うえいと	weight	12800	jmdict:1025680	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=weight
+うえーと	weight	12800	jmdict:1025680	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=weight
+うえるかむ	welcome	12800	jmdict:1026290	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=welcome
+うえるふぇあ	welfare	12800	jmdict:2861536	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=welfare
+うぃすき	whisky	12800	jmdict:1025140	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=whisky
+ういすき	whisky	12800	jmdict:1025140	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=whisky
+うゐすきー	whisky	12800	jmdict:1025140	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=whisky
+ういる	will	12800	jmdict:2715710	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=will
+ういん	win	12800	jmdict:2859577	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=win
+ういんど	wind	12800	jmdict:1025225	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=wind
+ういんどう	window	12800	jmdict:1025220	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=window
+ういんどー	window	12800	jmdict:1025220	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=window
+ういんぐ	wing	12800	jmdict:1025480	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=wing (in soccer, rugby, etc.)
+うぃんた	winter	12800	jmdict:1025210	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=winter
+ういんたー	winter	12800	jmdict:1025210	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=winter
+ういっしゅ	wish	12800	jmdict:2731850	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=wish
+うぉーむ	worm	12800	jmdict:1026560	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=worm (gear, shaft, etc.)
+しろふぉん	xylophone	12800	jmdict:1063360	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=xylophone
+しろほん	xylophone	12800	jmdict:1063360	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=xylophone
+やーる	yard	12800	jmdict:2559680	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=yard (unit of distance)
+やーるど	yard	12800	jmdict:2559680	JMdict の全件読み監査で確認; 読み全体と英単語の語形・借用語を全候補レビューで個別照合; 出典にある完全な別読み（頻度は未評価）; gloss=yard (unit of distance)
+いぇろー	yellow	12800	jmdict:1021040	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=yellow
+いえす	yes	12800	jmdict:2843921	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=yes
+いえすたでい	yesterday	12800	jmdict:2501330	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=yesterday
+よーが	yoga	12800	jmdict:1137490	JMdict の全件読み監査で確認; 採用済みの同じJMdict項目・英語語義に対応する完全な別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=yoga
+ずぃーる	zeal	12800	jmdict:2201770	JMdict の全件読み監査で確認; 既存の完全読みが同じJMdict見出しにあり、同じ英単語と対応する別読み（読み・語義制限を照合）; 出典にある完全な別読み（頻度は未評価）; gloss=zeal
+すとりくと	strict	12500	https://learn.microsoft.com/ja-jp/dotnet/visual-basic/language-reference/statements/option-infer-statement	公式日本語資料の全件読み監査で確認; Option Strictへの参照と「オプション ストリクト ステートメント」の完全対応; 日本語入力用の優先読み
+らっぷ	wrap	12500	https://help.autodesk.com/cloudhelp/2020/JPN/Maya-Modeling/files/GUID-291D9A2D-2DD1-4B1C-B4FA-1DC78F72B535.htm	公式日本語資料の全件読み監査で確認; ラップ オプション(Wrap Options)とラップ(Deform > (Create) Wrap)の完全対応; 日本語入力用の優先読み
+
+# 固定CMUdictの全登録語監査で確認した別発音（強勢の違いだけでは読みを追加しない）
+いくすきゅーず	excuse	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L40097	英語発音から作成・確認した読み; ARPAbet=IH0 K S K Y UW1 Z; 全件発音監査で確認した別発音の完全読み; 日本語慣用頻度は未確認
+えすためっと	estimate	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L39367	英語発音から作成・確認した読み; ARPAbet=EH1 S T AH0 M AH0 T; 全件発音監査で確認した別発音の完全読み; 日本語慣用頻度は未確認
+まだれいと	moderate	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L80301	英語発音から作成・確認した読み; ARPAbet=M AA1 D ER0 EY2 T; 全件発音監査で確認した別発音の完全読み; 日本語慣用頻度は未確認
+ぷろーどぅーす	produce	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L95892	英語発音から作成・確認した読み; ARPAbet=P R OW1 D UW0 S; 全件発音監査で確認した別発音の完全読み; 日本語慣用頻度は未確認
+れふゅーず	refuse	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L99987	英語発音から作成・確認した読み; ARPAbet=R EH1 F Y UW2 Z; 全件発音監査で確認した別発音の完全読み; 日本語慣用頻度は未確認
+りーさいん	resign	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L101421	英語発音から作成・確認した読み; ARPAbet=R IY0 S AY1 N; 全件発音監査で確認した別発音の完全読み; 日本語慣用頻度は未確認
+でゅー	due	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L35222	英語発音から作成・確認した読み; ARPAbet=D Y UW1; 全件発音監査で確認した別発音の完全読み; 日本語慣用頻度は未確認
+でゅりんぐ	during	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L35605	英語発音から作成・確認した読み; ARPAbet=D Y UH1 R IH0 NG; 全件発音監査で確認した別発音の完全読み; 日本語慣用頻度は未確認
+まいにゅーと	minute	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L79576	英語発音から作成・確認した読み; ARPAbet=M AY0 N Y UW1 T; 全件発音監査で確認した別発音の完全読み; 日本語慣用頻度は未確認
+だいれくりー	directly	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L32553	英語発音から作成・確認した読み; ARPAbet=D AY0 R EH1 K L IY0; 全件発音監査で確認した別発音の完全読み; 日本語慣用頻度は未確認
+じぇにゅーわいん	genuine	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L47433	英語発音から作成・確認した読み; ARPAbet=JH EH1 N Y UW1 W AY2 N; 全件発音監査で確認した別発音の完全読み; 日本語慣用頻度は未確認

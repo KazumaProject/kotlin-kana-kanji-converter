@@ -210,7 +210,7 @@ stem	deferred	既存すてむ→STEM(cost18501)と読み・大小文字をまと
 `changed-existing-pairs.tsv`、`summary.md` です。監査は共有の統合結果を使い、読みの採用や
 資料のダウンロードを自動では行いません。
 
-### 一般英単語の追加結果
+### 一般英単語の追加結果（読み監査修正前）
 
 上記の固定入力で全2,816対象を調査した結果です。
 
@@ -256,3 +256,89 @@ CMUdict由来1,044行、公式の日本語資料由来3行です。別レビュ�
 - [JapaneseCorpus 基準配布](https://github.com/KazumaProject/JapaneseCorpus/releases/tag/v2026.1012.19)
 - [JMdict 利用条件](https://www.edrdg.org/edrdg/licence.html)
 - [JMdict DTD / 語義・読み制限の定義](https://www.edrdg.org/jmdict/jmdict_dtd_h.html)
+
+### 日本語入力用の読みの全件監査・修正
+
+監査対象は、修正前の共通採用結果4,391組に含まれる**全4,119英語表記**です。
+JMdict 2026-10-12原本の全項目と照合し、未登録読みの候補6,452行を分類しました。
+同じ読み・表記の候補が複数の語義や項目に現れるため、候補行数は追加ペア数ではありません。
+候補の内訳は、採用897行、先行修正・大小文字をまとめた重複108行、不採用5,447行です。
+採用済みと同じ項目・完全読み・英語語義を持つ別読みは出典制限を照合し、それ以外の借用語・
+語形対応は個別に判定しました。意味だけの訳語、部分語、略称、和製英語、検索専用・不規則・
+稀用・旧用のかなは、新たな普通の読みの欠落として採用していません。
+
+候補抽出では完全一致の英語語義に加え、先頭・途中・末尾の括弧注釈、動詞の `to `、借用元を
+確認しました。例えば `piano (instrument)`、`producer (film, TV, etc.)`、`(record) label`、
+`to produce` です。注釈を一律に削除して採用する本番処理は追加せず、採用ペアごとに
+完全な読み・出典・対応の根拠を補完TSVへ記録しました。`strict→ストイック`、
+`combine→コンツェルン`、`prime→プライムレート` のような意味だけ・部分的な対応は不採用です。
+
+既存CMU由来1,044行も固定コミットの発音・行番号を全件照合し、異なる音素列を持つ別発音を
+確認しました。11組の別読みを追加し、最終的なCMU由来1,055行の出典を再照合しました。
+強勢だけの違いやあらゆる弱母音の表記を別読みにする方針ではありません。CMUは英語発音の
+根拠であり、日本語での慣用頻度や品詞を保証する資料としては扱いません。
+JMdict由来の最終3,379行では、原本の読み・語義・読み制限・漢字制限・借用元との対応を
+再検証し、未照合は0行でした。その他15行は公式日本語資料で対応を確認しました。
+
+| 英語表記 | 補完した日本語入力用の読み | 修正前にあった読みの例 |
+| --- | --- | --- |
+| deploy | でぷろい | でぃぷろい |
+| transform | とらんすふぉーむ | とぅらんすふぉーむ |
+| theme | てーま | しーむ |
+| fruit | ふるーつ | ふるーと |
+| piano | ぴあの | ぴあのー |
+| producer | ぷろでゅーさー | ぷらどぅーさー |
+| shirt | しゃつ | しゃーと |
+| story | すとーりー | すとりー |
+| movie | むーびー | むーゔぃー |
+| virus | うぃるす | ばいらす |
+| veteran | べてらん | ゔぇたらん |
+| produce | ぷろでゅーす | ぷろどぅーす |
+
+最終差分は**885組追加、既存50組のコスト変更、削除0組**です。追加分は日本語入力用の
+優先読み68組（12500）と出典のある別読み817組（12800）で、すべてを独立した不具合とは
+数えません。既存CMU由来48組は読み・表記・出典を保持して12800に変更しました。
+残る2組は `proxy` の通常表記 `ぷろきし` を12500、検索専用表記 `ぷろきしー` を12800に
+入れ替えた修正です。JMdictの検索専用フラグを確認し、通常表記を優先します。
+既存の略語の文字読みはこの通常語の異表記と区別して保持します。
+`むーゔぃー→movie`（上流の18500）も保持します。コストは登録方針で、実端末の順位や
+使用頻度の実測結果ではありません。
+
+出典だけの修正も1組あります。`きゃんせる→cancel` の旧JMdict項目は `cancellation` 等の
+語義で、英語表記 `cancel` そのものの根拠にはなっていませんでした。
+[AWSのOracle SQLキャンセル文書](https://docs.aws.amazon.com/ja_jp/AmazonRDS/latest/UserGuide/Appendix.Oracle.CommonDBATasks.CancellingSQL.html)
+の `rdsadmin.rdsadmin_util.cancel` と「キャンセル」の対応へ置き換え、読みとコストは保持しました。
+
+最終データは補完TSV4,449行、共通採用結果**5,276組・5,109読み・4,119英語表記**です。
+英語表記の集合は修正前と一致し、既存ペアをすべて保持しています。
+[収録一覧](english-dictionary-catalog.md) を再生成し、全5,276組の読み・表記・コストを採用結果と
+独立照合しました。配布ZIPも生成・再読込し、全採用行と共有POSを検証しました。
+ZIP SHA-256は `2da2882633c491bea8a95376942f69db7513ff132f360029ba9e39af17036586`、
+最大読みIDは5,109です。
+
+JMdict以外で追加した日本語入力用の優先読みは、次の公式資料で確認しました。
+
+- `でぷろい→deploy`: [Microsoft Azure App Service](https://learn.microsoft.com/ja-jp/azure/app-service/deploy-zip)
+  の `az webapp deploy` と「デプロイ」。取得HTML SHA-256:
+  `d8f3c661082a12214c1574d7409a977608d6c3695e74a0557594c54800cd934a`。
+- `とらんすふぉーむ→transform`: [AWS Fn::Transform](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/TemplateReference/intrinsic-function-reference-transform.html)
+  と「トランスフォーム」。取得HTML SHA-256:
+  `6d3815198ced25d438102c7022711751c8f6415b91ee293d62f2b064de374862`。
+- `すとりくと→strict`: [Microsoft Option Infer](https://learn.microsoft.com/ja-jp/dotnet/visual-basic/language-reference/statements/option-infer-statement)
+  の Option Strict 参照と「オプション ストリクト ステートメント」。
+- `らっぷ→wrap`: [Autodesk Wrap Options](https://help.autodesk.com/cloudhelp/2020/JPN/Maya-Modeling/files/GUID-291D9A2D-2DD1-4B1C-B4FA-1DC78F72B535.htm)
+  の「ラップ オプション(Wrap Options)」とメニューの `(Create) Wrap`。
+
+通常テスト142件中141件成功・辞書ビルド専用1件スキップ、別実行の `dictionaryBuildTest` は
+2件成功しました。`check` も成功しています。全辞書ビルドは9.241秒で、既存テストの上限
+11.484秒以内でした。回帰テストは優先読み、出典付き別発音、大小文字、同音語の保持、
+検索専用読みのコスト、意味だけ・部分語の不採用を検査します。
+
+ローカルの再調査記録は `build/english-source/reading-issues/` に置き、Gitには含めません。
+`all-surfaces-audit.tsv` に全4,119表記、`exhaustive-decisions.tsv` に全6,452候補の判断理由、
+`all-jmdict-source-verification.tsv` と `all-cmu-source-verification.tsv` に全登録出典の照合結果、
+`final-audit-summary.json` に最終差分を記録しています。配布内容を確認する一覧は上記の
+収録一覧で、補助候補抽出スクリプトの結果をそのまま本番辞書へ入れる処理はありません。
+
+「全件」はこの固定入力に登録された全表記と、指定原本から抽出した全候補を対象とする意味です。
+資料にない日本語慣用読み、あらゆる異表記の網羅、頻度、実端末のIME表示・最終順位は未確認です。
