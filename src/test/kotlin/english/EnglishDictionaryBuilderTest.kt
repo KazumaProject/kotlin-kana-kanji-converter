@@ -197,7 +197,7 @@ class EnglishDictionaryBuilderTest {
         val runtime = EnglishDictionaryQuality.runtimeEntries(entries)
 
         assertEquals(
-            setOf("gallery", "art", "ASCII", "exam"),
+            setOf("gallery", "art", "ART", "ASCII", "exam"),
             runtime.map { it.tango }.toSet(),
         )
         assertTrue(runtime.none {

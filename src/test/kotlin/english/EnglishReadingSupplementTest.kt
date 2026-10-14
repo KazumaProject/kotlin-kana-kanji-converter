@@ -17,6 +17,15 @@ class EnglishReadingSupplementTest {
     private fun dictionary(reading: String, surface: String, cost: Int = 12500) =
         Dictionary(reading, 1851, 1851, cost.toShort(), surface)
 
+    private fun reviewedSource(upstream: List<Dictionary>, supplement: List<EnglishSupplementEntry>): EnglishDictionarySource {
+        val rows = (upstream + supplement.map { it.dictionary }).distinctBy { it.yomi to it.tango }
+        val review = "reading\tsurface\tdecision\toutput_surface\tsource\treason\n" + rows.joinToString("\n") {
+            "${it.yomi}\t${it.tango}\tkeep\t${if (it.tango == "CODE") "code" else it.tango}\thttps://example.org/evidence\tfixture review"
+        } + "\n"
+        return EnglishDictionarySource(upstream, supplement,
+            EnglishCandidateReview.parse(ByteArrayInputStream(review.toByteArray()), "fixture-review.tsv"))
+    }
+
     @Test
     fun parsesProvenanceAndKeepsOriginalAbbreviationAndCompound() {
         val rows = parse("えーぴーあい\tAPI\t12500\tjmdict:2285430\t標準読み\n" +
@@ -44,9 +53,10 @@ class EnglishReadingSupplementTest {
     }
 
     @Test
-    fun rejectsCaseInsensitiveDuplicatePairs() {
+    fun acceptsCaseDistinctPairsButRejectsExactDuplicatePairs() {
+        assertEquals(2, parse("こーど\tcode\t12500\tjmdict:1\t標準\nこーど\tCODE\t12800\tjmdict:2\t大小文字違い\n").size)
         val error = assertFailsWith<IllegalArgumentException> {
-            parse("こーど\tcode\t12500\tjmdict:1\t標準\nこーど\tCODE\t12800\tjmdict:2\t重複\n")
+            parse("こーど\tcode\t12500\tjmdict:1\t標準\nこーど\tcode\t12800\tjmdict:2\t重複\n")
         }
         assertTrue(error.message!!.contains("line=3"))
         assertTrue(error.message!!.contains("duplicate"))
@@ -88,7 +98,7 @@ class EnglishReadingSupplementTest {
     @Test
     fun compoundApprovalAppliesOnlyToTheCompletePair() {
         val supplement = parse("うぇぶさいと\tweb site\t12500\tjmdict:1\t読み全体を確認\n")
-        val source = EnglishDictionarySource(listOf(dictionary("さいと", "web site")), supplement)
+        val source = reviewedSource(listOf(dictionary("さいと", "web site")), supplement)
         assertEquals(listOf("うぇぶさいと"), source.runtimeEntries.map { it.yomi })
         assertEquals(EnglishCandidateStatus.REVIEW, source.assessments[0].status)
     }
@@ -96,7 +106,7 @@ class EnglishReadingSupplementTest {
     @Test
     fun acceptsApprovedSoundCardWithoutAdmittingSoundExplanations() {
         val rows = parse("さうんどかーど\tsound card\t12500\tjmdict:2299000\t完全な複合語\n")
-        val source = EnglishDictionarySource(listOf(dictionary("さうんど", "sound card")), rows)
+        val source = reviewedSource(listOf(dictionary("さうんど", "sound card")), rows)
         assertEquals(listOf("さうんどかーど"), source.runtimeEntries.map { it.yomi })
         for (surface in listOf("sound of a bell", "sound produced by a bell")) {
             assertFailsWith<IllegalArgumentException> { parse("べる\t$surface\t12500\tjmdict:1\t説明文\n") }
@@ -115,23 +125,23 @@ class EnglishReadingSupplementTest {
 
     @Test
     fun keepsHomophonesAndSelectsMinimumCostWithUpstreamWinningTies() {
-        val source = EnglishDictionarySource(
+        val source = reviewedSource(
             listOf(dictionary("こーど", "CODE", 12500), dictionary("きゃっしゅ", "cash", 12800)),
             parse("こーど\tcode\t12500\tjmdict:1\t重複\n" +
                 "きゃっしゅ\tcash\t12500\tjmdict:2\t低コスト\n" +
                 "きゃっしゅ\tcache\t12500\tjmdict:3\t同音語\n"),
         )
-        assertEquals("CODE", source.runtimeEntries.single { it.yomi == "こーど" }.tango)
+        assertEquals("code", source.runtimeEntries.single { it.yomi == "こーど" }.tango)
         assertEquals(listOf("cache", "cash"), source.runtimeEntries.filter { it.yomi == "きゃっしゅ" }.map { it.tango })
         assertTrue(source.runtimeEntries.all { it.cost.toInt() == 12500 })
-        assertEquals(1, source.addedEntries.size)
+        assertEquals(2, source.addedEntries.size)
         assertEquals(1, source.newEnglishSurfaces)
         assertEquals(listOf("cash"), source.changedExistingEntries.map { it.tango })
     }
 
     @Test
     fun countsNewEnglishSurfacesSeparatelyFromAdditionalReadings() {
-        val source = EnglishDictionarySource(listOf(dictionary("さーばー", "server")),
+        val source = reviewedSource(listOf(dictionary("さーばー", "server")),
             parse("さーば\tserver\t12800\tjmdict:1\t読み揺れ\nこーひー\tcoffee\t12500\tjmdict:2\t標準\n"))
         assertEquals(2, source.addedEntries.size)
         assertEquals(1, source.newEnglishSurfaces)
@@ -261,7 +271,7 @@ class EnglishReadingSupplementTest {
             "しゃつ" to "shirt", "とれーす" to "trace", "すとーりー" to "story",
             "ぷりてぃー" to "pretty", "ちゅーん" to "tune", "ぴりおど" to "period",
             "ろー" to "raw", "きゃぴたる" to "capital", "めでぃあむ" to "medium",
-            "むーびー" to "movie", "りぎんぐ" to "rigging", "にゅーくりあ" to "nuclear",
+            "むーびー" to "movie", "ふぇっち" to "fetch", "にゅーくりあ" to "nuclear",
             "てくにっく" to "technique", "てきすたいる" to "textile",
             "ほいーる" to "wheel", "ぽんど" to "pound", "たっくる" to "tackle",
             "どらっぐ" to "drag", "ふりーくえんしー" to "frequency",
@@ -369,7 +379,7 @@ class EnglishReadingSupplementTest {
             assertTrue(second to surface in pairs)
         }
         assertTrue("すてむ" to "STEM" in pairs)
-        assertTrue(source.runtimeEntries.none { it.tango == "stem" })
+        assertTrue("すてむ" to "stem" in pairs)
         assertTrue("えーぴーあい" to "API" in pairs)
         assertTrue("じぇいそん" to "JSON" in pairs)
         val newRows = supplement.filter { it.note.startsWith("日本語資料で確認した読み") ||

@@ -17,6 +17,17 @@ class EnglishWordCoverageTest {
     private fun target(word: String, rank: Int) = EnglishWordTarget(word, rank, "ngsl-1.2")
 
     @Test
+    fun countsTheGeneralStemAsAnAdditionAndReadsBothCaseDistinctBaselineRows() {
+        val abbreviation = entry("すてむ", "STEM", 18501)
+        val ordinary = entry("すてむ", "stem")
+        val coverage = EnglishWordCoverage(listOf(target("stem", 1)), listOf(abbreviation), listOf(abbreviation, ordinary))
+        assertEquals(EnglishWordCoverageStatus.ADDED, coverage.rows.single().status)
+        assertEquals(listOf(ordinary), coverage.addedPairs)
+        val baseline = "reading\tleft_id\tright_id\tcost\tsurface\nすてむ\t1851\t1851\t18501\tSTEM\nすてむ\t1851\t1851\t12500\tstem\n"
+        assertEquals(listOf(abbreviation, ordinary), EnglishWordCoverage.parseBaseline(stream(baseline), "case-baseline.tsv"))
+    }
+
+    @Test
     fun distinguishesCanonicalHeadwordsFromAbbreviationsAndCompounds() {
         val baseline = listOf(entry("あっぷる", "apple"), entry("あいてぃー", "IT"), entry("ぎゃらりー", "art gallery"), entry("めい", "May"))
         val runtime = baseline + listOf(entry("せーぶ", "save"), entry("さーばー", "server"), entry("さーば", "server", 12800))
@@ -64,7 +75,7 @@ class EnglishWordCoverageTest {
     }
 
     @Test
-    fun reportsChangesToExistingCaseInsensitivePairsSeparatelyFromNewPairs() {
+    fun reportsCaseChangesSeparatelyFromNewPairs() {
         val old = entry("めい", "May", 18500)
         val current = entry("めい", "may", 12500)
         val coverage = EnglishWordCoverage(listOf(target("may", 1)), listOf(old), listOf(current))
@@ -128,7 +139,7 @@ class EnglishWordCoverageTest {
         val parsed = EnglishWordCoverage.parseBaseline(stream(header + "さーばー\t1851\t1851\t12500\tserver\n"), "runtime.tsv")
         assertEquals(listOf(entry("さーばー", "server")), parsed)
         for (rows in listOf("サーバー\t1851\t1851\t12500\tserver\n", "さーばー\t32768\t1851\t12500\tserver\n",
-            "さーばー\t1851\t1851\t0\tserver\n", "さーばー\t1851\t1851\t12500\tserver\nさーばー\t1851\t1851\t12500\tSERVER\n")) {
+            "さーばー\t1851\t1851\t0\tserver\n", "さーばー\t1851\t1851\t12500\tserver\nさーばー\t1851\t1851\t12500\tserver\n")) {
             val error = assertFailsWith<IllegalArgumentException> { EnglishWordCoverage.parseBaseline(stream(header + rows), "runtime.tsv") }
             assertTrue(error.message!!.contains("runtime.tsv: line="))
         }
@@ -159,8 +170,10 @@ class EnglishWordCoverageTest {
     fun fixedDevelopmentTargetsAreAddedOnceWithNoFrequencyRank() {
         val base = listOf(target("apple", 1), target("deploy", 2))
         val all = EnglishWordCoverage.withAdditionalWords(base)
-        assertEquals(8, all.size)
+        assertEquals(24, all.size)
         assertEquals(1, all.count { it.word == "deploy" })
+        assertTrue(all.map { it.word }.containsAll(listOf("sync", "async", "fetch", "webhook")))
+        assertEquals(all.size, all.map { it.word }.distinct().size)
         assertTrue(all.filter { it.word !in setOf("apple", "deploy") }.all { it.rank == null && it.origin == "development-work" })
     }
 
