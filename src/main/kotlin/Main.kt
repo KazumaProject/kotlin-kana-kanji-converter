@@ -1,95 +1,25 @@
 package com.kazumaproject
 
-import com.kazumaproject.Constants.ADDS_NEW_WORDS
-import com.kazumaproject.Constants.CUSTOM_LIST
-import com.kazumaproject.Constants.DIC_LIST
-import com.kazumaproject.Constants.DIFFICULT_LIST
-import com.kazumaproject.Constants.DOMAIN
-import com.kazumaproject.Constants.ENTERTAIMENT_NAME
-import com.kazumaproject.Constants.ERA
-import com.kazumaproject.Constants.FIGHT_NAME
-import com.kazumaproject.Constants.FIXED_LIST
-import com.kazumaproject.Constants.FOOD_NAME
-import com.kazumaproject.Constants.NAME_IT_LIST
-import com.kazumaproject.Constants.NAME_LIST
-import com.kazumaproject.Constants.NAME_MUSIC_LIST
-import com.kazumaproject.Constants.PHISIC_NOUN_LIST
-import com.kazumaproject.Constants.PLACE
-import com.kazumaproject.Constants.RESCORE_WORDS
-import com.kazumaproject.Constants.SYMBOL_LIST
-import com.kazumaproject.Constants.VERB_LIST
-import com.kazumaproject.Constants.WORDS
-import com.kazumaproject.Constants.ZENKANKU_LIST
-import com.kazumaproject.dictionary.DicUtils
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.classification.ClassifiedDictionaryData
-import com.kazumaproject.emoji.EmojiDictionaryBuilder
-import com.kazumaproject.emoticon.EmoticonDictionaryBuilder
-import com.kazumaproject.english.EnglishDictionarySource
 import com.kazumaproject.english.EnglishDictionaryBinaryValidator
 import com.kazumaproject.mozc.buildConnectionIdsFromResource
 import com.kazumaproject.mozc.validateBundledMozcDictionaryResources
-import com.kazumaproject.reading_correction.ReadingCorrectionBuilder
-import com.kazumaproject.symbol.SymbolDictionaryBuilder
 import java.io.*
 import java.util.*
 
 fun main() {
     validateBundledMozcDictionaryResources()
-    val fileList: List<String> = listOf(
-        "/dictionary00.txt",
-        "/dictionary01.txt",
-        "/dictionary02.txt",
-        "/dictionary03.txt",
-        "/dictionary04.txt",
-        "/dictionary05.txt",
-        "/dictionary06.txt",
-        "/dictionary07.txt",
-        "/dictionary08.txt",
-        "/dictionary09.txt",
-        "/suffix.txt",
-    )
-    val dicUtils = DicUtils()
-    val dictionaryList = dicUtils.getListDictionary(fileList)
-    val atokUnigramDictionaryList = dicUtils.getListDictionary(listOf("/atok-unigram-dictionary.txt"))
-    val englishDictionarySource = EnglishDictionarySource.loadResources(
-        contextId = IdDefConstants.`名詞,一般,*,*,*,*,*`.toInt(),
-    )
-    val englishDictionaryList = englishDictionarySource.runtimeEntries
-    val baseDictionaryList =
-        (dictionaryList +
-                DIC_LIST + CUSTOM_LIST +
-                NAME_LIST + FIXED_LIST +
-                DIFFICULT_LIST + SYMBOL_LIST +
-                NAME_MUSIC_LIST + NAME_IT_LIST +
-                VERB_LIST + DOMAIN + ERA + PLACE +
-                WORDS + ZENKANKU_LIST + ADDS_NEW_WORDS + PHISIC_NOUN_LIST
-                + FIGHT_NAME + FOOD_NAME + ENTERTAIMENT_NAME + RESCORE_WORDS
-                )
-    val existingPairs = baseDictionaryList.asSequence()
-        .map { it.yomi to it.tango }
-        .toHashSet()
-    val atokUnigramMissing = atokUnigramDictionaryList.filter { (it.yomi to it.tango) !in existingPairs }
-    val finalList =
-        (baseDictionaryList + atokUnigramMissing)
-            .groupBy { it.yomi }
-            .toSortedMap(compareBy({ it.length }, { it }))
-
-    println("finalList size: ${finalList.size}")
-    println(
-        "ATOK unigram dictionary: source=${atokUnigramDictionaryList.size}, " +
-                "alreadyPresent=${atokUnigramDictionaryList.size - atokUnigramMissing.size}, " +
-                "added=${atokUnigramMissing.size}",
-    )
-    println(
-        "English dictionary entries: upstream=${englishDictionarySource.upstream.size}, supplement=${englishDictionarySource.supplement.size}, " +
-                "runtime=${englishDictionaryList.size}, added=${englishDictionarySource.addedEntries.size}",
-    )
+    val baseline = BaselineDictionaryInputs.load()
+    val finalList = baseline.getValue("system").groupBy { it.yomi }
+        .toSortedMap(compareBy({ it.length }, { it }))
+    val englishDictionaryList = baseline.getValue("english_reading")
 
     buildConnectionIds()
     val classified = ClassifiedDictionaryData()
-    val sharedPosInputs = (finalList.values.flatten() + englishDictionaryList + classified.records.values.flatten())
+    val specialists = ClassifiedDictionaryData(File("src/main/specialist"), expectedCategoryCount = 2)
+    val sharedPosInputs = (finalList.values.flatten() + englishDictionaryList + classified.records.values.flatten() + specialists.records.values.flatten())
         .groupBy { it.yomi }.toSortedMap(compareBy({ it.length }, { it }))
     buildPOSTable(sharedPosInputs)
     buildTriesAndTokenArray(finalList)
@@ -101,13 +31,14 @@ fun main() {
         java.nio.file.Path.of("src/main/resources/token_english_reading.dat"),
         java.nio.file.Path.of("src/main/resources/pos_table.dat"),
     )
-    buildDictionaryForSingleKanji()
-    buildDictionaryForEmoji()
-    buildDictionaryForEmoticon()
-    buildDictionaryForSymbol()
-    buildDictionaryForReadingCorrection()
-    buildDictionaryForKotowaza()
+    buildDictionaryForSingleKanji(baseline.getValue("single_kanji"))
+    buildDictionaryForEmoji(baseline.getValue("emoji"))
+    buildDictionaryForEmoticon(baseline.getValue("emoticon"))
+    buildDictionaryForSymbol(baseline.getValue("symbol"))
+    buildDictionaryForReadingCorrection(baseline.getValue("reading_correction"))
+    buildDictionaryForKotowaza(baseline.getValue("kotowaza"))
     classified.build()
+    specialists.build()
 }
 
 private fun buildPOSTable(finalList: SortedMap<String, List<Dictionary>>) {
@@ -145,13 +76,8 @@ private fun buildConnectionIds() {
     buildConnectionIdsFromResource()
 }
 
-private fun buildDictionaryForSingleKanji() {
-    val dicUtils = DicUtils()
-
-    val dictionaryList = dicUtils.getSingleKanjiListDictionary("/single_kanji.tsv")
-        .sortedBy { it.yomi }
-        .sortedBy { it.yomi.length }
-        .groupBy { it.yomi }
+private fun buildDictionaryForSingleKanji(entries: List<Dictionary>) {
+    val dictionaryList = entries.groupBy { it.yomi }.toSortedMap(compareBy({ it.length }, { it }))
     buildAndWriteDictionaryArtifacts(
         dictionaryList = dictionaryList.toSortedMap(compareBy({ it.length }, { it })),
         yomiOutputPath = "./src/main/resources/yomi_singleKanji.dat",
@@ -160,12 +86,8 @@ private fun buildDictionaryForSingleKanji() {
     )
 }
 
-private fun buildDictionaryForEmoji() {
-    val emojiDictionaryBuilder = EmojiDictionaryBuilder()
-
-    val dictionaryList = emojiDictionaryBuilder.convertEmojiDataToDictionaryList("src/main/bin/emoji_data.tsv")
-        .groupBy { it.yomi }
-        .toSortedMap(compareBy({ it.length }, { it }))
+private fun buildDictionaryForEmoji(entries: List<Dictionary>) {
+    val dictionaryList = entries.groupBy { it.yomi }.toSortedMap(compareBy({ it.length }, { it }))
     buildAndWriteDictionaryArtifacts(
         dictionaryList = dictionaryList,
         yomiOutputPath = "./src/main/resources/yomi_emoji.dat",
@@ -174,12 +96,8 @@ private fun buildDictionaryForEmoji() {
     )
 }
 
-private fun buildDictionaryForEmoticon() {
-    val emoticonDictionaryBuilder = EmoticonDictionaryBuilder()
-
-    val dictionaryList = emoticonDictionaryBuilder.convertEmoticonDataToDictionaryList("src/main/bin/emoticon.tsv")
-        .groupBy { it.yomi }
-        .toSortedMap(compareBy({ it.length }, { it }))
+private fun buildDictionaryForEmoticon(entries: List<Dictionary>) {
+    val dictionaryList = entries.groupBy { it.yomi }.toSortedMap(compareBy({ it.length }, { it }))
     buildAndWriteDictionaryArtifacts(
         dictionaryList = dictionaryList,
         yomiOutputPath = "./src/main/resources/yomi_emoticon.dat",
@@ -188,12 +106,8 @@ private fun buildDictionaryForEmoticon() {
     )
 }
 
-private fun buildDictionaryForSymbol() {
-    val symbolDictionaryBuilder = SymbolDictionaryBuilder()
-
-    val dictionaryList = symbolDictionaryBuilder.convertSymbolDataToDictionaryList("src/main/bin/symbol.tsv")
-        .groupBy { it.yomi }
-        .toSortedMap(compareBy({ it.length }, { it }))
+private fun buildDictionaryForSymbol(entries: List<Dictionary>) {
+    val dictionaryList = entries.groupBy { it.yomi }.toSortedMap(compareBy({ it.length }, { it }))
     buildAndWriteDictionaryArtifacts(
         dictionaryList = dictionaryList,
         yomiOutputPath = "./src/main/resources/yomi_symbol.dat",
@@ -202,12 +116,8 @@ private fun buildDictionaryForSymbol() {
     )
 }
 
-private fun buildDictionaryForReadingCorrection() {
-    val readingCorrectionBuilder = ReadingCorrectionBuilder()
-
-    val dictionaryList = readingCorrectionBuilder.parseReadingCorrectionTSV("src/main/bin/reading_correction.tsv")
-        .groupBy { it.yomi }
-        .toSortedMap(compareBy({ it.length }, { it }))
+private fun buildDictionaryForReadingCorrection(entries: List<Dictionary>) {
+    val dictionaryList = entries.groupBy { it.yomi }.toSortedMap(compareBy({ it.length }, { it }))
     buildAndWriteDictionaryArtifacts(
         dictionaryList = dictionaryList,
         yomiOutputPath = "./src/main/resources/yomi_reading_correction.dat",
@@ -216,12 +126,8 @@ private fun buildDictionaryForReadingCorrection() {
     )
 }
 
-private fun buildDictionaryForKotowaza() {
-    val readingCorrectionBuilder = ReadingCorrectionBuilder()
-
-    val dictionaryList = readingCorrectionBuilder.parseKotowazaTSV("src/main/bin/kotowaza.tsv")
-        .groupBy { it.yomi }
-        .toSortedMap(compareBy({ it.length }, { it }))
+private fun buildDictionaryForKotowaza(entries: List<Dictionary>) {
+    val dictionaryList = entries.groupBy { it.yomi }.toSortedMap(compareBy({ it.length }, { it }))
     buildAndWriteDictionaryArtifacts(
         dictionaryList = dictionaryList,
         yomiOutputPath = "./src/main/resources/yomi_kotowaza.dat",

@@ -241,11 +241,17 @@ def release_manifest(root, archive, revision):
     source = json.loads((root / 'src/main/classification/distribution-manifest.json').read_text())
     with zipfile.ZipFile(archive) as z:
         assets = {name: hashlib.sha256(z.read(name)).hexdigest() for name in sorted(z.namelist()) if not name.endswith('/')}
+    import specialist_distribution as specialist
+    specialist_manifest = specialist.verify_files(root)
+    license_file = archive.parent / 'DICTIONARY-LICENSES.txt'
+    license_file.write_text(specialist.licenses(root), encoding='utf-8')
     result = {'schemaVersion': 1, 'revision': revision, 'classification': source,
+              'specialist': specialist_manifest, 'categoryCount': len(source['categoryRows']) + len(specialist_manifest['categoryRows']),
+              'licensesSha256': sha(license_file),
               'archiveSha256': sha(archive), 'assets': assets}
     output = archive.parent / 'dictionary-distribution-manifest.json'
     write_json(output, result)
-    (archive.parent / 'DICTIONARY-SHA256SUMS').write_text(''.join(f'{sha(p)}  {p.name}\n' for p in (archive, output)))
+    (archive.parent / 'DICTIONARY-SHA256SUMS').write_text(''.join(f'{sha(p)}  {p.name}\n' for p in (archive, output, license_file)))
 
 
 if __name__ == '__main__':

@@ -20,13 +20,14 @@ import java.util.zip.ZipInputStream
 class ClassifiedDictionaryData(
     directory: File = File("src/main/classification"),
     private val idDef: File = File("src/main/resources/id.def"),
+    expectedCategoryCount: Int = 28,
 ) {
     val categoryIds = Json.parseToJsonElement(File(directory, "categories.json").readText())
         .jsonObject.getValue("categories").jsonArray.map { it.jsonObject.getValue("id").jsonPrimitive.content }
     val records: Map<String, Set<Dictionary>>
 
     init {
-        require(categoryIds.size == 28 && categoryIds.distinct().size == 28 && categoryIds.all { it.matches(Regex("[a-z_]+")) })
+        require(categoryIds.size == expectedCategoryCount && categoryIds.distinct().size == expectedCategoryCount && categoryIds.all { it.matches(Regex("[a-z_]+")) })
         val idCount = MozcIdDefParser.parse(idDef.toPath()).size
         val categories = categoryIds.associateWith { linkedSetOf<Dictionary>() }
         GZIPInputStream(File(directory, "distribution-candidates.tsv.gz").inputStream().buffered()).bufferedReader().useLines { lines ->

@@ -1,6 +1,6 @@
 # 分類辞書の生成と配布
 
-既存の Web・Person・Place・Neologd・wiki の5辞書は、28種類の意味カテゴリ辞書へ置き換えます。元の5辞書のテキストは、分類結果との照合と品詞・コストの復元に使用します。
+既存の Web・Person・Place・Neologd・wiki の5辞書は、28種類の意味カテゴリ辞書へ置き換えます。追加の漢方・医療2カテゴリを合わせ、計30カテゴリを配布します。[専門辞書の入力と条件](specialist-dictionaries.md) を参照してください。元の5辞書のテキストは、分類結果との照合と品詞・コストの復元に使用します。
 
 ## 固定入力
 
@@ -34,6 +34,6 @@ freezeはSQLiteを読み取り専用の一つのトランザクションで読�
 
 [収録一覧](classified-dictionary-catalog/index.md)では、全レコードの読み・表記・左右品詞ID・コスト・分類元をカテゴリ別に掲載します。品詞名は一覧内の対応表で確認できます。大きなカテゴリはGitHub上で閲覧できるサイズに分割します。一覧はリポジトリの文書として保存し、配布ZIPやRelease添付ファイルには含めません。`python3 scripts/write_classified_dictionary_catalog.py` で再生成し、`--check` で固定入力との一致を確認します。
 
-既存Actionsを手動実行すると、ZIPと `dictionary-distribution-manifest.json`、`DICTIONARY-SHA256SUMS` を成果物として取得できます。`v*` タグでは3ファイルをGitHubのプレリリースへ添付し、通常リリースのLatestには設定しません。最新5プレリリースを保持し、通常リリースとそのタグは削除対象に含めません。
+既存Actionsを手動実行すると、ZIPと `dictionary-distribution-manifest.json`、`DICTIONARY-SHA256SUMS`、`DICTIONARY-LICENSES.txt` を成果物として取得できます。`v*` タグでは4ファイルをGitHubのプレリリースへ添付し、通常リリースのLatestには設定しません。最新5プレリリースを保持し、通常リリースとそのタグは削除対象に含めません。
 
-利用側IMEは旧5辞書の固定パスを28カテゴリの読み込みへ変更する必要があります。辞書バイナリの読み戻し検証と、実IMEの候補表示・順位の検証は別です。
+利用側IMEは旧5辞書の固定パスを30カテゴリの読み込みへ変更する必要があります。辞書バイナリの読み戻し検証と、実IMEの候補表示・順位の検証は別です。

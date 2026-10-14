@@ -171,6 +171,12 @@ val classificationCategoryIds = ((JsonSlurper().parse(classificationDirectory.fi
     ["categories"] as List<*>).map { (it as Map<*, *>)["id"] as String }
 require(classificationCategoryIds.size == 28 && classificationCategoryIds.distinct().size == 28 &&
     classificationCategoryIds.all { it.matches(Regex("[a-z_]+")) }) { "Expected 28 unique safe category IDs" }
+val specialistDirectory = layout.projectDirectory.dir("src/main/specialist")
+val specialistCategoryIds = ((JsonSlurper().parse(specialistDirectory.file("categories.json").asFile) as Map<*, *>)
+    ["categories"] as List<*>).map { (it as Map<*, *>)["id"] as String }
+require(specialistCategoryIds == listOf("kampo", "medical") &&
+    specialistCategoryIds.none { it in classificationCategoryIds }) { "Expected two distinct specialist categories" }
+val distributionCategoryIds = classificationCategoryIds + specialistCategoryIds
 val systemNgramDictionaryFile = dictionaryResourcesDir.file("ngram/system_ngram.dat")
 val systemNgramUnigramSourceDir = layout.projectDirectory.dir("src/main/ngram-unigram")
 val systemNgramUnigramDictionaryFile = dictionaryResourcesDir.file("ngram/system_ngram_unigram.dat")
@@ -244,7 +250,7 @@ val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("yomi_english_reading.dat", "english_reading/yomi.dat.zip", zipped = true, innerEntryName = "yomi.dat"),
     JapaneseKeyboardAssetSpec("tango_english_reading.dat", "english_reading/tango.dat.zip", zipped = true, innerEntryName = "tango.dat"),
     JapaneseKeyboardAssetSpec("token_english_reading.dat", "english_reading/token.dat.zip", zipped = true, innerEntryName = "token.dat"),
-) + classificationCategoryIds.flatMap { categoryId ->
+) + distributionCategoryIds.flatMap { categoryId ->
     listOf("yomi.dat", "tango.dat", "token.dat").map { name ->
         JapaneseKeyboardAssetSpec(
             "dictionary_categories/$categoryId/$name", "categories/$categoryId/$name.zip",
@@ -1039,13 +1045,45 @@ val verifyClassifiedDictionaryAssets = tasks.register<JavaExec>("verifyClassifie
 
 val buildDictionaryDistributionManifest = tasks.register<Exec>("buildDictionaryDistributionManifest") {
     group = "distribution"
-    dependsOn(verifyClassifiedDictionaryAssets)
+    dependsOn(verifyClassifiedDictionaryAssets, "verifySpecialistDictionaryAssets")
     commandLine("python3", "scripts/classified_distribution.py", "release-manifest",
         "--revision", providers.environmentVariable("GITHUB_SHA").orElse("local").get())
     inputs.file(japaneseKeyboardAssetsReleaseZip)
     inputs.file(classificationDirectory.file("distribution-manifest.json"))
-    outputs.files(japaneseKeyboardAssetsReleaseDir.file("dictionary-distribution-manifest.json"),
+    inputs.file(specialistDirectory.file("distribution-manifest.json"))
+    inputs.files("LICENSE", "LICENSE-DATA.md", "src/main/resources/THIRD-PARTY-NOTICES.md")
+    inputs.dir(specialistDirectory.dir("notices"))
+    inputs.dir("src/main/resources/third-party")
+    outputs.files(japaneseKeyboardAssetsReleaseDir.file("DICTIONARY-LICENSES.txt"),
+        japaneseKeyboardAssetsReleaseDir.file("dictionary-distribution-manifest.json"),
         japaneseKeyboardAssetsReleaseDir.file("DICTIONARY-SHA256SUMS"))
 }
 
 tasks.named("check") { dependsOn(verifyDistributionCandidates) }
+
+val exportExistingDictionaryInventory = tasks.register<JavaExec>("exportExistingDictionaryInventory") {
+    group = "verification"
+    description = "Exports the same baseline dictionary inputs selected by Main, including reconstructed kana surfaces."
+    dependsOn("classes", verifyDistributionCandidates, validateDictionaryIds)
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.specialist.ExistingDictionaryInventoryKt")
+    maxHeapSize = "4g"
+    args("--output", layout.buildDirectory.file("specialist/existing-pairs.jsonl.gz").get().asFile.path)
+    // Always recompute: constants, selectors, and all auxiliary sources are inputs too.
+}
+val verifySpecialistDistribution = tasks.register<Exec>("verifySpecialistDistribution") {
+    group = "verification"
+    dependsOn(exportExistingDictionaryInventory)
+    commandLine("python3", "scripts/specialist_distribution.py", "verify")
+}
+val verifySpecialistDictionaryAssets = tasks.register<JavaExec>("verifySpecialistDictionaryAssets") {
+    group = "verification"
+    dependsOn("verifyJapaneseKeyboardDictionaryAssets", verifySpecialistDistribution)
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.specialist.VerifySpecialistDictionaryAssetsKt")
+    maxHeapSize = "4g"
+    args("--archive", japaneseKeyboardAssetsReleaseZip.asFile.path,
+        "--existing-index", layout.buildDirectory.file("specialist/existing-pairs.jsonl.gz").get().asFile.path)
+}
+tasks.named("run") { dependsOn(verifySpecialistDistribution) }
+tasks.named("check") { dependsOn(verifySpecialistDistribution) }

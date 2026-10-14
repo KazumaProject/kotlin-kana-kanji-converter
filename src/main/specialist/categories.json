@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "id": "kampo",
+      "name": "漢方・生薬",
+      "definition": "KNApSAcK KAMPO由来の漢方処方名・生薬名。既存辞書にない読み・表記のみ。"
+    },
+    {
+      "id": "medical",
+      "name": "医療",
+      "definition": "万病・百薬辞書由来の症状・病名・医薬品名。既存辞書および漢方にない読み・表記のみ。"
+    }
+  ]
+}
