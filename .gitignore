@@ -51,5 +51,8 @@ __pycache__/
 !/src/test/resources/perf/dictionary-build-baseline.properties
 /src/main/resources/*
 !/src/main/resources/atok-unigram-dictionary.txt
+!/src/main/resources/third-party/
+/src/main/resources/third-party/*
+!/src/main/resources/third-party/CMUDICT-LICENSE
 .gradle-user-home
 release_zips

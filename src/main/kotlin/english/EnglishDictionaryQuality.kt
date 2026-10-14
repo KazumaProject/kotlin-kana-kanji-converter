@@ -8,8 +8,10 @@ import java.util.Locale
  *
  * The published source is already a direct-loanword artifact: its generator
  * requires the complete Japanese reading to match an English pronunciation.
- * This class remains a defensive runtime gate for malformed rows, gloss
- * explanations, and legacy source files.
+ * Curated supplements can also contain ordinary English words with reviewed
+ * pronunciation-derived readings. Full phonetic correspondence is established
+ * during source review; this class is a defensive lexical/format gate, not a
+ * pronunciation verifier or frequency score.
  */
 enum class EnglishCandidateStatus {
     PRIMARY,
@@ -85,7 +87,7 @@ object EnglishDictionaryQuality {
      * the clean runtime dictionary.
      */
     private val explanatoryGlossPattern = Regex(
-        """(?:^\s*(?:used\s+(?:to|after|with|for|as)|indicates?\b|counter\s+(?:for|used)\b|softens?\b|regardless\s+of\b|whether\b|no\s+matter\b|followed\s+by\b|preceded\s+by\b|person\s+(?:who|with|of)\b|people\s+(?:who|with)\b|someone\s+who\b|something\s+(?:that|which)\b|thing\s+(?:or|that|which)\b|device\s+used\b|method\s+(?:of|used)\b|sound\s+(?:of|used)\b|one's\b|to\s+be\b|in\s+(?:a|the)\b|with\s+(?:a|the)\b|for\s+(?:a|the)\b|by\s+(?:a|the)\b|any\b|(?:type|kind|form|group|member|species|variety|family|genus)\s+of\b)|\b(?:used\s+(?:to|for|as|with)|person\s+(?:who|with|of)|people\s+(?:who|with))\b)""",
+        """(?:^\s*(?:used\s+(?:to|after|with|for|as)|indicates?\s+|counter\s+(?:for|used)\b|softens?\b|regardless\s+of\b|whether\b|no\s+matter\b|followed\s+by\b|preceded\s+by\b|person\s+(?:who|with|of)\b|people\s+(?:who|with)\b|someone\s+who\b|something\s+(?:that|which)\b|thing\s+(?:or|that|which)\b|device\s+used\b|method\s+(?:of|used)\b|sound\s+(?:of|used)\b|one's\b|to\s+be\b|in\s+(?:a|the)\b|with\s+(?:a|the)\b|for\s+(?:a|the)\b|by\s+(?:a|the)\b|any\b|(?:type|kind|form|group|member|species|variety|family|genus)\s+of\b)|\b(?:used\s+(?:to|for|as|with)|person\s+(?:who|with|of)|people\s+(?:who|with))\b)""",
         RegexOption.IGNORE_CASE,
     )
 
@@ -332,8 +334,9 @@ object EnglishDictionaryQuality {
                     term|word|name|symbol|letter|part|piece|amount|degree|period|time|area|
                     region|side|edge|surface|material|substance|food|dish|drink|plant|animal|
                     bird|fish|insect|tree|flower|color|colour|language|country|city|river|mountain)
-                |(?:person|people|someone|something|thing|device|method|sound|member|species|
+                |(?:person|people|someone|something|thing|device|method|member|species|
                     variety|family|genus)\s+
+                |sound\s+(?:of|made|produced|used)\b
                 |(?:usually|generally|typically|specifically|especially|primarily|normally|often)\s+
             )
             |\b(?:the\s+act\s+of|the\s+state\s+of|the\s+process\s+of|the\s+quality\s+of|
@@ -343,7 +346,7 @@ object EnglishDictionaryQuality {
         """.trimIndent(),
     )
 
-    fun assess(entry: Dictionary): EnglishCandidateAssessment {
+    fun assess(entry: Dictionary, allowedCompounds: Set<Pair<String, String>> = emptySet()): EnglishCandidateAssessment {
         val normalizedReading = normalizeReading(entry.yomi)
         val normalizedSurface = normalizeSurface(entry.tango)
         val flags = buildList {
@@ -398,7 +401,7 @@ object EnglishDictionaryQuality {
             }
         }
 
-        val status = classifyStatus(entry, normalizedReading, normalizedSurface)
+        val status = classifyStatus(entry, normalizedReading, normalizedSurface, allowedCompounds)
         val reviewFlagCount = flags.count(reviewFlags::contains)
         val score = when (status) {
             EnglishCandidateStatus.PRIMARY -> 100
@@ -416,7 +419,8 @@ object EnglishDictionaryQuality {
         )
     }
 
-    fun assessAll(entries: List<Dictionary>): List<EnglishCandidateAssessment> = entries.map(::assess)
+    fun assessAll(entries: List<Dictionary>, allowedCompounds: Set<Pair<String, String>> = emptySet()): List<EnglishCandidateAssessment> =
+        entries.map { assess(it, allowedCompounds) }
 
     /**
      * Produces the noise-removed runtime dictionary.
@@ -442,8 +446,8 @@ object EnglishDictionaryQuality {
         return selected.values.mapNotNull(EnglishCandidateAssessment::toRuntimeEntry)
     }
 
-    fun summarize(entries: List<Dictionary>): EnglishDictionaryQualitySummary {
-        val assessments = assessAll(entries)
+    fun summarize(entries: List<Dictionary>, allowedCompounds: Set<Pair<String, String>> = emptySet()): EnglishDictionaryQualitySummary {
+        val assessments = assessAll(entries, allowedCompounds)
         val runtime = runtimeEntriesFromAssessments(assessments)
         val flagCounts = EnglishQualityFlag.entries
             .mapNotNull { flag ->
@@ -477,9 +481,10 @@ object EnglishDictionaryQuality {
         entry: Dictionary,
         normalizedReading: String,
         normalizedSurface: String,
+        allowedCompounds: Set<Pair<String, String>>,
     ): EnglishCandidateStatus {
         if (isHardExcluded(entry, normalizedReading, normalizedSurface)) return EnglishCandidateStatus.EXCLUDED
-        if (isReviewCandidate(normalizedReading, normalizedSurface)) return EnglishCandidateStatus.REVIEW
+        if (isReviewCandidate(normalizedReading, normalizedSurface, allowedCompounds)) return EnglishCandidateStatus.REVIEW
         return EnglishCandidateStatus.PRIMARY
     }
 
@@ -507,10 +512,10 @@ object EnglishDictionaryQuality {
                 surface.any(ellipsisCharacters::contains)
     }
 
-    private fun isReviewCandidate(reading: String, surface: String): Boolean {
+    private fun isReviewCandidate(reading: String, surface: String, allowedCompounds: Set<Pair<String, String>>): Boolean {
         val startsWithLowercase = surface.firstOrNull()?.isLowerCase() == true
         val isPhrase = surface.any(Char::isWhitespace) || surface.any(hyphenCharacters::contains)
-        return (isPhrase && !isAllowedCompound(reading, surface)) ||
+        return (isPhrase && !isAllowedCompound(reading, surface) && (reading to surface) !in allowedCompounds) ||
                 explanatoryGlossPattern.containsMatchIn(surface) ||
                 surface.count { it == ' ' } + 1 >= 8 ||
                 surface.length >= 64 ||

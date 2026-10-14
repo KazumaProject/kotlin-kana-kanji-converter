@@ -26,8 +26,8 @@ import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.classification.ClassifiedDictionaryData
 import com.kazumaproject.emoji.EmojiDictionaryBuilder
 import com.kazumaproject.emoticon.EmoticonDictionaryBuilder
-import com.kazumaproject.english.EnglishDictionaryBuilder
-import com.kazumaproject.english.EnglishDictionaryQuality
+import com.kazumaproject.english.EnglishDictionarySource
+import com.kazumaproject.english.EnglishDictionaryBinaryValidator
 import com.kazumaproject.mozc.buildConnectionIdsFromResource
 import com.kazumaproject.mozc.validateBundledMozcDictionaryResources
 import com.kazumaproject.reading_correction.ReadingCorrectionBuilder
@@ -53,11 +53,10 @@ fun main() {
     val dicUtils = DicUtils()
     val dictionaryList = dicUtils.getListDictionary(fileList)
     val atokUnigramDictionaryList = dicUtils.getListDictionary(listOf("/atok-unigram-dictionary.txt"))
-    val englishDictionarySource = EnglishDictionaryBuilder().parseResource(
-        resourcePath = "/english-dictionary.txt",
-        expectedContextId = IdDefConstants.`名詞,一般,*,*,*,*,*`.toInt(),
+    val englishDictionarySource = EnglishDictionarySource.loadResources(
+        contextId = IdDefConstants.`名詞,一般,*,*,*,*,*`.toInt(),
     )
-    val englishDictionaryList = EnglishDictionaryQuality.runtimeEntries(englishDictionarySource)
+    val englishDictionaryList = englishDictionarySource.runtimeEntries
     val baseDictionaryList =
         (dictionaryList +
                 DIC_LIST + CUSTOM_LIST +
@@ -84,8 +83,8 @@ fun main() {
                 "added=${atokUnigramMissing.size}",
     )
     println(
-        "English dictionary entries: source=${englishDictionarySource.size}, " +
-                "runtime=${englishDictionaryList.size}",
+        "English dictionary entries: upstream=${englishDictionarySource.upstream.size}, supplement=${englishDictionarySource.supplement.size}, " +
+                "runtime=${englishDictionaryList.size}, added=${englishDictionarySource.addedEntries.size}",
     )
 
     buildConnectionIds()
@@ -95,6 +94,13 @@ fun main() {
     buildPOSTable(sharedPosInputs)
     buildTriesAndTokenArray(finalList)
     buildEnglishDictionary(englishDictionaryList)
+    EnglishDictionaryBinaryValidator.validate(
+        englishDictionaryList,
+        java.nio.file.Path.of("src/main/resources/yomi_english_reading.dat"),
+        java.nio.file.Path.of("src/main/resources/tango_english_reading.dat"),
+        java.nio.file.Path.of("src/main/resources/token_english_reading.dat"),
+        java.nio.file.Path.of("src/main/resources/pos_table.dat"),
+    )
     buildDictionaryForSingleKanji()
     buildDictionaryForEmoji()
     buildDictionaryForEmoticon()

@@ -1,10 +1,8 @@
 import com.kazumaproject.engine.KanaKanjiEngine
-import com.kazumaproject.graph.Node
 import com.kazumaproject.ngram.EmptySystemNgramDictionary
 import com.kazumaproject.ngram.EmptySystemUnigramDictionary
 import com.kazumaproject.ngram.PackedSystemNgramDictionary
 import com.kazumaproject.ngram.PackedSystemUnigramDictionary
-import com.kazumaproject.ngram.SystemUnigramDictionary
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -28,9 +26,8 @@ fun main(args: Array<String>) {
         return
     }
 
-    val (engine, unigram) = createCandidateCliEngine()
+    val engine = createCandidateCliEngine()
     options.inputs.forEach { input ->
-        unigram.inputLength = input.length
         val candidates = engine.nBestPath(input, options.count)
         println(
             "{\"input\":${input.toJsonString()},\"candidates\":[" +
@@ -77,7 +74,7 @@ private fun parseCandidateCliOptions(args: Array<String>): CandidateCliOptions {
     return CandidateCliOptions(inputs, count, showHelp)
 }
 
-private fun createCandidateCliEngine(): Pair<KanaKanjiEngine, SingleNodeUnigramDictionary> {
+private fun createCandidateCliEngine(): KanaKanjiEngine {
     val requiredFiles = listOf("yomi.dat", "tango.dat", "token.dat", "connectionId.dat", "pos_table.dat")
     val missingFiles = requiredFiles.filterNot { File("src/main/resources/$it").isFile }
     check(missingFiles.isEmpty()) {
@@ -97,18 +94,7 @@ private fun createCandidateCliEngine(): Pair<KanaKanjiEngine, SingleNodeUnigramD
     } else {
         EmptySystemUnigramDictionary
     }
-    val unigram = SingleNodeUnigramDictionary(packedUnigram)
-    return KanaKanjiEngine(ngram, unigram).apply { buildEngine() } to unigram
-}
-
-/** Match JapaneseKeyboard's whole-input, one-node unigram policy for CLI checks. */
-internal class SingleNodeUnigramDictionary(
-    private val dictionary: SystemUnigramDictionary,
-) : SystemUnigramDictionary by dictionary {
-    var inputLength: Int = 0
-
-    override fun matches(node: Node): Boolean =
-        node.sPos == 0 && node.len.toInt() == inputLength && dictionary.matches(node)
+    return KanaKanjiEngine(ngram, packedUnigram).apply { buildEngine() }
 }
 
 private fun candidateCliUsage(): String =

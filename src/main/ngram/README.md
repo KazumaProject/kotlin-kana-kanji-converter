@@ -66,7 +66,13 @@ context scoring when no ATOK rule matches.
 
 The JVM converter can load the same packed assets for an end-to-end candidate
 test. `KanaKanjiEngine` keeps the normal Viterbi result unchanged and promotes
-only candidates whose node path matches a loaded scoreless rule:
+candidates whose node path matches a loaded scoreless rule. Unigram rules match
+any node in the path, including nodes inside compounds; they are not a
+standalone-input preference format. The `しろ` preference was removed after
+it promoted malformed compounds such as `しろ医`; the `したい` and `なら` preferences
+were also withdrawn. The CLI does not add an
+input-length filter that would hide this consumer behavior:
+
 
 ```kotlin
 val ngram = PackedSystemNgramDictionary.fromFile(File("system_ngram.dat"))

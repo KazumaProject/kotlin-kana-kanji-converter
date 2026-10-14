@@ -159,6 +159,8 @@ val dictionaryResourcesDir = layout.projectDirectory.dir("src/main/resources")
 // Build input: JapaneseCorpus's dedicated direct-loanword artifact. This is
 // intentionally kept separate from the normal system dictionary sources.
 val englishDictionaryFile = dictionaryResourcesDir.file("english-dictionary.txt")
+val englishSupplementFile = layout.projectDirectory.file("src/main/english/reading-supplement.tsv")
+sourceSets["main"].resources.srcDir("src/main/english")
 val englishDictionaryReportDir = layout.buildDirectory.dir("reports/english-dictionary")
 val japaneseKeyboardAssetsRootPath = "app/src/main/assets"
 val japaneseKeyboardAssetsStagingDir = layout.buildDirectory.dir("japaneseKeyboardDictionaryAssets")
@@ -519,33 +521,88 @@ val validateDictionaryIds = tasks.register("validateDictionaryIds") {
 
 val validateEnglishDictionary = tasks.register<JavaExec>("validateEnglishDictionary") {
     group = "verification"
-    description = "Validates the JapaneseCorpus direct-loanword hiragana-to-English source."
+    description = "Validates and merges the upstream and curated hiragana-to-English sources."
     dependsOn("classes")
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("com.kazumaproject.english.ValidateEnglishDictionaryKt")
     args(
         "--input", englishDictionaryFile.asFile.path,
+        "--supplement", englishSupplementFile.asFile.path,
         "--id-def", mozcIdDefFileProvider.get().asFile.path,
     )
     inputs.file(englishDictionaryFile)
+    inputs.file(englishSupplementFile)
     inputs.file(mozcIdDefFileProvider)
 }
 
 val analyzeEnglishDictionary = tasks.register<JavaExec>("analyzeEnglishDictionary") {
     group = "reporting"
-    description = "Writes a complete reading-to-English-candidate report from the JapaneseCorpus source."
+    description = "Reports upstream, curated, and merged English reading candidates."
     dependsOn(validateEnglishDictionary)
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("com.kazumaproject.english.GenerateEnglishDictionaryReportKt")
     val reportDirectory = englishDictionaryReportDir.get().asFile
     args(
         "--input", englishDictionaryFile.asFile.path,
+        "--supplement", englishSupplementFile.asFile.path,
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
         "--output", reportDirectory.resolve("english-dictionary-candidates.tsv").path,
         "--quality-output", reportDirectory.resolve("english-dictionary-quality.tsv").path,
         "--summary", reportDirectory.resolve("summary.md").path,
     )
     inputs.file(englishDictionaryFile)
+    inputs.file(englishSupplementFile)
+    inputs.file(mozcIdDefFileProvider)
     outputs.dir(englishDictionaryReportDir)
+}
+
+tasks.register<JavaExec>("generateEnglishDictionaryCatalog") {
+    group = "documentation"
+    description = "Updates the checked-in English surface/reading catalog from the shared adopted dictionary entries."
+    dependsOn(validateEnglishDictionary)
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.english.GenerateEnglishDictionaryCatalogKt")
+    val output = layout.projectDirectory.file("docs/english-dictionary-catalog.md")
+    args(
+        "--input", englishDictionaryFile.asFile.path,
+        "--supplement", englishSupplementFile.asFile.path,
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
+        "--output", output.asFile.path,
+    )
+    inputs.files(englishDictionaryFile, englishSupplementFile, mozcIdDefFileProvider)
+    outputs.file(output)
+}
+
+val analyzeEnglishWordCoverage = tasks.register<JavaExec>("analyzeEnglishWordCoverage") {
+    group = "reporting"
+    description = "Audits all pinned NGSL 1.2 headwords and selected development/work words against a runtime baseline."
+    dependsOn(validateEnglishDictionary)
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.english.AnalyzeEnglishWordCoverageKt")
+    val wordList = providers.gradleProperty("englishWordListFile")
+        .map { layout.projectDirectory.file(it) }
+        .orElse(layout.buildDirectory.file("english-source/general-words/ngsl.csv"))
+    val baseline = providers.gradleProperty("englishWordCoverageBaselineFile")
+        .map { layout.projectDirectory.file(it) }
+        .orElse(layout.buildDirectory.file("english-source/general-words/baseline-runtime.tsv"))
+    val reviewDecisions = providers.gradleProperty("englishWordReviewDecisionsFile")
+        .map { layout.projectDirectory.file(it) }
+        .orElse(layout.buildDirectory.file("english-source/general-words/review-decisions.tsv"))
+    val reportDirectory = layout.buildDirectory.dir("reports/english-word-coverage")
+    args(
+        "--word-list", wordList.get().asFile.path,
+        "--baseline-runtime", baseline.get().asFile.path,
+        "--input", englishDictionaryFile.asFile.path,
+        "--supplement", englishSupplementFile.asFile.path,
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
+        "--output", reportDirectory.get().asFile.path,
+    )
+    if (providers.gradleProperty("englishWordReviewDecisionsFile").isPresent || reviewDecisions.get().asFile.exists()) {
+        args("--review-decisions", reviewDecisions.get().asFile.path)
+        inputs.file(reviewDecisions)
+    }
+    inputs.files(wordList, baseline, englishDictionaryFile, englishSupplementFile, mozcIdDefFileProvider)
+    outputs.dir(reportDirectory)
 }
 
 val validateIdDefReferences = tasks.register("validateIdDefReferences") {
@@ -879,10 +936,25 @@ val packageJapaneseKeyboardDictionaryAssets = tasks.register("packageJapaneseKey
     }
 }
 
+val verifyEnglishDictionaryBinary = tasks.register<JavaExec>("verifyEnglishDictionaryBinary") {
+    group = "verification"
+    description = "Reloads the packaged English reading dictionary and checks all merged source rows and shared POS IDs."
+    dependsOn(packageJapaneseKeyboardDictionaryAssets)
+    mainClass.set("com.kazumaproject.english.VerifyEnglishDictionaryBinaryKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    args(
+        "--input", englishDictionaryFile.asFile.path,
+        "--supplement", englishSupplementFile.asFile.path,
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
+        "--release-zip", japaneseKeyboardAssetsReleaseZip.asFile.path,
+    )
+    inputs.files(englishDictionaryFile, englishSupplementFile, mozcIdDefFileProvider, japaneseKeyboardAssetsReleaseZip)
+}
+
 tasks.register("verifyJapaneseKeyboardDictionaryAssets") {
     group = "verification"
     description = "Verifies the JapaneseKeyboard dictionary assets zip layout and nested .dat.zip files."
-    dependsOn(packageJapaneseKeyboardDictionaryAssets)
+    dependsOn(packageJapaneseKeyboardDictionaryAssets, verifyEnglishDictionaryBinary)
     inputs.file(japaneseKeyboardAssetsReleaseZip)
 
     doLast {

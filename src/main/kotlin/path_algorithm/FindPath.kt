@@ -90,30 +90,22 @@ class FindPath(
         }
         val resultFinal = mutableListOf<CandidatePath>()
         val foundStrings = HashSet<String>()
-        val systemUnigramMatchedCandidates = HashSet<String>()
 
         while (queue.isNotEmpty()) {
             val state = queue.poll()
             if (state.node.tango == "EOS") {
                 val value = state.path.joinToString(separator = "") { it.tango }
-                // JapaneseKeyboard records one-node matches before de-duplicating
-                // surfaces, including those already found through a cheaper path.
-                if (pathMatchesSystemUnigram(state.path)) {
-                    systemUnigramMatchedCandidates += value
-                }
                 if (foundStrings.add(value)) {
                     resultFinal += CandidatePath(
                         value = value,
                         cost = state.cost,
                         matchedBySystemDictionary =
-                            pathMatchesSystemNgram(state.path),
+                            pathMatchesSystemNgram(state.path) || pathMatchesSystemUnigram(state.path),
                     )
                 }
                 if (
                     resultFinal.size >= internalCandidateCount ||
-                    (resultFinal.size >= n &&
-                        (systemUnigramMatchedCandidates.isNotEmpty() ||
-                            resultFinal.any { it.matchedBySystemDictionary }))
+                    (resultFinal.size >= n && resultFinal.any { it.matchedBySystemDictionary })
                 ) break
                 continue
             }
@@ -142,9 +134,7 @@ class FindPath(
         }
         return resultFinal
             .sortedWith(
-                compareByDescending<CandidatePath> {
-                    it.matchedBySystemDictionary || it.value in systemUnigramMatchedCandidates
-                }
+                compareByDescending<CandidatePath> { it.matchedBySystemDictionary }
                     .thenBy { it.cost },
             )
             .take(n)
@@ -169,9 +159,10 @@ class FindPath(
         return false
     }
 
+    // JapaneseKeyboard checks matchesSingleNode at every node in the path,
+    // after retaining the first path for each distinct candidate surface.
     private fun pathMatchesSystemUnigram(path: List<Node>): Boolean =
-        systemUnigramDictionary.ruleCount > 0 &&
-            path.size == 1 && systemUnigramDictionary.matches(path.single())
+        systemUnigramDictionary.ruleCount > 0 && path.any(systemUnigramDictionary::matches)
 
     private fun buildViterbi(
         graph: List<MutableList<MutableList<Node>>>,
