@@ -112,3 +112,19 @@ carry notice files. This repository preserves them under
 `src/main/resources/third-party/`; downstream packages must provide the required
 information or links in their own distribution. `LICENSE-DATA.md` and `NOTICE.md`
 in that directory provide additional JapaneseCorpus data provenance.
+
+## 漢方・医療辞書
+
+`src/main/specialist` のKNApSAcK KAMPO由来データと `kampo` 辞書の加工部分は
+[CC BY-SA 2.1 日本](https://creativecommons.org/licenses/by-sa/2.1/jp/) に従います。
+KNApSAcK Family © 金谷 重彦 (奈良先端科学技術大学院大学)。
+万病辞書 MANBYO_202106 と百薬辞書 HYAKUYAKU_202107 由来データおよび
+`medical` 辞書の編集・読み補完部分は [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) で提供します。
+作成者の表示は各提供元の保存した公式文書を維持します。
+
+加工は表記・読みの抽出と正規化、重複除外、空欄へのGemini推定読みの追加、
+品詞・コストの割当、バイナリ化です。原本の自動読みと推定読みの正確性は全件確認していません。
+出典・版・取得ZIPハッシュ・各行の原本対応・加工状態は
+[専門辞書の文書](../../../docs/specialist-dictionaries.md) と `src/main/specialist` に記録します。
+出典・著作権・条件・加工表示を保持し、漢方の継承条件を守ってください。
+配布時はライセンス全文を含む別添 `DICTIONARY-LICENSES.txt` を維持してください。

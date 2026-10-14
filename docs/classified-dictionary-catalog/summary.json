@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "inputSha256": "299780b3e415150e264a5aa95c4f3b205ae0f13c16bd8cb229283761b333e4bf",
-  "uniquePairs": 733984,
-  "records": 767766,
+  "uniquePairs": 827271,
+  "records": 861053,
   "categories": [
     {
       "id": "person",
@@ -365,6 +365,30 @@
         "verified": 213,
         "manual": 20
       }
+    },
+    {
+      "id": "kampo",
+      "name": "漢方・生薬",
+      "pairs": 440,
+      "readings": 426,
+      "records": 440,
+      "pages": 1,
+      "recordsByOrigin": {
+        "specialist": 440
+      }
+    },
+    {
+      "id": "medical",
+      "name": "医療",
+      "pairs": 92847,
+      "readings": 89629,
+      "records": 92847,
+      "pages": 85,
+      "recordsByOrigin": {
+        "specialist": 90841,
+        "inferred_reading": 2006
+      }
     }
-  ]
+  ],
+  "specialistInputSha256": "f67faa8ebe67f691300ff99da4b301585090992b328bfdf7dd76af150347a3e7"
 }

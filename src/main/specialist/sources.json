@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "kampo_core",
+      "category": "kampo",
+      "version": "LATEST (取得時ハッシュ固定)",
+      "page": "https://dbarchive.biosciencedbc.jp/jp/knapsack-kampo/data-1.html",
+      "download": "https://dbarchive.biosciencedbc.jp/data/knapsack-kampo/LATEST/knapsack_kampo_core.zip",
+      "archiveSha256": "372d2d48aa51aedc8275bbcbcd8fe49417ab57857b56d72761ce0a5a5e66a63f",
+      "member": "knapsack_kampo_core.csv",
+      "encoding": "cp932",
+      "surfaceColumn": "漢方名[Kampo Name]",
+      "readingColumn": "漢方名[Kana]",
+      "license": "CC-BY-SA-2.1-JP",
+      "attribution": "KNApSAcK Family © 金谷 重彦 (奈良先端科学技術大学院大学) licensed under CC表示 継承2.1 日本",
+      "notice": "https://dbarchive.biosciencedbc.jp/jp/knapsack-kampo/lic.html"
+    },
+    {
+      "id": "kampo_herb",
+      "category": "kampo",
+      "version": "LATEST (取得時ハッシュ固定)",
+      "page": "https://dbarchive.biosciencedbc.jp/jp/knapsack-kampo/data-2.html",
+      "download": "https://dbarchive.biosciencedbc.jp/data/knapsack-kampo/LATEST/knapsack_kampo_syoyaku.zip",
+      "archiveSha256": "b794a2c2f7b572bacec94594a9265919d21904f4431423e5907125d7c7193c7b",
+      "member": "knapsack_kampo_syoyaku.csv",
+      "encoding": "cp932",
+      "surfaceColumn": "生薬名 (漢字)",
+      "readingColumn": "生薬名 (カナ)",
+      "license": "CC-BY-SA-2.1-JP",
+      "attribution": "KNApSAcK Family © 金谷 重彦 (奈良先端科学技術大学院大学) licensed under CC表示 継承2.1 日本",
+      "notice": "https://dbarchive.biosciencedbc.jp/jp/knapsack-kampo/lic.html"
+    },
+    {
+      "id": "manbyo",
+      "category": "medical",
+      "version": "MANBYO_202106",
+      "page": "https://sociocom.naist.jp/manbyou-dic/",
+      "download": "https://sociocom.naist.jp/download/manbyo_202106/",
+      "archiveSha256": "60daa90df38726d68a68bcdf4112a7a4daaab624e3587993ccffddc3d70b1140",
+      "member": "MANBYO_202106/MANBYO_20210602.csv",
+      "encoding": "utf-8-sig",
+      "surfaceColumn": "出現形",
+      "readingColumn": "出現形よみ",
+      "license": "CC-BY-4.0",
+      "attribution": "奈良先端科学技術大学院大学 ソーシャル・コンピューティング研究室 — 万病辞書 MANBYO_202106",
+      "notice": "https://sociocom.naist.jp/manbyou-dic/"
+    },
+    {
+      "id": "hyakuyaku",
+      "category": "medical",
+      "version": "HYAKUYAKU_202107",
+      "page": "https://sociocom.naist.jp/hyakuyaku-dic/",
+      "download": "https://sociocom.naist.jp/download/hyakuyaku_202107/",
+      "archiveSha256": "87ea9b70e50620345543483039dd2f4da7746d57eff12c6c78356b71f79cb769",
+      "member": "HYAKUYAKU_v20210706/HYAKUYAKU_20210706.csv",
+      "encoding": "utf-8-sig",
+      "surfaceColumn": "出現形",
+      "readingColumn": "出現形よみ",
+      "license": "CC-BY-4.0",
+      "attribution": "奈良先端科学技術大学院大学 ソーシャル・コンピューティング研究室 — 百薬辞書 HYAKUYAKU_202107",
+      "notice": "https://sociocom.naist.jp/hyakuyaku-dic/"
+    }
+  ]
+}

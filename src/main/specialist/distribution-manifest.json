@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "rules": {
+    "version": 2,
+    "key": "normalized_reading+NFC_surface",
+    "reading": "trim,NFKC,katakana-to-hiragana",
+    "surface": "trim,NFC; internal spaces/case/width/variants preserved",
+    "readingPattern": "[ぁ-ゖー]+",
+    "categoryPriority": [
+      "kampo",
+      "medical"
+    ],
+    "cost": 9000,
+    "pos": "名詞,一般,*,*,*,*,*",
+    "readingAccuracy": "upstream automatic readings and optional Gemini inference; not independently verified",
+    "supplement": "manbyo missing readings only; source row and original surface must match",
+    "kanaSurface": "must equal the current TokenArray sentinel reconstruction"
+  },
+  "inputs": {
+    "src/main/specialist/notices/CC-BY-4.0.txt": "ae65546dff434288761879ba1cf7868fbaee47d62c92bdd795e31830647507f8",
+    "src/main/specialist/notices/CC-BY-SA-2.1-JP.txt": "511dc5b2375651354fc44c3d5a51297ba7c4a6a68f8c9a537db84342ca439423",
+    "src/main/specialist/notices/hyakuyaku.txt": "bb7dc9bb4c8cf5d8a008e367efaf87be158fad8881b8f854e9259718048496a4",
+    "src/main/specialist/notices/kampo_core.txt": "7ca7047eedec76c3a98913dc932487aee1b89c2604842db3f5e961e4c85c4496",
+    "src/main/specialist/notices/kampo_herb.txt": "7ca7047eedec76c3a98913dc932487aee1b89c2604842db3f5e961e4c85c4496",
+    "src/main/specialist/notices/manbyo.txt": "2ffeab722ef92e8fa0feb0df08b273e4c7522aa948052ce03a269a7475992934",
+    "src/main/specialist/gemini-readings.jsonl.gz": "04516a0f6b282cbac9bb0325d2f864db5f84829d4c5764e846d6411bc46eb9ec",
+    "src/main/specialist/gemini-run.json": "91b4925e86a3635ed342e28861be54fe7e03f72505628de41df4b48efa6a80fb",
+    "src/main/specialist/categories.json": "d03ce6563d7439cbcdcdaabf8df2529f507b2ce12abedb75e0ec1167704a0a25",
+    "src/main/specialist/sources.json": "a8bbbbe3b0fce76441acc19f3d7232d6f1f53f76709ce2990c029d0bb330c9e8",
+    "src/main/specialist/sources/kampo_core.jsonl.gz": "88b4487a56159df060c58e5c020c310f7d55def773f66cc384daab7146c0ff55",
+    "src/main/specialist/sources/kampo_herb.jsonl.gz": "1146440a2e946ecd4b80f3792ecc75160ce342f4ad3302e4fb0fc544158927ed",
+    "src/main/specialist/sources/hyakuyaku.jsonl.gz": "bbdefe7bec466e25d333adf2971bfd32e12ebf8eccf9e5c1dbe8132eba49027b",
+    "src/main/specialist/sources/manbyo.jsonl.gz": "acf4105c8bfff7d7278fb9d2298481b3dae2d6b58eda824f31b3345e6aea9492"
+  },
+  "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
+  "existingInventorySha256": "5ad6ef41ea84dce98a2990316d9873a4f4c691c1b288e84fbe3659424a35f173",
+  "existingDictionaryIds": [
+    "categories/address",
+    "categories/agreement",
+    "categories/award",
+    "categories/character",
+    "categories/event",
+    "categories/facility",
+    "categories/initiative",
+    "categories/lineage",
+    "categories/mythological_figure",
+    "categories/organization",
+    "categories/person",
+    "categories/place",
+    "categories/product",
+    "categories/station",
+    "categories/term",
+    "categories/transport_route",
+    "categories/vehicle",
+    "categories/work_anime",
+    "categories/work_book",
+    "categories/work_film",
+    "categories/work_franchise",
+    "categories/work_game",
+    "categories/work_manga",
+    "categories/work_music",
+    "categories/work_other",
+    "categories/work_periodical",
+    "categories/work_program",
+    "categories/work_stage",
+    "emoji",
+    "emoticon",
+    "english_reading",
+    "kotowaza",
+    "reading_correction",
+    "single_kanji",
+    "symbol",
+    "system"
+  ],
+  "existingUniquePairs": 1850329,
+  "sourceRows": {
+    "kampo_core": {
+      "rows": 1581,
+      "dispositions": {
+        "adopted": 257,
+        "existing_duplicate": 544,
+        "source_duplicate": 780
+      }
+    },
+    "kampo_herb": {
+      "rows": 278,
+      "dispositions": {
+        "adopted": 183,
+        "existing_duplicate": 95
+      }
+    },
+    "hyakuyaku": {
+      "rows": 39616,
+      "dispositions": {
+        "adopted": 20691,
+        "cross_category_duplicate": 114,
+        "existing_duplicate": 2705,
+        "non_kana_reading": 16090,
+        "unsupported_kana_surface": 16
+      }
+    },
+    "manbyo": {
+      "rows": 380300,
+      "dispositions": {
+        "adopted": 72156,
+        "existing_duplicate": 3009,
+        "missing_or_placeholder": 304064,
+        "non_kana_reading": 1060,
+        "source_duplicate": 8,
+        "unsupported_kana_surface": 3
+      }
+    }
+  },
+  "dispositions": {
+    "adopted": 93287,
+    "cross_category_duplicate": 114,
+    "existing_duplicate": 6353,
+    "missing_or_placeholder": 304064,
+    "non_kana_reading": 17150,
+    "source_duplicate": 788,
+    "unsupported_kana_surface": 19
+  },
+  "categoryRows": {
+    "kampo": 440,
+    "medical": 92847
+  },
+  "dictionaryRows": 93287,
+  "uniqueAdmittedPairs": 93287,
+  "readingOrigins": {
+    "gemini_inferred_unverified": 2006,
+    "upstream_unverified": 91281
+  },
+  "files": {
+    "distribution-candidates.tsv.gz": "f67faa8ebe67f691300ff99da4b301585090992b328bfdf7dd76af150347a3e7",
+    "provenance.jsonl.gz": "29910e7fbeea3c5f93a379558ec4a8208b75f0426c0386fd8f43674ac06a3b0a"
+  },
+  "limitations": [
+    "Upstream readings include automatic readings; Gemini supplements are inferred. Neither is independently verified.",
+    "POS and cost are assigned by this project. IME behavior and ranking are not verified.",
+    "Kana surfaces incompatible with the current sentinel encoding are withheld."
+  ]
+}

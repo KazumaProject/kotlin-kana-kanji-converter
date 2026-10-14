@@ -5,6 +5,7 @@ import gzip
 import hashlib
 import html
 import itertools
+import heapq
 import json
 from pathlib import Path
 import shutil
@@ -12,7 +13,7 @@ import tempfile
 
 import classified_distribution as distribution
 
-ORIGINS = {'verified': '資料確認済み', 'manual': 'assistant再分類（暫定）', 'gemini': 'Gemini（暫定）'}
+ORIGINS = {'verified': '資料確認済み', 'manual': 'assistant再分類（暫定）', 'gemini': 'Gemini（暫定）', 'specialist': '提供元の読み（正確性未確認）', 'inferred_reading': 'Gemini推定読み（未確認）'}
 MAX_ROWS = 1500
 MAX_BYTES = 180_000
 
@@ -32,10 +33,30 @@ def generate(root, output):
             reading, surface, _, origin, status = line.rstrip('\n').split('\t')
             if status == 'classified':
                 origins[(reading, surface)] = origin
+    specialist_dir = root / 'src/main/specialist'
+    specialist_file = specialist_dir / 'distribution-manifest.json'
+    specialist_rows = []
+    if specialist_file.exists():
+        import specialist_distribution as specialist
+        extra = specialist.verify_files(root)
+        categories += json.loads((specialist_dir / 'categories.json').read_text())['categories']
+        names = {c['id']: c.get('name', c['id']) for c in categories}
+        with gzip.open(specialist_dir / 'distribution-candidates.tsv.gz', 'rt', encoding='utf-8') as f:
+            specialist_rows = [line.rstrip('\n').split('\t') for line in f]
+        for _, reading, _, _, _, surface in specialist_rows:
+            if (reading, surface) in origins:
+                raise ValueError('Specialist catalog overlaps existing classified dictionaries')
+            origins[(reading, surface)] = 'specialist'
+        for record in specialist.read_json_gzip(specialist_dir / 'provenance.jsonl.gz'):
+            if record['status']=='adopted' and record.get('readingOrigin')=='gemini_inferred_unverified':
+                origins[(record['reading'],record['surface'])]='inferred_reading'
+        manifest['categoryRows'].update(extra['categoryRows'])
+        manifest['uniqueAdmittedPairs'] += extra['uniqueAdmittedPairs']
+        manifest['dictionaryRows'] += extra['dictionaryRows']
     output.mkdir(parents=True)
     summary = []
     with gzip.open(source / 'distribution-candidates.tsv.gz', 'rt', encoding='utf-8') as stream:
-        rows = (line.rstrip('\n').split('\t') for line in stream)
+        rows = heapq.merge((line.rstrip('\n').split('\t') for line in stream), specialist_rows)
         for category, records in itertools.groupby(rows, key=lambda row: row[0]):
             directory = output / category
             directory.mkdir()
@@ -103,12 +124,12 @@ def generate(root, output):
         table.append(f'| [{item["name"]}]({item["id"]}/index.md) | {item["pairs"]:,} | {item["readings"]:,} | {item["records"]:,} |')
     (output / 'index.md').write_text(
         '# 分類辞書の収録一覧\n\n'
-        f'28カテゴリ、全体で **{manifest["uniqueAdmittedPairs"]:,}組**、カテゴリ別に **{manifest["dictionaryRows"]:,}レコード**を収録しています。\n\n'
+        f'{len(categories)}カテゴリ、全体で **{manifest["uniqueAdmittedPairs"]:,}組**、カテゴリ別に **{manifest["dictionaryRows"]:,}レコード**を収録しています。\n\n'
         '「組」は読み・表記の重複を除いた件数、「レコード」は品詞・コストの違いも保持したバイナリへの収録件数です。'
         '複数カテゴリへの所属があるため、カテゴリ別の組数の合計は全体の組数と一致しません。\n\n'
         '一覧は配布対象の固定データから全件生成しています。Geminiとassistantの暫定分類・未確認の読みを含みます。'
-        'コストと品詞は元辞書の値です。分類取得失敗・未分類・除外候補はこの一覧には含めません。\n\n'
-        '[品詞IDと品詞名](pos.md) · [生成・配布手順](../classified-dictionary-distribution.md)\n\n'
+        '既存28カテゴリのコストと品詞は元辞書の値です。漢方・医療は提供元の読みと空欄へのGemini推定読み（未確認）を採用し、品詞とコストを本プロジェクトで設定しています。分類取得失敗・未分類・除外候補はこの一覧には含めません。\n\n'
+        '[品詞IDと品詞名](pos.md) · [生成・配布手順](../classified-dictionary-distribution.md) · [漢方・医療の出典記録](../specialist-dictionaries.md)\n\n'
         + '\n'.join(table) + '\n\n'
         f'元データSHA-256: `{manifest["files"]["distribution-candidates.tsv.gz"]}`\n\n'
         '再生成: `python3 scripts/write_classified_dictionary_catalog.py`\n'
@@ -120,6 +141,7 @@ def generate(root, output):
     (output / 'pos.md').write_text('\n'.join(pos) + '\n', encoding='utf-8')
     result = dict(schemaVersion=1, inputSha256=manifest['files']['distribution-candidates.tsv.gz'],
                   uniquePairs=manifest['uniqueAdmittedPairs'], records=manifest['dictionaryRows'], categories=summary)
+    if specialist_file.exists(): result['specialistInputSha256'] = extra['files']['distribution-candidates.tsv.gz']
     (output / 'summary.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     if sum(c['records'] for c in summary) != manifest['dictionaryRows']:
         raise ValueError('Catalog total differs from distributed records')

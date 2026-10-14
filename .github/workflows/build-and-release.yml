@@ -366,6 +366,7 @@ jobs:
             release_zips/japanese_keyboard_dictionary_assets.zip
             release_zips/dictionary-distribution-manifest.json
             release_zips/DICTIONARY-SHA256SUMS
+            release_zips/DICTIONARY-LICENSES.txt
           if-no-files-found: error
 
       # Engine tests load the generated dictionary .dat files,
@@ -386,7 +387,7 @@ jobs:
           name: Pre-release ${{ github.ref_name }}
           prerelease: true
           makeLatest: false
-          artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./release_zips/dictionary-distribution-manifest.json,./release_zips/DICTIONARY-SHA256SUMS
+          artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./release_zips/dictionary-distribution-manifest.json,./release_zips/DICTIONARY-SHA256SUMS,./release_zips/DICTIONARY-LICENSES.txt
           allowUpdates: true
           artifactErrorsFailBuild: true
           removeArtifacts: true
