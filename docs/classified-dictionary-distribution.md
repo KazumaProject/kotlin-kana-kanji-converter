@@ -60,3 +60,9 @@ python3 scripts/write_classified_dictionary_catalog.py --check
 既存Actionsを手動実行すると、ZIPと `dictionary-distribution-manifest.json`、`DICTIONARY-SHA256SUMS`、`DICTIONARY-LICENSES.txt` を成果物として取得できます。`v*` タグでは4ファイルをGitHubのプレリリースへ添付し、通常リリースのLatestには設定しません。最新5プレリリースを保持し、通常リリースとそのタグは削除対象に含めません。
 
 利用側IMEは旧5辞書の固定パスを30カテゴリの読み込みへ変更する必要があります。辞書バイナリの読み戻し検証と、実IMEの候補表示・順位の検証は別です。
+
+## 2026-10-14: うずまきボルトの修正
+
+ユーザー確認に基づき、読み「うずまきぼると」、表記「うずまきボルト」を character に登録します（左右品詞1851、コスト8400）。先に報告された「うずまき → UZUMAKI／うず巻／淋蒔」は除外します。判断は `src/main/classification/reviews/` に保存し、`python3 scripts/classified_distribution.py apply-reviews --commit` で固定データへ反映します。`freeze` でも判断履歴を再適用します。
+
+この変更の確認範囲は固定辞書データです。実アプリの候補表示・順位や配布ZIPの更新は含みません。

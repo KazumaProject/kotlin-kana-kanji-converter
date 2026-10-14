@@ -1,6 +1,6 @@
 # 分類辞書の収録一覧
 
-30カテゴリ、全体で **827,271組**、カテゴリ別に **861,053レコード**を収録しています。
+30カテゴリ、全体で **827,269組**、カテゴリ別に **861,051レコード**を収録しています。
 
 「組」は読み・表記の重複を除いた件数、「レコード」は品詞・コストの違いも保持したバイナリへの収録件数です。複数カテゴリへの所属があるため、カテゴリ別の組数の合計は全体の組数と一致しません。
 
@@ -10,15 +10,15 @@
 
 | カテゴリ | 読み・表記の組 | 読み数 | レコード数 |
 |---|---:|---:|---:|
-| [人物・人名](person/index.md) | 270,887 | 201,555 | 277,028 |
-| [架空キャラクター](character/index.md) | 8,801 | 8,652 | 8,870 |
+| [人物・人名](person/index.md) | 270,886 | 201,554 | 277,027 |
+| [架空キャラクター](character/index.md) | 8,802 | 8,653 | 8,871 |
 | [神話・伝承の存在](mythological_figure/index.md) | 3,629 | 3,447 | 3,629 |
 | [地名](place/index.md) | 78,941 | 76,456 | 85,399 |
 | [住所](address/index.md) | 121,789 | 121,672 | 122,248 |
 | [駅・停留所](station/index.md) | 6,816 | 6,732 | 6,816 |
 | [施設](facility/index.md) | 28,668 | 27,191 | 28,669 |
 | [交通路線](transport_route/index.md) | 3,211 | 3,182 | 3,211 |
-| [組織](organization/index.md) | 47,117 | 46,163 | 47,185 |
+| [組織](organization/index.md) | 47,116 | 46,162 | 47,184 |
 | [家系・氏族](lineage/index.md) | 2,986 | 2,940 | 2,986 |
 | [商品・サービス](product/index.md) | 13,626 | 13,389 | 13,629 |
 | [車両・船舶](vehicle/index.md) | 3,403 | 3,376 | 3,403 |
@@ -26,7 +26,7 @@
 | [賞](award/index.md) | 1,004 | 988 | 1,004 |
 | [条約・協定](agreement/index.md) | 1,744 | 1,734 | 1,744 |
 | [事業・キャンペーン](initiative/index.md) | 1,540 | 1,528 | 1,540 |
-| [一般語・専門用語](term/index.md) | 127,736 | 123,071 | 127,770 |
+| [一般語・専門用語](term/index.md) | 127,735 | 123,070 | 127,769 |
 | [作品シリーズ](work_franchise/index.md) | 270 | 267 | 270 |
 | [漫画作品](work_manga/index.md) | 1,003 | 987 | 1,003 |
 | [アニメ作品](work_anime/index.md) | 642 | 628 | 642 |
@@ -41,7 +41,7 @@
 | [漢方・生薬](kampo/index.md) | 440 | 426 | 440 |
 | [医療](medical/index.md) | 92,847 | 89,629 | 92,847 |
 
-元データSHA-256: `299780b3e415150e264a5aa95c4f3b205ae0f13c16bd8cb229283761b333e4bf`
+元データSHA-256: `3f6b7188300f5260ff7c7cf99ee6ef5e6bb8a7a848a4e88d6e70ed4a5de8c3f0`
 
 再生成: `python3 scripts/write_classified_dictionary_catalog.py`
 整合確認: `python3 scripts/write_classified_dictionary_catalog.py --check`
