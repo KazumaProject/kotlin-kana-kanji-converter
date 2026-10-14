@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "82e10eef85dccc9e981a841eac4d719b658b31128f4d73f8f52942eb4382e9b3",
-  "uniquePairs": 733494,
-  "records": 767274,
+  "inputSha256": "299780b3e415150e264a5aa95c4f3b205ae0f13c16bd8cb229283761b333e4bf",
+  "uniquePairs": 733984,
+  "records": 767766,
   "categories": [
     {
       "id": "person",
       "name": "人物・人名",
-      "pairs": 270397,
-      "readings": 201075,
-      "records": 276536,
+      "pairs": 270887,
+      "readings": 201555,
+      "records": 277028,
       "pages": 185,
       "recordsByOrigin": {
         "gemini": 210841,
-        "verified": 63650,
+        "verified": 64142,
         "manual": 2045
       }
     },
