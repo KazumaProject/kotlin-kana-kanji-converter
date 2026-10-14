@@ -1982,7 +1982,12 @@
         "addedRecords": 492,
         "addedSourceRows": 489
       }
-    ]
+    ],
+    "reviews": [
+      "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl",
+      "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl"
+    ],
+    "reviewBaseExcludedCandidatePairs": 5725
   },
   "inputs": {
     "src/main/bin/names.txt": "5fadf8bc0d4f97411138d47cfa18464cfb1c885c889627afde0c53d5b9bc3de9",
@@ -1990,12 +1995,14 @@
     "src/main/bin/only_wiki.txt.zip": "2c3ca451484900edee55ae4ebe79284e1301b077572f64e9100889a5755bed10",
     "src/main/bin/only_neologd.txt.zip": "64222fa806e424556b662619fb7cba9ac9683f89959afee909dadb112027458e",
     "src/main/bin/wiki_neologd_common.txt.zip": "1b0638f24e057077c1b1471dc30e741670b547979db458eb447af5cc7221283c",
-    "src/main/classification/person-additions/fighters-2026-10-14.jsonl": "21ba7b7db33feb7c1b55abfacb1fb6c451dd11d8a06175cfee7d36de53043eaf"
+    "src/main/classification/person-additions/fighters-2026-10-14.jsonl": "21ba7b7db33feb7c1b55abfacb1fb6c451dd11d8a06175cfee7d36de53043eaf",
+    "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl": "574794d0df19f8afd09d06b66897d7b7fce97dd3652bc005674a3ecae28bb30a",
+    "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl": "5a373897bbade57c507d08e4813baa7d5975bc752a568cdaee8aaebd9d18f155"
   },
   "files": {
     "categories.json": "4fd9d1c05f21789bffe2622ec7269abaff8b7904d2ae2485e072a35df1d10556",
-    "distribution-candidates.tsv.gz": "299780b3e415150e264a5aa95c4f3b205ae0f13c16bd8cb229283761b333e4bf",
-    "distribution-decisions.tsv.gz": "06f6f2d6cb74f1bbd9b766c578225fd6da37da768c1881e5694af06f11b5ba99"
+    "distribution-candidates.tsv.gz": "3f6b7188300f5260ff7c7cf99ee6ef5e6bb8a7a848a4e88d6e70ed4a5de8c3f0",
+    "distribution-decisions.tsv.gz": "eaedb888e6f1e62db4001800a36e8c672dfc992f4e717363f1bd5f9c91e7cb41"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "sourceRows": {
@@ -2006,13 +2013,13 @@
     "web": 308185
   },
   "admittedPairsByOrigin": {
-    "verified": 257491,
-    "gemini": 472165,
-    "manual": 4328
+    "gemini": 472163,
+    "verified": 257490,
+    "manual": 4329
   },
-  "uniqueAdmittedPairs": 733984,
-  "excludedCandidatePairs": 5725,
-  "excludedClassifiedPairs": 0,
+  "uniqueAdmittedPairs": 733982,
+  "excludedCandidatePairs": 5728,
+  "excludedClassifiedPairs": 3,
   "unclassifiedPairs": 10730,
   "noResultPairs": 52467,
   "conflicts": {
@@ -2021,15 +2028,15 @@
     "verified_over_manual": 8
   },
   "categoryRows": {
-    "person": 277028,
-    "character": 8870,
+    "person": 277027,
+    "character": 8871,
     "mythological_figure": 3629,
     "place": 85399,
     "address": 122248,
     "station": 6816,
     "facility": 28669,
     "transport_route": 3211,
-    "organization": 47185,
+    "organization": 47184,
     "lineage": 2986,
     "product": 13629,
     "vehicle": 3403,
@@ -2037,7 +2044,7 @@
     "award": 1004,
     "agreement": 1744,
     "initiative": 1540,
-    "term": 127770,
+    "term": 127769,
     "work_franchise": 270,
     "work_manga": 1003,
     "work_anime": 642,
@@ -2050,7 +2057,7 @@
     "work_periodical": 1029,
     "work_other": 5173
   },
-  "dictionaryRows": 767766,
+  "dictionaryRows": 767764,
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified."
   ]
