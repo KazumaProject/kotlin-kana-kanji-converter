@@ -5,6 +5,8 @@ JapaneseCorpus の direct-loanword 配布と、このリポジトリの確認済
 合流させ、通常のかな漢字辞書とは別の LOUDS / TokenArray 3点を生成します。
 `りんご → apple` のような意味による英訳は対象にしません。
 
+採用・除外と出力表記は `src/main/english/candidate-review.tsv` に記録します。
+未レビューの上流・補完ペアは監査に残し、配布辞書には収録しません。
 実際に採用された全表記と読みは [収録一覧](english-dictionary-catalog.md) に掲載しています。
 `./gradlew generateEnglishDictionaryCatalog` で同じ統合処理から再生成できます。
 一覧は入力のSHA-256を記録したスナップショットで、通常ビルドや配布処理では書き換えません。
@@ -51,8 +53,9 @@ noteは `英語発音から作成・確認した読み; ARPAbet=<元の発音>; 
 さーばー / さーば         → server（それぞれ出典の読みを確認）
 ```
 
-統合は読みと大小文字を区別しない表記で重複排除し、最小 cost を選びます。
-同額なら上流の表記を優先します。異なる同音語は残し、読みごとの token 順は
+統合は採用レビューで確定した読みと表記の完全一致で重複排除し、最小 cost を選びます。
+同額なら上流のレコードを優先します。一般語は小文字、採用する略語・固有名詞は確認した表記を
+レビューTSVに明記します。`stem / STEM` のような別語は同じ読みでも共存できます。異なる同音語は残し、読みごとの token 順は
 cost・表記順で固定します。TSV の列数、かな、表記、cost、出典、重複の誤りは
 ファイル名・行番号付きで失敗します。出典欄は形式検査であり、意味・発音の妥当性を
 自動証明するものではありません。
@@ -62,7 +65,7 @@ cost・表記順で固定します。TSV の列数、かな、表記、cost、�
 Actions は JapaneseCorpus の最新公開リリースを**一度だけ解決**し、同じタグから
 辞書、manifest、SHA256SUMS を取得します。辞書の SHA-256、manifest の checksum、
 `dictionary_kind == direct-loanword` を検証して `src/main/resources/english-dictionary.txt`
-へ展開します。補完TSVは自動的に全生成・検証・監査に合流します。
+へ展開します。補完TSVと採用レビューTSVは自動的に全生成・検証・監査に合流します。
 
 ローカルでも同じリリースの3ファイルを取得し、checksum と manifest を照合してから
 辞書を展開してください。ダウンロード、原本、抽出候補は `build/` に保存し、追跡しません。
@@ -86,6 +89,8 @@ Actions は JapaneseCorpus の最新公開リリースを**一度だけ解決**�
 - `english-dictionary-quality.tsv`: 全入力行の個別判定
 - `merged-runtime.tsv`: 統合・重複排除後の全採用行
 - `supplement-sources.tsv`: 補完行の出典と採用理由
+- `candidate-review.tsv`: 現行入力の採用・除外・未レビュー、出力表記と判断根拠
+- `runtime-changes.tsv`: 指定した採用済み基準との追加・削除・表記変更・コスト/POS変更
 - `summary.md`: 基準辞書との差分、追加ペア、既存ペアの変更、新しい英語表記、既存表記への読み追加、読み揺れの件数
 
 ZIPの再読込では、全登録読み、表記、cost、token 順、共有 `pos_table.dat` のPOS ID、
@@ -165,7 +170,13 @@ costやIMEの最終順位を推測する数値には使いません。
 基本語の追加として数えません。収録率はこの固定した調査集合に対する値であり、一般英文の
 理解率や実IMEの表示成功率ではありません。
 
-### 調査の再実行
+### 調査の再実行（旧調査の履歴）
+
+この節の2,070組の基準生成は `980eea5be020aa3c783f20cd593032e51bc697f6` の
+旧コードを別checkoutで使用した記録です。現行コードは採用レビューを適用するため、
+旧補完TSVだけを渡しても旧基準を再現しません。最新の監査手順は末尾の
+「実用語の採用レビュー」を参照してください。以下の旧 `stem` 保留記録は今回解消済みで、
+現行の `review-decisions.tsv` へ転記しないでください。
 
 上記SHA-256と一致するNGSL原本を `build/english-source/general-words/ngsl.csv` に用意します。
 追加前の基準は、同じJapaneseCorpus `v2026.1012.19` の上流入力と同じ `id.def`
@@ -342,3 +353,87 @@ JMdict以外で追加した日本語入力用の優先読みは、次の公式�
 
 「全件」はこの固定入力に登録された全表記と、指定原本から抽出した全候補を対象とする意味です。
 資料にない日本語慣用読み、あらゆる異表記の網羅、頻度、実端末のIME表示・最終順位は未確認です。
+
+
+## 実用語の採用レビュー（PR #128上の改善）
+
+基準は `v1.7.262-pre.2` / `8ec94757d48d58ac6a5ca2c3baccfcbb48d45003` の
+公開ZIPです。保存済みの公開ZIPのSHA-256
+`fbd977da62e56fba1f5a64546d3add5c9baab89b2beff364e111e9a9527448cf`、
+マニフェスト内117ファイルのハッシュ、英語5,276組の表記・左右POS・コスト・token順を
+読み戻して照合しました。前版の入力とコードで生成した採用済み基準TSVのSHA-256は
+`d66eb5f842a617c890dea76663e15587257abb813c31a37509945aa85627ce70` です。
+
+現行入力の全5,283ペアを `candidate-review.tsv` に記録しました。
+日常・仕事・ITで使う一般語、実用的な専門語・略語、製品名・固有名詞を採用します。
+対象用途に対して限定的と判断した語・名称は除外します。これは表記ごとの編集判断であり、
+利用頻度を実測した結果ではありません。既存の読みは既存資料・前版の監査根拠を引き継ぎ、
+今回全5,283ペアの発音や日本語での慣用頻度を再検証したという意味ではありません。
+
+採用レビューTSVはヘッダー付き6列です。
+
+```text
+reading<TAB>surface<TAB>decision<TAB>output_surface<TAB>source<TAB>reason
+```
+
+- キーは正規化済みの読みと元表記の完全一致です。新しい読みや大文字表記へ判断を流用しません。
+- `decision` は `keep` または `exclude`。採用行の `output_surface` は元表記の大小文字だけを変更でき、除外行は `-` です。
+- `source` は引き継ぐ読み・表記の資料、`reason` は今回の採用・除外・表記判断です。出典の形式検査は内容や頻度の自動証明ではありません。
+- 一般語は小文字。採用するAPI・JSON・STEMやGitHub・Pythonなどは元の表記を維持します。大文字検出だけで語の種類を自動判定しません。
+- 未レビューの上流・補完ペアは `unreviewed-candidate` として監査に残し、配布候補にはしません。上流更新後は監査の未確認行を確認してTSVへ追加します。
+- 既存の数詞・機能語・説明文・不完全な読み等の除外規則が優先されます。採用レビューだけで複合語の部分読みを許可できません。
+
+前版との差分は144組削除、6組追加、4組表記変更、コスト/POS変更0組です。
+5,138組・4,005表記を採用しています。削除した表記は119種類です。
+例は `すー→Sioux`、歴史的名称Gosplan、限定的な専門語esker・craton・nektonです。
+一般語の `Internet→internet / Boolean→boolean / Brie→brie / Navy→navy` は同じコストを保持します。
+
+補完入力に次の5組を追加しました。標準コストは従来どおり12500です。
+
+| 読み | 表記 | 根拠 |
+| --- | --- | --- |
+| しんく | sync | 固定CMUdictの `S IH1 NG K`。既存sink・thinkも維持 |
+| ふぇっち | fetch | 固定CMUdictの `F EH1 CH` |
+| すてむ | stem | 固定CMUdictの `S T EH1 M`。STEM（18501）と別表記で共存 |
+| えいしんく | async | [React本格入門・公開サンプルPDF 9頁（紙面181頁）](https://gihyo.jp/assets/files/book/2026/978-4-297-15523-0/9784297155230-01.pdf#page=9) の表記 |
+| うぇぶふっく | webhook | [GitHubの公式日本語Webhook API資料](https://docs.github.com/ja/rest/repos/webhooks?apiVersion=2022-11-28) |
+
+6組目の追加は既存入力の `めい→May` の復元です。
+従来の大小文字をまとめる重複排除で `may` に吸収されていました。
+新規の発音・読みを作らず、既存のMay（18500）とmay（12500）を両方収録します。
+
+NGSL 1.2の2,809語と仕事・IT対象を合わせた2,827語を再照合しました。
+選んだ対象は `sync / async / commit / branch / merge / rebase / push / pull / fetch /
+cache / cookie / session / token / endpoint / webhook / middleware` です。
+不足4語を補い、一般語stemの保留を解消しました。意味による英訳や活用形の一括展開は行いません。
+
+前版との監査は、照合済みの基準TSVを用意して実行します。
+
+```bash
+./gradlew analyzeEnglishDictionary \
+  -PenglishCandidateBaselineFile=build/english-source/pre2-baseline/merged-runtime.tsv
+./gradlew analyzeEnglishWordCoverage \
+  -PenglishWordCoverageBaselineFile=build/english-source/pre2-baseline/merged-runtime.tsv
+```
+
+基準は前記コミットの旧 `GenerateEnglishDictionaryReportKt` と、収録一覧に記録された
+SHA-256と一致する上流辞書・補完TSV・id.defで再生成し、前記TSVのSHA-256を照合します。
+新しい採用レビューを適用する現行の生成器で前版基準を代用しないでください。
+CLIで同等の入力を指定する場合は `--candidate-review`、差分の基準は `--baseline-runtime` です。
+採用レビューを指定しないCLIはリポジトリの `src/main/english/candidate-review.tsv` を使い、
+通常生成は同じファイルの組込みresourceを使います。
+`analyzeEnglishDictionary` で基準を省略した場合は、同じ現行入力に旧重複排除を適用した比較です。
+過去の公開ZIPとの差分としては扱いません。
+
+実IMEの候補表示・順序、大小文字を区別する候補の共存表示は未確認です。
+検証CLIのunigram照合・重複排除や利用側IMEの実装は変更していません。
+
+
+今回のローカル検証では通常テスト155件中154件成功・辞書ビルド専用1件スキップ、
+別実行の `dictionaryBuildTest` は2件成功でした。`test check` とNGSL監査が成功しました。
+生成ZIPの全英語5,138組と共有POS、および28カテゴリ767,274レコードを読み戻して照合しました。
+前版の全117配布ファイルと比較し、展開後の内容が変わったのは英語辞書の3ファイルだけでした。
+
+簡易CLIの先頭候補は `しろ→白 / しろい→白い / しろくろ→白黒 / しろあり→シロアリ` でした。
+`しろ + 医` の既存unigram回帰テストも成功しました。
+これはこのリポジトリの簡易CLIと辞書照合の結果であり、実アプリ全体の検証ではありません。

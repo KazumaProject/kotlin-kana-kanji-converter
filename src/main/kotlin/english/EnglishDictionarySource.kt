@@ -8,12 +8,19 @@ import java.util.Locale
 class EnglishDictionarySource(
     val upstream: List<Dictionary>,
     val supplement: List<EnglishSupplementEntry>,
+    val review: EnglishCandidateReview = EnglishCandidateReview.parseResource(),
 ) {
     val allowedCompounds: Set<Pair<String, String>> = supplement.map { it.dictionary.yomi to it.dictionary.tango }.toSet()
     val entries: List<Dictionary> = upstream + supplement.map { it.dictionary }
-    val assessments = EnglishDictionaryQuality.assessAll(entries, allowedCompounds)
-    val baselineRuntime = EnglishDictionaryQuality.runtimeEntries(upstream)
-    // Upstream comes first, so an equal-cost overlap keeps its original surface.
+    val canonicalCompounds = allowedCompounds.map { (reading, surface) ->
+        reading to (review.decisions[reading to surface]?.outputSurface ?: surface)
+    }.toSet()
+    val lexicalAssessments = EnglishDictionaryQuality.assessAll(entries, allowedCompounds)
+    val assessments = lexicalAssessments.map { review.assess(it, canonicalCompounds) }
+    val baselineRuntime = EnglishDictionaryQuality.runtimeEntriesFromAssessments(
+        EnglishDictionaryQuality.assessAll(upstream), caseSensitive = false)
+    val legacyRuntime = EnglishDictionaryQuality.runtimeEntriesFromAssessments(lexicalAssessments, caseSensitive = false)
+    // After editorial case selection, upstream wins equal-cost overlaps of the same exact output.
     val runtimeEntries: List<Dictionary> = EnglishDictionaryQuality.runtimeEntriesFromAssessments(assessments)
         .sortedWith(compareBy({ it.yomi.length }, { it.yomi }, { it.cost }, { it.tango }))
     val addedEntries: List<Dictionary> = run {
@@ -40,8 +47,9 @@ class EnglishDictionarySource(
     }
 
     companion object {
-        fun load(input: Path, supplement: Path, contextId: Int): EnglishDictionarySource = EnglishDictionarySource(
+        fun load(input: Path, supplement: Path, contextId: Int, review: Path = Path.of("src/main/english/candidate-review.tsv")): EnglishDictionarySource = EnglishDictionarySource(
             EnglishDictionaryBuilder().parse(input, contextId), EnglishReadingSupplement.parse(supplement, contextId),
+            EnglishCandidateReview.parse(review),
         )
 
         fun loadResources(contextId: Int, upstreamRequired: Boolean = true): EnglishDictionarySource = EnglishDictionarySource(
@@ -49,6 +57,6 @@ class EnglishDictionarySource(
             EnglishReadingSupplement.parseResource(contextId),
         )
 
-        private fun pairKey(entry: Dictionary) = entry.yomi to entry.tango.lowercase(Locale.ROOT)
+        private fun pairKey(entry: Dictionary) = entry.yomi to entry.tango
     }
 }

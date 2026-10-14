@@ -20,6 +20,8 @@ enum class EnglishCandidateStatus {
 }
 
 enum class EnglishQualityFlag(val code: String) {
+    UNREVIEWED_CANDIDATE("unreviewed-candidate"),
+    REVIEW_EXCLUDED("review-excluded"),
     NORMALIZED_READING("reading-normalized"),
     NORMALIZED_SURFACE("surface-normalized"),
     SPECIAL_READING("special-reading"),
@@ -433,11 +435,11 @@ object EnglishDictionaryQuality {
     fun runtimeEntries(entries: List<Dictionary>): List<Dictionary> =
         runtimeEntriesFromAssessments(assessAll(entries))
 
-    fun runtimeEntriesFromAssessments(assessments: List<EnglishCandidateAssessment>): List<Dictionary> {
+    fun runtimeEntriesFromAssessments(assessments: List<EnglishCandidateAssessment>, caseSensitive: Boolean = true): List<Dictionary> {
         val selected = linkedMapOf<Pair<String, String>, EnglishCandidateAssessment>()
         assessments.forEach { assessment ->
             val runtimeEntry = assessment.toRuntimeEntry() ?: return@forEach
-            val key = runtimeEntry.yomi to runtimeEntry.tango.lowercase(Locale.ROOT)
+            val key = runtimeEntry.yomi to if (caseSensitive) runtimeEntry.tango else runtimeEntry.tango.lowercase(Locale.ROOT)
             val current = selected[key]
             if (current == null || assessment.source.cost < current.source.cost) {
                 selected[key] = assessment
@@ -447,7 +449,10 @@ object EnglishDictionaryQuality {
     }
 
     fun summarize(entries: List<Dictionary>, allowedCompounds: Set<Pair<String, String>> = emptySet()): EnglishDictionaryQualitySummary {
-        val assessments = assessAll(entries, allowedCompounds)
+        return summarizeAssessments(assessAll(entries, allowedCompounds))
+    }
+
+    fun summarizeAssessments(assessments: List<EnglishCandidateAssessment>): EnglishDictionaryQualitySummary {
         val runtime = runtimeEntriesFromAssessments(assessments)
         val flagCounts = EnglishQualityFlag.entries
             .mapNotNull { flag ->
@@ -456,12 +461,12 @@ object EnglishDictionaryQuality {
             }
             .toMap()
         return EnglishDictionaryQualitySummary(
-            rawEntries = entries.size,
+            rawEntries = assessments.size,
             primaryEntries = assessments.count { it.status == EnglishCandidateStatus.PRIMARY },
             reviewEntries = assessments.count { it.status == EnglishCandidateStatus.REVIEW },
             excludedEntries = assessments.count { it.status == EnglishCandidateStatus.EXCLUDED },
             runtimeEntries = runtime.size,
-            rawReadings = entries.map(Dictionary::yomi).toSet().size,
+            rawReadings = assessments.map { it.source.yomi }.toSet().size,
             runtimeReadings = runtime.map(Dictionary::yomi).toSet().size,
             flagCounts = flagCounts,
         )

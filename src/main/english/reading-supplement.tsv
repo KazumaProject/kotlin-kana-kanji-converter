@@ -4460,3 +4460,8 @@ reading	surface	cost	source	note
 まいにゅーと	minute	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L79576	英語発音から作成・確認した読み; ARPAbet=M AY0 N Y UW1 T; 全件発音監査で確認した別発音の完全読み; 日本語慣用頻度は未確認
 だいれくりー	directly	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L32553	英語発音から作成・確認した読み; ARPAbet=D AY0 R EH1 K L IY0; 全件発音監査で確認した別発音の完全読み; 日本語慣用頻度は未確認
 じぇにゅーわいん	genuine	12800	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L47433	英語発音から作成・確認した読み; ARPAbet=JH EH1 N Y UW1 W AY2 N; 全件発音監査で確認した別発音の完全読み; 日本語慣用頻度は未確認
+しんく	sync	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L118931	英語発音から作成・確認した読み; ARPAbet=S IH1 NG K; 同期・開発用語。S IH1 NG K の全音をしんくに対応させる。
+ふぇっち	fetch	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L42176	英語発音から作成・確認した読み; ARPAbet=F EH1 CH; Gitの取得操作にも使う一般動詞。F EH1 CH の全音をふぇっちに対応させる。
+すてむ	stem	12500	https://github.com/cmusphinx/cmudict/blob/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict#L115794	英語発音から作成・確認した読み; ARPAbet=S T EH1 M; NGSL一般語。S T EH1 M の全音をすてむに対応させる。略語STEMと別表記として収録。
+えいしんく	async	12500	https://gihyo.jp/assets/files/book/2026/978-4-297-15523-0/9784297155230-01.pdf#page=9	日本語資料で確認した読み; 技術評論社のReact本格入門・公開サンプルにasync（エイシンク）と明記。非同期キーワードそのものの完全な読み。
+うぇぶふっく	webhook	12500	https://docs.github.com/ja/rest/repos/webhooks?apiVersion=2022-11-28	日本語資料で確認した読み; GitHub公式日本語API資料がウェブフックとWebhookを対応させる。イベント通知の一般IT用語なので出力は小文字。
