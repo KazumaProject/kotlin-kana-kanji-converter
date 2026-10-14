@@ -25,6 +25,14 @@ class TokenArray {
     var leftIds: List<Short> = listOf()
     var rightIds: List<Short> = listOf()
 
+    internal val entryCount: Int
+        get() {
+            check(wordCostList.size == nodeIdList.size && wordCostList.size == posTableIndexList.size) {
+                "Token array column lengths differ"
+            }
+            return wordCostList.size
+        }
+
     fun getListDictionaryByYomiTermId(
         nodeId: Int,
     ): List<TokenEntry> {
@@ -153,17 +161,22 @@ class TokenArray {
     fun readExternalNotCompress(objectInput: ObjectInput): TokenArray {
         objectInput.apply {
             try {
-                posTableIndexList = (readObject() as ShortArray).toMutableList()
-                wordCostList = (readObject() as ShortArray).toMutableList()
-                nodeIdList = (readObject() as IntArray).toMutableList()
-                bitvector = readObject() as BitSet
-                rebuildCache()
+                readExternalNotCompressStrict(this)
                 close()
             } catch (e: Exception) {
                 println(e.stackTraceToString())
             }
         }
         return TokenArray()
+    }
+
+    internal fun readExternalNotCompressStrict(input: ObjectInput) {
+        posTableIndexList = (input.readObject() as ShortArray).toMutableList()
+        wordCostList = (input.readObject() as ShortArray).toMutableList()
+        nodeIdList = (input.readObject() as IntArray).toMutableList()
+        bitvector = input.readObject() as BitSet
+        rebuildCache()
+        check(entryCount >= 0)
     }
 
     /**

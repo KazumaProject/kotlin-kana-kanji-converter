@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "id": "person",
+      "name": "人物・人名",
+      "definition": "実在人物、姓、名。対象と読みの一致が原資料で確認できるもの。"
+    },
+    {
+      "id": "character",
+      "name": "架空キャラクター",
+      "definition": "個別に特定できる創作上の人物・キャラクター。"
+    },
+    {
+      "id": "mythological_figure",
+      "name": "神話・伝承の存在",
+      "definition": "個別に特定できる神、精霊、妖怪、伝説上の人物。"
+    },
+    {
+      "id": "place",
+      "name": "地名",
+      "definition": "対象と読みが原資料で確認できる地理上の場所。"
+    },
+    {
+      "id": "address",
+      "name": "住所",
+      "definition": "日本郵便の町域名・読みと同一の、整理済み住所。階数や範囲等の郵便注記を含まない。"
+    },
+    {
+      "id": "station",
+      "name": "駅・停留所",
+      "definition": "個別に特定できる旅客用駅・停留所。"
+    },
+    {
+      "id": "facility",
+      "name": "施設",
+      "definition": "建物、施設、固定された交通インフラ。"
+    },
+    {
+      "id": "transport_route",
+      "name": "交通路線",
+      "definition": "個別に特定できる道路・交通路線・運行サービス。"
+    },
+    {
+      "id": "organization",
+      "name": "組織",
+      "definition": "会社、学校、公的機関、団体、チーム等。"
+    },
+    {
+      "id": "lineage",
+      "name": "家系・氏族",
+      "definition": "個別に特定できる歴史上の家系、氏族、王朝。"
+    },
+    {
+      "id": "product",
+      "name": "商品・サービス",
+      "definition": "商品、ブランド、ソフトウェア製品、利用者向けサービス。"
+    },
+    {
+      "id": "vehicle",
+      "name": "車両・船舶",
+      "definition": "個別に特定できる車両、船舶、車種・機体・車両モデル。"
+    },
+    {
+      "id": "event",
+      "name": "イベント・事件",
+      "definition": "日付・場所等を持つ個別の出来事、催事、大会、祭り、式典。"
+    },
+    {
+      "id": "award",
+      "name": "賞",
+      "definition": "賞・賞金・表彰制度。授賞式はevent。"
+    },
+    {
+      "id": "agreement",
+      "name": "条約・協定",
+      "definition": "個別に特定できる条約、協定、正式な合意。"
+    },
+    {
+      "id": "initiative",
+      "name": "事業・キャンペーン",
+      "definition": "複数の活動をまとめる、継続中の特定事業・キャンペーン。"
+    },
+    {
+      "id": "term",
+      "name": "一般語・専門用語",
+      "definition": "独立した語義と読みが辞書原資料で対応する一般語・専門用語。未分類語の受け皿にはしない。"
+    },
+    {
+      "id": "work_franchise",
+      "name": "作品シリーズ",
+      "definition": "複数の個別作品を束ねると資料で確認できるシリーズ・フランチャイズ。"
+    },
+    {
+      "id": "work_manga",
+      "name": "漫画作品",
+      "definition": "個別に特定できる漫画作品。"
+    },
+    {
+      "id": "work_anime",
+      "name": "アニメ作品",
+      "definition": "個別に特定できるアニメーション作品。"
+    },
+    {
+      "id": "work_film",
+      "name": "映画作品",
+      "definition": "個別に特定できる映画。"
+    },
+    {
+      "id": "work_program",
+      "name": "番組",
+      "definition": "個別に特定できるテレビ・ラジオ・配信番組。"
+    },
+    {
+      "id": "work_book",
+      "name": "書籍作品",
+      "definition": "個別に特定できる書籍、文学作品、経典。"
+    },
+    {
+      "id": "work_game",
+      "name": "ゲーム作品",
+      "definition": "個別に特定できるゲーム作品・ゲームシリーズ。"
+    },
+    {
+      "id": "work_music",
+      "name": "音楽作品",
+      "definition": "個別に特定できる楽曲、作曲、シングル、アルバム。"
+    },
+    {
+      "id": "work_stage",
+      "name": "舞台作品",
+      "definition": "個別に特定できる演劇・舞踊の作品。"
+    },
+    {
+      "id": "work_periodical",
+      "name": "定期刊行物",
+      "definition": "個別に特定できる新聞、雑誌、学術誌、編集出版物。"
+    },
+    {
+      "id": "work_other",
+      "name": "媒体未特定の作品・美術作品",
+      "definition": "原資料が個別の作品・文書・絵画・彫刻と明記し、漫画・アニメ・映画等の媒体を特定しないもの。媒体は推定しない。"
+    }
+  ]
+}

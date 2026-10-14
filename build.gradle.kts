@@ -1,4 +1,5 @@
 import org.gradle.api.GradleException
+import groovy.json.JsonSlurper
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
@@ -142,6 +143,7 @@ repositories {
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 }
 
 val generatedMozcIdDefDir = layout.buildDirectory.dir("generated/source/mozcIdDef/main/kotlin")
@@ -164,6 +166,11 @@ val japaneseKeyboardAssetsRootPath = "app/src/main/assets"
 val japaneseKeyboardAssetsStagingDir = layout.buildDirectory.dir("japaneseKeyboardDictionaryAssets")
 val japaneseKeyboardAssetsReleaseDir = layout.projectDirectory.dir("release_zips")
 val japaneseKeyboardAssetsReleaseZip = japaneseKeyboardAssetsReleaseDir.file("japanese_keyboard_dictionary_assets.zip")
+val classificationDirectory = layout.projectDirectory.dir("src/main/classification")
+val classificationCategoryIds = ((JsonSlurper().parse(classificationDirectory.file("categories.json").asFile) as Map<*, *>)
+    ["categories"] as List<*>).map { (it as Map<*, *>)["id"] as String }
+require(classificationCategoryIds.size == 28 && classificationCategoryIds.distinct().size == 28 &&
+    classificationCategoryIds.all { it.matches(Regex("[a-z_]+")) }) { "Expected 28 unique safe category IDs" }
 val systemNgramDictionaryFile = dictionaryResourcesDir.file("ngram/system_ngram.dat")
 val systemNgramUnigramSourceDir = layout.projectDirectory.dir("src/main/ngram-unigram")
 val systemNgramUnigramDictionaryFile = dictionaryResourcesDir.file("ngram/system_ngram_unigram.dat")
@@ -230,21 +237,6 @@ val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("yomi_kotowaza.dat", "kotowaza/yomi_kotowaza.dat"),
     JapaneseKeyboardAssetSpec("tango_kotowaza.dat", "kotowaza/tango_kotowaza.dat"),
     JapaneseKeyboardAssetSpec("token_kotowaza.dat", "kotowaza/token_kotowaza.dat"),
-    JapaneseKeyboardAssetSpec("yomi_person_names.dat", "person_name/yomi_person_names.dat"),
-    JapaneseKeyboardAssetSpec("tango_person_names.dat", "person_name/tango_person_names.dat"),
-    JapaneseKeyboardAssetSpec("token_person_names.dat", "person_name/token_person_names.dat"),
-    JapaneseKeyboardAssetSpec("yomi_places.dat", "places/yomi_places.dat.zip", zipped = true),
-    JapaneseKeyboardAssetSpec("tango_places.dat", "places/tango_places.dat.zip", zipped = true),
-    JapaneseKeyboardAssetSpec("token_places.dat", "places/token_places.dat.zip", zipped = true),
-    JapaneseKeyboardAssetSpec("yomi_wiki.dat", "wiki/yomi_wiki.dat.zip", zipped = true),
-    JapaneseKeyboardAssetSpec("tango_wiki.dat", "wiki/tango_wiki.dat.zip", zipped = true),
-    JapaneseKeyboardAssetSpec("token_wiki.dat", "wiki/token_wiki.dat.zip", zipped = true),
-    JapaneseKeyboardAssetSpec("yomi_neologd.dat", "neologd/yomi_neologd.dat.zip", zipped = true),
-    JapaneseKeyboardAssetSpec("tango_neologd.dat", "neologd/tango_neologd.dat.zip", zipped = true),
-    JapaneseKeyboardAssetSpec("token_neologd.dat", "neologd/token_neologd.dat.zip", zipped = true),
-    JapaneseKeyboardAssetSpec("yomi_web.dat", "web/yomi_web.dat.zip", zipped = true),
-    JapaneseKeyboardAssetSpec("tango_web.dat", "web/tango_web.dat.zip", zipped = true),
-    JapaneseKeyboardAssetSpec("token_web.dat", "web/token_web.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("zero_query_token.data", "mozc/zero_query/zero_query_token.data"),
     JapaneseKeyboardAssetSpec("zero_query_string.data", "mozc/zero_query/zero_query_string.data"),
     JapaneseKeyboardAssetSpec("zero_query_number_token.data", "mozc/zero_query/zero_query_number_token.data"),
@@ -252,7 +244,14 @@ val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("yomi_english_reading.dat", "english_reading/yomi.dat.zip", zipped = true, innerEntryName = "yomi.dat"),
     JapaneseKeyboardAssetSpec("tango_english_reading.dat", "english_reading/tango.dat.zip", zipped = true, innerEntryName = "tango.dat"),
     JapaneseKeyboardAssetSpec("token_english_reading.dat", "english_reading/token.dat.zip", zipped = true, innerEntryName = "token.dat"),
-)
+) + classificationCategoryIds.flatMap { categoryId ->
+    listOf("yomi.dat", "tango.dat", "token.dat").map { name ->
+        JapaneseKeyboardAssetSpec(
+            "dictionary_categories/$categoryId/$name", "categories/$categoryId/$name.zip",
+            zipped = true, innerEntryName = name,
+        )
+    }
+}
 
 val mozcZeroQueryOfficialResourceNames = listOf(
     "zero_query.def",
@@ -779,7 +778,8 @@ application {
 }
 
 tasks.named<JavaExec>("run") {
-    dependsOn(validateDictionaryIds, validateEnglishDictionary)
+    dependsOn(validateDictionaryIds, validateEnglishDictionary, "verifyDistributionCandidates")
+    maxHeapSize = "4g"
 }
 
 tasks.register<JavaExec>("convertCandidates") {
@@ -788,46 +788,6 @@ tasks.register<JavaExec>("convertCandidates") {
     mainClass.set("ConvertCandidatesKt")
     classpath = sourceSets["main"].runtimeClasspath
     dependsOn("classes")
-}
-
-tasks.register<JavaExec>("runMozcUT") {
-    mainClass.set("com.kazumaproject.MozcUTKt")
-    classpath = sourceSets["main"].runtimeClasspath
-    dependsOn(validateDictionaryIds)
-}
-
-tasks.register<JavaExec>("runMozcUTWiki") {
-    mainClass.set("com.kazumaproject.MozcUTWikiKt")
-    classpath = sourceSets["main"].runtimeClasspath
-    dependsOn(validateDictionaryIds)
-}
-
-tasks.register<JavaExec>("runMozcUTNeologd") {
-    mainClass.set("com.kazumaproject.MozcUTNeologdKt")
-    classpath = sourceSets["main"].runtimeClasspath
-    dependsOn(validateDictionaryIds)
-}
-
-tasks.register<JavaExec>("runMozcUTWikiNeologdCommon") {
-    mainClass.set("com.kazumaproject.MozcUTWikiNeologdCommonKt")
-    classpath = sourceSets["main"].runtimeClasspath
-    dependsOn(validateDictionaryIds)
-}
-
-tasks.named("runMozcUT") {
-    mustRunAfter("run")
-}
-
-tasks.named("runMozcUTWiki") {
-    mustRunAfter("runMozcUT")
-}
-
-tasks.named("runMozcUTNeologd") {
-    mustRunAfter("runMozcUTWiki")
-}
-
-tasks.named("runMozcUTWikiNeologdCommon") {
-    mustRunAfter("runMozcUTNeologd")
 }
 
 val generateMozcZeroQueryData = tasks.register<JavaExec>("generateMozcZeroQueryData") {
@@ -934,10 +894,6 @@ val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeybo
     description = "Generates all dictionary .dat files used by the JapaneseKeyboard assets package."
     dependsOn(
         "run",
-        "runMozcUT",
-        "runMozcUTWiki",
-        "runMozcUTNeologd",
-        "runMozcUTWikiNeologdCommon",
         generateMozcZeroQueryData,
         buildSystemNgramDictionary,
         buildSystemUnigramDictionary,
@@ -1061,3 +1017,35 @@ tasks.register("verifyJapaneseKeyboardDictionaryAssets") {
         logger.lifecycle("Verified JapaneseKeyboard dictionary assets: ${releaseZip.path}")
     }
 }
+
+val verifyDistributionCandidates = tasks.register<Exec>("verifyDistributionCandidates") {
+    group = "verification"
+    description = "Validates frozen classifications, original records, counts and input hashes without model calls."
+    commandLine("python3", "scripts/classified_distribution.py", "verify")
+    inputs.files(fileTree(classificationDirectory) { include("distribution-*", "categories.json") })
+    inputs.files(fileTree("src/main/bin") { include("names.txt", "place.txt.zip", "only_wiki.txt.zip", "only_neologd.txt.zip", "wiki_neologd_common.txt.zip") })
+    inputs.file(mozcIdDefFileProvider)
+}
+
+val verifyClassifiedDictionaryAssets = tasks.register<JavaExec>("verifyClassifiedDictionaryAssets") {
+    group = "verification"
+    description = "Reads the distributed category binaries and verifies all spelling, POS and cost records."
+    dependsOn("verifyJapaneseKeyboardDictionaryAssets")
+    mainClass.set("com.kazumaproject.classification.ClassifiedDictionaryAssetsKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    maxHeapSize = "3g"
+    args("--archive", japaneseKeyboardAssetsReleaseZip.asFile.path)
+}
+
+val buildDictionaryDistributionManifest = tasks.register<Exec>("buildDictionaryDistributionManifest") {
+    group = "distribution"
+    dependsOn(verifyClassifiedDictionaryAssets)
+    commandLine("python3", "scripts/classified_distribution.py", "release-manifest",
+        "--revision", providers.environmentVariable("GITHUB_SHA").orElse("local").get())
+    inputs.file(japaneseKeyboardAssetsReleaseZip)
+    inputs.file(classificationDirectory.file("distribution-manifest.json"))
+    outputs.files(japaneseKeyboardAssetsReleaseDir.file("dictionary-distribution-manifest.json"),
+        japaneseKeyboardAssetsReleaseDir.file("DICTIONARY-SHA256SUMS"))
+}
+
+tasks.named("check") { dependsOn(verifyDistributionCandidates) }
