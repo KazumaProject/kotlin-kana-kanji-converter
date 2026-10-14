@@ -388,6 +388,8 @@ def verify(root):
             or dict(source_counts) != manifest['sourceRows']
             or excluded != manifest['excludedClassifiedPairs'] or unclassified != manifest['unclassifiedPairs'] or no_result != manifest['noResultPairs']):
         raise ValueError('Manifest counts mismatch')
+    import luna_reclassification
+    luna_reclassification.verify_ledger(root)
     print(f'Verified frozen distribution: {len(actual)} rows, {sum(origins.values())} pairs, 28 categories')
 
 

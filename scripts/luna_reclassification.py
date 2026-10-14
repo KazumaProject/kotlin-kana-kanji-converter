@@ -1,0 +1,355 @@
+#!/usr/bin/env python3
+"""Offline, exact-pair reclassification. Never invokes a model."""
+import argparse
+import collections
+import fcntl
+import gzip
+import io
+import json
+import os
+from pathlib import Path
+import shutil
+import tempfile
+import unicodedata
+import classified_distribution as d
+
+REL = 'src/main/classification/luna-reclassification'
+FILES = ('distribution-decisions.tsv.gz', 'distribution-candidates.tsv.gz', 'distribution-manifest.json')
+MODEL = 'gpt-5.6-luna'
+EFFORT = 'max'
+POLICY = 'ime-adopt-reject-v1'
+HIRA = set('あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんぁぃぅぇぉゃゅょゎっゔーがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽ')
+REPRESENTATION_REASONS = {
+    'hiragana_sentinel_changes_surface': 'かな表記が読みから再構築され、元の表記を保持できないため不採用。',
+    'katakana_sentinel_changes_surface': 'カタカナ表記が読みから再構築され、元の表記を保持できないため不採用。',
+    'nfc_surface_changes_or_missing_trie_lookup': '表記の正規化または辞書検索により元の表記を保持できないため不採用。',
+}
+KATA = {chr(ord(c)+0x60) if 'ぁ' <= c <= 'ゔ' else c for c in HIRA}
+
+def jsonl(path):
+    opener = gzip.open if str(path).endswith('.gz') else open
+    with opener(path, 'rt', encoding='utf-8') as f:
+        return [json.loads(line) for line in f]
+
+def write_jsonl(path, rows):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open('wb') as raw:
+        stream = gzip.GzipFile(filename='', mode='wb', fileobj=raw, mtime=0) if str(path).endswith('.gz') else raw
+        try:
+            for row in rows:
+                stream.write((json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(',', ':'))+'\n').encode())
+        finally:
+            if stream is not raw: stream.close()
+
+def decisions(path):
+    with gzip.open(path, 'rt', encoding='utf-8') as f:
+        return {tuple(r[:2]): r for r in (line.rstrip('\n').split('\t') for line in f)}
+
+def snapshot(root):
+    out = root / REL
+    m = json.loads((out/'manifest.json').read_text())
+    expected_files = {'targets.jsonl.gz','baseline-decisions.tsv.gz','baseline-candidates.tsv.gz'}
+    if set(m['files']) != expected_files: raise ValueError('Invalid snapshot files')
+    for name, value in m['files'].items():
+        if d.sha(out/name) != value: raise ValueError('Snapshot hash mismatch: '+name)
+    baseline = m['baselineManifest']
+    for name in FILES[:2]:
+        if m['files']['baseline-'+name.removeprefix('distribution-')] != baseline['files'][name]:
+            raise ValueError('Baseline snapshot hash mismatch')
+    for path, expected in baseline['inputs'].items():
+        if d.sha(root/path) != expected: raise ValueError('Source input hash mismatch: '+path)
+    if d.sha(root/'src/main/resources/id.def') != baseline['idDefSha256']:
+        raise ValueError('id.def changed since export')
+    if d.sha(root/'src/main/classification/categories.json') != baseline['files']['categories.json']:
+        raise ValueError('Taxonomy changed since export')
+    current = json.loads((root/'src/main/classification/distribution-manifest.json').read_text())
+    if 'lunaReclassification' not in current['provenance']:
+        if current != baseline: raise ValueError('Distribution manifest changed since export')
+    else:
+        provenance = dict(current['provenance']); provenance.pop('lunaReclassification')
+        if (provenance != baseline['provenance'] or current['inputs'] != baseline['inputs']
+                or current['idDefSha256'] != baseline['idDefSha256']):
+            raise ValueError('Unrelated distribution provenance changed')
+    if m['heldSourceSha256'] != baseline['provenance']['dispositionsSha256']:
+        raise ValueError('Held source provenance mismatch')
+    targets = jsonl(out/'targets.jsonl.gz')
+    base = decisions(out/'baseline-decisions.tsv.gz')
+    pairs = set(); keys = set()
+    variants = collections.defaultdict(set)
+    for t in targets:
+        if not isinstance(t,dict) or not isinstance(t.get('reading'),str) or not isinstance(t.get('surface'),str):
+            raise ValueError('Invalid target schema')
+        pair = t['reading'],t['surface']
+        if not all(pair) or pair in pairs or t.get('candidate_key') != d.key(*pair) or t['candidate_key'] in keys:
+            raise ValueError('Duplicate or invalid target key')
+        pairs.add(pair); keys.add(t['candidate_key'])
+        prior = base.get(pair)
+        if (prior and (prior[4] not in ('unclassified','no_result') or t.get('original_status') != prior[4]
+                       or t.get('original_origin') != prior[3])) or (not prior and (t.get('original_status') != 'held' or t.get('original_origin') is not None)):
+            raise ValueError('Invalid target baseline status')
+        rows = t.get('source_rows')
+        if not isinstance(rows,list) or not rows or any(not isinstance(r,list) or len(r)!=6 or any(not isinstance(v,str) for v in r) for r in rows):
+            raise ValueError('Invalid target source variants')
+        variants[pair] = {tuple(r) for r in rows}
+        if len(variants[pair]) != len(rows): raise ValueError('Duplicate source variants')
+    unresolved = {pair for pair,row in base.items() if row[4] in ('unclassified','no_result')}
+    if not unresolved <= pairs: raise ValueError('Missing baseline unresolved target')
+    if len(targets) != m['targetCount'] or dict(collections.Counter(t['original_status'] for t in targets)) != m['targetCounts']:
+        raise ValueError('Snapshot counts mismatch')
+    actual = collections.defaultdict(set)
+    for source,row in d.source_rows(root):
+        pair=row[0],row[4]
+        if pair in pairs: actual[pair].add((source,*row))
+    if dict(actual) != dict(variants): raise ValueError('Target source variants mismatch')
+    return m, targets, base
+
+def export(root, dispositions, revision):
+    d.verify(root)
+    directory = root/'src/main/classification'
+    m = json.loads((directory/'distribution-manifest.json').read_text())
+    if d.sha(dispositions) != m['provenance']['dispositionsSha256']: raise ValueError('Held source hash mismatch')
+    base = decisions(directory/FILES[0])
+    targets = {pair: {'original_status': row[4], 'original_origin': row[3], 'hints': []} for pair,row in base.items() if row[4] in ('unclassified','no_result')}
+    with gzip.open(dispositions,'rt',encoding='utf-8') as f:
+        for line in f:
+            row = line.rstrip('\n').split('\t')
+            pair = tuple(row[3:5])
+            if row[0] == 'held' and pair not in base:
+                targets.setdefault(pair, {'original_status':'held', 'original_origin':None, 'hints': []})['hints'].append({'source':row[2], 'categories':json.loads(row[1]), 'reason':json.loads(row[8]), 'source_hints':json.loads(row[9])})
+    variants = collections.defaultdict(set)
+    for source,row in d.source_rows(root):
+        pair = (row[0],row[4])
+        if pair in targets: variants[pair].add((source,*row))
+    if set(targets)-set(variants): raise ValueError('Target missing from source')
+    out=root/REL
+    out.parent.mkdir(parents=True,exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix='.luna-export-',dir=out.parent) as temp:
+        staged=Path(temp)/'snapshot'; staged.mkdir()
+        write_jsonl(staged/'targets.jsonl.gz', ({'candidate_key':d.key(*pair),'reading':pair[0],'surface':pair[1], **info,'source_rows':[list(r) for r in sorted(variants[pair])]} for pair,info in sorted(targets.items())))
+        for name in FILES[:2]: shutil.copyfile(directory/name,staged/('baseline-'+name.removeprefix('distribution-')))
+        manifest={'schemaVersion':1,'revision':revision,'heldSourceSha256':d.sha(dispositions),'baselineManifest':m,'targetCounts':dict(collections.Counter(x['original_status'] for x in targets.values())), 'targetCount':len(targets), 'files':{name:d.sha(staged/name) for name in ('targets.jsonl.gz','baseline-decisions.tsv.gz','baseline-candidates.tsv.gz')}}
+        d.write_json(staged/'manifest.json',manifest)
+        if out.exists():
+            if (out/'manifest.json').read_bytes()!=(staged/'manifest.json').read_bytes() or any(d.sha(out/n)!=h for n,h in manifest['files'].items()):
+                raise ValueError('Existing snapshot differs from requested export')
+            snapshot(root)
+            print('Reused identical snapshot')
+        else: os.replace(staged,out)
+    print(json.dumps({'targetCount':len(targets),'targetCounts':manifest['targetCounts'],'target_sha256':manifest['files']['targets.jsonl.gz']}))
+
+def batches(root, size):
+    if size <= 0: raise ValueError('Batch size must be positive')
+    m,targets,_=snapshot(root)
+    out=root/'build/luna-classification/requests'
+    out.parent.mkdir(parents=True,exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix='.luna-requests-',dir=out.parent) as temp:
+        staged=Path(temp)/'requests'; staged.mkdir()
+        count=0
+        for index,start in enumerate(range(0,len(targets),size)):
+            rows=targets[start:start+size]; stem=f'{index:06d}'; count+=1
+            write_jsonl(staged/(stem+'.jsonl'),rows)
+            d.write_json(staged/(stem+'.meta.json'),{'target_sha256':m['files']['targets.jsonl.gz'],'candidate_keys':[r['candidate_key'] for r in rows], 'model':MODEL,'reasoning_effort':EFFORT})
+        if out.exists():
+            names={p.name for p in staged.iterdir()}
+            if {p.name for p in out.iterdir()}!=names or any(d.sha(out/n)!=d.sha(staged/n) for n in names):
+                raise ValueError('Existing request batches differ; refusing to overwrite active controller inputs')
+            print(f'Reused {count} identical request batches')
+        else:
+            os.replace(staged,out)
+            print(f'Wrote {count} request batches')
+
+def representation_error(reading,surface):
+    normalized=unicodedata.normalize('NFC',surface)
+    if reading == surface: return None
+    if normalized and set(normalized)<=HIRA:
+        if surface != reading: return 'hiragana_sentinel_changes_surface'
+    elif normalized and set(normalized)<=KATA:
+        reconstructed=''.join(chr(ord(c)+0x60) if '\u3041'<=c<='\u3093' else c for c in reading)
+        if surface != reconstructed: return 'katakana_sentinel_changes_surface'
+    elif normalized != surface: return 'nfc_surface_changes_or_missing_trie_lookup'
+    return None
+
+def load_results(root, directory, allow_partial=False):
+    m,targets,base=snapshot(root)
+    by_key={r['candidate_key']:r for r in targets}
+    results={}
+    for path in sorted(directory.glob('*.jsonl')):
+        meta=json.loads(path.with_suffix('.meta.json').read_text())
+        if (meta.get('policy_version') != POLICY or meta.get('target_sha256') != m['files']['targets.jsonl.gz'] or meta.get('model') != MODEL or meta.get('reasoning_effort') != EFFORT): raise ValueError('Batch provenance mismatch')
+        expected=meta['candidate_keys']
+        if len(expected)!=len(set(expected)) or not set(expected)<=by_key.keys(): raise ValueError('Invalid expected batch keys')
+        batch=jsonl(path)
+        if any(not isinstance(r,dict) or not isinstance(r.get('candidate_key'),str) for r in batch): raise ValueError('Invalid result row schema')
+        keys=[r.get('candidate_key') for r in batch]
+        if len(keys)!=len(set(keys)) or set(keys)!=set(expected): raise ValueError('Duplicate or missing batch IDs')
+        positions={k:i for i,k in enumerate(expected)}
+        for row in batch:
+            k=row['candidate_key']
+            if k in results: raise ValueError('Duplicate result ID')
+            target=by_key[k]
+            if (row.get('reading'),row.get('surface')) != (target['reading'],target['surface']): raise ValueError('Changed reading/surface')
+            if row.get('policy_version')!=POLICY or row.get('model')!=MODEL or row.get('reasoning_effort')!=EFFORT: raise ValueError('Invalid model identity or policy')
+            cats=row.get('categories')
+            allowed=set(m['baselineManifest']['categoryRows'])
+            if not isinstance(cats,list) or any(not isinstance(c,str) for c in cats) or len(cats)!=len(set(cats)) or not set(cats)<=allowed: raise ValueError('Invalid categories')
+            if row.get('action') not in ('adopt','reject') or bool(cats)!=(row['action']=='adopt') or not isinstance(row.get('reason'),str) or not row['reason'].strip(): raise ValueError('Invalid action/reason')
+            error=representation_error(target['reading'],target['surface']) if row['action']=='adopt' else None
+            results[k]={'response':row,'effective_action':'reject' if error else row['action'],'effective_categories':[] if error else sorted(cats),'representation_error':error,'effective_reason':REPRESENTATION_REASONS[error] if error else row['reason'],
+                        'batch_provenance':{**{field:value for field,value in meta.items() if field!='candidate_keys'},
+                                            'batch_stem':path.stem,'candidate_key_position':positions[k]}}
+    if not allow_partial and results.keys()!=by_key.keys(): raise ValueError(f'Incomplete results: {len(results)}/{len(by_key)}')
+    return m,targets,base,results
+
+def verify_ledger(root):
+    directory=root/'src/main/classification'
+    manifest=json.loads((directory/FILES[2]).read_text())
+    record=manifest.get('provenance',{}).get('lunaReclassification')
+    if not record: return
+    m,targets,base=snapshot(root)
+    if record.get('snapshotManifestSha256')!=d.sha(root/REL/'manifest.json'):
+        raise ValueError('Snapshot manifest hash mismatch')
+    provenance=dict(manifest['provenance']); provenance.pop('lunaReclassification')
+    if provenance!=m['baselineManifest']['provenance']:
+        raise ValueError('Unrelated baseline provenance changed')
+    path=root/record['path']
+    if d.sha(path)!=record['sha256']: raise ValueError('Result ledger hash mismatch')
+    ledger=jsonl(path)
+    by_key={r['candidate_key']:r for r in targets}
+    if len(by_key)!=m['targetCount'] or dict(collections.Counter(r['original_status'] for r in targets))!=m['targetCounts']:
+        raise ValueError('Snapshot counts mismatch')
+    if len(ledger)!=len(by_key) or len({r['response']['candidate_key'] for r in ledger})!=len(by_key): raise ValueError('Incomplete ledger')
+    for r in ledger:
+        row=r['response']; k=row['candidate_key']
+        if k not in by_key: raise ValueError('Ledger contains unrelated pair')
+        t=by_key[k]
+        batch=r.get('batch_provenance')
+        if (not isinstance(batch,dict) or batch.get('target_sha256')!=m['files']['targets.jsonl.gz']
+                or batch.get('policy_version')!=POLICY or batch.get('model')!=MODEL
+                or batch.get('reasoning_effort')!=EFFORT or not isinstance(batch.get('batch_stem'),str)
+                or not batch['batch_stem'] or type(batch.get('candidate_key_position')) is not int
+                or batch['candidate_key_position']<0):
+            raise ValueError('Invalid ledger batch provenance')
+        if (row['reading'],row['surface'])!=(t['reading'],t['surface']): raise ValueError('Ledger changed pair')
+        if row.get('policy_version')!=POLICY or row.get('model')!=MODEL or row.get('reasoning_effort')!=EFFORT or not isinstance(row.get('reason'),str) or not row['reason'].strip():
+            raise ValueError('Invalid ledger response provenance')
+        cats=row.get('categories')
+        if (not isinstance(cats,list) or any(not isinstance(c,str) for c in cats) or len(cats)!=len(set(cats))
+                or not set(cats)<=set(m['baselineManifest']['categoryRows'])
+                or row.get('action') not in ('adopt','reject') or bool(cats)!=(row['action']=='adopt')):
+            raise ValueError('Invalid ledger response classification')
+        error=representation_error(t['reading'],t['surface']) if row['action']=='adopt' else None
+        if (r['representation_error']!=error or r['effective_action']!=('reject' if error else row['action'])
+                or r['effective_categories']!=([] if error else sorted(cats))
+                or r.get('effective_reason')!=(REPRESENTATION_REASONS[error] if error else row['reason'])):
+            raise ValueError('Ledger effective decision mismatch')
+        pair=(t['reading'],t['surface'])
+        prior=base.get(pair)
+        if (prior and (prior[4] not in ('unclassified','no_result') or prior[4]!=t['original_status'] or prior[3]!=t['original_origin'])) or (not prior and t['original_status']!='held'):
+            raise ValueError('Invalid baseline target')
+        base[pair]=[*pair,','.join(r['effective_categories']),'manual','classified' if r['effective_action']=='adopt' else 'excluded']
+    if (manifest['excludedCandidatePairs']!=m['baselineManifest']['excludedCandidatePairs']+sum(r['effective_action']=='reject' for r in ledger)
+            or manifest['excludedClassifiedPairs']!=sum(r[4]=='excluded' for r in base.values())):
+        raise ValueError('Exclusion counts differ from ledger')
+    if base!=decisions(directory/FILES[0]): raise ValueError('Decisions differ from baseline plus ledger')
+    if (record['targetSha256']!=m['files']['targets.jsonl.gz'] or record['completedPairs']!=len(ledger)
+            or record.get('policy_version')!=POLICY or record.get('model')!=MODEL or record.get('reasoningEffort')!=EFFORT
+            or record.get('effectiveActions')!=dict(collections.Counter(r['effective_action'] for r in ledger))): raise ValueError('Ledger provenance mismatch')
+
+def apply(root, results_dir, dry_run=False, allow_partial=False):
+    if allow_partial and not dry_run: raise ValueError('--allow-partial requires --dry-run')
+    m,targets,base,results=load_results(root,results_dir,allow_partial)
+    counts=collections.Counter(r['effective_action'] for r in results.values())
+    if dry_run:
+        print(json.dumps({'validatedPairs':len(results),'effectiveActions':dict(counts)})); return
+    directory=root/'src/main/classification'
+    (root/'build/luna-classification').mkdir(parents=True,exist_ok=True)
+    with (root/'build/luna-classification/apply.lock').open('a') as lock:
+        fcntl.flock(lock,fcntl.LOCK_EX)
+        ledger=[results[k] for k in sorted(results)]
+        with tempfile.TemporaryDirectory(prefix='luna-apply-') as temp:
+            staging=Path(temp)
+            staged=staging/'src/main/classification'; staged.mkdir(parents=True)
+            for path in (root/'src/main/classification').iterdir():
+                if path.name not in FILES: (staged/path.name).symlink_to(path.resolve(),target_is_directory=path.is_dir())
+            # The result ledger must be staged locally instead of writing through a symlink.
+            (staged/'luna-reclassification').unlink()
+            shutil.copytree(root/REL,staging/REL)
+            ledger_path=staging/REL/'results.jsonl.gz'; write_jsonl(ledger_path,ledger)
+            current=json.loads((directory/FILES[2]).read_text())
+            old=current['provenance'].get('lunaReclassification')
+            if old:
+                if old['sha256']==d.sha(ledger_path):
+                    d.verify(root); print('Already applied identical results'); return
+                raise ValueError('Different results already applied')
+            if any(d.sha(directory/name)!=m['baselineManifest']['files'][name] for name in FILES[:2]): raise ValueError('Distribution changed since export')
+            for t in targets:
+                r=results[t['candidate_key']]; pair=t['reading'],t['surface']
+                base[pair]=[*pair,','.join(r['effective_categories']),'manual','classified' if r['effective_action']=='adopt' else 'excluded']
+            rows=set()
+            for _,row in d.source_rows(root):
+                pair=row[0],row[4]; decision=base.get(pair)
+                if decision and decision[4]=='classified': rows.update((cat,*row) for cat in decision[2].split(','))
+            d.write_gzip(staged/FILES[0],(base[p] for p in sorted(base)))
+            d.write_gzip(staged/FILES[1],sorted(rows))
+            origins=collections.Counter(r[3] for r in base.values() if r[4]=='classified')
+            cats=collections.Counter(r[0] for r in rows)
+            current.update(excludedClassifiedPairs=sum(r[4]=='excluded' for r in base.values()),excludedCandidatePairs=m['baselineManifest']['excludedCandidatePairs']+counts['reject'],admittedPairsByOrigin=dict(origins),uniqueAdmittedPairs=sum(origins.values()),dictionaryRows=len(rows),categoryRows={c:cats[c] for c in current['categoryRows']},unclassifiedPairs=sum(r[4]=='unclassified' for r in base.values()),noResultPairs=sum(r[4]=='no_result' for r in base.values()))
+            current['files'].update({name:d.sha(staged/name) for name in FILES[:2]})
+            current['provenance']['lunaReclassification']={'path':REL+'/results.jsonl.gz','snapshotManifestSha256':d.sha(root/REL/'manifest.json'),'sha256':d.sha(ledger_path),'targetSha256':m['files']['targets.jsonl.gz'],'completedPairs':len(results),'effectiveActions':dict(counts),'policy_version':POLICY,'model':MODEL,'reasoningEffort':EFFORT}
+            d.write_json(staged/FILES[2],current)
+            for relative in [*current['inputs'],'src/main/resources/id.def']:
+                target=staging/relative; target.parent.mkdir(parents=True,exist_ok=True)
+                if not target.exists(): target.symlink_to((root/relative).resolve())
+            d.verify(staging)
+            changes=[REL+'/results.jsonl.gz',*['src/main/classification/'+n for n in FILES]]
+            backup=root/'build/luna-classification/apply-backup'
+            if backup.exists(): raise ValueError('Interrupted apply backup exists; run recover')
+            backup.mkdir(parents=True)
+            for p in changes:
+                if (root/p).exists():
+                    dst=backup/p; dst.parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(root/p,dst)
+            d.write_json(backup/'journal.json',{'paths':changes,'existing':[p for p in changes if (root/p).exists()]})
+            try:
+                for p in changes:
+                    dst=root/p; tmp=dst.with_name(dst.name+'.luna-tmp'); shutil.copyfile(staging/p,tmp); os.replace(tmp,dst)
+                d.verify(root)
+            except BaseException:
+                _recover_unlocked(root); raise
+            shutil.rmtree(backup)
+    print(json.dumps({'appliedPairs':len(results),'effectiveActions':dict(counts)}))
+
+def _recover_unlocked(root):
+    backup=root/'build/luna-classification/apply-backup'
+    journal=json.loads((backup/'journal.json').read_text())
+    allowed={REL+'/results.jsonl.gz',*['src/main/classification/'+n for n in FILES]}
+    if (not isinstance(journal.get('paths'),list) or len(journal['paths'])!=len(set(journal['paths']))
+            or set(journal['paths'])!=allowed or not isinstance(journal.get('existing'),list)
+            or not set(journal['existing'])<=allowed):
+        raise ValueError('Invalid recovery journal paths')
+    if any(not (backup/p).is_file() for p in journal['existing']):
+        raise ValueError('Incomplete recovery backup')
+    for p in journal['paths']:
+        if p in journal['existing']: shutil.copyfile(backup/p,root/p)
+        else: (root/p).unlink(missing_ok=True)
+        (root/p).with_name(Path(p).name+'.luna-tmp').unlink(missing_ok=True)
+    shutil.rmtree(backup)
+
+def recover(root):
+    (root/'build/luna-classification').mkdir(parents=True,exist_ok=True)
+    with (root/'build/luna-classification/apply.lock').open('a') as lock:
+        try: fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        except BlockingIOError: raise ValueError('Apply is active; recovery refused')
+        _recover_unlocked(root)
+
+if __name__=='__main__':
+    p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('command',choices=['export','batches','apply','recover','verify'])
+    p.add_argument('--root',type=Path,default=Path('.')); p.add_argument('--dispositions',type=Path); p.add_argument('--revision',default='local'); p.add_argument('--results',type=Path); p.add_argument('--batch-size',type=int,default=200); p.add_argument('--dry-run',action='store_true'); p.add_argument('--allow-partial',action='store_true')
+    a=p.parse_args(); root=a.root.resolve()
+    if a.command=='export': export(root,a.dispositions,a.revision)
+    elif a.command=='batches':
+        if a.batch_size<=0: p.error('batch size must be positive')
+        batches(root,a.batch_size)
+    elif a.command=='apply': apply(root,a.results,a.dry_run,a.allow_partial)
+    elif a.command=='recover': recover(root)
+    else: verify_ledger(root)

@@ -1041,7 +1041,7 @@ val verifyDistributionCandidates = tasks.register<Exec>("verifyDistributionCandi
     group = "verification"
     description = "Validates frozen classifications, original records, counts and input hashes without model calls."
     commandLine("python3", "scripts/classified_distribution.py", "verify")
-    inputs.files(fileTree(classificationDirectory) { include("distribution-*", "categories.json", "person-additions/*.jsonl") })
+    inputs.files(fileTree(classificationDirectory) { include("distribution-*", "categories.json", "person-additions/*.jsonl", "luna-reclassification/**") })
     inputs.files(fileTree("src/main/bin") { include("names.txt", "place.txt.zip", "only_wiki.txt.zip", "only_neologd.txt.zip", "wiki_neologd_common.txt.zip") })
     inputs.file(mozcIdDefFileProvider)
 }
@@ -1100,3 +1100,13 @@ val verifySpecialistDictionaryAssets = tasks.register<JavaExec>("verifySpecialis
 }
 tasks.named("run") { dependsOn(verifySpecialistDistribution) }
 tasks.named("check") { dependsOn(verifySpecialistDistribution) }
+
+val testLunaReclassification = tasks.register<Exec>("testLunaReclassification") {
+    group = "verification"
+    description = "Tests offline Luna result validation and recoverable dictionary application."
+    commandLine("python3", "-m", "unittest", "discover", "-s", "scripts", "-p", "test_*luna*.py")
+    inputs.files("scripts/luna_reclassification.py", "scripts/test_luna_reclassification.py", "scripts/classified_distribution.py",
+        "scripts/run_luna_classification.py", "scripts/test_run_luna_classification.py",
+        "scripts/finish_luna_reclassification.py", "scripts/test_finish_luna_reclassification.py")
+}
+tasks.named("check") { dependsOn(testLunaReclassification) }

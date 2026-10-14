@@ -12,6 +12,8 @@
 
 元辞書、分類ファイル、`id.def` の変更は検証エラーになります。更新時は保存済みの分類結果を再確認して固定入力を作り直します。ActionsがAIや外部の分類資料を取得し直すことはありません。
 
+未分類・元の保留・分類取得失敗をGPT-5.6 Luna Maxで再判定する手順は、[未解決候補の再分類](luna-reclassification.md)を参照してください。再判定結果はカテゴリ付きの採用か理由付きの不採用で保存し、通信エラーや応答欠落は判定済み件数へ含めません。
+
 ```sh
 python3 scripts/classified_distribution.py freeze \
   --accepted /path/to/accepted-candidates.tsv.gz \
