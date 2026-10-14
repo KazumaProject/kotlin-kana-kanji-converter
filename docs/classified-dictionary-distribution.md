@@ -26,6 +26,29 @@ python3 -m unittest discover -s scripts -p 'test_classified_distribution.py' -v
 
 freezeはSQLiteを読み取り専用の一つのトランザクションで読み、進捗DBや元の分類結果を更新しません。Gitに保存するのは固定した圧縮データ、マニフェスト、必要なコードだけです。
 
+## 公式資料で確認した人名の追加
+
+`src/main/classification/person-additions/` に、確認済みの名簿をUTF-8 JSONLで保存します。各行に `reading`、`surface`、`sport`（`mma`・`kickboxing`・`boxing`）、`left_id`、`right_id`、`cost`、`source_url`、`source_surface`、`source_reading`、`checked_on`（YYYY-MM-DD）を記録します。今回の名簿には、確認したページのSHA-256と確認箇所も保存しています。ページ本文はGitへ保存せず、出典は各行のURLで参照します。
+
+読みは公式のカナ・ふりがなから、カタカナをひらがなへ変換して空白・中黒・引用符（“”「」）を除去します。長音は保持します。外国人名は公式日本語カタカナ表記を使い、英字名から読みを推定しません。表記は公式名・リングネームの姓名間の空白を除き、中黒などは保持します。競技の区分は名簿の整理用で、過去に別競技へ出場した選手も含みます。
+
+```sh
+python3 scripts/classified_distribution.py add-person-names \
+  --entries src/main/classification/person-additions/fighters-2026-10-14.jsonl
+python3 scripts/classified_distribution.py verify
+python3 scripts/write_classified_dictionary_catalog.py
+python3 scripts/write_classified_dictionary_catalog.py --check
+./gradlew buildDictionaryDistributionManifest test check
+```
+
+取り込み前と、一時領域に作成した更新後の固定データを検証してから元人名辞書・固定データ・マニフェストを更新します。既存のperson収録は変更せず、既存の別分類・未分類・取得失敗・除外の判断と衝突する候補はエラーにします。分類判断自体がない既存の元辞書レコードは、公式資料で確認した場合に限り、元の品詞・コストを保持してpersonへ収録します。新しい元人名辞書レコードは左右品詞ID 1851（名詞,一般）・コスト8400です。同じ組に複数の元レコードがある場合、追加人数より配布レコードの増加数が多くなります。
+
+新規判断の分類元は `verified` とし、元の分類履歴を保持したまま、名簿のハッシュ・新規の組・配布レコード数・元辞書への追加行数を `provenance.personAdditions` へ記録します。`verify` はその名簿と配布レコードの一致も確認し、外部サイトを取得しません。同じ名簿を再実行しても重複追加しません。後続の追加には別の名簿ファイルを使用します。`freeze` を改めて実行する場合は、その後に保存済みの追加名簿を取り込み直してください。
+
+2026-10-14の名簿は490組（MMA 61組・キックボクシング91組・ボクシング338組）です。人数による上限を設けず、今回取得した[UFC](https://jp.ufc.com/athletes)、[K-1](https://www.k-1.co.jp/fighter)、[大橋ジム](https://www.ohashi-gym.com/boxers/)、[帝拳](https://www.teiken.com/profile/index.html)の公式資料で確認できた候補を収録しています。帝拳の戦績は「対戦相手」列のみを採用し、「試合会場」の地名を混入させません。姓だけ・愛称だけ・読み未確認の候補は追加していません。同じ選手の中黒位置違いである「シーサケット・ソールンビサイ」は重ねて収録せず、「シーサケット・ソー・ルンビサイ」の1表記を採用しました。「組」は読み・表記の件数であり、別表記を人数として数えるものではありません。
+
+既存固定データとの差分は新規490組・492レコード、元人名辞書への追加は489行です。既存の収録レコードと分類判断の削除・変更はありません。品詞・コスト違いの2レコードを保持するため、配布レコードの増加数は組数より多くなります。全体は733,984組・767,766レコード、personは277,028レコードです。実IMEでの候補表示・順位は未確認です。
+
 ## 配布物
 
 `release_zips/japanese_keyboard_dictionary_assets.zip` の各カテゴリは `app/src/main/assets/categories/<カテゴリID>/` に配置し、`yomi.dat.zip`、`tango.dat.zip`、`token.dat.zip` を格納します。内側ZIPには対応する `.dat` が1ファイル入ります。旧5辞書の15ファイルは含みません。他の辞書と共通の `pos_table.dat`、`connectionId.dat.zip`、`id.def` は同じ配布ZIPに含まれます。

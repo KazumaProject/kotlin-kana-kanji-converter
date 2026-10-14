@@ -1022,7 +1022,7 @@ val verifyDistributionCandidates = tasks.register<Exec>("verifyDistributionCandi
     group = "verification"
     description = "Validates frozen classifications, original records, counts and input hashes without model calls."
     commandLine("python3", "scripts/classified_distribution.py", "verify")
-    inputs.files(fileTree(classificationDirectory) { include("distribution-*", "categories.json") })
+    inputs.files(fileTree(classificationDirectory) { include("distribution-*", "categories.json", "person-additions/*.jsonl") })
     inputs.files(fileTree("src/main/bin") { include("names.txt", "place.txt.zip", "only_wiki.txt.zip", "only_neologd.txt.zip", "wiki_neologd_common.txt.zip") })
     inputs.file(mozcIdDefFileProvider)
 }
