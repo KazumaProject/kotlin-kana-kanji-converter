@@ -14,6 +14,9 @@
 - トライ構造による柔軟なデータ処理
 - ビタビアルゴリズムを使用した最適な経路選択
 
+かな→英語辞書の収録内容は、[英語表記・かな読みの全一覧](docs/english-dictionary-catalog.md)
+で確認できます。上流と補完辞書を統合した採用結果を掲載しています。
+
 ## 自動ビルドとリリース
 
 GitHub Actions を使用して、プッシュされたタグに基づいてビルドとリリースを自動化しています。このプロセスには、辞書ファイルのダウンロード、Kotlin
@@ -57,11 +60,13 @@ CLIはunigramの照合範囲・表記の重複排除・一致候補を優先し�
 
 ## ライセンス
 
-このプロジェクトは [MIT ライセンス](LICENSE) のもとで提供されています。
+プログラムコードは [MIT ライセンス](LICENSE) のもとで提供されています。
 
-ただし、生成される辞書データには JMdict/JMdict_e（CC BY-SA 4.0）および Mozc
-辞書資源（IPAdic、ICOT、沖縄辞書など）の個別条件が適用されます。出典と条件の整理は
-リポジトリ内の [`THIRD-PARTY-NOTICES.md`](src/main/resources/THIRD-PARTY-NOTICES.md) を確認してください。
+辞書データには出典ごとの条件が適用されます。かな→英語の補完辞書はCC BY-SA 4.0で提供し、
+JMdict・NGSLの出典表示と、CMUdict由来部分の著作権表示・条件・免責を維持します。
+既存のMozc辞書資源にはIPAdic・ICOT・沖縄辞書などの条件があります。
+[辞書データのライセンスと出典](LICENSE-DATA.md) および
+[第三者表記](src/main/resources/THIRD-PARTY-NOTICES.md) を確認してください。
 
 ---
 
@@ -82,6 +87,9 @@ various uses.
 - Customizable dictionary files
 - Flexible trie-based data processing
 - Optimal path selection using the Viterbi algorithm
+
+Browse the [complete English surface and kana reading catalog](docs/english-dictionary-catalog.md)
+for the adopted entries from the upstream dictionary and curated supplement.
 
 ## Automated Build and Release
 
@@ -118,4 +126,8 @@ The CLI follows JapaneseKeyboard's unigram matching scope, first-distinct-surfac
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+The program code is licensed under the [MIT License](LICENSE).
+Dictionary data retains its source-specific licenses, including CC BY-SA 4.0
+for the curated English supplement and the CMUdict notice for its derived material.
+See [data licenses and attribution](LICENSE-DATA.md) and
+[third-party notices](src/main/resources/THIRD-PARTY-NOTICES.md).

@@ -6,8 +6,9 @@ import com.kazumaproject.connection_id.ConnectionIdBuilder
 import com.kazumaproject.dictionary.DicUtils
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
-import com.kazumaproject.english.EnglishDictionaryBuilder
-import com.kazumaproject.english.EnglishDictionaryQuality
+import com.kazumaproject.english.EnglishDictionarySource
+import com.kazumaproject.english.EnglishDictionaryBinaryValidator
+import com.kazumaproject.IdDefConstants
 import com.kazumaproject.mozc.ConnectionMatrixParser
 import org.junit.jupiter.api.Assumptions.assumeTrue
 import java.nio.file.Files
@@ -118,6 +119,14 @@ class DictionaryBuildIntegrationTest {
                     posTableForBuildPath = posTableForBuildPath.toString(),
                 )
 
+                EnglishDictionaryBinaryValidator.validate(
+                    englishDictionaries.values.flatten(),
+                    tempDir.resolve("english_reading_yomi.dat"),
+                    tempDir.resolve("english_reading_tango.dat"),
+                    tempDir.resolve("english_reading_token.dat"),
+                    posTablePath,
+                )
+
                 buildConnectionIds(tempDir.resolve("connectionId.dat"))
 
                 assertArtifactWritten(posTablePath)
@@ -172,9 +181,9 @@ class DictionaryBuildIntegrationTest {
             .toSortedMap(compareBy({ it.length }, { it }))
 
     private fun buildEnglishList() =
-        EnglishDictionaryQuality.runtimeEntries(
-            EnglishDictionaryBuilder().parseResource("/english-dictionary.txt", required = false),
-        )
+        EnglishDictionarySource.loadResources(
+            IdDefConstants.`名詞,一般,*,*,*,*,*`.toInt(), upstreamRequired = false,
+        ).runtimeEntries
             .groupBy(Dictionary::yomi)
             .toSortedMap(compareBy({ it.length }, { it }))
 

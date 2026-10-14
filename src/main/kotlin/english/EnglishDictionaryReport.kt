@@ -61,8 +61,8 @@ object EnglishDictionaryReport {
      * of the three candidate columns, so the report is both a usable overview
      * and a complete quality audit.
      */
-    fun writeCandidates(entries: List<Dictionary>, output: Path) {
-        val assessments = EnglishDictionaryQuality.assessAll(entries)
+    fun writeCandidates(entries: List<Dictionary>, output: Path, allowedCompounds: Set<Pair<String, String>> = emptySet()) {
+        val assessments = EnglishDictionaryQuality.assessAll(entries, allowedCompounds)
         val grouped = assessments
             .groupBy { it.source.yomi }
             .toSortedMap(compareBy<String>({ it.length }, { it }))
@@ -97,14 +97,14 @@ object EnglishDictionaryReport {
     }
 
     /** Writes one row for every source entry with the exact quality decision and flags. */
-    fun writeQuality(entries: List<Dictionary>, output: Path) {
+    fun writeQuality(entries: List<Dictionary>, output: Path, allowedCompounds: Set<Pair<String, String>> = emptySet()) {
         output.parent?.let(Files::createDirectories)
         Files.newBufferedWriter(output, StandardCharsets.UTF_8).use { writer ->
             writer.appendLine(
                 "entry_index\treading\tnormalized_reading\tenglish_candidate\t" +
                         "normalized_surface\tsource_cost\truntime_cost\tstatus\tscore\tflags",
             )
-            EnglishDictionaryQuality.assessAll(entries).forEachIndexed { index, assessment ->
+            EnglishDictionaryQuality.assessAll(entries, allowedCompounds).forEachIndexed { index, assessment ->
                 writer.appendLine(
                     listOf(
                         (index + 1).toString(),
@@ -127,10 +127,11 @@ object EnglishDictionaryReport {
         entries: List<Dictionary>,
         output: Path,
         sourceDescription: String,
+        allowedCompounds: Set<Pair<String, String>> = emptySet(),
     ) {
         output.parent?.let(Files::createDirectories)
         val summary = summarize(entries)
-        val quality = EnglishDictionaryQuality.summarize(entries)
+        val quality = EnglishDictionaryQuality.summarize(entries, allowedCompounds)
         val duplicateRows = entries.size - summary.uniqueReadingSurfacePairs
         val averageCandidates = if (summary.uniqueReadings == 0) {
             0.0
@@ -139,7 +140,7 @@ object EnglishDictionaryReport {
         }
 
         Files.newBufferedWriter(output, StandardCharsets.UTF_8).use { writer ->
-            writer.appendLine("# JapaneseCorpus 読み→英語辞書 集計")
+            writer.appendLine("# 読み→英語辞書 集計")
             writer.appendLine()
             writer.appendLine("- source: $sourceDescription")
             writer.appendLine("- entries: ${summary.entries}")
@@ -162,7 +163,9 @@ object EnglishDictionaryReport {
             writer.appendLine("- clean runtime entries after normalization/deduplication: ${quality.runtimeEntries}")
             writer.appendLine("- clean runtime readings: ${quality.runtimeReadings}")
             writer.appendLine()
-            writer.appendLine("`primary` は直接辞書生成時に完全な読みと発音が一致した候補、`review` は説明文・定義断片・未許可の複合語、`excluded` は括弧注釈・母音反復読み・数値表記・感嘆表現・機能語・間投詞・読み記号・接辞・未完の省略表現です。括弧注釈は表記を切り詰めず、原文のまま監査用に保持します。実行時辞書には全 primary 候補を残し、同じ読みと英語表記の重複だけを除去します。")
+            writer.appendLine("`primary` は上流の発音照合または確認済みの補完ペアを通過した候補、`review` は説明文・定義断片・未許可の複合語、`excluded` は括弧注釈・母音反復読み・数値表記・感嘆表現・機能語・間投詞・読み記号・接辞・未完の省略表現です。括弧注釈は表記を切り詰めず、原文のまま監査用に保持します。実行時辞書には全 primary 候補を残し、同じ読みと英語表記の重複だけを除去します。")
+            writer.appendLine()
+            writer.appendLine("個別判定の runtime_cost は、その入力行が品質規則を通過した場合のコストです。重複排除で選ばれた行だけを表すものではありません。実際に採用した表記・コスト・順序は merged-runtime.tsv を参照してください。")
             writer.appendLine()
             writer.appendLine("### フラグ件数")
             writer.appendLine()
@@ -172,8 +175,8 @@ object EnglishDictionaryReport {
             writer.appendLine()
             writer.appendLine("## 変換できる読みの条件")
             writer.appendLine()
-            writer.appendLine("JapaneseCorpus の生成条件により、JMdict の読みが Unicode カタカナブロックだけで構成されたものを対象にし、NFKC 正規化後にひらがなへ変換しています。")
-            writer.appendLine("そのため、日本語文全体の英訳辞書ではなく、カタカナ系の読みを入力したときの英語 gloss / 完全な英語 lsource 候補です。")
+            writer.appendLine("上流は JapaneseCorpus の direct-loanword 辞書、補完は出典を記録した読み全体に対応するペアです。")
+            writer.appendLine("一般英単語も英語発音から確認したかな読みで補完します。日本語の意味から英訳する辞書ではなく、英語の発音または外来語の読みを入力したときの候補です。")
             writer.appendLine()
             writer.appendLine("全読みごとの候補は同じディレクトリの `english-dictionary-candidates.tsv` に出力し、全${summary.entries}件の個別判定は `english-dictionary-quality.tsv` に出力します。")
         }
