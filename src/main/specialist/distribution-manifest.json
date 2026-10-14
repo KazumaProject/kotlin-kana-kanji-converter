@@ -33,7 +33,7 @@
     "src/main/specialist/sources/manbyo.jsonl.gz": "acf4105c8bfff7d7278fb9d2298481b3dae2d6b58eda824f31b3345e6aea9492"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
-  "existingInventorySha256": "4229eb0b07d35f39714d6264d376cb56237fd4d6ecf515060d330ef947235673",
+  "existingInventorySha256": "5ad6ef41ea84dce98a2990316d9873a4f4c691c1b288e84fbe3659424a35f173",
   "existingDictionaryIds": [
     "categories/address",
     "categories/agreement",
@@ -72,7 +72,7 @@
     "symbol",
     "system"
   ],
-  "existingUniquePairs": 1850011,
+  "existingUniquePairs": 1850329,
   "sourceRows": {
     "kampo_core": {
       "rows": 1581,

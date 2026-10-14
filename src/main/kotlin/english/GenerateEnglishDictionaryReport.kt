@@ -10,9 +10,9 @@ fun main(args: Array<String>) {
     val summary = Path.of(englishOption(args, "--summary") ?: error("Missing required option: --summary"))
     val quality = Path.of(englishOption(args, "--quality-output")
         ?: output.resolveSibling("english-dictionary-quality.tsv").toString())
-    EnglishDictionaryReport.writeCandidates(source.entries, output, source.allowedCompounds)
-    EnglishDictionaryReport.writeQuality(source.entries, quality, source.allowedCompounds)
-    EnglishDictionaryReport.writeSummary(source.entries, summary, "upstream + reading-supplement.tsv", source.allowedCompounds)
+    EnglishDictionaryReport.writeCandidates(source.entries, output, source.allowedCompounds, source.assessments)
+    EnglishDictionaryReport.writeQuality(source.entries, quality, source.allowedCompounds, source.assessments)
+    EnglishDictionaryReport.writeSummary(source.entries, summary, "upstream + reading-supplement.tsv", source.allowedCompounds, source.assessments)
     Files.writeString(summary, """
 
         ## 補完辞書の差分
@@ -41,5 +41,25 @@ fun main(args: Array<String>) {
             writer.appendLine("${it.dictionary.yomi}\t${it.dictionary.tango}\t${it.dictionary.cost}\t${it.source}\t${it.note}")
         }
     }
+    val baselinePath = englishOption(args, "--baseline-runtime")?.let(Path::of)
+    val baseline = baselinePath?.let(EnglishWordCoverage::readBaseline) ?: source.legacyRuntime
+    val changes = EnglishDictionaryChanges.compare(baseline, source.runtimeEntries)
+    EnglishDictionaryChanges.write(changes, output.resolveSibling("runtime-changes.tsv"))
+    Files.newBufferedWriter(output.resolveSibling("candidate-review.tsv")).use { writer ->
+        writer.appendLine("reading\tsurface\tdecision\toutput_surface\tsource\treason")
+        source.entries.distinctBy { it.yomi to it.tango }.forEach { entry ->
+            val decision = source.review.decisions[entry.yomi to entry.tango]
+            writer.appendLine(listOf(entry.yomi, entry.tango, if (decision == null) "unreviewed" else if (decision.keep) "keep" else "exclude",
+                decision?.outputSurface ?: "-", decision?.source ?: "-", decision?.reason ?: "未レビューのため配布しない").joinToString("\t"))
+        }
+    }
+    Files.writeString(summary, "\n## 採用レビューと差分\n\n" +
+        "- review SHA-256: `${EnglishWordCoverage.sha256(Path.of(englishOption(args, "--candidate-review") ?: "src/main/english/candidate-review.tsv"))}`\n" +
+        "- baseline: ${baselinePath?.toString() ?: "同じ入力に従来の大小文字をまとめる処理を適用（過去の配布との比較ではない）"}\n" +
+        "- baseline pairs: ${baseline.size}\n" +
+        "- baseline SHA-256: ${baselinePath?.let(EnglishWordCoverage::sha256) ?: "not applicable"}\n" +
+        "- changes: ${changes.groupingBy { it.kind }.eachCount().toSortedMap()}\n" +
+        "- unreviewed input rows: ${source.assessments.count { EnglishQualityFlag.UNREVIEWED_CANDIDATE in it.flags }}\n" +
+        "- editorially excluded input rows: ${source.assessments.count { EnglishQualityFlag.REVIEW_EXCLUDED in it.flags }}\n", APPEND)
     println("Wrote merged English dictionary report: runtime=${source.runtimeEntries.size}, addedPairs=${source.addedEntries.size}, output=$output")
 }

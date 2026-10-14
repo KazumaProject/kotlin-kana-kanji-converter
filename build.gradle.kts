@@ -159,6 +159,7 @@ val dictionaryResourcesDir = layout.projectDirectory.dir("src/main/resources")
 // Build input: JapaneseCorpus's dedicated direct-loanword artifact. This is
 // intentionally kept separate from the normal system dictionary sources.
 val englishDictionaryFile = dictionaryResourcesDir.file("english-dictionary.txt")
+val englishCandidateReviewFile = layout.projectDirectory.file("src/main/english/candidate-review.tsv")
 val englishSupplementFile = layout.projectDirectory.file("src/main/english/reading-supplement.tsv")
 sourceSets["main"].resources.srcDir("src/main/english")
 val englishDictionaryReportDir = layout.buildDirectory.dir("reports/english-dictionary")
@@ -534,10 +535,12 @@ val validateEnglishDictionary = tasks.register<JavaExec>("validateEnglishDiction
     args(
         "--input", englishDictionaryFile.asFile.path,
         "--supplement", englishSupplementFile.asFile.path,
+        "--candidate-review", englishCandidateReviewFile.asFile.path,
         "--id-def", mozcIdDefFileProvider.get().asFile.path,
     )
     inputs.file(englishDictionaryFile)
     inputs.file(englishSupplementFile)
+    inputs.file(englishCandidateReviewFile)
     inputs.file(mozcIdDefFileProvider)
 }
 
@@ -551,6 +554,7 @@ val analyzeEnglishDictionary = tasks.register<JavaExec>("analyzeEnglishDictionar
     args(
         "--input", englishDictionaryFile.asFile.path,
         "--supplement", englishSupplementFile.asFile.path,
+        "--candidate-review", englishCandidateReviewFile.asFile.path,
         "--id-def", mozcIdDefFileProvider.get().asFile.path,
         "--output", reportDirectory.resolve("english-dictionary-candidates.tsv").path,
         "--quality-output", reportDirectory.resolve("english-dictionary-quality.tsv").path,
@@ -558,7 +562,13 @@ val analyzeEnglishDictionary = tasks.register<JavaExec>("analyzeEnglishDictionar
     )
     inputs.file(englishDictionaryFile)
     inputs.file(englishSupplementFile)
+    inputs.file(englishCandidateReviewFile)
     inputs.file(mozcIdDefFileProvider)
+    providers.gradleProperty("englishCandidateBaselineFile").orNull?.let { path ->
+        val baseline = layout.projectDirectory.file(path)
+        args("--baseline-runtime", baseline.asFile.path)
+        inputs.file(baseline)
+    }
     outputs.dir(englishDictionaryReportDir)
 }
 
@@ -572,10 +582,11 @@ tasks.register<JavaExec>("generateEnglishDictionaryCatalog") {
     args(
         "--input", englishDictionaryFile.asFile.path,
         "--supplement", englishSupplementFile.asFile.path,
+        "--candidate-review", englishCandidateReviewFile.asFile.path,
         "--id-def", mozcIdDefFileProvider.get().asFile.path,
         "--output", output.asFile.path,
     )
-    inputs.files(englishDictionaryFile, englishSupplementFile, mozcIdDefFileProvider)
+    inputs.files(englishDictionaryFile, englishSupplementFile, englishCandidateReviewFile, mozcIdDefFileProvider)
     outputs.file(output)
 }
 
@@ -600,6 +611,7 @@ val analyzeEnglishWordCoverage = tasks.register<JavaExec>("analyzeEnglishWordCov
         "--baseline-runtime", baseline.get().asFile.path,
         "--input", englishDictionaryFile.asFile.path,
         "--supplement", englishSupplementFile.asFile.path,
+        "--candidate-review", englishCandidateReviewFile.asFile.path,
         "--id-def", mozcIdDefFileProvider.get().asFile.path,
         "--output", reportDirectory.get().asFile.path,
     )
@@ -607,7 +619,7 @@ val analyzeEnglishWordCoverage = tasks.register<JavaExec>("analyzeEnglishWordCov
         args("--review-decisions", reviewDecisions.get().asFile.path)
         inputs.file(reviewDecisions)
     }
-    inputs.files(wordList, baseline, englishDictionaryFile, englishSupplementFile, mozcIdDefFileProvider)
+    inputs.files(wordList, baseline, englishDictionaryFile, englishSupplementFile, englishCandidateReviewFile, mozcIdDefFileProvider)
     outputs.dir(reportDirectory)
 }
 
@@ -951,10 +963,11 @@ val verifyEnglishDictionaryBinary = tasks.register<JavaExec>("verifyEnglishDicti
     args(
         "--input", englishDictionaryFile.asFile.path,
         "--supplement", englishSupplementFile.asFile.path,
+        "--candidate-review", englishCandidateReviewFile.asFile.path,
         "--id-def", mozcIdDefFileProvider.get().asFile.path,
         "--release-zip", japaneseKeyboardAssetsReleaseZip.asFile.path,
     )
-    inputs.files(englishDictionaryFile, englishSupplementFile, mozcIdDefFileProvider, japaneseKeyboardAssetsReleaseZip)
+    inputs.files(englishDictionaryFile, englishSupplementFile, englishCandidateReviewFile, mozcIdDefFileProvider, japaneseKeyboardAssetsReleaseZip)
 }
 
 tasks.register("verifyJapaneseKeyboardDictionaryAssets") {
@@ -1028,7 +1041,7 @@ val verifyDistributionCandidates = tasks.register<Exec>("verifyDistributionCandi
     group = "verification"
     description = "Validates frozen classifications, original records, counts and input hashes without model calls."
     commandLine("python3", "scripts/classified_distribution.py", "verify")
-    inputs.files(fileTree(classificationDirectory) { include("distribution-*", "categories.json") })
+    inputs.files(fileTree(classificationDirectory) { include("distribution-*", "categories.json", "person-additions/*.jsonl") })
     inputs.files(fileTree("src/main/bin") { include("names.txt", "place.txt.zip", "only_wiki.txt.zip", "only_neologd.txt.zip", "wiki_neologd_common.txt.zip") })
     inputs.file(mozcIdDefFileProvider)
 }

@@ -6,7 +6,8 @@
 
 ## かな→英語辞書
 
-`src/main/english/reading-supplement.tsv` と、その内容を含む `english_reading` 辞書は、
+`src/main/english/reading-supplement.tsv`、採用・表記決定を記録した
+`src/main/english/candidate-review.tsv` と、その内容を含む `english_reading` 辞書は、
 JMdict由来部分およびこのプロジェクトの編集・追加部分を
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) で提供します。
 CMUdict由来部分の著作権表示・条件・免責も維持します。
@@ -20,7 +21,7 @@ CMUdict由来部分の著作権表示・条件・免責も維持します。
 | [JapaneseCorpus](https://github.com/KazumaProject/JapaneseCorpus/releases) | 上流配布に記録された各出典の権利者 | 上流の英語辞書と出典表示を利用。[第三者表記](src/main/resources/THIRD-PARTY-NOTICES.md) |
 
 変更内容は、読み・表記の選定、カタカナからひらがなへの正規化、確認した読み揺れの追加、
-CMUdictの米語発音から確認したかな読みの作成、コスト設定、品質検査、重複統合とバイナリ化です。
+CMUdictの米語発音から確認したかな読みの作成、コスト設定、品質検査、実用性に基づく採用・除外、一般語の小文字化、略語・固有名詞の表記維持、重複統合とバイナリ化です。
 各採用行の出典・判断は補完TSV、版・リビジョン・SHA-256・作成手順は
 [辞書作成ドキュメント](docs/english-dictionary.md) に記録しています。
 日本語の読みと英語表記を確認した公式資料は、各行の `source` にURLを記録しています。

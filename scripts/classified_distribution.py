@@ -6,8 +6,13 @@ import gzip
 import hashlib
 import io
 import json
+import re
+import tempfile
+import unicodedata
+from datetime import date
 from pathlib import Path
 import sqlite3
+from urllib.parse import urlsplit
 import zipfile
 
 SOURCES = {
@@ -60,6 +65,135 @@ def parse_rows(lines, source):
 
 def key(reading, surface):
     return hashlib.sha256((reading + '\0' + surface).encode()).hexdigest()
+
+
+def person_reading(value):
+    """Only mechanical kana normalization; never transliterate Latin names."""
+    value = unicodedata.normalize('NFC', value)
+    return ''.join(chr(ord(c) - 0x60) if '\u30a1' <= c <= '\u30f6' else c
+                   for c in value if not c.isspace() and c not in '・“”「」')
+
+
+def person_entries(root, path):
+    ids = {int(line.split(maxsplit=1)[0]) for line in
+           (root / 'src/main/resources/id.def').read_text(encoding='utf-8').splitlines()}
+    entries = {}
+    for number, line in enumerate(path.read_text(encoding='utf-8').splitlines(), 1):
+        entry = json.loads(line)
+        required = ('reading', 'surface', 'sport', 'left_id', 'right_id', 'cost',
+                    'source_url', 'source_surface', 'source_reading', 'checked_on')
+        if not isinstance(entry, dict) or any(k not in entry for k in required):
+            raise ValueError(f'{path}:{number}: missing person entry/evidence fields')
+        for field in ('reading', 'surface', 'sport', 'source_url', 'source_surface', 'source_reading', 'checked_on'):
+            if not isinstance(entry[field], str) or not entry[field] or any(c in entry[field] for c in '\t\r\n\0'):
+                raise ValueError(f'{path}:{number}: invalid {field}')
+        if (not re.fullmatch('[ぁ-ゖー]+', entry['reading'])
+                or entry['reading'] != person_reading(entry['source_reading'])
+                or entry['surface'] != ''.join(entry['source_surface'].split())
+                or unicodedata.normalize('NFC', entry['surface']) != entry['surface']):
+            raise ValueError(f'{path}:{number}: reading/surface differs from kana evidence')
+        if entry['sport'] not in ('mma', 'kickboxing', 'boxing'):
+            raise ValueError(f'{path}:{number}: invalid sport')
+        url = urlsplit(entry['source_url'])
+        if url.scheme != 'https' or not url.hostname or url.username or url.password:
+            raise ValueError(f'{path}:{number}: invalid evidence URL')
+        if date.fromisoformat(entry['checked_on']).isoformat() != entry['checked_on']:
+            raise ValueError(f'{path}:{number}: invalid confirmation date')
+        if (any(type(entry[k]) is not int or entry[k] not in ids or not 0 < entry[k] <= 32767
+                for k in ('left_id', 'right_id'))
+                or type(entry['cost']) is not int or not -32768 <= entry['cost'] <= 32767):
+            raise ValueError(f'{path}:{number}: invalid POS/cost')
+        pair = entry['reading'], entry['surface']
+        if pair in entries and entries[pair] != entry:
+            raise ValueError(f'{path}:{number}: conflicting duplicate person entry')
+        entries[pair] = entry
+    if not entries:
+        raise ValueError('Empty person entries')
+    return entries
+
+
+def add_person_names(root, path):
+    """Add reviewed names to the frozen snapshot without reopening AI history."""
+    root = root.resolve()
+    path = path.resolve()
+    relative = str(path.relative_to(root))  # Evidence must remain available in a clean checkout.
+    if not relative.startswith('src/main/classification/') or path.suffix != '.jsonl':
+        raise ValueError('Person entries must be a JSONL file under src/main/classification')
+    verify(root)
+    entries = person_entries(root, path)
+    directory = root / 'src/main/classification'
+    manifest = json.loads((directory / 'distribution-manifest.json').read_text())
+    with gzip.open(directory / 'distribution-decisions.tsv.gz', 'rt', encoding='utf-8') as f:
+        decisions = {tuple(row[:2]): row for row in (line.rstrip('\n').split('\t') for line in f)}
+    with gzip.open(directory / 'distribution-candidates.tsv.gz', 'rt', encoding='utf-8') as f:
+        rows = {tuple(line.rstrip('\n').split('\t')) for line in f}
+    sources_by_pair = collections.defaultdict(set)
+    names_rows = set()
+    for source, row in source_rows(root):
+        sources_by_pair[(row[0], row[4])].add(row)
+        if source == 'person': names_rows.add(row)
+    additions = []
+    appended = []
+    previous_rows = len(rows)
+    for pair, entry in sorted(entries.items()):
+        prior = decisions.get(pair)
+        if prior is not None:
+            if prior[4] == 'classified' and 'person' in prior[2].split(','):
+                continue
+            raise ValueError(f'Existing classification/exclusion conflicts with person entry: {pair}')
+        row = (pair[0], str(entry['left_id']), str(entry['right_id']), str(entry['cost']), pair[1])
+        additions.append(row)
+        if row not in names_rows: appended.append(row)
+        # A previously undecided pair may already have several source POS/cost variants.
+        # Admit those unchanged as well, as required by the source-to-distribution verifier.
+        rows.update(('person', *existing) for existing in sources_by_pair[pair] | {row})
+        decisions[pair] = [*pair, 'person', 'verified', 'classified']
+    if not additions:
+        print('Person additions: 0 (all names already admitted)')
+        return
+    if any(item['path'] == relative for item in manifest['provenance'].get('personAdditions', [])):
+        raise ValueError('Use a new evidence file for a subsequent person addition batch')
+    names_path = SOURCES['person'][0]
+    names = (root / names_path).read_text(encoding='utf-8')
+    if names and not names.endswith('\n'):
+        names += '\n'
+    names += ''.join('\t'.join(row) + '\n' for row in appended)
+    count = len(additions)
+    record_count = len(rows) - previous_rows
+    manifest['sourceRows']['person'] += len(appended)
+    manifest['admittedPairsByOrigin']['verified'] = manifest['admittedPairsByOrigin'].get('verified', 0) + count
+    manifest['uniqueAdmittedPairs'] += count
+    manifest['categoryRows']['person'] += record_count
+    manifest['dictionaryRows'] += record_count
+    manifest['inputs'][relative] = sha(path)
+    manifest['provenance'].setdefault('personAdditions', []).append({
+        'path': relative, 'sha256': sha(path), 'reviewedPairs': len(entries),
+        'addedPairs': [[row[0], row[4]] for row in additions], 'addedRecords': record_count,
+        'addedSourceRows': len(appended),
+    })
+    # Validate a staged snapshot first. Invalid batches never partially edit the inputs.
+    with tempfile.TemporaryDirectory(prefix='person-additions-') as temporary:
+        staging = Path(temporary)
+        staged_directory = staging / 'src/main/classification'
+        staged_directory.mkdir(parents=True)
+        for relative_path in [*manifest['inputs'], 'src/main/resources/id.def', 'src/main/classification/categories.json']:
+            target = staging / relative_path
+            target.parent.mkdir(parents=True, exist_ok=True)
+            if relative_path != names_path:
+                target.symlink_to(root / relative_path)
+        (staging / names_path).write_text(names, encoding='utf-8')
+        write_gzip(staged_directory / 'distribution-candidates.tsv.gz', sorted(rows))
+        write_gzip(staged_directory / 'distribution-decisions.tsv.gz', (decisions[pair] for pair in sorted(decisions)))
+        manifest['inputs'][names_path] = sha(staging / names_path)
+        for filename in manifest['files']:
+            manifest['files'][filename] = sha(staged_directory / filename)
+        write_json(staged_directory / 'distribution-manifest.json', manifest)
+        verify(staging)
+        for relative_path in [names_path, 'src/main/classification/distribution-candidates.tsv.gz',
+                              'src/main/classification/distribution-decisions.tsv.gz',
+                              'src/main/classification/distribution-manifest.json']:
+            (root / relative_path).write_bytes((staging / relative_path).read_bytes())
+    print(f'Person additions: {count} new pairs, {record_count} records, {len(entries) - count} already admitted')
 
 
 def freeze(root, accepted, dispositions, database, manual, taxonomy):
@@ -191,6 +325,7 @@ def verify(root):
     if len(categories) != 28 or len(set(categories)) != 28:
         raise ValueError('Expected 28 unique categories')
     decisions = {}
+    verified_person_pairs = set()
     origins = collections.Counter()
     excluded = unclassified = no_result = 0
     with gzip.open(directory / 'distribution-decisions.tsv.gz', 'rt') as f:
@@ -207,13 +342,17 @@ def verify(root):
                     or status == 'no_result' and origin != 'no_result'):
                 raise ValueError('Invalid classification status')
             decisions[pair] = values if status == 'classified' else set()
+            if status == 'classified' and origin == 'verified' and 'person' in values:
+                verified_person_pairs.add(pair)
             if status == 'classified': origins[origin] += 1
             if status == 'excluded': excluded += 1
             if status == 'unclassified': unclassified += 1
             if status == 'no_result': no_result += 1
     expected = set()
     matched = set()
-    for _, row in source_rows(root):
+    source_counts = collections.Counter()
+    for source, row in source_rows(root):
+        source_counts[source] += 1
         pair = (row[0], row[4])
         if pair in decisions:
             matched.add(pair)
@@ -229,9 +368,24 @@ def verify(root):
             actual.add(row)
     if actual != expected:
         raise ValueError(f'Distribution differs from sources: missing={len(expected-actual)}, extra={len(actual-expected)}')
+    for batch in manifest['provenance'].get('personAdditions', []):
+        if manifest['inputs'].get(batch['path']) != batch['sha256']:
+            raise ValueError('Person evidence hash differs from recorded input')
+        reviewed = person_entries(root, root / batch['path'])
+        pairs = {tuple(pair) for pair in batch['addedPairs']}
+        if (len(pairs) != len(batch['addedPairs'])
+                or sum(row[0] == 'person' and (row[1], row[5]) in pairs for row in actual) != batch['addedRecords']
+                or len(reviewed) != batch['reviewedPairs'] or not pairs <= reviewed.keys()
+                or not pairs <= verified_person_pairs):
+            raise ValueError('Person addition provenance differs from decisions')
+        for pair in pairs:
+            entry = reviewed[pair]
+            if ('person', pair[0], str(entry['left_id']), str(entry['right_id']), str(entry['cost']), pair[1]) not in actual:
+                raise ValueError(f'Person addition differs from reviewed POS/cost: {pair}')
     counts = collections.Counter(row[0] for row in actual)
     if ({c: counts[c] for c in categories} != manifest['categoryRows'] or len(actual) != manifest['dictionaryRows']
             or dict(origins) != manifest['admittedPairsByOrigin'] or sum(origins.values()) != manifest['uniqueAdmittedPairs']
+            or dict(source_counts) != manifest['sourceRows']
             or excluded != manifest['excludedClassifiedPairs'] or unclassified != manifest['unclassifiedPairs'] or no_result != manifest['noResultPairs']):
         raise ValueError('Manifest counts mismatch')
     print(f'Verified frozen distribution: {len(actual)} rows, {sum(origins.values())} pairs, 28 categories')
@@ -256,9 +410,9 @@ def release_manifest(root, archive, revision):
 
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('command', choices=['freeze', 'verify', 'release-manifest'])
+    p.add_argument('command', choices=['freeze', 'verify', 'release-manifest', 'add-person-names'])
     p.add_argument('--root', type=Path, default=Path('.'))
-    for name in ('accepted', 'dispositions', 'database', 'manual', 'taxonomy', 'archive'):
+    for name in ('accepted', 'dispositions', 'database', 'manual', 'taxonomy', 'archive', 'entries'):
         p.add_argument('--' + name, type=Path)
     p.add_argument('--revision', default='local')
     args = p.parse_args()
@@ -268,5 +422,8 @@ if __name__ == '__main__':
         freeze(args.root, args.accepted, args.dispositions, args.database, args.manual, args.taxonomy)
     elif args.command == 'verify':
         verify(args.root)
+    elif args.command == 'add-person-names':
+        if args.entries is None: p.error('--entries is required')
+        add_person_names(args.root, args.entries)
     else:
         release_manifest(args.root, args.archive or args.root / 'release_zips/japanese_keyboard_dictionary_assets.zip', args.revision)

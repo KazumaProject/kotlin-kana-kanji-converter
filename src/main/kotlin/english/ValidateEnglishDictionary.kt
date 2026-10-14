@@ -12,7 +12,7 @@ fun main(args: Array<String>) {
     }
     require(source.runtimeEntries.isNotEmpty()) { "English dictionary has no usable runtime entries" }
     require(source.runtimeEntries.all {
-        EnglishDictionaryQuality.assess(it, source.allowedCompounds).status == EnglishCandidateStatus.PRIMARY
+        EnglishDictionaryQuality.assess(it, source.canonicalCompounds).status == EnglishCandidateStatus.PRIMARY
     }) { "Merged runtime dictionary contains a non-primary candidate" }
     println(
         "Validated English dictionary: upstream=${source.upstream.size}, supplement=${source.supplement.size}, " +
@@ -26,6 +26,7 @@ internal fun loadEnglishDictionarySource(args: Array<String>): EnglishDictionary
     Path.of(englishOption(args, "--input") ?: error("Missing required option: --input")),
     Path.of(englishOption(args, "--supplement") ?: "src/main/english/reading-supplement.tsv"),
     findGenericNounId(Path.of(englishOption(args, "--id-def") ?: "src/main/resources/id.def")),
+    Path.of(englishOption(args, "--candidate-review") ?: "src/main/english/candidate-review.tsv"),
 )
 
 internal fun findGenericNounId(idDef: Path): Int {

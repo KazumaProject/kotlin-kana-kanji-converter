@@ -73,15 +73,12 @@ class EnglishWordCoverage(
             }
             EnglishWordCoverageRow(target, status, reason, baselineReadings, runtimeReadings)
         }
-        val baselinePairs = baselineRuntime.map(::pairKey).toSet()
-        val baselineByPair = baselineRuntime.associateBy(::pairKey)
-        val runtimePairs = runtimeEntries.map(::pairKey).toSet()
-        addedPairs = runtimeEntries.filter { pairKey(it) !in baselinePairs }
+        val changes = EnglishDictionaryChanges.compare(baselineRuntime, runtimeEntries)
+        addedPairs = changes.filter { it.kind == "added" }.map { it.after!! }
             .sortedWith(compareBy({ it.yomi }, { it.tango }, { it.cost }))
-        removedPairs = baselinePairs.count { it !in runtimePairs }
-        changedExistingPairs = runtimeEntries.mapNotNull { current ->
-            baselineByPair[pairKey(current)]?.takeIf { it != current }?.let { it to current }
-        }.sortedWith(compareBy({ it.second.yomi }, { it.second.tango }))
+        removedPairs = changes.count { it.kind == "removed" }
+        changedExistingPairs = changes.filter { it.before != null && it.after != null }
+            .map { it.before!! to it.after!! }.sortedWith(compareBy({ it.second.yomi }, { it.second.tango }))
         val baselineSurfaces = baselineRuntime.map { it.tango }.toSet()
         newSingleWordSurfaces = runtimeEntries.map { it.tango }.filter { isSingleWord(it) && it !in baselineSurfaces }.toSortedSet()
         newNonTargetSingleWordSurfaces = newSingleWordSurfaces.filter { it !in targetWords }.toSortedSet()
@@ -147,7 +144,9 @@ class EnglishWordCoverage(
     companion object {
         const val NGSL_SHA256 = "2098bab8955a120a9766c6282a51d7d578c6cb0a7d946600d2ffb73ba25a0b44"
         const val NGSL_HEADWORD_COUNT = 2809
-        val additionalWords = listOf("deploy", "dependency", "authentication", "authorization", "coroutine", "vendor", "stakeholder")
+        val additionalWords = listOf("deploy", "dependency", "authentication", "authorization", "coroutine", "vendor", "stakeholder",
+            "sync", "async", "commit", "branch", "merge", "rebase", "push", "pull", "fetch",
+            "cache", "cookie", "session", "token", "endpoint", "webhook", "middleware")
         private val wordListHeader = listOf("Lemma", "SFI Rank", "SFI", "Adjusted Frequency per Million (U)")
 
         fun readWordList(path: Path, verifyOfficial: Boolean = true): List<EnglishWordTarget> {
@@ -255,7 +254,7 @@ class EnglishWordCoverage(
             return assessment.flags.takeIf { assessment.status != EnglishCandidateStatus.PRIMARY }.orEmpty()
         }
 
-        private fun pairKey(entry: Dictionary) = entry.yomi to entry.tango.lowercase(Locale.ROOT)
+        private fun pairKey(entry: Dictionary) = entry.yomi to entry.tango
         private fun isSingleWord(surface: String) = surface.none(Char::isWhitespace)
 
         private fun parseCsvLine(line: String, location: String): List<String> {

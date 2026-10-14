@@ -3,7 +3,7 @@ package com.kazumaproject.english
 import java.nio.file.Path
 
 fun main(args: Array<String>) {
-    val acceptedOptions = setOf("--word-list", "--baseline-runtime", "--input", "--supplement", "--id-def", "--output", "--review-decisions")
+    val acceptedOptions = setOf("--word-list", "--baseline-runtime", "--input", "--supplement", "--id-def", "--output", "--review-decisions", "--candidate-review")
     require(args.size % 2 == 0) { "Expected option/value pairs" }
     val options = args.toList().chunked(2)
     require(options.all { it[0] in acceptedOptions && !it[1].startsWith("--") }) { "Unknown option or missing option value" }

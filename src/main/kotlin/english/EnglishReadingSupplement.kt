@@ -82,7 +82,7 @@ object EnglishReadingSupplement {
                     check(!phones.isNullOrEmpty() && phones.all(::isCmuPhone),
                         "CMUdict-derived reading must record valid stressed ARPAbet phonemes")
                 }
-                check(pairs.add(reading to surface.lowercase(Locale.ROOT)), "duplicate reading/surface pair")
+                check(pairs.add(reading to surface), "duplicate reading/surface pair")
                 val dictionary = Dictionary(reading, contextId.toShort(), contextId.toShort(), cost!!.toShort(), surface)
                 // Approval only relaxes the compound rule. All lexical/explanation exclusions remain in force.
                 val assessment = EnglishDictionaryQuality.assess(dictionary, setOf(reading to surface))
