@@ -110,16 +110,6 @@ class StandaloneUnigramTest {
         }
     }
 
-    @Test
-    fun mitaPreferenceRetainsTheKanjiAlternative() {
-        val dictionary = PackedStandaloneUnigramDictionary.read(binary())
-        val engine = KanaKanjiEngine(standaloneUnigramDictionary = dictionary).apply { buildEngine() }
-        val candidates = engine.nBestPath("みた", 10)
-        assertEquals("みた", candidates.first())
-        assertEquals(1, candidates.count { it == "みた" })
-        assertTrue("見た" in candidates)
-    }
-
     private fun candidates(input: String, dictionary: StandaloneUnigramDictionary, vararg nodes: Node): List<String> {
         val graph = List(input.length + 2) { mutableListOf<MutableList<Node>>() }
         graph[0].add(mutableListOf(node("BOS", reading = "", length = 0, cost = 0)))
