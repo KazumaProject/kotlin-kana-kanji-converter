@@ -217,12 +217,32 @@ val buildSystemUnigramDictionary = tasks.register<JavaExec>("buildSystemUnigramD
     outputs.file(systemNgramUnigramDictionaryFile)
     outputs.file(layout.buildDirectory.file("reports/ngram/unigram-build.txt"))
 }
+val buildStandaloneUnigramDictionary = tasks.register<JavaExec>("buildStandaloneUnigramDictionary") {
+    group = "distribution"
+    description = "Compiles whole-input single-node preferences into a separate version-5 asset."
+    dependsOn("classes")
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.ngram.BuildSystemNgramDictionaryKt")
+    args(
+        "--source", layout.projectDirectory.dir("src/main/ngram-standalone-unigram").asFile.path,
+        "--source-mode", "unigram",
+        "--format-version", "5",
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
+        "--output", dictionaryResourcesDir.file("ngram/system_ngram_standalone_unigram.dat").asFile.path,
+        "--report", layout.buildDirectory.file("reports/ngram/standalone-unigram-build.txt").get().asFile.path,
+    )
+    inputs.dir(layout.projectDirectory.dir("src/main/ngram-standalone-unigram"))
+    inputs.file(mozcIdDefFileProvider)
+    outputs.file(dictionaryResourcesDir.file("ngram/system_ngram_standalone_unigram.dat"))
+    outputs.file(layout.buildDirectory.file("reports/ngram/standalone-unigram-build.txt"))
+}
 val japaneseKeyboardAssetSpecs = listOf(
     JapaneseKeyboardAssetSpec("connectionId.dat", "connectionId.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("pos_table.dat", "pos_table.dat"),
     JapaneseKeyboardAssetSpec("id.def", "id.def"),
     JapaneseKeyboardAssetSpec("ngram/system_ngram.dat", "ngram/system_ngram.dat"),
     JapaneseKeyboardAssetSpec("ngram/system_ngram_unigram.dat", "ngram/system_ngram_unigram.dat"),
+    JapaneseKeyboardAssetSpec("ngram/system_ngram_standalone_unigram.dat", "ngram/system_ngram_standalone_unigram.dat"),
     JapaneseKeyboardAssetSpec("yomi.dat", "system/yomi.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("tango.dat", "system/tango.dat.zip", zipped = true),
     JapaneseKeyboardAssetSpec("token.dat", "system/token.dat.zip", zipped = true),
@@ -915,6 +935,7 @@ val generateJapaneseKeyboardDictionaries = tasks.register("generateJapaneseKeybo
         generateMozcZeroQueryData,
         buildSystemNgramDictionary,
         buildSystemUnigramDictionary,
+        buildStandaloneUnigramDictionary,
     )
 }
 

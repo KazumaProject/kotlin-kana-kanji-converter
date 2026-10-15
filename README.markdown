@@ -41,17 +41,17 @@ cd kotlin-kana-kanji-converter
 
 候補をターミナルから確認するには、次のコマンドを使います。複数の読みを一度に渡せます。
 
-unigramは、現在のJapaneseKeyboardと同じく、候補経路内の各ノードに照合します。1ノードの表記が一致すると複合候補全体も優先されます。「入力全体が完全一致したときだけ」という条件ではありません。「しろ」の優先ルールは、「しろ＋医」などが「白い」より上位になるため取り消しました。「したい」「なら」「ごと」の優先ルールも取り消しました。修飾キー省略入力の「こと」から生成された「ごと」も表記一致で優先されるため、「ごと」のルールを削除しています。通常辞書の品詞・コストは変更していません。
+既存の unigram（v4）は、候補経路内の各ノードを対象とする方式です。1ノードの表記が一致すると複合候補全体も優先されます。「入力全体が完全一致したときだけ」という条件ではありません。「しろ」の優先ルールは、「しろ＋医」などが「白い」より上位になるため取り消しました。「したい」「なら」「ごと」の優先ルールも取り消しました。修飾キー省略入力の「こと」から生成された「ごと」も表記一致で優先されるため、「ごと」のルールを削除しています。通常辞書の品詞・コストは変更していません。
 
 ```bash
 ./gradlew --quiet convertCandidates --args='--count 5 なのか しろ'
 ```
 
-読みごとに1行のJSONを出力します。`rank` は1から始まります。以下は先頭2件の出力例です。
+読みごとに1行のJSONを出力します。`rank` は1から始まります。以下は単体用辞書を生成した場合の先頭2件の出力例です。
 
 ```json
 {"input":"なのか","candidates":[{"rank":1,"text":"なのか"},{"rank":2,"text":"七日"}]}
-{"input":"しろ","candidates":[{"rank":1,"text":"白"},{"rank":2,"text":"しろ"}]}
+{"input":"しろ","candidates":[{"rank":1,"text":"しろ"},{"rank":2,"text":"白"}]}
 ```
 
 `--count` を省略すると候補を10件まで返します。生成済みの変換辞書がない環境では、Mozc辞書リソースを準備したうえで先に `./gradlew run` を実行してください。使い方は `./gradlew --quiet convertCandidates --args='--help'` で確認できます。
@@ -59,6 +59,8 @@ unigramは、現在のJapaneseKeyboardと同じく、候補経路内の各ノー
 `src/main/resources/ngram` に生成済みの `system_ngram.dat` と `system_ngram_unigram.dat` がある場合は、それぞれ候補の再順位付けに使います。生成するには `./gradlew buildSystemNgramDictionary buildSystemUnigramDictionary` を実行してください。
 
 「しろ」「したい」「なら」「ごと」の優先を取り消すには、新しく生成した `system_ngram_unigram.dat` に置き換える必要があります。JapaneseKeyboardで利用するときは、配布ZIPの `app/src/main/assets/ngram/system_ngram_unigram.dat` を使用してください。既存の `v1.7.260` のファイルには「ごと」のルールが残っています。
+
+単体入力用の別辞書（v5）には「しろ」「ごと」「したい」「はいる」「みた」を登録しています。`./gradlew buildStandaloneUnigramDictionary` で生成すると CLI が読み込みます。入力全体と読み・表記が一致する1ノード経路だけを対象にし、既存の v4 ルールは維持します。[仕様・配布先・利用側で必要な対応](docs/standalone-unigram.md)を参照してください。JapaneseKeyboard 側の対応と実アプリでの検証は未実施です。
 
 CLIはunigramの照合範囲・表記の重複排除・一致候補を優先してからコスト順にする処理をJapaneseKeyboardに合わせています。JapaneseKeyboardの文節判定、ビーム探索、学習辞書、予測候補、UI全体の表示順位まで同一とは保証しません。利用側を確認するときは実際のcheckoutと配布されたバイナリを使って検証してください。
 
@@ -126,7 +128,9 @@ Generated `system_ngram.dat` and `system_ngram_unigram.dat` files under `src/mai
 
 Unigram rules match each node in a candidate path, as in the current JapaneseKeyboard implementation. A matching node promotes the complete candidate, including compound candidates. These rules are not restricted to a whole-input, single-node path. The `しろ` rule has been removed because it promotes paths such as `しろ` + `医` above `白い`. The `したい`, `なら`, and `ごと` preferences have also been withdrawn. A modifier-key omission candidate can have a different reading from the input but still match the surface-only unigram rule; `こと` can generate `ごと` this way. Replace the deployed unigram binary with the newly generated asset; the v1.7.260 binary still contains the `ごと` rule.
 
-The CLI follows JapaneseKeyboard's unigram matching scope, first-distinct-surface matching, and match-before-cost ranking. It does not reproduce every segmentation, beam search, learned dictionary, prediction, or UI stage. Verify consumer behavior against the actual checkout and shipped binary before claiming app-level parity.
+A separate version-5 whole-input unigram asset contains `しろ`, `ごと`, `したい`, `はいる`, and `みた`. Generate it with `./gradlew buildStandaloneUnigramDictionary`. It promotes candidates with a single-node path covering the original input, with reading and surface both equal to that input. See [the contract and required consumer changes](docs/standalone-unigram.md). JapaneseKeyboard integration and app behavior have not been verified.
+
+For the existing v4 dictionary, the CLI follows JapaneseKeyboard's unigram matching scope, first-distinct-surface matching, and match-before-cost ranking. It does not reproduce every segmentation, beam search, learned dictionary, prediction, or UI stage. Verify consumer behavior against the actual checkout and shipped binary before claiming app-level parity.
 
 ## License
 

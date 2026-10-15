@@ -1,5 +1,7 @@
 import com.kazumaproject.engine.KanaKanjiEngine
 import com.kazumaproject.ngram.EmptySystemNgramDictionary
+import com.kazumaproject.ngram.EmptyStandaloneUnigramDictionary
+import com.kazumaproject.ngram.PackedStandaloneUnigramDictionary
 import com.kazumaproject.ngram.EmptySystemUnigramDictionary
 import com.kazumaproject.ngram.PackedSystemNgramDictionary
 import com.kazumaproject.ngram.PackedSystemUnigramDictionary
@@ -94,7 +96,13 @@ private fun createCandidateCliEngine(): KanaKanjiEngine {
     } else {
         EmptySystemUnigramDictionary
     }
-    return KanaKanjiEngine(ngram, packedUnigram).apply { buildEngine() }
+    val standaloneFile = File("src/main/resources/ngram/system_ngram_standalone_unigram.dat")
+    val standalone = if (standaloneFile.isFile) {
+        PackedStandaloneUnigramDictionary.fromFile(standaloneFile)
+    } else {
+        EmptyStandaloneUnigramDictionary
+    }
+    return KanaKanjiEngine(ngram, packedUnigram, standalone).apply { buildEngine() }
 }
 
 private fun candidateCliUsage(): String =
