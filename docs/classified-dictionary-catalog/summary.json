@@ -1,32 +1,32 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "1662c71f5d4def6f118b27c7620dcb2766a716b34d1be27be073f120cdf9c552",
-  "uniquePairs": 827272,
-  "records": 861054,
+  "inputSha256": "769a601735284d6361e2da0f4305c73b6ec2637839afea6ad9efbdbc34473ae6",
+  "uniquePairs": 827270,
+  "records": 861052,
   "categories": [
     {
       "id": "person",
       "name": "人物・人名",
-      "pairs": 270887,
-      "readings": 201555,
-      "records": 277028,
+      "pairs": 270886,
+      "readings": 201554,
+      "records": 277027,
       "pages": 185,
       "recordsByOrigin": {
         "gemini": 210841,
-        "verified": 64142,
+        "verified": 64141,
         "manual": 2045
       }
     },
     {
       "id": "character",
       "name": "架空キャラクター",
-      "pairs": 8801,
-      "readings": 8652,
-      "records": 8870,
+      "pairs": 8802,
+      "readings": 8653,
+      "records": 8871,
       "pages": 6,
       "recordsByOrigin": {
         "gemini": 8758,
-        "manual": 73,
+        "manual": 74,
         "verified": 39
       }
     },
@@ -111,12 +111,12 @@
     {
       "id": "organization",
       "name": "組織",
-      "pairs": 47117,
-      "readings": 46163,
-      "records": 47185,
+      "pairs": 47116,
+      "readings": 46162,
+      "records": 47184,
       "pages": 33,
       "recordsByOrigin": {
-        "gemini": 45091,
+        "gemini": 45090,
         "manual": 418,
         "verified": 1676
       }
@@ -213,12 +213,12 @@
     {
       "id": "term",
       "name": "一般語・専門用語",
-      "pairs": 127737,
-      "readings": 123072,
-      "records": 127771,
+      "pairs": 127736,
+      "readings": 123071,
+      "records": 127770,
       "pages": 86,
       "recordsByOrigin": {
-        "gemini": 110875,
+        "gemini": 110874,
         "verified": 15984,
         "manual": 912
       }
