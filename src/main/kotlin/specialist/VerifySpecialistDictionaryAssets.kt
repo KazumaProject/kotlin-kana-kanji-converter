@@ -48,6 +48,7 @@ private fun readDictionary(zip: ZipFile, source: String): List<Dictionary> {
     val yomi = readAsset(zip, yp).use { LOUDSWithTermId().readExternalNotCompress(it) }
     val tango = readAsset(zip, tp).use { LOUDS().readExternalNotCompress(it) }
     val tokens = readAsset(zip, tokensPath).use { TokenArray().also { a -> a.readExternalNotCompressStrict(it) } }
+    val pos = readAsset(zip, "pos_table.dat").use { it.readObject() as ShortArray to (it.readObject() as ShortArray) }
     val result = ArrayList<Dictionary>()
     var node = yomi.isLeaf.nextSetBit(0)
     var readings = 0
@@ -57,7 +58,9 @@ private fun readDictionary(zip: ZipFile, source: String): List<Dictionary> {
         require(term > 0) { "$source: invalid terminal $node" }
         readings++
         tokens.getListDictionaryByYomiTermId(term).forEach {
-            result.add(Dictionary(reading, 0, 0, it.wordCost, restoredSurface(reading, it.nodeId, tango)))
+            val index = it.posTableIndex.toInt()
+            require(index in pos.first.indices && index in pos.second.indices) { "$source: invalid POS index $index" }
+            result.add(Dictionary(reading, pos.first[index], pos.second[index], it.wordCost, restoredSurface(reading, it.nodeId, tango)))
         }
         node = yomi.isLeaf.nextSetBit(node + 1)
     }
@@ -77,6 +80,12 @@ fun main(args: Array<String>) {
     try {
         ZipFile(File(args[1])).use { zip ->
             val baseline = sources.sorted().associateWith { readDictionary(zip, it) }
+            val expectedSystem = com.kazumaproject.BaselineDictionaryInputs.system()
+            val literalSurfaces = expectedSystem.mapTo(HashSet()) { it.tango }
+            val expectedRecords = expectedSystem.map { it.copy(tango = effectiveSurface(it, literalSurfaces)) }.groupingBy { it }.eachCount()
+            check(baseline.getValue("system").groupingBy { it }.eachCount() == expectedRecords) {
+                "System dictionary reading/surface/POS/cost differs from selected inputs and feedback"
+            }
             val inventory = File(temporary, "existing-pairs.jsonl.gz")
             writeInventory(baseline, inventory)
             if (!expectedInventory.readBytes().contentEquals(inventory.readBytes())) {
@@ -93,10 +102,12 @@ fun main(args: Array<String>) {
             for (category in specialists.categoryIds) {
                 val entries = readDictionary(zip, "categories/$category")
                 val wanted = specialists.records.getValue(category).map { it.yomi to it.tango }.toSet()
-                check(entries.map { it.yomi to it.tango }.toSet() == wanted && entries.size == wanted.size) {
-                    "$category: reconstructed surface mismatch or duplicate token"
+                check(entries.map { it.yomi to it.tango }.toSet() == wanted && entries.size == specialists.records.getValue(category).size) {
+                    "$category: reconstructed surface mismatch or token count mismatch"
                 }
-                entries.forEach { check(occupied.add(pairKey(it.yomi, it.tango))) { "$category: duplicate packaged candidate $it" } }
+                entries.map { pairKey(it.yomi, it.tango) }.distinct().forEach {
+                    check(occupied.add(it)) { "$category: duplicate packaged candidate $it" }
+                }
                 println("Verified packaged specialist=$category rows=${entries.size}; duplicate pairs=0")
             }
         }

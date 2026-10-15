@@ -9,6 +9,18 @@ from pathlib import Path
 DIRECTORY = Path('src/main/classification')
 
 
+def records(entry):
+    """Legacy single-record additions and new multi-POS inflected additions."""
+    if 'added_record' in entry and 'added_records' in entry:
+        raise ValueError('Use only one added-record representation')
+    value = entry.get('added_records')
+    if value is not None:
+        if not isinstance(value, list) or not value:
+            raise ValueError('Invalid added records')
+        return value
+    return [entry['added_record']] if entry.get('added_record') is not None else []
+
+
 def paths(root):
     return sorted(str(p.relative_to(root)) for p in (root / DIRECTORY / 'reviews').glob('*.jsonl'))
 
@@ -44,13 +56,15 @@ def load(root, selected=None):
                         or baseline[4] not in ('classified', 'excluded', 'unclassified', 'no_result')
                         or not set(filter(None, baseline[2].split(','))) <= allowed):
                     raise ValueError('Invalid review baseline')
-            elif not entry.get('added_record'):
+            elif not records(entry):
                 raise ValueError('New review pair requires an added_record')
             if pair in latest and (latest[pair]['baseline'] != baseline
-                                  or latest[pair].get('added_record') != entry.get('added_record')):
+                                  or records(latest[pair]) != records(entry)):
                 raise ValueError('Review history changed the original baseline/added record')
-            record = entry.get('added_record')
-            if record is not None:
+            added = records(entry)
+            if len({json.dumps(r, sort_keys=True) for r in added}) != len(added):
+                raise ValueError('Duplicate added records')
+            for record in added:
                 if (baseline is not None or not isinstance(record, dict)
                         or any(type(record.get(k)) is not int for k in ('left_id', 'right_id', 'cost'))):
                     raise ValueError('Invalid added record')
@@ -100,8 +114,7 @@ def restore(decisions, entries):
 
 def added_rows(entries):
     for pair, entry in entries.items():
-        record = entry.get('added_record')
-        if record:
+        for record in records(entry):
             yield (pair[0], str(record['left_id']), str(record['right_id']), str(record['cost']), pair[1])
 
 

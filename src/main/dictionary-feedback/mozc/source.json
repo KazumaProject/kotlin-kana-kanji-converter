@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/google/mozc",
+  "revision": "1f3c17119514d6df107358322a307ee2003cd818",
+  "files": {
+    "src/data/rules/user_pos.def": "9fcd9a655bdd60d6521cab690ca4cb044b41a417a8b5c6993e21059aa1b389a2",
+    "src/data/rules/cforms.def": "947d82de803181bb9df8bb4fede6d0d3c3677c7de88c946ff3a35dbfc2bce0ab",
+    "src/data/dictionary_oss/id.def": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d"
+  }
+}

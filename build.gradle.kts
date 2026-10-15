@@ -1121,3 +1121,24 @@ val verifySpecialistDictionaryAssets = tasks.register<JavaExec>("verifySpecialis
 }
 tasks.named("run") { dependsOn(verifySpecialistDistribution) }
 tasks.named("check") { dependsOn(verifySpecialistDistribution) }
+
+val verifyDictionaryFeedback = tasks.register<Exec>("verifyDictionaryFeedback") {
+    group = "verification"
+    description = "Validates owner Issue history, pinned inflection rules and materialized system overrides."
+    commandLine("python3", "scripts/dictionary_feedback.py", "verify")
+    inputs.dir("src/main/dictionary-feedback")
+    inputs.dir(".github/ISSUE_TEMPLATE")
+    inputs.file(mozcIdDefFileProvider)
+}
+tasks.named("check") { dependsOn(verifyDictionaryFeedback) }
+tasks.named("run") { dependsOn(verifyDictionaryFeedback) }
+
+tasks.register<JavaExec>("exportFeedbackDictionaryInventory") {
+    group = "verification"
+    description = "Exports exact records from the system dictionary and all 30 categories for owner Issue requests."
+    dependsOn("classes", verifyDictionaryFeedback, verifyDistributionCandidates, verifySpecialistDistribution)
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.feedback.FeedbackDictionaryInventoryKt")
+    maxHeapSize = "4g"
+    args("--output", layout.buildDirectory.file("dictionary-feedback/inventory.jsonl.gz").get().asFile.path)
+}

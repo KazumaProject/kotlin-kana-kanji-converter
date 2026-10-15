@@ -22,6 +22,7 @@ import com.kazumaproject.Constants.WORDS
 import com.kazumaproject.Constants.ZENKANKU_LIST
 import com.kazumaproject.dictionary.DicUtils
 import com.kazumaproject.dictionary.models.Dictionary
+import com.kazumaproject.feedback.SystemDictionaryFeedback
 import com.kazumaproject.classification.ClassifiedDictionaryData
 import com.kazumaproject.emoji.EmojiDictionaryBuilder
 import com.kazumaproject.emoticon.EmoticonDictionaryBuilder
@@ -73,7 +74,7 @@ internal object BaselineDictionaryInputs {
                     "alreadyPresent=${atokUnigramDictionaryList.size - atokUnigramMissing.size}, " +
                     "added=${atokUnigramMissing.size}",
         )
-        return finalList.values.flatten()
+        return SystemDictionaryFeedback.apply(finalList.values.flatten())
     }
 
     fun load(): Map<String, List<Dictionary>> = linkedMapOf<String, List<Dictionary>>().apply {

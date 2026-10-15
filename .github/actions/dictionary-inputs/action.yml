@@ -1,0 +1,230 @@
+name: Prepare dictionary inputs
+description: Acquire one pinned Mozc revision and the verified latest JapaneseCorpus English release.
+inputs:
+  mozc-ref:
+    description: Explicit Mozc ref override; default comes from the versioned feedback rule lock.
+    required: false
+    default: ''
+runs:
+  using: composite
+  steps:
+    - name: Resolve Mozc revision
+      id: mozc
+      shell: bash
+      env:
+        MOZC_REF_OVERRIDE: ${{ inputs.mozc-ref }}
+      run: |
+        python3 - <<'PYCODE'
+        import json, os
+        revision = os.environ['MOZC_REF_OVERRIDE'] or json.load(open('src/main/dictionary-feedback/mozc/source.json'))['revision']
+        if any(c in revision for c in '\r\n'): raise ValueError('Invalid Mozc ref')
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+            output.write('ref=' + revision + '\n')
+        PYCODE
+    - name: Checkout google/mozc
+      uses: actions/checkout@v4
+      with:
+        repository: google/mozc
+        ref: ${{ steps.mozc.outputs.ref }}
+        path: mozc-src
+        persist-credentials: false
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '17'
+    - name: Copy Mozc dictionary resources
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        mkdir -p ./src/main/resources
+
+        cp \
+          ./mozc-src/src/data/dictionary_oss/id.def \
+          ./src/main/resources/id.def
+
+        for i in $(seq -w 00 09); do
+          cp \
+            "./mozc-src/src/data/dictionary_oss/dictionary${i}.txt" \
+            "./src/main/resources/dictionary${i}.txt"
+        done
+
+        cp \
+          ./mozc-src/src/data/dictionary_oss/connection_single_column.txt \
+          ./src/main/resources/connection_single_column.txt
+
+        cp \
+          ./mozc-src/src/data/dictionary_oss/suffix.txt \
+          ./src/main/resources/suffix.txt
+
+        cp \
+          ./mozc-src/src/data/single_kanji/single_kanji.tsv \
+          ./src/main/resources/single_kanji.tsv
+
+        cp \
+          ./mozc-src/src/data/zero_query/zero_query.def \
+          ./src/main/resources/zero_query.def
+
+        cp \
+          ./mozc-src/src/data/zero_query/zero_query_number.def \
+          ./src/main/resources/zero_query_number.def
+
+        cp \
+          ./mozc-src/src/data/emoji/emoji_data.tsv \
+          ./src/main/resources/mozc_emoji_data.tsv
+
+        cp \
+          ./mozc-src/src/data/emoticon/categorized.tsv \
+          ./src/main/resources/mozc_emoticon_categorized.tsv
+
+        cp \
+          ./mozc-src/src/data/symbol/symbol.tsv \
+          ./src/main/resources/mozc_symbol.tsv
+
+    - name: Verify Mozc resources exist
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        test -s ./src/main/resources/id.def
+        test -s ./src/main/resources/connection_single_column.txt
+        test -s ./src/main/resources/suffix.txt
+        test -s ./src/main/resources/single_kanji.tsv
+        test -s ./src/main/resources/zero_query.def
+        test -s ./src/main/resources/zero_query_number.def
+        test -s ./src/main/resources/mozc_emoji_data.tsv
+        test -s ./src/main/resources/mozc_emoticon_categorized.tsv
+        test -s ./src/main/resources/mozc_symbol.tsv
+
+        test -f ./src/main/custom_zero_query.def
+
+        for i in $(seq -w 00 09); do
+          test -s "./src/main/resources/dictionary${i}.txt"
+        done
+
+    - name: Download and verify latest JapaneseCorpus English dictionary
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        JAPANESE_CORPUS_REPOSITORY: KazumaProject/JapaneseCorpus
+        JAPANESE_CORPUS_ENGLISH_ASSET: mozc-english-reading-unigram-00000.txt.zst
+        JAPANESE_CORPUS_ENGLISH_MANIFEST: english-dictionary-manifest.json
+        JAPANESE_CORPUS_ENGLISH_SHA256SUMS: ENGLISH-DICTIONARY-SHA256SUMS
+      run: |
+        set -euo pipefail
+
+        echo "Resolving latest published JapaneseCorpus release..."
+
+        JAPANESE_CORPUS_TAG="$(
+          gh api \
+            "repos/${JAPANESE_CORPUS_REPOSITORY}/releases/latest" \
+            --jq '.tag_name'
+        )"
+
+        if [[ -z "${JAPANESE_CORPUS_TAG}" || "${JAPANESE_CORPUS_TAG}" == "null" ]]; then
+          echo "Failed to resolve latest JapaneseCorpus release tag." >&2
+          exit 1
+        fi
+
+        echo "JapaneseCorpus repository: ${JAPANESE_CORPUS_REPOSITORY}"
+        echo "JapaneseCorpus release:    ${JAPANESE_CORPUS_TAG}"
+        echo "English asset:             ${JAPANESE_CORPUS_ENGLISH_ASSET}"
+        echo "Manifest:                  ${JAPANESE_CORPUS_ENGLISH_MANIFEST}"
+        echo "SHA256SUMS:                ${JAPANESE_CORPUS_ENGLISH_SHA256SUMS}"
+
+        DOWNLOAD_DIR="${RUNNER_TEMP}/japanese-corpus"
+        mkdir -p "${DOWNLOAD_DIR}"
+
+        echo "Downloading files from the same JapaneseCorpus release..."
+
+        gh release download "${JAPANESE_CORPUS_TAG}" \
+          --repo "${JAPANESE_CORPUS_REPOSITORY}" \
+          --pattern "${JAPANESE_CORPUS_ENGLISH_ASSET}" \
+          --pattern "${JAPANESE_CORPUS_ENGLISH_MANIFEST}" \
+          --pattern "${JAPANESE_CORPUS_ENGLISH_SHA256SUMS}" \
+          --dir "${DOWNLOAD_DIR}"
+
+        ASSET_PATH="${DOWNLOAD_DIR}/${JAPANESE_CORPUS_ENGLISH_ASSET}"
+        MANIFEST_PATH="${DOWNLOAD_DIR}/${JAPANESE_CORPUS_ENGLISH_MANIFEST}"
+        SHA256SUMS_PATH="${DOWNLOAD_DIR}/${JAPANESE_CORPUS_ENGLISH_SHA256SUMS}"
+
+        echo "Verifying downloaded files exist..."
+
+        test -s "${ASSET_PATH}"
+        test -s "${MANIFEST_PATH}"
+        test -s "${SHA256SUMS_PATH}"
+
+        echo "Extracting expected SHA256 from ${JAPANESE_CORPUS_ENGLISH_SHA256SUMS}..."
+
+        EXPECTED_SHA256="$(
+          awk \
+            -v asset="${JAPANESE_CORPUS_ENGLISH_ASSET}" \
+            '$2 == asset || $2 == ("*" asset) { print $1; exit }' \
+            "${SHA256SUMS_PATH}"
+        )"
+
+        if [[ -z "${EXPECTED_SHA256}" ]]; then
+          echo \
+            "Could not find ${JAPANESE_CORPUS_ENGLISH_ASSET} in ${JAPANESE_CORPUS_ENGLISH_SHA256SUMS}." \
+            >&2
+          echo "Available checksum entries:" >&2
+          cat "${SHA256SUMS_PATH}" >&2
+          exit 1
+        fi
+
+        if [[ ! "${EXPECTED_SHA256}" =~ ^[0-9a-fA-F]{64}$ ]]; then
+          echo "Invalid SHA256 in checksum file: ${EXPECTED_SHA256}" >&2
+          exit 1
+        fi
+
+        echo "Expected SHA256: ${EXPECTED_SHA256}"
+
+        ACTUAL_SHA256="$(
+          sha256sum "${ASSET_PATH}" | awk '{print $1}'
+        )"
+
+        echo "Actual SHA256:   ${ACTUAL_SHA256}"
+
+        if [[ "${ACTUAL_SHA256}" != "${EXPECTED_SHA256}" ]]; then
+          echo "JapaneseCorpus English dictionary SHA256 mismatch." >&2
+          exit 1
+        fi
+
+        echo "SHA256 verification passed."
+
+        echo "Validating English dictionary manifest..."
+
+        jq -e \
+          --arg asset "${JAPANESE_CORPUS_ENGLISH_ASSET}" \
+          --arg sha "${EXPECTED_SHA256}" \
+          '
+            .parameters.dictionary_kind == "direct-loanword"
+            and
+            (
+              .assets[]
+              | select(.name == $asset)
+              | .sha256
+            ) == $sha
+          ' \
+          "${MANIFEST_PATH}" \
+          >/dev/null
+
+        echo "Manifest verification passed."
+
+        echo "Testing zstd archive..."
+
+        zstd --test "${ASSET_PATH}"
+
+        echo "Decompressing English dictionary..."
+
+        zstd \
+          --decompress \
+          --stdout \
+          "${ASSET_PATH}" \
+          > ./src/main/resources/english-dictionary.txt
+
+        test -s ./src/main/resources/english-dictionary.txt
+
+        echo "JapaneseCorpus English dictionary successfully installed."
+        echo "Source release: ${JAPANESE_CORPUS_TAG}"

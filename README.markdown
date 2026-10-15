@@ -6,6 +6,8 @@ Web・Person・Place・Neologd・wikiの5辞書は28カテゴリ辞書に置き�
 
 各カテゴリの件数と全収録レコードの読み・表記・品詞ID・コストは[分類辞書の収録一覧](docs/classified-dictionary-catalog/index.md)で確認できます。
 
+スマホのGitHub Issueから、候補の問題報告とシステム辞書・全30カテゴリへの単語追加を申請できます。活用形の生成、変更PR、検証、次回リリースへの反映については[スマホからの辞書改善](docs/dictionary-feedback.md)を参照してください。
+
 ## 概要
 
 このプログラムは、Kotlin

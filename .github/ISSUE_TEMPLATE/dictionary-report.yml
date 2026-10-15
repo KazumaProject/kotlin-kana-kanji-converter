@@ -1,0 +1,137 @@
+{
+  "body": [
+    {
+      "attributes": {
+        "value": "自分用の辞書改善フォームです。投稿内容は公開されます。1件のIssueにつき1語。除外は指定した読み・表記の完全一致だけが対象です。"
+      },
+      "type": "markdown"
+    },
+    {
+      "attributes": {
+        "label": "申請の種類",
+        "options": [
+          "候補の問題報告"
+        ]
+      },
+      "id": "request",
+      "type": "dropdown",
+      "validations": {
+        "required": true
+      }
+    },
+    {
+      "attributes": {
+        "description": "追加は基本形、問題報告は実際に入力した読み全体。例：りばーと",
+        "label": "読み"
+      },
+      "id": "reading",
+      "type": "input",
+      "validations": {
+        "required": true
+      }
+    },
+    {
+      "attributes": {
+        "description": "追加する表記、または問題の候補をそのまま入力。大文字・小文字も区別します。",
+        "label": "表記"
+      },
+      "id": "surface",
+      "type": "input",
+      "validations": {
+        "required": true
+      }
+    },
+    {
+      "attributes": {
+        "label": "希望する対応",
+        "options": [
+          "除外する",
+          "調査・修正を依頼する"
+        ]
+      },
+      "id": "action",
+      "type": "dropdown",
+      "validations": {
+        "required": true
+      }
+    },
+    {
+      "attributes": {
+        "label": "対象辞書",
+        "options": [
+          "収録先を検索（完全一致）",
+          "システム辞書 (system)",
+          "人物・人名 (categories/person)",
+          "架空キャラクター (categories/character)",
+          "神話・伝承の存在 (categories/mythological_figure)",
+          "地名 (categories/place)",
+          "住所 (categories/address)",
+          "駅・停留所 (categories/station)",
+          "施設 (categories/facility)",
+          "交通路線 (categories/transport_route)",
+          "組織 (categories/organization)",
+          "家系・氏族 (categories/lineage)",
+          "商品・サービス (categories/product)",
+          "車両・船舶 (categories/vehicle)",
+          "イベント・事件 (categories/event)",
+          "賞 (categories/award)",
+          "条約・協定 (categories/agreement)",
+          "事業・キャンペーン (categories/initiative)",
+          "一般語・専門用語 (categories/term)",
+          "作品シリーズ (categories/work_franchise)",
+          "漫画作品 (categories/work_manga)",
+          "アニメ作品 (categories/work_anime)",
+          "映画作品 (categories/work_film)",
+          "番組 (categories/work_program)",
+          "書籍作品 (categories/work_book)",
+          "ゲーム作品 (categories/work_game)",
+          "音楽作品 (categories/work_music)",
+          "舞台作品 (categories/work_stage)",
+          "定期刊行物 (categories/work_periodical)",
+          "媒体未特定の作品・美術作品 (categories/work_other)",
+          "漢方・生薬 (categories/kampo)",
+          "医療 (categories/medical)"
+        ]
+      },
+      "id": "target",
+      "type": "dropdown",
+      "validations": {
+        "required": true
+      }
+    },
+    {
+      "attributes": {
+        "description": "分かればReleaseタグなどを記入してください。",
+        "label": "辞書の版"
+      },
+      "id": "version",
+      "type": "input",
+      "validations": {
+        "required": false
+      }
+    },
+    {
+      "attributes": {
+        "label": "正しい候補"
+      },
+      "id": "expected",
+      "type": "input",
+      "validations": {
+        "required": false
+      }
+    },
+    {
+      "attributes": {
+        "label": "補足・出典"
+      },
+      "id": "notes",
+      "type": "textarea",
+      "validations": {
+        "required": false
+      }
+    }
+  ],
+  "description": "不要な候補や、読み・表記・分類の問題を報告します。",
+  "name": "辞書の候補を報告",
+  "title": "[辞書報告] "
+}

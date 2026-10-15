@@ -13,7 +13,7 @@ import tempfile
 
 import classified_distribution as distribution
 
-ORIGINS = {'verified': '資料確認済み', 'manual': 'assistant再分類（暫定）', 'gemini': 'Gemini（暫定）', 'specialist': '提供元の読み（正確性未確認）', 'inferred_reading': 'Gemini推定読み（未確認）'}
+ORIGINS = {'verified': '資料確認済み', 'manual': 'assistant再分類（暫定）', 'gemini': 'Gemini（暫定）', 'specialist': '提供元の読み（正確性未確認）', 'inferred_reading': 'Gemini推定読み（未確認）', 'owner_feedback': 'ユーザー確認'}
 MAX_ROWS = 1500
 MAX_BYTES = 180_000
 
@@ -43,17 +43,24 @@ def generate(root, output):
         names = {c['id']: c.get('name', c['id']) for c in categories}
         with gzip.open(specialist_dir / 'distribution-candidates.tsv.gz', 'rt', encoding='utf-8') as f:
             specialist_rows = [line.rstrip('\n').split('\t') for line in f]
+        classified_pairs = set(origins)
         for _, reading, _, _, _, surface in specialist_rows:
-            if (reading, surface) in origins:
+            if (reading, surface) in classified_pairs:
                 raise ValueError('Specialist catalog overlaps existing classified dictionaries')
             origins[(reading, surface)] = 'specialist'
         for record in specialist.read_json_gzip(specialist_dir / 'provenance.jsonl.gz'):
             if record['status']=='adopted' and record.get('readingOrigin')=='gemini_inferred_unverified':
                 origins[(record['reading'],record['surface'])]='inferred_reading'
+            if record['status']=='adopted' and record.get('readingOrigin')=='user_confirmation':
+                origins[(record['reading'],record['surface'])]='owner_feedback'
         manifest['categoryRows'].update(extra['categoryRows'])
         manifest['uniqueAdmittedPairs'] += extra['uniqueAdmittedPairs']
         manifest['dictionaryRows'] += extra['dictionaryRows']
     output.mkdir(parents=True)
+    import feedback_data as feedback
+    for (_, reading, surface), op in feedback.latest(root).items():
+        if op['dictionary'].startswith('categories/') and op['action'] == 'add' and (reading, surface) in origins:
+            origins[(reading, surface)] = 'owner_feedback'
     summary = []
     with gzip.open(source / 'distribution-candidates.tsv.gz', 'rt', encoding='utf-8') as stream:
         rows = heapq.merge((line.rstrip('\n').split('\t') for line in stream), specialist_rows)

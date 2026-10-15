@@ -1,0 +1,31 @@
+name: Dictionary feedback pipeline tests
+
+on:
+  pull_request:
+    paths:
+      - '.github/**'
+      - 'scripts/**'
+      - 'src/main/dictionary-feedback/mozc/**'
+      - 'src/main/kotlin/feedback/**'
+      - 'src/main/kotlin/BaselineDictionaryInputs.kt'
+      - 'src/main/kotlin/specialist/**'
+      - 'src/test/kotlin/feedback/**'
+      - 'build.gradle.kts'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/dictionary-inputs
+      - name: Verify forms, owner gates, exact matching, inflections and saved histories
+        run: |
+          python3 scripts/dictionary_feedback.py verify
+          python3 -m unittest discover -s scripts -p 'test_*.py' -v
+          python3 scripts/write_classified_dictionary_catalog.py --check
+      - name: Generate and reload the distributed dictionary assets
+        run: ./gradlew buildDictionaryDistributionManifest test check

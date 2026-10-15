@@ -223,6 +223,35 @@ def prepare(root, inventory):
     if used_supplements != set(supplements): raise ValueError('Unknown Gemini source row')
     records = sorted((category, reading, str(matches[0]), str(matches[0]), str(COST), surface)
                      for (reading, surface), category in adopted.items())
+    import feedback_data as feedback
+    feedback_requests = [(path, entry) for path, entry in feedback.requests(root)
+                         if any(op['dictionary'] in ('categories/kampo', 'categories/medical') for op in entry['operations'])]
+    if feedback_requests:
+        records = feedback.specialist_rows(root, records, existing)
+        inputs.update({path: distribution.sha(root / path) for path, _ in feedback_requests})
+        retained = {(row[0], row[1], row[5]) for row in records}
+        for record in provenance:
+            if record['status'] == 'adopted' and (record['category'], record['reading'], record['surface']) not in retained:
+                record['status'] = 'feedback_excluded'
+                counts['adopted'] -= 1; counts['feedback_excluded'] += 1
+                source_dispositions = source_counts[record['source']]['dispositions']
+                source_dispositions['adopted'] -= 1
+                source_dispositions['feedback_excluded'] = source_dispositions.get('feedback_excluded', 0) + 1
+        known = {(r['category'], r['reading'], r['surface']) for r in provenance if r['status'] == 'adopted'}
+        for path, entry in feedback_requests:
+            for op in entry['operations']:
+                identity = (op['dictionary'].split('/')[-1], op['reading'], op['surface'])
+                if identity in retained and identity not in known:
+                    provenance.append(dict(source='owner_feedback', sourceRow=entry['issue'], category=identity[0],
+                                           reading=identity[1], surface=identity[2], originalReading=identity[1],
+                                           originalSurface=identity[2], readingOrigin='user_confirmation',
+                                           status='adopted', reference=entry['issueUrl'], request=path))
+                    known.add(identity)
+                    counts['adopted'] += 1
+                    source_counts.setdefault('owner_feedback', dict(rows=0, dispositions=dict(adopted=0)))
+                    source_counts['owner_feedback']['rows'] += 1
+                    source_counts['owner_feedback']['dispositions']['adopted'] += 1
+        origins = collections.Counter(record['readingOrigin'] for record in provenance if record['status'] == 'adopted')
     candidates = io.BytesIO()
     with gzip.GzipFile(filename='', fileobj=candidates, mode='wb', mtime=0) as gz:
         gz.write(''.join('\t'.join(row)+'\n' for row in records).encode())
@@ -233,7 +262,7 @@ def prepare(root, inventory):
                     existingDictionaryIds=sorted({name for names in existing.values() for name in names}),
                     existingUniquePairs=len(existing), sourceRows=source_counts, dispositions=dict(sorted(counts.items())),
                     categoryRows={c['id']: sum(r[0] == c['id'] for r in records) for c in categories},
-                    dictionaryRows=len(records), uniqueAdmittedPairs=len(records), readingOrigins=dict(sorted(origins.items())),
+                    dictionaryRows=len(records), uniqueAdmittedPairs=len({(r[1], r[5]) for r in records}), readingOrigins=dict(sorted(origins.items())),
                     files={name: hashlib.sha256(raw).hexdigest() for name, raw in data.items()},
                     limitations=['Upstream readings include automatic readings; Gemini supplements are inferred. Neither is independently verified.',
                                  'POS and cost are assigned by this project. IME behavior and ranking are not verified.',
@@ -280,6 +309,10 @@ def licenses(root):
     parts = ['Dictionary data notices and licenses\n\nCode and third-party dictionary data have separate licenses.\n']
     for path in ('LICENSE', 'LICENSE-DATA.md', 'src/main/resources/THIRD-PARTY-NOTICES.md'):
         parts.append('\n=== ' + path + ' ===\n' + (root / path).read_text(encoding='utf-8'))
+    feedback_license = root / 'src/main/dictionary-feedback/mozc/LICENSE'
+    if feedback_license.exists():
+        parts.append('\n=== Mozc inflection rules used for owner additions ===\n' + feedback_license.read_text())
+        parts.append('\nOwner additions are recorded as user confirmations with their Issue URLs; they are not upstream or independently verified readings.\n')
     parts.append('\n=== Specialist dictionaries ===\nMedical: CC BY 4.0. Kampo: CC BY-SA 2.1 Japan.\n'
                  'Changes: field extraction, reading/surface normalization, duplicate filtering, optional Gemini inference of missing medical readings, assigned POS/cost, binary encoding.\n'
                  'Original readings include automatic readings; supplementary readings are Gemini inferences. Accuracy and IME ranking are not verified.\n')

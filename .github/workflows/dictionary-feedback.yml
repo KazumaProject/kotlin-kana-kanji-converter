@@ -1,0 +1,95 @@
+name: Dictionary Issue feedback
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: Owner dictionary Issue number to regenerate against the latest main
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dictionary-feedback-${{ github.event.issue.number || inputs.issue_number }}
+  cancel-in-progress: false
+
+jobs:
+  propose:
+    if: github.repository == 'KazumaProject/kotlin-kana-kanji-converter' && github.actor == 'KazumaProject'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      statuses: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout trusted default branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+      - name: Read and authorize the current Issue
+        id: issue
+        run: python3 scripts/github_dictionary_feedback.py fetch --event "$GITHUB_EVENT_PATH"
+      - name: Prepare dictionary inputs
+        if: steps.issue.outputs.active == 'true'
+        uses: ./.github/actions/dictionary-inputs
+      - name: Export the actual system and 30-category records
+        if: steps.issue.outputs.active == 'true'
+        run: ./gradlew exportFeedbackDictionaryInventory
+      - name: Prepare exact dictionary changes
+        id: prepare
+        if: steps.issue.outputs.active == 'true'
+        run: |
+          python3 scripts/dictionary_feedback.py prepare \
+            --issue build/dictionary-feedback/issue.json \
+            --inventory build/dictionary-feedback/inventory.jsonl.gz
+          python3 - <<'PY'
+          import json, os
+          result = json.load(open('build/dictionary-feedback/result.json'))
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('status=' + result['status'] + '\n')
+          PY
+      - name: Report requests requiring investigation or already present words
+        if: steps.prepare.outputs.status != '' && steps.prepare.outputs.status != 'ready'
+        run: python3 scripts/github_dictionary_feedback.py notify
+      - name: Apply saved reviews and rebuild frozen specialist inputs
+        if: steps.prepare.outputs.status == 'ready'
+        run: |
+          python3 scripts/classified_distribution.py apply-reviews --commit
+          ./gradlew exportExistingDictionaryInventory
+          python3 scripts/specialist_distribution.py freeze
+          python3 scripts/write_classified_dictionary_catalog.py
+          python3 scripts/dictionary_feedback.py verify
+          python3 -m unittest discover -s scripts -p 'test_*.py' -v
+      - name: Create or update the Draft PR
+        id: publish
+        if: steps.prepare.outputs.status == 'ready'
+        run: python3 scripts/github_dictionary_feedback.py publish
+      - name: Generate and verify packaged dictionaries and run tests
+        if: steps.publish.outputs.sha != ''
+        env:
+          GITHUB_SHA: ${{ steps.publish.outputs.sha }}
+        run: ./gradlew buildDictionaryDistributionManifest test check
+      - name: Save verification results and distribution preview
+        if: always() && steps.issue.outputs.active == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dictionary-feedback-${{ steps.issue.outputs.issue }}
+          if-no-files-found: ignore
+          path: |
+            build/dictionary-feedback/result.*
+            build/reports/tests/
+            release_zips/
+      - name: Update the Issue and PR verification status
+        if: always() && steps.issue.outputs.active == 'true'
+        env:
+          VERIFICATION_SUCCEEDED: ${{ job.status == 'success' }}
+        run: python3 scripts/github_dictionary_feedback.py finish --success "$VERIFICATION_SUCCEEDED"

@@ -473,8 +473,9 @@ def verify(root, allow_pending_reviews=False):
     if manifest['provenance'].get('termAdditions', []) != expected_term_provenance:
         raise ValueError('Term addition provenance differs from input')
     for pair in term_pairs:
-        if ('term' not in decisions.get(pair, set())
-                or decision_status.get(pair) != ('verified', 'classified')):
+        baseline = baseline_decisions.get(pair)
+        if (baseline is None or 'term' not in baseline[2].split(',')
+                or baseline[3:] != ['verified', 'classified']):
             raise ValueError(f'Term addition is not classified in term: {pair}')
     for batch in manifest['provenance'].get('personAdditions', []):
         if manifest['inputs'].get(batch['path']) != batch['sha256']:
@@ -515,6 +516,10 @@ def release_manifest(root, archive, revision):
               'specialist': specialist_manifest, 'categoryCount': len(source['categoryRows']) + len(specialist_manifest['categoryRows']),
               'licensesSha256': sha(license_file),
               'archiveSha256': sha(archive), 'assets': assets}
+    feedback = root / 'src/main/dictionary-feedback/system.json'
+    if feedback.exists():
+        result['dictionaryFeedback'] = json.loads(feedback.read_text())
+        result['dictionaryFeedback']['sourceSha256'] = sha(feedback)
     output = archive.parent / 'dictionary-distribution-manifest.json'
     write_json(output, result)
     (archive.parent / 'DICTIONARY-SHA256SUMS').write_text(''.join(f'{sha(p)}  {p.name}\n' for p in (archive, output, license_file)))
