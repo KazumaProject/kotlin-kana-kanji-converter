@@ -22,6 +22,7 @@ SOURCES = {
     'neologd': ('src/main/bin/only_neologd.txt.zip', 'only_neologd.txt'),
     'web': ('src/main/bin/wiki_neologd_common.txt.zip', 'wiki_neologd_common.txt'),
 }
+TERM_ADDITIONS_PATH = 'src/main/classification/term-additions.tsv'
 
 
 def sha(path):
@@ -51,6 +52,7 @@ def source_rows(root):
         else:
             with (root / path).open(encoding='utf-8') as f:
                 yield from parse_rows(f, source)
+    yield from term_addition_rows(root)
 
 
 def parse_rows(lines, source):
@@ -61,6 +63,39 @@ def parse_rows(lines, source):
         if not all(-32768 <= int(x) <= 32767 for x in row[1:4]) or any(int(x) < 0 for x in row[1:3]):
             raise ValueError(f'{source}:{number}: invalid POS/cost')
         yield source, tuple(row)
+
+
+def term_addition_rows(root):
+    """Read reviewed general-term additions with their source and review date."""
+    path = root / TERM_ADDITIONS_PATH
+    if not path.is_file():
+        return
+    ids = {int(line.split(maxsplit=1)[0]) for line in
+           (root / 'src/main/resources/id.def').read_text(encoding='utf-8').splitlines()}
+    seen = set()
+    with path.open(encoding='utf-8') as f:
+        for number, line in enumerate(f, 1):
+            fields = line.rstrip('\r\n').split('\t')
+            if len(fields) != 7:
+                raise ValueError(f'{TERM_ADDITIONS_PATH}:{number}: expected seven tab-separated fields')
+            parsed = next(parse_rows(['\t'.join(fields[:5])], 'term_additions'))[1]
+            reading, left, right, cost, surface = parsed
+            if not re.fullmatch('[ぁ-ゖー]+', reading):
+                raise ValueError(f'{TERM_ADDITIONS_PATH}:{number}: invalid reading')
+            if unicodedata.normalize('NFC', surface) != surface:
+                raise ValueError(f'{TERM_ADDITIONS_PATH}:{number}: surface must use NFC')
+            if any(int(value) not in ids for value in (left, right)):
+                raise ValueError(f'{TERM_ADDITIONS_PATH}:{number}: unknown POS ID')
+            source_url = urlsplit(fields[5])
+            if source_url.scheme != 'https' or not source_url.hostname or source_url.username or source_url.password:
+                raise ValueError(f'{TERM_ADDITIONS_PATH}:{number}: invalid source URL')
+            if date.fromisoformat(fields[6]).isoformat() != fields[6]:
+                raise ValueError(f'{TERM_ADDITIONS_PATH}:{number}: invalid review date')
+            record = (*parsed, fields[5], fields[6])
+            if record in seen:
+                raise ValueError(f'{TERM_ADDITIONS_PATH}:{number}: duplicate term addition')
+            seen.add(record)
+            yield 'term_additions', parsed
 
 
 def key(reading, surface):
@@ -262,6 +297,17 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
                 if prior and prior[0] != cats:
                     conflicts['manual_over_gemini'] += 1
                 decisions[pair] = (cats, 'manual')
+    term_additions = [row for _, row in term_addition_rows(root)]
+    for row in term_additions:
+        pair = (row[0], row[4])
+        if pair in excluded:
+            raise ValueError(f'Term addition conflicts with an exclusion: {pair}')
+        prior = decisions.get(pair)
+        if prior and prior[0]:
+            if 'term' not in prior[0]:
+                raise ValueError(f'Term addition conflicts with an existing classification: {pair}')
+            raise ValueError(f'Term addition is already classified: {pair}')
+        decisions[pair] = ({'term'}, 'verified')
     # Preserve independently reviewed later additions when rebuilding the older
     # AI snapshot, before applying hold/restoration overlays to their baselines.
     for batch in prior_batches:
@@ -303,6 +349,16 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
     write_gzip(out / 'distribution-decisions.tsv.gz', (reviewed[pair] for pair in sorted(reviewed)))
     admitted = collections.Counter(origin for pair, (cats, origin) in decisions.items() if cats and pair not in excluded)
     category_counts = collections.Counter(row[0] for row in rows)
+    inputs = {path: sha(root / path) for path, _ in SOURCES.values()}
+    term_addition_provenance = []
+    if (root / TERM_ADDITIONS_PATH).is_file():
+        inputs[TERM_ADDITIONS_PATH] = sha(root / TERM_ADDITIONS_PATH)
+        if term_additions:
+            term_addition_provenance.append({
+                'path': TERM_ADDITIONS_PATH,
+                'sha256': inputs[TERM_ADDITIONS_PATH],
+                'pairs': [list(pair) for pair in sorted({(row[0], row[4]) for row in term_additions})],
+            })
     manifest = {
         'schemaVersion': 1,
         'precedence': ['verified', 'manual', 'gemini'],
@@ -310,8 +366,9 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
             'acceptedSha256': sha(accepted), 'dispositionsSha256': sha(dispositions),
             'databaseReadSnapshotSha256': snapshot_hash.hexdigest(), 'manualSha256': sha(manual),
             'manualCandidates': manual_count, 'baselineVerifiedPairs': verified,
+            'termAdditions': term_addition_provenance,
         },
-        'inputs': {path: sha(root / path) for path, _ in SOURCES.values()},
+        'inputs': inputs,
         'files': {name: sha(out / name) for name in ('categories.json', 'distribution-candidates.tsv.gz', 'distribution-decisions.tsv.gz')},
         'idDefSha256': sha(root / 'src/main/resources/id.def'),
         'sourceRows': dict(source_counts),
@@ -355,6 +412,7 @@ def verify(root, allow_pending_reviews=False):
     if len(categories) != 28 or len(set(categories)) != 28:
         raise ValueError('Expected 28 unique categories')
     decisions = {}
+    decision_status = {}
     decision_rows = {}
     origins = collections.Counter()
     excluded = unclassified = no_result = 0
@@ -372,6 +430,7 @@ def verify(root, allow_pending_reviews=False):
                     or status == 'no_result' and origin != 'no_result'):
                 raise ValueError('Invalid classification status')
             decisions[pair] = values if status == 'classified' else set()
+            decision_status[pair] = (origin, status)
             decision_rows[pair] = [reading, surface, cats, origin, status]
             if status == 'classified': origins[origin] += 1
             if status == 'excluded': excluded += 1
@@ -404,6 +463,19 @@ def verify(root, allow_pending_reviews=False):
             actual.add(row)
     if actual != expected:
         raise ValueError(f'Distribution differs from sources: missing={len(expected-actual)}, extra={len(actual-expected)}')
+    term_additions = [row for _, row in term_addition_rows(root)]
+    term_pairs = sorted({(row[0], row[4]) for row in term_additions})
+    expected_term_provenance = ([{
+        'path': TERM_ADDITIONS_PATH,
+        'sha256': sha(root / TERM_ADDITIONS_PATH),
+        'pairs': [list(pair) for pair in term_pairs],
+    }] if term_pairs else [])
+    if manifest['provenance'].get('termAdditions', []) != expected_term_provenance:
+        raise ValueError('Term addition provenance differs from input')
+    for pair in term_pairs:
+        if ('term' not in decisions.get(pair, set())
+                or decision_status.get(pair) != ('verified', 'classified')):
+            raise ValueError(f'Term addition is not classified in term: {pair}')
     for batch in manifest['provenance'].get('personAdditions', []):
         if manifest['inputs'].get(batch['path']) != batch['sha256']:
             raise ValueError('Person evidence hash differs from recorded input')

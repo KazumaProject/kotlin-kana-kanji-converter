@@ -1,6 +1,6 @@
 # 分類辞書の収録一覧
 
-30カテゴリ、全体で **827,269組**、カテゴリ別に **861,051レコード**を収録しています。
+30カテゴリ、全体で **827,270組**、カテゴリ別に **861,052レコード**を収録しています。
 
 「組」は読み・表記の重複を除いた件数、「レコード」は品詞・コストの違いも保持したバイナリへの収録件数です。複数カテゴリへの所属があるため、カテゴリ別の組数の合計は全体の組数と一致しません。
 
@@ -26,7 +26,7 @@
 | [賞](award/index.md) | 1,004 | 988 | 1,004 |
 | [条約・協定](agreement/index.md) | 1,744 | 1,734 | 1,744 |
 | [事業・キャンペーン](initiative/index.md) | 1,540 | 1,528 | 1,540 |
-| [一般語・専門用語](term/index.md) | 127,735 | 123,070 | 127,769 |
+| [一般語・専門用語](term/index.md) | 127,736 | 123,071 | 127,770 |
 | [作品シリーズ](work_franchise/index.md) | 270 | 267 | 270 |
 | [漫画作品](work_manga/index.md) | 1,003 | 987 | 1,003 |
 | [アニメ作品](work_anime/index.md) | 642 | 628 | 642 |
@@ -41,7 +41,7 @@
 | [漢方・生薬](kampo/index.md) | 440 | 426 | 440 |
 | [医療](medical/index.md) | 92,847 | 89,629 | 92,847 |
 
-元データSHA-256: `3f6b7188300f5260ff7c7cf99ee6ef5e6bb8a7a848a4e88d6e70ed4a5de8c3f0`
+元データSHA-256: `769a601735284d6361e2da0f4305c73b6ec2637839afea6ad9efbdbc34473ae6`
 
 再生成: `python3 scripts/write_classified_dictionary_catalog.py`
 整合確認: `python3 scripts/write_classified_dictionary_catalog.py --check`
