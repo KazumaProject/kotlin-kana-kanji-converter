@@ -26,6 +26,16 @@ python3 -m unittest discover -s scripts -p 'test_classified_distribution.py' -v
 
 freezeはSQLiteを読み取り専用の一つのトランザクションで読み、進捗DBや元の分類結果を更新しません。Gitに保存するのは固定した圧縮データ、マニフェスト、必要なコードだけです。
 
+## 一般語の追加
+
+辞書原資料にない一般語は `src/main/classification/term-additions.tsv` に1行ずつ追加します。列は読み・左品詞ID・右品詞ID・コスト・表記・出典URL・確認日（YYYY-MM-DD）です。各行は独立した読みと表記が確認できる辞書・語彙資料を出典にし、配布時は一般語・専門用語の `term` カテゴリへ収録します。品詞とコストはMozc形式で指定します。
+
+```text
+どぱがき	1851	1851	8400	ドパガキ	https://example.org/dictionary-entry	2026-10-15
+```
+
+`freeze` はこの入力を出典確認済みの `term` 分類として取り込みます。重複行、無効な品詞ID・URL・日付、既存の別分類や除外判断との衝突は拒否します。出典URLと確認日は入力ファイルのハッシュとともに記録されます。
+
 ## 公式資料で確認した人名の追加
 
 `src/main/classification/person-additions/` に、確認済みの名簿をUTF-8 JSONLで保存します。各行に `reading`、`surface`、`sport`（`mma`・`kickboxing`・`boxing`）、`left_id`、`right_id`、`cost`、`source_url`、`source_surface`、`source_reading`、`checked_on`（YYYY-MM-DD）を記録します。今回の名簿には、確認したページのSHA-256と確認箇所も保存しています。ページ本文はGitへ保存せず、出典は各行のURLで参照します。

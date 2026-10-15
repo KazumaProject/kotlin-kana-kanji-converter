@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "299780b3e415150e264a5aa95c4f3b205ae0f13c16bd8cb229283761b333e4bf",
-  "uniquePairs": 827271,
-  "records": 861053,
+  "inputSha256": "1662c71f5d4def6f118b27c7620dcb2766a716b34d1be27be073f120cdf9c552",
+  "uniquePairs": 827272,
+  "records": 861054,
   "categories": [
     {
       "id": "person",
@@ -213,13 +213,13 @@
     {
       "id": "term",
       "name": "一般語・専門用語",
-      "pairs": 127736,
-      "readings": 123071,
-      "records": 127770,
+      "pairs": 127737,
+      "readings": 123072,
+      "records": 127771,
       "pages": 86,
       "recordsByOrigin": {
         "gemini": 110875,
-        "verified": 15983,
+        "verified": 15984,
         "manual": 912
       }
     },

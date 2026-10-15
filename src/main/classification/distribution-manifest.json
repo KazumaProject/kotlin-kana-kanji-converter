@@ -1982,6 +1982,18 @@
         "addedRecords": 492,
         "addedSourceRows": 489
       }
+    ],
+    "termAdditions": [
+      {
+        "path": "src/main/classification/term-additions.tsv",
+        "sha256": "031b9446633274363467d229074607e495abb0904061dc9b333298af6ebb339b",
+        "pairs": [
+          [
+            "どぱがき",
+            "ドパガキ"
+          ]
+        ]
+      }
     ]
   },
   "inputs": {
@@ -1990,12 +2002,13 @@
     "src/main/bin/only_wiki.txt.zip": "2c3ca451484900edee55ae4ebe79284e1301b077572f64e9100889a5755bed10",
     "src/main/bin/only_neologd.txt.zip": "64222fa806e424556b662619fb7cba9ac9683f89959afee909dadb112027458e",
     "src/main/bin/wiki_neologd_common.txt.zip": "1b0638f24e057077c1b1471dc30e741670b547979db458eb447af5cc7221283c",
-    "src/main/classification/person-additions/fighters-2026-10-14.jsonl": "21ba7b7db33feb7c1b55abfacb1fb6c451dd11d8a06175cfee7d36de53043eaf"
+    "src/main/classification/person-additions/fighters-2026-10-14.jsonl": "21ba7b7db33feb7c1b55abfacb1fb6c451dd11d8a06175cfee7d36de53043eaf",
+    "src/main/classification/term-additions.tsv": "031b9446633274363467d229074607e495abb0904061dc9b333298af6ebb339b"
   },
   "files": {
     "categories.json": "4fd9d1c05f21789bffe2622ec7269abaff8b7904d2ae2485e072a35df1d10556",
-    "distribution-candidates.tsv.gz": "299780b3e415150e264a5aa95c4f3b205ae0f13c16bd8cb229283761b333e4bf",
-    "distribution-decisions.tsv.gz": "06f6f2d6cb74f1bbd9b766c578225fd6da37da768c1881e5694af06f11b5ba99"
+    "distribution-candidates.tsv.gz": "1662c71f5d4def6f118b27c7620dcb2766a716b34d1be27be073f120cdf9c552",
+    "distribution-decisions.tsv.gz": "8209f407f2352faca6fcd6ee562f07f2e95bf908da5aa13cf937ae6fbd4fe346"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "sourceRows": {
@@ -2003,14 +2016,15 @@
     "place": 170145,
     "wiki": 150132,
     "neologd": 404817,
-    "web": 308185
+    "web": 308185,
+    "term_additions": 1
   },
   "admittedPairsByOrigin": {
-    "verified": 257491,
+    "verified": 257492,
     "gemini": 472165,
     "manual": 4328
   },
-  "uniqueAdmittedPairs": 733984,
+  "uniqueAdmittedPairs": 733985,
   "excludedCandidatePairs": 5725,
   "excludedClassifiedPairs": 0,
   "unclassifiedPairs": 10730,
@@ -2037,7 +2051,7 @@
     "award": 1004,
     "agreement": 1744,
     "initiative": 1540,
-    "term": 127770,
+    "term": 127771,
     "work_franchise": 270,
     "work_manga": 1003,
     "work_anime": 642,
@@ -2050,7 +2064,7 @@
     "work_periodical": 1029,
     "work_other": 5173
   },
-  "dictionaryRows": 767766,
+  "dictionaryRows": 767767,
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified."
   ]
