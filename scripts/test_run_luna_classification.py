@@ -32,7 +32,7 @@ class ControllerTests(unittest.TestCase):
                 'candidate_keys': ['key'], 'model': c.MODEL, 'reasoning_effort': c.EFFORT})
             c.save(root / 'src/main/classification/categories.json', TAXONOMY)
             completed = {'key': {'response': {'action': 'adopt'}}}
-            with patch.object(sys, 'argv', ['controller', '--root', str(root), '--workers', '32', '--finish']), \
+            with patch.object(sys, 'argv', ['controller', '--root', str(root), '--workers', '64', '--finish']), \
                     patch.object(c, 'load_completed', return_value=({'files': {'targets.jsonl.gz': 'hash'}}, ROWS, {}, completed)), \
                     patch.object(c.subprocess, 'run', return_value=SimpleNamespace(stdout='test-cli')), \
                     patch.object(c.signal, 'signal'), \
