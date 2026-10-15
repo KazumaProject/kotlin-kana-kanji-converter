@@ -181,21 +181,64 @@ class PackedSystemNgramDictionary private constructor(bytes: ByteArray) : System
 
 /** Reader for the separate version-4 literal unigram asset. */
 class PackedSystemUnigramDictionary private constructor(bytes: ByteArray) : SystemUnigramDictionary {
-    private val records = PackedNgramRecords(bytes, NgramEncoding.UNIGRAM_VERSION)
-    private val words = HashSet<String>(records.ruleCount * 2)
+    private val words = PackedUnigramWords(bytes, NgramEncoding.UNIGRAM_VERSION)
+    override val ruleCount: Int get() = words.ruleCount
+    override val storageBytes: Int get() = words.storageBytes
+    override fun matches(node: Node): Boolean = words.matches(node)
 
-    override val ruleCount: Int = records.ruleCount
-    override val storageBytes: Int = records.storageBytes
+    companion object {
+        fun read(bytes: ByteArray): PackedSystemUnigramDictionary = PackedSystemUnigramDictionary(bytes.copyOf())
+        fun fromFile(file: File): PackedSystemUnigramDictionary = read(file.readBytes())
+    }
+}
 
-    init {
-        repeat(records.ruleCount) { recordId ->
-            val key = records.decodeRecord(recordId)
-            words += decodeWord(key)
-        }
+/** A separate contract: callers must provide the complete path and the original input. */
+interface StandaloneUnigramDictionary {
+    val ruleCount: Int
+    val storageBytes: Int
+    fun mayMatchInput(input: String): Boolean
+    fun matches(input: String, path: List<Node>): Boolean
+}
+
+object EmptyStandaloneUnigramDictionary : StandaloneUnigramDictionary {
+    override val ruleCount = 0
+    override val storageBytes = 0
+    override fun mayMatchInput(input: String): Boolean = false
+    override fun matches(input: String, path: List<Node>): Boolean = false
+}
+
+/** Version 5 shares v4's record layout but requires whole-input matching. */
+class PackedStandaloneUnigramDictionary private constructor(bytes: ByteArray) : StandaloneUnigramDictionary {
+    private val words = PackedUnigramWords(bytes, NgramEncoding.STANDALONE_UNIGRAM_VERSION)
+    override val ruleCount: Int get() = words.ruleCount
+    override val storageBytes: Int get() = words.storageBytes
+
+    override fun mayMatchInput(input: String): Boolean = words.contains(input)
+
+    override fun matches(input: String, path: List<Node>): Boolean {
+        val node = path.singleOrNull() ?: return false
+        return input.isNotEmpty() && node.sPos == 0 && node.len.toInt() == input.length &&
+            node.key == input && node.tango == input && words.matches(node)
     }
 
-    override fun matches(node: Node): Boolean =
-        node.tango != "BOS" && node.tango != "EOS" && node.tango in words
+    companion object {
+        fun read(bytes: ByteArray): PackedStandaloneUnigramDictionary = PackedStandaloneUnigramDictionary(bytes.copyOf())
+        fun fromFile(file: File): PackedStandaloneUnigramDictionary = read(file.readBytes())
+    }
+}
+
+private class PackedUnigramWords(bytes: ByteArray, version: Int) {
+    private val records = PackedNgramRecords(bytes, version)
+    private val words = HashSet<String>(records.ruleCount * 2)
+    val ruleCount: Int = records.ruleCount
+    val storageBytes: Int = records.storageBytes
+
+    init {
+        repeat(records.ruleCount) { words += decodeWord(records.decodeRecord(it)) }
+    }
+
+    fun contains(input: String): Boolean = input in words
+    fun matches(node: Node): Boolean = node.tango != "BOS" && node.tango != "EOS" && node.tango in words
 
     private fun decodeWord(key: ByteArray): String {
         require(key.size >= 2) { "Truncated unigram record" }
@@ -207,13 +250,6 @@ class PackedSystemUnigramDictionary private constructor(bytes: ByteArray) : Syst
         val length = readUVarint(key, 2)
         require(length.next + length.value == key.size) { "Malformed unigram record" }
         return key.copyOfRange(length.next, key.size).toString(Charsets.UTF_8)
-    }
-
-    companion object {
-        fun read(bytes: ByteArray): PackedSystemUnigramDictionary =
-            PackedSystemUnigramDictionary(bytes.copyOf())
-
-        fun fromFile(file: File): PackedSystemUnigramDictionary = read(file.readBytes())
     }
 }
 

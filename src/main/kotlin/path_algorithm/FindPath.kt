@@ -2,6 +2,8 @@ package com.kazumaproject.viterbi
 
 import com.kazumaproject.graph.Node
 import com.kazumaproject.mozc.ConnectionMatrix
+import com.kazumaproject.ngram.EmptyStandaloneUnigramDictionary
+import com.kazumaproject.ngram.StandaloneUnigramDictionary
 import com.kazumaproject.ngram.EmptySystemNgramDictionary
 import com.kazumaproject.ngram.EmptySystemUnigramDictionary
 import com.kazumaproject.ngram.SystemNgramDictionary
@@ -12,6 +14,7 @@ import kotlin.math.sqrt
 class FindPath(
     private val systemNgramDictionary: SystemNgramDictionary = EmptySystemNgramDictionary,
     private val systemUnigramDictionary: SystemUnigramDictionary = EmptySystemUnigramDictionary,
+    private val standaloneUnigramDictionary: StandaloneUnigramDictionary = EmptyStandaloneUnigramDictionary,
 ) {
 
     private data class PathState(
@@ -73,7 +76,8 @@ class FindPath(
         graph: List<MutableList<MutableList<Node>>>,
         length: Int,
         connectionMatrix: ConnectionMatrix,
-        n: Int
+        n: Int,
+        input: String? = null,
     ): MutableList<String> {
         if (n <= 0) return mutableListOf()
         val outgoing = buildOutgoingNodes(graph, length)
@@ -81,27 +85,39 @@ class FindPath(
         val bos = graph[0].flatten().firstOrNull { it.tango == "BOS" } ?: return mutableListOf()
         queue.add(PathState(node = bos, path = emptyList(), cost = 0, endPosition = 0))
 
+        val canMatchStandalone = input != null && input.length == length &&
+            standaloneUnigramDictionary.mayMatchInput(input)
         val hasSystemRules =
-            systemNgramDictionary.ruleCount > 0 || systemUnigramDictionary.ruleCount > 0
+            systemNgramDictionary.ruleCount > 0 || systemUnigramDictionary.ruleCount > 0 ||
+                canMatchStandalone
         val internalCandidateCount = if (hasSystemRules) {
             maxOf(n, n.saturatingMultiply(4).coerceAtMost(64), 32)
         } else {
             n
         }
         val resultFinal = mutableListOf<CandidatePath>()
-        val foundStrings = HashSet<String>()
+        val candidateIndices = HashMap<String, Int>()
 
         while (queue.isNotEmpty()) {
             val state = queue.poll()
             if (state.node.tango == "EOS") {
                 val value = state.path.joinToString(separator = "") { it.tango }
-                if (foundStrings.add(value)) {
+                val standaloneMatch = canMatchStandalone &&
+                    standaloneUnigramDictionary.matches(requireNotNull(input), state.path)
+                val existingIndex = candidateIndices[value]
+                if (existingIndex == null) {
+                    candidateIndices[value] = resultFinal.size
                     resultFinal += CandidatePath(
                         value = value,
                         cost = state.cost,
                         matchedBySystemDictionary =
-                            pathMatchesSystemNgram(state.path) || pathMatchesSystemUnigram(state.path),
+                            pathMatchesSystemNgram(state.path) || pathMatchesSystemUnigram(state.path) ||
+                                standaloneMatch,
                     )
+                } else if (standaloneMatch) {
+                    // v5 can establish whole-input eligibility on a later one-node path.
+                    // Keep the first path's cost and v3/v4's first-distinct-path semantics.
+                    resultFinal[existingIndex] = resultFinal[existingIndex].copy(matchedBySystemDictionary = true)
                 }
                 if (
                     resultFinal.size >= internalCandidateCount ||

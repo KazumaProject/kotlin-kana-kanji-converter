@@ -91,3 +91,7 @@ Build and verify:
 
 ./gradlew verifyJapaneseKeyboardDictionaryAssets
 ```
+
+Whole-input preferences are maintained separately in `src/main/ngram-standalone-unigram`
+and compiled with `buildStandaloneUnigramDictionary` as version 5. See
+[the standalone matching contract](../../../docs/standalone-unigram.md).

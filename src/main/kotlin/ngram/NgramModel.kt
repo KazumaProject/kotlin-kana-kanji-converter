@@ -16,6 +16,8 @@ object NgramEncoding {
     const val MAGIC = 0x4A4B4E47 // JKNG
     const val VERSION = 3
     const val UNIGRAM_VERSION = 4
+    // Whole-input, one-node, input == surface semantics; never load as v4.
+    const val STANDALONE_UNIGRAM_VERSION = 5
     const val HEADER_SIZE = 80
     const val BLOCK_SIZE = 16
     const val BUCKET_COUNT = 65536
