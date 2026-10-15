@@ -14,7 +14,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class StandaloneUnigramTest {
-    private val words = listOf("しろ", "ごと", "したい", "はいる", "みた")
+    private val words = listOf("しろ", "ごと", "したい", "はいる", "みた", "なにか")
     private val rules = NgramSourceParser.parseUnigramDirectory(File("src/main/ngram-standalone-unigram"))
 
     private fun binary(version: Int = NgramEncoding.STANDALONE_UNIGRAM_VERSION): ByteArray {
@@ -29,13 +29,13 @@ class StandaloneUnigramTest {
     }
 
     @Test
-    fun separateAssetContainsExactlyTheFiveRequestedWordsAndBuildsDeterministically() {
+    fun separateAssetContainsExactlyTheSixRequestedWordsAndBuildsDeterministically() {
         assertEquals(words.toSet(), rules.map { (it.features.single() as NgramFeature.Word).value }.toSet())
         val bytes = binary()
         assertContentEquals(bytes, binary())
         SystemNgramBinaryReader(bytes).verify()
         val dictionary = PackedStandaloneUnigramDictionary.read(bytes)
-        assertEquals(5, dictionary.ruleCount)
+        assertEquals(6, dictionary.ruleCount)
         words.forEach {
             assertTrue(dictionary.mayMatchInput(it), it)
             assertTrue(dictionary.matches(it, listOf(node(it))), it)
@@ -103,7 +103,8 @@ class StandaloneUnigramTest {
             }
         }
         listOf("しろい", "しろくろ", "しろあり", "しろのなか", "しごと", "ものごと",
-            "したいです", "べんきょうしたい", "はいると", "みたい", "こと").forEach { input ->
+            "したいです", "べんきょうしたい", "はいると", "みたい", "こと",
+            "なにかある", "なにかを").forEach { input ->
             listOf(1, 4, 10).forEach { count ->
                 assertEquals(baseline.nBestPath(input, count), engine.nBestPath(input, count), "$input count=$count")
             }
