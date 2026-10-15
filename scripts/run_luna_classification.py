@@ -234,7 +234,7 @@ def main():
     parser.add_argument('--finish', action='store_true',
                         help='After classification succeeds, apply full results and verify rebuilt assets.')
     args = parser.parse_args()
-    if not 1 <= args.workers <= 3 or not 1 <= args.batch_size <= 200 or args.timeout <= 0 or (args.max_batches is not None and args.max_batches < 1): parser.error('Invalid workers/timeout/max-batches')
+    if not 1 <= args.workers <= 6 or not 1 <= args.batch_size <= 200 or args.timeout <= 0 or (args.max_batches is not None and args.max_batches < 1): parser.error('Invalid workers/timeout/max-batches')
     root = args.root.resolve(); directory = root / 'build/luna-classification'
     if args.status:
         report_status(root, directory)
