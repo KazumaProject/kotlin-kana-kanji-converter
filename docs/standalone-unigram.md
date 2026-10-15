@@ -1,6 +1,6 @@
 # 単体入力用 unigram 辞書
 
-`src/main/ngram-standalone-unigram/preferences.ngram` に「しろ」「ごと」「したい」「はいる」「みた」の5語を登録します。既存の各ノード用 unigram（v4）とは別の、入力全体用の辞書です。通常辞書の語・品詞・コストは変更しません。
+`src/main/ngram-standalone-unigram/preferences.ngram` に「しろ」「ごと」「したい」「はいる」「みた」「なにか」の6語を登録します。既存の各ノード用 unigram（v4）とは別の、入力全体用の辞書です。通常辞書の語・品詞・コストは変更しません。
 
 ## 生成・配布
 
@@ -8,7 +8,7 @@ Mozc の資源を通常の手順で準備してから実行します。
 
 ```sh
 ./gradlew buildStandaloneUnigramDictionary
-./gradlew --quiet convertCandidates --args='--count 5 しろ ごと したい はいる みた しろい しろくろ しろあり こと しごと'
+./gradlew --quiet convertCandidates --args='--count 5 しろ ごと したい はいる みた なにか しろい しろくろ しろあり こと しごと'
 ```
 
 生成先は `src/main/resources/ngram/system_ngram_standalone_unigram.dat`、レポートは `build/reports/ngram/standalone-unigram-build.txt` です。配布タスクにも生成を接続し、ZIP 内の `app/src/main/assets/ngram/system_ngram_standalone_unigram.dat` に追加します。既存の `system_ngram_unigram.dat` は置き換えません。生成済みバイナリは既存辞書と同様に Git 管理外です。
@@ -46,4 +46,4 @@ Mozc の資源を通常の手順で準備してから実行します。
   --tests '*SystemNgramRuntimeTest'
 ```
 
-バイナリの再現性・5語の一致・バージョンの相互拒否、合成グラフでの「しろ＋医」等の除外と重複候補処理を検証します。ローカルの生成済み通常辞書を使ったエンジンテストでは5語の優先と、複合入力の候補順を単体用辞書なしの場合と比較します（候補数1・4・10）。この比較はここで実行した簡易エンジンの範囲の検証です。
+バイナリの再現性・6語の一致・バージョンの相互拒否、合成グラフでの「しろ＋医」等の除外と重複候補処理を検証します。ローカルの生成済み通常辞書を使ったエンジンテストでは6語の優先と、複合入力の候補順を単体用辞書なしの場合と比較します（候補数1・4・10）。この比較はここで実行した簡易エンジンの範囲の検証です。
