@@ -22,6 +22,7 @@ SOURCES = {
     'neologd': ('src/main/bin/only_neologd.txt.zip', 'only_neologd.txt'),
     'web': ('src/main/bin/wiki_neologd_common.txt.zip', 'wiki_neologd_common.txt'),
 }
+TERM_ADDITIONS_PATH = 'src/main/classification/term-additions.tsv'
 
 
 def sha(path):
@@ -51,6 +52,7 @@ def source_rows(root):
         else:
             with (root / path).open(encoding='utf-8') as f:
                 yield from parse_rows(f, source)
+    yield from term_addition_rows(root)
 
 
 def parse_rows(lines, source):
@@ -61,6 +63,39 @@ def parse_rows(lines, source):
         if not all(-32768 <= int(x) <= 32767 for x in row[1:4]) or any(int(x) < 0 for x in row[1:3]):
             raise ValueError(f'{source}:{number}: invalid POS/cost')
         yield source, tuple(row)
+
+
+def term_addition_rows(root):
+    """Read reviewed general-term additions with their source and review date."""
+    path = root / TERM_ADDITIONS_PATH
+    if not path.is_file():
+        return
+    ids = {int(line.split(maxsplit=1)[0]) for line in
+           (root / 'src/main/resources/id.def').read_text(encoding='utf-8').splitlines()}
+    seen = set()
+    with path.open(encoding='utf-8') as f:
+        for number, line in enumerate(f, 1):
+            fields = line.rstrip('\r\n').split('\t')
+            if len(fields) != 7:
+                raise ValueError(f'{TERM_ADDITIONS_PATH}:{number}: expected seven tab-separated fields')
+            parsed = next(parse_rows(['\t'.join(fields[:5])], 'term_additions'))[1]
+            reading, left, right, cost, surface = parsed
+            if not re.fullmatch('[ぁ-ゖー]+', reading):
+                raise ValueError(f'{TERM_ADDITIONS_PATH}:{number}: invalid reading')
+            if unicodedata.normalize('NFC', surface) != surface:
+                raise ValueError(f'{TERM_ADDITIONS_PATH}:{number}: surface must use NFC')
+            if any(int(value) not in ids for value in (left, right)):
+                raise ValueError(f'{TERM_ADDITIONS_PATH}:{number}: unknown POS ID')
+            source_url = urlsplit(fields[5])
+            if source_url.scheme != 'https' or not source_url.hostname or source_url.username or source_url.password:
+                raise ValueError(f'{TERM_ADDITIONS_PATH}:{number}: invalid source URL')
+            if date.fromisoformat(fields[6]).isoformat() != fields[6]:
+                raise ValueError(f'{TERM_ADDITIONS_PATH}:{number}: invalid review date')
+            record = (*parsed, fields[5], fields[6])
+            if record in seen:
+                raise ValueError(f'{TERM_ADDITIONS_PATH}:{number}: duplicate term addition')
+            seen.add(record)
+            yield 'term_additions', parsed
 
 
 def key(reading, surface):
@@ -199,6 +234,9 @@ def add_person_names(root, path):
 def freeze(root, accepted, dispositions, database, manual, taxonomy):
     out = root / 'src/main/classification'
     out.mkdir(parents=True, exist_ok=True)
+    prior_manifest_path = out / 'distribution-manifest.json'
+    prior_batches = (json.loads(prior_manifest_path.read_text()).get('provenance', {}).get('personAdditions', [])
+                     if prior_manifest_path.exists() else [])
     categories = json.loads(taxonomy.read_text())
     allowed = {c['id'] for c in categories['categories']}
     decisions = {}
@@ -259,6 +297,28 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
                 if prior and prior[0] != cats:
                     conflicts['manual_over_gemini'] += 1
                 decisions[pair] = (cats, 'manual')
+    term_additions = [row for _, row in term_addition_rows(root)]
+    for row in term_additions:
+        pair = (row[0], row[4])
+        if pair in excluded:
+            raise ValueError(f'Term addition conflicts with an exclusion: {pair}')
+        prior = decisions.get(pair)
+        if prior and prior[0]:
+            if 'term' not in prior[0]:
+                raise ValueError(f'Term addition conflicts with an existing classification: {pair}')
+            raise ValueError(f'Term addition is already classified: {pair}')
+        decisions[pair] = ({'term'}, 'verified')
+    # Preserve independently reviewed later additions when rebuilding the older
+    # AI snapshot, before applying hold/restoration overlays to their baselines.
+    for batch in prior_batches:
+        path = root / batch['path']
+        if sha(path) != batch['sha256']:
+            raise ValueError('Person addition evidence changed: ' + batch['path'])
+        reviewed_people = person_entries(root, path)
+        for pair in map(tuple, batch['addedPairs']):
+            if pair not in reviewed_people:
+                raise ValueError('Person addition pair missing from evidence')
+            decisions[pair] = ({'person'}, 'verified')
     rows = set()
     matched = set()
     source_counts = collections.Counter()
@@ -275,14 +335,30 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
             rows.update((cat, *row) for cat in cats)
     if decisions.keys() - matched:
         raise ValueError(f'Classifications missing from source dictionaries: {len(decisions.keys() - matched)}')
+    import classification_reviews as reviews
+    baseline = {pair: [*pair, ','.join(sorted(cats)), origin,
+                      'excluded' if pair in excluded else 'classified' if cats else
+                      'no_result' if origin == 'no_result' else 'unclassified']
+                for pair, (cats, origin) in decisions.items()}
+    review_paths = reviews.paths(root)
+    reviewed = reviews.apply(baseline, reviews.load(root)) if review_paths else baseline
+    if review_paths:
+        rows = reviews.candidate_rows(root, reviewed, reviews.load(root))
     (out / 'categories.json').write_text(json.dumps(categories, ensure_ascii=False, indent=2) + '\n')
     write_gzip(out / 'distribution-candidates.tsv.gz', sorted(rows))
-    write_gzip(out / 'distribution-decisions.tsv.gz', (
-        (*pair, ','.join(sorted(cats)), origin, 'excluded' if pair in excluded else 'classified' if cats else 'no_result' if origin == 'no_result' else 'unclassified')
-        for pair, (cats, origin) in sorted(decisions.items())
-    ))
+    write_gzip(out / 'distribution-decisions.tsv.gz', (reviewed[pair] for pair in sorted(reviewed)))
     admitted = collections.Counter(origin for pair, (cats, origin) in decisions.items() if cats and pair not in excluded)
     category_counts = collections.Counter(row[0] for row in rows)
+    inputs = {path: sha(root / path) for path, _ in SOURCES.values()}
+    term_addition_provenance = []
+    if (root / TERM_ADDITIONS_PATH).is_file():
+        inputs[TERM_ADDITIONS_PATH] = sha(root / TERM_ADDITIONS_PATH)
+        if term_additions:
+            term_addition_provenance.append({
+                'path': TERM_ADDITIONS_PATH,
+                'sha256': inputs[TERM_ADDITIONS_PATH],
+                'pairs': [list(pair) for pair in sorted({(row[0], row[4]) for row in term_additions})],
+            })
     manifest = {
         'schemaVersion': 1,
         'precedence': ['verified', 'manual', 'gemini'],
@@ -290,8 +366,9 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
             'acceptedSha256': sha(accepted), 'dispositionsSha256': sha(dispositions),
             'databaseReadSnapshotSha256': snapshot_hash.hexdigest(), 'manualSha256': sha(manual),
             'manualCandidates': manual_count, 'baselineVerifiedPairs': verified,
+            'termAdditions': term_addition_provenance,
         },
-        'inputs': {path: sha(root / path) for path, _ in SOURCES.values()},
+        'inputs': inputs,
         'files': {name: sha(out / name) for name in ('categories.json', 'distribution-candidates.tsv.gz', 'distribution-decisions.tsv.gz')},
         'idDefSha256': sha(root / 'src/main/resources/id.def'),
         'sourceRows': dict(source_counts),
@@ -306,13 +383,22 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
         'dictionaryRows': len(rows),
         'limitations': ['Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified.'],
     }
+    if prior_batches:
+        manifest['provenance']['personAdditions'] = prior_batches
+        manifest['inputs'].update({batch['path']: batch['sha256'] for batch in prior_batches})
+    if review_paths:
+        reviews.update_manifest(root, manifest, reviewed, rows, review_paths)
     write_json(out / 'distribution-manifest.json', manifest)
     print(json.dumps({k: manifest[k] for k in ('uniqueAdmittedPairs', 'admittedPairsByOrigin', 'dictionaryRows', 'unclassifiedPairs')}, ensure_ascii=False))
 
 
-def verify(root):
+def verify(root, allow_pending_reviews=False):
+    import classification_reviews as reviews
     directory = root / 'src/main/classification'
     manifest = json.loads((directory / 'distribution-manifest.json').read_text())
+    selected_reviews = manifest['provenance'].get('reviews', [])
+    if not allow_pending_reviews and selected_reviews != reviews.paths(root):
+        raise ValueError('Review history changed: run apply-reviews before building')
     for path, expected in manifest['inputs'].items():
         if sha(root / path) != expected:
             raise ValueError(f'Input hash mismatch: {path}')
@@ -322,10 +408,12 @@ def verify(root):
     if sha(root / 'src/main/resources/id.def') != manifest['idDefSha256']:
         raise ValueError('id.def changed: regenerate and review distribution input')
     categories = [c['id'] for c in json.loads((directory / 'categories.json').read_text())['categories']]
+    review_entries = reviews.load(root, selected_reviews)
     if len(categories) != 28 or len(set(categories)) != 28:
         raise ValueError('Expected 28 unique categories')
     decisions = {}
-    verified_person_pairs = set()
+    decision_status = {}
+    decision_rows = {}
     origins = collections.Counter()
     excluded = unclassified = no_result = 0
     with gzip.open(directory / 'distribution-decisions.tsv.gz', 'rt') as f:
@@ -342,8 +430,8 @@ def verify(root):
                     or status == 'no_result' and origin != 'no_result'):
                 raise ValueError('Invalid classification status')
             decisions[pair] = values if status == 'classified' else set()
-            if status == 'classified' and origin == 'verified' and 'person' in values:
-                verified_person_pairs.add(pair)
+            decision_status[pair] = (origin, status)
+            decision_rows[pair] = [reading, surface, cats, origin, status]
             if status == 'classified': origins[origin] += 1
             if status == 'excluded': excluded += 1
             if status == 'unclassified': unclassified += 1
@@ -358,7 +446,14 @@ def verify(root):
             matched.add(pair)
             expected.update((cat, *row) for cat in decisions[pair])
     if decisions.keys() - matched:
-        raise ValueError('Decision missing from dictionary sources')
+        added_pairs = {(r[0], r[4]) for r in reviews.added_rows(review_entries)}
+        if decisions.keys() - matched - added_pairs:
+            raise ValueError('Decision missing from dictionary sources')
+    for row in reviews.added_rows(review_entries):
+        expected.update((cat, *row) for cat in decisions[(row[0], row[4])])
+    baseline_decisions = reviews.restore(decision_rows, review_entries)
+    if reviews.apply(baseline_decisions, review_entries) != decision_rows:
+        raise ValueError('Frozen decisions differ from saved review history')
     actual = set()
     with gzip.open(directory / 'distribution-candidates.tsv.gz', 'rt') as f:
         for line in f:
@@ -368,19 +463,36 @@ def verify(root):
             actual.add(row)
     if actual != expected:
         raise ValueError(f'Distribution differs from sources: missing={len(expected-actual)}, extra={len(actual-expected)}')
+    term_additions = [row for _, row in term_addition_rows(root)]
+    term_pairs = sorted({(row[0], row[4]) for row in term_additions})
+    expected_term_provenance = ([{
+        'path': TERM_ADDITIONS_PATH,
+        'sha256': sha(root / TERM_ADDITIONS_PATH),
+        'pairs': [list(pair) for pair in term_pairs],
+    }] if term_pairs else [])
+    if manifest['provenance'].get('termAdditions', []) != expected_term_provenance:
+        raise ValueError('Term addition provenance differs from input')
+    for pair in term_pairs:
+        if ('term' not in decisions.get(pair, set())
+                or decision_status.get(pair) != ('verified', 'classified')):
+            raise ValueError(f'Term addition is not classified in term: {pair}')
     for batch in manifest['provenance'].get('personAdditions', []):
         if manifest['inputs'].get(batch['path']) != batch['sha256']:
             raise ValueError('Person evidence hash differs from recorded input')
         reviewed = person_entries(root, root / batch['path'])
         pairs = {tuple(pair) for pair in batch['addedPairs']}
+        baseline_person_pairs = {pair for pair, row in baseline_decisions.items()
+                                 if row[3:] == ['verified', 'classified'] and 'person' in row[2].split(',')}
+        baseline_person_rows = {('person', *row) for _, row in source_rows(root)
+                                if (row[0], row[4]) in pairs and (row[0], row[4]) in baseline_person_pairs}
         if (len(pairs) != len(batch['addedPairs'])
-                or sum(row[0] == 'person' and (row[1], row[5]) in pairs for row in actual) != batch['addedRecords']
+                or len(baseline_person_rows) != batch['addedRecords']
                 or len(reviewed) != batch['reviewedPairs'] or not pairs <= reviewed.keys()
-                or not pairs <= verified_person_pairs):
+                or not pairs <= baseline_person_pairs):
             raise ValueError('Person addition provenance differs from decisions')
         for pair in pairs:
             entry = reviewed[pair]
-            if ('person', pair[0], str(entry['left_id']), str(entry['right_id']), str(entry['cost']), pair[1]) not in actual:
+            if ('person', pair[0], str(entry['left_id']), str(entry['right_id']), str(entry['cost']), pair[1]) not in baseline_person_rows:
                 raise ValueError(f'Person addition differs from reviewed POS/cost: {pair}')
     counts = collections.Counter(row[0] for row in actual)
     if ({c: counts[c] for c in categories} != manifest['categoryRows'] or len(actual) != manifest['dictionaryRows']
@@ -412,7 +524,8 @@ def release_manifest(root, archive, revision):
 
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('command', choices=['freeze', 'verify', 'release-manifest', 'add-person-names'])
+    p.add_argument('command', choices=['freeze', 'verify', 'release-manifest', 'add-person-names', 'apply-reviews', 'recover-reviews'])
+    p.add_argument('--commit', action='store_true', help='Apply reviewed data; otherwise show a dry-run summary')
     p.add_argument('--root', type=Path, default=Path('.'))
     for name in ('accepted', 'dispositions', 'database', 'manual', 'taxonomy', 'archive', 'entries'):
         p.add_argument('--' + name, type=Path)
@@ -427,5 +540,11 @@ if __name__ == '__main__':
     elif args.command == 'add-person-names':
         if args.entries is None: p.error('--entries is required')
         add_person_names(args.root, args.entries)
+    elif args.command == 'apply-reviews':
+        import classification_reviews as reviews
+        reviews.apply_saved(args.root, commit=args.commit)
+    elif args.command == 'recover-reviews':
+        import classification_reviews as reviews
+        reviews.recover(args.root)
     else:
         release_manifest(args.root, args.archive or args.root / 'release_zips/japanese_keyboard_dictionary_assets.zip', args.revision)

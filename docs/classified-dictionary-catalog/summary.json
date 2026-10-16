@@ -1,31 +1,31 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "ce31cfde54948e715d1a92bff4ded7c28b92781d06151d4141cd0a58b8bee526",
-  "uniquePairs": 1148659,
-  "records": 1185627,
+  "inputSha256": "11015f0d527a6de0056238177f3f33ae543b2854f59ec4a9c44472aed2199f56",
+  "uniquePairs": 1148658,
+  "records": 1185626,
   "categories": [
     {
       "id": "person",
       "name": "人物・人名",
-      "pairs": 488068,
-      "readings": 380631,
-      "records": 495196,
+      "pairs": 488067,
+      "readings": 380630,
+      "records": 495195,
       "pages": 331,
       "recordsByOrigin": {
         "manual": 220213,
         "gemini": 210841,
-        "verified": 64142
+        "verified": 64141
       }
     },
     {
       "id": "character",
       "name": "架空キャラクター",
-      "pairs": 10319,
-      "readings": 10127,
-      "records": 10399,
+      "pairs": 10320,
+      "readings": 10128,
+      "records": 10400,
       "pages": 7,
       "recordsByOrigin": {
-        "manual": 1602,
+        "manual": 1603,
         "gemini": 8758,
         "verified": 39
       }
@@ -111,12 +111,12 @@
     {
       "id": "organization",
       "name": "組織",
-      "pairs": 65025,
-      "readings": 63565,
-      "records": 65116,
+      "pairs": 65024,
+      "readings": 63564,
+      "records": 65115,
       "pages": 47,
       "recordsByOrigin": {
-        "gemini": 45091,
+        "gemini": 45090,
         "manual": 18349,
         "verified": 1676
       }
@@ -218,8 +218,8 @@
       "records": 145866,
       "pages": 98,
       "recordsByOrigin": {
-        "gemini": 110875,
-        "verified": 15983,
+        "gemini": 110874,
+        "verified": 15984,
         "manual": 19008
       }
     },

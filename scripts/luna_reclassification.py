@@ -285,10 +285,15 @@ def apply(root, results_dir, dry_run=False, allow_partial=False):
             for t in targets:
                 r=results[t['candidate_key']]; pair=t['reading'],t['surface']
                 base[pair]=[*pair,','.join(r['effective_categories']),'manual','classified' if r['effective_action']=='adopt' else 'excluded']
-            rows=set()
-            for _,row in d.source_rows(root):
-                pair=row[0],row[4]; decision=base.get(pair)
-                if decision and decision[4]=='classified': rows.update((cat,*row) for cat in decision[2].split(','))
+            if 'reviews' in current.get('provenance', {}):
+                import classification_reviews as reviews
+                review_entries=reviews.load(root,current['provenance']['reviews'])
+                rows=reviews.candidate_rows(root,base,review_entries)
+            else:
+                rows=set()
+                for _,row in d.source_rows(root):
+                    pair=row[0],row[4]; decision=base.get(pair)
+                    if decision and decision[4]=='classified': rows.update((cat,*row) for cat in decision[2].split(','))
             d.write_gzip(staged/FILES[0],(base[p] for p in sorted(base)))
             d.write_gzip(staged/FILES[1],sorted(rows))
             origins=collections.Counter(r[3] for r in base.values() if r[4]=='classified')

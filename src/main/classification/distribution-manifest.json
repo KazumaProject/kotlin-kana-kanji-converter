@@ -1983,9 +1983,26 @@
         "addedSourceRows": 489
       }
     ],
+    "reviews": [
+      "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl",
+      "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl"
+    ],
+    "reviewBaseExcludedCandidatePairs": 5725,
+    "termAdditions": [
+      {
+        "path": "src/main/classification/term-additions.tsv",
+        "sha256": "031b9446633274363467d229074607e495abb0904061dc9b333298af6ebb339b",
+        "pairs": [
+          [
+            "どぱがき",
+            "ドパガキ"
+          ]
+        ]
+      }
+    ],
     "lunaReclassification": {
       "path": "src/main/classification/luna-reclassification/results.jsonl.gz",
-      "snapshotManifestSha256": "a4b369df3704498c25243f278a9d385d1e8644f25a18664d588582c0f205ee03",
+      "snapshotManifestSha256": "cf2a4ad1fe62a168958371811a6a8bfe73ccb7868f2347b3aaf2160bd5da97bc",
       "sha256": "339cd3676f2c8efbe050613cc2f90b717b6a4b048562a0d3be5b7fdb7f3fe95b",
       "targetSha256": "a059b06f0a4d33809daf2844c742d45b790892b5e554c1ed726f54d0ecf131da",
       "completedPairs": 332902,
@@ -2004,12 +2021,15 @@
     "src/main/bin/only_wiki.txt.zip": "2c3ca451484900edee55ae4ebe79284e1301b077572f64e9100889a5755bed10",
     "src/main/bin/only_neologd.txt.zip": "64222fa806e424556b662619fb7cba9ac9683f89959afee909dadb112027458e",
     "src/main/bin/wiki_neologd_common.txt.zip": "1b0638f24e057077c1b1471dc30e741670b547979db458eb447af5cc7221283c",
-    "src/main/classification/person-additions/fighters-2026-10-14.jsonl": "21ba7b7db33feb7c1b55abfacb1fb6c451dd11d8a06175cfee7d36de53043eaf"
+    "src/main/classification/person-additions/fighters-2026-10-14.jsonl": "21ba7b7db33feb7c1b55abfacb1fb6c451dd11d8a06175cfee7d36de53043eaf",
+    "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl": "574794d0df19f8afd09d06b66897d7b7fce97dd3652bc005674a3ecae28bb30a",
+    "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl": "5a373897bbade57c507d08e4813baa7d5975bc752a568cdaee8aaebd9d18f155",
+    "src/main/classification/term-additions.tsv": "031b9446633274363467d229074607e495abb0904061dc9b333298af6ebb339b"
   },
   "files": {
     "categories.json": "4fd9d1c05f21789bffe2622ec7269abaff8b7904d2ae2485e072a35df1d10556",
-    "distribution-candidates.tsv.gz": "ce31cfde54948e715d1a92bff4ded7c28b92781d06151d4141cd0a58b8bee526",
-    "distribution-decisions.tsv.gz": "8b5a38ec76d00c0ec59be9aad0a51ae46060b4be617887a1b16829b66ae9cc89"
+    "distribution-candidates.tsv.gz": "11015f0d527a6de0056238177f3f33ae543b2854f59ec4a9c44472aed2199f56",
+    "distribution-decisions.tsv.gz": "6ca391cdddfc877e0b07c7ba530737dcdd11ba16d957d811546f15b19c94787c"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "sourceRows": {
@@ -2017,16 +2037,17 @@
     "place": 170145,
     "wiki": 150132,
     "neologd": 404817,
-    "web": 308185
+    "web": 308185,
+    "term_additions": 1
   },
   "admittedPairsByOrigin": {
-    "manual": 325879,
-    "gemini": 472165,
+    "manual": 325880,
+    "gemini": 472163,
     "verified": 257491
   },
-  "uniqueAdmittedPairs": 1055535,
-  "excludedCandidatePairs": 17076,
-  "excludedClassifiedPairs": 11351,
+  "uniqueAdmittedPairs": 1055534,
+  "excludedCandidatePairs": 17079,
+  "excludedClassifiedPairs": 11354,
   "unclassifiedPairs": 0,
   "noResultPairs": 0,
   "conflicts": {
@@ -2035,15 +2056,15 @@
     "verified_over_manual": 8
   },
   "categoryRows": {
-    "person": 495196,
-    "character": 10399,
+    "person": 495195,
+    "character": 10400,
     "mythological_figure": 4378,
     "place": 93629,
     "address": 122945,
     "station": 13261,
     "facility": 41573,
     "transport_route": 4955,
-    "organization": 65116,
+    "organization": 65115,
     "lineage": 3232,
     "product": 15128,
     "vehicle": 3881,
@@ -2064,7 +2085,7 @@
     "work_periodical": 1883,
     "work_other": 6237
   },
-  "dictionaryRows": 1092503,
+  "dictionaryRows": 1092502,
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified."
   ]

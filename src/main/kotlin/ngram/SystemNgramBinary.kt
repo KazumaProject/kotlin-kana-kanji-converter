@@ -212,7 +212,7 @@ object SystemNgramBinaryBuilder {
 
     private fun validateRules(rules: List<NgramRule>, formatVersion: Int) {
         require(rules.isNotEmpty()) { "Cannot build an empty n-gram dictionary" }
-        require(formatVersion == NgramEncoding.VERSION || formatVersion == NgramEncoding.UNIGRAM_VERSION) {
+        require(formatVersion in setOf(NgramEncoding.VERSION, NgramEncoding.UNIGRAM_VERSION, NgramEncoding.STANDALONE_UNIGRAM_VERSION)) {
             "Unsupported n-gram format version: $formatVersion"
         }
         if (formatVersion == NgramEncoding.VERSION) {
@@ -223,7 +223,7 @@ object SystemNgramBinaryBuilder {
             require(rules.all { rule ->
                 rule.features.size == 1 && rule.features.single() is NgramFeature.Word
             }) {
-                "Version ${NgramEncoding.UNIGRAM_VERSION} supports only single-word unigram rules"
+                "Version $formatVersion supports only single-word unigram rules"
             }
         }
     }
@@ -249,7 +249,7 @@ class SystemNgramBinaryReader(private val bytes: ByteArray) {
         require(bytes.size >= NgramEncoding.HEADER_SIZE) { "Truncated n-gram header" }
         require(buffer.getInt(0) == NgramEncoding.MAGIC) { "Invalid n-gram magic" }
         val version = buffer.getInt(4)
-        require(version == NgramEncoding.VERSION || version == NgramEncoding.UNIGRAM_VERSION) {
+        require(version in setOf(NgramEncoding.VERSION, NgramEncoding.UNIGRAM_VERSION, NgramEncoding.STANDALONE_UNIGRAM_VERSION)) {
             "Unsupported n-gram version: $version"
         }
         require(buffer.getInt(56) == bytes.size) { "Invalid n-gram file size" }
@@ -263,7 +263,7 @@ class SystemNgramBinaryReader(private val bytes: ByteArray) {
             if (version == NgramEncoding.VERSION) {
                 require(order in 2..5) { "Invalid v3 n-gram order: $order" }
             } else {
-                require(order == 1) { "Invalid v4 n-gram order: $order" }
+                require(order == 1) { "Invalid v$version unigram order: $order" }
             }
         }
         val bucketCount = buffer.getInt(64)

@@ -9,6 +9,19 @@ import java.util.zip.*
 import kotlin.test.*
 
 class ClassifiedDictionaryAssetsTest {
+    @Test
+    fun frozenReviewAdmitsUzumakiBorutoAndExcludesReportedFragments() {
+        val data = ClassifiedDictionaryData()
+        val name = data.records.getValue("character").single {
+            it.yomi == "うずまきぼると" && it.tango == "うずまきボルト"
+        }
+        assertEquals(1851.toShort(), name.leftId)
+        assertEquals(1851.toShort(), name.rightId)
+        assertEquals(8400.toShort(), name.cost)
+        val reported = setOf("淋蒔", "うず巻", "UZUMAKI")
+        assertFalse(data.records.values.flatten().any { it.yomi == "うずまき" && it.tango in reported })
+    }
+
     private fun fixture(test: (File, ClassifiedDictionaryData, File) -> Unit) {
         val root = Files.createTempDirectory("category-assets-test").toFile()
         try {
