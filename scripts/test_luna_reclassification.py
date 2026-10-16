@@ -190,6 +190,30 @@ class FixtureTests(unittest.TestCase):
                 self.assertEqual(l.decisions(directory/l.FILES[0])[('じょがい','除外')],list(base[3]))
                 self.assertEqual(l.decisions(directory/l.FILES[0])[('ほりゅう','保留')][4],'excluded')
                 with gzip.open(directory/l.FILES[1],'rt') as f: self.assertEqual(len(list(f)),4)
+                # Merge a later review of existing words without erasing the Luna decisions.
+                import classification_reviews as reviews
+                review_dir = directory/'reviews'; review_dir.mkdir()
+                frozen = l.decisions(directory/l.FILES[0])
+                review_entries = []
+                for pair, action, cats in [(('すみ','済'),'exclude',[]), (('よみ','字'),'reclassify',['c2'])]:
+                    review_entries.append(dict(reading=pair[0], surface=pair[1], candidate_key=l.d.key(*pair),
+                        action=action, categories=cats, baseline=frozen[pair], reason='saved later review',
+                        evidence=dict(kind='user_confirmation', reading=pair[0], surface=pair[1],
+                                      categories=cats, reference='explicit fixture review')))
+                l.write_jsonl(review_dir/'later.jsonl',review_entries)
+                reviews.apply_saved(root,commit=True)
+                merged = l.decisions(directory/l.FILES[0])
+                self.assertEqual(merged[('すみ','済')][4],'excluded')
+                self.assertEqual(merged[('よみ','字')][2],'c2')
+                self.assertEqual(merged[('みぶんるい','未分類')],frozen[('みぶんるい','未分類')])
+                self.assertEqual(merged[('ほりゅう','保留')],frozen[('ほりゅう','保留')])
+                self.assertEqual(json.loads((directory/l.FILES[2]).read_text())['excludedCandidatePairs'],3)
+                l.verify_ledger(root)
+                reviews.apply_saved(root,commit=True)
+                # An unrelated decision edit is still rejected after overlays are registered.
+                merged[('みぶんるい','未分類')][2]='c3'
+                l.d.write_gzip(directory/l.FILES[0],(merged[p] for p in sorted(merged)))
+                with self.assertRaisesRegex(ValueError,'Decisions differ'): l.verify_ledger(root)
 
 class EmptyExportTests(unittest.TestCase):
     def test_empty_snapshot_and_atomic_export_failure(self):

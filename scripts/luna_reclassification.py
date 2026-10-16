@@ -45,6 +45,33 @@ def decisions(path):
     with gzip.open(path, 'rt', encoding='utf-8') as f:
         return {tuple(r[:2]): r for r in (line.rstrip('\n').split('\t') for line in f)}
 
+def subsequent_reviews(root, current, baseline):
+    """Allow registered review overlays while keeping the original snapshot pinned."""
+    import classification_reviews as reviews
+    original = baseline['provenance'].get('reviews', [])
+    selected = current['provenance'].get('reviews', [])
+    if not set(original) <= set(selected):
+        raise ValueError('Baseline review history is missing')
+    added = [path for path in selected if path not in original]
+    entries = reviews.load(root, added)
+    provenance = dict(current['provenance'])
+    provenance.pop('lunaReclassification', None)
+    if 'reviews' in baseline['provenance']:
+        provenance['reviews'] = original
+    else:
+        provenance.pop('reviews', None)
+    if 'reviewBaseExcludedCandidatePairs' not in baseline['provenance']:
+        if provenance.pop('reviewBaseExcludedCandidatePairs', baseline['excludedCandidatePairs']) != baseline['excludedCandidatePairs']:
+            raise ValueError('Review baseline exclusion count changed')
+    inputs = dict(current['inputs'])
+    for path in added:
+        if inputs.pop(path, None) != d.sha(root/path):
+            raise ValueError('Subsequent review input hash mismatch')
+    if (provenance != baseline['provenance'] or inputs != baseline['inputs']
+            or current['idDefSha256'] != baseline['idDefSha256']):
+        raise ValueError('Unrelated distribution provenance changed')
+    return entries
+
 def snapshot(root):
     out = root / REL
     m = json.loads((out/'manifest.json').read_text())
@@ -66,10 +93,7 @@ def snapshot(root):
     if 'lunaReclassification' not in current['provenance']:
         if current != baseline: raise ValueError('Distribution manifest changed since export')
     else:
-        provenance = dict(current['provenance']); provenance.pop('lunaReclassification')
-        if (provenance != baseline['provenance'] or current['inputs'] != baseline['inputs']
-                or current['idDefSha256'] != baseline['idDefSha256']):
-            raise ValueError('Unrelated distribution provenance changed')
+        subsequent_reviews(root, current, baseline)
     if m['heldSourceSha256'] != baseline['provenance']['dispositionsSha256']:
         raise ValueError('Held source provenance mismatch')
     targets = jsonl(out/'targets.jsonl.gz')
@@ -208,9 +232,7 @@ def verify_ledger(root):
     m,targets,base=snapshot(root)
     if record.get('snapshotManifestSha256')!=d.sha(root/REL/'manifest.json'):
         raise ValueError('Snapshot manifest hash mismatch')
-    provenance=dict(manifest['provenance']); provenance.pop('lunaReclassification')
-    if provenance!=m['baselineManifest']['provenance']:
-        raise ValueError('Unrelated baseline provenance changed')
+    entries = subsequent_reviews(root, manifest, m['baselineManifest'])
     path=root/record['path']
     if d.sha(path)!=record['sha256']: raise ValueError('Result ledger hash mismatch')
     ledger=jsonl(path)
@@ -247,7 +269,11 @@ def verify_ledger(root):
         if (prior and (prior[4] not in ('unclassified','no_result') or prior[4]!=t['original_status'] or prior[3]!=t['original_origin'])) or (not prior and t['original_status']!='held'):
             raise ValueError('Invalid baseline target')
         base[pair]=[*pair,','.join(r['effective_categories']),'manual','classified' if r['effective_action']=='adopt' else 'excluded']
-    if (manifest['excludedCandidatePairs']!=m['baselineManifest']['excludedCandidatePairs']+sum(r['effective_action']=='reject' for r in ledger)
+    import classification_reviews as reviews
+    before_excluded = sum(r[4]=='excluded' for r in base.values())
+    base = reviews.apply(base, entries)
+    exclusion_delta = sum(r[4]=='excluded' for r in base.values()) - before_excluded
+    if (manifest['excludedCandidatePairs']!=m['baselineManifest']['excludedCandidatePairs']+sum(r['effective_action']=='reject' for r in ledger)+exclusion_delta
             or manifest['excludedClassifiedPairs']!=sum(r[4]=='excluded' for r in base.values())):
         raise ValueError('Exclusion counts differ from ledger')
     if base!=decisions(directory/FILES[0]): raise ValueError('Decisions differ from baseline plus ledger')

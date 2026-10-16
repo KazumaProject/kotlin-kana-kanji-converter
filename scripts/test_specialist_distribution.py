@@ -99,6 +99,22 @@ class SpecialistTest(unittest.TestCase):
         self.assertEqual(first,{**{p.name:p.read_bytes() for p in self.directory.glob('distribution-*')},
                                 'provenance':(self.directory/'provenance.jsonl.gz').read_bytes()})
 
+    def test_removed_classified_pair_is_not_reintroduced_as_specialist(self):
+        directory = self.root / 'src/main/classification'
+        directory.mkdir()
+        path = directory / 'distribution-decisions.tsv.gz'
+        base.write_gzip(path, [('え', '甲', 'term', 'manual', 'excluded')])
+        self.freeze()
+        s.verify(self.root, self.inventory)
+        self.assertFalse(any(row[1] == 'え' and row[5] == '甲' for row in self.rows()))
+        record = next(row for row in s.read_json_gzip(self.directory/'provenance.jsonl.gz')
+                      if row['reading'] == 'え' and row['surface'] == '甲')
+        self.assertEqual(record['status'], 'excluded_by_classification_review')
+        self.assertTrue(any(row[1] == 'お' and row[5] == '症状' for row in self.rows()))
+        base.write_gzip(path, [('え', '甲', 'term', 'manual', 'classified')])
+        with self.assertRaisesRegex(ValueError, 'input hash mismatch'):
+            s.verify(self.root, self.inventory)
+
     def test_changed_existing_inventory_is_rejected(self):
         self.freeze();self.inventory.write_bytes(s.compressed_json([]))
         with self.assertRaisesRegex(ValueError,'inventory changed'):s.verify(self.root,self.inventory)

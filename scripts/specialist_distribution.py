@@ -21,12 +21,13 @@ NOUN = '名詞,一般,*,*,*,*,*'
 COST = 9000
 HIRA = set('あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんぁぃぅぇぉゃゅょゎっゔーがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽ')
 KATA = {chr(ord(c) + 0x60) if '\u3041' <= c <= '\u3094' else c for c in HIRA}
-RULES = dict(version=2, key='normalized_reading+NFC_surface', reading='trim,NFKC,katakana-to-hiragana',
+RULES = dict(version=3, key='normalized_reading+NFC_surface', reading='trim,NFKC,katakana-to-hiragana',
              surface='trim,NFC; internal spaces/case/width/variants preserved',
              readingPattern='[ぁ-ゖー]+', categoryPriority=['kampo', 'medical'], cost=COST, pos=NOUN,
              readingAccuracy='upstream automatic readings and optional Gemini inference; not independently verified',
              supplement='manbyo missing readings only; source row and original surface must match',
-             kanaSurface='must equal the current TokenArray sentinel reconstruction')
+             kanaSurface='must equal the current TokenArray sentinel reconstruction',
+             classificationExclusions='withhold pairs excluded by the classified dictionary review')
 
 
 def json_bytes(value):
@@ -170,6 +171,14 @@ def prepare(root, inventory):
     matches = [int(i) for i, name in pos if name == NOUN]
     if len(matches) != 1 or not 0 <= matches[0] <= 32767: raise ValueError('Missing or invalid noun context')
     existing = load_inventory(inventory)
+    exclusion_path = root / 'src/main/classification/distribution-decisions.tsv.gz'
+    excluded = set()
+    if exclusion_path.exists():
+        with gzip.open(exclusion_path, 'rt', encoding='utf-8') as stream:
+            for line in stream:
+                row = line.rstrip('\n').split('\t')
+                if row[-1] == 'excluded':
+                    excluded.add(key(row[0], row[1]))
     adopted = {}; provenance = []; source_counts = {}; counts = collections.Counter()
     supplement_path = directory / 'gemini-readings.jsonl.gz'
     supplements = {}
@@ -183,6 +192,8 @@ def prepare(root, inventory):
             supplements[number] = entry
     used_supplements = set(); origins = collections.Counter()
     inputs = {str(p.relative_to(root)): distribution.sha(p) for p in sorted(directory.glob('notices/*.txt'))}
+    if exclusion_path.exists():
+        inputs[str(exclusion_path.relative_to(root))] = distribution.sha(exclusion_path)
     if supplement_path.exists(): inputs[str(supplement_path.relative_to(root))] = distribution.sha(supplement_path)
     report_path = directory / 'gemini-run.json'
     if report_path.exists(): inputs[str(report_path.relative_to(root))] = distribution.sha(report_path)
@@ -210,6 +221,8 @@ def prepare(root, inventory):
             if inferred: record['inference'] = inferred
             if reason:
                 status = reason
+            elif pair in excluded:
+                status = 'excluded_by_classification_review'
             elif pair in existing:
                 status = 'existing_duplicate'; record['existingDictionaries'] = sorted(existing[pair])
             elif pair in adopted:

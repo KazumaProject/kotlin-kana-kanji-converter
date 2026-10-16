@@ -59,5 +59,35 @@ class CatalogTest(unittest.TestCase):
         path.write_text(json.dumps(manifest))
         with self.assertRaisesRegex(ValueError,'Catalog count differs'):catalog.generate(self.root,self.root/'bad')
 
+    def test_exclusions_are_complete_paginated_and_use_final_saved_reasons(self):
+        source = self.root/'src/main/classification'
+        distribution.write_gzip(source/'distribution-decisions.tsv.gz',[
+            ('あ','甲<&|>','person,place','verified','classified'),('あ','乙','person','gemini','classified'),
+            ('い','除外<&|>','','manual','excluded'),('う','却下','term','manual','excluded')])
+        ledger = source/'luna.jsonl.gz'
+        with gzip.open(ledger,'wt',encoding='utf-8') as stream:
+            stream.write(json.dumps(dict(response=dict(reading='い',surface='除外<&|>'),
+                effective_action='reject',effective_reason='形式<&|>の制約'),ensure_ascii=False)+'\n')
+        review = source/'review.jsonl'
+        review.write_text(json.dumps(dict(reading='う',surface='却下',action='exclude',reason='最終理由<&|>',
+            evidence=dict(kind='user_confirmation')),ensure_ascii=False)+'\n')
+        path=source/'distribution-manifest.json'
+        manifest=json.loads(path.read_text())
+        manifest['provenance']=dict(lunaReclassification=dict(path=str(ledger.relative_to(self.root))),
+                                    reviews=[str(review.relative_to(self.root))])
+        path.write_text(json.dumps(manifest))
+        output=self.root/'catalog'
+        with patch.object(catalog,'MAX_ROWS',1): summary=catalog.generate(self.root,output)
+        self.assertEqual(summary['excluded'],dict(pairs=2,pages=2))
+        first=(output/'excluded/page-0001.md').read_text()
+        second=(output/'excluded/page-0002.md').read_text()
+        self.assertIn('除外&lt;&amp;&#124;&gt;',first)
+        self.assertIn('形式&lt;&amp;&#124;&gt;の制約',first)
+        self.assertIn('最終理由&lt;&amp;&#124;&gt;',second)
+        self.assertIn('ユーザー明示判断',second)
+        self.assertIn('次のページ',first)
+        self.assertIn('前のページ',second)
+        self.assertIn('excluded/index.md',(output/'index.md').read_text())
+
 
 if __name__ == '__main__':unittest.main()

@@ -1,9 +1,10 @@
-"""Persistent, offline review overlays. No model calls or inferred evidence."""
+"""Persistent, offline review overlays; model judgments remain manual, not verified."""
 import collections
 import contextlib
 import fcntl
 import gzip
 import json
+import re
 from pathlib import Path
 
 DIRECTORY = Path('src/main/classification')
@@ -57,13 +58,27 @@ def load(root, selected=None):
                 if (record['left_id'] not in ids or record['right_id'] not in ids
                         or not -32768 <= record['cost'] <= 32767):
                     raise ValueError('Invalid review POS/cost')
+            evidence = entry.get('evidence', {})
+            if evidence.get('kind') == 'model_review':
+                if (action not in ('exclude', 'reclassify') or baseline is None
+                        or baseline[4] != 'classified' or record is not None
+                        or action == 'exclude' and entry.get('categories')):
+                    raise ValueError('Model reviews only exclude or reclassify existing admitted pairs')
+                if (evidence.get('model') != 'gpt-5.6-luna'
+                        or evidence.get('reasoning_effort') != 'max'
+                        or evidence.get('target_revision') != '8ec94757d48d58ac6a5ca2c3baccfcbb48d45003'
+                        or not isinstance(evidence.get('response_sha256'), str)
+                        or not re.fullmatch('[0-9a-f]{64}', evidence['response_sha256'])
+                        or evidence.get('reading') != pair[0] or evidence.get('surface') != pair[1]
+                        or evidence.get('categories') != entry.get('categories', [])
+                        or not isinstance(evidence.get('reference'), str) or not evidence['reference']):
+                    raise ValueError('Invalid model review provenance')
             if action in ('keep', 'reclassify', 'add'):
                 cats = entry.get('categories')
                 if not isinstance(cats, list) or not cats or len(set(cats)) != len(cats) or not set(cats) <= allowed:
                     raise ValueError('Invalid review categories')
-                evidence = entry.get('evidence', {})
-                if evidence.get('kind') not in ('user_confirmation', 'independent_source'):
-                    raise ValueError('Restoration requires evidence, not model inference')
+                if evidence.get('kind') not in ('user_confirmation', 'independent_source', 'model_review'):
+                    raise ValueError('Review requires an identified evidence kind')
                 if (evidence.get('reading') != pair[0] or evidence.get('surface') != pair[1]
                         or evidence.get('categories') != cats or not evidence.get('reference')):
                     raise ValueError('Review evidence must identify the reading, surface and categories')
@@ -80,7 +95,9 @@ def apply(decisions, entries, validate_baseline=True):
             raise ValueError(f'Review baseline differs from input: {pair}')
         baseline = entry['baseline']
         if entry['action'] in ('hold', 'exclude'):
-            result[pair] = [*pair, baseline[2] if baseline else '', baseline[3] if baseline else 'manual', 'excluded']
+            origin = ('manual' if entry.get('evidence', {}).get('kind') == 'model_review'
+                      else baseline[3] if baseline else 'manual')
+            result[pair] = [*pair, baseline[2] if baseline else '', origin, 'excluded']
         else:
             cats = ','.join(sorted(entry['categories']))
             origin = 'verified' if entry['evidence']['kind'] == 'independent_source' else 'manual'
@@ -126,11 +143,13 @@ def update_manifest(root, manifest, decisions, rows, selected):
         manifest['inputs'].pop(relative, None)
     manifest['provenance']['reviews'] = selected
     manifest['inputs'].update({path: d.sha(root / path) for path in selected})
-    manifest['provenance'].setdefault('reviewBaseExcludedCandidatePairs', manifest['excludedCandidatePairs'])
+    luna_exclusions = manifest['provenance'].get('lunaReclassification', {}).get('effectiveActions', {}).get('reject', 0)
+    manifest['provenance'].setdefault('reviewBaseExcludedCandidatePairs', manifest['excludedCandidatePairs'] - luna_exclusions)
     entries = load(root, selected)
-    new_exclusions = sum(entry['action'] in ('hold', 'exclude') and
-                         (entry['baseline'] is None or entry['baseline'][4] != 'excluded') for entry in entries.values())
-    manifest['excludedCandidatePairs'] = manifest['provenance']['reviewBaseExcludedCandidatePairs'] + new_exclusions
+    new_exclusions = sum(int(entry['action'] in ('hold', 'exclude')) -
+                         int(entry['baseline'] is not None and entry['baseline'][4] == 'excluded')
+                         for entry in entries.values())
+    manifest['excludedCandidatePairs'] = manifest['provenance']['reviewBaseExcludedCandidatePairs'] + new_exclusions + luna_exclusions
     origins = collections.Counter(row[3] for row in decisions.values() if row[4] == 'classified')
     counts = collections.Counter(row[0] for row in rows)
     manifest.update(admittedPairsByOrigin=dict(origins), uniqueAdmittedPairs=sum(origins.values()),
@@ -195,6 +214,9 @@ def _apply_saved(root, commit=False):
         for relative in [*manifest['inputs'], 'src/main/resources/id.def', str(DIRECTORY / 'categories.json')]:
             target = staging / relative; target.parent.mkdir(parents=True, exist_ok=True)
             target.symlink_to(root / relative)
+        # The original snapshot and result ledger are also required by offline verification.
+        if 'lunaReclassification' in manifest['provenance']:
+            (staged / 'luna-reclassification').symlink_to(directory / 'luna-reclassification', target_is_directory=True)
         d.write_gzip(staged / 'distribution-decisions.tsv.gz', (reviewed[p] for p in sorted(reviewed)))
         d.write_gzip(staged / 'distribution-candidates.tsv.gz', sorted(rows))
         for name in manifest['files']:
