@@ -12,6 +12,8 @@
 
 元辞書、分類ファイル、`id.def` の変更は検証エラーになります。更新時は保存済みの分類結果を再確認して固定入力を作り直します。ActionsがAIや外部の分類資料を取得し直すことはありません。
 
+未分類・元の保留・分類取得失敗をGPT-5.6 Luna Maxで再判定する手順は、[未解決候補の再分類](luna-reclassification.md)を参照してください。再判定結果はカテゴリ付きの採用か理由付きの不採用で保存し、通信エラーや応答欠落は判定済み件数へ含めません。
+
 ```sh
 python3 scripts/classified_distribution.py freeze \
   --accepted /path/to/accepted-candidates.tsv.gz \
@@ -66,6 +68,12 @@ python3 scripts/write_classified_dictionary_catalog.py --check
 共通品詞表は基本辞書・英語辞書・分類辞書の品詞組を含めて一度生成します。その品詞表から全バイナリを生成し、配布ZIPを再読込して、各カテゴリの読み・表記・品詞・コストと余分・欠落のないレコード数を照合します。
 
 [収録一覧](classified-dictionary-catalog/index.md)では、全レコードの読み・表記・左右品詞ID・コスト・分類元をカテゴリ別に掲載します。品詞名は一覧内の対応表で確認できます。大きなカテゴリはGitHub上で閲覧できるサイズに分割します。一覧はリポジトリの文書として保存し、配布ZIPやRelease添付ファイルには含めません。`python3 scripts/write_classified_dictionary_catalog.py` で再生成し、`--check` で固定入力との一致を確認します。
+
+[不採用語と判断理由](classified-dictionary-catalog/excluded/index.md)には、固定判断台帳の `excluded` 全件を読み順で掲載します。PR #141の実効不採用理由と、PR #142を含む後続レビューの最終理由を使用し、モデル判断とユーザー明示判断を区別します。古い処理で除外され固定判断台帳に読み・表記が残っていない候補、および専門辞書の形式不正・重複による見送りは対象外です。
+
+PR #141の分類台帳と後続レビューは、元のスナップショット→Lunaの実効判断→後続レビューの順に検証します。両PRの配布用TSVを単純に上書きせず、`python3 scripts/classified_distribution.py apply-reviews --commit` で統合し、既存辞書一覧・専門辞書・カタログを再生成します。原スナップショット・台帳・レビューのハッシュを保持し、対象外の判断変更は検証で拒否します。
+
+配布は既存の [GitHub Actions](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/workflows/build-and-release.yml) を使用します。手動実行ではビルド・検証後にActions成果物を保存し、`v*` タグのpushでは同じ検証後にGitHubのプレリリースへ辞書ZIP・配布マニフェスト・SHA-256・ライセンスを添付します。閲覧用一覧の固定データとの一致も配布前に検証します。
 
 既存Actionsを手動実行すると、ZIPと `dictionary-distribution-manifest.json`、`DICTIONARY-SHA256SUMS`、`DICTIONARY-LICENSES.txt` を成果物として取得できます。`v*` タグでは4ファイルをGitHubのプレリリースへ添付し、通常リリースのLatestには設定しません。最新5プレリリースを保持し、通常リリースとそのタグは削除対象に含めません。
 

@@ -24,7 +24,7 @@
     "src/main/specialist/notices/kampo_core.txt": "7ca7047eedec76c3a98913dc932487aee1b89c2604842db3f5e961e4c85c4496",
     "src/main/specialist/notices/kampo_herb.txt": "7ca7047eedec76c3a98913dc932487aee1b89c2604842db3f5e961e4c85c4496",
     "src/main/specialist/notices/manbyo.txt": "2ffeab722ef92e8fa0feb0df08b273e4c7522aa948052ce03a269a7475992934",
-    "src/main/classification/distribution-decisions.tsv.gz": "ed50bed5d013d639b97d5821f5c00d3bee753fd0c2761df0e995f4309532ec1c",
+    "src/main/classification/distribution-decisions.tsv.gz": "20aec1771a1ae5dce99465c8c96ecedff1c4e27a54ca9d7316d75867c47c0764",
     "src/main/specialist/gemini-readings.jsonl.gz": "04516a0f6b282cbac9bb0325d2f864db5f84829d4c5764e846d6411bc46eb9ec",
     "src/main/specialist/gemini-run.json": "91b4925e86a3635ed342e28861be54fe7e03f72505628de41df4b48efa6a80fb",
     "src/main/specialist/categories.json": "d03ce6563d7439cbcdcdaabf8df2529f507b2ce12abedb75e0ec1167704a0a25",
@@ -35,7 +35,7 @@
     "src/main/specialist/sources/manbyo.jsonl.gz": "acf4105c8bfff7d7278fb9d2298481b3dae2d6b58eda824f31b3345e6aea9492"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
-  "existingInventorySha256": "b1216ea494da2515b5d579605fe14457c690ed037ecb09652967bcaef05ba086",
+  "existingInventorySha256": "0798905aff4403b73c0269ca9b6632a5599413800ed253ebf952e44114d187ed",
   "existingDictionaryIds": [
     "categories/address",
     "categories/agreement",
@@ -74,30 +74,30 @@
     "symbol",
     "system"
   ],
-  "existingUniquePairs": 1539973,
+  "existingUniquePairs": 1860565,
   "sourceRows": {
     "kampo_core": {
       "rows": 1581,
       "dispositions": {
-        "adopted": 257,
-        "existing_duplicate": 544,
-        "source_duplicate": 780
+        "adopted": 250,
+        "existing_duplicate": 591,
+        "source_duplicate": 740
       }
     },
     "kampo_herb": {
       "rows": 278,
       "dispositions": {
-        "adopted": 183,
-        "existing_duplicate": 95
+        "adopted": 182,
+        "existing_duplicate": 96
       }
     },
     "hyakuyaku": {
       "rows": 39616,
       "dispositions": {
-        "adopted": 20691,
-        "cross_category_duplicate": 114,
-        "excluded_by_classification_review": 54,
-        "existing_duplicate": 2651,
+        "adopted": 20656,
+        "cross_category_duplicate": 106,
+        "excluded_by_classification_review": 60,
+        "existing_duplicate": 2688,
         "non_kana_reading": 16090,
         "unsupported_kana_surface": 16
       }
@@ -105,9 +105,9 @@
     "manbyo": {
       "rows": 380300,
       "dispositions": {
-        "adopted": 72156,
-        "excluded_by_classification_review": 8,
-        "existing_duplicate": 3001,
+        "adopted": 72029,
+        "excluded_by_classification_review": 9,
+        "existing_duplicate": 3127,
         "missing_or_placeholder": 304064,
         "non_kana_reading": 1060,
         "source_duplicate": 8,
@@ -116,28 +116,28 @@
     }
   },
   "dispositions": {
-    "adopted": 93287,
-    "cross_category_duplicate": 114,
-    "excluded_by_classification_review": 62,
-    "existing_duplicate": 6291,
+    "adopted": 93117,
+    "cross_category_duplicate": 106,
+    "excluded_by_classification_review": 69,
+    "existing_duplicate": 6502,
     "missing_or_placeholder": 304064,
     "non_kana_reading": 17150,
-    "source_duplicate": 788,
+    "source_duplicate": 748,
     "unsupported_kana_surface": 19
   },
   "categoryRows": {
-    "kampo": 440,
-    "medical": 92847
+    "kampo": 432,
+    "medical": 92685
   },
-  "dictionaryRows": 93287,
-  "uniqueAdmittedPairs": 93287,
+  "dictionaryRows": 93117,
+  "uniqueAdmittedPairs": 93117,
   "readingOrigins": {
-    "gemini_inferred_unverified": 2006,
-    "upstream_unverified": 91281
+    "gemini_inferred_unverified": 2003,
+    "upstream_unverified": 91114
   },
   "files": {
-    "distribution-candidates.tsv.gz": "f67faa8ebe67f691300ff99da4b301585090992b328bfdf7dd76af150347a3e7",
-    "provenance.jsonl.gz": "3b61c3010e70a0038983301269ffe39853cb6d0ff4ddf1d1b7a61f8b70f70a21"
+    "distribution-candidates.tsv.gz": "2330d31edaec815cd0c743f3acf0708b7337bfd25d79d4edd5115356ac5455c4",
+    "provenance.jsonl.gz": "28bd0e3d90362c17ea1f986d4aabbd4a7d3a882bdd027faeba940da9034eec06"
   },
   "limitations": [
     "Upstream readings include automatic readings; Gemini supplements are inferred. Neither is independently verified.",

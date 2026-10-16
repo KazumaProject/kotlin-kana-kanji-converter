@@ -2037,7 +2037,21 @@
           ]
         ]
       }
-    ]
+    ],
+    "lunaReclassification": {
+      "path": "src/main/classification/luna-reclassification/results.jsonl.gz",
+      "snapshotManifestSha256": "cf2a4ad1fe62a168958371811a6a8bfe73ccb7868f2347b3aaf2160bd5da97bc",
+      "sha256": "339cd3676f2c8efbe050613cc2f90b717b6a4b048562a0d3be5b7fdb7f3fe95b",
+      "targetSha256": "a059b06f0a4d33809daf2844c742d45b790892b5e554c1ed726f54d0ecf131da",
+      "completedPairs": 332902,
+      "effectiveActions": {
+        "adopt": 321551,
+        "reject": 11351
+      },
+      "policy_version": "ime-adopt-reject-v1",
+      "model": "gpt-5.6-luna",
+      "reasoningEffort": "max"
+    }
   },
   "inputs": {
     "src/main/bin/names.txt": "5fadf8bc0d4f97411138d47cfa18464cfb1c885c889627afde0c53d5b9bc3de9",
@@ -2090,8 +2104,8 @@
   },
   "files": {
     "categories.json": "4fd9d1c05f21789bffe2622ec7269abaff8b7904d2ae2485e072a35df1d10556",
-    "distribution-candidates.tsv.gz": "8dbb6ecbe57750f50539d0cf84c46c5aa88444528f98d44c79f93d56552fbb9b",
-    "distribution-decisions.tsv.gz": "ed50bed5d013d639b97d5821f5c00d3bee753fd0c2761df0e995f4309532ec1c"
+    "distribution-candidates.tsv.gz": "b7613d16c1db378fbafff5351082d5866779c3863fe3fbc7d34ea609292af3e3",
+    "distribution-decisions.tsv.gz": "20aec1771a1ae5dce99465c8c96ecedff1c4e27a54ca9d7316d75867c47c0764"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "sourceRows": {
@@ -2103,51 +2117,51 @@
     "term_additions": 1
   },
   "admittedPairsByOrigin": {
+    "manual": 385598,
     "gemini": 183853,
-    "manual": 64047,
     "verified": 174253
   },
-  "uniqueAdmittedPairs": 422153,
-  "excludedCandidatePairs": 317558,
-  "excludedClassifiedPairs": 311833,
-  "unclassifiedPairs": 10730,
-  "noResultPairs": 52467,
+  "uniqueAdmittedPairs": 743704,
+  "excludedCandidatePairs": 328909,
+  "excludedClassifiedPairs": 323184,
+  "unclassifiedPairs": 0,
+  "noResultPairs": 0,
   "conflicts": {
     "verified_over_gemini": 30,
     "manual_over_gemini": 4321,
     "verified_over_manual": 8
   },
   "categoryRows": {
-    "person": 50627,
-    "character": 5342,
-    "mythological_figure": 2687,
-    "place": 36859,
-    "address": 152177,
-    "station": 6313,
-    "facility": 22165,
-    "transport_route": 2487,
-    "organization": 29555,
-    "lineage": 1773,
-    "product": 8384,
-    "vehicle": 2101,
-    "event": 6613,
-    "award": 636,
-    "agreement": 380,
-    "initiative": 943,
-    "term": 90522,
-    "work_franchise": 670,
-    "work_manga": 1033,
-    "work_anime": 659,
-    "work_film": 1448,
-    "work_program": 1854,
-    "work_book": 3843,
-    "work_game": 1406,
-    "work_music": 2047,
-    "work_stage": 397,
-    "work_periodical": 958,
-    "work_other": 1621
+    "person": 268795,
+    "character": 6871,
+    "mythological_figure": 3436,
+    "place": 45089,
+    "address": 152874,
+    "station": 12758,
+    "facility": 35069,
+    "transport_route": 4231,
+    "organization": 47486,
+    "lineage": 2019,
+    "product": 9883,
+    "vehicle": 2579,
+    "event": 8717,
+    "award": 1167,
+    "agreement": 425,
+    "initiative": 1072,
+    "term": 108618,
+    "work_franchise": 849,
+    "work_manga": 5144,
+    "work_anime": 1104,
+    "work_film": 6510,
+    "work_program": 9313,
+    "work_book": 7667,
+    "work_game": 3151,
+    "work_music": 10338,
+    "work_stage": 575,
+    "work_periodical": 1812,
+    "work_other": 2685
   },
-  "dictionaryRows": 435500,
+  "dictionaryRows": 760237,
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified."
   ]

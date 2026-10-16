@@ -143,11 +143,13 @@ def update_manifest(root, manifest, decisions, rows, selected):
         manifest['inputs'].pop(relative, None)
     manifest['provenance']['reviews'] = selected
     manifest['inputs'].update({path: d.sha(root / path) for path in selected})
-    manifest['provenance'].setdefault('reviewBaseExcludedCandidatePairs', manifest['excludedCandidatePairs'])
+    luna_exclusions = manifest['provenance'].get('lunaReclassification', {}).get('effectiveActions', {}).get('reject', 0)
+    manifest['provenance'].setdefault('reviewBaseExcludedCandidatePairs', manifest['excludedCandidatePairs'] - luna_exclusions)
     entries = load(root, selected)
-    new_exclusions = sum(entry['action'] in ('hold', 'exclude') and
-                         (entry['baseline'] is None or entry['baseline'][4] != 'excluded') for entry in entries.values())
-    manifest['excludedCandidatePairs'] = manifest['provenance']['reviewBaseExcludedCandidatePairs'] + new_exclusions
+    new_exclusions = sum(int(entry['action'] in ('hold', 'exclude')) -
+                         int(entry['baseline'] is not None and entry['baseline'][4] == 'excluded')
+                         for entry in entries.values())
+    manifest['excludedCandidatePairs'] = manifest['provenance']['reviewBaseExcludedCandidatePairs'] + new_exclusions + luna_exclusions
     origins = collections.Counter(row[3] for row in decisions.values() if row[4] == 'classified')
     counts = collections.Counter(row[0] for row in rows)
     manifest.update(admittedPairsByOrigin=dict(origins), uniqueAdmittedPairs=sum(origins.values()),
@@ -212,6 +214,9 @@ def _apply_saved(root, commit=False):
         for relative in [*manifest['inputs'], 'src/main/resources/id.def', str(DIRECTORY / 'categories.json')]:
             target = staging / relative; target.parent.mkdir(parents=True, exist_ok=True)
             target.symlink_to(root / relative)
+        # The original snapshot and result ledger are also required by offline verification.
+        if 'lunaReclassification' in manifest['provenance']:
+            (staged / 'luna-reclassification').symlink_to(directory / 'luna-reclassification', target_is_directory=True)
         d.write_gzip(staged / 'distribution-decisions.tsv.gz', (reviewed[p] for p in sorted(reviewed)))
         d.write_gzip(staged / 'distribution-candidates.tsv.gz', sorted(rows))
         for name in manifest['files']:

@@ -22,6 +22,75 @@ def code(value):
     return '<code>' + html.escape(value).replace('|', '&#124;') + '</code>'
 
 
+def generate_excluded(root, output, manifest):
+    """Publish frozen exclusions with saved reasons, without inventing evidence."""
+    source = root / 'src/main/classification'
+    excluded = {}
+    with gzip.open(source / 'distribution-decisions.tsv.gz', 'rt', encoding='utf-8') as stream:
+        for line in stream:
+            reading, surface, categories, origin, status = line.rstrip('\n').split('\t')
+            if status == 'excluded':
+                excluded[(reading, surface)] = [categories, ORIGINS.get(origin, origin), '理由の記録なし', '固定判断']
+    ledger = manifest.get('provenance', {}).get('lunaReclassification')
+    if ledger:
+        with gzip.open(root / ledger['path'], 'rt', encoding='utf-8') as stream:
+            for line in stream:
+                entry = json.loads(line)
+                pair = entry['response']['reading'], entry['response']['surface']
+                if pair in excluded and entry['effective_action'] == 'reject':
+                    excluded[pair][2:] = [entry['effective_reason'], 'PR #141・Luna Max（暫定）']
+    for relative in manifest.get('provenance', {}).get('reviews', []):
+        with (root / relative).open(encoding='utf-8') as stream:
+            for line in stream:
+                entry = json.loads(line)
+                pair = entry['reading'], entry['surface']
+                if pair in excluded and entry['action'] in ('exclude', 'hold'):
+                    kind = entry.get('evidence', {}).get('kind')
+                    basis = {'user_confirmation': 'ユーザー明示判断', 'model_review': 'Luna Max（暫定）',
+                             'independent_source': '独立資料'}.get(kind, '保存済みレビュー')
+                    excluded[pair][2:] = [entry['reason'], basis]
+    directory = output / 'excluded'
+    directory.mkdir()
+    pages, page, size = [], [], 0
+    def flush():
+        nonlocal page, size
+        if not page: return
+        filename = f'page-{len(pages)+1:04d}.md'
+        pages.append((filename, page[0][0], page[-1][0]))
+        (directory / filename).write_text(''.join(line for _, line in page), encoding='utf-8')
+        page, size = [], 0
+    for (reading, surface), (categories, origin, reason, basis) in sorted(excluded.items()):
+        line = '| ' + ' | '.join(code(value.replace('\n', ' ').replace('\r', ' '))
+                                for value in (reading, surface, categories, origin, reason, basis)) + ' |\n'
+        length = len(line.encode('utf-8'))
+        if page and (len(page) >= MAX_ROWS or size + length > MAX_BYTES): flush()
+        page.append((reading, line)); size += length
+    flush()
+    for index, (filename, _, _) in enumerate(pages):
+        navigation = ['[不採用の目次](index.md)', '[採用語の一覧](../index.md)']
+        if index: navigation.append(f'[前のページ]({pages[index-1][0]})')
+        if index+1 < len(pages): navigation.append(f'[次のページ]({pages[index+1][0]})')
+        nav = ' · '.join(navigation)
+        path = directory / filename
+        header = (f'# 不採用語 — {index+1}/{len(pages)}\n\n{nav}\n\n'
+                  '不採用は不存在・読み誤りの実証を意味しません。モデルの暫定判断やユーザー基準による除外を含みます。\n\n'
+                  '| 読み | 表記 | 保存カテゴリ（不採用） | 分類元 | 不採用理由 | 判断の根拠 |\n'
+                  '|---|---|---|---|---|---|\n')
+        path.write_text(header + path.read_text(encoding='utf-8') + '\n' + nav + '\n', encoding='utf-8')
+    links = '\n'.join(f'- [{i+1}ページ]({filename}): {code(first)} ～ {code(last)}'
+                      for i, (filename, first, last) in enumerate(pages))
+    (directory / 'index.md').write_text(
+        '# 不採用語と判断理由\n\n[採用語の一覧](../index.md)\n\n'
+        f'固定判断台帳で不採用になっている **{len(excluded):,}組**を、読み順で全件掲載しています。'
+        '同じ読み・表記は1回掲載し、保存済みの最終理由を表示します。\n\n'
+        'PR #141・#142の不採用判断を含みます。古い処理で除外され、固定判断台帳に読み・表記が残っていない候補は対象外です。'
+        '専門辞書の形式不正・既存辞書との重複による見送りは、この語彙判断の一覧には含みません。'
+        '不採用は不存在・読み誤りの実証を意味しません。\n\n'
+        + links + '\n\n'
+        f'判断台帳SHA-256: `{manifest["files"].get("distribution-decisions.tsv.gz", "未記録")}`\n', encoding='utf-8')
+    return dict(pairs=len(excluded), pages=len(pages))
+
+
 def generate(root, output):
     source = root / 'src/main/classification'
     manifest = json.loads((source / 'distribution-manifest.json').read_text())
@@ -129,7 +198,7 @@ def generate(root, output):
         '複数カテゴリへの所属があるため、カテゴリ別の組数の合計は全体の組数と一致しません。\n\n'
         '一覧は配布対象の固定データから全件生成しています。Geminiとassistantの暫定分類・未確認の読みを含みます。'
         '既存28カテゴリのコストと品詞は元辞書の値です。漢方・医療は提供元の読みと空欄へのGemini推定読み（未確認）を採用し、品詞とコストを本プロジェクトで設定しています。分類取得失敗・未分類・除外候補はこの一覧には含めません。\n\n'
-        '[品詞IDと品詞名](pos.md) · [生成・配布手順](../classified-dictionary-distribution.md) · [漢方・医療の出典記録](../specialist-dictionaries.md)\n\n'
+        '[不採用語と判断理由](excluded/index.md) · [品詞IDと品詞名](pos.md) · [生成・配布手順](../classified-dictionary-distribution.md) · [漢方・医療の出典記録](../specialist-dictionaries.md)\n\n'
         + '\n'.join(table) + '\n\n'
         f'元データSHA-256: `{manifest["files"]["distribution-candidates.tsv.gz"]}`\n\n'
         '再生成: `python3 scripts/write_classified_dictionary_catalog.py`\n'
@@ -141,6 +210,7 @@ def generate(root, output):
     (output / 'pos.md').write_text('\n'.join(pos) + '\n', encoding='utf-8')
     result = dict(schemaVersion=1, inputSha256=manifest['files']['distribution-candidates.tsv.gz'],
                   uniquePairs=manifest['uniqueAdmittedPairs'], records=manifest['dictionaryRows'], categories=summary)
+    result['excluded'] = generate_excluded(root, output, manifest)
     if specialist_file.exists(): result['specialistInputSha256'] = extra['files']['distribution-candidates.tsv.gz']
     (output / 'summary.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     if sum(c['records'] for c in summary) != manifest['dictionaryRows']:
