@@ -1,369 +1,368 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "769a601735284d6361e2da0f4305c73b6ec2637839afea6ad9efbdbc34473ae6",
-  "uniquePairs": 827270,
-  "records": 861052,
+  "inputSha256": "8dbb6ecbe57750f50539d0cf84c46c5aa88444528f98d44c79f93d56552fbb9b",
+  "uniquePairs": 515440,
+  "records": 528787,
   "categories": [
     {
       "id": "person",
       "name": "人物・人名",
-      "pairs": 270886,
-      "readings": 201554,
-      "records": 277027,
-      "pages": 185,
+      "pairs": 49666,
+      "readings": 43784,
+      "records": 50627,
+      "pages": 34,
       "recordsByOrigin": {
-        "gemini": 210841,
-        "verified": 64141,
-        "manual": 2045
+        "gemini": 25575,
+        "verified": 24053,
+        "manual": 999
       }
     },
     {
       "id": "character",
       "name": "架空キャラクター",
-      "pairs": 8802,
-      "readings": 8653,
-      "records": 8871,
-      "pages": 6,
+      "pairs": 5281,
+      "readings": 5232,
+      "records": 5342,
+      "pages": 4,
       "recordsByOrigin": {
-        "gemini": 8758,
-        "manual": 74,
-        "verified": 39
+        "manual": 2454,
+        "gemini": 2859,
+        "verified": 29
       }
     },
     {
       "id": "mythological_figure",
       "name": "神話・伝承の存在",
-      "pairs": 3629,
-      "readings": 3447,
-      "records": 3629,
-      "pages": 3,
+      "pairs": 2686,
+      "readings": 2510,
+      "records": 2687,
+      "pages": 2,
       "recordsByOrigin": {
-        "gemini": 3469,
-        "manual": 30,
-        "verified": 130
+        "manual": 818,
+        "gemini": 1771,
+        "verified": 98
       }
     },
     {
       "id": "place",
       "name": "地名",
-      "pairs": 78941,
-      "readings": 76456,
-      "records": 85399,
-      "pages": 57,
+      "pairs": 35160,
+      "readings": 33545,
+      "records": 36859,
+      "pages": 25,
       "recordsByOrigin": {
-        "gemini": 24811,
-        "verified": 60321,
-        "manual": 267
+        "gemini": 15893,
+        "verified": 16105,
+        "manual": 4861
       }
     },
     {
       "id": "address",
       "name": "住所",
-      "pairs": 121789,
-      "readings": 121672,
-      "records": 122248,
-      "pages": 94,
+      "pairs": 147915,
+      "readings": 147445,
+      "records": 152177,
+      "pages": 116,
       "recordsByOrigin": {
-        "gemini": 7856,
-        "verified": 114358,
-        "manual": 34
+        "gemini": 5478,
+        "verified": 112814,
+        "manual": 33885
       }
     },
     {
       "id": "station",
       "name": "駅・停留所",
-      "pairs": 6816,
-      "readings": 6732,
-      "records": 6816,
+      "pairs": 6311,
+      "readings": 6245,
+      "records": 6313,
       "pages": 5,
       "recordsByOrigin": {
-        "verified": 5068,
-        "gemini": 1733,
-        "manual": 15
+        "verified": 4900,
+        "gemini": 1116,
+        "manual": 297
       }
     },
     {
       "id": "facility",
       "name": "施設",
-      "pairs": 28668,
-      "readings": 27191,
-      "records": 28669,
-      "pages": 20,
+      "pairs": 22158,
+      "readings": 21068,
+      "records": 22165,
+      "pages": 16,
       "recordsByOrigin": {
-        "gemini": 26281,
-        "verified": 2165,
-        "manual": 223
+        "gemini": 17227,
+        "manual": 3344,
+        "verified": 1594
       }
     },
     {
       "id": "transport_route",
       "name": "交通路線",
-      "pairs": 3211,
-      "readings": 3182,
-      "records": 3211,
-      "pages": 3,
+      "pairs": 2486,
+      "readings": 2463,
+      "records": 2487,
+      "pages": 2,
       "recordsByOrigin": {
-        "gemini": 3083,
-        "verified": 112,
-        "manual": 16
+        "manual": 589,
+        "gemini": 1827,
+        "verified": 71
       }
     },
     {
       "id": "organization",
       "name": "組織",
-      "pairs": 47116,
-      "readings": 46162,
-      "records": 47184,
-      "pages": 33,
+      "pairs": 29499,
+      "readings": 29063,
+      "records": 29555,
+      "pages": 21,
       "recordsByOrigin": {
-        "gemini": 45090,
-        "manual": 418,
-        "verified": 1676
+        "gemini": 24630,
+        "manual": 3470,
+        "verified": 1455
       }
     },
     {
       "id": "lineage",
       "name": "家系・氏族",
-      "pairs": 2986,
-      "readings": 2940,
-      "records": 2986,
+      "pairs": 1773,
+      "readings": 1739,
+      "records": 1773,
       "pages": 2,
       "recordsByOrigin": {
-        "gemini": 2953,
-        "manual": 32,
+        "gemini": 1530,
+        "manual": 242,
         "verified": 1
       }
     },
     {
       "id": "product",
       "name": "商品・サービス",
-      "pairs": 13626,
-      "readings": 13389,
-      "records": 13629,
-      "pages": 10,
+      "pairs": 8382,
+      "readings": 8209,
+      "records": 8384,
+      "pages": 6,
       "recordsByOrigin": {
-        "gemini": 13499,
-        "manual": 71,
-        "verified": 59
+        "gemini": 5930,
+        "manual": 2430,
+        "verified": 24
       }
     },
     {
       "id": "vehicle",
       "name": "車両・船舶",
-      "pairs": 3403,
-      "readings": 3376,
-      "records": 3403,
-      "pages": 3,
+      "pairs": 2101,
+      "readings": 2076,
+      "records": 2101,
+      "pages": 2,
       "recordsByOrigin": {
-        "gemini": 3377,
-        "verified": 7,
-        "manual": 19
+        "gemini": 1803,
+        "manual": 291,
+        "verified": 7
       }
     },
     {
       "id": "event",
       "name": "イベント・事件",
-      "pairs": 9953,
-      "readings": 9832,
-      "records": 9955,
-      "pages": 7,
+      "pairs": 6613,
+      "readings": 6533,
+      "records": 6613,
+      "pages": 5,
       "recordsByOrigin": {
-        "gemini": 9809,
-        "verified": 71,
-        "manual": 75
+        "gemini": 5761,
+        "manual": 794,
+        "verified": 58
       }
     },
     {
       "id": "award",
       "name": "賞",
-      "pairs": 1004,
-      "readings": 988,
-      "records": 1004,
+      "pairs": 636,
+      "readings": 626,
+      "records": 636,
       "pages": 1,
       "recordsByOrigin": {
-        "gemini": 976,
-        "manual": 5,
+        "manual": 85,
+        "gemini": 528,
         "verified": 23
       }
     },
     {
       "id": "agreement",
       "name": "条約・協定",
-      "pairs": 1744,
-      "readings": 1734,
-      "records": 1744,
-      "pages": 2,
+      "pairs": 380,
+      "readings": 377,
+      "records": 380,
+      "pages": 1,
       "recordsByOrigin": {
-        "gemini": 1739,
-        "manual": 5
+        "gemini": 325,
+        "manual": 55
       }
     },
     {
       "id": "initiative",
       "name": "事業・キャンペーン",
-      "pairs": 1540,
-      "readings": 1528,
-      "records": 1540,
-      "pages": 2,
+      "pairs": 943,
+      "readings": 937,
+      "records": 943,
+      "pages": 1,
       "recordsByOrigin": {
-        "gemini": 1535,
-        "manual": 5
+        "manual": 423,
+        "gemini": 520
       }
     },
     {
       "id": "term",
       "name": "一般語・専門用語",
-      "pairs": 127736,
-      "readings": 123071,
-      "records": 127770,
-      "pages": 86,
+      "pairs": 90500,
+      "readings": 87129,
+      "records": 90522,
+      "pages": 61,
       "recordsByOrigin": {
-        "gemini": 110874,
-        "verified": 15984,
-        "manual": 912
+        "gemini": 67258,
+        "verified": 14579,
+        "manual": 8685
       }
     },
     {
       "id": "work_franchise",
       "name": "作品シリーズ",
-      "pairs": 270,
-      "readings": 267,
-      "records": 270,
+      "pairs": 670,
+      "readings": 663,
+      "records": 670,
       "pages": 1,
       "recordsByOrigin": {
-        "gemini": 268,
-        "manual": 1,
-        "verified": 1
+        "manual": 546,
+        "gemini": 124
       }
     },
     {
       "id": "work_manga",
       "name": "漫画作品",
-      "pairs": 1003,
-      "readings": 987,
-      "records": 1003,
+      "pairs": 1032,
+      "readings": 1021,
+      "records": 1033,
       "pages": 1,
       "recordsByOrigin": {
-        "gemini": 845,
-        "verified": 145,
-        "manual": 13
+        "manual": 484,
+        "verified": 116,
+        "gemini": 433
       }
     },
     {
       "id": "work_anime",
       "name": "アニメ作品",
-      "pairs": 642,
-      "readings": 628,
-      "records": 642,
+      "pairs": 659,
+      "readings": 649,
+      "records": 659,
       "pages": 1,
       "recordsByOrigin": {
-        "gemini": 622,
-        "manual": 12,
-        "verified": 8
+        "manual": 322,
+        "gemini": 330,
+        "verified": 7
       }
     },
     {
       "id": "work_film",
       "name": "映画作品",
-      "pairs": 1179,
-      "readings": 1170,
-      "records": 1180,
-      "pages": 1,
+      "pairs": 1448,
+      "readings": 1439,
+      "records": 1448,
+      "pages": 2,
       "recordsByOrigin": {
-        "gemini": 1018,
-        "verified": 141,
-        "manual": 21
+        "manual": 725,
+        "gemini": 603,
+        "verified": 120
       }
     },
     {
       "id": "work_program",
       "name": "番組",
-      "pairs": 2380,
-      "readings": 2341,
-      "records": 2381,
+      "pairs": 1854,
+      "readings": 1842,
+      "records": 1854,
       "pages": 2,
       "recordsByOrigin": {
-        "gemini": 2131,
-        "verified": 228,
-        "manual": 22
+        "gemini": 1161,
+        "manual": 541,
+        "verified": 152
       }
     },
     {
       "id": "work_book",
       "name": "書籍作品",
-      "pairs": 5352,
-      "readings": 5307,
-      "records": 5353,
-      "pages": 4,
+      "pairs": 3843,
+      "readings": 3816,
+      "records": 3843,
+      "pages": 3,
       "recordsByOrigin": {
-        "gemini": 5183,
-        "manual": 32,
-        "verified": 138
+        "gemini": 2613,
+        "manual": 1143,
+        "verified": 87
       }
     },
     {
       "id": "work_game",
       "name": "ゲーム作品",
-      "pairs": 1506,
-      "readings": 1450,
-      "records": 1506,
-      "pages": 2,
+      "pairs": 1406,
+      "readings": 1357,
+      "records": 1406,
+      "pages": 1,
       "recordsByOrigin": {
-        "gemini": 1437,
-        "verified": 55,
-        "manual": 14
+        "gemini": 1006,
+        "manual": 359,
+        "verified": 41
       }
     },
     {
       "id": "work_music",
       "name": "音楽作品",
-      "pairs": 3785,
-      "readings": 3726,
-      "records": 3789,
-      "pages": 3,
+      "pairs": 2047,
+      "readings": 2016,
+      "records": 2047,
+      "pages": 2,
       "recordsByOrigin": {
-        "gemini": 3462,
-        "verified": 306,
-        "manual": 21
+        "gemini": 1394,
+        "manual": 497,
+        "verified": 156
       }
     },
     {
       "id": "work_stage",
       "name": "舞台作品",
-      "pairs": 354,
-      "readings": 352,
-      "records": 354,
+      "pairs": 397,
+      "readings": 391,
+      "records": 397,
       "pages": 1,
       "recordsByOrigin": {
-        "gemini": 342,
-        "manual": 10,
-        "verified": 2
+        "gemini": 160,
+        "manual": 236,
+        "verified": 1
       }
     },
     {
       "id": "work_periodical",
       "name": "定期刊行物",
-      "pairs": 1028,
-      "readings": 1006,
-      "records": 1029,
+      "pairs": 957,
+      "readings": 939,
+      "records": 958,
       "pages": 1,
       "recordsByOrigin": {
-        "gemini": 990,
-        "verified": 31,
-        "manual": 8
+        "gemini": 655,
+        "verified": 29,
+        "manual": 274
       }
     },
     {
       "id": "work_other",
       "name": "媒体未特定の作品・美術作品",
-      "pairs": 5168,
-      "readings": 5141,
-      "records": 5173,
-      "pages": 4,
+      "pairs": 1621,
+      "readings": 1613,
+      "records": 1621,
+      "pages": 2,
       "recordsByOrigin": {
-        "gemini": 4940,
-        "verified": 213,
-        "manual": 20
+        "manual": 1179,
+        "gemini": 400,
+        "verified": 42
       }
     },
     {

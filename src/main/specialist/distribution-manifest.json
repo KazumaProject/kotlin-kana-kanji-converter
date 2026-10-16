@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "rules": {
-    "version": 2,
+    "version": 3,
     "key": "normalized_reading+NFC_surface",
     "reading": "trim,NFKC,katakana-to-hiragana",
     "surface": "trim,NFC; internal spaces/case/width/variants preserved",
@@ -14,7 +14,8 @@
     "pos": "名詞,一般,*,*,*,*,*",
     "readingAccuracy": "upstream automatic readings and optional Gemini inference; not independently verified",
     "supplement": "manbyo missing readings only; source row and original surface must match",
-    "kanaSurface": "must equal the current TokenArray sentinel reconstruction"
+    "kanaSurface": "must equal the current TokenArray sentinel reconstruction",
+    "classificationExclusions": "withhold pairs excluded by the classified dictionary review"
   },
   "inputs": {
     "src/main/specialist/notices/CC-BY-4.0.txt": "ae65546dff434288761879ba1cf7868fbaee47d62c92bdd795e31830647507f8",
@@ -23,6 +24,7 @@
     "src/main/specialist/notices/kampo_core.txt": "7ca7047eedec76c3a98913dc932487aee1b89c2604842db3f5e961e4c85c4496",
     "src/main/specialist/notices/kampo_herb.txt": "7ca7047eedec76c3a98913dc932487aee1b89c2604842db3f5e961e4c85c4496",
     "src/main/specialist/notices/manbyo.txt": "2ffeab722ef92e8fa0feb0df08b273e4c7522aa948052ce03a269a7475992934",
+    "src/main/classification/distribution-decisions.tsv.gz": "ed50bed5d013d639b97d5821f5c00d3bee753fd0c2761df0e995f4309532ec1c",
     "src/main/specialist/gemini-readings.jsonl.gz": "04516a0f6b282cbac9bb0325d2f864db5f84829d4c5764e846d6411bc46eb9ec",
     "src/main/specialist/gemini-run.json": "91b4925e86a3635ed342e28861be54fe7e03f72505628de41df4b48efa6a80fb",
     "src/main/specialist/categories.json": "d03ce6563d7439cbcdcdaabf8df2529f507b2ce12abedb75e0ec1167704a0a25",
@@ -33,7 +35,7 @@
     "src/main/specialist/sources/manbyo.jsonl.gz": "acf4105c8bfff7d7278fb9d2298481b3dae2d6b58eda824f31b3345e6aea9492"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
-  "existingInventorySha256": "2f113174ac818851dca9dcfbdda16d25bb934786b810c4a47be0b56ad3275d31",
+  "existingInventorySha256": "b1216ea494da2515b5d579605fe14457c690ed037ecb09652967bcaef05ba086",
   "existingDictionaryIds": [
     "categories/address",
     "categories/agreement",
@@ -72,7 +74,7 @@
     "symbol",
     "system"
   ],
-  "existingUniquePairs": 1850328,
+  "existingUniquePairs": 1539973,
   "sourceRows": {
     "kampo_core": {
       "rows": 1581,
@@ -94,7 +96,8 @@
       "dispositions": {
         "adopted": 20691,
         "cross_category_duplicate": 114,
-        "existing_duplicate": 2705,
+        "excluded_by_classification_review": 54,
+        "existing_duplicate": 2651,
         "non_kana_reading": 16090,
         "unsupported_kana_surface": 16
       }
@@ -103,7 +106,8 @@
       "rows": 380300,
       "dispositions": {
         "adopted": 72156,
-        "existing_duplicate": 3009,
+        "excluded_by_classification_review": 8,
+        "existing_duplicate": 3001,
         "missing_or_placeholder": 304064,
         "non_kana_reading": 1060,
         "source_duplicate": 8,
@@ -114,7 +118,8 @@
   "dispositions": {
     "adopted": 93287,
     "cross_category_duplicate": 114,
-    "existing_duplicate": 6353,
+    "excluded_by_classification_review": 62,
+    "existing_duplicate": 6291,
     "missing_or_placeholder": 304064,
     "non_kana_reading": 17150,
     "source_duplicate": 788,
@@ -132,7 +137,7 @@
   },
   "files": {
     "distribution-candidates.tsv.gz": "f67faa8ebe67f691300ff99da4b301585090992b328bfdf7dd76af150347a3e7",
-    "provenance.jsonl.gz": "29910e7fbeea3c5f93a379558ec4a8208b75f0426c0386fd8f43674ac06a3b0a"
+    "provenance.jsonl.gz": "3b61c3010e70a0038983301269ffe39853cb6d0ff4ddf1d1b7a61f8b70f70a21"
   },
   "limitations": [
     "Upstream readings include automatic readings; Gemini supplements are inferred. Neither is independently verified.",

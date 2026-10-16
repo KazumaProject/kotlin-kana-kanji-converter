@@ -1,9 +1,10 @@
-"""Persistent, offline review overlays. No model calls or inferred evidence."""
+"""Persistent, offline review overlays; model judgments remain manual, not verified."""
 import collections
 import contextlib
 import fcntl
 import gzip
 import json
+import re
 from pathlib import Path
 
 DIRECTORY = Path('src/main/classification')
@@ -57,13 +58,27 @@ def load(root, selected=None):
                 if (record['left_id'] not in ids or record['right_id'] not in ids
                         or not -32768 <= record['cost'] <= 32767):
                     raise ValueError('Invalid review POS/cost')
+            evidence = entry.get('evidence', {})
+            if evidence.get('kind') == 'model_review':
+                if (action not in ('exclude', 'reclassify') or baseline is None
+                        or baseline[4] != 'classified' or record is not None
+                        or action == 'exclude' and entry.get('categories')):
+                    raise ValueError('Model reviews only exclude or reclassify existing admitted pairs')
+                if (evidence.get('model') != 'gpt-5.6-luna'
+                        or evidence.get('reasoning_effort') != 'max'
+                        or evidence.get('target_revision') != '8ec94757d48d58ac6a5ca2c3baccfcbb48d45003'
+                        or not isinstance(evidence.get('response_sha256'), str)
+                        or not re.fullmatch('[0-9a-f]{64}', evidence['response_sha256'])
+                        or evidence.get('reading') != pair[0] or evidence.get('surface') != pair[1]
+                        or evidence.get('categories') != entry.get('categories', [])
+                        or not isinstance(evidence.get('reference'), str) or not evidence['reference']):
+                    raise ValueError('Invalid model review provenance')
             if action in ('keep', 'reclassify', 'add'):
                 cats = entry.get('categories')
                 if not isinstance(cats, list) or not cats or len(set(cats)) != len(cats) or not set(cats) <= allowed:
                     raise ValueError('Invalid review categories')
-                evidence = entry.get('evidence', {})
-                if evidence.get('kind') not in ('user_confirmation', 'independent_source'):
-                    raise ValueError('Restoration requires evidence, not model inference')
+                if evidence.get('kind') not in ('user_confirmation', 'independent_source', 'model_review'):
+                    raise ValueError('Review requires an identified evidence kind')
                 if (evidence.get('reading') != pair[0] or evidence.get('surface') != pair[1]
                         or evidence.get('categories') != cats or not evidence.get('reference')):
                     raise ValueError('Review evidence must identify the reading, surface and categories')
@@ -80,7 +95,9 @@ def apply(decisions, entries, validate_baseline=True):
             raise ValueError(f'Review baseline differs from input: {pair}')
         baseline = entry['baseline']
         if entry['action'] in ('hold', 'exclude'):
-            result[pair] = [*pair, baseline[2] if baseline else '', baseline[3] if baseline else 'manual', 'excluded']
+            origin = ('manual' if entry.get('evidence', {}).get('kind') == 'model_review'
+                      else baseline[3] if baseline else 'manual')
+            result[pair] = [*pair, baseline[2] if baseline else '', origin, 'excluded']
         else:
             cats = ','.join(sorted(entry['categories']))
             origin = 'verified' if entry['evidence']['kind'] == 'independent_source' else 'manual'
