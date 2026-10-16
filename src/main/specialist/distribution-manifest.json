@@ -33,7 +33,7 @@
     "src/main/specialist/sources/manbyo.jsonl.gz": "acf4105c8bfff7d7278fb9d2298481b3dae2d6b58eda824f31b3345e6aea9492"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
-  "existingInventorySha256": "5ad6ef41ea84dce98a2990316d9873a4f4c691c1b288e84fbe3659424a35f173",
+  "existingInventorySha256": "f75264464a9510e91f7452626c0fef7efe3db458e7272f722366dd4249c4a075",
   "existingDictionaryIds": [
     "categories/address",
     "categories/agreement",
@@ -72,29 +72,29 @@
     "symbol",
     "system"
   ],
-  "existingUniquePairs": 1850329,
+  "existingUniquePairs": 2170921,
   "sourceRows": {
     "kampo_core": {
       "rows": 1581,
       "dispositions": {
-        "adopted": 257,
-        "existing_duplicate": 544,
-        "source_duplicate": 780
+        "adopted": 250,
+        "existing_duplicate": 591,
+        "source_duplicate": 740
       }
     },
     "kampo_herb": {
       "rows": 278,
       "dispositions": {
-        "adopted": 183,
-        "existing_duplicate": 95
+        "adopted": 182,
+        "existing_duplicate": 96
       }
     },
     "hyakuyaku": {
       "rows": 39616,
       "dispositions": {
-        "adopted": 20691,
-        "cross_category_duplicate": 114,
-        "existing_duplicate": 2705,
+        "adopted": 20662,
+        "cross_category_duplicate": 106,
+        "existing_duplicate": 2742,
         "non_kana_reading": 16090,
         "unsupported_kana_surface": 16
       }
@@ -102,8 +102,8 @@
     "manbyo": {
       "rows": 380300,
       "dispositions": {
-        "adopted": 72156,
-        "existing_duplicate": 3009,
+        "adopted": 72030,
+        "existing_duplicate": 3135,
         "missing_or_placeholder": 304064,
         "non_kana_reading": 1060,
         "source_duplicate": 8,
@@ -112,27 +112,27 @@
     }
   },
   "dispositions": {
-    "adopted": 93287,
-    "cross_category_duplicate": 114,
-    "existing_duplicate": 6353,
+    "adopted": 93124,
+    "cross_category_duplicate": 106,
+    "existing_duplicate": 6564,
     "missing_or_placeholder": 304064,
     "non_kana_reading": 17150,
-    "source_duplicate": 788,
+    "source_duplicate": 748,
     "unsupported_kana_surface": 19
   },
   "categoryRows": {
-    "kampo": 440,
-    "medical": 92847
+    "kampo": 432,
+    "medical": 92692
   },
-  "dictionaryRows": 93287,
-  "uniqueAdmittedPairs": 93287,
+  "dictionaryRows": 93124,
+  "uniqueAdmittedPairs": 93124,
   "readingOrigins": {
-    "gemini_inferred_unverified": 2006,
-    "upstream_unverified": 91281
+    "gemini_inferred_unverified": 2003,
+    "upstream_unverified": 91121
   },
   "files": {
-    "distribution-candidates.tsv.gz": "f67faa8ebe67f691300ff99da4b301585090992b328bfdf7dd76af150347a3e7",
-    "provenance.jsonl.gz": "29910e7fbeea3c5f93a379558ec4a8208b75f0426c0386fd8f43674ac06a3b0a"
+    "distribution-candidates.tsv.gz": "5a58d0b3fe50c0228ae7ee7491c23b9c040a0fa376e8d360c2b4900f66d7af0e",
+    "provenance.jsonl.gz": "cc278186c2b24ee58e5129665538d70bc29b8049d0dacc75cc8077e236561b87"
   },
   "limitations": [
     "Upstream readings include automatic readings; Gemini supplements are inferred. Neither is independently verified.",

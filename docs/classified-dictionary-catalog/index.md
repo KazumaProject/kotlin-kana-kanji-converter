@@ -1,6 +1,6 @@
 # 分類辞書の収録一覧
 
-30カテゴリ、全体で **827,271組**、カテゴリ別に **861,053レコード**を収録しています。
+30カテゴリ、全体で **1,148,659組**、カテゴリ別に **1,185,627レコード**を収録しています。
 
 「組」は読み・表記の重複を除いた件数、「レコード」は品詞・コストの違いも保持したバイナリへの収録件数です。複数カテゴリへの所属があるため、カテゴリ別の組数の合計は全体の組数と一致しません。
 
@@ -10,38 +10,38 @@
 
 | カテゴリ | 読み・表記の組 | 読み数 | レコード数 |
 |---|---:|---:|---:|
-| [人物・人名](person/index.md) | 270,887 | 201,555 | 277,028 |
-| [架空キャラクター](character/index.md) | 8,801 | 8,652 | 8,870 |
-| [神話・伝承の存在](mythological_figure/index.md) | 3,629 | 3,447 | 3,629 |
-| [地名](place/index.md) | 78,941 | 76,456 | 85,399 |
-| [住所](address/index.md) | 121,789 | 121,672 | 122,248 |
-| [駅・停留所](station/index.md) | 6,816 | 6,732 | 6,816 |
-| [施設](facility/index.md) | 28,668 | 27,191 | 28,669 |
-| [交通路線](transport_route/index.md) | 3,211 | 3,182 | 3,211 |
-| [組織](organization/index.md) | 47,117 | 46,163 | 47,185 |
-| [家系・氏族](lineage/index.md) | 2,986 | 2,940 | 2,986 |
-| [商品・サービス](product/index.md) | 13,626 | 13,389 | 13,629 |
-| [車両・船舶](vehicle/index.md) | 3,403 | 3,376 | 3,403 |
-| [イベント・事件](event/index.md) | 9,953 | 9,832 | 9,955 |
-| [賞](award/index.md) | 1,004 | 988 | 1,004 |
-| [条約・協定](agreement/index.md) | 1,744 | 1,734 | 1,744 |
-| [事業・キャンペーン](initiative/index.md) | 1,540 | 1,528 | 1,540 |
-| [一般語・専門用語](term/index.md) | 127,736 | 123,071 | 127,770 |
-| [作品シリーズ](work_franchise/index.md) | 270 | 267 | 270 |
-| [漫画作品](work_manga/index.md) | 1,003 | 987 | 1,003 |
-| [アニメ作品](work_anime/index.md) | 642 | 628 | 642 |
-| [映画作品](work_film/index.md) | 1,179 | 1,170 | 1,180 |
-| [番組](work_program/index.md) | 2,380 | 2,341 | 2,381 |
-| [書籍作品](work_book/index.md) | 5,352 | 5,307 | 5,353 |
-| [ゲーム作品](work_game/index.md) | 1,506 | 1,450 | 1,506 |
-| [音楽作品](work_music/index.md) | 3,785 | 3,726 | 3,789 |
-| [舞台作品](work_stage/index.md) | 354 | 352 | 354 |
-| [定期刊行物](work_periodical/index.md) | 1,028 | 1,006 | 1,029 |
-| [媒体未特定の作品・美術作品](work_other/index.md) | 5,168 | 5,141 | 5,173 |
-| [漢方・生薬](kampo/index.md) | 440 | 426 | 440 |
-| [医療](medical/index.md) | 92,847 | 89,629 | 92,847 |
+| [人物・人名](person/index.md) | 488,068 | 380,631 | 495,196 |
+| [架空キャラクター](character/index.md) | 10,319 | 10,127 | 10,399 |
+| [神話・伝承の存在](mythological_figure/index.md) | 4,378 | 4,131 | 4,378 |
+| [地名](place/index.md) | 87,158 | 84,289 | 93,629 |
+| [住所](address/index.md) | 122,480 | 122,354 | 122,945 |
+| [駅・停留所](station/index.md) | 13,261 | 12,860 | 13,261 |
+| [施設](facility/index.md) | 41,572 | 39,511 | 41,573 |
+| [交通路線](transport_route/index.md) | 4,955 | 4,914 | 4,955 |
+| [組織](organization/index.md) | 65,025 | 63,565 | 65,116 |
+| [家系・氏族](lineage/index.md) | 3,232 | 3,175 | 3,232 |
+| [商品・サービス](product/index.md) | 15,125 | 14,841 | 15,128 |
+| [車両・船舶](vehicle/index.md) | 3,881 | 3,845 | 3,881 |
+| [イベント・事件](event/index.md) | 12,057 | 11,906 | 12,059 |
+| [賞](award/index.md) | 1,535 | 1,510 | 1,535 |
+| [条約・協定](agreement/index.md) | 1,789 | 1,778 | 1,789 |
+| [事業・キャンペーン](initiative/index.md) | 1,669 | 1,655 | 1,669 |
+| [一般語・専門用語](term/index.md) | 145,827 | 139,944 | 145,866 |
+| [作品シリーズ](work_franchise/index.md) | 449 | 445 | 449 |
+| [漫画作品](work_manga/index.md) | 5,114 | 5,066 | 5,114 |
+| [アニメ作品](work_anime/index.md) | 1,087 | 1,067 | 1,087 |
+| [映画作品](work_film/index.md) | 6,240 | 6,209 | 6,242 |
+| [番組](work_program/index.md) | 9,838 | 9,735 | 9,840 |
+| [書籍作品](work_book/index.md) | 9,175 | 9,100 | 9,177 |
+| [ゲーム作品](work_game/index.md) | 3,251 | 3,153 | 3,251 |
+| [音楽作品](work_music/index.md) | 12,073 | 11,870 | 12,080 |
+| [舞台作品](work_stage/index.md) | 532 | 528 | 532 |
+| [定期刊行物](work_periodical/index.md) | 1,882 | 1,832 | 1,883 |
+| [媒体未特定の作品・美術作品](work_other/index.md) | 6,231 | 6,198 | 6,237 |
+| [漢方・生薬](kampo/index.md) | 432 | 418 | 432 |
+| [医療](medical/index.md) | 92,692 | 89,492 | 92,692 |
 
-元データSHA-256: `299780b3e415150e264a5aa95c4f3b205ae0f13c16bd8cb229283761b333e4bf`
+元データSHA-256: `ce31cfde54948e715d1a92bff4ded7c28b92781d06151d4141cd0a58b8bee526`
 
 再生成: `python3 scripts/write_classified_dictionary_catalog.py`
 整合確認: `python3 scripts/write_classified_dictionary_catalog.py --check`

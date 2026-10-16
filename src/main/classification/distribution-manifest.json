@@ -1982,7 +1982,21 @@
         "addedRecords": 492,
         "addedSourceRows": 489
       }
-    ]
+    ],
+    "lunaReclassification": {
+      "path": "src/main/classification/luna-reclassification/results.jsonl.gz",
+      "snapshotManifestSha256": "a4b369df3704498c25243f278a9d385d1e8644f25a18664d588582c0f205ee03",
+      "sha256": "339cd3676f2c8efbe050613cc2f90b717b6a4b048562a0d3be5b7fdb7f3fe95b",
+      "targetSha256": "a059b06f0a4d33809daf2844c742d45b790892b5e554c1ed726f54d0ecf131da",
+      "completedPairs": 332902,
+      "effectiveActions": {
+        "adopt": 321551,
+        "reject": 11351
+      },
+      "policy_version": "ime-adopt-reject-v1",
+      "model": "gpt-5.6-luna",
+      "reasoningEffort": "max"
+    }
   },
   "inputs": {
     "src/main/bin/names.txt": "5fadf8bc0d4f97411138d47cfa18464cfb1c885c889627afde0c53d5b9bc3de9",
@@ -1994,8 +2008,8 @@
   },
   "files": {
     "categories.json": "4fd9d1c05f21789bffe2622ec7269abaff8b7904d2ae2485e072a35df1d10556",
-    "distribution-candidates.tsv.gz": "299780b3e415150e264a5aa95c4f3b205ae0f13c16bd8cb229283761b333e4bf",
-    "distribution-decisions.tsv.gz": "06f6f2d6cb74f1bbd9b766c578225fd6da37da768c1881e5694af06f11b5ba99"
+    "distribution-candidates.tsv.gz": "ce31cfde54948e715d1a92bff4ded7c28b92781d06151d4141cd0a58b8bee526",
+    "distribution-decisions.tsv.gz": "8b5a38ec76d00c0ec59be9aad0a51ae46060b4be617887a1b16829b66ae9cc89"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "sourceRows": {
@@ -2006,51 +2020,51 @@
     "web": 308185
   },
   "admittedPairsByOrigin": {
-    "verified": 257491,
+    "manual": 325879,
     "gemini": 472165,
-    "manual": 4328
+    "verified": 257491
   },
-  "uniqueAdmittedPairs": 733984,
-  "excludedCandidatePairs": 5725,
-  "excludedClassifiedPairs": 0,
-  "unclassifiedPairs": 10730,
-  "noResultPairs": 52467,
+  "uniqueAdmittedPairs": 1055535,
+  "excludedCandidatePairs": 17076,
+  "excludedClassifiedPairs": 11351,
+  "unclassifiedPairs": 0,
+  "noResultPairs": 0,
   "conflicts": {
     "verified_over_gemini": 30,
     "manual_over_gemini": 4321,
     "verified_over_manual": 8
   },
   "categoryRows": {
-    "person": 277028,
-    "character": 8870,
-    "mythological_figure": 3629,
-    "place": 85399,
-    "address": 122248,
-    "station": 6816,
-    "facility": 28669,
-    "transport_route": 3211,
-    "organization": 47185,
-    "lineage": 2986,
-    "product": 13629,
-    "vehicle": 3403,
-    "event": 9955,
-    "award": 1004,
-    "agreement": 1744,
-    "initiative": 1540,
-    "term": 127770,
-    "work_franchise": 270,
-    "work_manga": 1003,
-    "work_anime": 642,
-    "work_film": 1180,
-    "work_program": 2381,
-    "work_book": 5353,
-    "work_game": 1506,
-    "work_music": 3789,
-    "work_stage": 354,
-    "work_periodical": 1029,
-    "work_other": 5173
+    "person": 495196,
+    "character": 10399,
+    "mythological_figure": 4378,
+    "place": 93629,
+    "address": 122945,
+    "station": 13261,
+    "facility": 41573,
+    "transport_route": 4955,
+    "organization": 65116,
+    "lineage": 3232,
+    "product": 15128,
+    "vehicle": 3881,
+    "event": 12059,
+    "award": 1535,
+    "agreement": 1789,
+    "initiative": 1669,
+    "term": 145866,
+    "work_franchise": 449,
+    "work_manga": 5114,
+    "work_anime": 1087,
+    "work_film": 6242,
+    "work_program": 9840,
+    "work_book": 9177,
+    "work_game": 3251,
+    "work_music": 12080,
+    "work_stage": 532,
+    "work_periodical": 1883,
+    "work_other": 6237
   },
-  "dictionaryRows": 767766,
+  "dictionaryRows": 1092503,
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified."
   ]
