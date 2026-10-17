@@ -14,7 +14,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class StandaloneUnigramTest {
-    private val words = listOf("しろ", "ごと", "したい", "はいる", "みた", "なにか")
+    private val words = listOf("しろ", "ごと", "したい", "はいる", "みた", "なにか", "なら")
     private val rules = NgramSourceParser.parseUnigramDirectory(File("src/main/ngram-standalone-unigram"))
 
     private fun binary(version: Int = NgramEncoding.STANDALONE_UNIGRAM_VERSION): ByteArray {
@@ -29,20 +29,20 @@ class StandaloneUnigramTest {
     }
 
     @Test
-    fun separateAssetContainsExactlyTheSixRequestedWordsAndBuildsDeterministically() {
+    fun separateAssetContainsExactlyTheSevenRequestedWordsAndBuildsDeterministically() {
         assertEquals(words.toSet(), rules.map { (it.features.single() as NgramFeature.Word).value }.toSet())
         val bytes = binary()
         assertContentEquals(bytes, binary())
         SystemNgramBinaryReader(bytes).verify()
         val dictionary = PackedStandaloneUnigramDictionary.read(bytes)
-        assertEquals(6, dictionary.ruleCount)
+        assertEquals(7, dictionary.ruleCount)
         words.forEach {
             assertTrue(dictionary.mayMatchInput(it), it)
             assertTrue(dictionary.matches(it, listOf(node(it))), it)
         }
         assertFalse(dictionary.mayMatchInput("しろい"))
         assertFalse(dictionary.mayMatchInput("こと"))
-        assertFalse(dictionary.matches("なら", listOf(node("なら"))))
+        assertFalse(dictionary.mayMatchInput("ならい"))
         assertFailsWith<IllegalArgumentException> { PackedSystemUnigramDictionary.read(bytes) }
         assertFailsWith<IllegalArgumentException> { PackedSystemNgramDictionary.read(bytes) }
         assertFailsWith<IllegalArgumentException> { PackedStandaloneUnigramDictionary.read(binary(NgramEncoding.UNIGRAM_VERSION)) }
@@ -91,7 +91,7 @@ class StandaloneUnigramTest {
     }
 
     @Test
-    fun enginePromotesAllFiveWordsAndPreservesCompoundResults() {
+    fun enginePromotesConfiguredWordsAndPreservesCompoundResults() {
         val dictionary = PackedStandaloneUnigramDictionary.read(binary())
         val engine = KanaKanjiEngine(standaloneUnigramDictionary = dictionary).apply { buildEngine() }
         val baseline = KanaKanjiEngine().apply { buildEngine() }
