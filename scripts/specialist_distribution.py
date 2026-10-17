@@ -21,11 +21,12 @@ NOUN = '名詞,一般,*,*,*,*,*'
 COST = 9000
 HIRA = set('あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんぁぃぅぇぉゃゅょゎっゔーがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽ')
 KATA = {chr(ord(c) + 0x60) if '\u3041' <= c <= '\u3094' else c for c in HIRA}
-RULES = dict(version=3, key='normalized_reading+NFC_surface', reading='trim,NFKC,katakana-to-hiragana',
+RULES = dict(version=4, key='normalized_reading+NFC_surface', reading='trim,NFKC,katakana-to-hiragana',
              surface='trim,NFC; internal spaces/case/width/variants preserved',
              readingPattern='[ぁ-ゖー]+', categoryPriority=['kampo', 'medical'], cost=COST, pos=NOUN,
-             readingAccuracy='upstream automatic readings and optional Gemini inference; not independently verified',
+             readingAccuracy='upstream automatic readings and optional Gemini inference are unverified; explicit source-backed corrections are recorded',
              supplement='manbyo missing readings only; source row and original surface must match',
+             readingCorrections='source, row, original reading and surface must match; corrected readings carry evidence URLs',
              kanaSurface='must equal the current TokenArray sentinel reconstruction',
              classificationExclusions='withhold pairs excluded by the classified dictionary review')
 
@@ -181,6 +182,31 @@ def prepare(root, inventory):
                     excluded.add(key(row[0], row[1]))
     adopted = {}; provenance = []; source_counts = {}; counts = collections.Counter()
     supplement_path = directory / 'gemini-readings.jsonl.gz'
+    correction_path = directory / 'reading-corrections.json'
+    correction_document = json.loads(correction_path.read_text(encoding='utf-8'))
+    if correction_document.get('schemaVersion') != 1 or not isinstance(correction_document.get('corrections'), list):
+        raise ValueError('Invalid specialist reading-corrections schema')
+    corrections = {}
+    for correction in correction_document['corrections']:
+        required = {'source', 'sourceRow', 'originalReading', 'surface', 'correctedReading', 'evidence'}
+        if (set(correction) != required or type(correction['sourceRow']) is not int or correction['sourceRow'] < 2 or
+                any(not isinstance(correction[field], str) for field in
+                    ('source', 'originalReading', 'surface', 'correctedReading'))):
+            raise ValueError('Invalid specialist reading correction')
+        if (not correction['source'] or not correction['originalReading'] or not correction['surface'] or
+                not correction['correctedReading'] or correction['originalReading'] == correction['correctedReading'] or
+                not isinstance(correction['evidence'], list) or not correction['evidence'] or
+                any(not isinstance(e, dict) or not isinstance(e.get('url'), str) or
+                    not e['url'].startswith(('https://', 'http://')) or
+                    not isinstance(e.get('publisher'), str) or not e['publisher'] for e in correction['evidence'])):
+            raise ValueError('Reading correction is missing its source or evidence')
+        correction_key = correction['source'], correction['sourceRow']
+        if correction_key in corrections:
+            raise ValueError('Duplicate specialist reading correction')
+        corrections[correction_key] = correction
+    if any(source not in ids for source, _ in corrections):
+        raise ValueError('Reading correction references an unknown source')
+    used_corrections = set()
     supplements = {}
     if supplement_path.exists():
         for entry in read_json_gzip(supplement_path):
@@ -197,6 +223,7 @@ def prepare(root, inventory):
     if supplement_path.exists(): inputs[str(supplement_path.relative_to(root))] = distribution.sha(supplement_path)
     report_path = directory / 'gemini-run.json'
     if report_path.exists(): inputs[str(report_path.relative_to(root))] = distribution.sha(report_path)
+    inputs[str(correction_path.relative_to(root))] = distribution.sha(correction_path)
     for name in ('categories.json', 'sources.json'):
         inputs[str((directory / name).relative_to(root))] = distribution.sha(directory / name)
     ordered = sorted(config['sources'], key=lambda s: (RULES['categoryPriority'].index(s['category']), s['id']))
@@ -208,17 +235,27 @@ def prepare(root, inventory):
             row_count += 1
             original_reason = invalid_reason(row['reading'], row['surface'], *key(row['reading'], row['surface']))
             inferred = supplements.get(row['row']) if spec['id'] == 'manbyo' else None
+            correction = corrections.get((spec['id'], row['row']))
+            if inferred and correction:
+                raise ValueError('A source row cannot have both an inferred reading and a correction')
             raw_reading = row['reading']
             if inferred:
                 if original_reason != 'missing_or_placeholder' or inferred['surface'] != row['surface']:
                     raise ValueError('Gemini supplement does not match a missing source reading')
                 raw_reading = inferred['reading']; used_supplements.add(row['row'])
+            if correction:
+                if row['reading'] != correction['originalReading'] or row['surface'] != correction['surface']:
+                    raise ValueError('Specialist reading correction does not match its source row')
+                raw_reading = correction['correctedReading']; used_corrections.add((spec['id'], row['row']))
             reading, surface = key(raw_reading, row['surface']); pair = reading, surface
             reason = invalid_reason(raw_reading, row['surface'], reading, surface)
             record = dict(source=spec['id'], sourceRow=row['row'], originalReading=row['reading'],
                           originalSurface=row['surface'], reading=reading, surface=surface, category=spec['category'])
             record['readingOrigin'] = 'gemini_inferred_unverified' if inferred else 'upstream_unverified'
             if inferred: record['inference'] = inferred
+            if correction:
+                record['readingOrigin'] = 'curated_correction'
+                record['readingCorrection'] = correction
             if reason:
                 status = reason
             elif pair in excluded:
@@ -234,6 +271,7 @@ def prepare(root, inventory):
             by_status[status] += 1; counts[status] += 1
         source_counts[spec['id']] = dict(rows=row_count, dispositions=dict(sorted(by_status.items())))
     if used_supplements != set(supplements): raise ValueError('Unknown Gemini source row')
+    if used_corrections != set(corrections): raise ValueError('Unknown or mismatched specialist reading correction')
     records = sorted((category, reading, str(matches[0]), str(matches[0]), str(COST), surface)
                      for (reading, surface), category in adopted.items())
     candidates = io.BytesIO()

@@ -13,7 +13,7 @@ import tempfile
 
 import classified_distribution as distribution
 
-ORIGINS = {'verified': '資料確認済み', 'manual': 'assistant再分類（暫定）', 'gemini': 'Gemini（暫定）', 'specialist': '提供元の読み（正確性未確認）', 'inferred_reading': 'Gemini推定読み（未確認）'}
+ORIGINS = {'verified': '資料確認済み', 'manual': 'assistant再分類（暫定）', 'gemini': 'Gemini（暫定）', 'specialist': '提供元の読み（正確性未確認）', 'inferred_reading': 'Gemini推定読み（未確認）', 'curated_correction': '出典確認済みの読み訂正'}
 MAX_ROWS = 1500
 MAX_BYTES = 180_000
 
@@ -119,6 +119,8 @@ def generate(root, output):
         for record in specialist.read_json_gzip(specialist_dir / 'provenance.jsonl.gz'):
             if record['status']=='adopted' and record.get('readingOrigin')=='gemini_inferred_unverified':
                 origins[(record['reading'],record['surface'])]='inferred_reading'
+            if record['status']=='adopted' and record.get('readingOrigin')=='curated_correction':
+                origins[(record['reading'],record['surface'])]='curated_correction'
         manifest['categoryRows'].update(extra['categoryRows'])
         manifest['uniqueAdmittedPairs'] += extra['uniqueAdmittedPairs']
         manifest['dictionaryRows'] += extra['dictionaryRows']
@@ -197,7 +199,7 @@ def generate(root, output):
         '「組」は読み・表記の重複を除いた件数、「レコード」は品詞・コストの違いも保持したバイナリへの収録件数です。'
         '複数カテゴリへの所属があるため、カテゴリ別の組数の合計は全体の組数と一致しません。\n\n'
         '一覧は配布対象の固定データから全件生成しています。Geminiとassistantの暫定分類・未確認の読みを含みます。'
-        '既存28カテゴリのコストと品詞は元辞書の値です。漢方・医療は提供元の読みと空欄へのGemini推定読み（未確認）を採用し、品詞とコストを本プロジェクトで設定しています。分類取得失敗・未分類・除外候補はこの一覧には含めません。\n\n'
+        '既存28カテゴリのコストと品詞は元辞書の値です。漢方・医療は提供元の読みと空欄へのGemini推定読み（未確認）を採用し、個別の読み訂正には出典を記録します。品詞とコストは本プロジェクトで設定しています。分類取得失敗・未分類・除外候補はこの一覧には含めません。\n\n'
         '[不採用語と判断理由](excluded/index.md) · [品詞IDと品詞名](pos.md) · [生成・配布手順](../classified-dictionary-distribution.md) · [漢方・医療の出典記録](../specialist-dictionaries.md)\n\n'
         + '\n'.join(table) + '\n\n'
         f'元データSHA-256: `{manifest["files"]["distribution-candidates.tsv.gz"]}`\n\n'

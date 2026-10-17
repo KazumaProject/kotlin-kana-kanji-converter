@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "corrections": [
+    {
+      "source": "manbyo",
+      "sourceRow": 57986,
+      "originalReading": "あり",
+      "surface": "疣痔",
+      "correctedReading": "いぼじ",
+      "evidence": [
+        {
+          "url": "https://kotobank.jp/word/%E7%96%A3%E7%97%94-435747",
+          "publisher": "コトバンク（小学館デジタル大辞泉・精選版 日本国語大辞典）",
+          "note": "疣痔の読みを「いぼじ」と掲載。"
+        }
+      ]
+    },
+    {
+      "source": "manbyo",
+      "sourceRow": 59078,
+      "originalReading": "あり",
+      "surface": "錯乱",
+      "correctedReading": "さくらん",
+      "evidence": [
+        {
+          "url": "https://kotobank.jp/word/%E9%8C%AF%E4%B9%B1-509874",
+          "publisher": "コトバンク（百科事典マイペディア）",
+          "note": "錯乱の読みを「さくらん」と掲載。"
+        }
+      ]
+    },
+    {
+      "source": "manbyo",
+      "sourceRow": 74594,
+      "originalReading": "あり",
+      "surface": "胆砂",
+      "correctedReading": "たんさ",
+      "evidence": [
+        {
+          "url": "https://www.jsgcs.or.jp/files/uploads/glossary_ja2307.pdf",
+          "publisher": "日本消化器がん検診学会",
+          "note": "消化器がん検診用語集第4版に「たんさ／胆砂」と掲載。"
+        }
+      ]
+    },
+    {
+      "source": "manbyo",
+      "sourceRow": 78905,
+      "originalReading": "あり",
+      "surface": "巨舌",
+      "correctedReading": "きょぜつ",
+      "evidence": [
+        {
+          "url": "https://www.nihs.go.jp/center/yougo/gaibuijyou.pdf",
+          "publisher": "国立医薬品食品衛生研究所",
+          "note": "用語資料に「巨舌〈症〉／きょぜつ〈しょう〉」と掲載。"
+        }
+      ]
+    }
+  ]
+}
