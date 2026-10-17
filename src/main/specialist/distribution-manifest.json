@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "rules": {
-    "version": 3,
+    "version": 4,
     "key": "normalized_reading+NFC_surface",
     "reading": "trim,NFKC,katakana-to-hiragana",
     "surface": "trim,NFC; internal spaces/case/width/variants preserved",
@@ -12,8 +12,9 @@
     ],
     "cost": 9000,
     "pos": "名詞,一般,*,*,*,*,*",
-    "readingAccuracy": "upstream automatic readings and optional Gemini inference; not independently verified",
+    "readingAccuracy": "upstream automatic readings and optional Gemini inference are unverified; explicit source-backed corrections are recorded",
     "supplement": "manbyo missing readings only; source row and original surface must match",
+    "readingCorrections": "source, row, original reading and surface must match; corrected readings carry evidence URLs",
     "kanaSurface": "must equal the current TokenArray sentinel reconstruction",
     "classificationExclusions": "withhold pairs excluded by the classified dictionary review"
   },
@@ -27,6 +28,7 @@
     "src/main/classification/distribution-decisions.tsv.gz": "20aec1771a1ae5dce99465c8c96ecedff1c4e27a54ca9d7316d75867c47c0764",
     "src/main/specialist/gemini-readings.jsonl.gz": "04516a0f6b282cbac9bb0325d2f864db5f84829d4c5764e846d6411bc46eb9ec",
     "src/main/specialist/gemini-run.json": "91b4925e86a3635ed342e28861be54fe7e03f72505628de41df4b48efa6a80fb",
+    "src/main/specialist/reading-corrections.json": "8474db9b83c09dec59b292cf223defc3dda290a67d3bf887a7ff1abf4f5f13a5",
     "src/main/specialist/categories.json": "d03ce6563d7439cbcdcdaabf8df2529f507b2ce12abedb75e0ec1167704a0a25",
     "src/main/specialist/sources.json": "a8bbbbe3b0fce76441acc19f3d7232d6f1f53f76709ce2990c029d0bb330c9e8",
     "src/main/specialist/sources/kampo_core.jsonl.gz": "88b4487a56159df060c58e5c020c310f7d55def773f66cc384daab7146c0ff55",
@@ -105,9 +107,9 @@
     "manbyo": {
       "rows": 380300,
       "dispositions": {
-        "adopted": 72029,
+        "adopted": 72027,
         "excluded_by_classification_review": 9,
-        "existing_duplicate": 3127,
+        "existing_duplicate": 3129,
         "missing_or_placeholder": 304064,
         "non_kana_reading": 1060,
         "source_duplicate": 8,
@@ -116,10 +118,10 @@
     }
   },
   "dispositions": {
-    "adopted": 93117,
+    "adopted": 93115,
     "cross_category_duplicate": 106,
     "excluded_by_classification_review": 69,
-    "existing_duplicate": 6502,
+    "existing_duplicate": 6504,
     "missing_or_placeholder": 304064,
     "non_kana_reading": 17150,
     "source_duplicate": 748,
@@ -127,17 +129,18 @@
   },
   "categoryRows": {
     "kampo": 432,
-    "medical": 92685
+    "medical": 92683
   },
-  "dictionaryRows": 93117,
-  "uniqueAdmittedPairs": 93117,
+  "dictionaryRows": 93115,
+  "uniqueAdmittedPairs": 93115,
   "readingOrigins": {
+    "curated_correction": 2,
     "gemini_inferred_unverified": 2003,
-    "upstream_unverified": 91114
+    "upstream_unverified": 91110
   },
   "files": {
-    "distribution-candidates.tsv.gz": "2330d31edaec815cd0c743f3acf0708b7337bfd25d79d4edd5115356ac5455c4",
-    "provenance.jsonl.gz": "28bd0e3d90362c17ea1f986d4aabbd4a7d3a882bdd027faeba940da9034eec06"
+    "distribution-candidates.tsv.gz": "de25b742784973e59532d3ec86b670ab5dd25ed6c0558aa72d9eb2e6afb628dc",
+    "provenance.jsonl.gz": "6469bca936e3789527316ceb5d1e6cd0309fdeffba0bd09739b9c8f8b154442f"
   },
   "limitations": [
     "Upstream readings include automatic readings; Gemini supplements are inferred. Neither is independently verified.",

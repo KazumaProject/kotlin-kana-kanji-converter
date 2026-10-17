@@ -21,6 +21,7 @@ class SpecialistTest(unittest.TestCase):
         (self.directory/'categories.json').write_text(json.dumps({'categories':[{'id':'kampo'},{'id':'medical'}]}))
         (self.directory/'sources').mkdir(); (self.directory/'notices').mkdir()
         (self.directory/'notices/license.txt').write_text('test notice')
+        (self.directory/'reading-corrections.json').write_text(json.dumps({'schemaVersion':1,'corrections':[]}))
         sources=[dict(id=i,category=c) for i,c in [('kampo','kampo'),('manbyo','medical'),('hyakuyaku','medical')]]
         (self.directory/'sources.json').write_text(json.dumps({'sources':sources}))
         self.inventory=self.root/'existing.jsonl.gz'
@@ -73,6 +74,37 @@ class SpecialistTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'missing source reading'):self.freeze()
         entry['sourceRow']=999;path.write_bytes(s.compressed_json([entry]))
         with self.assertRaisesRegex(ValueError,'Unknown Gemini'):self.freeze()
+
+    def test_source_backed_reading_corrections_are_applied_and_provenanced(self):
+        entries = [
+            ('あり', '巨舌', 'きょぜつ'),
+            ('あり', '疣痔', 'いぼじ'),
+            ('あり', '胆砂', 'たんさ'),
+            ('あり', '錯乱', 'さくらん'),
+        ]
+        self.source('manbyo', [(old, surface) for old, surface, _ in entries])
+        evidence = {'url':'https://example.test/glossary', 'publisher':'test source'}
+        corrections = [dict(source='manbyo', sourceRow=i+2, originalReading=old, surface=surface,
+                            correctedReading=new, evidence=[evidence])
+                       for i, (old, surface, new) in enumerate(entries)]
+        path = self.directory/'reading-corrections.json'
+        path.write_text(json.dumps({'schemaVersion':1,'corrections':corrections}, ensure_ascii=False))
+
+        self.freeze(); s.verify(self.root, self.inventory)
+        candidates = {(row[1], row[5]) for row in self.rows() if row[0] == 'medical'}
+        for old, surface, corrected in entries:
+            self.assertNotIn((old, surface), candidates)
+            self.assertIn((corrected, surface), candidates)
+        records = [r for r in s.read_json_gzip(self.directory/'provenance.jsonl.gz')
+                   if r['surface'] in {surface for _, surface, _ in entries}]
+        self.assertEqual(len(records), 4)
+        self.assertTrue(all(r['originalReading'] == 'あり' and r['readingOrigin'] == 'curated_correction'
+                            and r['readingCorrection']['evidence'] == [evidence] for r in records))
+
+        corrections[0]['originalReading'] = '誤った旧読み'
+        path.write_text(json.dumps({'schemaVersion':1,'corrections':corrections}, ensure_ascii=False))
+        with self.assertRaisesRegex(ValueError, 'does not match its source row'):
+            self.freeze()
 
     def test_normalization_preserves_width_case_variants_and_internal_spaces(self):
         self.assertEqual(s.key(' ｶﾞﾝ ',' 癌 '),('がん','癌'))

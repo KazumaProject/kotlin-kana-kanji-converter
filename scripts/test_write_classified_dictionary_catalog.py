@@ -8,6 +8,7 @@ import unittest
 from unittest.mock import patch
 
 import classified_distribution as distribution
+import specialist_distribution as specialist
 import write_classified_dictionary_catalog as catalog
 
 
@@ -58,6 +59,27 @@ class CatalogTest(unittest.TestCase):
         manifest=json.loads(path.read_text());manifest['categoryRows']['person']=99
         path.write_text(json.dumps(manifest))
         with self.assertRaisesRegex(ValueError,'Catalog count differs'):catalog.generate(self.root,self.root/'bad')
+
+    def test_catalog_marks_source_backed_specialist_reading_corrections(self):
+        directory = self.root/'src/main/specialist'
+        directory.mkdir(parents=True)
+        (directory/'categories.json').write_text(Path('src/main/specialist/categories.json').read_text())
+        candidates = directory/'distribution-candidates.tsv.gz'
+        distribution.write_gzip(candidates, [('medical','きょぜつ','1','1','9000','巨舌')])
+        provenance = directory/'provenance.jsonl.gz'
+        provenance.write_bytes(specialist.compressed_json([dict(
+            source='manbyo', sourceRow=78905, reading='きょぜつ', surface='巨舌', status='adopted',
+            readingOrigin='curated_correction')]))
+        (directory/'distribution-manifest.json').write_text(json.dumps(dict(
+            rules=specialist.RULES, inputs={}, idDefSha256=distribution.sha(self.root/'src/main/resources/id.def'),
+            files={'distribution-candidates.tsv.gz':distribution.sha(candidates),
+                   'provenance.jsonl.gz':distribution.sha(provenance)},
+            categoryRows={'kampo':0,'medical':1}, dictionaryRows=1, uniqueAdmittedPairs=1)))
+
+        output = self.root/'catalog'
+        catalog.generate(self.root, output)
+        page = next((output/'medical').glob('page-*.md')).read_text()
+        self.assertIn('| <code>きょぜつ</code> | <code>巨舌</code> | 1 | 1 | 9000 | 出典確認済みの読み訂正 |', page)
 
     def test_exclusions_are_complete_paginated_and_use_final_saved_reasons(self):
         source = self.root/'src/main/classification'

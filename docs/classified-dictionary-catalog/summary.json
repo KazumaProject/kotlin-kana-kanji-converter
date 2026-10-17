@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "inputSha256": "b7613d16c1db378fbafff5351082d5866779c3863fe3fbc7d34ea609292af3e3",
-  "uniquePairs": 836821,
-  "records": 853354,
+  "uniquePairs": 836819,
+  "records": 853352,
   "categories": [
     {
       "id": "person",
@@ -379,13 +379,14 @@
     {
       "id": "medical",
       "name": "医療",
-      "pairs": 92685,
-      "readings": 89485,
-      "records": 92685,
+      "pairs": 92683,
+      "readings": 89486,
+      "records": 92683,
       "pages": 85,
       "recordsByOrigin": {
-        "specialist": 90682,
-        "inferred_reading": 2003
+        "specialist": 90678,
+        "inferred_reading": 2003,
+        "curated_correction": 2
       }
     }
   ],
@@ -393,5 +394,5 @@
     "pairs": 323184,
     "pages": 601
   },
-  "specialistInputSha256": "2330d31edaec815cd0c743f3acf0708b7337bfd25d79d4edd5115356ac5455c4"
+  "specialistInputSha256": "de25b742784973e59532d3ec86b670ab5dd25ed6c0558aa72d9eb2e6afb628dc"
 }
