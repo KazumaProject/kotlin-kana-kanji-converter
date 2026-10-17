@@ -24,7 +24,9 @@ class ClassifiedDictionaryData(
 ) {
     val categoryIds = Json.parseToJsonElement(File(directory, "categories.json").readText())
         .jsonObject.getValue("categories").jsonArray.map { it.jsonObject.getValue("id").jsonPrimitive.content }
+    /** Original source records. Packaging must not overwrite their costs. */
     val records: Map<String, Set<Dictionary>>
+    private val costPolicy = CategoryCostPolicy.load()
 
     init {
         require(categoryIds.size == expectedCategoryCount && categoryIds.distinct().size == expectedCategoryCount && categoryIds.all { it.matches(Regex("[a-z_]+")) })
@@ -54,7 +56,7 @@ class ClassifiedDictionaryData(
         records.forEach { (category, entries) ->
             val directory = File(output, category).apply { mkdirs() }
             buildAndWriteDictionaryArtifacts(
-                entries.groupBy { it.yomi }
+                entries.map { it.copy(cost = costPolicy.cost(it.yomi, it.cost)) }.groupBy { it.yomi }
                     .mapValues { (_, values) -> values.sortedWith(compareBy({ it.cost }, { it.tango }, { it.leftId }, { it.rightId })) }
                     .toSortedMap(compareBy({ it.length }, { it })),
                 File(directory, "yomi.dat").path, File(directory, "tango.dat").path, File(directory, "token.dat").path,
@@ -109,7 +111,7 @@ class ClassifiedDictionaryData(
                             it.tango.isKatakanaOnlyPure() -> -1
                             else -> tango.getNodeIndex(Normalizer.normalize(it.tango, Normalizer.Form.NFC)).also { n -> check(n >= 0) }
                         }
-                        listOf(spelling, it.leftId.toInt(), it.rightId.toInt(), it.cost.toInt())
+                        listOf(spelling, it.leftId.toInt(), it.rightId.toInt(), costPolicy.cost(reading, it.cost).toInt())
                     }.groupingBy { it }.eachCount()
                     check(actual == wanted) { "$category: spelling/POS/cost mismatch for $reading" }
                 }

@@ -23,6 +23,17 @@ SOURCES = {
     'web': ('src/main/bin/wiki_neologd_common.txt.zip', 'wiki_neologd_common.txt'),
 }
 TERM_ADDITIONS_PATH = 'src/main/classification/term-additions.tsv'
+CATEGORY_COST_POLICY_PATH = 'src/main/classification/runtime-cost-policy.json'
+
+
+def category_cost_policy(root):
+    policy = json.loads((root / CATEGORY_COST_POLICY_PATH).read_text(encoding='utf-8'))
+    if type(policy.get('schemaVersion')) is not int or policy['schemaVersion'] != 1:
+        raise ValueError('Unsupported category cost policy')
+    for field in ('unpenalizedReadingLength', 'costPerExtraCharacter', 'maximumPenalty'):
+        if type(policy.get(field)) is not int or not 0 <= policy[field] <= 2147483647:
+            raise ValueError(f'Invalid category cost policy: {field}')
+    return policy
 
 
 def sha(path):
@@ -515,6 +526,8 @@ def release_manifest(root, archive, revision):
     license_file.write_text(specialist.licenses(root), encoding='utf-8')
     result = {'schemaVersion': 1, 'revision': revision, 'classification': source,
               'specialist': specialist_manifest, 'categoryCount': len(source['categoryRows']) + len(specialist_manifest['categoryRows']),
+              'categoryCostPolicy': dict(category_cost_policy(root), sourcePath=CATEGORY_COST_POLICY_PATH,
+                                         sha256=sha(root / CATEGORY_COST_POLICY_PATH)),
               'licensesSha256': sha(license_file),
               'archiveSha256': sha(archive), 'assets': assets}
     output = archive.parent / 'dictionary-distribution-manifest.json'

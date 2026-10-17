@@ -24,7 +24,7 @@ class FindPath(
         val endPosition: Int,
     )
 
-    private data class CandidatePath(
+    internal data class CandidatePath(
         val value: String,
         val cost: Int,
         val matchedBySystemDictionary: Boolean,
@@ -78,7 +78,16 @@ class FindPath(
         connectionMatrix: ConnectionMatrix,
         n: Int,
         input: String? = null,
-    ): MutableList<String> {
+    ): MutableList<String> = rankedPaths(graph, length, connectionMatrix, n, input)
+        .mapTo(mutableListOf()) { it.value }
+
+    internal fun rankedPaths(
+        graph: List<MutableList<MutableList<Node>>>,
+        length: Int,
+        connectionMatrix: ConnectionMatrix,
+        n: Int,
+        input: String? = null,
+    ): List<CandidatePath> {
         if (n <= 0) return mutableListOf()
         val outgoing = buildOutgoingNodes(graph, length)
         val queue = PriorityQueue(compareBy<PathState> { it.cost })
@@ -154,7 +163,6 @@ class FindPath(
                     .thenBy { it.cost },
             )
             .take(n)
-            .mapTo(mutableListOf()) { it.value }
     }
 
     private fun pathMatchesSystemNgram(path: List<Node>): Boolean {

@@ -46,6 +46,17 @@ class GraphBuilder {
             )
         )
 
+        appendDictionary(str, graph, yomiTrie, tangoTrie, tokenArray)
+        return graph
+    }
+
+    internal fun appendDictionary(
+        str: String,
+        graph: List<MutableList<MutableList<Node>>>,
+        yomiTrie: LOUDSWithTermId,
+        tangoTrie: LOUDS,
+        tokenArray: TokenArray,
+    ) {
         for (i in str.indices){
             val subStr = str.substring(i, str.length)
             val commonPrefixSearch = yomiTrie.commonPrefixSearch(subStr)
@@ -74,7 +85,6 @@ class GraphBuilder {
                 graph[i + yomiStr.length].add(tangoList.toMutableList())
             }
         }
-        return graph
     }
 
 }

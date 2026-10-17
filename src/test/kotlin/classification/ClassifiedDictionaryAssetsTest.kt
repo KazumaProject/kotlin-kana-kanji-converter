@@ -32,6 +32,8 @@ class ClassifiedDictionaryAssetsTest {
                 it.write("person\tあ\t1\t1\t200\t乙\n")
                 it.write("person\tあい\t1\t1\t300\tアイ\n")
                 it.write("place\tあ\t1\t1\t100\t甲\n")
+                it.write("work_other\tそらとぶいえ\t1\t1\t8400\t空とぶ家\n")
+                it.write("work_other\tそらとぶいえ\t1\t1\t8500\t空とぶ家\n")
             }
             val data = ClassifiedDictionaryData(root, id)
             val posInput = data.records.values.flatten().groupBy { it.yomi }.toSortedMap()
@@ -76,6 +78,22 @@ class ClassifiedDictionaryAssetsTest {
         assertEquals(3, data.records.getValue("person").size)
         assertEquals(1, data.records.getValue("place").size)
         assertTrue(data.records.getValue("work_game").isEmpty())
+    }
+
+    @Test
+    fun packagedCostsChangeOnceWhileSourceRecordsAndVariantsRemainIntact() = fixture { root, data, _ ->
+        val raw = data.records.getValue("work_other")
+        assertEquals(setOf<Short>(8400, 8500), raw.map { it.cost }.toSet())
+        val tokens = File(root, "binaries/work_other/token.dat")
+        val before = tokens.readBytes()
+        java.io.ObjectInputStream(tokens.inputStream()).use { input ->
+            val array = TokenArray().also { it.readExternalNotCompressStrict(input) }
+            assertEquals(listOf<Short>(9900, 10000), array.getListDictionaryByYomiTermId(1).map { it.wordCost })
+        }
+        data.build(File(root, "binaries"), File(root, "pos_build.dat").path)
+        assertContentEquals(before, tokens.readBytes())
+        assertEquals(setOf<Short>(8400, 8500), raw.map { it.cost }.toSet())
+        data.verifyArchive(archive(root, data))
     }
 
     @Test

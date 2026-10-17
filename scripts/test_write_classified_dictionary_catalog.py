@@ -19,6 +19,8 @@ class CatalogTest(unittest.TestCase):
         self.root = Path(self.temporary.name)
         source = self.root / 'src/main/classification'
         source.mkdir(parents=True)
+        (source / 'runtime-cost-policy.json').write_text(
+            Path('src/main/classification/runtime-cost-policy.json').read_text())
         (self.root / 'src/main/resources').mkdir()
         (self.root / 'src/main/resources/id.def').write_text('0 BOS/EOS,*,*,*,*,*,*\n1 名詞,一般,*,*,*,*,*\n')
         categories = json.loads(Path('src/main/classification/categories.json').read_text())
@@ -49,6 +51,8 @@ class CatalogTest(unittest.TestCase):
         self.assertIn('次のページ',(output/'person/page-0001.md').read_text())
         self.assertIn('前のページ',(output/'person/page-0002.md').read_text())
         self.assertIn('名詞,一般',(output/'pos.md').read_text())
+        self.assertIn('min(6000, 500 × max(0, 読みの長さ − 3))', (output/'index.md').read_text())
+        self.assertIn('補正前の元コスト', (output/'index.md').read_text())
 
     def test_generation_is_deterministic_and_rejects_wrong_counts(self):
         a,b=self.root/'a',self.root/'b'

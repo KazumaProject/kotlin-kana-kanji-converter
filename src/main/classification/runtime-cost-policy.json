@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "unpenalizedReadingLength": 3,
+  "costPerExtraCharacter": 500,
+  "maximumPenalty": 6000
+}

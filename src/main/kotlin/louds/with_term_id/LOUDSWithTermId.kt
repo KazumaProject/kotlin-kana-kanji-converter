@@ -160,6 +160,29 @@ class LOUDSWithTermId {
         return result.toList()
     }
 
+    /** Bounded completion search; the prefix need not itself be a terminal. */
+    fun predictiveSearch(prefix: String, maxReadingLength: Int): List<String> {
+        if (prefix.isEmpty() || maxReadingLength < prefix.length) return emptyList()
+        var node = 0
+        for (character in prefix) {
+            node = traverse(node, character)
+            if (node < 0) return emptyList()
+        }
+        val result = mutableListOf<String>()
+        fun visit(position: Int, reading: String) {
+            if (isLeaf[position]) result.add(reading)
+            if (reading.length >= maxReadingLength) return
+            var child = firstChild(position)
+            if (child < 0) return
+            while (LBS[child]) {
+                visit(child, reading + labels[lbsSuccinct().rank1(child)])
+                child++
+            }
+        }
+        visit(node, prefix)
+        return result
+    }
+
     private fun search(index: Int, chars: CharArray, wordOffset: Int): Int {
         val succinct = lbsSuccinct()
         var index2 = index

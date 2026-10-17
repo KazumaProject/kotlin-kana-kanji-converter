@@ -200,6 +200,7 @@ def generate(root, output):
         '複数カテゴリへの所属があるため、カテゴリ別の組数の合計は全体の組数と一致しません。\n\n'
         '一覧は配布対象の固定データから全件生成しています。Geminiとassistantの暫定分類・未確認の読みを含みます。'
         '既存28カテゴリのコストと品詞は元辞書の値です。漢方・医療は提供元の読みと空欄へのGemini推定読み（未確認）を採用し、個別の読み訂正には出典を記録します。品詞とコストは本プロジェクトで設定しています。分類取得失敗・未分類・除外候補はこの一覧には含めません。\n\n'
+        + cost_policy_description(root) +
         '[不採用語と判断理由](excluded/index.md) · [品詞IDと品詞名](pos.md) · [生成・配布手順](../classified-dictionary-distribution.md) · [漢方・医療の出典記録](../specialist-dictionaries.md)\n\n'
         + '\n'.join(table) + '\n\n'
         f'元データSHA-256: `{manifest["files"]["distribution-candidates.tsv.gz"]}`\n\n'
@@ -218,6 +219,18 @@ def generate(root, output):
     if sum(c['records'] for c in summary) != manifest['dictionaryRows']:
         raise ValueError('Catalog total differs from distributed records')
     return result
+
+
+def cost_policy_description(root):
+    policy = distribution.category_cost_policy(root)
+    return (
+        '各ページの「コスト」は補正前の元コストです。30カテゴリの配布バイナリには、'
+        f'元コスト + min({policy["maximumPenalty"]}, {policy["costPerExtraCharacter"]} × '
+        f'max(0, 読みの長さ − {policy["unpenalizedReadingLength"]})) を保存します。'
+        '読みの長さは利用側と同じUTF-16の文字数で、表記の文字数ではありません。'
+        '全文入力にもこの固定補正が適用されます。'
+        '[補正設定](../../src/main/classification/runtime-cost-policy.json)は配布マニフェストにも記録します。\n\n'
+    )
 
 
 def hashes(directory):

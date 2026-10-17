@@ -3354,6 +3354,15 @@ object Constants {
     )
 
     val RESCORE_WORDS = listOf(
+        // A small reduction from Mozc's 4010 keeps 一律 ahead of 市立 for
+        // standalone いちりつ while retaining its existing POS connections.
+        Dictionary(
+            yomi = "いちりつ",
+            leftId = IdDefConstants.`名詞,副詞可能,*,*,*,*,*`,
+            rightId = IdDefConstants.`名詞,副詞可能,*,*,*,*,*`,
+            cost = 3900,
+            tango = "一律"
+        ),
         // Keep the literal hiragana ahead of the dictionary spelling "言う"
         // in compounds such as "いうこと" without removing "言う".
         Dictionary(

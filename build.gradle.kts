@@ -817,6 +817,7 @@ application {
 
 tasks.named<JavaExec>("run") {
     dependsOn(validateDictionaryIds, validateEnglishDictionary, "verifyDistributionCandidates")
+    inputs.file(classificationDirectory.file("runtime-cost-policy.json"))
     maxHeapSize = "4g"
 }
 
@@ -826,6 +827,7 @@ tasks.register<JavaExec>("convertCandidates") {
     mainClass.set("ConvertCandidatesKt")
     classpath = sourceSets["main"].runtimeClasspath
     dependsOn("classes")
+    maxHeapSize = "2g"
 }
 
 val generateMozcZeroQueryData = tasks.register<JavaExec>("generateMozcZeroQueryData") {
@@ -1086,6 +1088,7 @@ val buildDictionaryDistributionManifest = tasks.register<Exec>("buildDictionaryD
         "--revision", providers.environmentVariable("GITHUB_SHA").orElse("local").get())
     inputs.file(japaneseKeyboardAssetsReleaseZip)
     inputs.file(classificationDirectory.file("distribution-manifest.json"))
+    inputs.file(classificationDirectory.file("runtime-cost-policy.json"))
     inputs.file(specialistDirectory.file("distribution-manifest.json"))
     inputs.files("LICENSE", "LICENSE-DATA.md", "src/main/resources/THIRD-PARTY-NOTICES.md")
     inputs.dir(specialistDirectory.dir("notices"))

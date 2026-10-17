@@ -57,6 +57,19 @@ cd kotlin-kana-kanji-converter
 
 `--count` を省略すると候補を10件まで返します。生成済みの変換辞書がない環境では、Mozc辞書リソースを準備したうえで先に `./gradlew run` を実行してください。使い方は `./gradlew --quiet convertCandidates --args='--help'` で確認できます。
 
+30カテゴリを追加するには `--categories all`、個別に追加するには `--categories person,place` のように指定します。指定しない場合は基本辞書だけを使います。`--list-categories` で全カテゴリIDを確認できます。
+
+```bash
+# 全カテゴリの変換候補と予測候補をスコア付きで比較
+./gradlew --quiet convertCandidates --args='--categories all --predict --details そらとぶ いちりつ'
+# 医療だけを追加（完全一致と複合語の経路変換）
+./gradlew --quiet convertCandidates --args='--categories medical --details ふつうかんぼう'
+# 配布されたZIPを直接検証（ZIP内の共通品詞表・接続表・ngramを使用）
+./gradlew --quiet convertCandidates --args='--assets-zip /path/to/japanese_keyboard_dictionary_assets.zip --categories work_music --predict --details そらとぶ'
+```
+
+カテゴリ指定時は生成済みの `dictionary_categories/<ID>/{yomi,tango,token}.dat` を読み込みます。`--resource-dir` で生成済みリソースのディレクトリも指定できます。不明なカテゴリや指定ファイルの欠落はエラーにします。`--predict` は確認した利用側の標準設定（入力3〜16文字、先読み3文字、未入力1文字あたり1500、カテゴリあたり4件）でカテゴリの予測候補を加えます。`--details` の `score` は経路の接続コストを含む変換コスト、または予測の単語コスト＋未入力文字数の加算です。`systemDictionaryMatched` はコストとは別の優先判定です。学習・予測設定の変更・文節ビーム探索・UI全体の順位は再現しません。
+
 `src/main/resources/ngram` に生成済みの `system_ngram.dat` と `system_ngram_unigram.dat` がある場合は、それぞれ候補の再順位付けに使います。生成するには `./gradlew buildSystemNgramDictionary buildSystemUnigramDictionary` を実行してください。
 
 「しろ」「したい」「なら」「ごと」の優先を取り消すには、新しく生成した `system_ngram_unigram.dat` に置き換える必要があります。JapaneseKeyboardで利用するときは、配布ZIPの `app/src/main/assets/ngram/system_ngram_unigram.dat` を使用してください。既存の `v1.7.260` のファイルには「ごと」のルールが残っています。
@@ -124,6 +137,16 @@ To inspect ranked candidates from a terminal, pass one or more readings:
 ```
 
 The command prints one JSON object per reading, with one-based candidate ranks. The default limit is 10 candidates. If generated conversion dictionaries are missing, prepare the Mozc dictionary resources and run `./gradlew run` first. Use `./gradlew --quiet convertCandidates --args='--help'` for usage.
+
+Use `--categories all` to add all 30 category dictionaries, or `--categories person,place` to add individual dictionaries. `--list-categories` lists their IDs. With no category option, the system-only behavior is retained.
+
+```bash
+./gradlew --quiet convertCandidates --args='--categories all --predict --details そらとぶ いちりつ'
+./gradlew --quiet convertCandidates --args='--categories medical --details ふつうかんぼう'
+./gradlew --quiet convertCandidates --args='--assets-zip /path/to/japanese_keyboard_dictionary_assets.zip --categories work_music --predict --details そらとぶ'
+```
+
+`--resource-dir` selects another generated resource directory. `--assets-zip` reads a shipped ZIP with its own system dictionary, shared POS/connection tables and n-gram assets. Unknown categories and missing selected assets fail explicitly. `--predict` adds category completions with the verified consumer's standard defaults: input length 3–16, three-character lookahead, 1500 per missing character, four candidates per category. `--details` exposes the score, conversion/prediction kind, completion reading/category and the separate scoreless dictionary-match flag. This does not reproduce learning, other prediction settings, segmentation beam search or full application/UI ranking.
 
 Generated `system_ngram.dat` and `system_ngram_unigram.dat` files under `src/main/resources/ngram` are loaded when present for candidate reranking. Generate them with `./gradlew buildSystemNgramDictionary buildSystemUnigramDictionary`.
 

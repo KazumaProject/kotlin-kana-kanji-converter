@@ -8,6 +8,14 @@ import kotlin.test.assertTrue
 
 class KanaKanjiEngineBasicConversionTest {
     @Test
+    fun ichiritsuPrefersIchiritsuWithoutDisplacingMunicipalSchoolCompounds() {
+        assertEquals(listOf("一律", "市立"), engine.nBestPath("いちりつ", 2))
+        assertEquals("一律に", engine.nBestPath("いちりつに", 1).single())
+        assertEquals("市立高校", engine.nBestPath("いちりつこうこう", 1).single())
+        assertEquals("市立船橋", engine.nBestPath("いちりつふなばし", 1).single())
+    }
+
+    @Test
     fun bestPathMatchesJapaneseKeyboardBasicConversionGoldenCases() {
         assertBestPath(
             input = "へんかん",
