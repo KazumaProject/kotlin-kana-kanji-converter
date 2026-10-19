@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "taxonomy_version": "2026-10-19.1",
+  "policy": {
+    "version": "2026-10-19.1",
+    "adult_scope": [
+      "video",
+      "game",
+      "audio"
+    ],
+    "adult_definition": "性的表現を主目的とする成人向け映像・ゲーム・音声作品への出演。一般映画の性描写・グラビア・制作のみでは自動確定しない。",
+    "public_aliases_only": true,
+    "independent_review_required": true,
+    "unreviewed_distribution": "hold",
+    "adult_distribution": "adult_separate",
+    "negative_search_required_scopes": [
+      "video",
+      "game",
+      "audio"
+    ],
+    "not_applicable_categories": [
+      "surname",
+      "given_name",
+      "personal_name"
+    ]
+  },
+  "categories": [
+    {
+      "number": 1,
+      "id": "surname",
+      "label": "姓・名字",
+      "standard_enabled": true,
+      "definition": "姓そのものの読み・表記を独立資料で確認する。",
+      "boundary": "特定個人の姓を切り出すだけでは不可。"
+    },
+    {
+      "number": 2,
+      "id": "given_name",
+      "label": "名・下の名前",
+      "standard_enabled": true,
+      "definition": "下の名前そのものを独立した人名資料で確認する。",
+      "boundary": "短い表記や有名人の名と一致するだけでは不可。"
+    },
+    {
+      "number": 3,
+      "id": "personal_name",
+      "label": "人名・姓名",
+      "standard_enabled": true,
+      "definition": "特定個人に結びつけず、人名・姓名として独立資料で確認する。",
+      "boundary": "同定できない個人の受け皿にしない。"
+    },
+    {
+      "number": 4,
+      "id": "actor",
+      "label": "俳優",
+      "standard_enabled": true,
+      "definition": "映画・ドラマ等の俳優。",
+      "boundary": "声優中心はvoice_actor。成人向け確認済みは一般配布しない。"
+    },
+    {
+      "number": 5,
+      "id": "voice_actor",
+      "label": "声優",
+      "standard_enabled": true,
+      "definition": "声優活動を主とする個人。",
+      "boundary": "成人向けゲーム・音声作品への声の出演も出演調査の対象。"
+    },
+    {
+      "number": 6,
+      "id": "musician",
+      "label": "歌手・音楽家",
+      "standard_enabled": true,
+      "definition": "歌手、演奏家、作詞・作曲家、指揮者、DJ。",
+      "boundary": "グループ名は個人として分類しない。"
+    },
+    {
+      "number": 7,
+      "id": "idol",
+      "label": "アイドル",
+      "standard_enabled": true,
+      "definition": "アイドルとして活動する個人。",
+      "boundary": "グループ名はorganizationの修正候補。"
+    },
+    {
+      "number": 8,
+      "id": "comedian",
+      "label": "お笑い芸人",
+      "standard_enabled": true,
+      "definition": "お笑い芸人の個人。",
+      "boundary": "コンビ・ユニット名はorganizationの修正候補。"
+    },
+    {
+      "number": 9,
+      "id": "broadcaster",
+      "label": "タレント・モデル・放送・報道",
+      "standard_enabled": true,
+      "definition": "タレント、モデル、司会者、アナウンサー、記者等。",
+      "boundary": "独立モデル区分は設けない。グラビアのみで成人向け出演確定としない。"
+    },
+    {
+      "number": 10,
+      "id": "online_creator",
+      "label": "配信者・動画投稿者",
+      "standard_enabled": true,
+      "definition": "YouTuber、ストリーマー等の公開活動名。",
+      "boundary": "VTuberの非公開演者や実名は推定しない。設定上のキャラクターはcharacterの修正候補。"
+    },
+    {
+      "number": 11,
+      "id": "adult_performer",
+      "label": "成人向け作品出演者（分離）",
+      "standard_enabled": false,
+      "definition": "性的表現を主目的とする成人向け映像・ゲーム・音声作品への出演を公開資料で確認した個人。",
+      "boundary": "同名一致・噂・制作のみ・一般映画の性描写・性的でない年齢制限だけで確定しない。一般側へ重複配布しない。"
+    },
+    {
+      "number": 12,
+      "id": "sports",
+      "label": "スポーツ関係者",
+      "standard_enabled": true,
+      "definition": "スポーツ選手、監督、指導者、審判等。競技は副タグ。",
+      "boundary": "棋士・競技ゲームはcompetitive_games。"
+    },
+    {
+      "number": 13,
+      "id": "competitive_games",
+      "label": "棋士・競技ゲーム選手",
+      "standard_enabled": true,
+      "definition": "将棋、囲碁、チェス、競技麻雀、eスポーツ等。",
+      "boundary": "一般の配信のみはonline_creator。"
+    },
+    {
+      "number": 14,
+      "id": "writer",
+      "label": "作家・文筆家",
+      "standard_enabled": true,
+      "definition": "小説家、詩人、歌人、評論家、翻訳家等。",
+      "boundary": "漫画・イラスト中心はmanga_illustration。"
+    },
+    {
+      "number": 15,
+      "id": "manga_illustration",
+      "label": "漫画家・イラストレーター",
+      "standard_enabled": true,
+      "definition": "漫画・イラストを主に制作する個人。",
+      "boundary": "成人向け制作だけでは出演者とみなさない。"
+    },
+    {
+      "number": 16,
+      "id": "film_game_creator",
+      "label": "映画・映像・ゲーム制作者",
+      "standard_enabled": true,
+      "definition": "監督、脚本家、アニメーター、ゲーム開発者等。",
+      "boundary": "制作者と出演者を区別する。"
+    },
+    {
+      "number": 17,
+      "id": "art_design",
+      "label": "美術・写真・建築・デザイン",
+      "standard_enabled": true,
+      "definition": "美術家、写真家、建築家、デザイナー等。",
+      "boundary": "名前の文字種から活動を推定しない。"
+    },
+    {
+      "number": 18,
+      "id": "performing_arts",
+      "label": "舞台・伝統芸能",
+      "standard_enabled": true,
+      "definition": "落語、講談、歌舞伎、能、舞踊、演芸等。",
+      "boundary": "兼業は副分類で保存。"
+    },
+    {
+      "number": 19,
+      "id": "science_education",
+      "label": "研究・技術・教育",
+      "standard_enabled": true,
+      "definition": "研究者、技術者、発明家、教育者等。",
+      "boundary": "思想家との境界は資料に基づき主活動で判断。"
+    },
+    {
+      "number": 20,
+      "id": "politics_public",
+      "label": "政治・行政・外交・社会運動",
+      "standard_enabled": true,
+      "definition": "政治家、行政官、外交官、社会運動家等。",
+      "boundary": "歴史上という理由だけで別カテゴリにしない。"
+    },
+    {
+      "number": 21,
+      "id": "business",
+      "label": "実業・経営",
+      "standard_enabled": true,
+      "definition": "創業者、経営者、実業家等。",
+      "boundary": "役職と同一人物性を資料で確認。"
+    },
+    {
+      "number": 22,
+      "id": "military",
+      "label": "軍事",
+      "standard_enabled": true,
+      "definition": "軍人、軍事指導者等。歴史上の個人も同じ基準。",
+      "boundary": "神話・架空は既存カテゴリの修正候補。"
+    },
+    {
+      "number": 23,
+      "id": "royalty_nobility",
+      "label": "皇室・王室・貴族",
+      "standard_enabled": true,
+      "definition": "皇室・王室・貴族の身分が主要な識別情報となる個人。",
+      "boundary": "名前の印象から身分を推定しない。"
+    },
+    {
+      "number": 24,
+      "id": "religion_thought",
+      "label": "宗教・思想",
+      "standard_enabled": true,
+      "definition": "宗教家、宗教指導者、思想家等。",
+      "boundary": "哲学研究者はscience_educationとの境界を確認。"
+    },
+    {
+      "number": 25,
+      "id": "other_identified",
+      "label": "その他の特定人物",
+      "standard_enabled": true,
+      "definition": "料理人、探検家等、他の区分に該当しない資料で同定済みの個人。",
+      "boundary": "未調査・不明語・同定失敗の受け皿にしない。"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+name: Person subclassification validation
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/person_subclassification.py'
+      - 'scripts/test_person_subclassification.py'
+      - 'scripts/check_person_subclassification_pilot.py'
+      - 'src/main/classification/distribution-*.json'
+      - 'src/main/classification/distribution-*.tsv.gz'
+      - 'src/main/classification/person-taxonomy.json'
+      - 'src/main/classification/person-subclassification/**'
+      - '.github/workflows/person-subclassification.yml'
+  push:
+    paths:
+      - 'scripts/person_subclassification.py'
+      - 'scripts/test_person_subclassification.py'
+      - 'scripts/check_person_subclassification_pilot.py'
+      - 'src/main/classification/distribution-*.json'
+      - 'src/main/classification/distribution-*.tsv.gz'
+      - 'src/main/classification/person-taxonomy.json'
+      - 'src/main/classification/person-subclassification/**'
+      - '.github/workflows/person-subclassification.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test supervised classification and separation
+        run: python3 -m unittest discover -s scripts -p 'test_person_subclassification.py' -v
+      - name: Replay saved subagent pilot against frozen inputs
+        run: python3 scripts/check_person_subclassification_pilot.py

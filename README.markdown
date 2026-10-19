@@ -7,6 +7,8 @@ Web・Person・Place・Neologd・wikiの5辞書は28カテゴリ辞書に置き�
 各カテゴリの件数と全収録レコードの読み・表記・品詞ID・コストは[分類辞書の収録一覧](docs/classified-dictionary-catalog/index.md)で確認できます。
 保存済みの不採用判断は[不採用語と判断理由](docs/classified-dictionary-catalog/excluded/index.md)で、読み順に閲覧できます。
 
+人物辞書の25分類と成人向け出演者の分離に向けた、sub agentsの分類・独立レビュー・統合手順は[人物辞書の副分類](docs/person-subclassification.md)を参照してください。分類用の作業データを生成する機能であり、現在の配布辞書への切り替えは未実施です。
+
 ## 概要
 
 このプログラムは、Kotlin
