@@ -7,6 +7,8 @@ Web・Person・Place・Neologd・wikiの5辞書は28カテゴリ辞書に置き�
 各カテゴリの件数と全収録レコードの読み・表記・品詞ID・コストは[分類辞書の収録一覧](docs/classified-dictionary-catalog/index.md)で確認できます。
 保存済みの不採用判断は[不採用語と判断理由](docs/classified-dictionary-catalog/excluded/index.md)で、読み順に閲覧できます。
 
+一般語・専門用語の108,591組を対象にした[26分野・5タグの暫定分類案](docs/term-domain-proposal.md)をレビュー用に保存しています。生活用品・衣食住は一般語・日常表現に統合し、分類の確信度を別に記録しています。配布辞書への切り替えは行っていません。
+
 ## 概要
 
 このプログラムは、Kotlin

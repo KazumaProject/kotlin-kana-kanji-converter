@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "status": "provisional",
+  "semanticAccuracyVerified": false,
+  "productionIntegration": false,
+  "source": {
+    "path": "src/main/classification/distribution-candidates.tsv.gz",
+    "category": "term",
+    "revision": "d5bcefcf613b238966242a2aac3771ef9a18e12d",
+    "distributionSnapshotSha256": "b7613d16c1db378fbafff5351082d5866779c3863fe3fbc7d34ea609292af3e3",
+    "termRecordsSha256": "12c1d6c048e1fb05f15ec767004c66ec3a247b013f892a7cf917b7e79aa0c4c4"
+  },
+  "files": {
+    "taxonomy.json": "f0f953f9af527865733ffd5ba894f68f5a8a7597f2cda176a1fa8b6a3e5e5db1",
+    "assignments.tsv.gz": "5586f2ba440b5e64cffd205dd406f1ec90a3e4a2ccb19efeeee2ffecd0ecc9a8"
+  },
+  "counts": {
+    "sourcePairs": 108591,
+    "sourceRecords": 108618,
+    "unassigned": 0,
+    "domainPairs": {
+      "term_general": 56710,
+      "term_animals": 9463,
+      "term_plants": 6471,
+      "term_biology": 1228,
+      "term_medicine": 4034,
+      "term_pharmacy": 185,
+      "term_chemistry": 1406,
+      "term_mathematics": 1865,
+      "term_physics": 725,
+      "term_computing": 4906,
+      "term_engineering": 597,
+      "term_construction": 283,
+      "term_transport": 546,
+      "term_astronomy": 578,
+      "term_earth_environment": 859,
+      "term_economics": 2088,
+      "term_law_politics": 3955,
+      "term_education_society": 1808,
+      "term_language_literature": 1503,
+      "term_history": 886,
+      "term_religion_philosophy": 1608,
+      "term_arts": 1354,
+      "term_sports_games": 1668,
+      "term_food": 2664,
+      "term_agriculture": 403,
+      "term_military": 798
+    },
+    "domainRecords": {
+      "term_general": 56726,
+      "term_animals": 9463,
+      "term_plants": 6474,
+      "term_biology": 1228,
+      "term_medicine": 4036,
+      "term_pharmacy": 185,
+      "term_chemistry": 1406,
+      "term_mathematics": 1865,
+      "term_physics": 725,
+      "term_computing": 4906,
+      "term_engineering": 597,
+      "term_construction": 283,
+      "term_transport": 548,
+      "term_astronomy": 578,
+      "term_earth_environment": 859,
+      "term_economics": 2088,
+      "term_law_politics": 3955,
+      "term_education_society": 1808,
+      "term_language_literature": 1503,
+      "term_history": 887,
+      "term_religion_philosophy": 1608,
+      "term_arts": 1355,
+      "term_sports_games": 1668,
+      "term_food": 2666,
+      "term_agriculture": 403,
+      "term_military": 798
+    },
+    "tagPairs": {
+      "term_tag_yojijukugo": 980,
+      "term_tag_idioms": 761,
+      "term_tag_slang": 94,
+      "term_tag_abbreviations": 3287,
+      "term_tag_quantities": 1256
+    },
+    "tagRecords": {
+      "term_tag_yojijukugo": 981,
+      "term_tag_idioms": 764,
+      "term_tag_slang": 95,
+      "term_tag_abbreviations": 3287,
+      "term_tag_quantities": 1256
+    },
+    "confidencePairs": {
+      "high": 3237,
+      "medium": 32015,
+      "low": 73339
+    },
+    "domainConfidence": {
+      "term_general": {
+        "high": 1,
+        "medium": 6742,
+        "low": 49967
+      },
+      "term_animals": {
+        "high": 15,
+        "medium": 8093,
+        "low": 1355
+      },
+      "term_plants": {
+        "high": 26,
+        "medium": 3714,
+        "low": 2731
+      },
+      "term_biology": {
+        "high": 114,
+        "medium": 334,
+        "low": 780
+      },
+      "term_medicine": {
+        "high": 652,
+        "medium": 1768,
+        "low": 1614
+      },
+      "term_pharmacy": {
+        "high": 17,
+        "medium": 125,
+        "low": 43
+      },
+      "term_chemistry": {
+        "high": 126,
+        "medium": 391,
+        "low": 889
+      },
+      "term_mathematics": {
+        "high": 269,
+        "medium": 594,
+        "low": 1002
+      },
+      "term_physics": {
+        "high": 121,
+        "medium": 209,
+        "low": 395
+      },
+      "term_computing": {
+        "high": 324,
+        "medium": 259,
+        "low": 4323
+      },
+      "term_engineering": {
+        "high": 12,
+        "medium": 332,
+        "low": 253
+      },
+      "term_construction": {
+        "high": 9,
+        "medium": 194,
+        "low": 80
+      },
+      "term_transport": {
+        "high": 11,
+        "medium": 389,
+        "low": 146
+      },
+      "term_astronomy": {
+        "high": 126,
+        "medium": 233,
+        "low": 219
+      },
+      "term_earth_environment": {
+        "high": 122,
+        "medium": 368,
+        "low": 369
+      },
+      "term_economics": {
+        "high": 117,
+        "medium": 1116,
+        "low": 855
+      },
+      "term_law_politics": {
+        "high": 208,
+        "medium": 1827,
+        "low": 1920
+      },
+      "term_education_society": {
+        "high": 23,
+        "medium": 1192,
+        "low": 593
+      },
+      "term_language_literature": {
+        "high": 146,
+        "medium": 504,
+        "low": 853
+      },
+      "term_history": {
+        "high": 4,
+        "medium": 354,
+        "low": 528
+      },
+      "term_religion_philosophy": {
+        "high": 184,
+        "medium": 451,
+        "low": 973
+      },
+      "term_arts": {
+        "high": 91,
+        "medium": 572,
+        "low": 691
+      },
+      "term_sports_games": {
+        "high": 241,
+        "medium": 472,
+        "low": 955
+      },
+      "term_food": {
+        "high": 234,
+        "medium": 1122,
+        "low": 1308
+      },
+      "term_agriculture": {
+        "high": 7,
+        "medium": 258,
+        "low": 138
+      },
+      "term_military": {
+        "high": 37,
+        "medium": 402,
+        "low": 359
+      }
+    },
+    "assignmentMethods": {
+      "biological_term_head": 130,
+      "botanical_suffix_or_species_cue": 3555,
+      "exact_reference_field": 3239,
+      "lexical_domain_rule": 2115,
+      "local_character_model": 71523,
+      "local_model_with_cues": 6558,
+      "medical_term_head": 904,
+      "semantic_spotcheck": 89,
+      "specific_domain_cue": 11985,
+      "taxonomic_rank": 345,
+      "taxonomic_suffix_or_species_cue": 8148
+    }
+  },
+  "userDecision": {
+    "mergedCategory": "生活用品・衣食住",
+    "mergedInto": "一般語・日常表現",
+    "primaryCategoryPerPair": 1,
+    "uncertaintyStoredSeparately": true
+  },
+  "provenance": {
+    "trainingReference": {
+      "name": "JMdict",
+      "sha256": "00577bd3ee77262df868eb1cadc46290b73519f495dca27dac43193b9c9ed440",
+      "publisher": "James William BREEN / EDRDG",
+      "documentation": "https://www.edrdg.org/jmdict/j_jmdict.html"
+    },
+    "trainedModelSha256": "fac395dd71b2d1287362d67ed1e7b0eb9251eec94ae590e66e38542880dc5a3e",
+    "localPipelineSha256": {
+      "count_categories.py": "56e96fbfbd05804f7c29b5e93ad48db752b12f1c04681ff553103d9e6d562452",
+      "complete_categories.py": "2dedd1cbb7ba16de14425659ee16a0cff5bdf0029174a110192f2c3e301943ca",
+      "domain_refinements.py": "608f5b7115e721e43822a6dfe91a5ec361c7540c5d68a9781f20262bbef28936",
+      "finalize_categories.py": "ead5330af992807259034d1d82f1789763a4ff4cca41292c811af2c83a6d49d0"
+    },
+    "training": "Automatically derived JMdict field/gloss labels; local Japanese character n-gram classifier.",
+    "refinement": "Exact reference fields, domain-specific stems and suffixes, and provisional semantic spot checks.",
+    "inferenceReproductionIncluded": false
+  },
+  "licensing": {
+    "annotations": "CC-BY-SA-4.0",
+    "referenceAttribution": "James William BREEN / Electronic Dictionary Research and Development Group",
+    "referenceLicense": "https://www.edrdg.org/edrdg/licence.html",
+    "modifications": "Subject labels, expression tags, local model inference, lexical corrections, confidence metadata.",
+    "sourceWords": "Original dictionary-source conditions remain applicable; see LICENSE-DATA.md."
+  }
+}

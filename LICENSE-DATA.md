@@ -49,6 +49,23 @@ JapaneseCorpus由来データの原本表記は
 その他の辞書入力も、それぞれの出典・ライセンス条件に従います。この文書は、未確認の
 入力データに一律のライセンスを与えるものではありません。
 
+## 一般語・専門用語の暫定分類注釈
+
+`src/main/classification/term-domain-proposal/assignments.tsv.gz` の分野・タグ・
+分類根拠・確信度は、JMdictを用いた加工注釈としてCC BY-SA 4.0で提供します。
+James William BREEN / Electronic Dictionary Research and Development Group（EDRDG）。
+[EDRDGの公式ライセンス](https://www.edrdg.org/edrdg/licence.html)、
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)、
+[保存した公式表記](src/main/resources/third-party/JMDICT-LICENSE.html)を参照してください。
+
+加工はJMdictの分野タグ・語義に基づく学習ラベルの作成、ローカル分類器による推定、
+語幹・接尾辞と抜き取りの意味判断による補正、確信度の記録です。
+原本ハッシュ・モデルの識別ハッシュ・加工手順は提案の`manifest.json`に保存します。
+このPRは分類器や参照辞書そのものを含めず、固定した分類注釈を保存します。
+語・読み・品詞・コストには元の辞書出典の条件が引き続き適用され、
+元データの権利・条件を一律に変更するものではありません。
+分類注釈は全件確認済みの語義・読みの証明ではありません。
+
 ## 漢方・医療辞書
 
 `src/main/specialist` のKNApSAcK KAMPO由来データと `kampo` 辞書の加工部分は
