@@ -1,0 +1,284 @@
+{
+  "categories": [
+    {
+      "definition": "個別に特定できる創作上の人物・キャラクター。",
+      "id": "character",
+      "name": "架空キャラクター"
+    },
+    {
+      "definition": "個別に特定できる神、精霊、妖怪、伝説上の人物。",
+      "id": "mythological_figure",
+      "name": "神話・伝承の存在"
+    },
+    {
+      "definition": "対象と読みが原資料で確認できる地理上の場所。",
+      "id": "place",
+      "name": "地名"
+    },
+    {
+      "definition": "日本郵便の町域名・読みと同一の、整理済み住所。階数や範囲等の郵便注記を含まない。",
+      "id": "address",
+      "name": "住所"
+    },
+    {
+      "definition": "個別に特定できる旅客用駅・停留所。",
+      "id": "station",
+      "name": "駅・停留所"
+    },
+    {
+      "definition": "建物、施設、固定された交通インフラ。",
+      "id": "facility",
+      "name": "施設"
+    },
+    {
+      "definition": "個別に特定できる道路・交通路線・運行サービス。",
+      "id": "transport_route",
+      "name": "交通路線"
+    },
+    {
+      "definition": "会社、学校、公的機関、団体、チーム等。",
+      "id": "organization",
+      "name": "組織"
+    },
+    {
+      "definition": "個別に特定できる歴史上の家系、氏族、王朝。",
+      "id": "lineage",
+      "name": "家系・氏族"
+    },
+    {
+      "definition": "商品、ブランド、ソフトウェア製品、利用者向けサービス。",
+      "id": "product",
+      "name": "商品・サービス"
+    },
+    {
+      "definition": "個別に特定できる車両、船舶、車種・機体・車両モデル。",
+      "id": "vehicle",
+      "name": "車両・船舶"
+    },
+    {
+      "definition": "日付・場所等を持つ個別の出来事、催事、大会、祭り、式典。",
+      "id": "event",
+      "name": "イベント・事件"
+    },
+    {
+      "definition": "賞・賞金・表彰制度。授賞式はevent。",
+      "id": "award",
+      "name": "賞"
+    },
+    {
+      "definition": "個別に特定できる条約、協定、正式な合意。",
+      "id": "agreement",
+      "name": "条約・協定"
+    },
+    {
+      "definition": "複数の活動をまとめる、継続中の特定事業・キャンペーン。",
+      "id": "initiative",
+      "name": "事業・キャンペーン"
+    },
+    {
+      "definition": "独立した語義と読みが辞書原資料で対応する一般語・専門用語。未分類語の受け皿にはしない。",
+      "id": "term",
+      "name": "一般語・専門用語"
+    },
+    {
+      "definition": "複数の個別作品を束ねると資料で確認できるシリーズ・フランチャイズ。",
+      "id": "work_franchise",
+      "name": "作品シリーズ"
+    },
+    {
+      "definition": "個別に特定できる漫画作品。",
+      "id": "work_manga",
+      "name": "漫画作品"
+    },
+    {
+      "definition": "個別に特定できるアニメーション作品。",
+      "id": "work_anime",
+      "name": "アニメ作品"
+    },
+    {
+      "definition": "個別に特定できる映画。",
+      "id": "work_film",
+      "name": "映画作品"
+    },
+    {
+      "definition": "個別に特定できるテレビ・ラジオ・配信番組。",
+      "id": "work_program",
+      "name": "番組"
+    },
+    {
+      "definition": "個別に特定できる書籍、文学作品、経典。",
+      "id": "work_book",
+      "name": "書籍作品"
+    },
+    {
+      "definition": "個別に特定できるゲーム作品・ゲームシリーズ。",
+      "id": "work_game",
+      "name": "ゲーム作品"
+    },
+    {
+      "definition": "個別に特定できる楽曲、作曲、シングル、アルバム。",
+      "id": "work_music",
+      "name": "音楽作品"
+    },
+    {
+      "definition": "個別に特定できる演劇・舞踊の作品。",
+      "id": "work_stage",
+      "name": "舞台作品"
+    },
+    {
+      "definition": "個別に特定できる新聞、雑誌、学術誌、編集出版物。",
+      "id": "work_periodical",
+      "name": "定期刊行物"
+    },
+    {
+      "definition": "原資料が個別の作品・文書・絵画・彫刻と明記し、漫画・アニメ・映画等の媒体を特定しないもの。媒体は推定しない。",
+      "id": "work_other",
+      "name": "媒体未特定の作品・美術作品"
+    },
+    {
+      "definition": "姓そのものの読み・表記を独立資料で確認する。",
+      "id": "person_surname",
+      "name": "姓・名字",
+      "standard_enabled": true
+    },
+    {
+      "definition": "下の名前そのものを独立した人名資料で確認する。",
+      "id": "person_given_name",
+      "name": "名・下の名前",
+      "standard_enabled": true
+    },
+    {
+      "definition": "特定個人に結びつけず、人名・姓名として独立資料で確認する。",
+      "id": "person_personal_name",
+      "name": "人名・姓名",
+      "standard_enabled": true
+    },
+    {
+      "definition": "映画・ドラマ等の俳優。",
+      "id": "person_actor",
+      "name": "俳優",
+      "standard_enabled": true
+    },
+    {
+      "definition": "声優活動を主とする個人。",
+      "id": "person_voice_actor",
+      "name": "声優",
+      "standard_enabled": true
+    },
+    {
+      "definition": "歌手、演奏家、作詞・作曲家、指揮者、DJ。",
+      "id": "person_musician",
+      "name": "歌手・音楽家",
+      "standard_enabled": true
+    },
+    {
+      "definition": "アイドルとして活動する個人。",
+      "id": "person_idol",
+      "name": "アイドル",
+      "standard_enabled": true
+    },
+    {
+      "definition": "お笑い芸人の個人。",
+      "id": "person_comedian",
+      "name": "お笑い芸人",
+      "standard_enabled": true
+    },
+    {
+      "definition": "タレント、モデル、司会者、アナウンサー、記者等。",
+      "id": "person_broadcaster",
+      "name": "タレント・モデル・放送・報道",
+      "standard_enabled": true
+    },
+    {
+      "definition": "YouTuber、ストリーマー等の公開活動名。",
+      "id": "person_online_creator",
+      "name": "配信者・動画投稿者",
+      "standard_enabled": true
+    },
+    {
+      "definition": "スポーツ選手、監督、指導者、審判等。競技は副タグ。",
+      "id": "person_sports",
+      "name": "スポーツ関係者",
+      "standard_enabled": true
+    },
+    {
+      "definition": "将棋、囲碁、チェス、競技麻雀、eスポーツ等。",
+      "id": "person_competitive_games",
+      "name": "棋士・競技ゲーム選手",
+      "standard_enabled": true
+    },
+    {
+      "definition": "小説家、詩人、歌人、評論家、翻訳家等。",
+      "id": "person_writer",
+      "name": "作家・文筆家",
+      "standard_enabled": true
+    },
+    {
+      "definition": "漫画・イラストを主に制作する個人。",
+      "id": "person_manga_illustration",
+      "name": "漫画家・イラストレーター",
+      "standard_enabled": true
+    },
+    {
+      "definition": "監督、脚本家、アニメーター、ゲーム開発者等。",
+      "id": "person_film_game_creator",
+      "name": "映画・映像・ゲーム制作者",
+      "standard_enabled": true
+    },
+    {
+      "definition": "美術家、写真家、建築家、デザイナー等。",
+      "id": "person_art_design",
+      "name": "美術・写真・建築・デザイン",
+      "standard_enabled": true
+    },
+    {
+      "definition": "落語、講談、歌舞伎、能、舞踊、演芸等。",
+      "id": "person_performing_arts",
+      "name": "舞台・伝統芸能",
+      "standard_enabled": true
+    },
+    {
+      "definition": "研究者、技術者、発明家、教育者等。",
+      "id": "person_science_education",
+      "name": "研究・技術・教育",
+      "standard_enabled": true
+    },
+    {
+      "definition": "政治家、行政官、外交官、社会運動家等。",
+      "id": "person_politics_public",
+      "name": "政治・行政・外交・社会運動",
+      "standard_enabled": true
+    },
+    {
+      "definition": "創業者、経営者、実業家等。",
+      "id": "person_business",
+      "name": "実業・経営",
+      "standard_enabled": true
+    },
+    {
+      "definition": "軍人、軍事指導者等。歴史上の個人も同じ基準。",
+      "id": "person_military",
+      "name": "軍事",
+      "standard_enabled": true
+    },
+    {
+      "definition": "皇室・王室・貴族の身分が主要な識別情報となる個人。",
+      "id": "person_royalty_nobility",
+      "name": "皇室・王室・貴族",
+      "standard_enabled": true
+    },
+    {
+      "definition": "宗教家、宗教指導者、思想家等。",
+      "id": "person_religion_thought",
+      "name": "宗教・思想",
+      "standard_enabled": true
+    },
+    {
+      "definition": "料理人、探検家等、他の区分に該当しない資料で同定済みの個人。",
+      "id": "person_other_identified",
+      "name": "その他の特定人物",
+      "standard_enabled": true
+    }
+  ],
+  "version": 1
+}

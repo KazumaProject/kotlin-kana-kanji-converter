@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "source_url": "https://www.edrdg.org/pub/Nihongo/JMnedict.xml.gz",
+  "source_sha256": "50a03fadb0267f80c0f9ebde13e214127c5deb0e83c87deac3710c22511e8239",
+  "reviewer_code_sha256": "f931ba844bdcfd7497bf4d49afb3241b1789d9c97e5f9f0ee957b99df0eda064",
+  "snapshot_id": "f2c3fdce6dc49ae6cacc76a3fbce5e4cab0839dd2ae6f87e123268d7b2bf4a15",
+  "proposal_file_sha256": "27d2fd97927cae4c36d3e12537122c150575beeeff50ba856df63134fb4ea505",
+  "classifier_sidecar_sha256": "5f80639f62bbd47c8854399899cc38c4ab97452a396bd27abf7578ce8fb11561",
+  "metadata_positive_blocker_digest": "c0bdd9fc6078f545d46384bda33fdb5b4bd002f0073fd18ca12d0395b8c5ae8b",
+  "reviews_sha256": "26266b09767c0927ca81e283c225a15ebc598966e9ba241f18e8623ecf034f16",
+  "checked_on": "2026-10-19",
+  "scope": "Independent exact generic-name evidence; full particular-person matches vetoed; no adult absence assertion."
+}

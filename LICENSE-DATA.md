@@ -35,6 +35,25 @@ EDRDGの公式表記には、アプリ内の出典表示とデータ更新手順
 
 ## 既存の日本語辞書とその他のデータ
 
+### 人物辞書の副分類
+
+`src/main/classification/person-subclassification/distribution` の姓・名の型付けには
+[JMnedict / EDRDG](https://www.edrdg.org/enamdict/enamdict_doc.html) を使用しています。
+Copyright James William BREEN and the Electronic Dictionary Research and Development Group。
+JMnedict由来の分類・選定・編集データは
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) で提供し、原資料の権利を維持します。
+読み・表記の完全一致、読み制約の保持、一般的な人名と特定個人の区別、曖昧項目の保留、
+独立した再解析、元の品詞・コストの保持、分類分割とバイナリ化を行いました。
+一般的な姓・名としての採用を、特定人物の成人向け出演歴の非該当確認とはみなしません。
+
+凍結したWikipedia APIのカテゴリ情報はWikimedia contributorsに帰属し、
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) と出典URL・履歴へのリンクを維持します。
+この情報は公開された指標を保守的な保留条件として使い、記載がないことから非出演を推定しません。
+出典・原本ハッシュ・取得日・分類提案・独立レビューは同ディレクトリのevidenceとmanifestに保存しています。
+再配布時には同梱の公式ライセンス・説明・出典表示を維持し、アプリ内の出典表示と更新手順も提供してください。
+更新時は最新の原本を取得して新しいスナップショットと独立レビューを作成します。
+原本の表記は[同梱notice](src/main/classification/person-subclassification/distribution/notices/SOURCES.md)を参照してください。
+
 Mozcのコード部分と辞書部分は条件が異なります。辞書にはNAIST/IPAdic、ICOT、
 沖縄辞書などの条件が含まれます。原本の表示を次のファイルに保存しています。
 

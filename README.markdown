@@ -2,12 +2,12 @@
 
 [![Build and Release](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/workflows/build-and-release.yml)
 
-Web・Person・Place・Neologd・wikiの5辞書は28カテゴリ辞書に置き換えます。固定した分類結果から生成する配布形式、更新手順、利用側IMEで必要な変更は[分類辞書の生成と配布](docs/classified-dictionary-distribution.md)を参照してください。
+Web・Person・Place・Neologd・wikiの元辞書から、固定した分類結果と人物辞書の独立レビューを使ってカテゴリ辞書を生成します。配布形式、更新手順、利用側IMEで必要な変更は[分類辞書の生成と配布](docs/classified-dictionary-distribution.md)を参照してください。
 
-各カテゴリの件数と全収録レコードの読み・表記・品詞ID・コストは[分類辞書の収録一覧](docs/classified-dictionary-catalog/index.md)で確認できます。
+元の分類入力の読み・表記・品詞ID・コストは[監査用の収録一覧](docs/classified-dictionary-catalog/index.md)で確認できます。人物辞書の現在の配布入力は下記の副分類データです。
 保存済みの不採用判断は[不採用語と判断理由](docs/classified-dictionary-catalog/excluded/index.md)で、読み順に閲覧できます。
 
-人物辞書の25分類と成人向け出演者の分離に向けた、sub agentsの分類・独立レビュー・統合手順は[人物辞書の副分類](docs/person-subclassification.md)を参照してください。分類用の作業データを生成する機能であり、現在の配布辞書への切り替えは未実施です。
+人物辞書の25分類、成人向け出演者の分離、sub agentsの分類・独立レビュー・統合手順は[人物辞書の副分類](docs/person-subclassification.md)を参照してください。標準ビルドは審査済みデータを使い、保留語と成人向け専用区分を読み込みません。分類別の採用語数はPR本文で報告しています。
 
 ## 概要
 

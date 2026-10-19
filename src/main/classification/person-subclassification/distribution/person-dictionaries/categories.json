@@ -1,0 +1,155 @@
+{
+  "categories": [
+    {
+      "definition": "姓そのものの読み・表記を独立資料で確認する。",
+      "id": "person_surname",
+      "name": "姓・名字",
+      "standard_enabled": true
+    },
+    {
+      "definition": "下の名前そのものを独立した人名資料で確認する。",
+      "id": "person_given_name",
+      "name": "名・下の名前",
+      "standard_enabled": true
+    },
+    {
+      "definition": "特定個人に結びつけず、人名・姓名として独立資料で確認する。",
+      "id": "person_personal_name",
+      "name": "人名・姓名",
+      "standard_enabled": true
+    },
+    {
+      "definition": "映画・ドラマ等の俳優。",
+      "id": "person_actor",
+      "name": "俳優",
+      "standard_enabled": true
+    },
+    {
+      "definition": "声優活動を主とする個人。",
+      "id": "person_voice_actor",
+      "name": "声優",
+      "standard_enabled": true
+    },
+    {
+      "definition": "歌手、演奏家、作詞・作曲家、指揮者、DJ。",
+      "id": "person_musician",
+      "name": "歌手・音楽家",
+      "standard_enabled": true
+    },
+    {
+      "definition": "アイドルとして活動する個人。",
+      "id": "person_idol",
+      "name": "アイドル",
+      "standard_enabled": true
+    },
+    {
+      "definition": "お笑い芸人の個人。",
+      "id": "person_comedian",
+      "name": "お笑い芸人",
+      "standard_enabled": true
+    },
+    {
+      "definition": "タレント、モデル、司会者、アナウンサー、記者等。",
+      "id": "person_broadcaster",
+      "name": "タレント・モデル・放送・報道",
+      "standard_enabled": true
+    },
+    {
+      "definition": "YouTuber、ストリーマー等の公開活動名。",
+      "id": "person_online_creator",
+      "name": "配信者・動画投稿者",
+      "standard_enabled": true
+    },
+    {
+      "definition": "性的表現を主目的とする成人向け映像・ゲーム・音声作品への出演を公開資料で確認した個人。",
+      "id": "person_adult_performer",
+      "name": "成人向け作品出演者（分離）",
+      "standard_enabled": false
+    },
+    {
+      "definition": "スポーツ選手、監督、指導者、審判等。競技は副タグ。",
+      "id": "person_sports",
+      "name": "スポーツ関係者",
+      "standard_enabled": true
+    },
+    {
+      "definition": "将棋、囲碁、チェス、競技麻雀、eスポーツ等。",
+      "id": "person_competitive_games",
+      "name": "棋士・競技ゲーム選手",
+      "standard_enabled": true
+    },
+    {
+      "definition": "小説家、詩人、歌人、評論家、翻訳家等。",
+      "id": "person_writer",
+      "name": "作家・文筆家",
+      "standard_enabled": true
+    },
+    {
+      "definition": "漫画・イラストを主に制作する個人。",
+      "id": "person_manga_illustration",
+      "name": "漫画家・イラストレーター",
+      "standard_enabled": true
+    },
+    {
+      "definition": "監督、脚本家、アニメーター、ゲーム開発者等。",
+      "id": "person_film_game_creator",
+      "name": "映画・映像・ゲーム制作者",
+      "standard_enabled": true
+    },
+    {
+      "definition": "美術家、写真家、建築家、デザイナー等。",
+      "id": "person_art_design",
+      "name": "美術・写真・建築・デザイン",
+      "standard_enabled": true
+    },
+    {
+      "definition": "落語、講談、歌舞伎、能、舞踊、演芸等。",
+      "id": "person_performing_arts",
+      "name": "舞台・伝統芸能",
+      "standard_enabled": true
+    },
+    {
+      "definition": "研究者、技術者、発明家、教育者等。",
+      "id": "person_science_education",
+      "name": "研究・技術・教育",
+      "standard_enabled": true
+    },
+    {
+      "definition": "政治家、行政官、外交官、社会運動家等。",
+      "id": "person_politics_public",
+      "name": "政治・行政・外交・社会運動",
+      "standard_enabled": true
+    },
+    {
+      "definition": "創業者、経営者、実業家等。",
+      "id": "person_business",
+      "name": "実業・経営",
+      "standard_enabled": true
+    },
+    {
+      "definition": "軍人、軍事指導者等。歴史上の個人も同じ基準。",
+      "id": "person_military",
+      "name": "軍事",
+      "standard_enabled": true
+    },
+    {
+      "definition": "皇室・王室・貴族の身分が主要な識別情報となる個人。",
+      "id": "person_royalty_nobility",
+      "name": "皇室・王室・貴族",
+      "standard_enabled": true
+    },
+    {
+      "definition": "宗教家、宗教指導者、思想家等。",
+      "id": "person_religion_thought",
+      "name": "宗教・思想",
+      "standard_enabled": true
+    },
+    {
+      "definition": "料理人、探検家等、他の区分に該当しない資料で同定済みの個人。",
+      "id": "person_other_identified",
+      "name": "その他の特定人物",
+      "standard_enabled": true
+    }
+  ],
+  "version": 1
+}

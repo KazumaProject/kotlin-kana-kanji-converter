@@ -3,9 +3,15 @@ name: Person subclassification validation
 on:
   pull_request:
     paths:
-      - 'scripts/person_subclassification.py'
-      - 'scripts/test_person_subclassification.py'
-      - 'scripts/check_person_subclassification_pilot.py'
+      - 'scripts/*person*.py'
+      - 'scripts/classified_distribution.py'
+      - 'src/main/kotlin/classification/**'
+      - 'src/main/kotlin/Main.kt'
+      - 'src/test/kotlin/classification/**'
+      - 'build.gradle.kts'
+      - 'LICENSE-DATA.md'
+      - 'src/main/resources/THIRD-PARTY-NOTICES.md'
+      - 'src/main/classification/categories.json'
       - 'src/main/classification/distribution-*.json'
       - 'src/main/classification/distribution-*.tsv.gz'
       - 'src/main/classification/person-taxonomy.json'
@@ -13,9 +19,15 @@ on:
       - '.github/workflows/person-subclassification.yml'
   push:
     paths:
-      - 'scripts/person_subclassification.py'
-      - 'scripts/test_person_subclassification.py'
-      - 'scripts/check_person_subclassification_pilot.py'
+      - 'scripts/*person*.py'
+      - 'scripts/classified_distribution.py'
+      - 'src/main/kotlin/classification/**'
+      - 'src/main/kotlin/Main.kt'
+      - 'src/test/kotlin/classification/**'
+      - 'build.gradle.kts'
+      - 'LICENSE-DATA.md'
+      - 'src/main/resources/THIRD-PARTY-NOTICES.md'
+      - 'src/main/classification/categories.json'
       - 'src/main/classification/distribution-*.json'
       - 'src/main/classification/distribution-*.tsv.gz'
       - 'src/main/classification/person-taxonomy.json'
@@ -34,6 +46,34 @@ jobs:
         with:
           python-version: '3.12'
       - name: Test supervised classification and separation
-        run: python3 -m unittest discover -s scripts -p 'test_person_subclassification.py' -v
+        run: python3 -m unittest discover -s scripts -p 'test_*.py' -q
       - name: Replay saved subagent pilot against frozen inputs
         run: python3 scripts/check_person_subclassification_pilot.py
+      - name: Replay full distribution and independent source evidence
+        run: python3 scripts/person_dictionary_distribution.py verify --root .
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Download the matching official Mozc ID and matrix resources
+        env:
+          MOZC_CLASSIFICATION_REF: '0136c35782536cb43d710575c311cd4185982738'
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, urllib.request
+          root = pathlib.Path('src/main/resources')
+          root.mkdir(exist_ok=True)
+          base = 'https://raw.githubusercontent.com/google/mozc/' + os.environ['MOZC_CLASSIFICATION_REF'] + '/src/data/dictionary_oss/'
+          for name in ('id.def', 'connection_single_column.txt'):
+              with urllib.request.urlopen(base + name, timeout=120) as response:
+                  (root / name).write_bytes(response.read())
+          expected = json.loads(pathlib.Path('src/main/classification/distribution-manifest.json').read_text())['idDefSha256']
+          assert hashlib.sha256((root / 'id.def').read_bytes()).hexdigest() == expected
+          PY
+      - name: Build binaries and verify every packaged category record
+        run: ./gradlew buildPersonDictionaryDistribution testPersonDictionaryDistribution --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: person-subclassified-dictionary-assets
+          path: release_zips/person_subclassified_dictionary_assets.zip
+          if-no-files-found: error

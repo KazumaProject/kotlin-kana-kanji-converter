@@ -168,10 +168,13 @@ val japaneseKeyboardAssetsStagingDir = layout.buildDirectory.dir("japaneseKeyboa
 val japaneseKeyboardAssetsReleaseDir = layout.projectDirectory.dir("release_zips")
 val japaneseKeyboardAssetsReleaseZip = japaneseKeyboardAssetsReleaseDir.file("japanese_keyboard_dictionary_assets.zip")
 val classificationDirectory = layout.projectDirectory.dir("src/main/classification")
-val classificationCategoryIds = ((JsonSlurper().parse(classificationDirectory.file("categories.json").asFile) as Map<*, *>)
+// Keep the original snapshot as a verification/source-inventory input. Active
+// binaries use the independently reviewed and filtered person distribution.
+val personClassificationDirectory = classificationDirectory.dir("person-subclassification/distribution")
+val classificationCategoryIds = ((JsonSlurper().parse(personClassificationDirectory.file("categories.json").asFile) as Map<*, *>)
     ["categories"] as List<*>).map { (it as Map<*, *>)["id"] as String }
-require(classificationCategoryIds.size == 28 && classificationCategoryIds.distinct().size == 28 &&
-    classificationCategoryIds.all { it.matches(Regex("[a-z_]+")) }) { "Expected 28 unique safe category IDs" }
+require(classificationCategoryIds.size == 51 && classificationCategoryIds.distinct().size == 51 &&
+    classificationCategoryIds.all { it.matches(Regex("[a-z_]+")) }) { "Expected 51 unique safe category IDs" }
 val specialistDirectory = layout.projectDirectory.dir("src/main/specialist")
 val specialistCategoryIds = ((JsonSlurper().parse(specialistDirectory.file("categories.json").asFile) as Map<*, *>)
     ["categories"] as List<*>).map { (it as Map<*, *>)["id"] as String }
@@ -816,7 +819,7 @@ application {
 }
 
 tasks.named<JavaExec>("run") {
-    dependsOn(validateDictionaryIds, validateEnglishDictionary, "verifyDistributionCandidates")
+    dependsOn(validateDictionaryIds, validateEnglishDictionary, "verifyDistributionCandidates", "verifyPersonDistribution")
     maxHeapSize = "4g"
 }
 
@@ -994,7 +997,7 @@ val verifyEnglishDictionaryBinary = tasks.register<JavaExec>("verifyEnglishDicti
 tasks.register("verifyJapaneseKeyboardDictionaryAssets") {
     group = "verification"
     description = "Verifies the JapaneseKeyboard dictionary assets zip layout and nested .dat.zip files."
-    dependsOn(packageJapaneseKeyboardDictionaryAssets, verifyEnglishDictionaryBinary)
+    dependsOn(packageJapaneseKeyboardDictionaryAssets, verifyEnglishDictionaryBinary, "verifyPersonDistribution")
     inputs.file(japaneseKeyboardAssetsReleaseZip)
 
     doLast {
@@ -1069,10 +1072,57 @@ val verifyDistributionCandidates = tasks.register<Exec>("verifyDistributionCandi
     inputs.file(mozcIdDefFileProvider)
 }
 
+val verifyPersonDistribution = tasks.register<Exec>("verifyPersonDistribution") {
+    group = "verification"
+    description = "Validates independent person decisions, withheld records and active cross-category filtering."
+    dependsOn(verifyDistributionCandidates)
+    commandLine("python3", "scripts/person_dictionary_distribution.py", "verify", "--root", ".")
+    inputs.dir(personClassificationDirectory)
+    inputs.files("scripts/person_dictionary_distribution.py", "scripts/person_subclassification.py")
+    inputs.files(classificationDirectory.file("distribution-candidates.tsv.gz"),
+        classificationDirectory.file("person-taxonomy.json"))
+}
+
+val buildPersonDictionaryDistribution = tasks.register<JavaExec>("buildPersonDictionaryDistribution") {
+    group = "distribution"
+    description = "Builds reviewed category binaries with an isolated POS table, without rebuilding the system dictionary."
+    dependsOn("classes", verifyPersonDistribution, validateMozcIdDef, validateConnectionMatrix)
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.classification.PersonDictionaryDistributionKt")
+    maxHeapSize = "3g"
+    args("--output", layout.buildDirectory.dir("person-dictionary-distribution").get().asFile.path,
+        "--id-def", mozcIdDefFileProvider.get().asFile.path,
+        "--archive", japaneseKeyboardAssetsReleaseDir.file("person_subclassified_dictionary_assets.zip").asFile.path)
+    inputs.dir(personClassificationDirectory)
+    inputs.file(mozcIdDefFileProvider)
+    inputs.file(mozcConnectionFileProvider)
+    inputs.files("LICENSE", "LICENSE-DATA.md", "src/main/resources/THIRD-PARTY-NOTICES.md")
+    inputs.dir("src/main/resources/third-party")
+    outputs.dir(layout.buildDirectory.dir("person-dictionary-distribution"))
+    outputs.file(japaneseKeyboardAssetsReleaseDir.file("person_subclassified_dictionary_assets.zip"))
+}
+
+val testPersonDictionaryDistribution = tasks.register<Test>("testPersonDictionaryDistribution") {
+    group = "verification"
+    description = "Tests the active person distribution and frozen baseline inventory without unrelated system resources."
+    testClassesDirs = sourceSets["test"].output.classesDirs
+    classpath = sourceSets["test"].runtimeClasspath
+    useJUnitPlatform()
+    maxHeapSize = "2g"
+    dependsOn("testClasses", verifyPersonDistribution, validateMozcIdDef, validateConnectionMatrix)
+    filter {
+        includeTestsMatching("classification.ClassifiedDictionaryAssetsTest")
+        includeTestsMatching("classification.PersonDictionaryDistributionTest")
+    }
+    inputs.dir(personClassificationDirectory)
+    inputs.files(classificationDirectory.file("categories.json"),
+        classificationDirectory.file("distribution-candidates.tsv.gz"), mozcIdDefFileProvider)
+}
+
 val verifyClassifiedDictionaryAssets = tasks.register<JavaExec>("verifyClassifiedDictionaryAssets") {
     group = "verification"
     description = "Reads the distributed category binaries and verifies all spelling, POS and cost records."
-    dependsOn("verifyJapaneseKeyboardDictionaryAssets")
+    dependsOn("verifyJapaneseKeyboardDictionaryAssets", verifyPersonDistribution)
     mainClass.set("com.kazumaproject.classification.ClassifiedDictionaryAssetsKt")
     classpath = sourceSets["main"].runtimeClasspath
     maxHeapSize = "3g"
@@ -1085,7 +1135,7 @@ val buildDictionaryDistributionManifest = tasks.register<Exec>("buildDictionaryD
     commandLine("python3", "scripts/classified_distribution.py", "release-manifest",
         "--revision", providers.environmentVariable("GITHUB_SHA").orElse("local").get())
     inputs.file(japaneseKeyboardAssetsReleaseZip)
-    inputs.file(classificationDirectory.file("distribution-manifest.json"))
+    inputs.file(personClassificationDirectory.file("distribution-manifest.json"))
     inputs.file(specialistDirectory.file("distribution-manifest.json"))
     inputs.files("LICENSE", "LICENSE-DATA.md", "src/main/resources/THIRD-PARTY-NOTICES.md")
     inputs.dir(specialistDirectory.dir("notices"))
@@ -1095,7 +1145,7 @@ val buildDictionaryDistributionManifest = tasks.register<Exec>("buildDictionaryD
         japaneseKeyboardAssetsReleaseDir.file("DICTIONARY-SHA256SUMS"))
 }
 
-tasks.named("check") { dependsOn(verifyDistributionCandidates) }
+tasks.named("check") { dependsOn(verifyDistributionCandidates, verifyPersonDistribution) }
 
 val exportExistingDictionaryInventory = tasks.register<JavaExec>("exportExistingDictionaryInventory") {
     group = "verification"

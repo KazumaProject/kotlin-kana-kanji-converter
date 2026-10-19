@@ -131,5 +131,5 @@ private fun nestedStream(zip: ZipFile, path: String, name: String): ZipInputStre
 
 fun main(args: Array<String>) {
     require(args.size == 2 && args[0] == "--archive") { "Usage: --archive <distribution.zip>" }
-    ClassifiedDictionaryData().verifyArchive(File(args[1]))
+    personDistributionData().verifyArchive(File(args[1]))
 }

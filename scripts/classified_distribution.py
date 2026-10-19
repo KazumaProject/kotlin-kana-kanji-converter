@@ -506,7 +506,11 @@ def verify(root, allow_pending_reviews=False):
 
 
 def release_manifest(root, archive, revision):
-    source = json.loads((root / 'src/main/classification/distribution-manifest.json').read_text())
+    # Production uses the reviewed person distribution. Minimal legacy test
+    # fixtures without the curated directory retain their original snapshot.
+    curated = root / 'src/main/classification/person-subclassification/distribution'
+    classification = curated if curated.exists() else root / 'src/main/classification'
+    source = json.loads((classification / 'distribution-manifest.json').read_text())
     with zipfile.ZipFile(archive) as z:
         assets = {name: hashlib.sha256(z.read(name)).hexdigest() for name in sorted(z.namelist()) if not name.endswith('/')}
     import specialist_distribution as specialist

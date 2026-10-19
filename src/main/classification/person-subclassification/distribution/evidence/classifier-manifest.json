@@ -1,0 +1,38 @@
+{
+  "checked_on": "2026-10-19",
+  "classifier_id": "jmnedict-classifier",
+  "counts": {
+    "exact_source_match_items": 22725,
+    "generic_name_proposals": 7430,
+    "given_name": 1766,
+    "individual_or_unresolved_hold": 259417,
+    "items": 266847,
+    "personal_name": 1239,
+    "surname": 4425
+  },
+  "engine_sha256": "f726b9a2d90949507c5af5647d2fbecad3ea0deaf6ddfe724597e7cffc1f08d4",
+  "files": {
+    "proposals.jsonl": "27d2fd97927cae4c36d3e12537122c150575beeeff50ba856df63134fb4ea505",
+    "source-matches.jsonl.gz": "5f80639f62bbd47c8854399899cc38c4ab97452a396bd27abf7578ce8fb11561"
+  },
+  "implementation_sha256": "89d9a1011d886f98a6bd9d704947732aab94654709c2893a31980d72b06ef7e7",
+  "limitations": "Generic-source proposals only. Individual appearance histories have not been investigated. Independent review required.",
+  "production_release": false,
+  "run_id": "jmnedict-v1",
+  "schema_version": 1,
+  "snapshot_id": "f2c3fdce6dc49ae6cacc76a3fbce5e4cab0839dd2ae6f87e123268d7b2bf4a15",
+  "source": {
+    "attribution": "JMnedict, Electronic Dictionary Research and Development Group",
+    "documentation_url": "https://www.edrdg.org/enamdict/enamdict_doc.html",
+    "license_url": "https://www.edrdg.org/edrdg/licence.html",
+    "sha256": "50a03fadb0267f80c0f9ebde13e214127c5deb0e83c87deac3710c22511e8239",
+    "url": "https://www.edrdg.org/pub/Nihongo/JMnedict.xml.gz"
+  },
+  "sources": {
+    "distribution-candidates.tsv.gz": "b7613d16c1db378fbafff5351082d5866779c3863fe3fbc7d34ea609292af3e3",
+    "distribution-decisions.tsv.gz": "20aec1771a1ae5dce99465c8c96ecedff1c4e27a54ca9d7316d75867c47c0764",
+    "distribution-manifest.json": "b86212a33ad07b01f7ede74321176173c85f78f8d6d43fad0138f8dd6bcadd6f",
+    "person-taxonomy.json": "b3c843f9f2f150660b20d83d150ceae4386a5cfb301d8ac4809c9ceb296d6028"
+  },
+  "unbound_draft": false
+}

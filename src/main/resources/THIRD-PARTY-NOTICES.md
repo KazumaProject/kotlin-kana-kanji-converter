@@ -10,7 +10,22 @@ The upstream documents in `third-party/LICENSE-DATA.md` and `third-party/NOTICE.
 are preserved JapaneseCorpus notices: references to "this repository" in those
 documents describe JapaneseCorpus, not this converter project.
 
-## Project source code
+## JMnedict person subclassification
+
+The person subclassification data uses JMnedict by James William BREEN and the
+Electronic Dictionary Research and Development Group, under CC BY-SA 4.0.
+Source: https://www.edrdg.org/pub/Nihongo/JMnedict.xml.gz .
+Documentation: https://www.edrdg.org/enamdict/enamdict_doc.html .
+Terms: https://www.edrdg.org/edrdg/licence.html .
+Modifications include exact-pair selection, generic-name typing, ambiguity
+withholding, independent re-parsing, retention of original POS/cost and binary
+encoding. Original rights, attribution, ShareAlike, application source displays
+and source/update links must be retained. The frozen Wikimedia category evidence
+is attributed to Wikimedia contributors under CC BY-SA 4.0, with the actual
+request URLs and article/history links retained. See the included source notices
+under `src/main/classification/person-subclassification/distribution/notices`.
+
+## Project source code (MIT)
 
 The Kotlin conversion program source files are distributed
 under the MIT License. The complete project license is in the repository

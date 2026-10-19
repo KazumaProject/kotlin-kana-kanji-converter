@@ -3,6 +3,7 @@ package com.kazumaproject
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.classification.ClassifiedDictionaryData
+import com.kazumaproject.classification.personDistributionData
 import com.kazumaproject.english.EnglishDictionaryBinaryValidator
 import com.kazumaproject.mozc.buildConnectionIdsFromResource
 import com.kazumaproject.mozc.validateBundledMozcDictionaryResources
@@ -17,7 +18,7 @@ fun main() {
     val englishDictionaryList = baseline.getValue("english_reading")
 
     buildConnectionIds()
-    val classified = ClassifiedDictionaryData()
+    val classified = personDistributionData()
     val specialists = ClassifiedDictionaryData(File("src/main/specialist"), expectedCategoryCount = 2)
     val sharedPosInputs = (finalList.values.flatten() + englishDictionaryList + classified.records.values.flatten() + specialists.records.values.flatten())
         .groupBy { it.yomi }.toSortedMap(compareBy({ it.length }, { it }))
