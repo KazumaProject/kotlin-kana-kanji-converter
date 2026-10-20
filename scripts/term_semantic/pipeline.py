@@ -366,6 +366,13 @@ def high_risk(item):
             or 'term_tag_abbreviations' in item['tags'])
 
 
+def reviewer_requires_sol(a,b,reviewed):
+    core=lambda item:(item['usage_class'],item['primary_domain'])
+    return (reviewed['needs_review'] or unknown(reviewed)
+            or (core(a)==core(b) and core(reviewed)!=core(a))
+            or reviewed['primary_domain'] not in (a['primary_domain'],b['primary_domain']))
+
+
 def reconcile(db, meta, affected):
     surface_ambiguity=set(meta.get('surface_ambiguity_ids',[]))
     passes=collections.defaultdict(dict)
@@ -382,7 +389,7 @@ def reconcile(db, meta, affected):
             pending['adjudicator'].append(i); continue
         elif i in passes['reviewer']:
             final,origin=passes['reviewer'][i]
-            if final['needs_review'] or unknown(final): pending['adjudicator'].append(i); continue
+            if reviewer_requires_sol(a,b,final): pending['adjudicator'].append(i); continue
         elif semantic(a)!=semantic(b) or high_risk(a) or high_risk(b) or i in surface_ambiguity or int(i[:8],16)%10==0:
             pending['reviewer'].append(i); continue
         else:
@@ -507,7 +514,7 @@ def _verify(db,args):
         need_sol=(int(row['id'][:8],16)%100==0 and semantic(ab[0])==semantic(ab[1]) and not unknown(ab[0]) and not ab[0]['needs_review'])
         if 'reviewer' in prior:
             reviewed=json.loads(prior['reviewer']['value'])
-            need_sol=need_sol or reviewed['needs_review'] or unknown(reviewed)
+            need_sol=need_sol or reviewer_requires_sol(ab[0],ab[1],reviewed)
         if need_sol and 'adjudicator' not in prior: raise ValueError('Required Sol judgment missing')
         expected_origin=next(prior[stage]['job_id'] for stage in ('adjudicator','reviewer','A') if stage in prior)
         if row['origin']!=expected_origin: raise ValueError('Final bypasses the latest review')

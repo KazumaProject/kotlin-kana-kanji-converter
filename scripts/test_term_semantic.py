@@ -285,6 +285,15 @@ class SemanticPipelineTest(unittest.TestCase):
         self.assertEqual([row['surface'] for row in review], ['X'])
         self.assertEqual(review[0]['classification_pass'], 'adjudicator')
 
+    def test_reviewer_cannot_unilaterally_overturn_unanimous_core_labels(self):
+        pair = next(row for row in self.pairs.values() if row['surface']=='犬')
+        a = self.result(pair)
+        reviewed = dict(a, usage_class='technical')
+        self.assertTrue(p.reviewer_requires_sol(a, copy.deepcopy(a), reviewed))
+        self.assertFalse(p.reviewer_requires_sol(a, copy.deepcopy(a), dict(a)))
+        b = dict(a, usage_class='technical')
+        self.assertFalse(p.reviewer_requires_sol(a, b, dict(a)))
+
 
 if __name__ == '__main__':
     unittest.main()
