@@ -125,6 +125,11 @@ def coordinator_prompt(run, phase):
    semantic judgment. NEVER bind a semantic row by array position/index to identifiers or pairs copied
    from input. Do NOT mechanically fill reading/surface from source items; this previously silently
    attached judgments to the wrong words. Only stable_id may be computed mechanically by `emit`.
+   Write every semantic row as a complete literal JSON row with all semantic fields explicitly chosen.
+   Use apply_patch or a quoted heredoc to write literal JSON; Python may only serialize those complete
+   literal rows. No code may fill tags/ambiguity/category defaults, infer unknown from usage, or assign
+   semantic fields via conditionals/loops. No reading-only or surface-only decision dictionaries.
+   Unchanged independently authored rows may be reused verbatim after you compare the candidates.
    Author all remaining required classification fields; no defaults, omitted semantic fields, lookup
    datasets, blanket labels, suffix rules, or another model. No input_index-only decision tables.
    You may use compact JSON {{"fields":["reading","surface",...],"rows":[[...],...]}} with the word
@@ -147,23 +152,6 @@ def coordinator_prompt(run, phase):
 6. `{cli} ingest --run {run} --job JOB --output OUTPUT --evidence EVIDENCE`.
    If pre-emit schema validation fails, repair authored decisions once. Once emit succeeds its artifacts
    are immutable: do not rewrite proof, decisions, pairs or identifiers to silence a later error.
-''' if p.config(run).get('pair_anchor_required') else f'''3. For each item, use YOUR semantic understanding of full reading/surface and explicitly author its
-   classification. You may serialize JSON/copy identifiers mechanically; NEVER generate labels
-   with character/suffix/keyword rules, lookup datasets, a blanket default, or a different model.
-   Required14fields, one object per item, concise reasons. Write only assigned output path.
-   Minimize tokens by displaying a compact semantic view [input_index,reading,surface], authoring an
-   explicit decision table by input_index, and mechanically copying identifiers into complete JSONL.
-   Do not retype long stable IDs or unchanged source strings. All semantic fields remain LLM judgments.
-   Large jobs may be authored in 100-item chunks in the SAME assigned job, then combined and validated.
-   Key explicit decisions by stable_id or input index, never surface alone: identical spellings with
-   different readings can have different meanings. Do not share a surface-only decision across them.
-4. For reviewer/adjudicator first read independent_input without candidate_results and WRITE independent
-   judgments to the same job directory independent-output.jsonl. Only THEN read full input and reconcile.
-5. Use actual $CODEX_THREAD_ID to run
-   `python3 -m scripts.term_semantic.runtime attest --run {run} --job JOB --thread-id "$CODEX_THREAD_ID"`.
-   Attestation reads your actual host-recorded model/parent; do not invent it.
-6. `{cli} ingest --run {run} --job JOB --output OUTPUT --evidence EVIDENCE`.
-   On schema error, repair only failed structure/entries once. Never change source fields or remove IDs.
 '''
     return f'''Execute actual semantic classification, not a plan. Repository code is read-only:
 {repo}
@@ -173,6 +161,7 @@ Use the formal spawn_agent tool, exact model gpt-6-luna for A,B,reviewer and gpt
 Use reasoning_effort medium; record the actual host setting, never assert a requested setting was used.
 All children MUST have independent fresh context (fork_turns none), no inherited conversation or sibling labels.
 Maximum TWO concurrent child agents. Never substitute codex exec workers for formal subagents.
+Wait up to50 seconds for active children rather than frequent status polling; inspect stage counts at wave boundaries.
 Inspect status first. Spawn only stages that actually have pending jobs; skip completed A/B on resume.
 When A/B work exists, spawn two long-running children, one A and one B. In pilot each processes all available jobs of its stage.
 In full each processes at most10 jobs per wave, then returns; drain Reviewer and Sol jobs after each wave,
@@ -260,6 +249,10 @@ def usage_report(args):
 def run_coordinator(args):
     run = p.external_path(args.run)
     meta = p.config(run)
+    if not meta.get('pair_anchor_required'):
+        raise ValueError('Legacy classification runs are read-only; prepare a pair-anchored run')
+    if (run/'extension-pending.json').exists():
+        raise ValueError('Interrupted extension: run extend-pilot again before restarting the coordinator')
     if (run/'promotion-pending.json').exists():
         raise ValueError('Interrupted promotion: run promote again before restarting the coordinator')
     if (args.phase == 'full') != bool(meta['full']):

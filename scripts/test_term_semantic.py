@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 
 from term_semantic import pipeline as p
 from term_semantic import runtime
@@ -96,6 +97,26 @@ class SemanticPipelineTest(unittest.TestCase):
         self.assertFalse(state['complete'])
         with self.assertRaises(ValueError):
             self.invoke(p.verify, complete=True)
+
+    def test_every_ab_disagreement_requires_sol_when_policy_expanded(self):
+        self.invoke(p.review_all)
+        self.ingest(self.claim('A'))
+        job = self.claim('B')
+        rows = [self.result(row) for row in json.loads(Path(job['input']).read_text())['items']]
+        next(row for row in rows if row['surface']=='犬')['usage_class']='technical'
+        self.ingest(job,rows)
+        self.ingest(self.claim('reviewer'))
+        job = self.claim('adjudicator')
+        self.assertIn('犬',[x['surface'] for x in json.loads(Path(job['input']).read_text())['items']])
+        self.ingest(job)
+        self.finish()
+        self.invoke(p.verify,complete=True)
+
+    def test_legacy_classification_cannot_resume(self):
+        with mock.patch.object(runtime.shutil,'which') as executable:
+            with self.assertRaisesRegex(ValueError,'read-only'):
+                runtime.run_coordinator(argparse.Namespace(run=str(self.run),phase='pilot'))
+            executable.assert_not_called()
 
     def test_source_scope_and_pos_cost_variants(self):
         self.assertEqual(p.records(self.source), [list(r) for r in self.rows])
@@ -472,6 +493,45 @@ class PairAnchoredTest(unittest.TestCase):
         self.invoke(p.audit,size=2)
         finish()
         self.invoke(p.verify,complete=True)
+
+
+    def test_pre_emit_errors_are_recorded(self):
+        job = self.claim('A')
+        path = Path(job['decisions'])
+        path.write_text(p.encoded([{'reading':'いぬ'}]))
+        with self.assertRaises(ValueError):
+            self.invoke(p.emit,job=job['job'],decisions=str(path),independent=False)
+        with p.connect(self.run) as db:
+            errors=[json.loads(row[0]) for row in db.execute('SELECT error FROM validation_errors')]
+        self.assertEqual(len(errors),1)
+        self.assertEqual(errors[0]['phase'],'emit')
+        self.assertFalse(errors[0]['independent'])
+
+    def test_frozen_schema_tampering_and_pending_extension_are_rejected(self):
+        marker=self.run/'extension-pending.json'
+        marker.write_text('{}')
+        with self.assertRaisesRegex(ValueError,'Interrupted extension'):
+            runtime.run_coordinator(argparse.Namespace(run=str(self.run),phase='pilot'))
+        marker.unlink()
+        (self.run/'result.schema.json').write_text('{}')
+        with self.assertRaisesRegex(ValueError,'Frozen schema changed'):
+            self.invoke(p.verify,complete=False)
+
+    def test_verification_reads_frozen_pairs_once(self):
+        for stage in ('A','B','reviewer','adjudicator'):
+            while True:
+                job=self.claim(stage)
+                if job['job'] is None:break
+                self.accept(job)
+        SemanticPipelineTest.acknowledge_fixture_anomalies(self)
+        original=Path.read_text
+        reads=[]
+        def observed(path,*args,**kwargs):
+            if path==self.run/'pairs.json':reads.append(path)
+            return original(path,*args,**kwargs)
+        with mock.patch.object(Path,'read_text',observed):
+            self.invoke(p.verify,complete=True)
+        self.assertEqual(len(reads),1)
 
 
 if __name__ == '__main__':

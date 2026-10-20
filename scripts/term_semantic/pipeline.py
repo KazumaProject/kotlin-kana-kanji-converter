@@ -300,14 +300,16 @@ def acknowledge_anomaly(args):
 
 
 def review_all(args):
-    run=Path(args.run);meta=config(run);meta['review_all']=True
+    run=Path(args.run);meta=config(run);meta.update(review_all=True,adjudicate_disagreements=True)
     atomic(run/'manifest.json',encoded(meta))
     with connect(run) as db:
         ids=[r['id'] for r in db.execute("SELECT id FROM result_items WHERE pass='A'")]
         before=db.execute("SELECT count(*) FROM job_items WHERE stage='reviewer'").fetchone()[0]
+        sol_before=db.execute("SELECT count(*) FROM job_items WHERE stage='adjudicator'").fetchone()[0]
         reconcile(db,meta,ids)
         after=db.execute("SELECT count(*) FROM job_items WHERE stage='reviewer'").fetchone()[0]
-    print(encoded({'review_all':True,'newly_scheduled_words':after-before}))
+        sol_after=db.execute("SELECT count(*) FROM job_items WHERE stage='adjudicator'").fetchone()[0]
+    print(encoded({'review_all':True,'adjudicate_disagreements':True,'newly_scheduled_words':after-before,'newly_scheduled_adjudications':sol_after-sol_before}))
 
 
 def compact_pending(db, stage, meta):
@@ -382,8 +384,9 @@ def parse_decisions(path):
     return [parsed]
 
 
-def check_proof(run, job, proof_path, independent=False):
-    meta=config(run); proof_path=Path(proof_path); proof=json.loads(proof_path.read_text())
+def check_proof(run, job, proof_path, independent=False, context=None):
+    context=context or {'meta':config(run),'pairs':json.loads((Path(run)/'pairs.json').read_text()),'taxonomy':json.loads((Path(run)/'taxonomy.json').read_text())}
+    meta=context['meta']; proof_path=Path(proof_path); proof=json.loads(proof_path.read_text())
     directory=attempt_directory(run,job)
     prefix='independent-' if independent else ''
     output=directory/(prefix+'output.jsonl')
@@ -398,13 +401,23 @@ def check_proof(run, job, proof_path, independent=False):
         item=dict(item); computed=stable_id(item['reading'],item['surface'])
         if item.get('stable_id',computed)!=computed: raise ValueError('Authored stable_id/pair mismatch')
         item['stable_id']=computed; anchored.append(item)
-    validate(anchored,json.loads(job['ids']),json.loads((Path(run)/'pairs.json').read_text()),json.loads((Path(run)/'taxonomy.json').read_text()))
+    validate(anchored,json.loads(job['ids']),context['pairs'],context['taxonomy'])
     wanted=''.join(encoded(item)+'\n' for item in sorted(anchored,key=lambda x:x['stable_id']))
     if output.read_text()!=wanted: raise ValueError('Output differs from authored pair decisions')
     return proof
 
 
 def emit(args):
+    try:
+        return _emit(args)
+    except (ValueError,KeyError,TypeError,json.JSONDecodeError) as exc:
+        with connect(args.run) as db:
+            db.execute('INSERT INTO validation_errors VALUES(?,?,?)',
+                       (args.job,time.time(),encoded({'phase':'emit','independent':getattr(args,'independent',False),'error':str(exc)})))
+        raise
+
+
+def _emit(args):
     meta=config(args.run)
     if not meta.get('pair_anchor_required'): raise ValueError('Emit requires a pair-anchored run')
     with connect(args.run) as db:
@@ -448,13 +461,14 @@ def reveal(args):
         print(encoded({'candidate_input':str(target),'independent_seal':str(directory/'independent-seal.json')}))
 
 
-def anchor_evidence(run,job,output=None):
+def anchor_evidence(run,job,output=None,context=None):
+    context=context or {'meta':config(run),'pairs':json.loads((Path(run)/'pairs.json').read_text()),'taxonomy':json.loads((Path(run)/'taxonomy.json').read_text())}
     directory=attempt_directory(run,job)
-    proof_path=directory/'emit-proof.json'; proof=check_proof(run,job,proof_path)
+    proof_path=directory/'emit-proof.json'; proof=check_proof(run,job,proof_path,context=context)
     if output is not None and Path(output).resolve()!=(directory/'output.jsonl').resolve(): raise ValueError('Ingest requires assigned emitted output')
     evidence={'emit_proof':str(proof_path),'emit_proof_sha256':digest(proof_path.read_bytes()),'input_sha256':proof['input_sha256'],'output_sha256':proof['output_sha256']}
     if job['pass'] in ('reviewer','adjudicator'):
-        independent=directory/'independent-emit-proof.json'; check_proof(run,job,independent,True)
+        independent=directory/'independent-emit-proof.json'; check_proof(run,job,independent,True,context=context)
         seal_path=directory/'independent-seal.json'; seal=json.loads(seal_path.read_text())
         if seal.get('job')!=job['id'] or seal.get('independent_proof_sha256')!=digest(independent.read_bytes()) or seal.get('independent_output_sha256')!=digest((directory/'independent-output.jsonl').read_bytes()): raise ValueError('Independent judgment seal changed')
         if not (directory/'candidate-input.json').exists(): raise ValueError('Review reveal missing')
@@ -535,9 +549,10 @@ def high_risk(item):
             or 'term_tag_abbreviations' in item['tags'])
 
 
-def reviewer_requires_sol(a,b,reviewed):
+def reviewer_requires_sol(a,b,reviewed,all_disagreements=False):
     core=lambda item:(item['usage_class'],item['primary_domain'])
-    return (reviewed['needs_review'] or unknown(reviewed)
+    return ((all_disagreements and semantic(a)!=semantic(b))
+            or reviewed['needs_review'] or unknown(reviewed)
             or (core(a)==core(b) and core(reviewed)!=core(a))
             or reviewed['primary_domain'] not in (a['primary_domain'],b['primary_domain']))
 
@@ -558,7 +573,7 @@ def reconcile(db, meta, affected):
             pending['adjudicator'].append(i); continue
         elif i in passes['reviewer']:
             final,origin=passes['reviewer'][i]
-            if reviewer_requires_sol(a,b,final): pending['adjudicator'].append(i); continue
+            if reviewer_requires_sol(a,b,final,meta.get('adjudicate_disagreements',False)): pending['adjudicator'].append(i); continue
         elif meta.get('review_all') or semantic(a)!=semantic(b) or high_risk(a) or high_risk(b) or i in surface_ambiguity or int(i[:8],16)%10==0:
             pending['reviewer'].append(i); continue
         else:
@@ -664,7 +679,7 @@ def _verify(db,args):
         items=json.loads(job['result']); validate(items,ids,pairs,tax)
         evidence=json.loads(job['evidence'])
         if meta.get('pair_anchor_required'):
-            anchor=anchor_evidence(run,job)
+            anchor=anchor_evidence(run,job,context={'meta':meta,'pairs':pairs,'taxonomy':tax})
             if any(evidence.get(k)!=v for k,v in anchor.items()): raise ValueError('Accepted anchor evidence changed')
             emitted={item['stable_id']:item for item in parse_decisions(attempt_directory(run,job)/'output.jsonl')}
             if any({key:item[key] for key in FIELDS}!={key:emitted[item['stable_id']][key] for key in FIELDS} for item in items): raise ValueError('Accepted result differs from emitted pair decision')
@@ -692,7 +707,7 @@ def _verify(db,args):
         need_sol=(int(row['id'][:8],16)%100==0 and semantic(ab[0])==semantic(ab[1]) and not unknown(ab[0]) and not ab[0]['needs_review'])
         if 'reviewer' in prior:
             reviewed=json.loads(prior['reviewer']['value'])
-            need_sol=need_sol or reviewer_requires_sol(ab[0],ab[1],reviewed)
+            need_sol=need_sol or reviewer_requires_sol(ab[0],ab[1],reviewed,meta.get('adjudicate_disagreements',False))
         if need_sol and 'adjudicator' not in prior: raise ValueError('Required Sol judgment missing')
         expected_origin=next(prior[stage]['job_id'] for stage in ('adjudicator','reviewer','A') if stage in prior)
         if row['origin']!=expected_origin: raise ValueError('Final bypasses the latest review')
@@ -751,7 +766,7 @@ def _report(db,args):
         item=json.loads(row['value'])
         for name,ids in groups.items():
             if row['id'] in ids: strata[name][item['usage_class']]+=1
-    output={'sample_group_usage':strata,'selected':meta['selected'],'counts':counts,'domain_agreement':domains,'model_processed':{stage:len(items) for stage,items in passes.items()},'usage_evidence':evidence,'validation_errors':[dict(r) for r in db.execute('SELECT * FROM validation_errors')],'unknown_anomalies':[dict(r) for r in db.execute('SELECT * FROM anomalies')],'accuracy':'not measured: no independent human gold labels','cost':'unavailable unless explicitly present in execution evidence'}
+    output={'sample_group_usage':strata,'selected':meta['selected'],'counts':counts,'domain_agreement':domains,'model_processed':{stage:len(items) for stage,items in passes.items()},'usage_evidence':evidence,'validation_errors':[dict(r) for r in db.execute('SELECT * FROM validation_errors')],'unknown_anomalies':[dict(r) for r in db.execute('SELECT * FROM anomalies')],'agreement_fields':sorted(json.loads(semantic(next(iter(passes['A'].values()))))) if passes['A'] else [],'domain_grouping':'Classifier A primary_domain; null includes unresolved or multiple domains','accuracy':'not measured: no independent human gold labels','cost':'unavailable unless explicitly present in execution evidence'}
     overlap=len(set(passes['A'])&set(passes['B']))
     output['agreement_rates']={'compared_pairs':overlap,
         'all_fields':counts['agreement']['agree']/overlap if overlap else None,
