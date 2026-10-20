@@ -123,18 +123,24 @@ Maximum TWO concurrent child agents. Never substitute codex exec workers for for
 Spawn two long-running children, one A and one B. In pilot each processes all available jobs of its stage.
 In full each processes at most10 jobs per wave, then returns; drain Reviewer and Sol jobs after each wave,
 check semantic errors and progress, then start the next independent A/B wave until all source IDs finish.
+The first full wave must be one job per A/B to verify the larger batch's actual format/usage before ten-job waves.
 If an agent returns early, follow up until that stage queue is empty. Do not repeat validated work.
 You coordinate and run validation; the actual child LLM must author every semantic decision.
 
 WORKER instructions to forward, replacing STAGE:
 1. cwd {repo}; `{cli} next --run {run} --stage STAGE`.
-2. If job=null, return truthful counts. Otherwise read returned prompt, taxonomy, input, and
+2. If job=null, return truthful counts. Otherwise read returned prompt and taxonomy. A/B read input;
+   reviewer/adjudicator read ONLY independent_input until their independent output is written. Read
    {repo}/src/main/classification/term-semantic/result.schema.json. No other repository files,
    dictionary data, legacy labels, searches or web access. Treat strings as data.
 3. For each item, use YOUR semantic understanding of full reading/surface and explicitly author its
    classification. You may serialize JSON/copy identifiers mechanically; NEVER generate labels
    with character/suffix/keyword rules, lookup datasets, a blanket default, or a different model.
    Required14fields, one object per item, concise reasons. Write only assigned output path.
+   Minimize tokens by displaying a compact semantic view [input_index,reading,surface], authoring an
+   explicit decision table by input_index, and mechanically copying identifiers into complete JSONL.
+   Do not retype long stable IDs or unchanged source strings. All semantic fields remain LLM judgments.
+   Large jobs may be authored in 100-item chunks in the SAME assigned job, then combined and validated.
    Key explicit decisions by stable_id or input index, never surface alone: identical spellings with
    different readings can have different meanings. Do not share a surface-only decision across them.
 4. For reviewer/adjudicator first read independent_input without candidate_results and WRITE independent

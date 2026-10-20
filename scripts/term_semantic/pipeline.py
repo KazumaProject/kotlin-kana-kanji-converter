@@ -190,8 +190,11 @@ def promote(args):
         pending=json.loads(marker.read_text())
         if pending['source_sha256']!=meta['source_sha256']: raise ValueError('Promotion source mismatch')
         remaining=pending['remaining_ids']
+        meta['batch_size']=pending.get('batch_size',meta['batch_size'])
+        if getattr(args,'batch_size',None) not in (None,meta['batch_size']): raise ValueError('Interrupted promotion has a fixed batch size')
     else:
-        atomic(marker,encoded({'source_sha256':meta['source_sha256'],'remaining_ids':remaining}))
+        if getattr(args,'batch_size',None): meta['batch_size']=args.batch_size
+        atomic(marker,encoded({'source_sha256':meta['source_sha256'],'remaining_ids':remaining,'batch_size':meta['batch_size']}))
     for offset in range(0,len(remaining),meta['batch_size']):
         for stage in ('A','B'): add_job(db,stage,remaining[offset:offset+meta['batch_size']],meta)
     meta.update(full=True,selected=len(pairs),pilot_selected=meta['selected'],selected_ids=sorted(pairs))
@@ -673,6 +676,7 @@ def main():
         if name=='prepare':
             for key in ('source','taxonomy','prompts'): p.add_argument('--'+key,required=True)
             p.add_argument('--seed',default='semantic-v1'); p.add_argument('--pilot-size',type=int,default=1200); p.add_argument('--batch-size',type=int,default=100); p.add_argument('--full',action='store_true'); p.add_argument('--classifier-model',default='gpt-6-luna'); p.add_argument('--adjudicator-model',default='gpt-6.1-sol')
+        if name=='promote': p.add_argument('--batch-size',type=int,choices=range(1,201))
         if name=='audit': p.add_argument('--size',type=int,default=240)
         if name=='acknowledge-anomaly':
             p.add_argument('--job',required=True); p.add_argument('--note',required=True); p.add_argument('--evidence',required=True)
@@ -683,7 +687,7 @@ def main():
         if name=='compare': p.add_argument('--legacy',required=True)
         if name=='export': p.add_argument('--output',required=True)
     args=parser.parse_args()
-    if getattr(args,'batch_size',1)<1 or getattr(args,'pilot_size',1)<1: parser.error('Sizes must be positive')
+    if (getattr(args,'batch_size',None) is not None and args.batch_size<1) or getattr(args,'pilot_size',1)<1: parser.error('Sizes must be positive')
     try: globals()[{'next':'next_job','acknowledge-anomaly':'acknowledge_anomaly'}.get(args.command,args.command)](args)
     except (ValueError,KeyError,TypeError) as exc: parser.exit(2,str(exc)+'\n')
 

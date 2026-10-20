@@ -237,11 +237,12 @@ class SemanticPipelineTest(unittest.TestCase):
         self.finish()
         with p.connect(self.run) as db:
             old_jobs = db.execute('SELECT count(*) FROM jobs').fetchone()[0]
-        self.invoke(p.promote)
+        self.invoke(p.promote,batch_size=200)
         self.invoke(p.promote)
         with p.connect(self.run) as db:
             self.assertEqual(old_jobs, db.execute('SELECT count(*) FROM jobs').fetchone()[0])
         self.assertTrue(p.config(self.run)['full'])
+        self.assertEqual(p.config(self.run)['batch_size'],200)
         self.invoke(p.verify, complete=True)
 
     def test_export_does_not_overwrite_existing_directory(self):
