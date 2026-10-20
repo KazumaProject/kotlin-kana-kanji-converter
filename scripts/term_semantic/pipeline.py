@@ -85,7 +85,7 @@ def connect(run):
                 for item in json.loads(row['result']): db.execute('INSERT OR REPLACE INTO result_items VALUES(?,?,?,?)',(row['pass'],item['stable_id'],encoded(item),row['id']))
         db.execute('CREATE INDEX IF NOT EXISTS result_items_id ON result_items(id)')
         db.execute('CREATE INDEX IF NOT EXISTS job_items_job ON job_items(job_id)')
-        missing_review=[r[0] for r in db.execute("SELECT a.id FROM job_items a LEFT JOIN job_items r ON r.stage='reviewer' AND r.id=a.id WHERE a.stage='adjudicator' AND r.id IS NULL")]
+        missing_review=[r[0] for r in db.execute("SELECT a.id FROM job_items a LEFT JOIN job_items r ON r.stage='reviewer' AND r.id=a.id WHERE (a.stage='adjudicator' OR a.stage LIKE 'adjudicator@%') AND r.id IS NULL")]
         if missing_review:
             meta=config(run)
             for offset in range(0,len(missing_review),meta['batch_size']):
@@ -162,6 +162,71 @@ def prepare(args):
     print(encoded({k:v for k,v in meta.items() if not k.endswith('_ids')}))
 
 
+def sol_revision(stage):
+    if stage=='adjudicator': return 1
+    if stage.startswith('adjudicator@') and stage.split('@',1)[1].isdigit():
+        return int(stage.split('@',1)[1])
+    return 0
+
+
+def review_stage(stage):
+    return stage=='reviewer' or sol_revision(stage)>0
+
+
+def latest_origin(prior):
+    sol=sorted((stage for stage in prior if sol_revision(stage)),key=sol_revision,reverse=True)
+    return next(stage for stage in sol+['reviewer','A'] if stage in prior)
+
+
+def rereview_request(run,stage):
+    for path in (Path(run)/'rereviews').glob('*.json'):
+        value=json.loads(path.read_text())
+        if value['stage']==stage:
+            if value.get('findings_path') and digest(Path(value['findings_path']).read_bytes())!=value['findings_sha256']:
+                raise ValueError('Rereview findings changed')
+            return path,value
+    raise ValueError('Rereview request missing')
+
+
+def rereview(args):
+    run=Path(args.run); meta=config(run)
+    ids=sorted(set(json.loads(Path(args.ids_file).read_text())))
+    if not ids or not all(isinstance(i,str) for i in ids) or not set(ids)<=set(meta['selected_ids']):
+        raise ValueError('Rereview requires nonempty selected stable IDs')
+    key=args.review_key.strip(); reason=args.reason.strip()
+    if not key or len(reason)<10: raise ValueError('Review key and concrete reason required')
+    path=run/'rereviews'/(digest(key.encode())+'.json')
+    findings=Path(args.findings).read_text() if getattr(args,'findings',None) else None
+    if findings is not None and not isinstance(json.loads(findings).get('findings'),list): raise ValueError('Expected findings list')
+    with connect(run) as db:
+        db.execute('BEGIN IMMEDIATE')
+        meta=config(run)
+        for i in ids:
+            if not db.execute("SELECT 1 FROM result_items WHERE pass='adjudicator' AND id=?",(i,)).fetchone():
+                raise ValueError('Initial Sol adjudication must exist before rereview')
+        if path.exists():
+            request=json.loads(path.read_text())
+            if request['ids']!=ids or request['reason']!=reason or request['source_sha256']!=meta['source_sha256'] or request.get('findings_sha256')!=(digest(findings.encode()) if findings is not None else None):
+                raise ValueError('Rereview key already records a different request')
+        else:
+            stages=list(meta['models'])+[json.loads(p.read_text())['stage'] for p in (run/'rereviews').glob('*.json')]
+            revision=max(sol_revision(stage) for stage in stages)+1
+            request={'key':key,'stage':'adjudicator@'+str(revision),'ids':ids,'reason':reason,'source_sha256':meta['source_sha256']}
+            if findings is not None:
+                target=run/'rereview-findings'/(digest(key.encode())+'.json')
+                immutable_artifact(target,findings)
+                request.update(findings_path=str(target),findings_sha256=digest(findings.encode()))
+            atomic(path,encoded(request))
+        stage=request['stage']
+        text=(run/'prompts/adjudicator.md').read_text()
+        immutable_artifact(run/'prompts'/(stage+'.md'),text)
+        meta['models'][stage]=meta['models']['adjudicator']
+        meta['prompt_hashes'][stage]=digest(text.encode())
+        atomic(run/'manifest.json',encoded(meta))
+        for offset in range(0,len(ids),meta['batch_size']): add_job(db,stage,ids[offset:offset+meta['batch_size']],meta)
+    print(encoded({'stage':stage,'words':len(ids),'request':str(path),'history_preserved':True}))
+
+
 def job_identity(meta, stage, ids):
     identity=[meta['source_sha256'],meta['taxonomy_sha256'],meta['prompt_hashes'][stage],meta['models'][stage],stage,sorted(ids)]
     if 'output_contract' in meta: identity.append(meta['output_contract'])
@@ -169,7 +234,7 @@ def job_identity(meta, stage, ids):
 
 
 def add_job(db, stage, ids, meta):
-    if stage=='adjudicator':
+    if sol_revision(stage):
         # An independent Sol audit may discover an unknown meaning even when
         # A/B agreed. Ensure the required Reviewer judgment exists in that case.
         unreviewed=[i for i in ids if not db.execute("SELECT 1 FROM job_items WHERE stage='reviewer' AND id=?",(i,)).fetchone()]
@@ -336,8 +401,8 @@ def next_job(args):
     lease_token = uuid.uuid4().hex
     db.execute("UPDATE jobs SET status='pending' WHERE status='leased' AND lease_until < ?",(now,))
     compact_pending(db,args.stage,config(args.run))
-    stage = ' AND pass=?' if args.stage else ''
-    row = db.execute("SELECT * FROM jobs WHERE status='pending'"+stage+" AND (pass!='adjudicator' OR NOT EXISTS(SELECT 1 FROM job_items ji LEFT JOIN result_items ri ON ri.pass='reviewer' AND ri.id=ji.id WHERE ji.stage='adjudicator' AND ji.job_id=jobs.id AND ri.id IS NULL)) ORDER BY CASE pass WHEN 'A' THEN 0 WHEN 'B' THEN 1 WHEN 'reviewer' THEN 2 ELSE 3 END,ids LIMIT 1", (args.stage,) if args.stage else ()).fetchone()
+    stage = " AND (pass=? OR pass LIKE 'adjudicator@%')" if args.stage=='adjudicator' else ' AND pass=?' if args.stage else ''
+    row = db.execute("SELECT * FROM jobs WHERE status='pending'"+stage+" AND (pass NOT LIKE 'adjudicator%' OR NOT EXISTS(SELECT 1 FROM job_items ji LEFT JOIN result_items ri ON ri.pass='reviewer' AND ri.id=ji.id WHERE ji.stage=jobs.pass AND ji.job_id=jobs.id AND ri.id IS NULL)) ORDER BY CASE pass WHEN 'A' THEN 0 WHEN 'B' THEN 1 WHEN 'reviewer' THEN 2 ELSE 3 END,ids LIMIT 1", (args.stage,) if args.stage else ()).fetchone()
     if not row:
         db.commit(); print(encoded({'job':None})); return
     db.execute("UPDATE jobs SET status='leased',lease_until=?,lease_token=?,attempt=attempt+1 WHERE id=?",(now+args.lease_seconds,lease_token,row['id']))
@@ -345,7 +410,7 @@ def next_job(args):
     pairs=json.loads((Path(args.run)/'pairs.json').read_text())
     payload={'batch_id':row['id'],'classification_pass':row['pass'],'lease_token':lease_token,'items':[pairs[i] for i in json.loads(row['ids'])]}
     anchored=config(args.run).get('pair_anchor_required',False)
-    if row['pass'] in ('reviewer','adjudicator') and not anchored:
+    if review_stage(row['pass']) and not anchored:
         candidates={}
         for i in json.loads(row['ids']):
             for prior in db.execute('SELECT pass,value FROM result_items WHERE id=?',(i,)):
@@ -424,7 +489,7 @@ def _emit(args):
         job=db.execute('SELECT * FROM jobs WHERE id=?',(args.job,)).fetchone()
         if not job or job['status'] not in ('leased','validated'): raise ValueError('Job must be leased')
         directory=attempt_directory(args.run,job); independent=getattr(args,'independent',False)
-        if independent and job['pass'] not in ('reviewer','adjudicator'): raise ValueError('Independent emit is only for review passes')
+        if independent and not review_stage(job['pass']): raise ValueError('Independent emit is only for review passes')
         items=parse_decisions(args.decisions); anchored=[]
         for original in items:
             if not isinstance(original,dict) or not {'reading','surface'}<=set(original): raise ValueError('Every authored decision requires reading and surface')
@@ -445,7 +510,7 @@ def reveal(args):
     if not config(args.run).get('pair_anchor_required'): raise ValueError('Reveal requires a pair-anchored run')
     with connect(args.run) as db:
         job=db.execute('SELECT * FROM jobs WHERE id=?',(args.job,)).fetchone()
-        if not job or job['pass'] not in ('reviewer','adjudicator') or job['status'] not in ('leased','validated'): raise ValueError('Reveal is only for leased review passes')
+        if not job or not review_stage(job['pass']) or job['status'] not in ('leased','validated'): raise ValueError('Reveal is only for leased review passes')
         directory=attempt_directory(args.run,job); proof_path=directory/'independent-emit-proof.json'
         proof=check_proof(args.run,job,proof_path,True)
         seal={'job':job['id'],'independent_proof_sha256':digest(proof_path.read_bytes()),'independent_output_sha256':proof['output_sha256']}
@@ -457,6 +522,12 @@ def reveal(args):
                 item=json.loads(prior['value'])
                 candidates.setdefault(i,[]).append({'pass':prior['pass'],'result':{k:item[k] for k in FIELDS-{'stable_id','reading','surface'}}})
         payload['candidate_results']=candidates
+        if sol_revision(job['pass'])>1:
+            _,request=rereview_request(args.run,job['pass'])
+            if request.get('findings_path'):
+                findings=json.loads(Path(request['findings_path']).read_text())
+                payload['supplemental_ai_findings']=[item for item in findings['findings'] if stable_id(item['reading'],item['surface']) in json.loads(job['ids'])]
+                payload['findings_are_verified_reference_labels']=False
         target=directory/'candidate-input.json'; immutable_artifact(target,encoded(payload))
         print(encoded({'candidate_input':str(target),'independent_seal':str(directory/'independent-seal.json')}))
 
@@ -467,12 +538,15 @@ def anchor_evidence(run,job,output=None,context=None):
     proof_path=directory/'emit-proof.json'; proof=check_proof(run,job,proof_path,context=context)
     if output is not None and Path(output).resolve()!=(directory/'output.jsonl').resolve(): raise ValueError('Ingest requires assigned emitted output')
     evidence={'emit_proof':str(proof_path),'emit_proof_sha256':digest(proof_path.read_bytes()),'input_sha256':proof['input_sha256'],'output_sha256':proof['output_sha256']}
-    if job['pass'] in ('reviewer','adjudicator'):
+    if review_stage(job['pass']):
         independent=directory/'independent-emit-proof.json'; check_proof(run,job,independent,True,context=context)
         seal_path=directory/'independent-seal.json'; seal=json.loads(seal_path.read_text())
         if seal.get('job')!=job['id'] or seal.get('independent_proof_sha256')!=digest(independent.read_bytes()) or seal.get('independent_output_sha256')!=digest((directory/'independent-output.jsonl').read_bytes()): raise ValueError('Independent judgment seal changed')
         if not (directory/'candidate-input.json').exists(): raise ValueError('Review reveal missing')
         evidence.update(independent_proof_sha256=digest(independent.read_bytes()),independent_seal_sha256=digest(seal_path.read_bytes()))
+    if sol_revision(job['pass'])>1:
+        request_path,_=rereview_request(run,job['pass'])
+        evidence.update(rereview_request_sha256=digest(request_path.read_bytes()),candidate_input_sha256=digest((directory/'candidate-input.json').read_bytes()))
     return evidence
 
 
@@ -568,8 +642,9 @@ def reconcile(db, meta, affected):
     for i in sorted(set(passes['A'])&set(passes['B'])):
         db.execute('DELETE FROM finals WHERE id=?',(i,))
         a,origin=passes['A'][i]; b,_=passes['B'][i]
-        if i in passes['adjudicator']:
-            final,origin=passes['adjudicator'][i]
+        sol=[stage for stage in passes if sol_revision(stage) and i in passes[stage]]
+        if sol:
+            final,origin=passes[max(sol,key=sol_revision)][i]
         elif int(i[:8],16)%100==0 and semantic(a)==semantic(b) and not unknown(a) and not a['needs_review']:
             pending['adjudicator'].append(i); continue
         elif i in passes['reviewer']:
@@ -710,10 +785,10 @@ def _verify(db,args):
             reviewed=json.loads(prior['reviewer']['value'])
             need_sol=need_sol or reviewer_requires_sol(ab[0],ab[1],reviewed,meta.get('adjudicate_disagreements',False))
         if need_sol and 'adjudicator' not in prior: raise ValueError('Required Sol judgment missing')
-        expected_origin=next(prior[stage]['job_id'] for stage in ('adjudicator','reviewer','A') if stage in prior)
+        expected_origin=prior[latest_origin(prior)]['job_id']
         if row['origin']!=expected_origin: raise ValueError('Final bypasses the latest review')
         if unknown(final):
-            if origin['pass']!='adjudicator': raise ValueError('Unknown without Sol adjudication')
+            if not sol_revision(origin['pass']): raise ValueError('Unknown without Sol adjudication')
             if not db.execute("SELECT 1 FROM result_items WHERE pass='reviewer' AND id=?",(row['id'],)).fetchone(): raise ValueError('Unknown without Reviewer')
     audit_path=run/'audit-selection.json'
     if audit_path.exists():
@@ -724,14 +799,14 @@ def _verify(db,args):
         if args.complete:
             for i in audit_ids:
                 origin=db.execute('SELECT jobs.pass FROM finals JOIN jobs ON jobs.id=finals.origin WHERE finals.id=?',(i,)).fetchone()
-                if not origin or origin['pass']!='adjudicator': raise ValueError('Independent Sol audit incomplete')
+                if not origin or not sol_revision(origin['pass']): raise ValueError('Independent Sol audit incomplete')
     if args.complete and ({r['id'] for r in finals}!=selected or db.execute("SELECT count(*) FROM jobs WHERE status!='validated'").fetchone()[0]): raise ValueError('Classification incomplete')
     if args.complete and db.execute("SELECT 1 FROM anomalies WHERE status!='inspected_by_sol' LIMIT 1").fetchone(): raise ValueError('Unknown-rate anomaly requires Sol inspection')
     complete=({r['id'] for r in finals}==selected
               and not db.execute("SELECT 1 FROM jobs WHERE status!='validated' LIMIT 1").fetchone()
               and not db.execute("SELECT 1 FROM anomalies WHERE status!='inspected_by_sol' LIMIT 1").fetchone())
     if audit_path.exists():
-        complete=complete and all(db.execute("SELECT jobs.pass FROM finals JOIN jobs ON jobs.id=finals.origin WHERE finals.id=?",(i,)).fetchone()[0]=='adjudicator' for i in audit_ids)
+        complete=complete and all(sol_revision(db.execute("SELECT jobs.pass FROM finals JOIN jobs ON jobs.id=finals.origin WHERE finals.id=?",(i,)).fetchone()[0]) for i in audit_ids)
     print(encoded({'verified':True,'selected':meta['selected'],'finalized':len(finals),'complete':bool(complete)}))
 
 
@@ -778,7 +853,7 @@ def _report(db,args):
         model=meta['models'][stage];model_ids[model].update(items);model_counts[model]+=len(items)
     output['model_totals']={model:{'judgments':n,'unique_pairs':len(model_ids[model])} for model,n in model_counts.items()}
     output['finalized']=db.execute('SELECT count(*) FROM finals').fetchone()[0]
-    output['review_judgments']=sum(len(passes[stage]) for stage in ('reviewer','adjudicator'))
+    output['review_judgments']=sum(len(items) for stage,items in passes.items() if review_stage(stage))
     output['ai_audit_is_ground_truth']=False
     finals={r['id']:json.loads(r['value']) for r in db.execute('SELECT id,value FROM finals')}
     run=Path(args.run)
@@ -866,7 +941,7 @@ def compare(args):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     sub=parser.add_subparsers(dest='command',required=True)
-    for name in ('prepare','promote','extend-pilot','audit','review-all','acknowledge-anomaly','next','emit','reveal','ingest','status','verify','report','compare','export'):
+    for name in ('prepare','promote','extend-pilot','audit','review-all','rereview','acknowledge-anomaly','next','emit','reveal','ingest','status','verify','report','compare','export'):
         p=sub.add_parser(name); p.add_argument('--run',required=True)
         if name=='prepare':
             for key in ('source','taxonomy','prompts'): p.add_argument('--'+key,required=True)
@@ -874,6 +949,8 @@ def main():
         if name=='extend-pilot': p.add_argument('--pilot-size',type=int,default=1200)
         if name=='promote': p.add_argument('--batch-size',type=int,choices=range(1,201))
         if name=='audit': p.add_argument('--size',type=int,default=240)
+        if name=='rereview':
+            p.add_argument('--ids-file',required=True); p.add_argument('--review-key',required=True); p.add_argument('--reason',required=True); p.add_argument('--findings')
         if name=='acknowledge-anomaly':
             p.add_argument('--job',required=True); p.add_argument('--note',required=True); p.add_argument('--evidence',required=True)
         if name=='next': p.add_argument('--stage',choices=['A','B','reviewer','adjudicator']); p.add_argument('--lease-seconds',type=int,default=1800)

@@ -68,6 +68,12 @@ Reviewer and adjudicator jobs initially expose only blind input. Their complete 
 
 `extend-pilot` grows a completed smoke to the same deterministic 1,200-word sample while retaining validated calls, archives the previous audit selection, and checkpoints an interrupted extension. Full promotion also retains pilot results. Begin full waves with one 100-word job per A/B, then at most ten jobs per stage before draining review. Preserve the inspected first-wave job/evidence/report hashes in `full-first-wave.json` so resume reuses that check. Drain existing review work before new waves. Intermediate JSON syntax repairs are logged and corrected; a repair-count limit or merely displaying source IDs does not block valid classification. Actual code-derived meaning, prohibited evidence or incorrect model provenance must be reported. A larger batch is an explicit option only after measured output reliability and usage justify it.
 
+## 少数語の再判定 / Versioned reconsideration
+
+AI監査で新しい所見が得られた語は、元の判断を上書きせず`rereview`で少数語をまとめて再判定する。`--ids-file`は対象stable IDのJSON配列、`--review-key`は再開時にも同じ依頼を示すキー、`--reason`は再判定理由である。任意の`--findings`には新しいAI所見を含むJSON（findings配列）を指定できる。所見は固定・ハッシュ記録し、Sol自身の独立判断が検証を通るまで公開しない。所見を正解ラベルとは扱わない。
+
+The existing `next --stage adjudicator` queue also serves `adjudicator@N` passes. Each uses the frozen Sol prompt/model and full blind-review proofs. The latest validated numeric revision determines the final annotation; prior jobs, results and evidence remain intact. A/B are reused. The request key makes restarts idempotent. New judgments and unique pairs are reported separately, and original-record export checks still apply. This changes annotations, never source dictionary records.
+
 ## 検証・費用 / Verification and usage
 
 Validate IDs, complete coverage, unchanged reading/surface, schema, category/tag consistency, mandatory adjudication, resumability and deterministic merge. Export must preserve the full multiset of original records, including duplicate counts, POS IDs and costs. Tag views overlap and are not counted as the primary export multiset. Terminal unknown records remain in the primary export.

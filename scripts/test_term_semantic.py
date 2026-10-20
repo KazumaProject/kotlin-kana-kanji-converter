@@ -413,7 +413,7 @@ class PairAnchoredTest(unittest.TestCase):
 
     def accept(self, job):
         rows = self.decisions(job)
-        if job['pass'] in ('reviewer', 'adjudicator'):
+        if p.review_stage(job['pass']):
             path = Path(job['independent_decisions'])
             self.assertNotIn('candidate_results', json.loads(Path(job['input']).read_text()))
             self.assertFalse(Path(job['candidate_input']).exists())
@@ -563,6 +563,72 @@ class PairAnchoredTest(unittest.TestCase):
         report.write_text('{}')
         with self.assertRaisesRegex(ValueError,'inspection evidence changed'):
             runtime.first_wave_verified(self.run)
+
+
+    def test_versioned_sol_rereview_preserves_history_and_is_idempotent(self):
+        def finish():
+            for stage in ('A','B','reviewer','adjudicator'):
+                while True:
+                    job=self.claim(stage)
+                    if job['job'] is None:break
+                    self.accept(job)
+            SemanticPipelineTest.acknowledge_fixture_anomalies(self)
+        finish()
+        with p.connect(self.run) as db:
+            old=[tuple(x) for x in db.execute('SELECT id,result,evidence FROM jobs ORDER BY id')]
+        ident=p.stable_id('えっくす','X')
+        ids=self.base/'rereview-ids.json';ids.write_text(p.encoded([ident]))
+        findings=self.base/'synthetic-findings.json'
+        findings.write_text(p.encoded({'findings':[{'reading':'えっくす','surface':'X','inspection_rationale':'Synthetic mechanism fixture, not verified semantics.'}]}))
+        args=dict(ids_file=str(ids),review_key='synthetic-followup',reason='Synthetic revision mechanics, not a semantic accuracy test.',findings=str(findings))
+        first=self.invoke(p.rereview,**args)
+        self.assertEqual(first['stage'],'adjudicator@2')
+        self.assertEqual(self.invoke(p.rereview,**args)['stage'],first['stage'])
+        job=self.claim('adjudicator')
+        self.assertEqual(job['pass'],'adjudicator@2')
+        self.assertNotIn('supplemental_ai_findings',json.loads(Path(job['input']).read_text()))
+        original=self.result
+        def updated(pair):
+            row=original(pair)
+            if pair['surface']=='X':
+                row.update(usage_class='general',primary_domain='term_language_literature',
+                           final_category='term_language_literature',ambiguous=False,
+                           needs_review=False,context_required=False,ambiguity_types=[],
+                           short_reason='Synthetic revised fixture only.')
+            return row
+        self.result=updated
+        self.accept(job)
+        candidate=json.loads(Path(job['candidate_input']).read_text())
+        self.assertEqual(candidate['supplemental_ai_findings'][0]['surface'],'X')
+        self.assertFalse(candidate['findings_are_verified_reference_labels'])
+        with p.connect(self.run) as db:
+            for jid,value,evidence in old:
+                self.assertEqual(tuple(db.execute('SELECT result,evidence FROM jobs WHERE id=?',(jid,)).fetchone()),(value,evidence))
+            final=db.execute('SELECT value,origin FROM finals WHERE id=?',(ident,)).fetchone()
+            self.assertEqual(final['origin'],job['job'])
+            self.assertEqual(json.loads(final['value'])['classification_pass'],'adjudicator@2')
+            self.assertEqual(db.execute("SELECT count(*) FROM result_items WHERE id=? AND pass LIKE 'adjudicator%'",(ident,)).fetchone()[0],2)
+        self.invoke(p.audit,size=3)
+        finish()
+        self.invoke(p.verify,complete=True)
+        report=self.invoke(p.report)
+        self.assertEqual(report['model_processed']['adjudicator@2'],1)
+        exported=self.invoke(p.export,output=str(self.base/'revision-export'))
+        self.assertEqual(exported['exported_records'],4)
+        self.assertEqual(self.claim('adjudicator')['job'],None)
+        self.invoke(p.rereview,**args)
+        self.assertEqual(self.claim('adjudicator')['job'],None)
+        request=json.loads(Path(first['request']).read_text())
+        Path(request['findings_path']).write_text('{}')
+        with self.assertRaisesRegex(ValueError,'Rereview findings changed'):
+            self.invoke(p.verify,complete=True)
+
+    def test_rereview_rejects_unselected_or_unadjudicated_ids(self):
+        ids=self.base/'invalid-rereview.json'
+        for ident in ('not-a-selected-id',p.stable_id('いぬ','犬')):
+            ids.write_text(p.encoded([ident]))
+            with self.assertRaises(ValueError):
+                self.invoke(p.rereview,ids_file=str(ids),review_key='invalid',reason='Synthetic rejection fixture only.')
 
 
 if __name__ == '__main__':
