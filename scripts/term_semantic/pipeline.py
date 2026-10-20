@@ -252,6 +252,17 @@ def acknowledge_anomaly(args):
     print(encoded({'acknowledged':args.job}))
 
 
+def review_all(args):
+    run=Path(args.run);meta=config(run);meta['review_all']=True
+    atomic(run/'manifest.json',encoded(meta))
+    with connect(run) as db:
+        ids=[r['id'] for r in db.execute("SELECT id FROM result_items WHERE pass='A'")]
+        before=db.execute("SELECT count(*) FROM job_items WHERE stage='reviewer'").fetchone()[0]
+        reconcile(db,meta,ids)
+        after=db.execute("SELECT count(*) FROM job_items WHERE stage='reviewer'").fetchone()[0]
+    print(encoded({'review_all':True,'newly_scheduled_words':after-before}))
+
+
 def compact_pending(db, stage, meta):
     """Batch unstarted reviews; never discard a call, lease or accepted history."""
     if stage not in ('reviewer','adjudicator'):
@@ -395,7 +406,7 @@ def reconcile(db, meta, affected):
         elif i in passes['reviewer']:
             final,origin=passes['reviewer'][i]
             if reviewer_requires_sol(a,b,final): pending['adjudicator'].append(i); continue
-        elif semantic(a)!=semantic(b) or high_risk(a) or high_risk(b) or i in surface_ambiguity or int(i[:8],16)%10==0:
+        elif meta.get('review_all') or semantic(a)!=semantic(b) or high_risk(a) or high_risk(b) or i in surface_ambiguity or int(i[:8],16)%10==0:
             pending['reviewer'].append(i); continue
         else:
             final=a
@@ -514,7 +525,7 @@ def _verify(db,args):
         ab=[json.loads(db.execute('SELECT value FROM result_items WHERE pass=? AND id=?',(stage,row['id'])).fetchone()['value']) for stage in ('A','B')]
         if final.get('agreement_status')!=('agree' if semantic(ab[0])==semantic(ab[1]) else 'disagree'): raise ValueError('Agreement status changed')
         prior={r['pass']:r for r in db.execute('SELECT pass,value,job_id FROM result_items WHERE id=?',(row['id'],))}
-        need_review=(semantic(ab[0])!=semantic(ab[1]) or high_risk(ab[0]) or high_risk(ab[1]) or row['id'] in surface_ambiguity or int(row['id'][:8],16)%10==0)
+        need_review=(meta.get('review_all') or semantic(ab[0])!=semantic(ab[1]) or high_risk(ab[0]) or high_risk(ab[1]) or row['id'] in surface_ambiguity or int(row['id'][:8],16)%10==0)
         if need_review and 'reviewer' not in prior: raise ValueError('Required Reviewer judgment missing')
         need_sol=(int(row['id'][:8],16)%100==0 and semantic(ab[0])==semantic(ab[1]) and not unknown(ab[0]) and not ab[0]['needs_review'])
         if 'reviewer' in prior:
@@ -672,7 +683,7 @@ def compare(args):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     sub=parser.add_subparsers(dest='command',required=True)
-    for name in ('prepare','promote','audit','acknowledge-anomaly','next','ingest','status','verify','report','compare','export'):
+    for name in ('prepare','promote','audit','review-all','acknowledge-anomaly','next','ingest','status','verify','report','compare','export'):
         p=sub.add_parser(name); p.add_argument('--run',required=True)
         if name=='prepare':
             for key in ('source','taxonomy','prompts'): p.add_argument('--'+key,required=True)
@@ -689,7 +700,7 @@ def main():
         if name=='export': p.add_argument('--output',required=True)
     args=parser.parse_args()
     if (getattr(args,'batch_size',None) is not None and args.batch_size<1) or getattr(args,'pilot_size',1)<1: parser.error('Sizes must be positive')
-    try: globals()[{'next':'next_job','acknowledge-anomaly':'acknowledge_anomaly'}.get(args.command,args.command)](args)
+    try: globals()[{'next':'next_job','acknowledge-anomaly':'acknowledge_anomaly','review-all':'review_all'}.get(args.command,args.command)](args)
     except (ValueError,KeyError,TypeError) as exc: parser.exit(2,str(exc)+'\n')
 
 if __name__=='__main__': main()

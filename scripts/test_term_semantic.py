@@ -325,6 +325,18 @@ class SemanticPipelineTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             runtime.independent_spawn_settings(path,'/root/another-worker')
 
+    def test_expanded_review_reuses_existing_judgments_and_requires_all_words(self):
+        self.finish()
+        with p.connect(self.run) as db:
+            ab_before=[tuple(row) for row in db.execute("SELECT id,result FROM jobs WHERE pass IN ('A','B') ORDER BY id")]
+        self.invoke(p.review_all)
+        self.invoke(p.review_all)
+        self.finish()
+        with p.connect(self.run) as db:
+            self.assertEqual(db.execute("SELECT count(*) FROM result_items WHERE pass='reviewer'").fetchone()[0],3)
+            self.assertEqual(ab_before,[tuple(row) for row in db.execute("SELECT id,result FROM jobs WHERE pass IN ('A','B') ORDER BY id")])
+        self.invoke(p.verify,complete=True)
+
 
 if __name__ == '__main__':
     unittest.main()

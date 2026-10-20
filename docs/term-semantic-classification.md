@@ -33,6 +33,7 @@ python3 -m scripts.term_semantic prepare --run "$RUN" \
   --source src/main/classification/distribution-candidates.tsv.gz \
   --taxonomy src/main/classification/term-semantic/taxonomy.json \
   --prompts src/main/classification/term-semantic/prompts
+python3 -m scripts.term_semantic review-all --run "$RUN"
 python3 -m scripts.term_semantic.runtime run --run "$RUN" --phase pilot
 python3 -m scripts.term_semantic status --run "$RUN"
 python3 -m scripts.term_semantic verify --run "$RUN" --complete
@@ -40,7 +41,7 @@ python3 -m scripts.term_semantic report --run "$RUN"
 python3 -m scripts.term_semantic.runtime usage --run "$RUN"
 
 # After the pilot quality checks in the approved plan pass:
-python3 -m scripts.term_semantic promote --run "$RUN"
+python3 -m scripts.term_semantic promote --run "$RUN" --batch-size 200
 python3 -m scripts.term_semantic.runtime run --run "$RUN" --phase full
 python3 -m scripts.term_semantic verify --run "$RUN" --complete
 python3 -m scripts.term_semantic export --run "$RUN" --output "$RUN/final-export"
@@ -55,7 +56,9 @@ Resume with `status` and `runtime run`, not another `prepare`. The current host 
 
 Begin with 100 rows, then a 1,200-pair pilot (900 deterministic random pairs and 300 input-ambiguity pairs). Use 100-row batches, reducing only for output truncation or format failure. Do not select samples using old labels or frequency inferred from dictionary costs. After pilot checks, continue to the full input under the approved plan. Report random and ambiguity-enriched samples separately.
 
-Luna A/B classify every pair independently. Reviewer examines disagreements, high-risk entries and a deterministic 10% agreement sample. Sol adjudicates unresolved cases and independently audits about 1% of the full input. The pilot additionally schedules 240 Sol audit entries (120 random, 120 stratified by new category/usage/agreement). Prior Sol judgments are reused. Failures found in a group require expanded review in a new version if an immutable accepted judgment must change. Unknown outcomes never become general merely to reduce an unknown rate. Above 20% unknown in a batch triggers a recorded Sol input/prompt/abandonment check, not a quota; `acknowledge-anomaly` requires evidence and a concrete note.
+Luna A/B classify every pair independently. The default ledger routes disagreements, high-risk entries and a deterministic 10% agreement sample to Reviewer; `review-all` expands that to every word without repeating existing judgments. The approved full run uses this expanded review because the AI pilots found semantic problems even in unanimous classifications. Sol adjudicates unresolved cases, core-label reversals of unanimous A/B, and independently audits about 1% of the full input. The pilot additionally schedules 240 Sol audit entries (120 random, 120 stratified by new category/usage/agreement). Prior Sol judgments are reused. Failures found in a group require expanded review in a new version if an immutable accepted judgment must change. Unknown outcomes never become general merely to reduce an unknown rate. Above 20% unknown in a batch triggers a recorded Sol input/prompt/abandonment check, not a quota; `acknowledge-anomaly` requires evidence and a concrete note.
+
+Full promotion may raise only the remaining batch size to 200; existing pilot jobs/results remain unchanged. The first full wave tests one larger A/B job before ten-job waves. Workers may author a large job in 100-item chunks and combine it mechanically. Compact index/reading/surface views reduce repeated identifier tokens; semantic decisions are still authored by the LLM, with complete validated JSONL outputs.
 
 ## 検証・費用 / Verification and usage
 

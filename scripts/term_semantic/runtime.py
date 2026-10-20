@@ -120,11 +120,14 @@ Use the formal spawn_agent tool, exact model gpt-6-luna for A,B,reviewer and gpt
 Use reasoning_effort medium; record the actual host setting, never assert a requested setting was used.
 All children MUST have independent fresh context (fork_turns none), no inherited conversation or sibling labels.
 Maximum TWO concurrent child agents. Never substitute codex exec workers for formal subagents.
-Spawn two long-running children, one A and one B. In pilot each processes all available jobs of its stage.
+Inspect status first. Spawn only stages that actually have pending jobs; skip completed A/B on resume.
+When A/B work exists, spawn two long-running children, one A and one B. In pilot each processes all available jobs of its stage.
 In full each processes at most10 jobs per wave, then returns; drain Reviewer and Sol jobs after each wave,
 check semantic errors and progress, then start the next independent A/B wave until all source IDs finish.
 The first full wave must be one job per A/B to verify the larger batch's actual format/usage before ten-job waves.
-If an agent returns early, follow up until that stage queue is empty. Do not repeat validated work.
+In pilot follow up early returns until the A/B stage queues are empty. In full, follow up ONLY until
+the current wave's quota is validated, not until the entire full-inventory stage queue is empty.
+Do not repeat validated work. Use database counts, not an agent's self-reported counts.
 You coordinate and run validation; the actual child LLM must author every semantic decision.
 
 WORKER instructions to forward, replacing STAGE:
@@ -153,12 +156,14 @@ WORKER instructions to forward, replacing STAGE:
 7. Continue next job in the SAME STAGE (full A/B: at most10 jobs per wave). Read no other stage results for A/B. Preserve prompt version.
    A/B ambiguity must not force general. Unknown needs review; genuinely understood terms should classify.
 
-After A and B empty, run Reviewer child(s) then Sol adjudicator child(s) until no required jobs remain.
+After the pilot A/B queues empty OR the current full wave A/B quotas complete, run Reviewer child(s)
+then Sol adjudicator child(s) until no ready review jobs remain. In full run verify (without --complete)
+and report after each wave, then repeat A/B waves while any A/B jobs remain. Do not end after one wave.
 Anomalies above20%unknown require Sol to inspect inputs and abandonment risk. Do not lower rates by guessing.
 Record concrete inspection notes with `{cli} acknowledge-anomaly --run {run} --job JOB
 --note NOTE --evidence SOL_EVIDENCE`. Use actual host-attested Sol evidence, not a model assertion.
-For pilot, run `{cli} audit --run {run} --size 240` after first finalization, then process newly created
-adjudicator jobs. This selects120 random IDs and120 stratified by new category/usage/disagreement;
+For pilot, run `{cli} audit --run {run} --size 240` after first finalization, then drain newly created
+Reviewer jobs BEFORE adjudicator jobs. This selects120 random IDs and120 stratified by new category/usage/disagreement;
 no human review required. Record findings externally. Never alter validated history. If an audit finds
 a systematic error requiring review of already validated judgments, report it to root for a new version.
 Do not report accuracy; agreement and AI audit findings are separate. Unidentified meanings require Sol.
