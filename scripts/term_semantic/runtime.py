@@ -157,7 +157,7 @@ def coordinator_prompt(run, phase):
    Unchanged independently authored rows may be reused verbatim after you compare the candidates.
    Author all remaining required classification fields; no defaults, omitted semantic fields, lookup
    datasets, blanket labels, suffix rules, or another model. No input_index-only decision tables.
-   You may use compact JSON {{"fields":["reading","surface",...],"rows":[[...],...]}} with the word
+   Prefer returned draft_fields and compact JSON {{"fields":["reading","surface",...],"rows":[[...],...]}} with the word
    pair explicitly written in EACH semantic row. Any order is accepted; exact frozen pair coverage is checked.
 4. For reviewer/adjudicator first read ONLY independent_input, prompt, taxonomy and returned frozen schema.
    Candidate results do not exist yet. Author independent-decisions.json in the assigned attempt directory.
