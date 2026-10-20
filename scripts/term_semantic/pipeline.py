@@ -288,7 +288,8 @@ def next_job(args):
         candidates={}
         for i in json.loads(row['ids']):
             for prior in db.execute('SELECT pass,value FROM result_items WHERE id=?',(i,)):
-                candidates.setdefault(i,[]).append({'pass':prior['pass'],'result':json.loads(prior['value'])})
+                item=json.loads(prior['value'])
+                candidates.setdefault(i,[]).append({'pass':prior['pass'],'result':{k:item[k] for k in FIELDS-{'stable_id','reading','surface'}}})
         payload['candidate_results']=candidates
     path=Path(args.run)/'jobs'/row['id']/'attempts'/str(row['attempt']+1)/'input.json'
     atomic(path,encoded(payload))

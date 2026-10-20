@@ -100,6 +100,17 @@ class SemanticPipelineTest(unittest.TestCase):
         for row in payload['items']:
             self.assertEqual(set(row), {'stable_id', 'reading', 'surface'})
 
+    def test_review_proposals_exclude_authority_metadata_and_duplicate_source_fields(self):
+        self.ingest(self.claim('A'))
+        self.ingest(self.claim('B'))
+        job=self.claim('reviewer')
+        payload=json.loads(Path(job['input']).read_text())
+        independent=json.loads(Path(job['independent_input']).read_text())
+        self.assertNotIn('candidate_results',independent)
+        for proposals in payload['candidate_results'].values():
+            for proposal in proposals:
+                self.assertEqual(set(proposal['result']),p.FIELDS-{'stable_id','reading','surface'})
+
     def test_rejects_incomplete_duplicate_or_changed_results(self):
         rows = [self.result(pair) for pair in self.pairs.values()]
         mutations = [lambda a: a.pop(), lambda a: a.append(copy.deepcopy(a[0])),
