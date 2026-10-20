@@ -586,6 +586,7 @@ class PairAnchoredTest(unittest.TestCase):
         self.assertEqual(self.invoke(p.rereview,**args)['stage'],first['stage'])
         job=self.claim('adjudicator')
         self.assertEqual(job['pass'],'adjudicator@2')
+        self.assertEqual(job['queue_stage'],'adjudicator')
         self.assertNotIn('supplemental_ai_findings',json.loads(Path(job['input']).read_text()))
         original=self.result
         def updated(pair):
