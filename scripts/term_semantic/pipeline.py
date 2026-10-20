@@ -145,6 +145,11 @@ def prepare(args):
         prompts[name] = digest(text.encode())
         atomic(run/'prompts'/(name+'.md'), text)
     meta = dict(source_sha256=digest(source.read_bytes()), snapshot_sha256=digest(encoded(data).encode()), records=len(data), pairs=len(pairs), selected=len(chosen), seed=args.seed, full=args.full, taxonomy_sha256=digest(encoded(tax).encode()), prompt_hashes=prompts, batch_size=args.batch_size, created_at=int(time.time()), uniform_ids=uniform, ambiguity_ids=chosen[len(uniform):], selected_ids=sorted(chosen), surface_ambiguity_ids=[i for i,x in pairs.items() if surfaces[x['surface']]>1], models={'A':args.classifier_model,'B':args.classifier_model,'reviewer':args.classifier_model,'adjudicator':args.adjudicator_model})
+    if getattr(args,'pair_anchored',True):
+        meta.update(pair_anchor_required=True,output_contract='word-pair-v1')
+        schema=Path(args.taxonomy).with_name('result.schema.json')
+        atomic(run/'result.schema.json',schema.read_text())
+        meta['schema_sha256']=digest((run/'result.schema.json').read_bytes())
     atomic(run/'manifest.json', encoded(meta))
     db = connect(run)
     db.executescript('''CREATE TABLE jobs(id TEXT PRIMARY KEY, pass TEXT NOT NULL, ids TEXT NOT NULL, status TEXT NOT NULL, lease_until REAL, lease_token TEXT, attempt INTEGER DEFAULT 0, result TEXT, evidence TEXT, error TEXT); CREATE TABLE finals(id TEXT PRIMARY KEY, value TEXT NOT NULL, origin TEXT NOT NULL);''')
@@ -157,6 +162,12 @@ def prepare(args):
     print(encoded({k:v for k,v in meta.items() if not k.endswith('_ids')}))
 
 
+def job_identity(meta, stage, ids):
+    identity=[meta['source_sha256'],meta['taxonomy_sha256'],meta['prompt_hashes'][stage],meta['models'][stage],stage,sorted(ids)]
+    if 'output_contract' in meta: identity.append(meta['output_contract'])
+    return digest(encoded(identity).encode())
+
+
 def add_job(db, stage, ids, meta):
     if stage=='adjudicator':
         # An independent Sol audit may discover an unknown meaning even when
@@ -164,7 +175,7 @@ def add_job(db, stage, ids, meta):
         unreviewed=[i for i in ids if not db.execute("SELECT 1 FROM job_items WHERE stage='reviewer' AND id=?",(i,)).fetchone()]
         if unreviewed:
             add_job(db, 'reviewer', unreviewed, meta)
-    job_id = digest(encoded([meta['source_sha256'],meta['taxonomy_sha256'],meta['prompt_hashes'][stage],meta['models'][stage],stage,sorted(ids)]).encode())
+    job_id = job_identity(meta,stage,ids)
     db.execute('INSERT OR IGNORE INTO jobs(id,pass,ids,status) VALUES(?,?,?,?)',(job_id,stage,encoded(sorted(ids)),'pending'))
     for i in ids: db.execute('INSERT OR IGNORE INTO job_items VALUES(?,?,?)',(stage,i,job_id))
 
@@ -202,6 +213,42 @@ def promote(args):
     atomic(run/'manifest.json',encoded(meta))
     marker.unlink()
     print(encoded({'selected':len(pairs),'reused':len(existing),'added':len(remaining)}))
+
+
+def extend_pilot(args):
+    run=Path(args.run); meta=config(run); target=args.pilot_size
+    if meta['full']: raise ValueError('Cannot extend a full run as pilot')
+    marker=run/'extension-pending.json'
+    if marker.exists():
+        pending=json.loads(marker.read_text())
+        if pending['target_size']!=target: raise ValueError('Different pilot extension pending')
+    else:
+        if target<=meta['selected'] or target>meta['pairs']: raise ValueError('Pilot extension must increase selected size within source pairs')
+        verify(argparse.Namespace(run=args.run,complete=True))
+        pending={'target_size':target,'previous_size':meta['selected'],'source_sha256':meta['source_sha256']}
+        atomic(marker,encoded(pending))
+    if pending['source_sha256']!=meta['source_sha256']: raise ValueError('Extension source changed')
+    pairs=json.loads((run/'pairs.json').read_text()); ordered=sorted(pairs,key=lambda i:digest((meta['seed']+i).encode()))
+    uniform=ordered[:min(900,target)]; used=set(uniform)
+    rc=collections.Counter(x['reading'] for x in pairs.values()); sc=collections.Counter(x['surface'] for x in pairs.values())
+    extra=[i for i in ordered if i not in used and (rc[pairs[i]['reading']]>1 or sc[pairs[i]['surface']]>1)]
+    selected=uniform+extra[:max(0,target-len(uniform))]; used=set(selected)
+    selected+=[i for i in ordered if i not in used][:max(0,target-len(selected))]
+    db=connect(run)
+    existing={r['id'] for r in db.execute("SELECT id FROM job_items WHERE stage='A'")}
+    if not existing<=set(selected): raise ValueError('Previous sample is not subset of extension')
+    audit_path=run/'audit-selection.json'
+    if audit_path.exists():
+        archive=run/'audit-history'/('selected-'+str(pending['previous_size'])+'.json')
+        immutable_artifact(archive,audit_path.read_text()); audit_path.unlink()
+    remaining=[i for i in selected if i not in existing]
+    db.execute('BEGIN IMMEDIATE')
+    for offset in range(0,len(remaining),meta['batch_size']):
+        for stage in ('A','B'): add_job(db,stage,remaining[offset:offset+meta['batch_size']],meta)
+    db.commit()
+    meta.update(selected=target,selected_ids=sorted(selected),uniform_ids=uniform,ambiguity_ids=selected[len(uniform):])
+    atomic(run/'manifest.json',encoded(meta)); marker.unlink()
+    print(encoded({'selected':target,'reused':len(existing),'added':len(remaining)}))
 
 
 def audit(args):
@@ -295,7 +342,8 @@ def next_job(args):
     db.commit()
     pairs=json.loads((Path(args.run)/'pairs.json').read_text())
     payload={'batch_id':row['id'],'classification_pass':row['pass'],'lease_token':lease_token,'items':[pairs[i] for i in json.loads(row['ids'])]}
-    if row['pass'] in ('reviewer','adjudicator'):
+    anchored=config(args.run).get('pair_anchor_required',False)
+    if row['pass'] in ('reviewer','adjudicator') and not anchored:
         candidates={}
         for i in json.loads(row['ids']):
             for prior in db.execute('SELECT pass,value FROM result_items WHERE id=?',(i,)):
@@ -306,7 +354,112 @@ def next_job(args):
     atomic(path,encoded(payload))
     independent=path.with_name('independent-input.json')
     atomic(independent,encoded({k:v for k,v in payload.items() if k!='candidate_results'}))
-    print(encoded({'job':row['id'],'pass':row['pass'],'model':config(args.run)['models'][row['pass']],'lease_token':lease_token,'input':str(path),'prompt':str(Path(args.run)/'prompts'/(row['pass']+'.md')),'independent_input':str(independent),'taxonomy':str(Path(args.run)/'taxonomy.json'),'output':str(path.with_name('output.jsonl'))}))
+    print(encoded({'job':row['id'],'pass':row['pass'],'model':config(args.run)['models'][row['pass']],'lease_token':lease_token,'input':str(path),'prompt':str(Path(args.run)/'prompts'/(row['pass']+'.md')),'independent_input':str(independent),'taxonomy':str(Path(args.run)/'taxonomy.json'),'schema':str(Path(args.run)/'result.schema.json') if anchored else str(Path(__file__).resolve().parents[2]/'src/main/classification/term-semantic/result.schema.json'),'decisions':str(path.with_name('decisions.json')),'independent_decisions':str(path.with_name('independent-decisions.json')),'independent_output':str(path.with_name('independent-output.jsonl')),'candidate_input':str(path.with_name('candidate-input.json')),'output':str(path.with_name('output.jsonl'))}))
+
+
+def attempt_directory(run, job):
+    return Path(run)/'jobs'/job['id']/'attempts'/str(job['attempt'])
+
+
+def immutable_artifact(path, text):
+    if path.exists():
+        if path.read_text()!=text: raise ValueError('Cannot alter accepted artifact: '+str(path))
+    else: atomic(path,text)
+
+
+def parse_decisions(path):
+    raw=Path(path).read_text()
+    try: parsed=json.loads(raw)
+    except json.JSONDecodeError: return [json.loads(line) for line in raw.splitlines() if line.strip()]
+    if isinstance(parsed,dict) and set(parsed)=={'fields','rows'}:
+        fields=parsed['fields']
+        if not isinstance(fields,list) or len(fields)!=len(set(fields)): raise ValueError('Duplicate compact fields')
+        rows=parsed['rows']
+        if not isinstance(rows,list) or any(not isinstance(row,list) or len(row)!=len(fields) for row in rows): raise ValueError('Malformed compact decisions')
+        return [dict(zip(fields,row)) for row in rows]
+    if isinstance(parsed,list): return parsed
+    if isinstance(parsed,dict) and set(parsed)=={'results'}: return parsed['results']
+    return [parsed]
+
+
+def check_proof(run, job, proof_path, independent=False):
+    meta=config(run); proof_path=Path(proof_path); proof=json.loads(proof_path.read_text())
+    directory=attempt_directory(run,job)
+    prefix='independent-' if independent else ''
+    output=directory/(prefix+'output.jsonl')
+    expected={'contract':meta['output_contract'],'job':job['id'],'lease_token':job['lease_token'],'input_sha256':digest((directory/'independent-input.json').read_bytes()),'output_sha256':digest(output.read_bytes())}
+    if any(proof.get(k)!=v for k,v in expected.items()) or proof_path.resolve()!=(directory/(prefix+'emit-proof.json')).resolve(): raise ValueError('Invalid pair-anchor proof')
+    authored=Path(proof['authored_path'])
+    if digest(authored.read_bytes())!=proof['decisions_sha256']: raise ValueError('Authored decisions changed')
+    items=parse_decisions(authored)
+    anchored=[]
+    for item in items:
+        if not isinstance(item,dict) or not {'reading','surface'}<=set(item): raise ValueError('Every authored decision requires reading and surface')
+        item=dict(item); computed=stable_id(item['reading'],item['surface'])
+        if item.get('stable_id',computed)!=computed: raise ValueError('Authored stable_id/pair mismatch')
+        item['stable_id']=computed; anchored.append(item)
+    validate(anchored,json.loads(job['ids']),json.loads((Path(run)/'pairs.json').read_text()),json.loads((Path(run)/'taxonomy.json').read_text()))
+    wanted=''.join(encoded(item)+'\n' for item in sorted(anchored,key=lambda x:x['stable_id']))
+    if output.read_text()!=wanted: raise ValueError('Output differs from authored pair decisions')
+    return proof
+
+
+def emit(args):
+    meta=config(args.run)
+    if not meta.get('pair_anchor_required'): raise ValueError('Emit requires a pair-anchored run')
+    with connect(args.run) as db:
+        job=db.execute('SELECT * FROM jobs WHERE id=?',(args.job,)).fetchone()
+        if not job or job['status'] not in ('leased','validated'): raise ValueError('Job must be leased')
+        directory=attempt_directory(args.run,job); independent=getattr(args,'independent',False)
+        if independent and job['pass'] not in ('reviewer','adjudicator'): raise ValueError('Independent emit is only for review passes')
+        items=parse_decisions(args.decisions); anchored=[]
+        for original in items:
+            if not isinstance(original,dict) or not {'reading','surface'}<=set(original): raise ValueError('Every authored decision requires reading and surface')
+            item=dict(original); computed=stable_id(item['reading'],item['surface'])
+            if item.get('stable_id',computed)!=computed: raise ValueError('Authored stable_id/pair mismatch')
+            item['stable_id']=computed; anchored.append(item)
+        validate(anchored,json.loads(job['ids']),json.loads((Path(args.run)/'pairs.json').read_text()),json.loads((Path(args.run)/'taxonomy.json').read_text()))
+        prefix='independent-' if independent else ''
+        output=directory/(prefix+'output.jsonl'); proof_path=directory/(prefix+'emit-proof.json')
+        text=''.join(encoded(item)+'\n' for item in sorted(anchored,key=lambda x:x['stable_id']))
+        proof={'contract':meta['output_contract'],'job':job['id'],'lease_token':job['lease_token'],'input_sha256':digest((directory/'independent-input.json').read_bytes()),'authored_path':str(Path(args.decisions).resolve()),'decisions_sha256':digest(Path(args.decisions).read_bytes()),'output_sha256':digest(text.encode())}
+        if job['status']=='validated' and (not output.exists() or not proof_path.exists()): raise ValueError('Cannot create artifacts for accepted history')
+        immutable_artifact(output,text); immutable_artifact(proof_path,encoded(proof)+'\n')
+        print(encoded({'output':str(output),'proof':str(proof_path)}))
+
+
+def reveal(args):
+    if not config(args.run).get('pair_anchor_required'): raise ValueError('Reveal requires a pair-anchored run')
+    with connect(args.run) as db:
+        job=db.execute('SELECT * FROM jobs WHERE id=?',(args.job,)).fetchone()
+        if not job or job['pass'] not in ('reviewer','adjudicator') or job['status'] not in ('leased','validated'): raise ValueError('Reveal is only for leased review passes')
+        directory=attempt_directory(args.run,job); proof_path=directory/'independent-emit-proof.json'
+        proof=check_proof(args.run,job,proof_path,True)
+        seal={'job':job['id'],'independent_proof_sha256':digest(proof_path.read_bytes()),'independent_output_sha256':proof['output_sha256']}
+        immutable_artifact(directory/'independent-seal.json',encoded(seal)+'\n')
+        payload=json.loads((directory/'independent-input.json').read_text()); candidates={}
+        for i in json.loads(job['ids']):
+            for prior in db.execute('SELECT pass,value FROM result_items WHERE id=?',(i,)):
+                if prior['pass']==job['pass']: continue
+                item=json.loads(prior['value'])
+                candidates.setdefault(i,[]).append({'pass':prior['pass'],'result':{k:item[k] for k in FIELDS-{'stable_id','reading','surface'}}})
+        payload['candidate_results']=candidates
+        target=directory/'candidate-input.json'; immutable_artifact(target,encoded(payload))
+        print(encoded({'candidate_input':str(target),'independent_seal':str(directory/'independent-seal.json')}))
+
+
+def anchor_evidence(run,job,output=None):
+    directory=attempt_directory(run,job)
+    proof_path=directory/'emit-proof.json'; proof=check_proof(run,job,proof_path)
+    if output is not None and Path(output).resolve()!=(directory/'output.jsonl').resolve(): raise ValueError('Ingest requires assigned emitted output')
+    evidence={'emit_proof':str(proof_path),'emit_proof_sha256':digest(proof_path.read_bytes()),'input_sha256':proof['input_sha256'],'output_sha256':proof['output_sha256']}
+    if job['pass'] in ('reviewer','adjudicator'):
+        independent=directory/'independent-emit-proof.json'; check_proof(run,job,independent,True)
+        seal_path=directory/'independent-seal.json'; seal=json.loads(seal_path.read_text())
+        if seal.get('job')!=job['id'] or seal.get('independent_proof_sha256')!=digest(independent.read_bytes()) or seal.get('independent_output_sha256')!=digest((directory/'independent-output.jsonl').read_bytes()): raise ValueError('Independent judgment seal changed')
+        if not (directory/'candidate-input.json').exists(): raise ValueError('Review reveal missing')
+        evidence.update(independent_proof_sha256=digest(independent.read_bytes()),independent_seal_sha256=digest(seal_path.read_bytes()))
+    return evidence
 
 
 FIELDS={'stable_id','reading','surface','usage_class','primary_domain','alternative_domains','tags','ambiguous','needs_review','short_reason','final_category','uncertain_tags','ambiguity_types','context_required'}
@@ -447,6 +600,9 @@ def _ingest_transaction(db,args):
     pairs=json.loads((Path(args.run)/'pairs.json').read_text()); tax=json.loads((Path(args.run)/'taxonomy.json').read_text()); meta=config(args.run)
     validate(items,json.loads(row['ids']),pairs,tax)
     evidence=json.loads(Path(args.evidence).read_text())
+    if meta.get('pair_anchor_required'):
+        anchor=anchor_evidence(args.run,row,args.output)
+        if any(evidence.get(k)!=v for k,v in anchor.items()): raise ValueError('Attestation lacks pair-anchor proof hashes')
     if row['status']!='validated' and (row['status']!='leased' or not row['lease_token'] or evidence.get('lease_token')!=row['lease_token']): raise ValueError('Stale or missing lease token')
     if evidence.get('model')!=meta['models'][row['pass']] or not evidence.get('agent_id'): raise ValueError('Actual model and agent_id evidence required')
     for item in items:
@@ -479,6 +635,7 @@ def _verify(db,args):
     if actual!=pairs: raise ValueError('Source pair mapping changed')
     tax=json.loads((run/'taxonomy.json').read_text())
     if digest(encoded(tax).encode())!=meta['taxonomy_sha256']: raise ValueError('Taxonomy changed')
+    if meta.get('schema_sha256') and digest((run/'result.schema.json').read_bytes())!=meta['schema_sha256']: raise ValueError('Frozen schema changed')
     for name,sha in meta['prompt_hashes'].items():
         if digest((run/'prompts'/(name+'.md')).read_bytes())!=sha: raise ValueError('Prompt changed')
     selected=set(meta.get('selected_ids',[]))
@@ -501,11 +658,16 @@ def _verify(db,args):
         if scheduled!=selected: raise ValueError('A/B selected coverage mismatch')
     for job in db.execute('SELECT * FROM jobs'):
         ids=json.loads(job['ids'])
-        wanted=digest(encoded([meta['source_sha256'],meta['taxonomy_sha256'],meta['prompt_hashes'][job['pass']],meta['models'][job['pass']],job['pass'],sorted(ids)]).encode())
+        wanted=job_identity(meta,job['pass'],ids)
         if wanted!=job['id'] or not set(ids)<=selected: raise ValueError('Job identity changed')
         if job['status']!='validated': continue
         items=json.loads(job['result']); validate(items,ids,pairs,tax)
         evidence=json.loads(job['evidence'])
+        if meta.get('pair_anchor_required'):
+            anchor=anchor_evidence(run,job)
+            if any(evidence.get(k)!=v for k,v in anchor.items()): raise ValueError('Accepted anchor evidence changed')
+            emitted={item['stable_id']:item for item in parse_decisions(attempt_directory(run,job)/'output.jsonl')}
+            if any({key:item[key] for key in FIELDS}!={key:emitted[item['stable_id']][key] for key in FIELDS} for item in items): raise ValueError('Accepted result differs from emitted pair decision')
         if evidence.get('model')!=meta['models'][job['pass']] or not evidence.get('agent_id'): raise ValueError('Invalid execution evidence')
         for item in items:
             if item.get('model')!=evidence['model'] or item.get('classification_pass')!=job['pass'] or item.get('batch_id')!=job['id'] or item.get('prompt_version')!=meta['prompt_hashes'][job['pass']]: raise ValueError('Result provenance mismatch')
@@ -683,16 +845,20 @@ def compare(args):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     sub=parser.add_subparsers(dest='command',required=True)
-    for name in ('prepare','promote','audit','review-all','acknowledge-anomaly','next','ingest','status','verify','report','compare','export'):
+    for name in ('prepare','promote','extend-pilot','audit','review-all','acknowledge-anomaly','next','emit','reveal','ingest','status','verify','report','compare','export'):
         p=sub.add_parser(name); p.add_argument('--run',required=True)
         if name=='prepare':
             for key in ('source','taxonomy','prompts'): p.add_argument('--'+key,required=True)
             p.add_argument('--seed',default='semantic-v1'); p.add_argument('--pilot-size',type=int,default=1200); p.add_argument('--batch-size',type=int,default=100); p.add_argument('--full',action='store_true'); p.add_argument('--classifier-model',default='gpt-6-luna'); p.add_argument('--adjudicator-model',default='gpt-6.1-sol')
+        if name=='extend-pilot': p.add_argument('--pilot-size',type=int,default=1200)
         if name=='promote': p.add_argument('--batch-size',type=int,choices=range(1,201))
         if name=='audit': p.add_argument('--size',type=int,default=240)
         if name=='acknowledge-anomaly':
             p.add_argument('--job',required=True); p.add_argument('--note',required=True); p.add_argument('--evidence',required=True)
         if name=='next': p.add_argument('--stage',choices=['A','B','reviewer','adjudicator']); p.add_argument('--lease-seconds',type=int,default=1800)
+        if name in ('emit','reveal'): p.add_argument('--job',required=True)
+        if name=='emit':
+            p.add_argument('--decisions',required=True); p.add_argument('--independent',action='store_true')
         if name=='ingest':
             for key in ('job','output','evidence'): p.add_argument('--'+key,required=True)
         if name=='verify': p.add_argument('--complete',action='store_true')
@@ -700,7 +866,7 @@ def main():
         if name=='export': p.add_argument('--output',required=True)
     args=parser.parse_args()
     if (getattr(args,'batch_size',None) is not None and args.batch_size<1) or getattr(args,'pilot_size',1)<1: parser.error('Sizes must be positive')
-    try: globals()[{'next':'next_job','acknowledge-anomaly':'acknowledge_anomaly','review-all':'review_all'}.get(args.command,args.command)](args)
+    try: globals()[{'next':'next_job','acknowledge-anomaly':'acknowledge_anomaly','review-all':'review_all','extend-pilot':'extend_pilot'}.get(args.command,args.command)](args)
     except (ValueError,KeyError,TypeError) as exc: parser.exit(2,str(exc)+'\n')
 
 if __name__=='__main__': main()

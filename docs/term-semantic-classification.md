@@ -24,15 +24,15 @@ A/B use separate contexts and prompts. `common.md` is mandatory for all roles. R
 
 ## 運用 / Operation
 
-The ledger CLI exposes `prepare`, `next`, `ingest`, `status`, `verify`, `report`, `compare`, `audit`, `acknowledge-anomaly`, `promote`, and `export`. The runtime adapter starts the logged-in Codex CLI with a Sol coordinator that must invoke the formal subagent tool. Each worker's actual model and parent relationship are checked against local Codex host metadata by `runtime attest`; a model's self-identification is insufficient. Never substitute heuristics when model execution is unavailable.
+The ledger CLI exposes `prepare`, `next`, `emit`, `reveal`, `extend-pilot`, `review-all`, `ingest`, `status`, `verify`, `report`, `compare`, `audit`, `acknowledge-anomaly`, `promote`, and `export`. The runtime adapter starts the logged-in Codex CLI with a Sol coordinator that must invoke the formal subagent tool. Each worker's actual model and parent relationship are checked against local Codex host metadata by `runtime attest`; a model's self-identification is insufficient. Never substitute heuristics when model execution is unavailable.
 
 ```sh
 # Run these commands from the dedicated worktree. RUN must be outside the repository.
-RUN=/Users/kazuma/.codex/term-semantic-runs/run-v1
+RUN=/Users/kazuma/.codex/term-semantic-runs/run-v2-pair-anchored
 python3 -m scripts.term_semantic prepare --run "$RUN" \
   --source src/main/classification/distribution-candidates.tsv.gz \
   --taxonomy src/main/classification/term-semantic/taxonomy.json \
-  --prompts src/main/classification/term-semantic/prompts
+  --prompts src/main/classification/term-semantic/prompts --pilot-size 100
 python3 -m scripts.term_semantic review-all --run "$RUN"
 python3 -m scripts.term_semantic.runtime run --run "$RUN" --phase pilot
 python3 -m scripts.term_semantic status --run "$RUN"
@@ -40,8 +40,12 @@ python3 -m scripts.term_semantic verify --run "$RUN" --complete
 python3 -m scripts.term_semantic report --run "$RUN"
 python3 -m scripts.term_semantic.runtime usage --run "$RUN"
 
+# Extend the completed 100-word smoke without repeating its validated judgments:
+python3 -m scripts.term_semantic extend-pilot --run "$RUN" --pilot-size 1200
+python3 -m scripts.term_semantic.runtime run --run "$RUN" --phase pilot
+
 # After the pilot quality checks in the approved plan pass:
-python3 -m scripts.term_semantic promote --run "$RUN" --batch-size 200
+python3 -m scripts.term_semantic promote --run "$RUN" --batch-size 100
 python3 -m scripts.term_semantic.runtime run --run "$RUN" --phase full
 python3 -m scripts.term_semantic verify --run "$RUN" --complete
 python3 -m scripts.term_semantic export --run "$RUN" --output "$RUN/final-export"
@@ -58,7 +62,11 @@ Begin with 100 rows, then a 1,200-pair pilot (900 deterministic random pairs and
 
 Luna A/B classify every pair independently. The default ledger routes disagreements, high-risk entries and a deterministic 10% agreement sample to Reviewer; `review-all` expands that to every word without repeating existing judgments. The approved full run uses this expanded review because the AI pilots found semantic problems even in unanimous classifications. Sol adjudicates unresolved cases, core-label reversals of unanimous A/B, and independently audits about 1% of the full input. The pilot additionally schedules 240 Sol audit entries (120 random, 120 stratified by new category/usage/agreement). Prior Sol judgments are reused. Failures found in a group require expanded review in a new version if an immutable accepted judgment must change. Unknown outcomes never become general merely to reduce an unknown rate. Above 20% unknown in a batch triggers a recorded Sol input/prompt/abandonment check, not a quota; `acknowledge-anomaly` requires evidence and a concrete note.
 
-Full promotion may raise only the remaining batch size to 200; existing pilot jobs/results remain unchanged. The first full wave tests one larger A/B job before ten-job waves. Workers may author a large job in 100-item chunks and combine it mechanically. Compact index/reading/surface views reduce repeated identifier tokens; semantic decisions are still authored by the LLM, with complete validated JSONL outputs.
+Each AI-authored semantic row must contain its exact reading and surface. `emit` computes only the stable ID, validates complete pair coverage and writes immutable output/proof files. Index-only decisions and mechanically copying pairs onto judgments are forbidden: prototype audits found judgments attached to unrelated words despite schema-valid output. Compact tables may reduce repeated JSON keys, but must explicitly contain both pair columns in every row. Pair anchoring prevents that mechanical attachment path; it does not prove that an AI understood a word correctly.
+
+Reviewer and adjudicator jobs initially expose only blind input. Their complete independent decisions must pass `emit --independent` before `reveal` creates the candidate input and seals the independent artifacts. Ingest and verification check authored decisions, output, input and seal hashes. The schema is frozen per run. Earlier prototype runs without this contract are retained externally for investigation and must not seed production judgments.
+
+`extend-pilot` grows a completed smoke to the same deterministic 1,200-word sample while retaining validated calls, archives the previous audit selection, and checkpoints an interrupted extension. Full promotion also retains pilot results. Begin full waves with one 100-word job per A/B, then at most ten jobs per stage before draining review. A larger batch is an explicit option only after measured output reliability and usage justify it.
 
 ## 検証・費用 / Verification and usage
 

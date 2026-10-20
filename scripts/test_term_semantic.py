@@ -31,7 +31,7 @@ class SemanticPipelineTest(unittest.TestCase):
         self.tax = json.loads(self.taxpath.read_text())
         self.invoke(p.prepare, source=str(self.source), taxonomy=str(self.taxpath),
                     prompts=str(self.taxpath.parent/'prompts'), seed='test-v1',
-                    pilot_size=3, batch_size=3, full=False,
+                    pilot_size=3, batch_size=3, full=False, pair_anchored=getattr(self, 'anchored', False),
                     classifier_model='gpt-6-luna', adjudicator_model='gpt-6.1-sol')
         self.pairs = json.loads((self.run/'pairs.json').read_text())
 
@@ -335,6 +335,133 @@ class SemanticPipelineTest(unittest.TestCase):
         with p.connect(self.run) as db:
             self.assertEqual(db.execute("SELECT count(*) FROM result_items WHERE pass='reviewer'").fetchone()[0],3)
             self.assertEqual(ab_before,[tuple(row) for row in db.execute("SELECT id,result FROM jobs WHERE pass IN ('A','B') ORDER BY id")])
+        self.invoke(p.verify,complete=True)
+
+
+class PairAnchoredTest(unittest.TestCase):
+    invoke = SemanticPipelineTest.invoke
+    result = SemanticPipelineTest.result
+    claim = SemanticPipelineTest.claim
+    anchored = True
+
+    def setUp(self):
+        SemanticPipelineTest.setUp(self)
+
+    def decisions(self, job):
+        rows = [self.result(row) for row in json.loads(Path(job['input']).read_text())['items']]
+        for row in rows:
+            row.pop('stable_id')
+        return rows
+
+    def test_authored_pairs_required_and_order_independent(self):
+        job = self.claim('A')
+        path = Path(job['decisions'])
+        rows = self.decisions(job)
+        bad = copy.deepcopy(rows)
+        bad[0].pop('reading')
+        path.write_text(p.encoded(bad))
+        with self.assertRaises(ValueError):
+            self.invoke(p.emit, job=job['job'], decisions=str(path), independent=False)
+        path.write_text(p.encoded(list(reversed(rows))))
+        emitted = self.invoke(p.emit, job=job['job'], decisions=str(path), independent=False)
+        actual = [json.loads(line) for line in Path(emitted['output']).read_text().splitlines()]
+        self.assertEqual({row['stable_id'] for row in actual}, {p.stable_id(row['reading'],row['surface']) for row in rows})
+
+    def test_pair_identity_and_inventory_cannot_be_repaired_by_index(self):
+        job = self.claim('A')
+        path = Path(job['decisions'])
+        rows = self.decisions(job)
+        for changed in ('stable_id', 'surface'):
+            bad = copy.deepcopy(rows)
+            bad[0][changed] = 'wrong'
+            path.write_text(p.encoded(bad))
+            with self.assertRaises(ValueError):
+                self.invoke(p.emit, job=job['job'], decisions=str(path), independent=False)
+        with self.assertRaises(ValueError):
+            self.invoke(p.reveal, job=job['job'])
+
+
+    def accept(self, job):
+        rows = self.decisions(job)
+        if job['pass'] in ('reviewer', 'adjudicator'):
+            path = Path(job['independent_decisions'])
+            self.assertNotIn('candidate_results', json.loads(Path(job['input']).read_text()))
+            self.assertFalse(Path(job['candidate_input']).exists())
+            with self.assertRaises((ValueError, FileNotFoundError)):
+                self.invoke(p.reveal, job=job['job'])
+            path.write_text(p.encoded(rows))
+            self.invoke(p.emit, job=job['job'], decisions=str(path), independent=True)
+            self.invoke(p.reveal, job=job['job'])
+            self.assertIn('candidate_results', json.loads(Path(job['candidate_input']).read_text()))
+        path = Path(job['decisions'])
+        path.write_text(p.encoded(rows))
+        self.invoke(p.emit, job=job['job'], decisions=str(path), independent=False)
+        with p.connect(self.run) as db:
+            row = db.execute('SELECT * FROM jobs WHERE id=?',(job['job'],)).fetchone()
+            evidence = p.anchor_evidence(self.run, row, job['output'])
+        evidence.update(model=job['model'], agent_id='synthetic-fixture-only',
+                        lease_token=job['lease_token'], execution_kind='test-fixture')
+        proof = path.with_name('evidence.json')
+        proof.write_text(p.encoded(evidence))
+        return self.invoke(p.ingest, job=job['job'], output=job['output'], evidence=str(proof))
+
+    def test_blind_review_proof_and_seal_preserve_decisions(self):
+        for stage in ('A','B'):
+            self.accept(self.claim(stage))
+        job = self.claim('reviewer')
+        self.accept(job)
+        path = Path(job['independent_decisions'])
+        path.write_text(path.read_text()+' ')
+        with p.connect(self.run) as db:
+            row = db.execute('SELECT * FROM jobs WHERE id=?',(job['job'],)).fetchone()
+            with self.assertRaisesRegex(ValueError, 'changed'):
+                p.anchor_evidence(self.run,row)
+
+    def test_complete_anchored_roundtrip_and_tamper_detection(self):
+        for stage in ('A','B','reviewer','adjudicator'):
+            while True:
+                job = self.claim(stage)
+                if job['job'] is None:
+                    break
+                self.accept(job)
+        SemanticPipelineTest.acknowledge_fixture_anomalies(self)
+        self.invoke(p.verify,complete=True)
+        path = next((self.run/'jobs').glob('*/attempts/*/decisions.json'))
+        path.write_text(path.read_text()+' ')
+        with self.assertRaises(ValueError):
+            self.invoke(p.verify,complete=True)
+
+
+    def test_pilot_extension_reuses_calls_and_archives_audit(self):
+        self.run = self.base/'small-run'
+        self.invoke(p.prepare, source=str(self.source), taxonomy=str(self.taxpath),
+                    prompts=str(self.taxpath.parent/'prompts'), seed='test-v1',
+                    pilot_size=1, batch_size=1, full=False, pair_anchored=True,
+                    classifier_model='gpt-6-luna', adjudicator_model='gpt-6.1-sol')
+        def finish():
+            for stage in ('A','B','reviewer','adjudicator'):
+                while True:
+                    job = self.claim(stage)
+                    if job['job'] is None:
+                        break
+                    self.accept(job)
+            SemanticPipelineTest.acknowledge_fixture_anomalies(self)
+        finish()
+        self.invoke(p.audit,size=2)
+        finish()
+        self.invoke(p.verify,complete=True)
+        with p.connect(self.run) as db:
+            before = [tuple(row) for row in db.execute('SELECT id,result FROM jobs ORDER BY id')]
+        result = self.invoke(p.extend_pilot,pilot_size=3)
+        self.assertEqual(result,dict(selected=3,reused=1,added=2))
+        self.assertTrue((self.run/'audit-history/selected-1.json').exists())
+        self.assertFalse((self.run/'audit-selection.json').exists())
+        with p.connect(self.run) as db:
+            for ident, value in before:
+                self.assertEqual(db.execute('SELECT result FROM jobs WHERE id=?',(ident,)).fetchone()[0],value)
+        finish()
+        self.invoke(p.audit,size=2)
+        finish()
         self.invoke(p.verify,complete=True)
 
 
