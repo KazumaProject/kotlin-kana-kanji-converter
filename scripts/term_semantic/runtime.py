@@ -109,6 +109,8 @@ WORKER instructions to forward, replacing STAGE:
    classification. You may serialize JSON/copy identifiers mechanically; NEVER generate labels
    with character/suffix/keyword rules, lookup datasets, a blanket default, or a different model.
    Required14fields, one object per item, concise reasons. Write only assigned output path.
+   Key explicit decisions by stable_id or input index, never surface alone: identical spellings with
+   different readings can have different meanings. Do not share a surface-only decision across them.
 4. For reviewer/adjudicator first read independent_input without candidate_results and WRITE independent
    judgments to the same job directory independent-output.jsonl. Only THEN read full input and reconcile.
 5. Use actual $CODEX_THREAD_ID to run

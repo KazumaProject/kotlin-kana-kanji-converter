@@ -143,7 +143,7 @@ def prepare(args):
         text = (common.read_text() + '\n\n' if common.exists() else '') + p.read_text()
         prompts[name] = digest(text.encode())
         atomic(run/'prompts'/(name+'.md'), text)
-    meta = dict(source_sha256=digest(source.read_bytes()), snapshot_sha256=digest(encoded(data).encode()), records=len(data), pairs=len(pairs), selected=len(chosen), seed=args.seed, full=args.full, taxonomy_sha256=digest(encoded(tax).encode()), prompt_hashes=prompts, batch_size=args.batch_size, created_at=int(time.time()), uniform_ids=uniform, ambiguity_ids=chosen[len(uniform):], selected_ids=sorted(chosen), models={'A':args.classifier_model,'B':args.classifier_model,'reviewer':args.classifier_model,'adjudicator':args.adjudicator_model})
+    meta = dict(source_sha256=digest(source.read_bytes()), snapshot_sha256=digest(encoded(data).encode()), records=len(data), pairs=len(pairs), selected=len(chosen), seed=args.seed, full=args.full, taxonomy_sha256=digest(encoded(tax).encode()), prompt_hashes=prompts, batch_size=args.batch_size, created_at=int(time.time()), uniform_ids=uniform, ambiguity_ids=chosen[len(uniform):], selected_ids=sorted(chosen), surface_ambiguity_ids=[i for i,x in pairs.items() if surfaces[x['surface']]>1], models={'A':args.classifier_model,'B':args.classifier_model,'reviewer':args.classifier_model,'adjudicator':args.adjudicator_model})
     atomic(run/'manifest.json', encoded(meta))
     db = connect(run)
     db.executescript('''CREATE TABLE jobs(id TEXT PRIMARY KEY, pass TEXT NOT NULL, ids TEXT NOT NULL, status TEXT NOT NULL, lease_until REAL, lease_token TEXT, attempt INTEGER DEFAULT 0, result TEXT, evidence TEXT, error TEXT); CREATE TABLE finals(id TEXT PRIMARY KEY, value TEXT NOT NULL, origin TEXT NOT NULL);''')
@@ -367,6 +367,7 @@ def high_risk(item):
 
 
 def reconcile(db, meta, affected):
+    surface_ambiguity=set(meta.get('surface_ambiguity_ids',[]))
     passes=collections.defaultdict(dict)
     for i in affected:
         for row in db.execute('SELECT * FROM result_items WHERE id=?',(i,)):
@@ -382,7 +383,7 @@ def reconcile(db, meta, affected):
         elif i in passes['reviewer']:
             final,origin=passes['reviewer'][i]
             if final['needs_review'] or unknown(final): pending['adjudicator'].append(i); continue
-        elif semantic(a)!=semantic(b) or high_risk(a) or high_risk(b) or int(i[:8],16)%10==0:
+        elif semantic(a)!=semantic(b) or high_risk(a) or high_risk(b) or i in surface_ambiguity or int(i[:8],16)%10==0:
             pending['reviewer'].append(i); continue
         else:
             final=a
@@ -442,7 +443,13 @@ def status(args):
 
 
 def verify(args):
-    run=Path(args.run); meta=config(run); data=json.loads((run/'source-records.json').read_text()); pairs=json.loads((run/'pairs.json').read_text()); db=connect(run)
+    with connect(args.run) as db:
+        db.execute('BEGIN')
+        return _verify(db,args)
+
+
+def _verify(db,args):
+    run=Path(args.run); meta=config(run); data=json.loads((run/'source-records.json').read_text()); pairs=json.loads((run/'pairs.json').read_text())
     if digest(encoded(data).encode())!=meta['snapshot_sha256']: raise ValueError('Source snapshot changed')
     if len(data)!=meta['records'] or len(pairs)!=meta['pairs']: raise ValueError('Source counts changed')
     actual={stable_id(r[0],r[4]):{'stable_id':stable_id(r[0],r[4]),'reading':r[0],'surface':r[4]} for r in data}
@@ -458,6 +465,8 @@ def verify(args):
     expected=ordered[:min(900,meta['selected'])]
     expected_set=set(expected)
     rc=collections.Counter(x['reading'] for x in pairs.values()); sc=collections.Counter(x['surface'] for x in pairs.values())
+    surface_ambiguity={i for i,x in pairs.items() if sc[x['surface']]>1}
+    if 'surface_ambiguity_ids' in meta and set(meta['surface_ambiguity_ids'])!=surface_ambiguity: raise ValueError('Surface ambiguity inventory changed')
     extras=[i for i in ordered if i not in expected_set and (rc[pairs[i]['reading']]>1 or sc[pairs[i]['surface']]>1)]
     expected+=extras[:max(0,meta['selected']-len(expected))]
     expected_set=set(expected)
@@ -492,6 +501,16 @@ def verify(args):
             if not db.execute('SELECT 1 FROM result_items WHERE pass=? AND id=?',(stage,row['id'])).fetchone(): raise ValueError('Final missing A/B')
         ab=[json.loads(db.execute('SELECT value FROM result_items WHERE pass=? AND id=?',(stage,row['id'])).fetchone()['value']) for stage in ('A','B')]
         if final.get('agreement_status')!=('agree' if semantic(ab[0])==semantic(ab[1]) else 'disagree'): raise ValueError('Agreement status changed')
+        prior={r['pass']:r for r in db.execute('SELECT pass,value,job_id FROM result_items WHERE id=?',(row['id'],))}
+        need_review=(semantic(ab[0])!=semantic(ab[1]) or high_risk(ab[0]) or high_risk(ab[1]) or row['id'] in surface_ambiguity or int(row['id'][:8],16)%10==0)
+        if need_review and 'reviewer' not in prior: raise ValueError('Required Reviewer judgment missing')
+        need_sol=(int(row['id'][:8],16)%100==0 and semantic(ab[0])==semantic(ab[1]) and not unknown(ab[0]) and not ab[0]['needs_review'])
+        if 'reviewer' in prior:
+            reviewed=json.loads(prior['reviewer']['value'])
+            need_sol=need_sol or reviewed['needs_review'] or unknown(reviewed)
+        if need_sol and 'adjudicator' not in prior: raise ValueError('Required Sol judgment missing')
+        expected_origin=next(prior[stage]['job_id'] for stage in ('adjudicator','reviewer','A') if stage in prior)
+        if row['origin']!=expected_origin: raise ValueError('Final bypasses the latest review')
         if unknown(final):
             if origin['pass']!='adjudicator': raise ValueError('Unknown without Sol adjudication')
             if not db.execute("SELECT 1 FROM result_items WHERE pass='reviewer' AND id=?",(row['id'],)).fetchone(): raise ValueError('Unknown without Reviewer')
