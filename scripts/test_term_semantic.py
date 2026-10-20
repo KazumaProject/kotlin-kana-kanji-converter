@@ -174,8 +174,8 @@ class SemanticPipelineTest(unittest.TestCase):
         a, b = self.base/'a', self.base/'b'
         self.invoke(p.export, output=str(a))
         self.invoke(p.export, output=str(b))
-        self.assertEqual({f.name: f.read_bytes() for f in a.iterdir()},
-                         {f.name: f.read_bytes() for f in b.iterdir()})
+        self.assertEqual({str(f.relative_to(a)): f.read_bytes() for f in a.rglob('*') if f.is_file()},
+                         {str(f.relative_to(b)): f.read_bytes() for f in b.rglob('*') if f.is_file()})
         recovered = []
         for path in a.glob('*.tsv.gz'):
             if path.name.startswith('term_tag_'):
@@ -293,6 +293,11 @@ class SemanticPipelineTest(unittest.TestCase):
         self.assertFalse(p.reviewer_requires_sol(a, copy.deepcopy(a), dict(a)))
         b = dict(a, usage_class='technical')
         self.assertFalse(p.reviewer_requires_sol(a, b, dict(a)))
+
+    def test_literal_quotes_are_preserved_in_source_records(self):
+        source=self.base/'literal.tsv'
+        source.write_text('term\tりてらる\t1\t2\t-3\t"literal"\n')
+        self.assertEqual(p.records(source), [['りてらる','1','2','-3','"literal"']])
 
 
 if __name__ == '__main__':

@@ -11,6 +11,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import shutil
 import sqlite3
 import time
 import uuid
@@ -40,7 +41,7 @@ def records(path):
     opener = gzip.open if str(path).endswith('.gz') else open
     rows = []
     with opener(path, 'rt', encoding='utf-8', newline='') as stream:
-        for row in csv.reader(stream, delimiter='\t'):
+        for row in csv.reader(stream, delimiter='\t', quoting=csv.QUOTE_NONE):
             if len(row) == 6:
                 category, *row = row
                 if category != 'term':
@@ -609,7 +610,7 @@ def export(args):
         path=out/(category+'.tsv.gz')
         with path.open('wb') as raw:
             with gzip.GzipFile(filename='',fileobj=raw,mode='wb',mtime=0) as stream: stream.write(payload)
-        with gzip.open(path,'rt') as stream: recovered.extend(list(csv.reader(stream,delimiter='\t')))
+        with gzip.open(path,'rt',encoding='utf-8') as stream: recovered.extend(list(csv.reader(stream,delimiter='\t',quoting=csv.QUOTE_NONE)))
     if collections.Counter(map(tuple,recovered))!=collections.Counter(map(tuple,selected_records)): raise ValueError('Export multiset mismatch')
     tag_rows=collections.defaultdict(list)
     for row in selected_records:
@@ -618,9 +619,31 @@ def export(args):
         target=out/'tags'/(tag+'.tsv.gz'); target.parent.mkdir(exist_ok=True)
         with target.open('wb') as raw:
             with gzip.GzipFile(filename='',fileobj=raw,mode='wb',mtime=0) as stream: stream.write(''.join('\t'.join(r)+'\n' for r in sorted(rows)).encode())
-        with gzip.open(target,'rt') as stream: restored=list(csv.reader(stream,delimiter='\t'))
+        with gzip.open(target,'rt',encoding='utf-8') as stream: restored=list(csv.reader(stream,delimiter='\t',quoting=csv.QUOTE_NONE))
         if collections.Counter(map(tuple,restored))!=collections.Counter(map(tuple,rows)): raise ValueError('Tag export mismatch')
     atomic(out/'assignments.jsonl' ,''.join(encoded(finals[i])+'\n' for i in sorted(finals)))
+    atomic(out/'taxonomy.json',(run/'taxonomy.json').read_text())
+    repo=Path(__file__).resolve().parents[2]
+    notice=repo/'src/main/classification/term-semantic/NOTICE.md'
+    if notice.is_file(): shutil.copyfile(notice,out/'taxonomy-NOTICE.md')
+    licenses=out/'source-notices'; licenses.mkdir()
+    shutil.copyfile(repo/'LICENSE-DATA.md',licenses/'LICENSE-DATA.md')
+    shutil.copytree(repo/'src/main/resources/third-party',licenses/'third-party')
+    atomic(out/'README.txt','Classification proposal, not an IME binary.\n'
+           'Primary category files preserve each selected original reading/POS/cost/surface record once.\n'
+           'Tag files overlap and must not be added to the primary multiset.\n'
+           'New annotations come from the recorded LLM passes, not supplied dictionary evidence.\n'
+           'Inherited taxonomy and original dictionary notices are retained separately.\n'
+           'No blanket relicensing or measured semantic accuracy is asserted.\n')
+    export_manifest={'schema_version':1,'status':'proposal','production_integration':False,
+        'semantic_accuracy_measured':False,'source_sha256':config(run)['source_sha256'],
+        'source_records_snapshot_sha256':config(run)['snapshot_sha256'],
+        'original_pairs':config(run)['pairs'],'original_records':len(data),
+        'exported_pairs':len(finals),'exported_records':len(recovered),
+        'full_source':len(recovered)==len(data),'taxonomy_sha256':config(run)['taxonomy_sha256'],
+        'models':config(run)['models'],'prompt_hashes':config(run)['prompt_hashes'],
+        'files':{str(f.relative_to(out)):digest(f.read_bytes()) for f in sorted(out.rglob('*')) if f.is_file()}}
+    atomic(out/'manifest.json',encoded(export_manifest)+'\n')
     print(encoded({'exported_pairs':len(finals),'exported_records':len(recovered),'full_source':len(recovered)==len(data)}))
 
 

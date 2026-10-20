@@ -18,6 +18,8 @@ Usage and domain are independent. Additional categories distinguish understood m
 
 Workers receive identifiers, readings and surfaces, without legacy labels or source hints. No external dictionary datasets are retrieved or supplied. This restriction concerns the workflow, not an unverifiable claim about model pretraining. Original source notices remain applicable; new model annotations have separate provenance.
 
+継承した分類定義の表示は [taxonomy NOTICE](../src/main/classification/term-semantic/NOTICE.md) に残す。exportにはtaxonomy、入力ハッシュ・モデル・プロンプト版・ファイルハッシュを持つmanifest、既存の元辞書の出典表示を含める。これは新AI判定をJMdict由来と表示したり、元辞書全体を一律に再ライセンスしたりするものではない。
+
 A/B use separate contexts and prompts. `common.md` is mandatory for all roles. Runner-recorded model, prompt version, pass, batch and call evidence are authoritative; model-written self-identification is not execution evidence. Save concise reasons, not chains of thought. Same-model agreement is not ground truth.
 
 ## 運用 / Operation
@@ -60,6 +62,8 @@ Luna A/B classify every pair independently. Reviewer examines disagreements, hig
 Validate IDs, complete coverage, unchanged reading/surface, schema, category/tag consistency, mandatory adjudication, resumability and deterministic merge. Export must preserve the full multiset of original records, including duplicate counts, POS IDs and costs. Tag views overlap and are not counted as the primary export multiset. Terminal unknown records remain in the primary export.
 
 Report A/B agreement by axis, disagreements by domain, usage distribution, review counts, JSON errors, unresolved meanings and legacy changes. Without independently verified reference labels, do not call agreement or AI audit success an accuracy measurement. Human review is optional and does not block other work.
+
+`report` writes `human-review.jsonl` for terminal unidentified meanings, `disagreements.jsonl` for paired A/B disagreements, and `audit-sample.jsonl` for the independent audit selection. These stay outside the repository. Known meanings with multiple domains are classified outcomes and are not automatically put in the human-review list.
 
 取得できたトークン・料金だけを実測と呼ぶ。取得不可は取得不可とし、予測・残枠を分離する。API単価をCodexログインの実請求額とみなさない。初期の呼び出し・トークン目安は実測と照合し、キャッシュ入力を含む総量と未キャッシュ入力・出力を区別する。`runtime usage`は同じスレッドの累積値を重複加算せず保存する。全件予測はパイロット実測から別途算出する。認証・モデル利用不可・解消しない品質問題ではチェックポイントと具体的障害を残す。
 
