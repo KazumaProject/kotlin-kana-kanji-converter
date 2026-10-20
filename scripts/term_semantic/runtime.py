@@ -119,9 +119,32 @@ def attest(args):
                      'agent_id': actual['id']}))
 
 
+def first_wave_verified(run):
+    path=Path(run)/'full-first-wave.json'
+    if not path.exists():
+        return False
+    checked=json.loads(path.read_text())
+    report=Path(checked['inspection_report'])
+    if not checked.get('semantic_writing_checked') or p.digest(report.read_bytes())!=checked['inspection_sha256']:
+        raise ValueError('First-wave inspection evidence changed')
+    with p.connect(run) as db:
+        for stage in ('A','B'):
+            item=checked['jobs'][stage]
+            job=db.execute('SELECT * FROM jobs WHERE id=?',(item['job'],)).fetchone()
+            if not job or job['pass']!=stage or job['status']!='validated' or p.digest(job['evidence'].encode())!=item['evidence_sha256']:
+                raise ValueError('First-wave accepted evidence changed')
+            anchor=p.anchor_evidence(run,job)
+            evidence=json.loads(job['evidence'])
+            if any(evidence.get(k)!=v for k,v in anchor.items()):
+                raise ValueError('First-wave anchor evidence changed')
+    return True
+
+
 def coordinator_prompt(run, phase):
     repo = Path(__file__).resolve().parents[2]
     cli = f'python3 -m scripts.term_semantic'
+    checked=phase=='full' and first_wave_verified(run)
+    first_wave='First-wave writing inspection is already verified by full-first-wave.json. Reuse it and use ten-job A/B waves.' if checked else 'The first full wave is one job per A/B. Inspect its final authored rows and host writing calls before ten-job waves.'
     worker_protocol = f'''3. Each decision MUST explicitly contain the reading AND surface authored by YOU together with its
    semantic judgment. Omit stable_id entirely from authored decision fields; emit derives it.
    The result schema describes emitted output, not a requirement to hand-copy derived IDs. NEVER bind a semantic row by array position/index to identifiers or pairs copied
@@ -152,7 +175,10 @@ def coordinator_prompt(run, phase):
    Attestation reads host-recorded model/parent and hashes input, output and sealed independent proofs.
    Do not invent host information or alter emitted artifacts.
 6. `{cli} ingest --run {run} --job JOB --output OUTPUT --evidence EVIDENCE`.
-   If pre-emit schema validation fails, repair authored decisions once. Once emit succeeds its artifacts
+   If pre-emit validation fails, inspect all reported errors and repair only invalid entries. Record every
+   failure and preserve unchanged semantic rows. Structural repairs and source-ID display are not reasons
+   to stop the whole run. After repeated serialization failures, ask Coordinator for mechanical I/O help
+   while retaining the actual child-authored semantic decisions. Once emit succeeds its artifacts
    are immutable: do not rewrite proof, decisions, pairs or identifiers to silence a later error.
 '''
     return f'''Execute actual semantic classification, not a plan. Repository code is read-only:
@@ -165,13 +191,15 @@ All children MUST have independent fresh context (fork_turns none), no inherited
 Maximum TWO concurrent child agents. Never substitute codex exec workers for formal subagents.
 Use wait_agent timeout_ms=50000 for active children; inspect stage counts at wave boundaries instead of frequent polling.
 Inspect status first. Spawn only stages that actually have pending jobs; skip completed A/B on resume.
+On resume, drain ready Reviewer/Sol work from accepted earlier waves before starting new A/B work.
 When A/B work exists, spawn two long-running children, one A and one B. In pilot each processes all available jobs of its stage.
 In full each processes at most10 jobs per wave, then returns; drain Reviewer and Sol jobs after each wave,
 check semantic errors and progress, then start the next independent A/B wave until all source IDs finish.
-The first full wave must be one job per A/B to verify actual format/usage before ten-job waves.
-Inspect the first wave children’s host-recorded writing tool calls: every semantic row must be an explicit
-literal, with no index binding or code-derived semantic defaults. Schema success alone is insufficient.
-If that contract is violated, preserve the checkpoint and report the exact violation to root before more waves.
+{first_wave}
+Inspection concerns the final accepted semantic rows and their actual authorship. Intermediate JSON
+syntax errors or multiple structural repairs are logged and corrected, not fatal contract violations.
+If actual semantic judgments are index-bound, code-derived or use prohibited evidence, preserve the
+checkpoint and report that specific semantic violation to root. Never invent meanings to satisfy schema.
 In pilot follow up early returns until the A/B stage queues are empty. In full, follow up ONLY until
 the current wave's quota is validated, not until the entire full-inventory stage queue is empty.
 Do not repeat validated work. Use database counts, not an agent's self-reported counts.
@@ -180,7 +208,7 @@ You coordinate and run validation; the actual child LLM must author every semant
 WORKER instructions to forward, replacing STAGE:
 1. cwd {repo}; `{cli} next --run {run} --stage STAGE`.
 2. If job=null, return truthful counts. Otherwise read returned prompt and taxonomy. A/B read input
-   through a compact reading/surface-only view without indexes or stable IDs;
+   through a compact reading/surface-only view; displaying source IDs is not a semantic violation, but avoid its token cost;
    reviewer/adjudicator read ONLY independent_input as reading/surface pairs until independent output validates.
    After reveal, candidate results may be mechanically joined to the exact source pairs for display. Read
    the frozen schema path returned by next. No other repository files,

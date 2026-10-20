@@ -546,5 +546,24 @@ class PairAnchoredTest(unittest.TestCase):
         self.assertIn('incomplete',result['error'].lower())
 
 
+    def test_first_wave_inspection_checkpoint_is_reused_and_hash_checked(self):
+        jobs={}
+        for stage in ('A','B'):
+            job=self.claim(stage)
+            self.accept(job)
+            with p.connect(self.run) as db:
+                evidence=db.execute('SELECT evidence FROM jobs WHERE id=?',(job['job'],)).fetchone()[0]
+            jobs[stage]={'job':job['job'],'evidence_sha256':p.digest(evidence.encode())}
+        report=self.base/'synthetic-writing-inspection.json'
+        report.write_text('{"synthetic_fixture_only":true}')
+        checkpoint={'semantic_writing_checked':True,'inspection_report':str(report),
+                    'inspection_sha256':p.digest(report.read_bytes()),'jobs':jobs}
+        (self.run/'full-first-wave.json').write_text(p.encoded(checkpoint))
+        self.assertTrue(runtime.first_wave_verified(self.run))
+        report.write_text('{}')
+        with self.assertRaisesRegex(ValueError,'inspection evidence changed'):
+            runtime.first_wave_verified(self.run)
+
+
 if __name__ == '__main__':
     unittest.main()
