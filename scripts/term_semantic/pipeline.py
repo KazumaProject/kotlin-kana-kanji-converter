@@ -511,7 +511,13 @@ def verify(args):
 
 
 def report(args):
-    db=connect(args.run); counts=collections.defaultdict(collections.Counter); passes=collections.defaultdict(dict); evidence=[]
+    with connect(args.run) as db:
+        db.execute('BEGIN')
+        return _report(db,args)
+
+
+def _report(db,args):
+    counts=collections.defaultdict(collections.Counter); passes=collections.defaultdict(dict); evidence=[]
     for row in db.execute("SELECT pass,result,evidence FROM jobs WHERE status='validated'"):
         for item in json.loads(row['result']): passes[row['pass']][item['stable_id']]=item
         evidence.append(json.loads(row['evidence']))
@@ -549,6 +555,15 @@ def report(args):
     output['finalized']=db.execute('SELECT count(*) FROM finals').fetchone()[0]
     output['review_judgments']=sum(len(passes[stage]) for stage in ('reviewer','adjudicator'))
     output['ai_audit_is_ground_truth']=False
+    finals={r['id']:json.loads(r['value']) for r in db.execute('SELECT id,value FROM finals')}
+    run=Path(args.run)
+    atomic(run/'human-review.jsonl',''.join(encoded(finals[i])+'\n' for i in sorted(finals) if unknown(finals[i])))
+    atomic(run/'disagreements.jsonl',''.join(encoded({'stable_id':i,'A':passes['A'][i],'B':passes['B'][i],'final':finals.get(i)})+'\n' for i in sorted(set(passes['A'])&set(passes['B'])) if semantic(passes['A'][i])!=semantic(passes['B'][i])))
+    audit_path=run/'audit-selection.json'
+    if audit_path.exists():
+        selection=json.loads(audit_path.read_text())
+        atomic(run/'audit-sample.jsonl',''.join(encoded(finals[i])+'\n' for i in selection['uniform_ids']+selection['stratified_ids'] if i in finals))
+    output['human_review_count']=sum(unknown(item) for item in finals.values())
     atomic(Path(args.run)/'report.json',encoded(output)); print(encoded({k:v for k,v in output.items() if k!='usage_evidence'}))
 
 

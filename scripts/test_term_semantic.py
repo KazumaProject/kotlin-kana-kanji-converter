@@ -275,6 +275,16 @@ class SemanticPipelineTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             p.external_path(Path(__file__).resolve().parent/'runtime-output')
 
+    def test_report_separates_agreement_from_accuracy_and_lists_unknowns(self):
+        self.finish()
+        result = self.invoke(p.report)
+        self.assertFalse(result['ai_audit_is_ground_truth'])
+        self.assertEqual(result['agreement_rates']['compared_pairs'], 3)
+        self.assertEqual(result['human_review_count'], 1)
+        review = [json.loads(line) for line in (self.run/'human-review.jsonl').read_text().splitlines()]
+        self.assertEqual([row['surface'] for row in review], ['X'])
+        self.assertEqual(review[0]['classification_pass'], 'adjudicator')
+
 
 if __name__ == '__main__':
     unittest.main()
