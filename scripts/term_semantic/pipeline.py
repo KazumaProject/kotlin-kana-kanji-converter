@@ -397,6 +397,16 @@ def compact_pending(db, stage, meta):
 def next_job(args):
     db = connect(args.run)
     db.execute('BEGIN IMMEDIATE')
+    meta = config(args.run)
+    actor = os.environ.get('CODEX_THREAD_ID')
+    if meta.get('full') and args.stage in ('A', 'B') and actor:
+        completed = db.execute("SELECT count(*) FROM jobs WHERE pass=? AND status='validated' AND json_extract(evidence,'$.agent_id')=?", (args.stage, actor)).fetchone()[0]
+        if completed >= meta.get('worker_wave_job_limit', 10):
+            db.commit()
+            print(encoded({'job':None, 'worker_wave_complete':True,
+                           'global_stage_complete':False, 'validated_jobs_for_agent':completed,
+                           'reason':'Return to Coordinator for review; a later A/B wave needs a fresh independent worker.'}))
+            return
     now = time.time()
     lease_token = uuid.uuid4().hex
     db.execute("UPDATE jobs SET status='pending' WHERE status='leased' AND lease_until < ?",(now,))

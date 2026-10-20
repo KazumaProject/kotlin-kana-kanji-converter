@@ -195,6 +195,8 @@ On resume, drain ready Reviewer/Sol work from accepted earlier waves before star
 When A/B work exists, spawn two long-running children, one A and one B. In pilot each processes all available jobs of its stage.
 In full each processes at most10 jobs per wave, then returns; drain Reviewer and Sol jobs after each wave,
 check semantic errors and progress, then start the next independent A/B wave until all source IDs finish.
+The runner returns worker_wave_complete after ten accepted full A/B jobs for that host actor.
+That means yield to review, not global stage completion; use a fresh fork_turns=none worker next wave.
 {first_wave}
 Inspection concerns the final accepted semantic rows and their actual authorship. Intermediate JSON
 syntax errors or multiple structural repairs are logged and corrected, not fatal contract violations.

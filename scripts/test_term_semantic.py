@@ -184,6 +184,26 @@ class SemanticPipelineTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.ingest(job)
 
+    def test_full_worker_yields_to_review_without_completing_global_stage(self):
+        meta = p.config(self.run)
+        meta.update(full=True, batch_size=1, worker_wave_job_limit=2)
+        (self.run/'manifest.json').write_text(p.encoded(meta))
+        with p.connect(self.run) as db:
+            db.execute("DELETE FROM jobs WHERE pass='A'")
+            for term_id in self.pairs:
+                p.add_job(db, 'A', [term_id], meta)
+        with mock.patch.dict('os.environ', CODEX_THREAD_ID='synthetic-fixture-only'):
+            self.ingest(self.claim('A'))
+            self.ingest(self.claim('A'))
+            yielded = self.claim('A')
+        self.assertIsNone(yielded['job'])
+        self.assertTrue(yielded['worker_wave_complete'])
+        self.assertFalse(yielded['global_stage_complete'])
+        with p.connect(self.run) as db:
+            self.assertEqual(db.execute("SELECT count(*) FROM jobs WHERE pass='A' AND status='pending'").fetchone()[0], 1)
+        with mock.patch.dict('os.environ', CODEX_THREAD_ID='another-synthetic-worker'):
+            self.assertIsNotNone(self.claim('A')['job'])
+
     def test_unknown_requires_sol_after_reviewer(self):
         self.ingest(self.claim('A'))
         self.ingest(self.claim('B'))
