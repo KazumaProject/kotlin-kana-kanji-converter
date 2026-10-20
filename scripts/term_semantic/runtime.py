@@ -54,6 +54,24 @@ def recorded_usage(path):
     return latest
 
 
+def independent_spawn_settings(path, task_path):
+    settings=None
+    with Path(path).open() as stream:
+        for line in stream:
+            try:
+                event=json.loads(line); payload=event.get('payload',{})
+                if event.get('type')!='response_item' or payload.get('type') not in ('function_call','custom_tool_call') or not payload.get('name','').endswith('spawn_agent'):
+                    continue
+                args=json.loads(payload.get('arguments',payload.get('input','{}')))
+                if args.get('task_name')==task_path.rsplit('/',1)[-1]:
+                    settings={key:args.get(key) for key in ('task_name','model','reasoning_effort','fork_turns')}
+            except (ValueError,TypeError):
+                continue
+    if settings is None or settings['fork_turns']!='none':
+        raise ValueError('No host-recorded independent spawn (fork_turns=none) for this task')
+    return settings
+
+
 def attest(args):
     run = p.external_path(args.run)
     with p.connect(run) as db:
@@ -67,12 +85,20 @@ def attest(args):
         raise ValueError('Host-recorded model differs from the requested pass model')
     if args.parent_thread_id and actual['spawn']['parent_thread_id'] != args.parent_thread_id:
         raise ValueError('Unexpected coordinator parent thread')
+    database=Path.home()/'.codex/state_5.sqlite'
+    with contextlib.closing(sqlite3.connect(database.as_uri()+'?mode=ro',uri=True)) as db:
+        parent=db.execute('SELECT rollout_path FROM threads WHERE id=?',(actual['spawn']['parent_thread_id'],)).fetchone()
+    if parent is None:
+        raise ValueError('Coordinator host record missing')
+    settings=independent_spawn_settings(parent[0],actual['spawn']['agent_path'])
     evidence = dict(model=actual['model'], agent_id=actual['id'],
                     reasoning_effort=actual['reasoning_effort'],
                     task_path=actual['spawn'].get('agent_path'),
                     coordinator_thread_id=actual['spawn']['parent_thread_id'],
                     lease_token=job['lease_token'], call_id=actual['id']+':'+args.job,
                     execution_kind='formal_codex_subagent',
+                    spawn_settings=settings,
+                    implementation_sha256={name:p.digest(Path(__file__).with_name(name).read_bytes()) for name in ('pipeline.py','runtime.py')},
                     recorded_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),
                     usage=recorded_usage(actual['rollout_path']),
                     usage_scope='cumulative thread usage; do not sum repeated attestations',
@@ -206,7 +232,8 @@ def run_coordinator(args):
                '-o', str(attempt/'reply.json'), '-']
     p.atomic(attempt/'invocation.json', p.encoded(dict(command=command,
              cli_version=subprocess.check_output([executable, '--version'], text=True).strip(),
-             phase=args.phase, prompt_sha256=p.digest(prompt.encode()))))
+             phase=args.phase, prompt_sha256=p.digest(prompt.encode()),
+             implementation_sha256={name:p.digest(Path(__file__).with_name(name).read_bytes()) for name in ('pipeline.py','runtime.py')})))
     print(p.encoded({'attempt': str(attempt), 'phase': args.phase}), flush=True)
     with (attempt/'events.jsonl').open('w') as stdout, (attempt/'stderr.txt').open('w') as stderr:
         result = subprocess.run(command, input=prompt, text=True, stdout=stdout, stderr=stderr)

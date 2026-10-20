@@ -299,6 +299,20 @@ class SemanticPipelineTest(unittest.TestCase):
         source.write_text('term\tりてらる\t1\t2\t-3\t"literal"\n')
         self.assertEqual(p.records(source), [['りてらる','1','2','-3','"literal"']])
 
+    def test_spawn_attestation_requires_actual_independent_context(self):
+        path=self.base/'parent-rollout.jsonl'
+        for fork in ('all','none'):
+            path.write_text(p.encoded({'type':'response_item','payload':{
+                'type':'function_call','name':'collaboration.spawn_agent',
+                'arguments':p.encoded({'task_name':'worker','model':'gpt-6-luna','fork_turns':fork})}})+'\n')
+            if fork=='all':
+                with self.assertRaises(ValueError):
+                    runtime.independent_spawn_settings(path,'/root/worker')
+            else:
+                self.assertEqual(runtime.independent_spawn_settings(path,'/root/worker')['fork_turns'],'none')
+        with self.assertRaises(ValueError):
+            runtime.independent_spawn_settings(path,'/root/another-worker')
+
 
 if __name__ == '__main__':
     unittest.main()
