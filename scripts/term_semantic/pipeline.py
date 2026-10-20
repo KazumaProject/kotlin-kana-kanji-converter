@@ -406,7 +406,13 @@ def ingest(args):
 
 
 def _ingest(args):
-    db=connect(args.run); row=db.execute('SELECT * FROM jobs WHERE id=?',(args.job,)).fetchone()
+    with connect(args.run) as db:
+        db.execute('BEGIN IMMEDIATE')
+        return _ingest_transaction(db,args)
+
+
+def _ingest_transaction(db,args):
+    row=db.execute('SELECT * FROM jobs WHERE id=?',(args.job,)).fetchone()
     if row is None: raise ValueError('Unknown job')
     raw=Path(args.output).read_text()
     try:
