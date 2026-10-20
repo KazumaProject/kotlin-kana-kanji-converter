@@ -534,5 +534,17 @@ class PairAnchoredTest(unittest.TestCase):
         self.assertEqual(len(reads),1)
 
 
+    def test_successful_coordinator_exit_cannot_mask_incomplete_classification(self):
+        with mock.patch.object(runtime.shutil,'which',return_value='/synthetic-test-only/codex'), \
+             mock.patch.object(runtime.subprocess,'check_output',return_value='synthetic-test-fixture'), \
+             mock.patch.object(runtime.subprocess,'run',return_value=runtime.subprocess.CompletedProcess([],0)):
+            with contextlib.redirect_stdout(io.StringIO()):
+                code=runtime.run_coordinator(argparse.Namespace(run=str(self.run),phase='pilot'))
+        self.assertEqual(code,1)
+        result=json.loads(next((self.run/'coordinators').glob('*/completion.json')).read_text())
+        self.assertFalse(result['complete'])
+        self.assertIn('incomplete',result['error'].lower())
+
+
 if __name__ == '__main__':
     unittest.main()

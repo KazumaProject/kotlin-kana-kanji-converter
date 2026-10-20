@@ -80,7 +80,7 @@ Report A/B agreement by axis, disagreements by domain, usage distribution, revie
 
 取得できたトークン・料金だけを実測と呼ぶ。取得不可は取得不可とし、予測・残枠を分離する。API単価をCodexログインの実請求額とみなさない。初期の呼び出し・トークン目安は実測と照合し、キャッシュ入力を含む総量と未キャッシュ入力・出力を区別する。`runtime usage`は同じスレッドの累積値を重複加算せず保存する。全件予測はパイロット実測から別途算出する。認証・モデル利用不可・解消しない品質問題ではチェックポイントと具体的障害を残す。
 
-Only measured usage is reported as measured. API list prices are not a Codex subscription bill. Authentication/model failures and unresolved quality blockers must remain visible. Completion requires a final category for every pair, all mandatory audits and full record-preservation verification; it does not mean every meaning is resolved.
+Only measured usage is reported as measured. API list prices are not a Codex subscription bill. Authentication/model failures and unresolved quality blockers must remain visible. A successful native coordinator exit is followed by `verify --complete`; an incomplete run returns failure and preserves a completion diagnostic. Completion requires a final category for every pair, all mandatory audits and full record-preservation verification; it does not mean every meaning is resolved.
 
 ## PR
 

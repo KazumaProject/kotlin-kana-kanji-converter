@@ -7,6 +7,7 @@ import argparse
 import contextlib
 import datetime
 import json
+import io
 from pathlib import Path
 import shutil
 import sqlite3
@@ -161,12 +162,15 @@ Use the formal spawn_agent tool, exact model gpt-6-luna for A,B,reviewer and gpt
 Use reasoning_effort medium; record the actual host setting, never assert a requested setting was used.
 All children MUST have independent fresh context (fork_turns none), no inherited conversation or sibling labels.
 Maximum TWO concurrent child agents. Never substitute codex exec workers for formal subagents.
-Wait up to50 seconds for active children rather than frequent status polling; inspect stage counts at wave boundaries.
+Use wait_agent timeout_ms=50000 for active children; inspect stage counts at wave boundaries instead of frequent polling.
 Inspect status first. Spawn only stages that actually have pending jobs; skip completed A/B on resume.
 When A/B work exists, spawn two long-running children, one A and one B. In pilot each processes all available jobs of its stage.
 In full each processes at most10 jobs per wave, then returns; drain Reviewer and Sol jobs after each wave,
 check semantic errors and progress, then start the next independent A/B wave until all source IDs finish.
-The first full wave must be one job per A/B to verify the larger batch's actual format/usage before ten-job waves.
+The first full wave must be one job per A/B to verify actual format/usage before ten-job waves.
+Inspect the first wave children’s host-recorded writing tool calls: every semantic row must be an explicit
+literal, with no index binding or code-derived semantic defaults. Schema success alone is insufficient.
+If that contract is violated, preserve the checkpoint and report the exact violation to root before more waves.
 In pilot follow up early returns until the A/B stage queues are empty. In full, follow up ONLY until
 the current wave's quota is validated, not until the entire full-inventory stage queue is empty.
 Do not repeat validated work. Use database counts, not an agent's self-reported counts.
@@ -278,7 +282,19 @@ def run_coordinator(args):
     with (attempt/'events.jsonl').open('w') as stdout, (attempt/'stderr.txt').open('w') as stderr:
         result = subprocess.run(command, input=prompt, text=True, stdout=stdout, stderr=stderr)
     p.atomic(attempt/'exit.json', p.encoded({'returncode': result.returncode}))
-    return result.returncode
+    if result.returncode:
+        return result.returncode
+    try:
+        with contextlib.redirect_stdout(io.StringIO()) as verification:
+            p.verify(argparse.Namespace(run=str(run),complete=True))
+        completed=json.loads(verification.getvalue().strip().splitlines()[-1])
+        p.atomic(attempt/'completion.json',p.encoded(completed))
+    except (ValueError,OSError,KeyError,TypeError) as exc:
+        failed={'verified':False,'complete':False,'error':str(exc)}
+        p.atomic(attempt/'completion.json',p.encoded(failed))
+        print(p.encoded(failed),flush=True)
+        return 1
+    return 0
 
 
 def main():
