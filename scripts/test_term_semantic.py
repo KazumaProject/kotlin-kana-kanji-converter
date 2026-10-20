@@ -88,6 +88,15 @@ class SemanticPipelineTest(unittest.TestCase):
             self.invoke(p.acknowledge_anomaly, job=job, evidence=str(evidence),
                         note='Synthetic mechanics fixture: one intentionally unknown term, not actual semantic review.')
 
+    def test_pending_audit_does_not_report_complete_candidate_set(self):
+        self.finish()
+        self.invoke(p.audit, size=3)
+        state = self.invoke(p.verify, complete=False)
+        self.assertEqual(state['finalized'], 3)
+        self.assertFalse(state['complete'])
+        with self.assertRaises(ValueError):
+            self.invoke(p.verify, complete=True)
+
     def test_source_scope_and_pos_cost_variants(self):
         self.assertEqual(p.records(self.source), [list(r) for r in self.rows])
         self.assertEqual(len(self.pairs), 3)

@@ -711,7 +711,12 @@ def _verify(db,args):
                 if not origin or origin['pass']!='adjudicator': raise ValueError('Independent Sol audit incomplete')
     if args.complete and ({r['id'] for r in finals}!=selected or db.execute("SELECT count(*) FROM jobs WHERE status!='validated'").fetchone()[0]): raise ValueError('Classification incomplete')
     if args.complete and db.execute("SELECT 1 FROM anomalies WHERE status!='inspected_by_sol' LIMIT 1").fetchone(): raise ValueError('Unknown-rate anomaly requires Sol inspection')
-    print(encoded({'verified':True,'selected':meta['selected'],'finalized':len(finals),'complete':len(finals)==meta['selected']}))
+    complete=({r['id'] for r in finals}==selected
+              and not db.execute("SELECT 1 FROM jobs WHERE status!='validated' LIMIT 1").fetchone()
+              and not db.execute("SELECT 1 FROM anomalies WHERE status!='inspected_by_sol' LIMIT 1").fetchone())
+    if audit_path.exists():
+        complete=complete and all(db.execute("SELECT jobs.pass FROM finals JOIN jobs ON jobs.id=finals.origin WHERE finals.id=?",(i,)).fetchone()[0]=='adjudicator' for i in audit_ids)
+    print(encoded({'verified':True,'selected':meta['selected'],'finalized':len(finals),'complete':bool(complete)}))
 
 
 def report(args):
