@@ -1,49 +1,63 @@
-# 分類辞書の収録一覧
+# 人物辞書置換プレリリース — 全配布カテゴリ
 
-30カテゴリ、全体で **836,923組**、カテゴリ別に **853,456レコード**を収録しています。
+特別プレリリースZIPのカテゴリ一覧です。通常配布の30カテゴリから汎用 `person` を除き、人物細分類24カテゴリに置き換えた **53カテゴリ**を掲載しています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-「組」は読み・表記の重複を除いた件数、「レコード」は品詞・コストの違いも保持したバイナリへの収録件数です。複数カテゴリへの所属があるため、カテゴリ別の組数の合計は全体の組数と一致しません。
+カテゴリ別レコード数の合計は **848,517**、読み・表記の組数の合計は **840,468**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
-一覧は配布対象の固定データから全件生成しています。Geminiとassistantの暫定分類・未確認の読みを含みます。既存28カテゴリのコストと品詞は元辞書の値です。漢方・医療は提供元の読みと空欄へのGemini推定読み（未確認）を採用し、個別の読み訂正には出典を記録します。品詞とコストは本プロジェクトで設定しています。分類取得失敗・未分類・除外候補はこの一覧には含めません。
+[生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換プレリリース) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
-[不採用語と判断理由](excluded/index.md) · [品詞IDと品詞名](pos.md) · [生成・配布手順](../classified-dictionary-distribution.md) · [漢方・医療の出典記録](../specialist-dictionaries.md)
-
-[人物細分類の全収録語](person-taxonomy/index.md)（特別プレリリース向け） · [置換プレリリースの全53カテゴリ](person-replacement/index.md)
-
-| カテゴリ | 読み・表記の組 | 読み数 | レコード数 |
-|---|---:|---:|---:|
-| [人物・人名](person/index.md) | 266,950 | 237,899 | 268,898 |
-| [架空キャラクター](character/index.md) | 6,799 | 6,728 | 6,871 |
-| [神話・伝承の存在](mythological_figure/index.md) | 3,435 | 3,195 | 3,436 |
-| [地名](place/index.md) | 43,377 | 41,365 | 45,089 |
-| [住所](address/index.md) | 148,606 | 148,127 | 152,874 |
-| [駅・停留所](station/index.md) | 12,756 | 12,396 | 12,758 |
-| [施設](facility/index.md) | 35,062 | 33,472 | 35,069 |
-| [交通路線](transport_route/index.md) | 4,230 | 4,195 | 4,231 |
-| [組織](organization/index.md) | 47,408 | 46,636 | 47,487 |
-| [家系・氏族](lineage/index.md) | 2,019 | 1,974 | 2,019 |
-| [商品・サービス](product/index.md) | 9,881 | 9,662 | 9,883 |
-| [車両・船舶](vehicle/index.md) | 2,579 | 2,546 | 2,579 |
-| [イベント・事件](event/index.md) | 8,717 | 8,612 | 8,717 |
-| [賞](award/index.md) | 1,167 | 1,150 | 1,167 |
-| [条約・協定](agreement/index.md) | 425 | 421 | 425 |
-| [事業・キャンペーン](initiative/index.md) | 1,072 | 1,065 | 1,072 |
-| [一般語・専門用語](term/index.md) | 108,591 | 104,245 | 108,618 |
-| [作品シリーズ](work_franchise/index.md) | 849 | 837 | 849 |
-| [漫画作品](work_manga/index.md) | 5,143 | 5,103 | 5,144 |
-| [アニメ作品](work_anime/index.md) | 1,104 | 1,088 | 1,104 |
-| [映画作品](work_film/index.md) | 6,509 | 6,477 | 6,510 |
-| [番組](work_program/index.md) | 9,312 | 9,238 | 9,313 |
-| [書籍作品](work_book/index.md) | 7,666 | 7,612 | 7,667 |
-| [ゲーム作品](work_game/index.md) | 3,151 | 3,061 | 3,151 |
-| [音楽作品](work_music/index.md) | 10,335 | 10,202 | 10,338 |
-| [舞台作品](work_stage/index.md) | 575 | 566 | 575 |
-| [定期刊行物](work_periodical/index.md) | 1,811 | 1,768 | 1,812 |
-| [媒体未特定の作品・美術作品](work_other/index.md) | 2,684 | 2,671 | 2,685 |
-| [漢方・生薬](kampo/index.md) | 432 | 418 | 432 |
-| [医療](medical/index.md) | 92,683 | 89,486 | 92,683 |
-
-元データSHA-256: `6909ea156e6973e651a2fe1e4858810d4ded340bce8c082e286597fb4cfde8fc`
-
-再生成: `python3 scripts/write_classified_dictionary_catalog.py`
-整合確認: `python3 scripts/write_classified_dictionary_catalog.py --check`
+| カテゴリ | ID | 読み・表記の組 | レコード数 | 全件一覧 |
+|---|---|---:|---:|---|
+| [架空キャラクター](character/index.md) | `character` | 6,799 | 6,871 | [全件](character/index.md) |
+| [神話・伝承の存在](mythological_figure/index.md) | `mythological_figure` | 3,435 | 3,436 | [全件](mythological_figure/index.md) |
+| [地名](place/index.md) | `place` | 43,377 | 45,089 | [全件](place/index.md) |
+| [住所](address/index.md) | `address` | 148,606 | 152,874 | [全件](address/index.md) |
+| [駅・停留所](station/index.md) | `station` | 12,756 | 12,758 | [全件](station/index.md) |
+| [施設](facility/index.md) | `facility` | 35,062 | 35,069 | [全件](facility/index.md) |
+| [交通路線](transport_route/index.md) | `transport_route` | 4,230 | 4,231 | [全件](transport_route/index.md) |
+| [組織](organization/index.md) | `organization` | 47,408 | 47,487 | [全件](organization/index.md) |
+| [家系・氏族](lineage/index.md) | `lineage` | 2,019 | 2,019 | [全件](lineage/index.md) |
+| [商品・サービス](product/index.md) | `product` | 9,881 | 9,883 | [全件](product/index.md) |
+| [車両・船舶](vehicle/index.md) | `vehicle` | 2,579 | 2,579 | [全件](vehicle/index.md) |
+| [イベント・事件](event/index.md) | `event` | 8,717 | 8,717 | [全件](event/index.md) |
+| [賞](award/index.md) | `award` | 1,167 | 1,167 | [全件](award/index.md) |
+| [条約・協定](agreement/index.md) | `agreement` | 425 | 425 | [全件](agreement/index.md) |
+| [事業・キャンペーン](initiative/index.md) | `initiative` | 1,072 | 1,072 | [全件](initiative/index.md) |
+| [一般語・専門用語](term/index.md) | `term` | 108,591 | 108,618 | [全件](term/index.md) |
+| [作品シリーズ](work_franchise/index.md) | `work_franchise` | 849 | 849 | [全件](work_franchise/index.md) |
+| [漫画作品](work_manga/index.md) | `work_manga` | 5,143 | 5,144 | [全件](work_manga/index.md) |
+| [アニメ作品](work_anime/index.md) | `work_anime` | 1,104 | 1,104 | [全件](work_anime/index.md) |
+| [映画作品](work_film/index.md) | `work_film` | 6,509 | 6,510 | [全件](work_film/index.md) |
+| [番組](work_program/index.md) | `work_program` | 9,312 | 9,313 | [全件](work_program/index.md) |
+| [書籍作品](work_book/index.md) | `work_book` | 7,666 | 7,667 | [全件](work_book/index.md) |
+| [ゲーム作品](work_game/index.md) | `work_game` | 3,151 | 3,151 | [全件](work_game/index.md) |
+| [音楽作品](work_music/index.md) | `work_music` | 10,335 | 10,338 | [全件](work_music/index.md) |
+| [舞台作品](work_stage/index.md) | `work_stage` | 575 | 575 | [全件](work_stage/index.md) |
+| [定期刊行物](work_periodical/index.md) | `work_periodical` | 1,811 | 1,812 | [全件](work_periodical/index.md) |
+| [媒体未特定の作品・美術作品](work_other/index.md) | `work_other` | 2,684 | 2,685 | [全件](work_other/index.md) |
+| [漢方・生薬](kampo/index.md) | `kampo` | 432 | 432 | [全件](kampo/index.md) |
+| [医療](medical/index.md) | `medical` | 92,683 | 92,683 | [全件](medical/index.md) |
+| [姓・名字（由来未確認）](surname_origin_unconfirmed/index.md) | `surname_origin_unconfirmed` | 49,328 | 49,617 | [全件](surname_origin_unconfirmed/index.md) |
+| [名・下の名前（由来未確認）](given_name_origin_unconfirmed/index.md) | `given_name_origin_unconfirmed` | 7,085 | 7,163 | [全件](given_name_origin_unconfirmed/index.md) |
+| [人名・姓名（由来未確認）](personal_name_origin_unconfirmed/index.md) | `personal_name_origin_unconfirmed` | 169,291 | 170,660 | [全件](personal_name_origin_unconfirmed/index.md) |
+| [俳優](actor/index.md) | `actor` | 6,395 | 6,450 | [全件](actor/index.md) |
+| [声優](voice_actor/index.md) | `voice_actor` | 572 | 579 | [全件](voice_actor/index.md) |
+| [歌手・音楽家](musician/index.md) | `musician` | 969 | 971 | [全件](musician/index.md) |
+| [アイドル](idol/index.md) | `idol` | 153 | 154 | [全件](idol/index.md) |
+| [お笑い芸人](comedian/index.md) | `comedian` | 53 | 55 | [全件](comedian/index.md) |
+| [タレント・モデル・放送・報道](broadcaster/index.md) | `broadcaster` | 1,305 | 1,308 | [全件](broadcaster/index.md) |
+| [配信者・動画投稿者](online_creator/index.md) | `online_creator` | 70 | 71 | [全件](online_creator/index.md) |
+| [スポーツ関係者](sports/index.md) | `sports` | 4,624 | 4,626 | [全件](sports/index.md) |
+| [棋士・競技ゲーム選手](competitive_games/index.md) | `competitive_games` | 104 | 104 | [全件](competitive_games/index.md) |
+| [作家・文筆家](writer/index.md) | `writer` | 1,133 | 1,134 | [全件](writer/index.md) |
+| [漫画家・イラストレーター](manga_illustration/index.md) | `manga_illustration` | 214 | 215 | [全件](manga_illustration/index.md) |
+| [映画・映像・ゲーム制作者](film_game_creator/index.md) | `film_game_creator` | 199 | 200 | [全件](film_game_creator/index.md) |
+| [美術・写真・建築・デザイン](art_design/index.md) | `art_design` | 922 | 922 | [全件](art_design/index.md) |
+| [舞台・伝統芸能](performing_arts/index.md) | `performing_arts` | 294 | 295 | [全件](performing_arts/index.md) |
+| [研究・技術・教育](science_education/index.md) | `science_education` | 7,575 | 7,605 | [全件](science_education/index.md) |
+| [政治・行政・外交・社会運動](politics_public/index.md) | `politics_public` | 1,549 | 1,549 | [全件](politics_public/index.md) |
+| [実業・経営](business/index.md) | `business` | 4,016 | 4,035 | [全件](business/index.md) |
+| [軍事](military/index.md) | `military` | 768 | 768 | [全件](military/index.md) |
+| [皇室・王室・貴族](royalty_nobility/index.md) | `royalty_nobility` | 286 | 286 | [全件](royalty_nobility/index.md) |
+| [その他の特定人物](other_identified/index.md) | `other_identified` | 5,031 | 5,038 | [全件](other_identified/index.md) |
+| [思想・哲学](thought/index.md) | `thought` | 154 | 154 | [全件](thought/index.md) |
