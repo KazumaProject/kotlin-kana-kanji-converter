@@ -6,6 +6,7 @@ import gzip
 import hashlib
 import io
 import json
+import os
 import re
 import tempfile
 import unicodedata
@@ -26,6 +27,9 @@ TERM_ADDITIONS_PATH = 'src/main/classification/term-additions.tsv'
 TERM_TAXONOMY_PATH = 'src/main/classification/term-taxonomy.json'
 TERM_CLASSIFICATIONS_PATH = 'src/main/classification/term-classifications.tsv.gz'
 TERM_CLASSIFICATIONS_MANIFEST_PATH = 'src/main/classification/term-classifications-manifest.json'
+EVENT_TAXONOMY_PATH = 'src/main/classification/event-taxonomy.json'
+EVENT_CLASSIFICATIONS_PATH = 'src/main/classification/event-classifications.tsv.gz'
+EVENT_CLASSIFICATIONS_MANIFEST_PATH = 'src/main/classification/event-classifications-manifest.json'
 TERM_CLASSIFICATION_PROMPT_VERSIONS = {
     'term-best-fit-15-categories-ordered-groups-10-v2',
     'term-best-fit-15-categories-ordered-code-array-v3',
@@ -86,28 +90,79 @@ def term_taxonomy(root):
     return {'id': 'term', 'name': data['name'], 'groups': group_metadata}, flattened
 
 
-def merged_categories(base, term_data):
-    if term_data is None:
+def event_taxonomy(root):
+    path = root / EVENT_TAXONOMY_PATH
+    if not path.is_file():
+        return None
+    data = json.loads(path.read_text(encoding='utf-8'))
+    if (data.get('schemaVersion') != 1 or data.get('id') != 'event'
+            or [group.get('id') for group in data.get('groups', [])] != ['occasion', 'incident', 'history']):
+        raise ValueError('Unsupported event taxonomy')
+    flattened = []
+    classifier_ids = []
+    group_metadata = []
+    for group in data['groups']:
+        entries = group.get('categories')
+        if not isinstance(entries, list):
+            raise ValueError('Event taxonomy group must contain categories')
+        ids = []
+        for category in entries:
+            if (not isinstance(category.get('id'), str)
+                    or not re.fullmatch(r'event/(occasion|incident|history)/[a-z_]+', category['id'])
+                    or not category['id'].startswith(f'event/{group["id"]}/')
+                    or not isinstance(category.get('name'), str) or not category['name']
+                    or not isinstance(category.get('definition'), str) or not category['definition']
+                    or type(category.get('distribution')) is not bool):
+                raise ValueError('Invalid event taxonomy leaf category')
+            classifier_ids.append(category['id'])
+            if category['distribution']:
+                flattened.append({key: category[key] for key in ('id', 'name', 'definition')})
+                ids.append(category['id'])
+        group_metadata.append({'id': f'event/{group["id"]}', 'name': group['name'], 'categories': ids})
+    all_ids = [category_id for group in data['groups'] for category_id in
+               (category['id'] for category in group['categories'])]
+    ids = [category['id'] for category in flattened]
+    if (len(all_ids) != 9 or len(set(all_ids)) != 9 or len(ids) != 6 or len(set(ids)) != 6
+            or len(classifier_ids) != 9):
+        raise ValueError('Event taxonomy must contain nine labels and six distributable categories')
+    return {'id': 'event', 'name': data['name'], 'groups': group_metadata}, flattened
+
+
+def merged_categories(base, term_data, event_data=None):
+    if term_data is None and event_data is None:
         return base
-    structure, term_categories = term_data
     categories = list(base.get('categories', []))
     ids = [category.get('id') for category in categories]
     if len(ids) != len(set(ids)):
         raise ValueError('Duplicate category IDs in source taxonomy')
-    if 'term' in ids:
-        insertion = ids.index('term')
-        categories = [category for category in categories if category.get('id') != 'term']
-        categories[insertion:insertion] = term_categories
-    elif set(category['id'] for category in term_categories) <= set(ids):
-        existing = {category['id']: category for category in categories}
-        for category in term_categories:
-            if existing[category['id']].get('name') != category['name']:
-                raise ValueError(f'Term category name differs from taxonomy: {category["id"]}')
-    else:
-        raise ValueError('Source taxonomy must contain term or all 15 expanded term categories')
+    structures = []
+    if term_data is not None:
+        structure, term_categories = term_data
+        structures.append(('term', structure, term_categories))
+    if event_data is not None:
+        structure, event_categories = event_data
+        structures.append(('event', structure, event_categories))
+    inserted_at = {}
+    for parent_id, structure, leaf_categories in structures:
+        leaf_ids = {category['id'] for category in leaf_categories}
+        if parent_id in ids:
+            insertion = ids.index(parent_id)
+            inserted_at[parent_id] = insertion
+            categories = [category for category in categories if category.get('id') != parent_id]
+            categories[insertion:insertion] = leaf_categories
+            ids = [category.get('id') for category in categories]
+        elif leaf_ids <= set(ids):
+            existing = {category['id']: category for category in categories}
+            for category in leaf_categories:
+                if existing[category['id']].get('name') != category['name']:
+                    raise ValueError(f'{parent_id.title()} category name differs from taxonomy: {category["id"]}')
+            inserted_at[parent_id] = min(ids.index(category_id) for category_id in leaf_ids)
+        else:
+            raise ValueError(f'Source taxonomy must contain {parent_id} or all expanded {parent_id} categories')
     result = dict(base)
     result['categories'] = categories
-    result['categoryGroups'] = [structure]
+    result['categoryGroups'] = [structure for parent_id, structure, _ in
+                                sorted(structures, key=lambda item: inserted_at[item[0]])]
     return result
 
 
@@ -174,6 +229,78 @@ def term_classification_data(root, allowed=None):
             'metadata': metadata, 'categoryIds': category_ids}
 
 
+def event_classification_data(root, allowed=None):
+    taxonomy_data = event_taxonomy(root)
+    if taxonomy_data is None:
+        return None
+    taxonomy, categories = taxonomy_data
+    category_ids = {category['id'] for category in categories}
+    if allowed is not None and not category_ids <= allowed:
+        raise ValueError('Distributable event categories are absent from categories.json')
+    path = root / EVENT_CLASSIFICATIONS_PATH
+    metadata_path = root / EVENT_CLASSIFICATIONS_MANIFEST_PATH
+    if not path.is_file() or not metadata_path.is_file():
+        current = root / 'src/main/classification/categories.json'
+        if current.is_file():
+            current_ids = {category.get('id') for category in
+                           json.loads(current.read_text(encoding='utf-8')).get('categories', [])}
+            if 'event' in current_ids and not any(
+                    category.startswith('event/') for category in current_ids if isinstance(category, str)):
+                return None
+        raise ValueError('Gemini event classifications and their provenance manifest are required')
+    metadata = json.loads(metadata_path.read_text(encoding='utf-8'))
+    taxonomy_ids = {category['id'] for group in json.loads(
+        (root / EVENT_TAXONOMY_PATH).read_text(encoding='utf-8'))['groups'] for category in group['categories']}
+    proofs = metadata.get('freeTierProofs')
+    if (metadata.get('schemaVersion') != 1 or metadata.get('model') not in (
+                'gemini-3.1-flash-lite', 'gemini-3.5-flash-lite')
+            or metadata.get('apiEndpoint') != 'generateContent'
+            or metadata.get('projectId') != 'gen-lang-client-0548563154'
+            or metadata.get('freeTierOnly') is not True or metadata.get('billingEnabled') is not False
+            or metadata.get('promptVersion') != 'event-six-distributable-three-classification-only-v1'
+            or metadata.get('taxonomySha256') != sha(root / EVENT_TAXONOMY_PATH)
+            or not isinstance(proofs, list) or not proofs
+            or any(any(type(proof.get(name)) is not int or proof[name] <= 0 for name in ('rpm', 'tpm', 'rpd'))
+                   or not re.fullmatch(r'[0-9a-f]{64}', proof.get('sha256', ''))
+                   or not isinstance(proof.get('verifiedAt'), str)
+                   or proof.get('apiEndpoint') != 'generateContent'
+                   or datetime.fromisoformat(proof['verifiedAt']).tzinfo is None for proof in proofs)):
+        raise ValueError('Event classification manifest does not record a verified Gemini free-tier run')
+    if (not re.fullmatch(r'[0-9a-f]{64}', metadata.get('sourcePairSha256', ''))
+            or not re.fullmatch(r'[0-9a-f]{64}', metadata.get('taxonomySha256', ''))
+            or not isinstance(metadata.get('sourceFiles'), dict)
+            or any(not isinstance(name, str) or not re.fullmatch(r'[0-9a-f]{64}', value)
+                   for name, value in metadata['sourceFiles'].items())):
+        raise ValueError('Event classification manifest is missing input hashes')
+    counts = metadata.get('categoryCounts')
+    if (set(counts or {}) != taxonomy_ids
+            or any(type(value) is not int or value < 0 for value in counts.values())
+            or sum(counts.values()) != metadata.get('uniquePairs')):
+        raise ValueError('Event classification category counts are invalid')
+    results = {}
+    row_counts = collections.Counter()
+    with gzip.open(path, 'rt', encoding='utf-8', newline='') as stream:
+        for number, line in enumerate(stream, 1):
+            fields = line.rstrip('\n').split('\t')
+            if len(fields) != 3 or not fields[0] or not fields[1] or fields[2] not in category_ids:
+                raise ValueError(f'{EVENT_CLASSIFICATIONS_PATH}:{number}: invalid category result')
+            pair = fields[0], fields[1]
+            if pair in results:
+                raise ValueError(f'{EVENT_CLASSIFICATIONS_PATH}:{number}: duplicate reading/surface pair')
+            results[pair] = fields[2]
+            row_counts[fields[2]] += 1
+    expected_distribution_counts = {category: counts[category] for category in category_ids}
+    if ({category: row_counts[category] for category in category_ids} != expected_distribution_counts
+            or len(results) != sum(expected_distribution_counts.values())):
+        raise ValueError('Saved event classifications contain missing or classifier-only data')
+    if (any(type(metadata.get(field)) is not int or metadata[field] < 1
+            for field in ('uniquePairs', 'batchCount'))
+            or metadata['batchCount'] > metadata['uniquePairs']):
+        raise ValueError('Event classification manifest has invalid counts')
+    return {'taxonomy': taxonomy, 'categories': categories, 'results': results,
+            'metadata': metadata, 'categoryIds': category_ids, 'taxonomyIds': taxonomy_ids}
+
+
 def apply_term_classifications(root, decisions, force=False, reviewed_pairs=()):
     """Replace the structural term parent with one saved Gemini leaf per admitted pair."""
     if not force:
@@ -210,6 +337,345 @@ def apply_term_classifications(root, decisions, force=False, reviewed_pairs=()):
                     raise ValueError(f'Frozen term category differs from Gemini result: {pair}')
         output[pair] = row
     return output
+
+
+def apply_event_classifications(root, decisions, force=False, reviewed_pairs=()):
+    """Replace the structural event parent with saved distributable Gemini leaves."""
+    if not force:
+        current = root / 'src/main/classification/categories.json'
+        if current.is_file():
+            current_ids = {category.get('id') for category in
+                           json.loads(current.read_text(encoding='utf-8')).get('categories', [])}
+            if 'event' in current_ids and not any(
+                    category.startswith('event/') for category in current_ids if isinstance(category, str)):
+                return {pair: list(row) for pair, row in decisions.items()}
+    data = event_classification_data(root)
+    if data is None:
+        return {pair: list(row) for pair, row in decisions.items()}
+    results = data['results']
+    reviewed_pairs = set(reviewed_pairs)
+    output = {}
+    for pair, original in decisions.items():
+        row = list(original)
+        categories = set(filter(None, row[2].split(',')))
+        if 'event' in categories:
+            if pair not in results:
+                raise ValueError(f'No saved distributable event category for retained pair: {pair}')
+            categories.remove('event')
+            categories.add(results[pair])
+            if len(categories & data['categoryIds']) != 1:
+                raise ValueError(f'Each retained event pair must have exactly one distributable category: {pair}')
+            row[2] = ','.join(sorted(categories))
+        elif any(category.startswith('event/') for category in categories):
+            leaf_categories = categories & data['categoryIds']
+            if len(leaf_categories) != 1 or pair not in results:
+                raise ValueError(f'Each retained event pair must have exactly one distributable category: {pair}')
+            for category in leaf_categories:
+                if pair not in reviewed_pairs and results.get(pair) != category:
+                    raise ValueError(f'Frozen event category differs from Gemini result: {pair}')
+        output[pair] = row
+    return output
+
+
+def apply_event_classifications_snapshot(root, classification_map, run_metadata):
+    """Expand the event parent and redact classifier-only pairs from event snapshots."""
+    import copy
+    import shutil
+    import tempfile
+    import classification_reviews as reviews
+    import luna_reclassification as luna
+    import run_event_classification as event_runner
+
+    root = Path(root).resolve()
+    directory = root / 'src/main/classification'
+    current_manifest = json.loads((directory / 'distribution-manifest.json').read_text(encoding='utf-8'))
+    for relative, expected in current_manifest['inputs'].items():
+        if sha(root / relative) != expected:
+            raise ValueError(f'Input hash mismatch before event migration: {relative}')
+    for name, expected in current_manifest['files'].items():
+        if sha(directory / name) != expected:
+            raise ValueError(f'Classification hash mismatch before event migration: {name}')
+    if sha(root / 'src/main/resources/id.def') != current_manifest['idDefSha256']:
+        raise ValueError('id.def hash mismatch before event migration')
+    if not (directory / 'event-taxonomy.json').is_file():
+        raise ValueError('Event taxonomy is missing')
+    raw_taxonomy = json.loads((root / EVENT_TAXONOMY_PATH).read_text(encoding='utf-8'))
+    classifier_categories = [category for group in raw_taxonomy['groups'] for category in group['categories']]
+    category_ids = {category['id'] for category in classifier_categories}
+    distributed_ids = {category['id'] for category in classifier_categories if category['distribution']}
+    items, _, _ = event_runner.collect_items(root)
+    if (set(classification_map) != set(items)
+            or any(category_id not in category_ids for category_id in classification_map.values())):
+        raise ValueError('Event classification results do not cover the exact event snapshot')
+    counts = collections.Counter(classification_map.values())
+    expected_counts = run_metadata.get('categoryCounts', {})
+    if (set(expected_counts) != category_ids or
+            {category: counts[category] for category in category_ids} != expected_counts or
+            sum(counts.values()) != len(items)):
+        raise ValueError('Event classification category totals do not match the exact input')
+    excluded_pairs = {pair for pair, category in classification_map.items() if category not in distributed_ids}
+
+    # These are separate user-reviewed dictionary sources; do not silently change them.
+    for _, row in term_addition_rows(root):
+        if (row[0], row[4]) in excluded_pairs:
+            raise ValueError('Classifier-only pairs overlap term-addition data')
+    additions_dir = directory / 'person-additions'
+    if additions_dir.is_dir():
+        for path in additions_dir.glob('*.jsonl'):
+            with path.open(encoding='utf-8') as stream:
+                for line in stream:
+                    record = json.loads(line)
+                    if (record.get('reading'), record.get('surface')) in excluded_pairs:
+                        raise ValueError('Classifier-only pairs overlap person-addition data')
+
+    event_metadata = dict(run_metadata)
+    event_metadata.update(schemaVersion=1, taxonomySha256=sha(root / EVENT_TAXONOMY_PATH),
+                          uniquePairs=len(items), categoryCounts={key: counts[key] for key in sorted(category_ids)})
+    if (not event_metadata.get('freeTierOnly') or event_metadata.get('billingEnabled') is not False
+            or event_metadata.get('model') not in ('gemini-3.1-flash-lite', 'gemini-3.5-flash-lite')
+            or event_metadata.get('apiEndpoint') != 'generateContent'
+            or event_metadata.get('projectId') != 'gen-lang-client-0548563154'):
+        raise ValueError('Event classification provenance does not prove Gemini Free-tier use')
+
+    build_root = root / 'build'
+    build_root.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix='event-taxonomy-migration-', dir=build_root) as temporary:
+        staging = Path(temporary)
+        staged_directory = staging / 'src/main/classification'
+        staged_directory.mkdir(parents=True)
+        changed_names = {
+            'categories.json', 'distribution-candidates.tsv.gz', 'distribution-decisions.tsv.gz',
+            'distribution-manifest.json', EVENT_CLASSIFICATIONS_PATH.split('/')[-1],
+            EVENT_CLASSIFICATIONS_MANIFEST_PATH.split('/')[-1], 'reviews', 'luna-reclassification',
+        }
+        for entry in directory.iterdir():
+            if entry.name not in changed_names:
+                target = staged_directory / entry.name
+                target.symlink_to(entry.resolve(), target_is_directory=entry.is_dir())
+
+        staged_review_dir = staged_directory / 'reviews'
+        staged_review_dir.mkdir()
+        selected_reviews = list(current_manifest['provenance'].get('reviews', []))
+        removed_review_rows = 0
+        for relative in selected_reviews:
+            source = root / relative
+            target = staging / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            retained = []
+            with source.open(encoding='utf-8') as stream:
+                for line in stream:
+                    entry = json.loads(line)
+                    if (entry.get('reading'), entry.get('surface')) in excluded_pairs:
+                        removed_review_rows += 1
+                    else:
+                        retained.append(line)
+            target.write_text(''.join(retained), encoding='utf-8')
+
+        event_data = event_taxonomy(root)
+        term_data = term_taxonomy(root)
+        base_taxonomy = json.loads((directory / 'categories.json').read_text(encoding='utf-8'))
+        categories = merged_categories(base_taxonomy, term_data, event_data)
+        write_json(staged_directory / 'categories.json', categories)
+        write_gzip(staged_directory / EVENT_CLASSIFICATIONS_PATH.split('/')[-1],
+                   ((*pair, classification_map[pair]) for pair in sorted(classification_map)
+                    if classification_map[pair] in distributed_ids))
+        write_json(staged_directory / EVENT_CLASSIFICATIONS_MANIFEST_PATH.split('/')[-1], event_metadata)
+
+        staged_luna = staged_directory / 'luna-reclassification'
+        staged_luna.mkdir()
+        luna_directory = directory / 'luna-reclassification'
+        luna_manifest = json.loads((luna_directory / 'manifest.json').read_text(encoding='utf-8'))
+        baseline_manifest = copy.deepcopy(luna_manifest['baselineManifest'])
+        baseline_candidate_path = luna_directory / 'baseline-candidates.tsv.gz'
+        baseline_candidates = []
+        with gzip.open(baseline_candidate_path, 'rt', encoding='utf-8') as stream:
+            for line in stream:
+                fields = tuple(line.rstrip('\n').split('\t'))
+                if (fields[1], fields[5]) not in excluded_pairs:
+                    baseline_candidates.append(fields)
+        baseline_decisions_path = luna_directory / 'baseline-decisions.tsv.gz'
+        baseline_decisions = {}
+        with gzip.open(baseline_decisions_path, 'rt', encoding='utf-8') as stream:
+            for line in stream:
+                fields = line.rstrip('\n').split('\t')
+                if tuple(fields[:2]) not in excluded_pairs:
+                    baseline_decisions[tuple(fields[:2])] = fields
+        old_baseline_decisions = luna.decisions(baseline_decisions_path)
+        removed_excluded_baseline = sum(
+            pair in excluded_pairs and row[4] == 'excluded'
+            for pair, row in old_baseline_decisions.items())
+        baseline_manifest['excludedCandidatePairs'] = max(
+            0, baseline_manifest['excludedCandidatePairs'] - removed_excluded_baseline)
+        baseline_manifest['excludedClassifiedPairs'] = sum(row[4] == 'excluded'
+                                                           for row in baseline_decisions.values())
+        baseline_manifest['unclassifiedPairs'] = sum(row[4] == 'unclassified'
+                                                      for row in baseline_decisions.values())
+        baseline_manifest['noResultPairs'] = sum(row[4] == 'no_result'
+                                                  for row in baseline_decisions.values())
+        baseline_origins = collections.Counter(row[3] for row in baseline_decisions.values()
+                                               if row[4] == 'classified')
+        baseline_manifest['admittedPairsByOrigin'] = dict(baseline_origins)
+        baseline_manifest['uniqueAdmittedPairs'] = sum(baseline_origins.values())
+        baseline_manifest['dictionaryRows'] = len(baseline_candidates)
+        baseline_category_counts = collections.Counter(row[0] for row in baseline_candidates)
+        baseline_manifest['categoryRows'] = {
+            category: baseline_category_counts[category]
+            for category in baseline_manifest['categoryRows']
+        }
+        baseline_manifest['provenance']['baselineVerifiedPairs'] = sum(
+            row[3] == 'verified' and row[4] == 'classified' for row in baseline_decisions.values())
+        current_manifest['provenance']['baselineVerifiedPairs'] = baseline_manifest[
+            'provenance']['baselineVerifiedPairs']
+
+        # Link all unchanged repository inputs and create a writable review overlay.
+        for relative in set(current_manifest['inputs']) | set(baseline_manifest['inputs']) | {
+                'src/main/resources/id.def'}:
+            target = staging / relative
+            source = root / relative
+            if target.exists() or target.is_symlink() or not source.exists():
+                continue
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.symlink_to(source.resolve(), target_is_directory=source.is_dir())
+
+        baseline_review_paths = baseline_manifest.get('provenance', {}).get('reviews', [])
+        for relative in baseline_review_paths:
+            if relative in baseline_manifest['inputs']:
+                baseline_manifest['inputs'][relative] = sha(staging / relative)
+        baseline_review_entries = reviews.load(staging, baseline_review_paths)
+        baseline_review_delta = sum(
+            int(entry['action'] in ('hold', 'exclude')) -
+            int(entry['baseline'] is not None and entry['baseline'][4] == 'excluded')
+            for entry in baseline_review_entries.values())
+        if 'reviewBaseExcludedCandidatePairs' in baseline_manifest.get('provenance', {}):
+            baseline_manifest['provenance']['reviewBaseExcludedCandidatePairs'] = (
+                baseline_manifest['excludedCandidatePairs'] - baseline_review_delta)
+            current_manifest['provenance']['reviewBaseExcludedCandidatePairs'] = baseline_manifest[
+                'provenance']['reviewBaseExcludedCandidatePairs']
+        for relative in selected_reviews:
+            current_manifest['inputs'][relative] = sha(staging / relative)
+        review_entries = luna.subsequent_reviews(staging, current_manifest, baseline_manifest)
+
+        write_gzip(staged_luna / 'baseline-candidates.tsv.gz', sorted(baseline_candidates))
+        write_gzip(staged_luna / 'baseline-decisions.tsv.gz',
+                   (baseline_decisions[pair] for pair in sorted(baseline_decisions)))
+        baseline_manifest['files']['distribution-candidates.tsv.gz'] = sha(
+            staged_luna / 'baseline-candidates.tsv.gz')
+        baseline_manifest['files']['distribution-decisions.tsv.gz'] = sha(
+            staged_luna / 'baseline-decisions.tsv.gz')
+
+        targets = luna.jsonl(luna_directory / 'targets.jsonl.gz')
+        targets = [row for row in targets if (row['reading'], row['surface']) not in excluded_pairs]
+        luna.write_jsonl(staged_luna / 'targets.jsonl.gz', targets)
+        redacted_target_sha256 = sha(staged_luna / 'targets.jsonl.gz')
+        result_ledger = luna.jsonl(luna_directory / 'results.jsonl.gz')
+        result_ledger = [row for row in result_ledger
+                         if (row['response']['reading'], row['response']['surface']) not in excluded_pairs]
+        for result in result_ledger:
+            result['batch_provenance']['target_sha256'] = redacted_target_sha256
+        luna.write_jsonl(staged_luna / 'results.jsonl.gz', result_ledger)
+        luna_manifest['baselineManifest'] = baseline_manifest
+        luna_manifest['targetCount'] = len(targets)
+        luna_manifest['targetCounts'] = dict(collections.Counter(row['original_status'] for row in targets))
+        luna_manifest['files'] = {
+            name: sha(staged_luna / name)
+            for name in ('targets.jsonl.gz', 'baseline-decisions.tsv.gz', 'baseline-candidates.tsv.gz')
+        }
+        write_json(staged_luna / 'manifest.json', luna_manifest)
+
+        # Continue the saved Luna ledger from the redacted baseline, then replay reviews and taxonomies.
+        decisions = {pair: list(row) for pair, row in baseline_decisions.items()}
+        for result in result_ledger:
+            response = result['response']
+            pair = response['reading'], response['surface']
+            decisions[pair] = [*pair, ','.join(result['effective_categories']), 'manual',
+                               'classified' if result['effective_action'] == 'adopt' else 'excluded']
+        decisions = reviews.apply(decisions, review_entries)
+        for batch, person_entries in luna.person_additions_after_baseline(
+                staging, current_manifest, baseline_manifest):
+            for reading, surface in batch['addedPairs']:
+                pair = reading, surface
+                if pair in decisions or pair not in person_entries:
+                    raise ValueError('Person additions conflict with redacted event baseline')
+                decisions[pair] = [reading, surface, 'person', 'verified', 'classified']
+        decisions = apply_term_classifications(staging, decisions, force=True, reviewed_pairs=review_entries)
+        decisions = apply_event_classifications(staging, decisions, force=True, reviewed_pairs=review_entries)
+        # Rebuild from every selected review so additions from the pinned baseline remain present.
+        all_review_entries = reviews.load(staging, selected_reviews)
+        rows = reviews.candidate_rows(staging, decisions, all_review_entries)
+        write_gzip(staged_directory / 'distribution-decisions.tsv.gz',
+                   (decisions[pair] for pair in sorted(decisions)))
+        write_gzip(staged_directory / 'distribution-candidates.tsv.gz', sorted(rows))
+
+        manifest = current_manifest
+        manifest['schemaVersion'] = 3
+        manifest['categoryGroups'] = categories.get('categoryGroups', [])
+        manifest['categoryRows'] = {category['id']: 0 for category in categories['categories']}
+        counts_by_category = collections.Counter(row[0] for row in rows)
+        manifest['categoryRows'].update({category: counts_by_category[category]
+                                        for category in manifest['categoryRows']})
+        for relative in (EVENT_TAXONOMY_PATH, EVENT_CLASSIFICATIONS_PATH,
+                         EVENT_CLASSIFICATIONS_MANIFEST_PATH):
+            manifest['inputs'][relative] = sha(staging / relative)
+        manifest['provenance']['eventClassification'] = {
+            key: value for key, value in event_metadata.items() if key != 'schemaVersion'
+        }
+        manifest['provenance']['lunaReclassification'].update({
+            'snapshotManifestSha256': sha(staged_luna / 'manifest.json'),
+            'sha256': sha(staged_luna / 'results.jsonl.gz'),
+            'targetSha256': luna_manifest['files']['targets.jsonl.gz'],
+            'completedPairs': len(result_ledger),
+            'effectiveActions': dict(collections.Counter(row['effective_action'] for row in result_ledger)),
+        })
+        manifest['provenance']['reviewBaseExcludedCandidatePairs'] = baseline_manifest[
+            'provenance'].get('reviewBaseExcludedCandidatePairs', baseline_manifest['excludedCandidatePairs'])
+        reviews.update_manifest(staging, manifest, decisions, rows, selected_reviews)
+        manifest['files'] = {
+            name: sha(staged_directory / name)
+            for name in ('categories.json', 'distribution-candidates.tsv.gz', 'distribution-decisions.tsv.gz')
+        }
+        write_json(staged_directory / 'distribution-manifest.json', manifest)
+        try:
+            verify(staging)
+        except Exception as error:
+            raise ValueError(f'Staged event taxonomy verification failed ({type(error).__name__})') from None
+
+        changed_paths = [
+            'src/main/classification/categories.json',
+            'src/main/classification/distribution-candidates.tsv.gz',
+            'src/main/classification/distribution-decisions.tsv.gz',
+            'src/main/classification/distribution-manifest.json',
+            EVENT_CLASSIFICATIONS_PATH, EVENT_CLASSIFICATIONS_MANIFEST_PATH,
+            'src/main/classification/luna-reclassification/manifest.json',
+            'src/main/classification/luna-reclassification/targets.jsonl.gz',
+            'src/main/classification/luna-reclassification/results.jsonl.gz',
+            'src/main/classification/luna-reclassification/baseline-candidates.tsv.gz',
+            'src/main/classification/luna-reclassification/baseline-decisions.tsv.gz',
+            *selected_reviews,
+        ]
+        for relative in changed_paths:
+            source = staging / relative
+            target = root / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            pending = target.with_name(target.name + '.event-tmp')
+            shutil.copyfile(source, pending)
+            os.replace(pending, target)
+
+    return {
+        'uniquePairsClassified': len(classification_map),
+        'categoryCounts': {category['id']: counts[category['id']] for category in classifier_categories},
+        'distributionCategoryCounts': {
+            category['id']: counts[category['id']] for category in classifier_categories
+            if category['distribution']
+        },
+        'classifierOnlyCategoryCounts': {
+            category['id']: counts[category['id']] for category in classifier_categories
+            if not category['distribution']
+        },
+        'classifierOnlyPairsRemovedFromEventData': len(excluded_pairs),
+        'reviewRowsRemoved': removed_review_rows,
+        'distributionPairs': manifest['uniqueAdmittedPairs'],
+        'distributionRecords': manifest['dictionaryRows'],
+    }
 
 
 def apply_term_classifications_snapshot(root):
@@ -520,11 +986,20 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
     prior_manifest_path = out / 'distribution-manifest.json'
     prior_batches = (json.loads(prior_manifest_path.read_text()).get('provenance', {}).get('personAdditions', [])
                      if prior_manifest_path.exists() else [])
-    categories = merged_categories(json.loads(taxonomy.read_text()), term_taxonomy(root))
+    term_tax = term_taxonomy(root)
+    event_tax = event_taxonomy(root)
+    term_data = term_classification_data(root)
+    event_data = event_classification_data(root)
+    categories = merged_categories(json.loads(taxonomy.read_text()), term_tax,
+                                   event_tax if event_data is not None else None)
     allowed = {c['id'] for c in categories['categories']}
     term_data = term_classification_data(root, allowed)
+    event_data = event_classification_data(root, allowed)
     if term_taxonomy(root) is not None and term_data is None:
         raise ValueError('Cannot freeze expanded term categories without complete Gemini results')
+    if event_taxonomy(root) is not None and event_data is None and not any(
+            category['id'] == 'event' for category in json.loads(taxonomy.read_text())['categories']):
+        raise ValueError('Cannot freeze expanded event categories without complete Gemini results')
     decisions = {}
     excluded = set()
     with gzip.open(dispositions, 'rt') as f:
@@ -614,7 +1089,8 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
             continue
         matched.add(pair)
         cats, origin = decisions[pair]
-        source_allowed = allowed | ({'term'} if term_data is not None else set())
+        source_allowed = allowed | ({'term'} if term_data is not None else set()) \
+            | ({'event'} if event_data is not None else set())
         if not cats <= source_allowed:
             raise ValueError(f'Unknown categories for {pair}: {cats - source_allowed}')
     if decisions.keys() - matched:
@@ -629,6 +1105,8 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
     reviewed = reviews.apply(baseline, review_entries) if review_paths else baseline
     reviewed = apply_term_classifications(root, reviewed, force=term_data is not None,
                                           reviewed_pairs=review_entries)
+    reviewed = apply_event_classifications(root, reviewed, force=event_data is not None,
+                                           reviewed_pairs=review_entries)
     rows = reviews.candidate_rows(root, reviewed, review_entries)
     (out / 'categories.json').write_text(json.dumps(categories, ensure_ascii=False, indent=2) + '\n')
     write_gzip(out / 'distribution-candidates.tsv.gz', sorted(rows))
@@ -646,6 +1124,15 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
         }
         term_classification_provenance['categoryCounts'] = term_data['metadata']['categoryCounts']
         term_classification_provenance['freeTierProofs'] = term_data['metadata']['freeTierProofs']
+    event_classification_provenance = None
+    if event_data is not None:
+        for path in (EVENT_TAXONOMY_PATH, EVENT_CLASSIFICATIONS_PATH,
+                     EVENT_CLASSIFICATIONS_MANIFEST_PATH):
+            inputs[path] = sha(root / path)
+        event_classification_provenance = {
+            key: value for key, value in event_data['metadata'].items()
+            if key != 'schemaVersion'
+        }
     term_addition_provenance = []
     if (root / TERM_ADDITIONS_PATH).is_file():
         inputs[TERM_ADDITIONS_PATH] = sha(root / TERM_ADDITIONS_PATH)
@@ -656,7 +1143,7 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
                 'pairs': [list(pair) for pair in sorted({(row[0], row[4]) for row in term_additions})],
             })
     manifest = {
-        'schemaVersion': 2 if term_data is not None else 1,
+        'schemaVersion': 3 if event_data is not None else 2 if term_data is not None else 1,
         'precedence': ['verified', 'manual', 'gemini'],
         'provenance': {
             'acceptedSha256': sha(accepted), 'dispositionsSha256': sha(dispositions),
@@ -682,6 +1169,8 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
     }
     if term_classification_provenance is not None:
         manifest['provenance']['termClassification'] = term_classification_provenance
+    if event_classification_provenance is not None:
+        manifest['provenance']['eventClassification'] = event_classification_provenance
     if prior_batches:
         manifest['provenance']['personAdditions'] = prior_batches
         manifest['inputs'].update({batch['path']: batch['sha256'] for batch in prior_batches})
@@ -712,13 +1201,29 @@ def verify(root, allow_pending_reviews=False):
         raise ValueError('Expected unique category IDs')
     expanded_terms = any(category.startswith('term/') for category in categories)
     term_data = term_classification_data(root, set(categories)) if expanded_terms else None
+    expanded_events = any(category.startswith('event/') for category in categories)
+    event_data = event_classification_data(root, set(categories)) if expanded_events else None
+    saved_taxonomy = json.loads((directory / 'categories.json').read_text(encoding='utf-8'))
     if term_data is not None:
-        if manifest.get('schemaVersion') != 2:
-            raise ValueError('Expanded term categories require distribution manifest schema 2')
-        saved_taxonomy = json.loads((directory / 'categories.json').read_text(encoding='utf-8'))
-        if (saved_taxonomy.get('categoryGroups') != [term_data['taxonomy']]
-                or manifest.get('categoryGroups') != saved_taxonomy['categoryGroups']):
-            raise ValueError('Term category hierarchy differs from its taxonomy')
+        if manifest.get('schemaVersion') not in (2, 3):
+            raise ValueError('Expanded term categories require distribution manifest schema 2 or 3')
+    if expanded_events and event_data is None:
+        raise ValueError('Expanded event categories require complete Gemini classifications')
+    if event_data is not None and manifest.get('schemaVersion') != 3:
+        raise ValueError('Expanded event categories require distribution manifest schema 3')
+    if term_data is not None or event_data is not None:
+        expected_groups = []
+        groups = []
+        if event_data is not None:
+            groups.append((min(categories.index(category['id']) for category in event_data['categories']),
+                           event_data['taxonomy']))
+        if term_data is not None:
+            groups.append((min(categories.index(category['id']) for category in term_data['categories']),
+                           term_data['taxonomy']))
+        expected_groups = [group for _, group in sorted(groups, key=lambda item: item[0])]
+        if (saved_taxonomy.get('categoryGroups') != expected_groups
+                or manifest.get('categoryGroups') != expected_groups):
+            raise ValueError('Classified dictionary category hierarchy differs from its taxonomy')
     decisions = {}
     decision_status = {}
     decision_rows = {}
@@ -731,7 +1236,7 @@ def verify(root, allow_pending_reviews=False):
             if pair in decisions or origin not in [*manifest['precedence'], 'no_result']:
                 raise ValueError('Duplicate decision or invalid origin')
             values = set(cats.split(',')) if cats else set()
-            allowed = set(categories) | ({'term'} if status == 'excluded' else set())
+            allowed = set(categories) | ({'term', 'event'} if status == 'excluded' else set())
             if not values <= allowed or status not in ('excluded', 'classified', 'unclassified', 'no_result'):
                 raise ValueError('Invalid decision')
             if (status == 'classified' and not values or status in ('unclassified', 'no_result') and values
@@ -764,6 +1269,8 @@ def verify(root, allow_pending_reviews=False):
     replayed_decisions = reviews.apply(baseline_decisions, review_entries)
     replayed_decisions = apply_term_classifications(root, replayed_decisions, force=term_data is not None,
                                                     reviewed_pairs=review_entries)
+    replayed_decisions = apply_event_classifications(root, replayed_decisions, force=event_data is not None,
+                                                     reviewed_pairs=review_entries)
     if replayed_decisions != decision_rows:
         raise ValueError('Frozen decisions differ from saved review history')
     actual = set()
@@ -826,6 +1333,19 @@ def verify(root, allow_pending_reviews=False):
             raise ValueError('Gemini term classification contains pairs absent from dictionary sources')
     elif 'termClassification' in manifest['provenance']:
         raise ValueError('Term classification provenance exists without expanded term categories')
+    if event_data is not None:
+        for category, expected_count in event_data['metadata']['categoryCounts'].items():
+            if category not in event_data['taxonomyIds'] or type(expected_count) is not int or expected_count < 0:
+                raise ValueError('Invalid event category count in classifier provenance')
+        expected_event_provenance = {key: value for key, value in event_data['metadata'].items()
+                                     if key != 'schemaVersion'}
+        if manifest['provenance'].get('eventClassification') != expected_event_provenance:
+            raise ValueError('Gemini event classification provenance differs from its manifest')
+        source_pairs = {(row[0], row[4]) for _, row in source_rows(root)}
+        if event_data['results'].keys() - source_pairs:
+            raise ValueError('Gemini event classification contains pairs absent from dictionary sources')
+    elif 'eventClassification' in manifest['provenance']:
+        raise ValueError('Event classification provenance exists without expanded event categories')
     import luna_reclassification
     luna_reclassification.verify_ledger(root)
     print(f'Verified frozen distribution: {len(actual)} rows, {sum(origins.values())} pairs, {len(categories)} categories')

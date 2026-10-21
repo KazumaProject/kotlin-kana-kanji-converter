@@ -82,6 +82,18 @@ def subsequent_reviews(root, current, baseline):
                      d.TERM_CLASSIFICATIONS_MANIFEST_PATH):
             if inputs.pop(path, None) != d.sha(root/path):
                 raise ValueError('Term classification input hash mismatch')
+    if 'eventClassification' in provenance:
+        event_data = d.event_classification_data(root)
+        if event_data is None:
+            raise ValueError('Frozen event classification input is missing')
+        expected_event_provenance = {key: value for key, value in event_data['metadata'].items()
+                                     if key != 'schemaVersion'}
+        if provenance.pop('eventClassification', None) != expected_event_provenance:
+            raise ValueError('Event classification provenance differs from its frozen input')
+        for path in (d.EVENT_TAXONOMY_PATH, d.EVENT_CLASSIFICATIONS_PATH,
+                     d.EVENT_CLASSIFICATIONS_MANIFEST_PATH):
+            if inputs.pop(path, None) != d.sha(root/path):
+                raise ValueError('Event classification input hash mismatch')
     for path in added:
         if inputs.pop(path, None) != d.sha(root/path):
             raise ValueError('Subsequent review input hash mismatch')
@@ -99,12 +111,23 @@ def subsequent_reviews(root, current, baseline):
         inputs[PERSON_SOURCE] = baseline['inputs'][PERSON_SOURCE]
     if (provenance != baseline['provenance'] or inputs != baseline['inputs']
             or current['idDefSha256'] != baseline['idDefSha256']):
-        raise ValueError('Unrelated distribution provenance changed')
+        provenance_diff = sorted(key for key in set(provenance) | set(baseline['provenance'])
+                                 if provenance.get(key) != baseline['provenance'].get(key))
+        input_missing = sorted(set(baseline['inputs']) - set(inputs))
+        input_extra = sorted(set(inputs) - set(baseline['inputs']))
+        input_hash_diff = sorted(path for path in set(inputs) & set(baseline['inputs'])
+                                 if inputs[path] != baseline['inputs'][path])
+        raise ValueError(
+            'Unrelated distribution provenance changed: '
+            f'provenanceKeys={provenance_diff}, inputMissing={input_missing}, '
+            f'inputExtra={input_extra}, inputHashes={input_hash_diff}, '
+            f'idDefMismatch={current["idDefSha256"] != baseline["idDefSha256"]}')
     return entries
 
 
 PERSON_SOURCE = 'src/main/bin/names.txt'
 TERM_PARENT_DEFINITION = '独立した語義と読みが辞書原資料で対応する一般語・専門用語。未分類語の受け皿にはしない。'
+EVENT_PARENT_DEFINITION = '日付・場所等を持つ個別の出来事、催事、大会、祭り、式典。'
 
 
 def person_additions_after_baseline(root, current, baseline):
@@ -160,45 +183,68 @@ def restore_person_source(root, current, baseline, additions):
 
 
 def term_hierarchy_restores_baseline(root, current, baseline):
-    """Allow only the recorded 15-leaf replacement of the pinned term parent."""
-    taxonomy_data = d.term_taxonomy(root)
-    if taxonomy_data is None or 'termClassification' not in current.get('provenance', {}):
+    """Allow only saved taxonomy leaf replacements of pinned structural parents."""
+    replacements = []
+    term_data = d.term_taxonomy(root)
+    event_data = d.event_taxonomy(root)
+    if term_data is not None and 'termClassification' in current.get('provenance', {}):
+        replacements.append(('term', term_data[0], term_data[1], TERM_PARENT_DEFINITION))
+    if event_data is not None and 'eventClassification' in current.get('provenance', {}):
+        replacements.append(('event', event_data[0], event_data[1], EVENT_PARENT_DEFINITION))
+    if not replacements:
         return False
-    parent, leaves = taxonomy_data
     expanded = json.loads((root/'src/main/classification/categories.json').read_text(encoding='utf-8'))
-    leaf_ids = {category['id'] for category in leaves}
+    replacement_map = {
+        parent_id: (structure, {category['id'] for category in leaves}, definition)
+        for parent_id, structure, leaves, definition in replacements
+    }
     collapsed_categories = []
-    inserted_parent = False
+    inserted_parents = set()
     for category in expanded.get('categories', []):
-        if category.get('id') in leaf_ids:
-            if not inserted_parent:
+        parent_id = next((parent for parent, (_, leaf_ids, _) in replacement_map.items()
+                          if category.get('id') in leaf_ids), None)
+        if parent_id is not None:
+            if parent_id not in inserted_parents:
+                structure, _, definition = replacement_map[parent_id]
                 collapsed_categories.append({
-                    'id': 'term', 'name': parent['name'], 'definition': TERM_PARENT_DEFINITION,
+                    'id': parent_id, 'name': structure['name'], 'definition': definition,
                 })
-                inserted_parent = True
+                inserted_parents.add(parent_id)
         else:
             collapsed_categories.append(category)
-    if not inserted_parent:
+    if inserted_parents != set(replacement_map):
         return False
     collapsed = dict(expanded)
     collapsed.pop('categoryGroups', None)
     collapsed['categories'] = collapsed_categories
-    if d.merged_categories(collapsed, taxonomy_data) != expanded:
+    if d.merged_categories(collapsed, term_data if 'term' in replacement_map else None,
+                           event_data if 'event' in replacement_map else None) != expanded:
         return False
     reconstructed = json.dumps(collapsed, ensure_ascii=False, indent=2) + '\n'
     expected_hash = baseline.get('files', {}).get('categories.json')
     if hashlib.sha256(reconstructed.encode('utf-8')).hexdigest() != expected_hash:
         return False
     category_ids = {category['id'] for category in expanded['categories']}
-    data = d.term_classification_data(root, category_ids)
-    expected_provenance = ({key: value for key, value in data['metadata'].items()
-                            if key != 'schemaVersion'} if data is not None else None)
-    if expected_provenance is None or current['provenance'].get('termClassification') != expected_provenance:
-        return False
-    for relative in (d.TERM_TAXONOMY_PATH, d.TERM_CLASSIFICATIONS_PATH,
-                     d.TERM_CLASSIFICATIONS_MANIFEST_PATH):
-        if current.get('inputs', {}).get(relative) != d.sha(root/relative):
+    if 'term' in replacement_map:
+        data = d.term_classification_data(root, category_ids)
+        expected_provenance = ({key: value for key, value in data['metadata'].items()
+                                if key != 'schemaVersion'} if data is not None else None)
+        if expected_provenance is None or current['provenance'].get('termClassification') != expected_provenance:
             return False
+        for relative in (d.TERM_TAXONOMY_PATH, d.TERM_CLASSIFICATIONS_PATH,
+                         d.TERM_CLASSIFICATIONS_MANIFEST_PATH):
+            if current.get('inputs', {}).get(relative) != d.sha(root/relative):
+                return False
+    if 'event' in replacement_map:
+        data = d.event_classification_data(root, category_ids)
+        expected_provenance = ({key: value for key, value in data['metadata'].items()
+                                if key != 'schemaVersion'} if data is not None else None)
+        if expected_provenance is None or current['provenance'].get('eventClassification') != expected_provenance:
+            return False
+        for relative in (d.EVENT_TAXONOMY_PATH, d.EVENT_CLASSIFICATIONS_PATH,
+                         d.EVENT_CLASSIFICATIONS_MANIFEST_PATH):
+            if current.get('inputs', {}).get(relative) != d.sha(root/relative):
+                return False
     return True
 
 
@@ -416,6 +462,8 @@ def verify_ledger(root):
             base[pair] = [reading, surface, 'person', 'verified', 'classified']
     base = d.apply_term_classifications(
         root, base, force='termClassification' in manifest['provenance'], reviewed_pairs=entries)
+    base = d.apply_event_classifications(
+        root, base, force='eventClassification' in manifest['provenance'], reviewed_pairs=entries)
     exclusion_delta = sum(r[4]=='excluded' for r in base.values()) - before_excluded
     if (manifest['excludedCandidatePairs']!=m['baselineManifest']['excludedCandidatePairs']+sum(r['effective_action']=='reject' for r in ledger)+exclusion_delta
             or manifest['excludedClassifiedPairs']!=sum(r[4]=='excluded' for r in base.values())):

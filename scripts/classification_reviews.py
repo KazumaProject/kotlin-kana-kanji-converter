@@ -20,6 +20,9 @@ def load(root, selected=None):
     if (root / d.TERM_TAXONOMY_PATH).is_file():
         # Historic review baselines use the former structural parent ID.
         allowed.add('term')
+    if (root / d.EVENT_TAXONOMY_PATH).is_file():
+        # Historic event review baselines use the former structural parent ID.
+        allowed.add('event')
     ids = {int(line.split(maxsplit=1)[0]) for line in (root / 'src/main/resources/id.def').read_text().splitlines()}
     latest = {}
     for relative in paths(root) if selected is None else selected:
@@ -201,6 +204,7 @@ def _apply_saved(root, commit=False):
         raise ValueError('Registered review history is missing')
     reviewed = apply(baseline, entries)
     reviewed = d.apply_term_classifications(root, reviewed, reviewed_pairs=entries)
+    reviewed = d.apply_event_classifications(root, reviewed, reviewed_pairs=entries)
     rows = candidate_rows(root, reviewed, entries)
     before = manifest['dictionaryRows']
     old_counts = dict(manifest['categoryRows'])
