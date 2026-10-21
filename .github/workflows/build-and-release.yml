@@ -366,9 +366,9 @@ jobs:
       - name: Exercise replacement category dictionaries with KanaKanjiEngine
         if: startsWith(github.ref, 'refs/tags/person-dictionaries-v')
         run: |
-          ./gradlew --quiet convertPersonCandidates --no-daemon --args="--archive build/person-dictionary/japanese_keyboard_dictionary_assets_person_replaced.zip --base release_zips/japanese_keyboard_dictionary_assets.zip --category sports --count 10 --expect-candidate 堀米雄斗 ほりごめゆうと"
-          ./gradlew --quiet convertPersonCandidates --no-daemon --args="--archive build/person-dictionary/japanese_keyboard_dictionary_assets_person_replaced.zip --base release_zips/japanese_keyboard_dictionary_assets.zip --category manga_illustration --count 10 --expect-candidate あいおいやよい あいおいやよい"
-          ./gradlew --quiet convertPersonCandidates --no-daemon --args="--archive build/person-dictionary/japanese_keyboard_dictionary_assets_person_replaced.zip --base release_zips/japanese_keyboard_dictionary_assets.zip --category performing_arts --count 10 --expect-candidate 玉川太福 たまがわだいふく"
+          ./gradlew --quiet convertPersonCandidates --no-daemon --args="--archive build/person-dictionary/japanese_keyboard_dictionary_assets.zip --base release_zips/japanese_keyboard_dictionary_assets.zip --category sports --count 10 --expect-candidate 堀米雄斗 ほりごめゆうと"
+          ./gradlew --quiet convertPersonCandidates --no-daemon --args="--archive build/person-dictionary/japanese_keyboard_dictionary_assets.zip --base release_zips/japanese_keyboard_dictionary_assets.zip --category manga_illustration --count 10 --expect-candidate あいおいやよい あいおいやよい"
+          ./gradlew --quiet convertPersonCandidates --no-daemon --args="--archive build/person-dictionary/japanese_keyboard_dictionary_assets.zip --base release_zips/japanese_keyboard_dictionary_assets.zip --category performing_arts --count 10 --expect-candidate 玉川太福 たまがわだいふく"
 
       - name: Upload verified dictionary distribution
         if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
@@ -417,7 +417,7 @@ jobs:
             The generic `person` dictionary is removed from this prerelease bundle and replaced by the taxonomy's 24 standard-enabled person subcategory dictionaries. The bundle has 53 categories in total. Each replacement category is identified in `dictionary-distribution-manifest.json` with `parentCategoryId: person`. Candidates that cannot be reclassified or fail the IME format filter are excluded; adult-related and other restricted categories are excluded.
           prerelease: true
           makeLatest: false
-          artifacts: build/person-dictionary/japanese_keyboard_dictionary_assets_person_replaced.zip,build/person-dictionary/person-replacement-dictionary-manifest.json,build/person-dictionary/DICTIONARY-SHA256SUMS,release_zips/DICTIONARY-LICENSES.txt
+          artifacts: build/person-dictionary/japanese_keyboard_dictionary_assets.zip,build/person-dictionary/person-replacement-dictionary-manifest.json,build/person-dictionary/DICTIONARY-SHA256SUMS,release_zips/DICTIONARY-LICENSES.txt
           allowUpdates: true
           artifactErrorsFailBuild: true
           removeArtifacts: true
