@@ -567,12 +567,17 @@ def apply_event_classifications_snapshot(root, classification_map, run_metadata)
         targets = [row for row in targets if (row['reading'], row['surface']) not in excluded_pairs]
         luna.write_jsonl(staged_luna / 'targets.jsonl.gz', targets)
         redacted_target_sha256 = sha(staged_luna / 'targets.jsonl.gz')
-        result_ledger = luna.jsonl(luna_directory / 'results.jsonl.gz')
+        ledger_record = current_manifest['provenance']['lunaReclassification']
+        ledger_source = root / ledger_record['path']
+        if not ledger_source.is_file():
+            ledger_source = root / luna.LEGACY_LEDGER_PATH
+        result_ledger = luna.jsonl(ledger_source)
         result_ledger = [row for row in result_ledger
                          if (row['response']['reading'], row['response']['surface']) not in excluded_pairs]
         for result in result_ledger:
             result['batch_provenance']['target_sha256'] = redacted_target_sha256
-        luna.write_jsonl(staged_luna / 'results.jsonl.gz', result_ledger)
+        staged_ledger = staging / luna.LOCAL_LEDGER_PATH
+        luna.write_jsonl(staged_ledger, result_ledger)
         luna_manifest['baselineManifest'] = baseline_manifest
         luna_manifest['targetCount'] = len(targets)
         luna_manifest['targetCounts'] = dict(collections.Counter(row['original_status'] for row in targets))
@@ -620,8 +625,9 @@ def apply_event_classifications_snapshot(root, classification_map, run_metadata)
             key: value for key, value in event_metadata.items() if key != 'schemaVersion'
         }
         manifest['provenance']['lunaReclassification'].update({
+            'path': luna.LOCAL_LEDGER_PATH,
             'snapshotManifestSha256': sha(staged_luna / 'manifest.json'),
-            'sha256': sha(staged_luna / 'results.jsonl.gz'),
+            'sha256': sha(staged_ledger),
             'targetSha256': luna_manifest['files']['targets.jsonl.gz'],
             'completedPairs': len(result_ledger),
             'effectiveActions': dict(collections.Counter(row['effective_action'] for row in result_ledger)),
@@ -647,9 +653,9 @@ def apply_event_classifications_snapshot(root, classification_map, run_metadata)
             EVENT_CLASSIFICATIONS_PATH, EVENT_CLASSIFICATIONS_MANIFEST_PATH,
             'src/main/classification/luna-reclassification/manifest.json',
             'src/main/classification/luna-reclassification/targets.jsonl.gz',
-            'src/main/classification/luna-reclassification/results.jsonl.gz',
             'src/main/classification/luna-reclassification/baseline-candidates.tsv.gz',
             'src/main/classification/luna-reclassification/baseline-decisions.tsv.gz',
+            luna.LOCAL_LEDGER_PATH,
             *selected_reviews,
         ]
         for relative in changed_paths:
@@ -659,6 +665,7 @@ def apply_event_classifications_snapshot(root, classification_map, run_metadata)
             pending = target.with_name(target.name + '.event-tmp')
             shutil.copyfile(source, pending)
             os.replace(pending, target)
+        (root / luna.LEGACY_LEDGER_PATH).unlink(missing_ok=True)
 
     return {
         'uniquePairsClassified': len(classification_map),
@@ -1347,8 +1354,10 @@ def verify(root, allow_pending_reviews=False):
     elif 'eventClassification' in manifest['provenance']:
         raise ValueError('Event classification provenance exists without expanded event categories')
     import luna_reclassification
-    luna_reclassification.verify_ledger(root)
-    print(f'Verified frozen distribution: {len(actual)} rows, {sum(origins.values())} pairs, {len(categories)} categories')
+    ledger_verified = luna_reclassification.verify_ledger(root)
+    ledger_status = 'Luna ledger verified' if ledger_verified else 'local Luna ledger unavailable; audit skipped'
+    print(f'Verified frozen distribution: {len(actual)} rows, {sum(origins.values())} pairs, '
+          f'{len(categories)} categories; {ledger_status}')
 
 
 def release_manifest(root, archive, revision):

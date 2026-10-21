@@ -2879,7 +2879,7 @@
       }
     ],
     "lunaReclassification": {
-      "path": "src/main/classification/luna-reclassification/results.jsonl.gz",
+      "path": "build/luna-classification/ledger/results.jsonl.gz",
       "snapshotManifestSha256": "e1f9c989b51321087525a8b5d27e658aa0f86c84c85976e1f1a72f6d425908de",
       "sha256": "18619c2c1f36bb33d579890d4746d9543175bd464673ca0fe1a11f25d72449a4",
       "targetSha256": "cc775b8dbe7884ed692231c1ff14e487ec46d08ecc7c0952348a27222297c0df",

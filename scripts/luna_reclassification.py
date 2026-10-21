@@ -15,6 +15,8 @@ import unicodedata
 import classified_distribution as d
 
 REL = 'src/main/classification/luna-reclassification'
+LOCAL_LEDGER_PATH = 'build/luna-classification/ledger/results.jsonl.gz'
+LEGACY_LEDGER_PATH = REL + '/results.jsonl.gz'
 FILES = ('distribution-decisions.tsv.gz', 'distribution-candidates.tsv.gz', 'distribution-manifest.json')
 MODEL = 'gpt-5.6-luna'
 EFFORT = 'max'
@@ -406,16 +408,20 @@ def load_results(root, directory, allow_partial=False):
     if not allow_partial and results.keys()!=by_key.keys(): raise ValueError(f'Incomplete results: {len(results)}/{len(by_key)}')
     return m,targets,base,results
 
-def verify_ledger(root):
+def verify_ledger(root, required=False):
     directory=root/'src/main/classification'
     manifest=json.loads((directory/FILES[2]).read_text())
     record=manifest.get('provenance',{}).get('lunaReclassification')
-    if not record: return
+    if not record: return True
+    path=root/record['path']
+    if not path.is_file():
+        if required:
+            raise FileNotFoundError(f'Local Luna ledger is missing: {path}')
+        return False
     m,targets,base=snapshot(root)
     if record.get('snapshotManifestSha256')!=d.sha(root/REL/'manifest.json'):
         raise ValueError('Snapshot manifest hash mismatch')
     entries = subsequent_reviews(root, manifest, m['baselineManifest'])
-    path=root/record['path']
     if d.sha(path)!=record['sha256']: raise ValueError('Result ledger hash mismatch')
     ledger=jsonl(path)
     by_key={r['candidate_key']:r for r in targets}
@@ -472,6 +478,7 @@ def verify_ledger(root):
     if (record['targetSha256']!=m['files']['targets.jsonl.gz'] or record['completedPairs']!=len(ledger)
             or record.get('policy_version')!=POLICY or record.get('model')!=MODEL or record.get('reasoningEffort')!=EFFORT
             or record.get('effectiveActions')!=dict(collections.Counter(r['effective_action'] for r in ledger))): raise ValueError('Ledger provenance mismatch')
+    return True
 
 def apply(root, results_dir, dry_run=False, allow_partial=False):
     if allow_partial and not dry_run: raise ValueError('--allow-partial requires --dry-run')
@@ -492,11 +499,16 @@ def apply(root, results_dir, dry_run=False, allow_partial=False):
             # The result ledger must be staged locally instead of writing through a symlink.
             (staged/'luna-reclassification').unlink()
             shutil.copytree(root/REL,staging/REL)
-            ledger_path=staging/REL/'results.jsonl.gz'; write_jsonl(ledger_path,ledger)
+            ledger_path=staging/LOCAL_LEDGER_PATH; write_jsonl(ledger_path,ledger)
+            (staging/LEGACY_LEDGER_PATH).unlink(missing_ok=True)
             current=json.loads((directory/FILES[2]).read_text())
             old=current['provenance'].get('lunaReclassification')
             if old:
                 if old['sha256']==d.sha(ledger_path):
+                    local_ledger=root/LOCAL_LEDGER_PATH
+                    if not local_ledger.exists():
+                        local_ledger.parent.mkdir(parents=True,exist_ok=True)
+                        shutil.copyfile(ledger_path,local_ledger)
                     d.verify(root); print('Already applied identical results'); return
                 raise ValueError('Different results already applied')
             if any(d.sha(directory/name)!=m['baselineManifest']['files'][name] for name in FILES[:2]): raise ValueError('Distribution changed since export')
@@ -518,13 +530,13 @@ def apply(root, results_dir, dry_run=False, allow_partial=False):
             cats=collections.Counter(r[0] for r in rows)
             current.update(excludedClassifiedPairs=sum(r[4]=='excluded' for r in base.values()),excludedCandidatePairs=m['baselineManifest']['excludedCandidatePairs']+counts['reject'],admittedPairsByOrigin=dict(origins),uniqueAdmittedPairs=sum(origins.values()),dictionaryRows=len(rows),categoryRows={c:cats[c] for c in current['categoryRows']},unclassifiedPairs=sum(r[4]=='unclassified' for r in base.values()),noResultPairs=sum(r[4]=='no_result' for r in base.values()))
             current['files'].update({name:d.sha(staged/name) for name in FILES[:2]})
-            current['provenance']['lunaReclassification']={'path':REL+'/results.jsonl.gz','snapshotManifestSha256':d.sha(root/REL/'manifest.json'),'sha256':d.sha(ledger_path),'targetSha256':m['files']['targets.jsonl.gz'],'completedPairs':len(results),'effectiveActions':dict(counts),'policy_version':POLICY,'model':MODEL,'reasoningEffort':EFFORT}
+            current['provenance']['lunaReclassification']={'path':LOCAL_LEDGER_PATH,'snapshotManifestSha256':d.sha(root/REL/'manifest.json'),'sha256':d.sha(ledger_path),'targetSha256':m['files']['targets.jsonl.gz'],'completedPairs':len(results),'effectiveActions':dict(counts),'policy_version':POLICY,'model':MODEL,'reasoningEffort':EFFORT}
             d.write_json(staged/FILES[2],current)
             for relative in [*current['inputs'],'src/main/resources/id.def']:
                 target=staging/relative; target.parent.mkdir(parents=True,exist_ok=True)
                 if not target.exists(): target.symlink_to((root/relative).resolve())
             d.verify(staging)
-            changes=[REL+'/results.jsonl.gz',*['src/main/classification/'+n for n in FILES]]
+            changes=[LOCAL_LEDGER_PATH,LEGACY_LEDGER_PATH,*['src/main/classification/'+n for n in FILES]]
             backup=root/'build/luna-classification/apply-backup'
             if backup.exists(): raise ValueError('Interrupted apply backup exists; run recover')
             backup.mkdir(parents=True)
@@ -534,7 +546,11 @@ def apply(root, results_dir, dry_run=False, allow_partial=False):
             d.write_json(backup/'journal.json',{'paths':changes,'existing':[p for p in changes if (root/p).exists()]})
             try:
                 for p in changes:
-                    dst=root/p; tmp=dst.with_name(dst.name+'.luna-tmp'); shutil.copyfile(staging/p,tmp); os.replace(tmp,dst)
+                    if p==LEGACY_LEDGER_PATH:
+                        (root/p).unlink(missing_ok=True)
+                        continue
+                    dst=root/p; dst.parent.mkdir(parents=True,exist_ok=True)
+                    tmp=dst.with_name(dst.name+'.luna-tmp'); shutil.copyfile(staging/p,tmp); os.replace(tmp,dst)
                 d.verify(root)
             except BaseException:
                 _recover_unlocked(root); raise
@@ -544,15 +560,19 @@ def apply(root, results_dir, dry_run=False, allow_partial=False):
 def _recover_unlocked(root):
     backup=root/'build/luna-classification/apply-backup'
     journal=json.loads((backup/'journal.json').read_text())
-    allowed={REL+'/results.jsonl.gz',*['src/main/classification/'+n for n in FILES]}
+    repository_paths={'src/main/classification/'+n for n in FILES}
+    allowed={LOCAL_LEDGER_PATH,LEGACY_LEDGER_PATH,*repository_paths}
+    legacy_allowed={LEGACY_LEDGER_PATH,*repository_paths}
     if (not isinstance(journal.get('paths'),list) or len(journal['paths'])!=len(set(journal['paths']))
-            or set(journal['paths'])!=allowed or not isinstance(journal.get('existing'),list)
-            or not set(journal['existing'])<=allowed):
+            or set(journal['paths']) not in (allowed,legacy_allowed) or not isinstance(journal.get('existing'),list)
+            or not set(journal['existing'])<=set(journal['paths'])):
         raise ValueError('Invalid recovery journal paths')
     if any(not (backup/p).is_file() for p in journal['existing']):
         raise ValueError('Incomplete recovery backup')
     for p in journal['paths']:
-        if p in journal['existing']: shutil.copyfile(backup/p,root/p)
+        if p in journal['existing']:
+            (root/p).parent.mkdir(parents=True,exist_ok=True)
+            shutil.copyfile(backup/p,root/p)
         else: (root/p).unlink(missing_ok=True)
         (root/p).with_name(Path(p).name+'.luna-tmp').unlink(missing_ok=True)
     shutil.rmtree(backup)
@@ -575,4 +595,4 @@ if __name__=='__main__':
         batches(root,a.batch_size)
     elif a.command=='apply': apply(root,a.results,a.dry_run,a.allow_partial)
     elif a.command=='recover': recover(root)
-    else: verify_ledger(root)
+    else: verify_ledger(root,required=True)

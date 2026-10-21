@@ -133,5 +133,30 @@ class CatalogTest(unittest.TestCase):
         self.assertIn('前のページ',second)
         self.assertIn('excluded/index.md',(output/'index.md').read_text())
 
+    def test_catalog_generation_without_local_luna_ledger(self):
+        source = self.root/'src/main/classification'
+        distribution.write_gzip(source/'distribution-decisions.tsv.gz',[
+            ('あ','甲<&|>','person,place','verified','classified'),
+            ('あ','乙','person','gemini','classified'),
+            ('あ','却下','','manual','excluded')])
+        manifest_path=source/'distribution-manifest.json'
+        manifest=json.loads(manifest_path.read_text())
+        manifest['provenance']={'lunaReclassification':{
+            'path':'build/luna-classification/ledger/results.jsonl.gz'}}
+        manifest_path.write_text(json.dumps(manifest))
+        output=self.root/'catalog'
+        catalog.generate(self.root,output)
+        page=(output/'excluded/page-0001.md').read_text()
+        self.assertIn('| <code>あ</code> | <code>却下</code>',page)
+        self.assertIn('理由の記録なし',page)
+
+    def test_catalog_check_without_local_luna_ledger_skips_only_reason_outputs(self):
+        generated={'categories/person/page-0001.md':'a','excluded/page-0001.md':'b','summary.json':'c'}
+        frozen={'categories/person/page-0001.md':'a','excluded/page-0001.md':'x','summary.json':'y'}
+        generated_check,frozen_check=catalog.hashes_for_check(generated,frozen,False)
+        self.assertEqual(generated_check,frozen_check)
+        generated_check,frozen_check=catalog.hashes_for_check(generated,frozen,True)
+        self.assertNotEqual(generated_check,frozen_check)
+
 
 if __name__ == '__main__':unittest.main()

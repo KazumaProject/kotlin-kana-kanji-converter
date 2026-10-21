@@ -33,12 +33,14 @@ def generate_excluded(root, output, manifest):
                 excluded[(reading, surface)] = [categories, ORIGINS.get(origin, origin), '理由の記録なし', '固定判断']
     ledger = manifest.get('provenance', {}).get('lunaReclassification')
     if ledger:
-        with gzip.open(root / ledger['path'], 'rt', encoding='utf-8') as stream:
-            for line in stream:
-                entry = json.loads(line)
-                pair = entry['response']['reading'], entry['response']['surface']
-                if pair in excluded and entry['effective_action'] == 'reject':
-                    excluded[pair][2:] = [entry['effective_reason'], 'PR #141・Luna Max（暫定）']
+        ledger_path = root / ledger['path']
+        if ledger_path.is_file():
+            with gzip.open(ledger_path, 'rt', encoding='utf-8') as stream:
+                for line in stream:
+                    entry = json.loads(line)
+                    pair = entry['response']['reading'], entry['response']['surface']
+                    if pair in excluded and entry['effective_action'] == 'reject':
+                        excluded[pair][2:] = [entry['effective_reason'], 'PR #141・Luna Max（暫定）']
     for relative in manifest.get('provenance', {}).get('reviews', []):
         with (root / relative).open(encoding='utf-8') as stream:
             for line in stream:
@@ -511,19 +513,36 @@ def hashes(directory):
             for p in directory.rglob('*') if p.is_file()}
 
 
+def hashes_for_check(generated, frozen, luna_ledger_available):
+    if luna_ledger_available:
+        return generated, frozen
+    ignored = lambda path: path == 'summary.json' or path.startswith('excluded/')
+    return ({path: digest for path, digest in generated.items() if not ignored(path)},
+            {path: digest for path, digest in frozen.items() if not ignored(path)})
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, default=Path('.'))
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
-    distribution.verify(args.root)
     destination = args.root / 'docs/classified-dictionary-catalog'
+    manifest = json.loads((args.root / 'src/main/classification/distribution-manifest.json').read_text())
+    luna_record = manifest.get('provenance', {}).get('lunaReclassification')
+    luna_ledger_available = not luna_record or (args.root / luna_record['path']).is_file()
+    if not args.check and not luna_ledger_available:
+        raise SystemExit('Local Luna ledger required to regenerate excluded-reason pages')
+    distribution.verify(args.root)
     with tempfile.TemporaryDirectory() as directory:
         staging = Path(directory) / 'catalog'
         summary = generate(args.root, staging)
         if args.check:
-            if hashes(staging) != hashes(destination):
+            generated_hashes, frozen_hashes = hashes_for_check(
+                hashes(staging), hashes(destination), luna_ledger_available)
+            if generated_hashes != frozen_hashes:
                 raise SystemExit('Catalog differs from frozen distribution; regenerate it')
+            if not luna_ledger_available:
+                print('Local Luna ledger unavailable; excluded-reason pages and summary.json comparison skipped')
         else:
             if destination.exists(): shutil.rmtree(destination)
             shutil.copytree(staging, destination)
