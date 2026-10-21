@@ -40,7 +40,9 @@ freezeはSQLiteを読み取り専用の一つのトランザクションで読�
 
 ## 公式資料で確認した人名の追加
 
-`src/main/classification/person-additions/` に、確認済みの名簿をUTF-8 JSONLで保存します。各行に `reading`、`surface`、`sport`（`mma`・`kickboxing`・`boxing`）、`left_id`、`right_id`、`cost`、`source_url`、`source_surface`、`source_reading`、`checked_on`（YYYY-MM-DD）を記録します。今回の名簿には、確認したページのSHA-256と確認箇所も保存しています。ページ本文はGitへ保存せず、出典は各行のURLで参照します。
+`src/main/classification/person-additions/` に、確認済みの名簿をUTF-8 JSONLで保存します。各行に `reading`、`surface`、`sport`、`left_id`、`right_id`、`cost`、`source_url`、`source_surface`、`source_reading`、`checked_on`（YYYY-MM-DD）を記録します。`sport` は `person-taxonomy.json` の `sport_subcategories` にあるIDを使用します。今回の名簿には、確認したページのSHA-256と確認箇所も保存しています。ページ本文はGitへ保存せず、出典は各行のURLで参照します。
+
+2026-10-21のJOCパリ2024名鑑は20競技135人を確認しました。既存のperson収録81組に競技タグを付与し、過去の除外2組を出典付きで戻し、未収録52組を追加します。名簿の全行にJOC公式プロフィールURL、氏名・読み、競技、確認箇所、取得ページのSHA-256を保存します。
 
 読みは公式のカナ・ふりがなから、カタカナをひらがなへ変換して空白・中黒・引用符（“”「」）を除去します。長音は保持します。外国人名は公式日本語カタカナ表記を使い、英字名から読みを推定しません。表記は公式名・リングネームの姓名間の空白を除き、中黒などは保持します。競技の区分は名簿の整理用で、過去に別競技へ出場した選手も含みます。
 

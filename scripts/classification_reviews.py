@@ -211,7 +211,9 @@ def _apply_saved(root, commit=False):
     with tempfile.TemporaryDirectory(prefix='classification-review-', dir=work) as temporary:
         staging = Path(temporary)
         staged = staging / DIRECTORY; staged.mkdir(parents=True)
-        for relative in [*manifest['inputs'], 'src/main/resources/id.def', str(DIRECTORY / 'categories.json')]:
+        for relative in [*manifest['inputs'], 'src/main/resources/id.def',
+                         str(DIRECTORY / 'categories.json'),
+                         str(DIRECTORY / 'person-taxonomy.json')]:
             target = staging / relative; target.parent.mkdir(parents=True, exist_ok=True)
             target.symlink_to(root / relative)
         # The original snapshot and result ledger are also required by offline verification.

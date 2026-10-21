@@ -112,6 +112,8 @@ def person_reading(value):
 def person_entries(root, path):
     ids = {int(line.split(maxsplit=1)[0]) for line in
            (root / 'src/main/resources/id.def').read_text(encoding='utf-8').splitlines()}
+    taxonomy = json.loads((root / 'src/main/classification/person-taxonomy.json').read_text(encoding='utf-8'))
+    allowed_sports = set(taxonomy.get('sport_subcategories', {}))
     entries = {}
     for number, line in enumerate(path.read_text(encoding='utf-8').splitlines(), 1):
         entry = json.loads(line)
@@ -122,12 +124,19 @@ def person_entries(root, path):
         for field in ('reading', 'surface', 'sport', 'source_url', 'source_surface', 'source_reading', 'checked_on'):
             if not isinstance(entry[field], str) or not entry[field] or any(c in entry[field] for c in '\t\r\n\0'):
                 raise ValueError(f'{path}:{number}: invalid {field}')
+        if ('source_section' in entry and
+                (not isinstance(entry['source_section'], str) or not entry['source_section'])):
+            raise ValueError(f'{path}:{number}: invalid source_section')
+        if ('source_sha256' in entry and
+                (not isinstance(entry['source_sha256'], str)
+                 or not re.fullmatch('[0-9a-f]{64}', entry['source_sha256']))):
+            raise ValueError(f'{path}:{number}: invalid source_sha256')
         if (not re.fullmatch('[ぁ-ゖー]+', entry['reading'])
                 or entry['reading'] != person_reading(entry['source_reading'])
                 or entry['surface'] != ''.join(entry['source_surface'].split())
                 or unicodedata.normalize('NFC', entry['surface']) != entry['surface']):
             raise ValueError(f'{path}:{number}: reading/surface differs from kana evidence')
-        if entry['sport'] not in ('mma', 'kickboxing', 'boxing'):
+        if entry['sport'] not in allowed_sports:
             raise ValueError(f'{path}:{number}: invalid sport')
         url = urlsplit(entry['source_url'])
         if url.scheme != 'https' or not url.hostname or url.username or url.password:
@@ -201,17 +210,23 @@ def add_person_names(root, path):
     manifest['categoryRows']['person'] += record_count
     manifest['dictionaryRows'] += record_count
     manifest['inputs'][relative] = sha(path)
+    taxonomy_path = 'src/main/classification/person-taxonomy.json'
+    manifest['inputs'][taxonomy_path] = sha(root / taxonomy_path)
     manifest['provenance'].setdefault('personAdditions', []).append({
         'path': relative, 'sha256': sha(path), 'reviewedPairs': len(entries),
         'addedPairs': [[row[0], row[4]] for row in additions], 'addedRecords': record_count,
         'addedSourceRows': len(appended),
+        'appendedPairs': [[row[0], row[4]] for row in appended],
     })
     # Validate a staged snapshot first. Invalid batches never partially edit the inputs.
     with tempfile.TemporaryDirectory(prefix='person-additions-') as temporary:
         staging = Path(temporary)
         staged_directory = staging / 'src/main/classification'
         staged_directory.mkdir(parents=True)
-        for relative_path in [*manifest['inputs'], 'src/main/resources/id.def', 'src/main/classification/categories.json']:
+        for relative_path in dict.fromkeys([
+                *manifest['inputs'], 'src/main/resources/id.def',
+                'src/main/classification/categories.json',
+                'src/main/classification/person-taxonomy.json']):
             target = staging / relative_path
             target.parent.mkdir(parents=True, exist_ok=True)
             if relative_path != names_path:
@@ -219,6 +234,9 @@ def add_person_names(root, path):
         (staging / names_path).write_text(names, encoding='utf-8')
         write_gzip(staged_directory / 'distribution-candidates.tsv.gz', sorted(rows))
         write_gzip(staged_directory / 'distribution-decisions.tsv.gz', (decisions[pair] for pair in sorted(decisions)))
+        if 'lunaReclassification' in manifest['provenance']:
+            (staged_directory / 'luna-reclassification').symlink_to(
+                directory / 'luna-reclassification', target_is_directory=True)
         manifest['inputs'][names_path] = sha(staging / names_path)
         for filename in manifest['files']:
             manifest['files'][filename] = sha(staged_directory / filename)

@@ -1981,6 +1981,433 @@
         ],
         "addedRecords": 492,
         "addedSourceRows": 489
+      },
+      {
+        "path": "src/main/classification/person-additions/joc-paris2024-2026-10-21.jsonl",
+        "sha256": "756f05ac434375e66f3ef023e8586cae01ceaf5493f1c64a4ce4826e472fdce5",
+        "reviewedPairs": 135,
+        "addedPairs": [
+          [
+            "あさいゆう",
+            "浅井悠由"
+          ],
+          [
+            "いいつかしぶき",
+            "飯束潮吹"
+          ],
+          [
+            "いなばゆうすけ",
+            "稲場悠介"
+          ],
+          [
+            "いのうえかい",
+            "井上皆"
+          ],
+          [
+            "うちだみさき",
+            "内田美咲"
+          ],
+          [
+            "うらたかな",
+            "浦田果菜"
+          ],
+          [
+            "おいかわしほり",
+            "及川栞"
+          ],
+          [
+            "おおいしあやみ",
+            "大石綾美"
+          ],
+          [
+            "おおのひろと",
+            "大能寛飛"
+          ],
+          [
+            "おおほりあや",
+            "大堀彩"
+          ],
+          [
+            "おかざきはるか",
+            "岡﨑遥海"
+          ],
+          [
+            "おがわりか",
+            "小川里佳"
+          ],
+          [
+            "おぎはらだいち",
+            "荻原大地"
+          ],
+          [
+            "おもとさくらこ",
+            "尾本桜子"
+          ],
+          [
+            "おれありーこなー",
+            "オレアリーコナー"
+          ],
+          [
+            "きじまもえか",
+            "木島萌香"
+          ],
+          [
+            "こづかみき",
+            "狐塚美樹"
+          ],
+          [
+            "こばやかわしほ",
+            "小早川志穂"
+          ],
+          [
+            "こばやしうた",
+            "小林唄"
+          ],
+          [
+            "さいとうふみや",
+            "斉藤史弥"
+          ],
+          [
+            "さとうともか",
+            "佐藤友花"
+          ],
+          [
+            "しまだあみる",
+            "島田あみる"
+          ],
+          [
+            "しまだあやの",
+            "島田綾乃"
+          ],
+          [
+            "すずきとうい",
+            "鈴木透生"
+          ],
+          [
+            "すずきみゆ",
+            "鈴木美結"
+          ],
+          [
+            "たかたみつる",
+            "髙田充"
+          ],
+          [
+            "たなかさき",
+            "田中彩樹"
+          ],
+          [
+            "たなかみさき",
+            "田中美紗樹"
+          ],
+          [
+            "たなかゆうき",
+            "田中雄己"
+          ],
+          [
+            "だてきよむ",
+            "伊達清武"
+          ],
+          [
+            "とみざわまこと",
+            "富澤慎"
+          ],
+          [
+            "とりやままい",
+            "鳥山麻衣"
+          ],
+          [
+            "なかにしじゅんや",
+            "中西絢哉"
+          ],
+          [
+            "なかむらえいか",
+            "中村瑛香"
+          ],
+          [
+            "ながいゆり",
+            "永井友理"
+          ],
+          [
+            "ながまつせら",
+            "永松瀬羅"
+          ],
+          [
+            "にしだかぴーりあおうら",
+            "西田カピーリア桜良"
+          ],
+          [
+            "にしむらとわ",
+            "西村永遠"
+          ],
+          [
+            "はせがわみゆ",
+            "長谷川美優"
+          ],
+          [
+            "はねだたくや",
+            "羽根田卓也"
+          ],
+          [
+            "ひろうちえみ",
+            "廣内映美"
+          ],
+          [
+            "ふるかわたかはる",
+            "古川高晴"
+          ],
+          [
+            "ふるたなおき",
+            "古田直輝"
+          ],
+          [
+            "みやもとまさのり",
+            "宮本昌典"
+          ],
+          [
+            "もりかのん",
+            "森花音"
+          ],
+          [
+            "やざわあき",
+            "矢澤亜季"
+          ],
+          [
+            "やすながましろ",
+            "安永真白"
+          ],
+          [
+            "やまだまさる",
+            "山田優"
+          ],
+          [
+            "よしおかだい",
+            "吉岡大"
+          ],
+          [
+            "よしむらみほ",
+            "𠮷村美穂"
+          ],
+          [
+            "わたなべたいよう",
+            "渡邉太陽"
+          ],
+          [
+            "わだあみ",
+            "和田彩未"
+          ]
+        ],
+        "addedRecords": 52,
+        "addedSourceRows": 52,
+        "appendedPairs": [
+          [
+            "あさいゆう",
+            "浅井悠由"
+          ],
+          [
+            "いいつかしぶき",
+            "飯束潮吹"
+          ],
+          [
+            "いなばゆうすけ",
+            "稲場悠介"
+          ],
+          [
+            "いのうえかい",
+            "井上皆"
+          ],
+          [
+            "うちだみさき",
+            "内田美咲"
+          ],
+          [
+            "うらたかな",
+            "浦田果菜"
+          ],
+          [
+            "おいかわしほり",
+            "及川栞"
+          ],
+          [
+            "おおいしあやみ",
+            "大石綾美"
+          ],
+          [
+            "おおのひろと",
+            "大能寛飛"
+          ],
+          [
+            "おおほりあや",
+            "大堀彩"
+          ],
+          [
+            "おかざきはるか",
+            "岡﨑遥海"
+          ],
+          [
+            "おがわりか",
+            "小川里佳"
+          ],
+          [
+            "おぎはらだいち",
+            "荻原大地"
+          ],
+          [
+            "おもとさくらこ",
+            "尾本桜子"
+          ],
+          [
+            "おれありーこなー",
+            "オレアリーコナー"
+          ],
+          [
+            "きじまもえか",
+            "木島萌香"
+          ],
+          [
+            "こづかみき",
+            "狐塚美樹"
+          ],
+          [
+            "こばやかわしほ",
+            "小早川志穂"
+          ],
+          [
+            "こばやしうた",
+            "小林唄"
+          ],
+          [
+            "さいとうふみや",
+            "斉藤史弥"
+          ],
+          [
+            "さとうともか",
+            "佐藤友花"
+          ],
+          [
+            "しまだあみる",
+            "島田あみる"
+          ],
+          [
+            "しまだあやの",
+            "島田綾乃"
+          ],
+          [
+            "すずきとうい",
+            "鈴木透生"
+          ],
+          [
+            "すずきみゆ",
+            "鈴木美結"
+          ],
+          [
+            "たかたみつる",
+            "髙田充"
+          ],
+          [
+            "たなかさき",
+            "田中彩樹"
+          ],
+          [
+            "たなかみさき",
+            "田中美紗樹"
+          ],
+          [
+            "たなかゆうき",
+            "田中雄己"
+          ],
+          [
+            "だてきよむ",
+            "伊達清武"
+          ],
+          [
+            "とみざわまこと",
+            "富澤慎"
+          ],
+          [
+            "とりやままい",
+            "鳥山麻衣"
+          ],
+          [
+            "なかにしじゅんや",
+            "中西絢哉"
+          ],
+          [
+            "なかむらえいか",
+            "中村瑛香"
+          ],
+          [
+            "ながいゆり",
+            "永井友理"
+          ],
+          [
+            "ながまつせら",
+            "永松瀬羅"
+          ],
+          [
+            "にしだかぴーりあおうら",
+            "西田カピーリア桜良"
+          ],
+          [
+            "にしむらとわ",
+            "西村永遠"
+          ],
+          [
+            "はせがわみゆ",
+            "長谷川美優"
+          ],
+          [
+            "はねだたくや",
+            "羽根田卓也"
+          ],
+          [
+            "ひろうちえみ",
+            "廣内映美"
+          ],
+          [
+            "ふるかわたかはる",
+            "古川高晴"
+          ],
+          [
+            "ふるたなおき",
+            "古田直輝"
+          ],
+          [
+            "みやもとまさのり",
+            "宮本昌典"
+          ],
+          [
+            "もりかのん",
+            "森花音"
+          ],
+          [
+            "やざわあき",
+            "矢澤亜季"
+          ],
+          [
+            "やすながましろ",
+            "安永真白"
+          ],
+          [
+            "やまだまさる",
+            "山田優"
+          ],
+          [
+            "よしおかだい",
+            "吉岡大"
+          ],
+          [
+            "よしむらみほ",
+            "𠮷村美穂"
+          ],
+          [
+            "わたなべたいよう",
+            "渡邉太陽"
+          ],
+          [
+            "わだあみ",
+            "和田彩未"
+          ]
+        ]
       }
     ],
     "reviews": [
@@ -2024,7 +2451,8 @@
       "src/main/classification/reviews/2026-10-16-pr128-luna-0035.jsonl",
       "src/main/classification/reviews/2026-10-16-pr128-luna-0036.jsonl",
       "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl",
-      "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl"
+      "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl",
+      "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl"
     ],
     "reviewBaseExcludedCandidatePairs": 5725,
     "termAdditions": [
@@ -2055,7 +2483,7 @@
     }
   },
   "inputs": {
-    "src/main/bin/names.txt": "5fadf8bc0d4f97411138d47cfa18464cfb1c885c889627afde0c53d5b9bc3de9",
+    "src/main/bin/names.txt": "116cd495ccabddc6c9b47cbe3eec661f906f58c896891bd9800fdf0f2554179d",
     "src/main/bin/place.txt.zip": "bae15eb6755a2e6aa30d1d9ece7970c7d97d761b6e430c59bc11222f8e2e6f01",
     "src/main/bin/only_wiki.txt.zip": "2c3ca451484900edee55ae4ebe79284e1301b077572f64e9100889a5755bed10",
     "src/main/bin/only_neologd.txt.zip": "64222fa806e424556b662619fb7cba9ac9683f89959afee909dadb112027458e",
@@ -2102,16 +2530,19 @@
     "src/main/classification/reviews/2026-10-16-pr128-luna-0035.jsonl": "e0397e26a62a4802077af40afecd176dd9f32e8ca6e9db0c0c15a99b67210067",
     "src/main/classification/reviews/2026-10-16-pr128-luna-0036.jsonl": "05fb5fef150cbd033c6c031916b4f583bd1e6c7fd82c1ccdcc90465450614e75",
     "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl": "59f4fb8499430452c3e32a12c9fafaceadbd096256a227f60cb7546454fa5cd7",
-    "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl": "6b65e3c0092f7113000199e7dd7f530cc5e5f9911913ecb3c741a65aeef0a42b"
+    "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl": "6b65e3c0092f7113000199e7dd7f530cc5e5f9911913ecb3c741a65aeef0a42b",
+    "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl": "7585c7afb2c8413500eab761ad429c461f139a414148c9be907442daeb141d5a",
+    "src/main/classification/person-additions/joc-paris2024-2026-10-21.jsonl": "756f05ac434375e66f3ef023e8586cae01ceaf5493f1c64a4ce4826e472fdce5",
+    "src/main/classification/person-taxonomy.json": "8fc86fa0f0f0430451251e8290f9b88ca7eac8339b7f1cdec39af33d0ef811fd"
   },
   "files": {
     "categories.json": "4fd9d1c05f21789bffe2622ec7269abaff8b7904d2ae2485e072a35df1d10556",
-    "distribution-candidates.tsv.gz": "2a6490b7cc3324e0a8906798336acb40ef096333d6517741ede39c773f43a577",
-    "distribution-decisions.tsv.gz": "97551abc6030143fc68eded69bec7d019eb601078646d685211ee3c7355f6e8e"
+    "distribution-candidates.tsv.gz": "e21f7b04eb48c1d048ffd60cbb6b9fbaea82423c93b1f943a410b12b5072ff33",
+    "distribution-decisions.tsv.gz": "3164860ae9e425b03caade836f9087986dc47f0d5bae718d33d72f233e4c5432"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "sourceRows": {
-    "person": 70894,
+    "person": 70946,
     "place": 170145,
     "wiki": 150132,
     "neologd": 404817,
@@ -2121,11 +2552,11 @@
   "admittedPairsByOrigin": {
     "manual": 385597,
     "gemini": 183853,
-    "verified": 174254
+    "verified": 174308
   },
-  "uniqueAdmittedPairs": 743704,
-  "excludedCandidatePairs": 328909,
-  "excludedClassifiedPairs": 323184,
+  "uniqueAdmittedPairs": 743758,
+  "excludedCandidatePairs": 328907,
+  "excludedClassifiedPairs": 323182,
   "unclassifiedPairs": 0,
   "noResultPairs": 0,
   "conflicts": {
@@ -2134,7 +2565,7 @@
     "verified_over_manual": 8
   },
   "categoryRows": {
-    "person": 268794,
+    "person": 268848,
     "character": 6871,
     "mythological_figure": 3436,
     "place": 45089,
@@ -2163,7 +2594,7 @@
     "work_periodical": 1812,
     "work_other": 2685
   },
-  "dictionaryRows": 760237,
+  "dictionaryRows": 760291,
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified."
   ]
