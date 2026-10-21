@@ -414,7 +414,7 @@ jobs:
           tag: ${{ github.ref_name }}
           name: Person category replacement ${{ github.ref_name }}
           body: |
-            The generic `person` dictionary is removed from this prerelease bundle and replaced by the taxonomy's 24 standard-enabled person subcategory dictionaries. The bundle has 53 categories in total. Each replacement category is identified in `dictionary-distribution-manifest.json` with `parentCategoryId: person`. Candidates that cannot be reclassified or fail the IME format filter are excluded; adult-related and other restricted categories are excluded.
+            The generic `person` dictionary is removed from this prerelease bundle and replaced by the taxonomy's 24 standard-enabled person subcategory dictionaries under `app/src/main/assets/categories/person/<category-id>/`. The bundle has 53 categories in total. Each replacement category is identified in `dictionary-distribution-manifest.json` with `parentCategoryId: person`. Candidates that cannot be reclassified or fail the IME format filter are excluded; adult-related and other restricted categories are excluded.
           prerelease: true
           makeLatest: false
           artifacts: build/person-dictionary/japanese_keyboard_dictionary_assets.zip,build/person-dictionary/person-replacement-dictionary-manifest.json,build/person-dictionary/DICTIONARY-SHA256SUMS,release_zips/DICTIONARY-LICENSES.txt

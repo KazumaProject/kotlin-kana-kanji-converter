@@ -101,6 +101,8 @@ PR #141の分類台帳と後続レビューは、元のスナップショット�
 
 `person-dictionary-candidates.tsv.gz` には許可カテゴリの読み・表記・品詞・コスト・競技タグだけを保存します。未分類候補は、再分類できた項目だけを既存カテゴリに移し、なお確定できない項目は出力しません。空の読み・表記、空白・制御文字を含む候補、かな以外の読み、文字を含まない表記も除外します。根拠データと分類作業用キャッシュはリポジトリ外に置き、`scripts/export_person_dictionary_source.py` は許可24カテゴリの行だけを書き出します。成人制作者は `adult_work_creator` として漫画カテゴリから分けますが、出演者・制作者・成人関連保留を含む候補は個人データをリポジトリにも配布用データにも入れません。成人関連の候補キーはリポジトリ外の除外JSONLにハッシュだけを保持し、今後のGemini候補送信前にも網羅を検査します。置換ZIPには汎用 `person` の辞書ファイルを含めません。
 
+置換ZIPの人物辞書は `app/src/main/assets/categories/person/<カテゴリID>/` の下に配置します。`person/` は親ディレクトリで、各サブディレクトリに `yomi.dat.zip`、`tango.dat.zip`、`token.dat.zip` を格納します。他の29カテゴリは既存どおり `categories/<カテゴリID>/` に置きます。
+
 ZIPルートの `dictionary-distribution-manifest.json` は機械可読の分類メタデータです。人物細分類それぞれに `parentCategoryId: "person"` とカテゴリID、表示名、収録件数、辞書ファイルのパスを記録し、`replacesCategory: "person"` で置換関係を示します。個々の候補名や除外候補はマニフェストに含めません。GitHub Releaseには辞書ZIP、同じマニフェスト、チェックサム、ライセンス表示を添付します。
 
 ダウンロードした置換ZIPから、指定カテゴリの辞書をCLIで使う例です。`--base` には同じコミットから生成した置換前の通常アセットZIPを指定します。
