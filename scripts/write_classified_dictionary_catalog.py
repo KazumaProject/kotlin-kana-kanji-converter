@@ -225,7 +225,13 @@ def generate(root, output):
         manifest['uniqueAdmittedPairs'] += extra['uniqueAdmittedPairs']
         manifest['dictionaryRows'] += extra['dictionaryRows']
     output.mkdir(parents=True)
-    person_taxonomy_summary = generate_person_taxonomy(root, output / 'person-taxonomy')
+    taxonomy_source = source / 'person-taxonomy.json'
+    person_source = source / 'person-dictionary-candidates.tsv.gz'
+    person_taxonomy_summary = None
+    if taxonomy_source.is_file() or person_source.is_file():
+        if not taxonomy_source.is_file() or not person_source.is_file():
+            raise ValueError('Person taxonomy catalog requires both taxonomy and candidate sources')
+        person_taxonomy_summary = generate_person_taxonomy(root, output / 'person-taxonomy')
     summary = []
     with gzip.open(source / 'distribution-candidates.tsv.gz', 'rt', encoding='utf-8') as stream:
         rows = heapq.merge((line.rstrip('\n').split('\t') for line in stream), specialist_rows)
@@ -294,6 +300,10 @@ def generate(root, output):
     table = ['| カテゴリ | 読み・表記の組 | 読み数 | レコード数 |', '|---|---:|---:|---:|']
     for item in summary:
         table.append(f'| [{item["name"]}]({item["id"]}/index.md) | {item["pairs"]:,} | {item["readings"]:,} | {item["records"]:,} |')
+    person_taxonomy_link = (
+        '[人物細分類の全収録語](person-taxonomy/index.md)（特別プレリリース向け）\n\n'
+        if person_taxonomy_summary is not None else ''
+    )
     (output / 'index.md').write_text(
         '# 分類辞書の収録一覧\n\n'
         f'{len(categories)}カテゴリ、全体で **{manifest["uniqueAdmittedPairs"]:,}組**、カテゴリ別に **{manifest["dictionaryRows"]:,}レコード**を収録しています。\n\n'
@@ -302,7 +312,7 @@ def generate(root, output):
         '一覧は配布対象の固定データから全件生成しています。Geminiとassistantの暫定分類・未確認の読みを含みます。'
         '既存28カテゴリのコストと品詞は元辞書の値です。漢方・医療は提供元の読みと空欄へのGemini推定読み（未確認）を採用し、個別の読み訂正には出典を記録します。品詞とコストは本プロジェクトで設定しています。分類取得失敗・未分類・除外候補はこの一覧には含めません。\n\n'
         '[不採用語と判断理由](excluded/index.md) · [品詞IDと品詞名](pos.md) · [生成・配布手順](../classified-dictionary-distribution.md) · [漢方・医療の出典記録](../specialist-dictionaries.md)\n\n'
-        '[人物細分類の全収録語](person-taxonomy/index.md)（特別プレリリース向け）\n\n'
+        + person_taxonomy_link
         + '\n'.join(table) + '\n\n'
         f'元データSHA-256: `{manifest["files"]["distribution-candidates.tsv.gz"]}`\n\n'
         '再生成: `python3 scripts/write_classified_dictionary_catalog.py`\n'
@@ -315,7 +325,8 @@ def generate(root, output):
     result = dict(schemaVersion=1, inputSha256=manifest['files']['distribution-candidates.tsv.gz'],
                   uniquePairs=manifest['uniqueAdmittedPairs'], records=manifest['dictionaryRows'], categories=summary)
     result['excluded'] = generate_excluded(root, output, manifest)
-    result['personTaxonomy'] = person_taxonomy_summary
+    if person_taxonomy_summary is not None:
+        result['personTaxonomy'] = person_taxonomy_summary
     if specialist_file.exists(): result['specialistInputSha256'] = extra['files']['distribution-candidates.tsv.gz']
     (output / 'summary.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     if sum(c['records'] for c in summary) != manifest['dictionaryRows']:
