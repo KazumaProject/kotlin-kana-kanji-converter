@@ -66,8 +66,8 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(a.read_bytes(),b.read_bytes()); self.assertEqual(l.jsonl(a),[self.row])
     def test_recover(self):
         backup=self.root/'build/luna-classification/apply-backup'; backup.mkdir(parents=True)
-        paths=[l.REL+'/results.jsonl.gz',*['src/main/classification/'+n for n in l.FILES]]
-        existing=paths[1:]
+        paths=[l.LOCAL_LEDGER_PATH,l.LEGACY_LEDGER_PATH,*['src/main/classification/'+n for n in l.FILES]]
+        existing=[l.LEGACY_LEDGER_PATH,*['src/main/classification/'+n for n in l.FILES]]
         for p in paths:
             dest=self.root/p; dest.parent.mkdir(parents=True,exist_ok=True); dest.write_text('changed')
             if p in existing:
@@ -76,6 +76,13 @@ class PipelineTests(unittest.TestCase):
         l.recover(self.root)
         for p in existing: self.assertEqual((self.root/p).read_text(),'original')
         self.assertFalse((self.root/paths[0]).exists())
+    def test_missing_local_ledger_can_skip_or_require_audit(self):
+        directory=self.root/'src/main/classification'; directory.mkdir(parents=True)
+        l.d.write_json(directory/'distribution-manifest.json',{'provenance':{'lunaReclassification':{
+            'path':l.LOCAL_LEDGER_PATH}}})
+        self.assertFalse(l.verify_ledger(self.root))
+        with self.assertRaisesRegex(FileNotFoundError,'Local Luna ledger is missing'):
+            l.verify_ledger(self.root,required=True)
     def test_recovery_refuses_unrelated_paths(self):
         backup=self.root/'build/luna-classification/apply-backup'; backup.mkdir(parents=True)
         protected=self.root/'protected'; protected.write_text('safe')
@@ -164,13 +171,13 @@ class FixtureTests(unittest.TestCase):
                 with patch.object(l.os,'replace',side_effect=fail_second):
                     with self.assertRaises(OSError): l.apply(root,results)
                 self.assertEqual(before,{n:(directory/n).read_bytes() for n in l.FILES})
-                self.assertFalse((root/l.REL/'results.jsonl.gz').exists())
+                self.assertFalse((root/l.LOCAL_LEDGER_PATH).exists())
                 l.apply(root,results)
                 after=[l.d.sha(directory/n) for n in l.FILES]
                 l.apply(root,results)
                 self.assertEqual(after,[l.d.sha(directory/n) for n in l.FILES])
                 self.assertEqual(l.decisions(directory/l.FILES[0])[('すみ','済')],list(base[2]))
-                ledger=l.jsonl(root/l.REL/'results.jsonl.gz')
+                ledger=l.jsonl(root/l.LOCAL_LEDGER_PATH)
                 self.assertTrue(all(r['batch_provenance']['reply_sha256']=='fixture-reply-sha' for r in ledger))
                 self.assertTrue(all(r['batch_provenance']['evidence']=={'request':'fixture'} for r in ledger))
                 self.assertTrue(all('candidate_keys' not in r['batch_provenance'] for r in ledger))

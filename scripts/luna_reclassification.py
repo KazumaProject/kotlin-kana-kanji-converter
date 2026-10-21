@@ -15,6 +15,8 @@ import unicodedata
 import classified_distribution as d
 
 REL = 'src/main/classification/luna-reclassification'
+LOCAL_LEDGER_PATH = 'build/luna-classification/ledger/results.jsonl.gz'
+LEGACY_LEDGER_PATH = REL + '/results.jsonl.gz'
 FILES = ('distribution-decisions.tsv.gz', 'distribution-candidates.tsv.gz', 'distribution-manifest.json')
 MODEL = 'gpt-5.6-luna'
 EFFORT = 'max'
@@ -82,6 +84,18 @@ def subsequent_reviews(root, current, baseline):
                      d.TERM_CLASSIFICATIONS_MANIFEST_PATH):
             if inputs.pop(path, None) != d.sha(root/path):
                 raise ValueError('Term classification input hash mismatch')
+    if 'eventClassification' in provenance:
+        event_data = d.event_classification_data(root)
+        if event_data is None:
+            raise ValueError('Frozen event classification input is missing')
+        expected_event_provenance = {key: value for key, value in event_data['metadata'].items()
+                                     if key != 'schemaVersion'}
+        if provenance.pop('eventClassification', None) != expected_event_provenance:
+            raise ValueError('Event classification provenance differs from its frozen input')
+        for path in (d.EVENT_TAXONOMY_PATH, d.EVENT_CLASSIFICATIONS_PATH,
+                     d.EVENT_CLASSIFICATIONS_MANIFEST_PATH):
+            if inputs.pop(path, None) != d.sha(root/path):
+                raise ValueError('Event classification input hash mismatch')
     for path in added:
         if inputs.pop(path, None) != d.sha(root/path):
             raise ValueError('Subsequent review input hash mismatch')
@@ -99,12 +113,23 @@ def subsequent_reviews(root, current, baseline):
         inputs[PERSON_SOURCE] = baseline['inputs'][PERSON_SOURCE]
     if (provenance != baseline['provenance'] or inputs != baseline['inputs']
             or current['idDefSha256'] != baseline['idDefSha256']):
-        raise ValueError('Unrelated distribution provenance changed')
+        provenance_diff = sorted(key for key in set(provenance) | set(baseline['provenance'])
+                                 if provenance.get(key) != baseline['provenance'].get(key))
+        input_missing = sorted(set(baseline['inputs']) - set(inputs))
+        input_extra = sorted(set(inputs) - set(baseline['inputs']))
+        input_hash_diff = sorted(path for path in set(inputs) & set(baseline['inputs'])
+                                 if inputs[path] != baseline['inputs'][path])
+        raise ValueError(
+            'Unrelated distribution provenance changed: '
+            f'provenanceKeys={provenance_diff}, inputMissing={input_missing}, '
+            f'inputExtra={input_extra}, inputHashes={input_hash_diff}, '
+            f'idDefMismatch={current["idDefSha256"] != baseline["idDefSha256"]}')
     return entries
 
 
 PERSON_SOURCE = 'src/main/bin/names.txt'
 TERM_PARENT_DEFINITION = '独立した語義と読みが辞書原資料で対応する一般語・専門用語。未分類語の受け皿にはしない。'
+EVENT_PARENT_DEFINITION = '日付・場所等を持つ個別の出来事、催事、大会、祭り、式典。'
 
 
 def person_additions_after_baseline(root, current, baseline):
@@ -160,45 +185,68 @@ def restore_person_source(root, current, baseline, additions):
 
 
 def term_hierarchy_restores_baseline(root, current, baseline):
-    """Allow only the recorded 15-leaf replacement of the pinned term parent."""
-    taxonomy_data = d.term_taxonomy(root)
-    if taxonomy_data is None or 'termClassification' not in current.get('provenance', {}):
+    """Allow only saved taxonomy leaf replacements of pinned structural parents."""
+    replacements = []
+    term_data = d.term_taxonomy(root)
+    event_data = d.event_taxonomy(root)
+    if term_data is not None and 'termClassification' in current.get('provenance', {}):
+        replacements.append(('term', term_data[0], term_data[1], TERM_PARENT_DEFINITION))
+    if event_data is not None and 'eventClassification' in current.get('provenance', {}):
+        replacements.append(('event', event_data[0], event_data[1], EVENT_PARENT_DEFINITION))
+    if not replacements:
         return False
-    parent, leaves = taxonomy_data
     expanded = json.loads((root/'src/main/classification/categories.json').read_text(encoding='utf-8'))
-    leaf_ids = {category['id'] for category in leaves}
+    replacement_map = {
+        parent_id: (structure, {category['id'] for category in leaves}, definition)
+        for parent_id, structure, leaves, definition in replacements
+    }
     collapsed_categories = []
-    inserted_parent = False
+    inserted_parents = set()
     for category in expanded.get('categories', []):
-        if category.get('id') in leaf_ids:
-            if not inserted_parent:
+        parent_id = next((parent for parent, (_, leaf_ids, _) in replacement_map.items()
+                          if category.get('id') in leaf_ids), None)
+        if parent_id is not None:
+            if parent_id not in inserted_parents:
+                structure, _, definition = replacement_map[parent_id]
                 collapsed_categories.append({
-                    'id': 'term', 'name': parent['name'], 'definition': TERM_PARENT_DEFINITION,
+                    'id': parent_id, 'name': structure['name'], 'definition': definition,
                 })
-                inserted_parent = True
+                inserted_parents.add(parent_id)
         else:
             collapsed_categories.append(category)
-    if not inserted_parent:
+    if inserted_parents != set(replacement_map):
         return False
     collapsed = dict(expanded)
     collapsed.pop('categoryGroups', None)
     collapsed['categories'] = collapsed_categories
-    if d.merged_categories(collapsed, taxonomy_data) != expanded:
+    if d.merged_categories(collapsed, term_data if 'term' in replacement_map else None,
+                           event_data if 'event' in replacement_map else None) != expanded:
         return False
     reconstructed = json.dumps(collapsed, ensure_ascii=False, indent=2) + '\n'
     expected_hash = baseline.get('files', {}).get('categories.json')
     if hashlib.sha256(reconstructed.encode('utf-8')).hexdigest() != expected_hash:
         return False
     category_ids = {category['id'] for category in expanded['categories']}
-    data = d.term_classification_data(root, category_ids)
-    expected_provenance = ({key: value for key, value in data['metadata'].items()
-                            if key != 'schemaVersion'} if data is not None else None)
-    if expected_provenance is None or current['provenance'].get('termClassification') != expected_provenance:
-        return False
-    for relative in (d.TERM_TAXONOMY_PATH, d.TERM_CLASSIFICATIONS_PATH,
-                     d.TERM_CLASSIFICATIONS_MANIFEST_PATH):
-        if current.get('inputs', {}).get(relative) != d.sha(root/relative):
+    if 'term' in replacement_map:
+        data = d.term_classification_data(root, category_ids)
+        expected_provenance = ({key: value for key, value in data['metadata'].items()
+                                if key != 'schemaVersion'} if data is not None else None)
+        if expected_provenance is None or current['provenance'].get('termClassification') != expected_provenance:
             return False
+        for relative in (d.TERM_TAXONOMY_PATH, d.TERM_CLASSIFICATIONS_PATH,
+                         d.TERM_CLASSIFICATIONS_MANIFEST_PATH):
+            if current.get('inputs', {}).get(relative) != d.sha(root/relative):
+                return False
+    if 'event' in replacement_map:
+        data = d.event_classification_data(root, category_ids)
+        expected_provenance = ({key: value for key, value in data['metadata'].items()
+                                if key != 'schemaVersion'} if data is not None else None)
+        if expected_provenance is None or current['provenance'].get('eventClassification') != expected_provenance:
+            return False
+        for relative in (d.EVENT_TAXONOMY_PATH, d.EVENT_CLASSIFICATIONS_PATH,
+                         d.EVENT_CLASSIFICATIONS_MANIFEST_PATH):
+            if current.get('inputs', {}).get(relative) != d.sha(root/relative):
+                return False
     return True
 
 
@@ -360,16 +408,20 @@ def load_results(root, directory, allow_partial=False):
     if not allow_partial and results.keys()!=by_key.keys(): raise ValueError(f'Incomplete results: {len(results)}/{len(by_key)}')
     return m,targets,base,results
 
-def verify_ledger(root):
+def verify_ledger(root, required=False):
     directory=root/'src/main/classification'
     manifest=json.loads((directory/FILES[2]).read_text())
     record=manifest.get('provenance',{}).get('lunaReclassification')
-    if not record: return
+    if not record: return True
+    path=root/record['path']
+    if not path.is_file():
+        if required:
+            raise FileNotFoundError(f'Local Luna ledger is missing: {path}')
+        return False
     m,targets,base=snapshot(root)
     if record.get('snapshotManifestSha256')!=d.sha(root/REL/'manifest.json'):
         raise ValueError('Snapshot manifest hash mismatch')
     entries = subsequent_reviews(root, manifest, m['baselineManifest'])
-    path=root/record['path']
     if d.sha(path)!=record['sha256']: raise ValueError('Result ledger hash mismatch')
     ledger=jsonl(path)
     by_key={r['candidate_key']:r for r in targets}
@@ -416,6 +468,8 @@ def verify_ledger(root):
             base[pair] = [reading, surface, 'person', 'verified', 'classified']
     base = d.apply_term_classifications(
         root, base, force='termClassification' in manifest['provenance'], reviewed_pairs=entries)
+    base = d.apply_event_classifications(
+        root, base, force='eventClassification' in manifest['provenance'], reviewed_pairs=entries)
     exclusion_delta = sum(r[4]=='excluded' for r in base.values()) - before_excluded
     if (manifest['excludedCandidatePairs']!=m['baselineManifest']['excludedCandidatePairs']+sum(r['effective_action']=='reject' for r in ledger)+exclusion_delta
             or manifest['excludedClassifiedPairs']!=sum(r[4]=='excluded' for r in base.values())):
@@ -424,6 +478,7 @@ def verify_ledger(root):
     if (record['targetSha256']!=m['files']['targets.jsonl.gz'] or record['completedPairs']!=len(ledger)
             or record.get('policy_version')!=POLICY or record.get('model')!=MODEL or record.get('reasoningEffort')!=EFFORT
             or record.get('effectiveActions')!=dict(collections.Counter(r['effective_action'] for r in ledger))): raise ValueError('Ledger provenance mismatch')
+    return True
 
 def apply(root, results_dir, dry_run=False, allow_partial=False):
     if allow_partial and not dry_run: raise ValueError('--allow-partial requires --dry-run')
@@ -444,11 +499,16 @@ def apply(root, results_dir, dry_run=False, allow_partial=False):
             # The result ledger must be staged locally instead of writing through a symlink.
             (staged/'luna-reclassification').unlink()
             shutil.copytree(root/REL,staging/REL)
-            ledger_path=staging/REL/'results.jsonl.gz'; write_jsonl(ledger_path,ledger)
+            ledger_path=staging/LOCAL_LEDGER_PATH; write_jsonl(ledger_path,ledger)
+            (staging/LEGACY_LEDGER_PATH).unlink(missing_ok=True)
             current=json.loads((directory/FILES[2]).read_text())
             old=current['provenance'].get('lunaReclassification')
             if old:
                 if old['sha256']==d.sha(ledger_path):
+                    local_ledger=root/LOCAL_LEDGER_PATH
+                    if not local_ledger.exists():
+                        local_ledger.parent.mkdir(parents=True,exist_ok=True)
+                        shutil.copyfile(ledger_path,local_ledger)
                     d.verify(root); print('Already applied identical results'); return
                 raise ValueError('Different results already applied')
             if any(d.sha(directory/name)!=m['baselineManifest']['files'][name] for name in FILES[:2]): raise ValueError('Distribution changed since export')
@@ -470,13 +530,13 @@ def apply(root, results_dir, dry_run=False, allow_partial=False):
             cats=collections.Counter(r[0] for r in rows)
             current.update(excludedClassifiedPairs=sum(r[4]=='excluded' for r in base.values()),excludedCandidatePairs=m['baselineManifest']['excludedCandidatePairs']+counts['reject'],admittedPairsByOrigin=dict(origins),uniqueAdmittedPairs=sum(origins.values()),dictionaryRows=len(rows),categoryRows={c:cats[c] for c in current['categoryRows']},unclassifiedPairs=sum(r[4]=='unclassified' for r in base.values()),noResultPairs=sum(r[4]=='no_result' for r in base.values()))
             current['files'].update({name:d.sha(staged/name) for name in FILES[:2]})
-            current['provenance']['lunaReclassification']={'path':REL+'/results.jsonl.gz','snapshotManifestSha256':d.sha(root/REL/'manifest.json'),'sha256':d.sha(ledger_path),'targetSha256':m['files']['targets.jsonl.gz'],'completedPairs':len(results),'effectiveActions':dict(counts),'policy_version':POLICY,'model':MODEL,'reasoningEffort':EFFORT}
+            current['provenance']['lunaReclassification']={'path':LOCAL_LEDGER_PATH,'snapshotManifestSha256':d.sha(root/REL/'manifest.json'),'sha256':d.sha(ledger_path),'targetSha256':m['files']['targets.jsonl.gz'],'completedPairs':len(results),'effectiveActions':dict(counts),'policy_version':POLICY,'model':MODEL,'reasoningEffort':EFFORT}
             d.write_json(staged/FILES[2],current)
             for relative in [*current['inputs'],'src/main/resources/id.def']:
                 target=staging/relative; target.parent.mkdir(parents=True,exist_ok=True)
                 if not target.exists(): target.symlink_to((root/relative).resolve())
             d.verify(staging)
-            changes=[REL+'/results.jsonl.gz',*['src/main/classification/'+n for n in FILES]]
+            changes=[LOCAL_LEDGER_PATH,LEGACY_LEDGER_PATH,*['src/main/classification/'+n for n in FILES]]
             backup=root/'build/luna-classification/apply-backup'
             if backup.exists(): raise ValueError('Interrupted apply backup exists; run recover')
             backup.mkdir(parents=True)
@@ -486,7 +546,11 @@ def apply(root, results_dir, dry_run=False, allow_partial=False):
             d.write_json(backup/'journal.json',{'paths':changes,'existing':[p for p in changes if (root/p).exists()]})
             try:
                 for p in changes:
-                    dst=root/p; tmp=dst.with_name(dst.name+'.luna-tmp'); shutil.copyfile(staging/p,tmp); os.replace(tmp,dst)
+                    if p==LEGACY_LEDGER_PATH:
+                        (root/p).unlink(missing_ok=True)
+                        continue
+                    dst=root/p; dst.parent.mkdir(parents=True,exist_ok=True)
+                    tmp=dst.with_name(dst.name+'.luna-tmp'); shutil.copyfile(staging/p,tmp); os.replace(tmp,dst)
                 d.verify(root)
             except BaseException:
                 _recover_unlocked(root); raise
@@ -496,15 +560,19 @@ def apply(root, results_dir, dry_run=False, allow_partial=False):
 def _recover_unlocked(root):
     backup=root/'build/luna-classification/apply-backup'
     journal=json.loads((backup/'journal.json').read_text())
-    allowed={REL+'/results.jsonl.gz',*['src/main/classification/'+n for n in FILES]}
+    repository_paths={'src/main/classification/'+n for n in FILES}
+    allowed={LOCAL_LEDGER_PATH,LEGACY_LEDGER_PATH,*repository_paths}
+    legacy_allowed={LEGACY_LEDGER_PATH,*repository_paths}
     if (not isinstance(journal.get('paths'),list) or len(journal['paths'])!=len(set(journal['paths']))
-            or set(journal['paths'])!=allowed or not isinstance(journal.get('existing'),list)
-            or not set(journal['existing'])<=allowed):
+            or set(journal['paths']) not in (allowed,legacy_allowed) or not isinstance(journal.get('existing'),list)
+            or not set(journal['existing'])<=set(journal['paths'])):
         raise ValueError('Invalid recovery journal paths')
     if any(not (backup/p).is_file() for p in journal['existing']):
         raise ValueError('Incomplete recovery backup')
     for p in journal['paths']:
-        if p in journal['existing']: shutil.copyfile(backup/p,root/p)
+        if p in journal['existing']:
+            (root/p).parent.mkdir(parents=True,exist_ok=True)
+            shutil.copyfile(backup/p,root/p)
         else: (root/p).unlink(missing_ok=True)
         (root/p).with_name(Path(p).name+'.luna-tmp').unlink(missing_ok=True)
     shutil.rmtree(backup)
@@ -527,4 +595,4 @@ if __name__=='__main__':
         batches(root,a.batch_size)
     elif a.command=='apply': apply(root,a.results,a.dry_run,a.allow_partial)
     elif a.command=='recover': recover(root)
-    else: verify_ledger(root)
+    else: verify_ledger(root,required=True)

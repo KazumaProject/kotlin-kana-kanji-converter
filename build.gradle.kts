@@ -170,8 +170,8 @@ val japaneseKeyboardAssetsReleaseZip = japaneseKeyboardAssetsReleaseDir.file("ja
 val classificationDirectory = layout.projectDirectory.dir("src/main/classification")
 val classificationCategoryIds = ((JsonSlurper().parse(classificationDirectory.file("categories.json").asFile) as Map<*, *>)
     ["categories"] as List<*>).map { (it as Map<*, *>)["id"] as String }
-require(classificationCategoryIds.size == 42 && classificationCategoryIds.distinct().size == 42 &&
-    classificationCategoryIds.all { it.matches(Regex("[a-z_]+(/[a-z_]+)*")) }) { "Expected 42 unique safe category IDs" }
+require(classificationCategoryIds.size == 47 && classificationCategoryIds.distinct().size == 47 &&
+    classificationCategoryIds.all { it.matches(Regex("[a-z_]+(/[a-z_]+)*")) }) { "Expected 47 unique safe category IDs" }
 val specialistDirectory = layout.projectDirectory.dir("src/main/specialist")
 val specialistCategoryIds = ((JsonSlurper().parse(specialistDirectory.file("categories.json").asFile) as Map<*, *>)
     ["categories"] as List<*>).map { (it as Map<*, *>)["id"] as String }
@@ -1149,6 +1149,7 @@ val verifyDistributionCandidates = tasks.register<Exec>("verifyDistributionCandi
     commandLine("python3", "scripts/classified_distribution.py", "verify")
     inputs.files(fileTree(classificationDirectory) {
         include("distribution-*", "categories.json", "term-taxonomy.json", "term-classifications*",
+            "event-taxonomy.json", "event-classifications*",
             "person-additions/*.jsonl", "reviews/*.jsonl", "luna-reclassification/**")
     })
     inputs.files(fileTree("src/main/bin") { include("names.txt", "place.txt.zip", "only_wiki.txt.zip", "only_neologd.txt.zip", "wiki_neologd_common.txt.zip") })

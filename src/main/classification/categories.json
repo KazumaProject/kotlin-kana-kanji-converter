@@ -62,9 +62,34 @@
       "definition": "個別に特定できる車両、船舶、車種・機体・車両モデル。"
     },
     {
-      "id": "event",
-      "name": "イベント・事件",
-      "definition": "日付・場所等を持つ個別の出来事、催事、大会、祭り、式典。"
+      "id": "event/occasion/organized_event",
+      "name": "催し・行事",
+      "definition": "祭り、伝統行事、文化・芸術の催事、展示会、博覧会、スポーツ大会、競技会、会議、選挙など、開催日時や場所を持つ催し。シリーズ名と特定回の名称を含む。"
+    },
+    {
+      "id": "event/occasion/observance",
+      "name": "記念日・啓発日",
+      "definition": "暦上の日付や毎年の慣習に結び付いた記念日、祝日、啓発日。単発の式典や開催イベントは含めない。"
+    },
+    {
+      "id": "event/occasion/exam_qualification",
+      "name": "試験・検定",
+      "definition": "国家試験、入学試験、検定、資格試験などの制度名や試験名。試験会場での単発イベントは含めない。"
+    },
+    {
+      "id": "event/incident/natural_disaster",
+      "name": "自然災害",
+      "definition": "発生した地震、台風、洪水、噴火、津波など、自然現象による具体的な災害。"
+    },
+    {
+      "id": "event/incident/social_issue_litigation",
+      "name": "社会問題・騒動・訴訟",
+      "definition": "社会運動、政治・社会的な騒動、論争、集団的な抗議、社会問題に関する訴訟や公的紛争。犯罪事件、テロ、事故は含めない。"
+    },
+    {
+      "id": "event/history/conflict",
+      "name": "歴史的紛争・政変",
+      "definition": "戦争、戦闘、軍事作戦、革命、政変、反乱、一揆など、歴史上の武力紛争や政治的変動。自然災害や現代の社会問題は含めない。"
     },
     {
       "id": "award",
@@ -213,6 +238,36 @@
     }
   ],
   "categoryGroups": [
+    {
+      "id": "event",
+      "name": "イベント・事件",
+      "groups": [
+        {
+          "id": "event/occasion",
+          "name": "催し・行事",
+          "categories": [
+            "event/occasion/organized_event",
+            "event/occasion/observance",
+            "event/occasion/exam_qualification"
+          ]
+        },
+        {
+          "id": "event/incident",
+          "name": "事件・事故・災害",
+          "categories": [
+            "event/incident/natural_disaster",
+            "event/incident/social_issue_litigation"
+          ]
+        },
+        {
+          "id": "event/history",
+          "name": "歴史的出来事・紛争",
+          "categories": [
+            "event/history/conflict"
+          ]
+        }
+      ]
+    },
     {
       "id": "term",
       "name": "一般語・専門用語",

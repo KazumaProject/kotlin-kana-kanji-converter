@@ -15,7 +15,7 @@
       "databaseReadSnapshotSha256": "9dbd95e39e022382d32b6082bf2e99c6575b5028ebef1b16ffa88af76ae64135",
       "manualSha256": "424933a57e13d3093e600ed69e3c8a72c58e965888d442ea6d73422f1f04cc47",
       "manualCandidates": 4901,
-      "baselineVerifiedPairs": 252174,
+      "baselineVerifiedPairs": 257471,
       "personAdditions": [
         {
           "path": "src/main/classification/person-additions/fighters-2026-10-14.jsonl",
@@ -2018,8 +2018,8 @@
     },
     "files": {
       "categories.json": "4fd9d1c05f21789bffe2622ec7269abaff8b7904d2ae2485e072a35df1d10556",
-      "distribution-candidates.tsv.gz": "769a601735284d6361e2da0f4305c73b6ec2637839afea6ad9efbdbc34473ae6",
-      "distribution-decisions.tsv.gz": "dbdb4b455c4fa766402bd16c265513ab54c1e1925fc65d2ea010aee8ed59bf82"
+      "distribution-candidates.tsv.gz": "c42bba326b23469547eae63c992c8428eed4ad145d8f0fd0ac8bdf6c25fd9bd3",
+      "distribution-decisions.tsv.gz": "c8d984788f438515e2a3d85295256435be0ae451d17e7f78f9920c67c36cf588"
     },
     "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
     "sourceRows": {
@@ -2031,15 +2031,15 @@
       "term_additions": 1
     },
     "admittedPairsByOrigin": {
-      "gemini": 472163,
-      "verified": 257491,
-      "manual": 4329
+      "gemini": 470972,
+      "verified": 257471,
+      "manual": 4315
     },
-    "uniqueAdmittedPairs": 733983,
+    "uniqueAdmittedPairs": 732758,
     "excludedCandidatePairs": 5728,
     "excludedClassifiedPairs": 3,
-    "unclassifiedPairs": 10730,
-    "noResultPairs": 52467,
+    "unclassifiedPairs": 10724,
+    "noResultPairs": 52355,
     "conflicts": {
       "verified_over_gemini": 30,
       "manual_over_gemini": 4321,
@@ -2049,46 +2049,46 @@
       "person": 277027,
       "character": 8871,
       "mythological_figure": 3629,
-      "place": 85399,
+      "place": 85398,
       "address": 122248,
       "station": 6816,
-      "facility": 28669,
+      "facility": 28664,
       "transport_route": 3211,
-      "organization": 47184,
-      "lineage": 2986,
-      "product": 13629,
-      "vehicle": 3403,
-      "event": 9955,
-      "award": 1004,
-      "agreement": 1744,
-      "initiative": 1540,
-      "term": 127770,
+      "organization": 47165,
+      "lineage": 2985,
+      "product": 13626,
+      "vehicle": 3402,
+      "event": 8770,
+      "award": 979,
+      "agreement": 1739,
+      "initiative": 1527,
+      "term": 127705,
       "work_franchise": 270,
       "work_manga": 1003,
       "work_anime": 642,
-      "work_film": 1180,
-      "work_program": 2381,
-      "work_book": 5353,
+      "work_film": 1179,
+      "work_program": 2378,
+      "work_book": 5351,
       "work_game": 1506,
-      "work_music": 3789,
-      "work_stage": 354,
+      "work_music": 3788,
+      "work_stage": 353,
       "work_periodical": 1029,
-      "work_other": 5173
+      "work_other": 5170
     },
-    "dictionaryRows": 767765,
+    "dictionaryRows": 766431,
     "limitations": [
       "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified."
     ]
   },
   "targetCounts": {
-    "no_result": 52467,
-    "unclassified": 10730,
-    "held": 269705
+    "no_result": 52355,
+    "held": 269539,
+    "unclassified": 10724
   },
-  "targetCount": 332902,
+  "targetCount": 332618,
   "files": {
-    "targets.jsonl.gz": "a059b06f0a4d33809daf2844c742d45b790892b5e554c1ed726f54d0ecf131da",
-    "baseline-decisions.tsv.gz": "dbdb4b455c4fa766402bd16c265513ab54c1e1925fc65d2ea010aee8ed59bf82",
-    "baseline-candidates.tsv.gz": "769a601735284d6361e2da0f4305c73b6ec2637839afea6ad9efbdbc34473ae6"
+    "targets.jsonl.gz": "cc775b8dbe7884ed692231c1ff14e487ec46d08ecc7c0952348a27222297c0df",
+    "baseline-decisions.tsv.gz": "c8d984788f438515e2a3d85295256435be0ae451d17e7f78f9920c67c36cf588",
+    "baseline-candidates.tsv.gz": "c42bba326b23469547eae63c992c8428eed4ad145d8f0fd0ac8bdf6c25fd9bd3"
   }
 }
