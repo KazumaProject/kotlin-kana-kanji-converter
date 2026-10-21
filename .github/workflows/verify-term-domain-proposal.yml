@@ -1,0 +1,40 @@
+name: Verify provisional term domains
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/verify-term-domain-proposal.yml'
+      - 'scripts/term_domain_proposal.py'
+      - 'scripts/test_term_domain_proposal.py'
+      - 'src/main/classification/term-domain-proposal/**'
+      - 'src/main/classification/distribution-candidates.tsv.gz'
+      - 'docs/term-domain-proposal.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/verify-term-domain-proposal.yml'
+      - 'scripts/term_domain_proposal.py'
+      - 'scripts/test_term_domain_proposal.py'
+      - 'src/main/classification/term-domain-proposal/**'
+      - 'src/main/classification/distribution-candidates.tsv.gz'
+      - 'docs/term-domain-proposal.md'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test proposal invariants
+        run: python -m unittest discover -s scripts -p test_term_domain_proposal.py -v
+      - name: Verify frozen input and report
+        run: |
+          python scripts/term_domain_proposal.py verify
+          python scripts/term_domain_proposal.py report --check
+      - name: Export and read back all 31 dictionary sources
+        run: python scripts/term_domain_proposal.py export --output build/term-domain-proposal
