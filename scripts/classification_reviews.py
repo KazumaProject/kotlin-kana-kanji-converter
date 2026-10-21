@@ -211,9 +211,13 @@ def _apply_saved(root, commit=False):
     with tempfile.TemporaryDirectory(prefix='classification-review-', dir=work) as temporary:
         staging = Path(temporary)
         staged = staging / DIRECTORY; staged.mkdir(parents=True)
-        for relative in [*manifest['inputs'], 'src/main/resources/id.def',
-                         str(DIRECTORY / 'categories.json'),
-                         str(DIRECTORY / 'person-taxonomy.json')]:
+        staged_paths = list(dict.fromkeys([
+            *manifest['inputs'], 'src/main/resources/id.def',
+            str(DIRECTORY / 'categories.json')]))
+        taxonomy_path = str(DIRECTORY / 'person-taxonomy.json')
+        if taxonomy_path not in staged_paths and (root / taxonomy_path).is_file():
+            staged_paths.append(taxonomy_path)
+        for relative in staged_paths:
             target = staging / relative; target.parent.mkdir(parents=True, exist_ok=True)
             target.symlink_to(root / relative)
         # The original snapshot and result ledger are also required by offline verification.
