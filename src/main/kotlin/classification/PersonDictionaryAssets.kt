@@ -272,9 +272,9 @@ class PersonDictionaryData(
                 pos.second.all { it.toInt() in 0 until expectedIdCount })
             for (category in categoryIds) {
                 val expected = records.getValue(category)
-                val yomi = nestedObject(zip, "$assetRoot/categories/$category/yomi.dat.zip", "yomi.dat")
-                val tango = nestedObject(zip, "$assetRoot/categories/$category/tango.dat.zip", "tango.dat")
-                val token = nestedObject(zip, "$assetRoot/categories/$category/token.dat.zip", "token.dat")
+                val yomi = nestedObject(zip, "$assetRoot/categories/person/$category/yomi.dat.zip", "yomi.dat")
+                val tango = nestedObject(zip, "$assetRoot/categories/person/$category/tango.dat.zip", "tango.dat")
+                val token = nestedObject(zip, "$assetRoot/categories/person/$category/token.dat.zip", "token.dat")
                 verifyDictionaryAssets(category, expected, yomi, tango, token, pos)
             }
         }

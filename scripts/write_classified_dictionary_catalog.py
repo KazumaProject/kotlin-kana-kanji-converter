@@ -91,6 +91,89 @@ def generate_excluded(root, output, manifest):
     return dict(pairs=len(excluded), pages=len(pages))
 
 
+def generate_sport_subcategories(directory, rows, sport_names):
+    """Render the sports category again, grouped by its reviewed sport tags."""
+    grouped = {sport_id: [] for sport_id in sport_names}
+    for reading, surface, _left, _right, _cost, sports in rows:
+        sport_ids = {value for value in sports.split(',') if value}
+        if not sport_ids:
+            sport_ids = {'sport_unspecified'}
+        unknown = sport_ids - grouped.keys()
+        if unknown:
+            raise ValueError(f'Unknown sport subcategories: {sorted(unknown)}')
+        for sport_id in sport_ids:
+            grouped[sport_id].append((reading, surface))
+
+    output = directory / 'by-sport'
+    output.mkdir()
+    summary = []
+    for sport_id, label in sport_names.items():
+        sport_rows = grouped[sport_id]
+        pairs = sorted(set(sport_rows))
+        if not pairs:
+            continue
+
+        sport_dir = output / sport_id
+        sport_dir.mkdir()
+        pages, page, byte_count = [], [], 0
+
+        def flush():
+            nonlocal page, byte_count
+            if not page:
+                return
+            filename = f'page-{len(pages)+1:04d}.md'
+            (sport_dir / filename).write_text(''.join(page), encoding='utf-8')
+            pages.append(filename)
+            page, byte_count = [], 0
+
+        for reading, surface in pairs:
+            row = f'| {code(reading)} | {code(surface)} |\n'
+            size = len(row.encode('utf-8'))
+            if page and (len(page) >= MAX_ROWS or byte_count + size > MAX_BYTES):
+                flush()
+            page.append(row)
+            byte_count += size
+        flush()
+
+        for index, filename in enumerate(pages):
+            navigation = ['[スポーツ関係者一覧](../../index.md)', '[競技別一覧](../index.md)']
+            if index:
+                navigation.append(f'[前のページ]({pages[index-1]})')
+            if index + 1 < len(pages):
+                navigation.append(f'[次のページ]({pages[index+1]})')
+            nav = ' · '.join(navigation)
+            path = sport_dir / filename
+            header = (f'# {label} — {index+1}/{len(pages)}\n\n{nav}\n\n'
+                      'この競技に分類された標準配布対象の読み・表記の組です。複数競技に分類された語は各競技一覧に掲載されます。\n\n'
+                      '| 読み | 表記 |\n|---|---|\n')
+            path.write_text(header + path.read_text(encoding='utf-8') + '\n' + nav + '\n', encoding='utf-8')
+
+        links = '\n'.join(f'- [{index+1}ページ]({filename})' for index, filename in enumerate(pages))
+        (sport_dir / 'index.md').write_text(
+            f'# {label}\n\n[スポーツ関係者一覧](../../index.md) · [競技別一覧](../index.md)\n\n'
+            f'レコード数: **{len(sport_rows):,}** · 読み・表記の組: **{len(pairs):,}**。\n\n{links}\n',
+            encoding='utf-8')
+        summary.append(dict(id=sport_id, name=label, records=len(sport_rows), pairs=len(pairs), pages=len(pages)))
+
+    table = ['| 競技 | 読み・表記の組 | レコード数 | 全件一覧 |', '|---|---:|---:|---|']
+    for item in summary:
+        detail = f'{item["id"]}/index.md'
+        table.append(
+            f'| [{item["name"]}]({detail}) | {item["pairs"]:,} | '
+            f'{item["records"]:,} | [全件]({detail}) |'
+        )
+    record_count = sum(item['records'] for item in summary)
+    pair_count = sum(item['pairs'] for item in summary)
+    (output / 'index.md').write_text(
+        '# スポーツ関係者 — 競技別一覧\n\n[スポーツ関係者の全件一覧](../index.md) · [最終配布カテゴリ一覧](../../../index.md)\n\n'
+        f'競技タグ別に **{len(summary)}競技**、延べ **{record_count:,}レコード**、'
+        f'**{pair_count:,}組**を掲載しています。複数競技に分類された語は各競技に重複して掲載するため、競技別合計には重複があります。'
+        '競技タグが未設定または特定できない語は「競技未特定」に含めています。\n\n'
+        + '\n'.join(table) + '\n',
+        encoding='utf-8')
+    return summary
+
+
 def generate_person_taxonomy(root, output, final_pairs):
     source = root / 'src/main/classification'
     taxonomy = json.loads((source / 'person-taxonomy.json').read_text(encoding='utf-8'))
@@ -112,7 +195,7 @@ def generate_person_taxonomy(root, output, final_pairs):
                 raise ValueError(f'{source_file}:{number}: non-standard person category: {category}')
             if not reading or not surface:
                 raise ValueError(f'{source_file}:{number}: empty reading or surface')
-            records[category].append((reading, surface, left, right, cost))
+            records[category].append((reading, surface, left, right, cost, sports))
             final_pairs.add((reading, surface))
 
     output.mkdir(parents=True, exist_ok=True)
@@ -146,7 +229,7 @@ def generate_person_taxonomy(root, output, final_pairs):
         flush()
 
         for index, filename in enumerate(pages):
-            navigation = ['[最終配布カテゴリ一覧](../index.md)']
+            navigation = ['[最終配布カテゴリ一覧](../../index.md)']
             if index:
                 navigation.append(f'[前のページ]({pages[index-1]})')
             if index + 1 < len(pages):
@@ -158,12 +241,18 @@ def generate_person_taxonomy(root, output, final_pairs):
                       '| 読み | 表記 |\n|---|---|\n')
             path.write_text(header + path.read_text(encoding='utf-8') + '\n' + nav + '\n', encoding='utf-8')
 
+        sport_subcategories = []
+        if category_id == 'sports':
+            sport_subcategories = generate_sport_subcategories(
+                directory, rows, taxonomy['sport_subcategories'])
         links = '\n'.join(f'- [{index+1}ページ]({filename})' for index, filename in enumerate(pages))
         if not pages:
             links = '収録0件。'
         (directory / 'index.md').write_text(
-            f'# {names[category_id]}\n\n[最終配布カテゴリ一覧](../index.md)\n\n'
-            f'親カテゴリ: `person` · レコード数: **{len(rows):,}** · 読み・表記の組: **{len(pairs):,}**。\n\n{links}\n',
+            f'# {names[category_id]}\n\n[最終配布カテゴリ一覧](../../index.md)\n\n'
+            f'親カテゴリ: `person` · レコード数: **{len(rows):,}** · 読み・表記の組: **{len(pairs):,}**。\n\n'
+            + ('[競技別一覧](by-sport/index.md)\n\n' if sport_subcategories else '')
+            + f'{links}\n',
             encoding='utf-8')
         summary.append(dict(id=category_id, name=names[category_id], records=len(rows), pairs=len(pairs), pages=len(pages)))
 
@@ -189,10 +278,11 @@ def generate_person_replacement_index(output, base_summary, person_summary):
         )
     for category in person_categories:
         category_id = category['id']
+        detail = f'person/{category_id}/index.md'
         table.append(
-            f'| [{category["name"]}]({category_id}/index.md) | '
+            f'| [{category["name"]}]({detail}) | '
             f'`{category_id}` | {category["pairs"]:,} | {category["records"]:,} | '
-            f'[全件]({category_id}/index.md) |'
+            f'[全件]({detail}) |'
         )
 
     record_count = sum(item['records'] for item in base_categories) + person_summary['records']
@@ -253,7 +343,7 @@ def generate(root, output):
     if taxonomy_source.is_file() or person_source.is_file():
         if not taxonomy_source.is_file() or not person_source.is_file():
             raise ValueError('Person taxonomy catalog requires both taxonomy and candidate sources')
-        person_taxonomy_summary = generate_person_taxonomy(root, output, final_pairs)
+        person_taxonomy_summary = generate_person_taxonomy(root, output / 'person', final_pairs)
     summary = []
     with gzip.open(source / 'distribution-candidates.tsv.gz', 'rt', encoding='utf-8') as stream:
         rows = heapq.merge((line.rstrip('\n').split('\t') for line in stream), specialist_rows)

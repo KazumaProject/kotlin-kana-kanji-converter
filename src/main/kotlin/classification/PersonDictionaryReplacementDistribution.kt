@@ -57,7 +57,7 @@ class PersonDictionaryReplacementDistribution(
             "Person category archive contains unexpected paths"
         }
         val addedPersonFiles = standardPersonCategoryIds.flatMap { category ->
-            DICTIONARY_ASSET_NAMES.map { "$ASSET_ROOT/categories/$category/$it" }
+            personCategoryAssetPaths(category)
         }
         val finalAssetFiles = (baseFiles - removedPersonFiles + addedPersonFiles).toSortedSet()
         val fileHashes = linkedMapOf<String, String>()
@@ -70,7 +70,7 @@ class PersonDictionaryReplacementDistribution(
             standardPersonCategoryIds.forEach { category ->
                 DICTIONARY_ASSET_NAMES.forEach { assetName ->
                     val personPath = "categories/$category/$assetName"
-                    val releasePath = "$ASSET_ROOT/categories/$category/$assetName"
+                    val releasePath = "$ASSET_ROOT/categories/person/$category/$assetName"
                     fileHashes[releasePath] = personZip.getInputStream(personZip.getEntry(personPath)).use(::sha256)
                 }
             }
@@ -89,7 +89,7 @@ class PersonDictionaryReplacementDistribution(
                 standardPersonCategoryIds.forEach { category ->
                     DICTIONARY_ASSET_NAMES.forEach { assetName ->
                         val personPath = "categories/$category/$assetName"
-                        val releasePath = "$ASSET_ROOT/categories/$category/$assetName"
+                        val releasePath = "$ASSET_ROOT/categories/person/$category/$assetName"
                         output.putNextEntry(ZipEntry(releasePath).apply { time = 0L })
                         personZip.getInputStream(personZip.getEntry(personPath)).use { it.copyTo(output) }
                         output.closeEntry()
@@ -117,7 +117,7 @@ class PersonDictionaryReplacementDistribution(
         val removedPersonFiles = categoryAssetPaths("person")
         check(removedPersonFiles.all { it in baseFiles }) { "Base dictionary bundle is missing the generic person category" }
         val addedPersonFiles = standardPersonCategoryIds.flatMap { category ->
-            DICTIONARY_ASSET_NAMES.map { "$ASSET_ROOT/categories/$category/$it" }
+            personCategoryAssetPaths(category)
         }
         val expectedAssets = (baseFiles - removedPersonFiles + addedPersonFiles).toSortedSet()
         val actualFiles = ZipFile(archive).use { it.fileEntryNames() }
@@ -125,8 +125,8 @@ class PersonDictionaryReplacementDistribution(
             "Replacement bundle paths differ: missing=${(expectedAssets + DISTRIBUTION_MANIFEST) - actualFiles}, " +
                 "unexpected=${actualFiles - (expectedAssets + DISTRIBUTION_MANIFEST)}"
         }
-        check(actualFiles.none { it.startsWith("$ASSET_ROOT/categories/person/") }) {
-            "Replacement bundle still contains the generic person category"
+        check(removedPersonFiles.none { it in actualFiles }) {
+            "Replacement bundle still contains the generic person dictionary files"
         }
 
         val actualHashes = linkedMapOf<String, String>()
@@ -163,7 +163,7 @@ class PersonDictionaryReplacementDistribution(
         outputDirectory.mkdirs()
         ZipFile(archive).use { zip ->
             DICTIONARY_ASSET_NAMES.forEach { assetName ->
-                val path = "$ASSET_ROOT/categories/$category/$assetName"
+                val path = "$ASSET_ROOT/categories/person/$category/$assetName"
                 val entry = zip.getEntry(path) ?: error("Missing person category asset: $path")
                 val outputName = assetName.removeSuffix(".zip")
                 val nested = ZipInputStream(zip.getInputStream(entry)).use { input ->
@@ -207,7 +207,7 @@ class PersonDictionaryReplacementDistribution(
                     put("dictionaryType", "person")
                     put("recordCount", categoryRecords.size)
                     put("uniquePairs", categoryRecords.map { it.yomi to it.tango }.toSet().size)
-                    put("assetPaths", JsonArray(categoryAssetPaths(id).map(::JsonPrimitive)))
+                    put("assetPaths", JsonArray(personCategoryAssetPaths(id).map(::JsonPrimitive)))
                 })
             }
         }
@@ -241,6 +241,9 @@ class PersonDictionaryReplacementDistribution(
 
     private fun categoryAssetPaths(category: String): Set<String> =
         DICTIONARY_ASSET_NAMES.mapTo(linkedSetOf()) { "$ASSET_ROOT/categories/$category/$it" }
+
+    private fun personCategoryAssetPaths(category: String): List<String> =
+        DICTIONARY_ASSET_NAMES.map { "$ASSET_ROOT/categories/person/$category/$it" }
 
     private fun personCategoryArchivePaths(category: String): List<String> =
         DICTIONARY_ASSET_NAMES.map { "categories/$category/$it" }
