@@ -2023,7 +2023,8 @@
       "src/main/classification/reviews/2026-10-16-pr128-luna-0034.jsonl",
       "src/main/classification/reviews/2026-10-16-pr128-luna-0035.jsonl",
       "src/main/classification/reviews/2026-10-16-pr128-luna-0036.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl"
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl",
+      "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl"
     ],
     "reviewBaseExcludedCandidatePairs": 5725,
     "termAdditions": [
@@ -2100,12 +2101,13 @@
     "src/main/classification/reviews/2026-10-16-pr128-luna-0034.jsonl": "ad31487ccded464ffc35d442b016879cc020a0d32e510c3d1c0d5ca029854127",
     "src/main/classification/reviews/2026-10-16-pr128-luna-0035.jsonl": "e0397e26a62a4802077af40afecd176dd9f32e8ca6e9db0c0c15a99b67210067",
     "src/main/classification/reviews/2026-10-16-pr128-luna-0036.jsonl": "05fb5fef150cbd033c6c031916b4f583bd1e6c7fd82c1ccdcc90465450614e75",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl": "59f4fb8499430452c3e32a12c9fafaceadbd096256a227f60cb7546454fa5cd7"
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl": "59f4fb8499430452c3e32a12c9fafaceadbd096256a227f60cb7546454fa5cd7",
+    "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl": "6b65e3c0092f7113000199e7dd7f530cc5e5f9911913ecb3c741a65aeef0a42b"
   },
   "files": {
     "categories.json": "4fd9d1c05f21789bffe2622ec7269abaff8b7904d2ae2485e072a35df1d10556",
-    "distribution-candidates.tsv.gz": "b7613d16c1db378fbafff5351082d5866779c3863fe3fbc7d34ea609292af3e3",
-    "distribution-decisions.tsv.gz": "20aec1771a1ae5dce99465c8c96ecedff1c4e27a54ca9d7316d75867c47c0764"
+    "distribution-candidates.tsv.gz": "2a6490b7cc3324e0a8906798336acb40ef096333d6517741ede39c773f43a577",
+    "distribution-decisions.tsv.gz": "97551abc6030143fc68eded69bec7d019eb601078646d685211ee3c7355f6e8e"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "sourceRows": {
@@ -2117,9 +2119,9 @@
     "term_additions": 1
   },
   "admittedPairsByOrigin": {
-    "manual": 385598,
+    "manual": 385597,
     "gemini": 183853,
-    "verified": 174253
+    "verified": 174254
   },
   "uniqueAdmittedPairs": 743704,
   "excludedCandidatePairs": 328909,
@@ -2132,7 +2134,7 @@
     "verified_over_manual": 8
   },
   "categoryRows": {
-    "person": 268795,
+    "person": 268794,
     "character": 6871,
     "mythological_figure": 3436,
     "place": 45089,
@@ -2140,7 +2142,7 @@
     "station": 12758,
     "facility": 35069,
     "transport_route": 4231,
-    "organization": 47486,
+    "organization": 47487,
     "lineage": 2019,
     "product": 9883,
     "vehicle": 2579,
