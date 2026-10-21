@@ -1,22 +1,9 @@
 {
   "schemaVersion": 1,
   "inputSha256": "6909ea156e6973e651a2fe1e4858810d4ded340bce8c082e286597fb4cfde8fc",
-  "uniquePairs": 836923,
-  "records": 853456,
+  "uniquePairs": 832083,
+  "records": 848517,
   "categories": [
-    {
-      "id": "person",
-      "name": "人物・人名",
-      "pairs": 266950,
-      "readings": 237899,
-      "records": 268898,
-      "pages": 180,
-      "recordsByOrigin": {
-        "manual": 219166,
-        "gemini": 25575,
-        "verified": 24157
-      }
-    },
     {
       "id": "character",
       "name": "架空キャラクター",
@@ -388,193 +375,179 @@
         "inferred_reading": 2003,
         "curated_correction": 2
       }
+    },
+    {
+      "id": "surname_origin_unconfirmed",
+      "name": "姓・名字（由来未確認）",
+      "records": 49617,
+      "pairs": 49328,
+      "pages": 33
+    },
+    {
+      "id": "given_name_origin_unconfirmed",
+      "name": "名・下の名前（由来未確認）",
+      "records": 7163,
+      "pairs": 7085,
+      "pages": 5
+    },
+    {
+      "id": "personal_name_origin_unconfirmed",
+      "name": "人名・姓名（由来未確認）",
+      "records": 170660,
+      "pairs": 169291,
+      "pages": 113
+    },
+    {
+      "id": "actor",
+      "name": "俳優",
+      "records": 6450,
+      "pairs": 6395,
+      "pages": 5
+    },
+    {
+      "id": "voice_actor",
+      "name": "声優",
+      "records": 579,
+      "pairs": 572,
+      "pages": 1
+    },
+    {
+      "id": "musician",
+      "name": "歌手・音楽家",
+      "records": 971,
+      "pairs": 969,
+      "pages": 1
+    },
+    {
+      "id": "idol",
+      "name": "アイドル",
+      "records": 154,
+      "pairs": 153,
+      "pages": 1
+    },
+    {
+      "id": "comedian",
+      "name": "お笑い芸人",
+      "records": 55,
+      "pairs": 53,
+      "pages": 1
+    },
+    {
+      "id": "broadcaster",
+      "name": "タレント・モデル・放送・報道",
+      "records": 1308,
+      "pairs": 1305,
+      "pages": 1
+    },
+    {
+      "id": "online_creator",
+      "name": "配信者・動画投稿者",
+      "records": 71,
+      "pairs": 70,
+      "pages": 1
+    },
+    {
+      "id": "sports",
+      "name": "スポーツ関係者",
+      "records": 4626,
+      "pairs": 4624,
+      "pages": 4
+    },
+    {
+      "id": "competitive_games",
+      "name": "棋士・競技ゲーム選手",
+      "records": 104,
+      "pairs": 104,
+      "pages": 1
+    },
+    {
+      "id": "writer",
+      "name": "作家・文筆家",
+      "records": 1134,
+      "pairs": 1133,
+      "pages": 1
+    },
+    {
+      "id": "manga_illustration",
+      "name": "漫画家・イラストレーター",
+      "records": 215,
+      "pairs": 214,
+      "pages": 1
+    },
+    {
+      "id": "film_game_creator",
+      "name": "映画・映像・ゲーム制作者",
+      "records": 200,
+      "pairs": 199,
+      "pages": 1
+    },
+    {
+      "id": "art_design",
+      "name": "美術・写真・建築・デザイン",
+      "records": 922,
+      "pairs": 922,
+      "pages": 1
+    },
+    {
+      "id": "performing_arts",
+      "name": "舞台・伝統芸能",
+      "records": 295,
+      "pairs": 294,
+      "pages": 1
+    },
+    {
+      "id": "science_education",
+      "name": "研究・技術・教育",
+      "records": 7605,
+      "pairs": 7575,
+      "pages": 6
+    },
+    {
+      "id": "politics_public",
+      "name": "政治・行政・外交・社会運動",
+      "records": 1549,
+      "pairs": 1549,
+      "pages": 2
+    },
+    {
+      "id": "business",
+      "name": "実業・経営",
+      "records": 4035,
+      "pairs": 4016,
+      "pages": 3
+    },
+    {
+      "id": "military",
+      "name": "軍事",
+      "records": 768,
+      "pairs": 768,
+      "pages": 1
+    },
+    {
+      "id": "royalty_nobility",
+      "name": "皇室・王室・貴族",
+      "records": 286,
+      "pairs": 286,
+      "pages": 1
+    },
+    {
+      "id": "other_identified",
+      "name": "その他の特定人物",
+      "records": 5038,
+      "pairs": 5031,
+      "pages": 4
+    },
+    {
+      "id": "thought",
+      "name": "思想・哲学",
+      "records": 154,
+      "pairs": 154,
+      "pages": 1
     }
   ],
   "excluded": {
     "pairs": 323182,
     "pages": 601
-  },
-  "personTaxonomy": {
-    "categories": [
-      {
-        "id": "surname_origin_unconfirmed",
-        "name": "姓・名字（由来未確認）",
-        "records": 49617,
-        "pairs": 49328,
-        "pages": 33
-      },
-      {
-        "id": "given_name_origin_unconfirmed",
-        "name": "名・下の名前（由来未確認）",
-        "records": 7163,
-        "pairs": 7085,
-        "pages": 5
-      },
-      {
-        "id": "personal_name_origin_unconfirmed",
-        "name": "人名・姓名（由来未確認）",
-        "records": 170660,
-        "pairs": 169291,
-        "pages": 113
-      },
-      {
-        "id": "actor",
-        "name": "俳優",
-        "records": 6450,
-        "pairs": 6395,
-        "pages": 5
-      },
-      {
-        "id": "voice_actor",
-        "name": "声優",
-        "records": 579,
-        "pairs": 572,
-        "pages": 1
-      },
-      {
-        "id": "musician",
-        "name": "歌手・音楽家",
-        "records": 971,
-        "pairs": 969,
-        "pages": 1
-      },
-      {
-        "id": "idol",
-        "name": "アイドル",
-        "records": 154,
-        "pairs": 153,
-        "pages": 1
-      },
-      {
-        "id": "comedian",
-        "name": "お笑い芸人",
-        "records": 55,
-        "pairs": 53,
-        "pages": 1
-      },
-      {
-        "id": "broadcaster",
-        "name": "タレント・モデル・放送・報道",
-        "records": 1308,
-        "pairs": 1305,
-        "pages": 1
-      },
-      {
-        "id": "online_creator",
-        "name": "配信者・動画投稿者",
-        "records": 71,
-        "pairs": 70,
-        "pages": 1
-      },
-      {
-        "id": "sports",
-        "name": "スポーツ関係者",
-        "records": 4626,
-        "pairs": 4624,
-        "pages": 4
-      },
-      {
-        "id": "competitive_games",
-        "name": "棋士・競技ゲーム選手",
-        "records": 104,
-        "pairs": 104,
-        "pages": 1
-      },
-      {
-        "id": "writer",
-        "name": "作家・文筆家",
-        "records": 1134,
-        "pairs": 1133,
-        "pages": 1
-      },
-      {
-        "id": "manga_illustration",
-        "name": "漫画家・イラストレーター",
-        "records": 215,
-        "pairs": 214,
-        "pages": 1
-      },
-      {
-        "id": "film_game_creator",
-        "name": "映画・映像・ゲーム制作者",
-        "records": 200,
-        "pairs": 199,
-        "pages": 1
-      },
-      {
-        "id": "art_design",
-        "name": "美術・写真・建築・デザイン",
-        "records": 922,
-        "pairs": 922,
-        "pages": 1
-      },
-      {
-        "id": "performing_arts",
-        "name": "舞台・伝統芸能",
-        "records": 295,
-        "pairs": 294,
-        "pages": 1
-      },
-      {
-        "id": "science_education",
-        "name": "研究・技術・教育",
-        "records": 7605,
-        "pairs": 7575,
-        "pages": 6
-      },
-      {
-        "id": "politics_public",
-        "name": "政治・行政・外交・社会運動",
-        "records": 1549,
-        "pairs": 1549,
-        "pages": 2
-      },
-      {
-        "id": "business",
-        "name": "実業・経営",
-        "records": 4035,
-        "pairs": 4016,
-        "pages": 3
-      },
-      {
-        "id": "military",
-        "name": "軍事",
-        "records": 768,
-        "pairs": 768,
-        "pages": 1
-      },
-      {
-        "id": "royalty_nobility",
-        "name": "皇室・王室・貴族",
-        "records": 286,
-        "pairs": 286,
-        "pages": 1
-      },
-      {
-        "id": "other_identified",
-        "name": "その他の特定人物",
-        "records": 5038,
-        "pairs": 5031,
-        "pages": 4
-      },
-      {
-        "id": "thought",
-        "name": "思想・哲学",
-        "records": 154,
-        "pairs": 154,
-        "pages": 1
-      }
-    ],
-    "records": 263959,
-    "uniquePairs": 262090,
-    "sourceSha256": "aab96a9d5fc59af5e9bda3f9e9bc2e5f0e693704dd533a0a4bd3a2d374733764"
-  },
-  "personReplacement": {
-    "categories": 53,
-    "records": 848517,
-    "categoryPairCount": 840468,
-    "baseCategories": 29,
-    "personCategories": 24
   },
   "specialistInputSha256": "de25b742784973e59532d3ec86b670ab5dd25ed6c0558aa72d9eb2e6afb628dc"
 }

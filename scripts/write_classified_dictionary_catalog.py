@@ -91,7 +91,7 @@ def generate_excluded(root, output, manifest):
     return dict(pairs=len(excluded), pages=len(pages))
 
 
-def generate_person_taxonomy(root, output):
+def generate_person_taxonomy(root, output, final_pairs):
     source = root / 'src/main/classification'
     taxonomy = json.loads((source / 'person-taxonomy.json').read_text(encoding='utf-8'))
     categories = [category for category in taxonomy['categories'] if category['standard_enabled']]
@@ -113,11 +113,10 @@ def generate_person_taxonomy(root, output):
             if not reading or not surface:
                 raise ValueError(f'{source_file}:{number}: empty reading or surface')
             records[category].append((reading, surface, left, right, cost))
+            final_pairs.add((reading, surface))
 
-    output.mkdir(parents=True)
+    output.mkdir(parents=True, exist_ok=True)
     summary = []
-    table = ['| 人物カテゴリ | ID | レコード数 | 読み・表記の組 | 例（読み順から選択） |',
-             '|---|---|---:|---:|---|']
     for category in categories:
         category_id = category['id']
         rows = records[category_id]
@@ -147,7 +146,7 @@ def generate_person_taxonomy(root, output):
         flush()
 
         for index, filename in enumerate(pages):
-            navigation = ['[人物カテゴリ一覧](../index.md)']
+            navigation = ['[最終配布カテゴリ一覧](../index.md)']
             if index:
                 navigation.append(f'[前のページ]({pages[index-1]})')
             if index + 1 < len(pages):
@@ -159,35 +158,17 @@ def generate_person_taxonomy(root, output):
                       '| 読み | 表記 |\n|---|---|\n')
             path.write_text(header + path.read_text(encoding='utf-8') + '\n' + nav + '\n', encoding='utf-8')
 
-        samples = []
-        if pairs:
-            sample_indexes = sorted({round(i * (len(pairs) - 1) / 9) for i in range(10)})
-            samples = [pairs[index] for index in sample_indexes]
-        sample_text = '、'.join(f'{reading} → {surface}' for reading, surface in samples) or '—'
-        table.append(f'| [{names[category_id]}]({category_id}/index.md) | `{category_id}` | {len(rows):,} | {len(pairs):,} | {sample_text} |')
         links = '\n'.join(f'- [{index+1}ページ]({filename})' for index, filename in enumerate(pages))
         if not pages:
             links = '収録0件。'
         (directory / 'index.md').write_text(
-            f'# {names[category_id]}\n\n[人物カテゴリ一覧](../index.md)\n\n'
+            f'# {names[category_id]}\n\n[最終配布カテゴリ一覧](../index.md)\n\n'
             f'親カテゴリ: `person` · レコード数: **{len(rows):,}** · 読み・表記の組: **{len(pairs):,}**。\n\n{links}\n',
             encoding='utf-8')
         summary.append(dict(id=category_id, name=names[category_id], records=len(rows), pairs=len(pairs), pages=len(pages)))
 
     record_count = sum(item['records'] for item in summary)
     pair_count = sum(item['pairs'] for item in summary)
-    (output / 'index.md').write_text(
-        '# 人物細分類の収録一覧\n\n'
-        '人物カテゴリを親カテゴリ `person` の下に分けた特別プレリリース向けデータです。'
-        f'標準配布対象の{len(categories)}カテゴリを掲載し、成人関連（出演者・制作者・保留）、宗教・犯罪・諜報・テロ・組織犯罪などの配布除外カテゴリを除いています。再分類できない候補とIME形式に合わない候補は掲載していません。\n\n'
-        f'全 **{len(categories)}カテゴリ**、**{record_count:,}レコード**、カテゴリ内の重複を除いた **{pair_count:,}組**を収録しています。'
-        'ページにはカテゴリごとの読み・表記の全組を掲載します。例は読み順から最大10組を選んでいます。\n\n'
-        '[分類定義](../../../src/main/classification/person-taxonomy.json) · '
-        '[通常配布カテゴリ一覧](../index.md) · '
-        '[人物細分類への置換プレリリース](../../classified-dictionary-distribution.md#人物細分類への置換プレリリース)\n\n'
-        + '\n'.join(table) + '\n\n'
-        f'人物候補データSHA-256: `{source_hash}`\n',
-        encoding='utf-8')
     return dict(categories=summary, records=record_count, uniquePairs=pair_count, sourceSha256=source_hash)
 
 
@@ -198,35 +179,33 @@ def generate_person_replacement_index(output, base_summary, person_summary):
     if len(base_categories) != 29 or len(person_categories) != 24:
         raise ValueError('Expected 29 existing non-person categories and 24 person categories')
 
-    directory = output / 'person-replacement'
-    directory.mkdir()
     table = ['| カテゴリ | ID | 読み・表記の組 | レコード数 | 全件一覧 |',
              '|---|---|---:|---:|---|']
     for category in base_categories:
         category_id = category['id']
         table.append(
-            f'| [{category["name"]}](../{category_id}/index.md) | `{category_id}` | '
-            f'{category["pairs"]:,} | {category["records"]:,} | [全件](../{category_id}/index.md) |'
+            f'| [{category["name"]}]({category_id}/index.md) | `{category_id}` | '
+            f'{category["pairs"]:,} | {category["records"]:,} | [全件]({category_id}/index.md) |'
         )
     for category in person_categories:
         category_id = category['id']
         table.append(
-            f'| [{category["name"]}](../person-taxonomy/{category_id}/index.md) | '
+            f'| [{category["name"]}]({category_id}/index.md) | '
             f'`{category_id}` | {category["pairs"]:,} | {category["records"]:,} | '
-            f'[全件](../person-taxonomy/{category_id}/index.md) |'
+            f'[全件]({category_id}/index.md) |'
         )
 
     record_count = sum(item['records'] for item in base_categories) + person_summary['records']
     pair_count = sum(item['pairs'] for item in base_categories) + person_summary['uniquePairs']
-    (directory / 'index.md').write_text(
+    (output / 'index.md').write_text(
         '# 人物辞書置換プレリリース — 全配布カテゴリ\n\n'
         '特別プレリリースZIPのカテゴリ一覧です。通常配布の30カテゴリから汎用 `person` を除き、'
         '人物細分類24カテゴリに置き換えた **53カテゴリ**を掲載しています。'
         '未分類候補と成人関連など配布対象外の候補は含めていません。\n\n'
         f'カテゴリ別レコード数の合計は **{record_count:,}**、読み・表記の組数の合計は **{pair_count:,}**です。'
         '同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。\n\n'
-        '[生成・配布手順](../../classified-dictionary-distribution.md#人物細分類への置換プレリリース) · '
-        '[人物細分類の例と一覧](../person-taxonomy/index.md)\n\n'
+        '[生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換プレリリース) · '
+        '[人物分類定義](../../src/main/classification/person-taxonomy.json)\n\n'
         + '\n'.join(table) + '\n',
         encoding='utf-8')
     return dict(categories=53, records=record_count, categoryPairCount=pair_count,
@@ -270,14 +249,17 @@ def generate(root, output):
     taxonomy_source = source / 'person-taxonomy.json'
     person_source = source / 'person-dictionary-candidates.tsv.gz'
     person_taxonomy_summary = None
+    final_pairs = set()
     if taxonomy_source.is_file() or person_source.is_file():
         if not taxonomy_source.is_file() or not person_source.is_file():
             raise ValueError('Person taxonomy catalog requires both taxonomy and candidate sources')
-        person_taxonomy_summary = generate_person_taxonomy(root, output / 'person-taxonomy')
+        person_taxonomy_summary = generate_person_taxonomy(root, output, final_pairs)
     summary = []
     with gzip.open(source / 'distribution-candidates.tsv.gz', 'rt', encoding='utf-8') as stream:
         rows = heapq.merge((line.rstrip('\n').split('\t') for line in stream), specialist_rows)
         for category, records in itertools.groupby(rows, key=lambda row: row[0]):
+            if category == 'person' and person_taxonomy_summary is not None:
+                continue
             directory = output / category
             directory.mkdir()
             pages = []
@@ -299,6 +281,7 @@ def generate(root, output):
 
             for _, reading, left, right, cost, surface in records:
                 origin = origins[(reading, surface)]
+                final_pairs.add((reading, surface))
                 row = f'| {code(reading)} | {code(surface)} | {left} | {right} | {cost} | {ORIGINS[origin]} |\n'
                 size = len(row.encode('utf-8'))
                 if page and (len(page) >= MAX_ROWS or byte_count + size > MAX_BYTES):
@@ -332,6 +315,8 @@ def generate(root, output):
                 f'読み・表記の組: **{len(pairs):,}**、読み: **{len(readings):,}**、レコード: **{count:,}**。\n\n{links}\n', encoding='utf-8')
     present = {item['id'] for item in summary}
     for category in categories:
+        if category['id'] == 'person' and person_taxonomy_summary is not None:
+            continue
         if category['id'] not in present:
             directory = output / category['id']
             directory.mkdir()
@@ -339,18 +324,9 @@ def generate(root, output):
             summary.append(dict(id=category['id'],name=names[category['id']],pairs=0,readings=0,records=0,pages=0,recordsByOrigin={}))
     order = {c['id']: i for i,c in enumerate(categories)}
     summary.sort(key=lambda item: order[item['id']])
-    person_replacement_summary = (
-        generate_person_replacement_index(output, summary, person_taxonomy_summary)
-        if person_taxonomy_summary is not None else None
-    )
     table = ['| カテゴリ | 読み・表記の組 | 読み数 | レコード数 |', '|---|---:|---:|---:|']
     for item in summary:
         table.append(f'| [{item["name"]}]({item["id"]}/index.md) | {item["pairs"]:,} | {item["readings"]:,} | {item["records"]:,} |')
-    person_taxonomy_link = (
-        '[人物細分類の全収録語](person-taxonomy/index.md)（特別プレリリース向け） · '
-        '[置換プレリリースの全53カテゴリ](person-replacement/index.md)\n\n'
-        if person_taxonomy_summary is not None else ''
-    )
     (output / 'index.md').write_text(
         '# 分類辞書の収録一覧\n\n'
         f'{len(categories)}カテゴリ、全体で **{manifest["uniqueAdmittedPairs"]:,}組**、カテゴリ別に **{manifest["dictionaryRows"]:,}レコード**を収録しています。\n\n'
@@ -359,26 +335,29 @@ def generate(root, output):
         '一覧は配布対象の固定データから全件生成しています。Geminiとassistantの暫定分類・未確認の読みを含みます。'
         '既存28カテゴリのコストと品詞は元辞書の値です。漢方・医療は提供元の読みと空欄へのGemini推定読み（未確認）を採用し、個別の読み訂正には出典を記録します。品詞とコストは本プロジェクトで設定しています。分類取得失敗・未分類・除外候補はこの一覧には含めません。\n\n'
         '[不採用語と判断理由](excluded/index.md) · [品詞IDと品詞名](pos.md) · [生成・配布手順](../classified-dictionary-distribution.md) · [漢方・医療の出典記録](../specialist-dictionaries.md)\n\n'
-        + person_taxonomy_link
         + '\n'.join(table) + '\n\n'
         f'元データSHA-256: `{manifest["files"]["distribution-candidates.tsv.gz"]}`\n\n'
         '再生成: `python3 scripts/write_classified_dictionary_catalog.py`\n'
         '整合確認: `python3 scripts/write_classified_dictionary_catalog.py --check`\n', encoding='utf-8')
+    person_replacement_summary = (
+        generate_person_replacement_index(output, summary, person_taxonomy_summary)
+        if person_taxonomy_summary is not None else None
+    )
     pos = ['# 品詞IDと品詞名', '', '各レコードの左・右品詞IDは同じid.defを参照します。', '', '| ID | 品詞名 |', '|---:|---|']
     for line in (root / 'src/main/resources/id.def').read_text(encoding='utf-8').splitlines():
         number, name = line.split(maxsplit=1)
         pos.append(f'| {number} | {code(name)} |')
     (output / 'pos.md').write_text('\n'.join(pos) + '\n', encoding='utf-8')
+    final_categories = summary + (person_taxonomy_summary['categories'] if person_taxonomy_summary is not None else [])
     result = dict(schemaVersion=1, inputSha256=manifest['files']['distribution-candidates.tsv.gz'],
-                  uniquePairs=manifest['uniqueAdmittedPairs'], records=manifest['dictionaryRows'], categories=summary)
+                  uniquePairs=len(final_pairs) if person_taxonomy_summary is not None else manifest['uniqueAdmittedPairs'],
+                  records=sum(category['records'] for category in final_categories), categories=final_categories)
     result['excluded'] = generate_excluded(root, output, manifest)
-    if person_taxonomy_summary is not None:
-        result['personTaxonomy'] = person_taxonomy_summary
-    if person_replacement_summary is not None:
-        result['personReplacement'] = person_replacement_summary
     if specialist_file.exists(): result['specialistInputSha256'] = extra['files']['distribution-candidates.tsv.gz']
     (output / 'summary.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    if sum(c['records'] for c in summary) != manifest['dictionaryRows']:
+    expected_records = manifest['dictionaryRows'] - manifest['categoryRows'].get('person', 0) \
+        if person_taxonomy_summary is not None else manifest['dictionaryRows']
+    if sum(c['records'] for c in summary) != expected_records:
         raise ValueError('Catalog total differs from distributed records')
     return result
 
