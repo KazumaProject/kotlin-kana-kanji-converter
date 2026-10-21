@@ -1,10 +1,14 @@
 # 分類辞書の生成と配布
 
-既存の Web・Person・Place・Neologd・wiki の5辞書は、28種類の意味カテゴリ辞書へ置き換えます。追加の漢方・医療2カテゴリを合わせ、計30カテゴリを配布します。[専門辞書の入力と条件](specialist-dictionaries.md) を参照してください。元の5辞書のテキストは、分類結果との照合と品詞・コストの復元に使用します。
+既存の Web・Person・Place・Neologd・wiki の5辞書は、42種類の意味カテゴリ辞書へ置き換えます。追加の漢方・医療2カテゴリを合わせ、計44カテゴリを配布します。[専門辞書の入力と条件](specialist-dictionaries.md) を参照してください。元の5辞書のテキストは、分類結果との照合と品詞・コストの復元に使用します。
+
+一般語・専門用語の `term` は親ディレクトリです。`term/general/` に一般語5分類、`term/specialist/` に専門語10分類を置きます。15分類すべてに収録する用語はGemini 3.5 Flash-Liteの無料枠で `generateContent` APIを並列利用して分類し、読み・表記ごとに最も適合する分類を1つ選びます。分類結果と無料枠の実行情報は固定データに保存し、候補・応答・途中経過はリポジトリ外に置きます。結果は未独立検証のGemini分類として扱います。
+
+分類階層は `src/main/classification/term-taxonomy.json`、固定した読み・表記ごとの分類は `term-classifications.tsv.gz` に保存します。生成時に `term` を15の葉カテゴリへ置き換え、各葉の読み・表記・品詞・コストを従来の配布TSVへ出力します。構造上の親 `term` 自体には辞書バイナリを作りません。
 
 ## 固定入力
 
-`src/main/classification/categories.json` が分類の定義です。`distribution-decisions.tsv.gz` は読み・表記ごとの最終分類、分類元、収録状態を保存します。分類取得失敗は `no_result` として未分類と区別し、バイナリには収録しません。`distribution-candidates.tsv.gz` はカテゴリ・読み・左品詞ID・右品詞ID・コスト・表記の6列で、元辞書のレコードを保持します。いずれもUTF-8、ヘッダーなしです。
+`src/main/classification/categories.json` は配布カテゴリの一覧、`term-taxonomy.json` は用語親カテゴリと15の葉カテゴリの定義です。`term-classifications.tsv.gz` は読み・表記ごとのGemini分類結果を固定します。`distribution-decisions.tsv.gz` は読み・表記ごとの最終分類、分類元、収録状態を保存します。分類取得失敗は `no_result` として未分類と区別し、バイナリには収録しません。`distribution-candidates.tsv.gz` はカテゴリ・読み・左品詞ID・右品詞ID・コスト・表記の6列で、元辞書のレコードを保持します。TSVはUTF-8、ヘッダーなしです。
 
 分類の優先順位は、資料で確認した分類、assistantによる4,901件の再分類、保存済みのGemini成功結果の順です。確認済みの分類は、元の採用証明書に加えて、保存済みレビューでカテゴリと独立した読みの両方が確認された候補を含みます。Gemini履歴には最新の保存済み成功結果を使用し、Qwenの結果は使用しません。再分類結果の未分類指定は、その候補のGemini分類を取り消します。明示的な除外指定は分類元にかかわらず収録しません。
 
@@ -30,13 +34,13 @@ freezeはSQLiteを読み取り専用の一つのトランザクションで読�
 
 ## 一般語の追加
 
-辞書原資料にない一般語は `src/main/classification/term-additions.tsv` に1行ずつ追加します。列は読み・左品詞ID・右品詞ID・コスト・表記・出典URL・確認日（YYYY-MM-DD）です。各行は独立した読みと表記が確認できる辞書・語彙資料を出典にし、配布時は一般語・専門用語の `term` カテゴリへ収録します。品詞とコストはMozc形式で指定します。
+辞書原資料にない一般語は `src/main/classification/term-additions.tsv` に1行ずつ追加します。列は読み・左品詞ID・右品詞ID・コスト・表記・出典URL・確認日（YYYY-MM-DD）です。各行は独立した読みと表記が確認できる辞書・語彙資料を出典にし、配布時は15の用語葉カテゴリのいずれかへ収録します。追加語も固定されたGemini分類に含めてから配布データを再生成します。品詞とコストはMozc形式で指定します。
 
 ```text
 どぱがき	1851	1851	8400	ドパガキ	https://example.org/dictionary-entry	2026-10-15
 ```
 
-`freeze` はこの入力を出典確認済みの `term` 分類として取り込みます。重複行、無効な品詞ID・URL・日付、既存の別分類や除外判断との衝突は拒否します。出典URLと確認日は入力ファイルのハッシュとともに記録されます。
+`freeze` はこの入力を出典確認済みの用語分類として取り込みます。重複行、無効な品詞ID・URL・日付、既存の別分類や除外判断との衝突は拒否します。出典URLと確認日は入力ファイルのハッシュとともに記録されます。
 
 ## 公式資料で確認した人名の追加
 
@@ -93,15 +97,15 @@ PR #141の分類台帳と後続レビューは、元のスナップショット�
 
 既存Actionsを手動実行すると、ZIPと `dictionary-distribution-manifest.json`、`DICTIONARY-SHA256SUMS`、`DICTIONARY-LICENSES.txt` を成果物として取得できます。`v*` タグでは4ファイルをGitHubのプレリリースへ添付し、通常リリースのLatestには設定しません。最新5プレリリースを保持し、通常リリースとそのタグは削除対象に含めません。
 
-利用側IMEは旧5辞書の固定パスを30カテゴリの読み込みへ変更する必要があります。辞書バイナリの読み戻し検証と、実IMEの候補表示・順位の検証は別です。
+利用側IMEは旧5辞書の固定パスを44カテゴリの読み込みへ変更する必要があります。用語カテゴリは `categories/term/general/<分類ID>/` と `categories/term/specialist/<分類ID>/` の下へ配置します。辞書バイナリの読み戻し検証と、実IMEの候補表示・順位の検証は別です。
 
 ## 人物細分類への置換プレリリース
 
-`person-dictionaries-v*` タグでは、通常の30カテゴリから汎用 `person` を除き、`person-taxonomy.json` の `standard_enabled: true` の24人物細分類に置き換えます。未分類の候補を受け入れる辞書は作りません。追加調査でも分類できない候補と、IME候補としての形式条件を満たさない候補は配布元データから除きます。プレリリースZIPは合計53カテゴリ（既存30から `person` を除いた29カテゴリと、人物細分類24カテゴリ）です。カテゴリ別の収録数と全収録語は[最終プレリリースの配布カテゴリ一覧](classified-dictionary-catalog/index.md)にまとめています。新しい人物バイナリは他辞書と共通のPOSテーブルを使います。通常の `v*` プレリリース生成はこの変更の対象外です。
+`person-dictionaries-v*` タグでは、通常の44カテゴリから汎用 `person` を除き、`person-taxonomy.json` の `standard_enabled: true` の24人物細分類に置き換えます。未分類の候補を受け入れる辞書は作りません。追加調査でも分類できない候補と、IME候補としての形式条件を満たさない候補は配布元データから除きます。プレリリースZIPは合計67カテゴリ（既存44から `person` を除いた43カテゴリと、人物細分類24カテゴリ）です。カテゴリ別の収録数と全収録語は[最終プレリリースの配布カテゴリ一覧](classified-dictionary-catalog/index.md)にまとめています。新しい人物バイナリは他辞書と共通のPOSテーブルを使います。通常の `v*` プレリリース生成はこの変更の対象外です。
 
 `person-dictionary-candidates.tsv.gz` には許可カテゴリの読み・表記・品詞・コスト・競技タグだけを保存します。未分類候補は、再分類できた項目だけを既存カテゴリに移し、なお確定できない項目は出力しません。空の読み・表記、空白・制御文字を含む候補、かな以外の読み、文字を含まない表記も除外します。根拠データと分類作業用キャッシュはリポジトリ外に置き、`scripts/export_person_dictionary_source.py` は許可24カテゴリの行だけを書き出します。成人制作者は `adult_work_creator` として漫画カテゴリから分けますが、出演者・制作者・成人関連保留を含む候補は個人データをリポジトリにも配布用データにも入れません。成人関連の候補キーはリポジトリ外の除外JSONLにハッシュだけを保持し、今後のGemini候補送信前にも網羅を検査します。置換ZIPには汎用 `person` の辞書ファイルを含めません。
 
-置換ZIPの人物辞書は `app/src/main/assets/categories/person/<カテゴリID>/` の下に配置します。`person/` は親ディレクトリで、各サブディレクトリに `yomi.dat.zip`、`tango.dat.zip`、`token.dat.zip` を格納します。他の29カテゴリは既存どおり `categories/<カテゴリID>/` に置きます。
+置換ZIPの人物辞書は `app/src/main/assets/categories/person/<カテゴリID>/` の下に配置します。`person/` は親ディレクトリで、各サブディレクトリに `yomi.dat.zip`、`tango.dat.zip`、`token.dat.zip` を格納します。他の43カテゴリは `categories/<カテゴリID>/` に置きます。
 
 ZIPルートの `dictionary-distribution-manifest.json` は機械可読の分類メタデータです。人物細分類それぞれに `parentCategoryId: "person"` とカテゴリID、表示名、収録件数、辞書ファイルのパスを記録し、`replacesCategory: "person"` で置換関係を示します。個々の候補名や除外候補はマニフェストに含めません。GitHub Releaseには辞書ZIP、同じマニフェスト、チェックサム、ライセンス表示を添付します。
 

@@ -262,11 +262,11 @@ def generate_person_taxonomy(root, output, final_pairs):
 
 
 def generate_person_replacement_index(output, base_summary, person_summary):
-    """List the exact 53-category prerelease, linking to each full word list."""
+    """List the exact 67-category prerelease, linking to each full word list."""
     base_categories = [item for item in base_summary if item['id'] != 'person']
     person_categories = person_summary['categories']
-    if len(base_categories) != 29 or len(person_categories) != 24:
-        raise ValueError('Expected 29 existing non-person categories and 24 person categories')
+    if len(base_categories) != 43 or len(person_categories) != 24:
+        raise ValueError('Expected 43 existing non-person categories and 24 person categories')
 
     table = ['| カテゴリ | ID | 読み・表記の組 | レコード数 | 全件一覧 |',
              '|---|---|---:|---:|---|']
@@ -289,8 +289,8 @@ def generate_person_replacement_index(output, base_summary, person_summary):
     pair_count = sum(item['pairs'] for item in base_categories) + person_summary['uniquePairs']
     (output / 'index.md').write_text(
         '# 人物辞書置換プレリリース — 全配布カテゴリ\n\n'
-        '特別プレリリースZIPのカテゴリ一覧です。通常配布の30カテゴリから汎用 `person` を除き、'
-        '人物細分類24カテゴリに置き換えた **53カテゴリ**を掲載しています。'
+        '特別プレリリースZIPのカテゴリ一覧です。通常配布の44カテゴリから汎用 `person` を除き、'
+        '人物細分類24カテゴリに置き換えた **67カテゴリ**を掲載しています。'
         '未分類候補と成人関連など配布対象外の候補は含めていません。\n\n'
         f'カテゴリ別レコード数の合計は **{record_count:,}**、読み・表記の組数の合計は **{pair_count:,}**です。'
         '同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。\n\n'
@@ -298,14 +298,16 @@ def generate_person_replacement_index(output, base_summary, person_summary):
         '[人物分類定義](../../src/main/classification/person-taxonomy.json)\n\n'
         + '\n'.join(table) + '\n',
         encoding='utf-8')
-    return dict(categories=53, records=record_count, categoryPairCount=pair_count,
+    return dict(categories=67, records=record_count, categoryPairCount=pair_count,
                 baseCategories=len(base_categories), personCategories=len(person_categories))
 
 
 def generate(root, output):
     source = root / 'src/main/classification'
     manifest = json.loads((source / 'distribution-manifest.json').read_text())
-    categories = json.loads((source / 'categories.json').read_text())['categories']
+    taxonomy = json.loads((source / 'categories.json').read_text())
+    categories = taxonomy['categories']
+    category_groups = taxonomy.get('categoryGroups', [])
     names = {c['id']: c.get('name', c['id']) for c in categories}
     origins = {}
     with gzip.open(source / 'distribution-decisions.tsv.gz', 'rt', encoding='utf-8') as stream:
@@ -351,7 +353,7 @@ def generate(root, output):
             if category == 'person' and person_taxonomy_summary is not None:
                 continue
             directory = output / category
-            directory.mkdir()
+            directory.mkdir(parents=True)
             pages = []
             page = []
             byte_count = 0
@@ -390,7 +392,10 @@ def generate(root, output):
             summary.append(item)
             for index, filename in enumerate(pages):
                 path = directory / filename
-                navigation = ['[カテゴリ目次](index.md)', '[全カテゴリ](../index.md)', '[品詞IDと品詞名](../pos.md)']
+                root_link = '../' * len(Path(category).parts)
+                navigation = ['[カテゴリ目次](index.md)',
+                              f'[全カテゴリ]({root_link}index.md)',
+                              f'[品詞IDと品詞名]({root_link}pos.md)']
                 if index: navigation.append(f'[前のページ]({pages[index-1]})')
                 if index+1 < len(pages): navigation.append(f'[次のページ]({pages[index+1]})')
                 nav = ' · '.join(navigation)
@@ -400,8 +405,9 @@ def generate(root, output):
                           '|---|---|---:|---:|---:|---|\n')
                 path.write_text(header + path.read_text(encoding='utf-8') + '\n' + nav + '\n', encoding='utf-8')
             links = '\n'.join(f'- [{i+1}ページ]({filename})' for i, filename in enumerate(pages))
+            root_link = '../' * len(Path(category).parts)
             (directory / 'index.md').write_text(
-                f'# {names[category]} ({category})\n\n[全カテゴリ](../index.md) · [品詞名](../pos.md)\n\n'
+                f'# {names[category]} ({category})\n\n[全カテゴリ]({root_link}index.md) · [品詞名]({root_link}pos.md)\n\n'
                 f'読み・表記の組: **{len(pairs):,}**、読み: **{len(readings):,}**、レコード: **{count:,}**。\n\n{links}\n', encoding='utf-8')
     present = {item['id'] for item in summary}
     for category in categories:
@@ -409,7 +415,7 @@ def generate(root, output):
             continue
         if category['id'] not in present:
             directory = output / category['id']
-            directory.mkdir()
+            directory.mkdir(parents=True)
             (directory / 'index.md').write_text(f'# {names[category["id"]]}\n\n収録0件。\n', encoding='utf-8')
             summary.append(dict(id=category['id'],name=names[category['id']],pairs=0,readings=0,records=0,pages=0,recordsByOrigin={}))
     order = {c['id']: i for i,c in enumerate(categories)}
@@ -417,14 +423,61 @@ def generate(root, output):
     table = ['| カテゴリ | 読み・表記の組 | 読み数 | レコード数 |', '|---|---:|---:|---:|']
     for item in summary:
         table.append(f'| [{item["name"]}]({item["id"]}/index.md) | {item["pairs"]:,} | {item["readings"]:,} | {item["records"]:,} |')
+    term_group_text = ''
+    if category_groups:
+        sections = []
+        for parent in category_groups:
+            parent_id = parent['id']
+            parent_totals = [item for item in summary if item['id'].startswith(parent_id + '/')]
+            parent_pairs = sum(item['pairs'] for item in parent_totals)
+            parent_records = sum(item['records'] for item in parent_totals)
+            group_links = []
+            parent_dir = output / parent_id
+            parent_dir.mkdir(parents=True, exist_ok=True)
+            for group in parent['groups']:
+                group_categories = [item for item in parent_totals if item['id'].startswith(group['id'] + '/')]
+                group_pairs = sum(item['pairs'] for item in group_categories)
+                group_records = sum(item['records'] for item in group_categories)
+                group_dir = output / group['id']
+                group_dir.mkdir(parents=True, exist_ok=True)
+                leaf_links = '\n'.join(
+                    f'- [{item["name"]}]({item["id"].split("/")[-1]}/index.md) — '
+                    f'{item["pairs"]:,}組、{item["records"]:,}レコード'
+                    for item in group_categories)
+                (group_dir / 'index.md').write_text(
+                    f'# {group["name"]}\n\n[term分類](../index.md) · [全カテゴリ](../../index.md)\n\n'
+                    f'読み・表記の組: **{group_pairs:,}**、レコード: **{group_records:,}**。\n\n'
+                    f'{leaf_links}\n', encoding='utf-8')
+                group_links.append(
+                    f'- [{group["name"]}]({group["id"].split("/")[-1]}/index.md) — '
+                    f'{group_pairs:,}組、{group_records:,}レコード')
+            (parent_dir / 'index.md').write_text(
+                f'# {parent["name"]}\n\n[全カテゴリ](../index.md)\n\n'
+                f'読み・表記の組: **{parent_pairs:,}**、レコード: **{parent_records:,}**。\n\n'
+                + '\n'.join(group_links) + '\n', encoding='utf-8')
+            sections.append(
+                f'- [{parent["name"]}]({parent_id}/index.md) — {parent_pairs:,}組、{parent_records:,}レコード')
+        term_group_text = '\n'.join(sections) + '\n\n'
+        term_dir = output / 'term'
+        term_dir.mkdir(parents=True, exist_ok=True)
+        term_children = '\n'.join(
+            f'- [{group["name"]}]({group["id"].split("/")[-1]}/index.md)'
+            for group in category_groups[0]['groups'])
+        parent_pairs = sum(item['pairs'] for item in summary if item['id'].startswith('term/'))
+        parent_records = sum(item['records'] for item in summary if item['id'].startswith('term/'))
+        (term_dir / 'index.md').write_text(
+            f'# {category_groups[0]["name"]}\n\n[全カテゴリ](../index.md)\n\n'
+            f'読み・表記の組: **{parent_pairs:,}**、レコード: **{parent_records:,}**。\n\n'
+            f'{term_children}\n', encoding='utf-8')
     (output / 'index.md').write_text(
         '# 分類辞書の収録一覧\n\n'
         f'{len(categories)}カテゴリ、全体で **{manifest["uniqueAdmittedPairs"]:,}組**、カテゴリ別に **{manifest["dictionaryRows"]:,}レコード**を収録しています。\n\n'
         '「組」は読み・表記の重複を除いた件数、「レコード」は品詞・コストの違いも保持したバイナリへの収録件数です。'
         '複数カテゴリへの所属があるため、カテゴリ別の組数の合計は全体の組数と一致しません。\n\n'
         '一覧は配布対象の固定データから全件生成しています。Geminiとassistantの暫定分類・未確認の読みを含みます。'
-        '既存28カテゴリのコストと品詞は元辞書の値です。漢方・医療は提供元の読みと空欄へのGemini推定読み（未確認）を採用し、個別の読み訂正には出典を記録します。品詞とコストは本プロジェクトで設定しています。分類取得失敗・未分類・除外候補はこの一覧には含めません。\n\n'
+        '用語カテゴリは一般語5分類・専門語10分類を含みます。その他の既存カテゴリのコストと品詞は元辞書の値です。漢方・医療は提供元の読みと空欄へのGemini推定読み（未確認）を採用し、個別の読み訂正には出典を記録します。品詞とコストは本プロジェクトで設定しています。分類取得失敗・未分類・除外候補はこの一覧には含めません。\n\n'
         '[不採用語と判断理由](excluded/index.md) · [品詞IDと品詞名](pos.md) · [生成・配布手順](../classified-dictionary-distribution.md) · [漢方・医療の出典記録](../specialist-dictionaries.md)\n\n'
+        + term_group_text
         + '\n'.join(table) + '\n\n'
         f'元データSHA-256: `{manifest["files"]["distribution-candidates.tsv.gz"]}`\n\n'
         '再生成: `python3 scripts/write_classified_dictionary_catalog.py`\n'

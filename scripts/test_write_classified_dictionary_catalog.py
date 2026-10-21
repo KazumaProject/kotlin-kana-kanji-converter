@@ -60,6 +60,28 @@ class CatalogTest(unittest.TestCase):
         path.write_text(json.dumps(manifest))
         with self.assertRaisesRegex(ValueError,'Catalog count differs'):catalog.generate(self.root,self.root/'bad')
 
+    def test_term_hierarchy_writes_parent_group_and_leaf_indexes(self):
+        source = self.root / 'src/main/classification'
+        base = json.loads((source / 'categories.json').read_text(encoding='utf-8'))
+        term_taxonomy = distribution.term_taxonomy(Path.cwd())
+        categories = distribution.merged_categories(base, term_taxonomy)
+        (source / 'categories.json').write_text(json.dumps(categories, ensure_ascii=False), encoding='utf-8')
+        manifest_path = source / 'distribution-manifest.json'
+        manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+        manifest['categoryRows'] = {
+            category['id']: sum(row[0] == category['id'] for row in self.rows)
+            for category in categories['categories']
+        }
+        manifest_path.write_text(json.dumps(manifest), encoding='utf-8')
+        output = self.root / 'catalog'
+        catalog.generate(self.root, output)
+        self.assertTrue((output / 'term/index.md').is_file())
+        self.assertTrue((output / 'term/general/index.md').is_file())
+        self.assertTrue((output / 'term/specialist/index.md').is_file())
+        self.assertTrue((output / 'term/general/products_daily_goods/index.md').is_file())
+        self.assertIn('[一般語](general/index.md)', (output / 'term/index.md').read_text())
+        self.assertIn('[商品・日用品（一般名称）]', (output / 'term/general/index.md').read_text())
+
     def test_catalog_marks_source_backed_specialist_reading_corrections(self):
         directory = self.root/'src/main/specialist'
         directory.mkdir(parents=True)
