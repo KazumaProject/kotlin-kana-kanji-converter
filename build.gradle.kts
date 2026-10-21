@@ -851,7 +851,7 @@ val buildPersonDictionaryDistribution = tasks.register<JavaExec>("buildPersonDic
 }
 
 val personReplacementArchive = layout.buildDirectory.file(
-    "person-dictionary/japanese_keyboard_dictionary_assets_person_replaced.zip",
+    "person-dictionary/japanese_keyboard_dictionary_assets.zip",
 )
 val personReplacementManifest = layout.buildDirectory.file(
     "person-dictionary/person-replacement-dictionary-manifest.json",
