@@ -282,9 +282,9 @@ def taxonomy_maps(path):
         raise ValueError('Taxonomy must exclude the restricted categories from standard dictionaries')
     if policy.get('restricted_category_records') != 'aggregate_counts_only':
         raise ValueError('Taxonomy must keep restricted category records as aggregate counts only')
-    if any(next((row['standard_enabled'] for row in taxonomy['categories']
-                if row['id'] == category_id), None) is not False
-           for category_id in AGGREGATE_ONLY_CATEGORY_IDS):
+    disabled_ids = {row['id'] for row in taxonomy['categories']
+                    if row.get('standard_enabled') is False}
+    if disabled_ids != AGGREGATE_ONLY_CATEGORY_IDS:
         raise ValueError('Restricted categories must have standard distribution disabled')
     if policy.get('adult_distribution') != 'metadata_only':
         raise ValueError('Adult performer data must be metadata only')
@@ -670,7 +670,7 @@ def main():
         'recovery_gemini_override_rows_applied': recovery_applied,
         'initial_gemini_manual_only_rows_demoted': initial_demoted,
         'recovery_gemini_manual_only_rows_demoted': recovery_demoted,
-        'classification_policy': 'Reviewed outputs omit person-level rows in restricted categories and retain aggregate counts only; raw source and Gemini input files remain unchanged. Restricted categories are excluded from standard dictionaries.',
+        'classification_policy': 'Reviewed outputs omit person-level rows in restricted categories and retain aggregate counts only. Raw source and Gemini workspaces are external to the repository; future Gemini runs require an external restricted-category hash exclusion file. The current broad person dictionary snapshot does not apply person-subcategory exclusions.',
         'taxonomy_version': taxonomy['taxonomy_version'],
     }
     write_json(output / 'summary.json', summary)

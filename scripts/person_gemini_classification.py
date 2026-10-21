@@ -23,7 +23,7 @@ TAXONOMY_PATH = 'src/main/classification/person-taxonomy.json'
 SOURCE_PATH = 'src/main/classification/distribution-candidates.tsv.gz'
 WORK_PATH = (Path.home() / '.cache' / 'kotlin-kana-kanji-converter' /
              'person-gemini-classification-3-1-flash-lite')
-PROMPT_VERSION = 'person-codes-groups-10-v14'
+PROMPT_VERSION = 'person-codes-groups-10-v15'
 GROUP_SIZE = 10
 UNAVAILABLE_CODE = 11
 MANUAL_ONLY_CODES = {1, 2, 3, UNAVAILABLE_CODE, 24, 26, 27, 28, 29, 30}
@@ -105,6 +105,10 @@ def load_taxonomy(root):
     for number, category_id in CATEGORY_IDS.items():
         if by_number[number].get('id') != category_id:
             raise ValueError(f'Person taxonomy ID changed for code {number}')
+    disabled_codes = {entry['number'] for entry in categories
+                      if entry.get('standard_enabled') is False}
+    if not disabled_codes <= MANUAL_ONLY_CODES:
+        raise ValueError('Every category disabled for standard dictionaries must be manual-only in Gemini')
     return taxonomy
 
 
@@ -135,7 +139,7 @@ def collect_items(root):
             for reading, surface in sorted(pairs)], record_count
 
 
-def candidate_keys_from_file(path):
+def candidate_keys_from_file(path, restricted_category_ids=None):
     if path is None:
         return set()
     keys = set()
@@ -148,6 +152,11 @@ def candidate_keys_from_file(path):
                 row = json.loads(value)
             except json.JSONDecodeError:
                 row = value
+            if restricted_category_ids is not None:
+                if (not isinstance(row, dict) or set(row) != {'candidate_key', 'category_id'}
+                        or row.get('category_id') not in restricted_category_ids):
+                    raise ValueError(
+                        f'{path}:{number}: restricted-key files must contain only candidate_key and category_id')
             key = row.get('candidate_key') if isinstance(row, dict) else row
             if not isinstance(key, str) or not re.fullmatch(r'[0-9a-f]{64}', key):
                 raise ValueError(f'{path}:{number}: expected a SHA-256 candidate_key')
@@ -162,15 +171,30 @@ def batch_id(index):
 def manifest_for(root, batch_size, include_candidate_keys_path=None,
                  exclude_candidate_keys_path=None):
     taxonomy = load_taxonomy(root)
+    if include_candidate_keys_path is None:
+        raise ValueError('Gemini preparation requires a prefiltered --include-candidate-keys allowlist')
+    if exclude_candidate_keys_path is None:
+        raise ValueError('Gemini preparation requires an external restricted-category hash exclusion file')
+    root = Path(root).resolve()
+    input_paths = [Path(include_candidate_keys_path).resolve(),
+                   Path(exclude_candidate_keys_path).resolve()]
+    if any(path == root or root in path.parents for path in input_paths):
+        raise ValueError('Gemini candidate allowlist and restricted-category exclusions must be outside the repository')
+    excluded_categories = set(taxonomy.get('policy', {}).get(
+        'standard_dictionary_excluded_categories', []))
+    if not excluded_categories:
+        raise ValueError('Taxonomy must define standard dictionary exclusions before Gemini preparation')
     items, _ = collect_items(root)
     all_keys = {item['candidate_key'] for item in items}
-    include_keys = candidate_keys_from_file(include_candidate_keys_path)
-    exclude_keys = candidate_keys_from_file(exclude_candidate_keys_path)
+    include_keys = candidate_keys_from_file(input_paths[0])
+    exclude_keys = candidate_keys_from_file(input_paths[1], excluded_categories)
     unknown_keys = (include_keys | exclude_keys) - all_keys
     if unknown_keys:
         raise ValueError(f'Candidate-key file contains {len(unknown_keys)} keys absent from {SOURCE_PATH}')
-    if include_candidate_keys_path is not None and not include_keys:
+    if not include_keys:
         raise ValueError('Candidate-key include file is empty')
+    if not exclude_keys:
+        raise ValueError('Restricted-category hash exclusion file is empty')
     selected = [item for item in items
                 if (include_candidate_keys_path is None or item['candidate_key'] in include_keys)
                 and item['candidate_key'] not in exclude_keys]
@@ -181,8 +205,7 @@ def manifest_for(root, batch_size, include_candidate_keys_path=None,
                        if item['candidate_key'] in selected_keys)
     for item in selected:
         item.pop('source_record_count', None)
-    include_path = Path(include_candidate_keys_path).resolve() if include_candidate_keys_path else None
-    exclude_path = Path(exclude_candidate_keys_path).resolve() if exclude_candidate_keys_path else None
+    include_path, exclude_path = input_paths
     source_path, taxonomy_path = root / SOURCE_PATH, root / TAXONOMY_PATH
     count = (len(selected) + batch_size - 1) // batch_size
     return {
@@ -217,6 +240,9 @@ def prepare(root, workspace, batch_size, include_candidate_keys_path=None,
     if include_candidate_keys_path is None:
         raise ValueError('Gemini preparation requires a prefiltered --include-candidate-keys allowlist')
     workspace = workspace.resolve()
+    root = root.resolve()
+    if workspace == root or root in workspace.parents:
+        raise ValueError('Gemini workspaces must be outside the repository')
     target = manifest_for(root, batch_size, include_candidate_keys_path,
                           exclude_candidate_keys_path)
     manifest_path = workspace / 'manifest.json'
@@ -262,6 +288,9 @@ def load_workspace(root, workspace):
     manifest = json.loads((workspace / 'manifest.json').read_text(encoding='utf-8'))
     if manifest.get('schema_version') != 1 or manifest.get('model') != MODEL:
         raise ValueError('Unsupported classification workspace')
+    if (manifest.get('include_candidate_keys_path') is None or
+            manifest.get('exclude_candidate_keys_path') is None):
+        raise ValueError('Gemini workspace must have both an external allowlist and restricted-category exclusions')
     include_path = manifest.get('include_candidate_keys_path')
     exclude_path = manifest.get('exclude_candidate_keys_path')
     expected = manifest_for(root, manifest['batch_size'], include_path, exclude_path)
@@ -652,6 +681,8 @@ def classify_batch(workspace, name, items, key, pacer, timeout):
 def classify(args):
     root = args.root.resolve()
     workspace = args.workspace.resolve()
+    if workspace == root or root in workspace.parents:
+        raise ValueError('Gemini workspaces must be outside the repository')
     manifest = load_workspace(root, workspace)
     if manifest.get('include_candidate_keys_path') is None:
         raise ValueError('Gemini requests require a prefiltered --include-candidate-keys allowlist')
