@@ -71,13 +71,28 @@ def rows_by_key(paths, enabled_ids):
     return result
 
 
+def restricted_proposal_keys(paths, category_by_code):
+    """Keep Gemini's restricted-category proposals out of the fallback dictionary."""
+    keys = set()
+    for path in paths:
+        for row in reviews.read_jsonl(path):
+            code = row.get("category_code")
+            category = category_by_code.get(code, {}).get("id")
+            if category in reviews.AGGREGATE_ONLY_CATEGORY_IDS:
+                key = row.get("candidate_key")
+                if not isinstance(key, str) or len(key) != 64:
+                    raise ValueError("Restricted Gemini proposal has an invalid candidate key")
+                keys.add(key)
+    return keys
+
+
 def export(args):
     exclusions = load_exclusions(args.excluded_candidates, args.root)
     taxonomy, category_by_code, category_by_id = reviews.taxonomy_maps(args.root / "src/main/classification/person-taxonomy.json")
     enabled = {row["id"] for row in taxonomy["categories"] if row.get("standard_enabled") is True}
     category_order = {row["id"]: row["number"] for row in taxonomy["categories"]}
-    if len(enabled) != 30:
-        raise ValueError("Expected exactly 30 standard-enabled person categories")
+    if len(enabled) != 24:
+        raise ValueError("Expected exactly 24 standard-enabled person categories")
 
     overrides = reviews.load_overrides(
         args.root / "src/main/classification/person-category-overrides.jsonl",
@@ -99,6 +114,22 @@ def export(args):
         )
 
         decisions = list(reviews.read_jsonl(args.source_decisions))
+        confirmed_performers = {
+            row["candidate_key"] for row in decisions
+            if row.get("category_id") == "adult_performer"
+            and row.get("status") == "adult_performer_source_confirmed"
+        }
+        excluded_performers = {
+            key for key, category in exclusions.items()
+            if category == "adult_performer"
+        }
+        if not confirmed_performers or excluded_performers != confirmed_performers:
+            raise ValueError(
+                "Adult performer exclusion hashes must exactly match source-confirmed adult performer decisions")
+        for row in decisions:
+            if row.get("candidate_key") in confirmed_performers and row["candidate_key"] != candidate_key(
+                    row.get("reading", ""), row.get("surface", "")):
+                raise ValueError("Adult performer source decision key does not match its reading and surface")
         sport_qids = reviews.wikidata_sports_by_qid(args.wikidata_sports)
         reviewed, changes, before, after, _, _ = reviews.source_review(
             decisions, sport_qids, category_by_code,
@@ -123,6 +154,7 @@ def export(args):
 
         # The source review is the final authority for its candidate set. A
         # restricted or unresolved decision removes any earlier model label.
+        source_approved_keys = set()
         for row in reviewed:
             key = row["candidate_key"]
             category = row.get("category_id")
@@ -131,8 +163,35 @@ def export(args):
                     row["reading"], row["surface"], category,
                     set(row.get("sport_subcategories", [])),
                 )
+                source_approved_keys.add(key)
             else:
                 final.pop(key, None)
+
+        restricted_source_keys = {
+            row["candidate_key"] for row in reviewed
+            if row.get("category_id") in reviews.AGGREGATE_ONLY_CATEGORY_IDS
+        }
+        adult_related_source_keys = {
+            row["candidate_key"] for row in decisions
+            if str(row.get("status", "")).startswith("adult_related_")
+        }
+        if any(not isinstance(key, str) or len(key) != 64
+               for key in adult_related_source_keys):
+            raise ValueError("Adult-related source decision has an invalid candidate key")
+        excluded_adult_hold_keys = {
+            key for key, category in exclusions.items()
+            if category == "adult_related_hold"
+        }
+        if not adult_related_source_keys <= excluded_adult_hold_keys:
+            raise ValueError("External exclusions omit adult-related source-review candidates")
+        restricted_source_keys.update(adult_related_source_keys)
+        restricted_gemini_keys = restricted_proposal_keys(
+            [*sorted(args.gemini_results.glob("*.jsonl")),
+             *sorted(args.recovery_gemini_results.glob("*.jsonl"))],
+            category_by_code,
+        )
+        for key in restricted_gemini_keys - source_approved_keys:
+            final.pop(key, None)
 
     additions_dir = args.root / "src/main/classification/person-additions"
     for path in sorted(additions_dir.glob("*.jsonl")):
@@ -165,10 +224,20 @@ def export(args):
     if unknown_exclusions:
         raise ValueError(f"Restricted candidate exclusion file contains {len(unknown_exclusions)} keys absent from the person source")
 
-    # Apply hash-only restrictions after every classification and addition source
-    # so a later model result cannot reintroduce a held candidate.
+    # Hash-only restricted and adult-related exclusions take precedence over
+    # model and source-review classifications so no individual names enter the
+    # distributable person dictionary.
     for key in exclusions:
         final.pop(key, None)
+
+    unresolved_keys = (source_keys - set(final) - set(exclusions)
+                       - restricted_source_keys - restricted_gemini_keys)
+    ime_filtered_keys = set()
+    for key, (reading, surface, _, _) in list(final.items()):
+        if reviews.ime_candidate_issue(reading, surface):
+            final.pop(key)
+            records_by_pair.pop(key, None)
+            ime_filtered_keys.add(key)
 
     output_rows = []
     matched = set()
@@ -207,6 +276,9 @@ def export(args):
         "nonemptyCategories": len({row[0] for row in output_rows}),
         "dictionaryPairs": len(matched),
         "dictionaryRecords": len(output_rows),
+        "unclassifiedExcludedPairs": len(unresolved_keys),
+        "imeFormatExcludedPairs": len(ime_filtered_keys),
+        "adultRelatedSourceExcludedPairs": len(adult_related_source_keys),
         "excludedCandidateCounts": dict(sorted(collections.Counter(exclusions.values()).items())),
         "sourceSha256": hashlib.sha256(args.output.read_bytes()).hexdigest(),
     }, ensure_ascii=False, sort_keys=True))

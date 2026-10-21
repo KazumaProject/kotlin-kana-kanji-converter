@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import re
+import unicodedata
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,13 +21,38 @@ DEFAULT_OUTPUT = CACHE / 'reviewed-classifications'
 OVERRIDES = ROOT / 'src/main/classification/person-category-overrides.jsonl'
 TAXONOMY = ROOT / 'src/main/classification/person-taxonomy.json'
 MANUAL_ONLY_CATEGORY_IDS = {
-    'adult_performer', 'religion', 'crime_offender', 'espionage', 'terrorism',
-    'organized_crime', 'thought',
+    'adult_performer', 'adult_work_creator', 'religion', 'crime_offender', 'espionage', 'terrorism',
+    'organized_crime', 'thought', 'unclassified_person',
 }
 AGGREGATE_ONLY_CATEGORY_IDS = {
-    'adult_performer', 'religion', 'crime_offender', 'espionage', 'terrorism',
+    'adult_performer', 'adult_work_creator', 'religion', 'crime_offender', 'espionage', 'terrorism',
     'organized_crime',
 }
+
+
+def ime_candidate_issue(reading, surface):
+    """Return a stable format issue for pairs unsuitable for a kana IME lexicon."""
+    if not reading or not surface:
+        return 'empty'
+    if any(char.isspace() or unicodedata.category(char).startswith('C')
+           for char in reading + surface):
+        return 'whitespace_or_control'
+
+    def is_kana_or_mark(char):
+        codepoint = ord(char)
+        return (
+            0x3041 <= codepoint <= 0x309F
+            or 0x30A1 <= codepoint <= 0x30FF
+            or 0x31F0 <= codepoint <= 0x31FF
+            or 0xFF66 <= codepoint <= 0xFF9D
+            or unicodedata.category(char).startswith('M')
+        )
+
+    if any(not is_kana_or_mark(char) for char in reading):
+        return 'non_kana_reading'
+    if not any(unicodedata.category(char).startswith('L') for char in surface):
+        return 'surface_without_letters'
+    return None
 
 
 # Wikidata P641 labels observed in the checked source snapshot, normalized into
@@ -284,10 +310,15 @@ def taxonomy_maps(path):
         raise ValueError('Taxonomy must keep restricted category records as aggregate counts only')
     disabled_ids = {row['id'] for row in taxonomy['categories']
                     if row.get('standard_enabled') is False}
-    if disabled_ids != AGGREGATE_ONLY_CATEGORY_IDS:
-        raise ValueError('Restricted categories must have standard distribution disabled')
-    if policy.get('adult_distribution') != 'metadata_only':
-        raise ValueError('Adult performer data must be metadata only')
+    expected_disabled_ids = AGGREGATE_ONLY_CATEGORY_IDS | {'unclassified_person'}
+    if disabled_ids != expected_disabled_ids:
+        raise ValueError('Restricted and non-classified categories must be disabled for standard distribution')
+    if policy.get('unreviewed_distribution') != 'excluded':
+        raise ValueError('Unreviewed person candidates must be excluded from standard distribution')
+    if policy.get('adult_distribution') != {
+            'adult_performer': 'metadata_only',
+            'adult_work_creator': 'metadata_only'}:
+        raise ValueError('Adult performer and creator distribution policies are inconsistent')
     if policy.get('adult_related_hold', {}).get('distribution') != 'metadata_only':
         raise ValueError('Adult-related hold data must be metadata only')
     for tag, label in SPORT_LABELS.items():

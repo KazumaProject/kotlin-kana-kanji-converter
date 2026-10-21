@@ -8,7 +8,7 @@
 
 [不採用語と判断理由](excluded/index.md) · [品詞IDと品詞名](pos.md) · [生成・配布手順](../classified-dictionary-distribution.md) · [漢方・医療の出典記録](../specialist-dictionaries.md)
 
-[人物細分類の全収録語](person-taxonomy/index.md)（特別プレリリース向け）
+[人物細分類の全収録語](person-taxonomy/index.md)（特別プレリリース向け） · [置換プレリリースの全53カテゴリ](person-replacement/index.md)
 
 | カテゴリ | 読み・表記の組 | 読み数 | レコード数 |
 |---|---:|---:|---:|

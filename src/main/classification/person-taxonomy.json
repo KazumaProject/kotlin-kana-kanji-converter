@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "taxonomy_version": "2026-10-21.6",
+  "taxonomy_version": "2026-10-21.8",
   "policy": {
-    "version": "2026-10-21.6",
+    "version": "2026-10-21.8",
     "name_origin_definition": "日本由来／海外由来は人の国籍や文字種ではなく、姓・名・姓名の命名慣習上の由来を指す。読みや表記だけから推測せず、由来に確信がない場合は対応する由来未確認カテゴリにする。複数の命名慣習が混在し判別できない場合も由来未確認にする。",
     "adult_scope": [
       "video",
@@ -12,8 +12,11 @@
     "adult_definition": "性的表現を主目的とする成人向け映像・ゲーム・音声作品への出演。一般映画の性描写・グラビア・制作のみでは自動確定しない。",
     "public_aliases_only": true,
     "independent_review_required": true,
-    "unreviewed_distribution": "hold",
-    "adult_distribution": "metadata_only",
+    "unreviewed_distribution": "excluded",
+    "adult_distribution": {
+      "adult_performer": "metadata_only",
+      "adult_work_creator": "metadata_only"
+    },
     "negative_search_required_scopes": [
       "video",
       "game",
@@ -26,6 +29,7 @@
     ],
     "standard_dictionary_excluded_categories": [
       "adult_performer",
+      "adult_work_creator",
       "crime_offender",
       "espionage",
       "organized_crime",
@@ -35,7 +39,7 @@
     "restricted_category_records": "aggregate_counts_only",
     "adult_related_hold": {
       "label": "成人関連保留（別枠）",
-      "definition": "成人関連の可能性はあるが作品の性質または候補との対応を確認できない項目に加え、成人向け作品の制作者など出演者カテゴリとは別の成人関連活動を確認した項目を、一般配布から保留する。個別候補名は保存・配布せず、件数のみ集計する。",
+      "definition": "成人関連の可能性があるが作品の性質または候補との対応を確認できない項目を保留する。個別候補名は保存・配布せず、件数のみ集計する。確認済みの制作者はadult_work_creator、出演者はadult_performerに分ける。",
       "distribution": "metadata_only"
     }
   },
@@ -158,7 +162,7 @@
       "label": "漫画家・イラストレーター",
       "standard_enabled": true,
       "definition": "漫画・イラストを主に制作する個人、または資料で漫画家の合作名義と確認できる活動名。",
-      "boundary": "成人向け作品の制作者は一般配布せず、adult_related_holdに集計する。制作だけでは出演者とみなさない。合作ペンネームは姓・名に分解しない。"
+      "boundary": "確認済みの成人向け作品制作者はadult_work_creatorへ分類し、制作だけで出演者とはみなさない。合作ペンネームは姓・名に分解しない。"
     },
     {
       "number": 16,
@@ -282,51 +286,19 @@
     },
     {
       "number": 31,
-      "id": "japanese_surname",
-      "label": "日本由来の姓・名字",
-      "standard_enabled": true,
-      "definition": "日本の命名慣習に由来する姓。",
-      "boundary": "日本人が持つ姓というだけでは不可。読みや表記だけで判断できず、由来に確信がなければsurname_origin_unconfirmedにする。"
+      "id": "adult_work_creator",
+      "label": "成人向け作品の制作者",
+      "standard_enabled": false,
+      "definition": "性的表現を主目的とする成人向け作品の漫画・イラスト制作者として、作品と活動名の対応を公開資料で確認できる個人。",
+      "boundary": "manga_illustrationには含めず、adult_performerとも区別する。作品と活動名の対応を公開資料で確認する。個人名・読み・出典はリポジトリに保存せず、カテゴリ定義と集計だけを保持する。"
     },
     {
       "number": 32,
-      "id": "overseas_surname",
-      "label": "海外由来の姓・名字",
-      "standard_enabled": true,
-      "definition": "日本以外の命名慣習に由来する姓。日本語に音写された姓も含む。",
-      "boundary": "海外出身者が持つ姓というだけでは不可。由来に確信がなければsurname_origin_unconfirmedにする。"
-    },
-    {
-      "number": 33,
-      "id": "japanese_given_name",
-      "label": "日本由来の名・下の名前",
-      "standard_enabled": true,
-      "definition": "日本の命名慣習に由来する名。",
-      "boundary": "日本人が持つ名というだけでは不可。読みや表記だけで判断できず、由来に確信がなければgiven_name_origin_unconfirmedにする。"
-    },
-    {
-      "number": 34,
-      "id": "overseas_given_name",
-      "label": "海外由来の名・下の名前",
-      "standard_enabled": true,
-      "definition": "日本以外の命名慣習に由来する名。日本語に音写された名も含む。",
-      "boundary": "海外出身者が持つ名というだけでは不可。由来に確信がなければgiven_name_origin_unconfirmedにする。"
-    },
-    {
-      "number": 35,
-      "id": "japanese_personal_name",
-      "label": "日本由来の人名・姓名",
-      "standard_enabled": true,
-      "definition": "姓名全体が日本の命名慣習に由来する人名。",
-      "boundary": "個人の国籍や日本語表記だけで判断しない。姓名の一部が別の慣習に由来する場合や、全体の由来が不明な場合はpersonal_name_origin_unconfirmedにする。"
-    },
-    {
-      "number": 36,
-      "id": "overseas_personal_name",
-      "label": "海外由来の人名・姓名",
-      "standard_enabled": true,
-      "definition": "姓名全体が日本以外の命名慣習に由来する人名。日本語に音写された姓名も含む。",
-      "boundary": "個人の国籍やカタカナ表記だけで判断しない。複数の命名慣習が混在する場合や、全体の由来が不明な場合はpersonal_name_origin_unconfirmedにする。"
+      "id": "unclassified_person",
+      "label": "人物（未分類）",
+      "standard_enabled": false,
+      "definition": "人物候補と確認できるが、読み・表記や利用可能な根拠から他の配布カテゴリを確定できない項目。",
+      "boundary": "辞書へ収録しない。既存カテゴリに根拠を持って再分類できた候補だけを配布し、その他は候補データから除外する。"
     }
   ],
   "sport_subcategories": {

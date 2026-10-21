@@ -44,14 +44,14 @@ class PersonDictionaryData(
             category.getValue("id").jsonPrimitive.content
         } else null
     }
-    private val restrictedCategoryIds = categories.mapNotNull { element ->
+    private val nonStandardCategoryIds = categories.mapNotNull { element ->
         val category = element.jsonObject
         if (!category.getValue("standard_enabled").jsonPrimitive.boolean) {
             category.getValue("id").jsonPrimitive.content
         } else null
     }.toSet()
     private val requiredRestrictedCategoryIds = setOf(
-        "adult_performer", "crime_offender", "espionage", "organized_crime", "religion", "terrorism",
+        "adult_performer", "adult_work_creator", "crime_offender", "espionage", "organized_crime", "religion", "terrorism",
     )
     private val sportIds = taxonomy.getValue("sport_subcategories").jsonObject.keys
     private val idCount = if (idDef.isFile) MozcIdDefParser.parse(idDef.toPath()).size else null
@@ -60,13 +60,16 @@ class PersonDictionaryData(
     private val sportTagsByPair: Map<Pair<String, String>, Set<String>>
 
     init {
-        require(categoryIds.size == 30 && categoryIds.distinct().size == categoryIds.size)
-        require(restrictedCategoryIds == requiredRestrictedCategoryIds)
+        require(categoryIds.size == 24 && categoryIds.distinct().size == categoryIds.size)
+        require(nonStandardCategoryIds == requiredRestrictedCategoryIds + "unclassified_person")
         val policy = taxonomy.getValue("policy").jsonObject
         require(policy.getValue("standard_dictionary_excluded_categories").jsonArray
             .map { it.jsonPrimitive.content }.toSet() == requiredRestrictedCategoryIds)
         require(policy.getValue("restricted_category_records").jsonPrimitive.content == "aggregate_counts_only")
-        require(policy.getValue("adult_distribution").jsonPrimitive.content == "metadata_only")
+        require(policy.getValue("adult_distribution").jsonObject.let { adultDistribution ->
+            adultDistribution.getValue("adult_performer").jsonPrimitive.content == "metadata_only" &&
+                adultDistribution.getValue("adult_work_creator").jsonPrimitive.content == "metadata_only"
+        })
         require(policy
             .getValue("adult_related_hold").jsonObject
             .getValue("distribution").jsonPrimitive.content == "metadata_only")
@@ -86,7 +89,7 @@ class PersonDictionaryData(
                 val surface = fields[5]
                 val tagText = fields[6]
                 require(categoryId in categoryIds) {
-                    if (categoryId in restrictedCategoryIds) {
+                    if (categoryId in nonStandardCategoryIds) {
                         "Restricted person category found in standard dictionary source"
                     } else {
                         "Unknown or disabled person category in standard dictionary source"
