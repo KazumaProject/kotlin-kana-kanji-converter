@@ -37,13 +37,18 @@
     "src/main/specialist/sources/manbyo.jsonl.gz": "acf4105c8bfff7d7278fb9d2298481b3dae2d6b58eda824f31b3345e6aea9492"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
-  "existingInventorySha256": "6a4b989c863265915b9027b742bb86a9fa56644c92445203aae7686706763a95",
+  "existingInventorySha256": "acfe784edacbb2956677afbeef8d6e203d1299b5c88450a4faac9010bd2c7967",
   "existingDictionaryIds": [
     "categories/address",
     "categories/agreement",
     "categories/award",
     "categories/character",
-    "categories/event",
+    "categories/event/history/conflict",
+    "categories/event/incident/natural_disaster",
+    "categories/event/incident/social_issue_litigation",
+    "categories/event/occasion/exam_qualification",
+    "categories/event/occasion/observance",
+    "categories/event/occasion/organized_event",
     "categories/facility",
     "categories/initiative",
     "categories/lineage",
@@ -90,7 +95,7 @@
     "symbol",
     "system"
   ],
-  "existingUniquePairs": 1860648,
+  "existingUniquePairs": 1859463,
   "sourceRows": {
     "kampo_core": {
       "rows": 1581,
