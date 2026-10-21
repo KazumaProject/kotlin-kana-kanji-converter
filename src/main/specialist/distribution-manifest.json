@@ -37,7 +37,7 @@
     "src/main/specialist/sources/manbyo.jsonl.gz": "acf4105c8bfff7d7278fb9d2298481b3dae2d6b58eda824f31b3345e6aea9492"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
-  "existingInventorySha256": "08abcee29ad80c2bf689c51fab3c2cc3ed5a5b40b47d61d3bd7582405c4fadbf",
+  "existingInventorySha256": "6a4b989c863265915b9027b742bb86a9fa56644c92445203aae7686706763a95",
   "existingDictionaryIds": [
     "categories/address",
     "categories/agreement",
@@ -53,7 +53,21 @@
     "categories/place",
     "categories/product",
     "categories/station",
-    "categories/term",
+    "categories/term/general/food_drink_cooking",
+    "categories/term/general/internet_slang_culture",
+    "categories/term/general/neologisms_trends_youth_language",
+    "categories/term/general/other_general",
+    "categories/term/general/products_daily_goods",
+    "categories/term/specialist/chemistry_life_sciences",
+    "categories/term/specialist/culture_arts_sports",
+    "categories/term/specialist/earth_environment_resources",
+    "categories/term/specialist/economics_management",
+    "categories/term/specialist/engineering_technology",
+    "categories/term/specialist/humanities_social_sciences",
+    "categories/term/specialist/information_communications",
+    "categories/term/specialist/law_politics",
+    "categories/term/specialist/mathematics_physics",
+    "categories/term/specialist/transport_safety_defense",
     "categories/transport_route",
     "categories/vehicle",
     "categories/work_anime",
@@ -140,7 +154,7 @@
   },
   "files": {
     "distribution-candidates.tsv.gz": "de25b742784973e59532d3ec86b670ab5dd25ed6c0558aa72d9eb2e6afb628dc",
-    "provenance.jsonl.gz": "6469bca936e3789527316ceb5d1e6cd0309fdeffba0bd09739b9c8f8b154442f"
+    "provenance.jsonl.gz": "0d7c5daf9d81383d25b06c3b48c25a29a7cbca85b751e1941b4942b44c498315"
   },
   "limitations": [
     "Upstream readings include automatic readings; Gemini supplements are inferred. Neither is independently verified.",
