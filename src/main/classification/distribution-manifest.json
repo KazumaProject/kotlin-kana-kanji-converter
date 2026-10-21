@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "precedence": [
     "verified",
     "manual",
@@ -2891,6 +2891,84 @@
       "policy_version": "ime-adopt-reject-v1",
       "model": "gpt-5.6-luna",
       "reasoningEffort": "max"
+    },
+    "termClassification": {
+      "apiEndpoint": "generateContent",
+      "batchCount": 218,
+      "billingEnabled": false,
+      "categoryCounts": {
+        "term/general/food_drink_cooking": 4076,
+        "term/general/internet_slang_culture": 568,
+        "term/general/neologisms_trends_youth_language": 483,
+        "term/general/other_general": 20509,
+        "term/general/products_daily_goods": 1159,
+        "term/specialist/chemistry_life_sciences": 27568,
+        "term/specialist/culture_arts_sports": 5368,
+        "term/specialist/earth_environment_resources": 2112,
+        "term/specialist/economics_management": 5784,
+        "term/specialist/engineering_technology": 3511,
+        "term/specialist/humanities_social_sciences": 17897,
+        "term/specialist/information_communications": 6063,
+        "term/specialist/law_politics": 5279,
+        "term/specialist/mathematics_physics": 4171,
+        "term/specialist/transport_safety_defense": 4043
+      },
+      "classificationStatus": "Gemini best-fit; not independently reviewed",
+      "freeTierOnly": true,
+      "freeTierProofs": [
+        {
+          "apiEndpoint": "generateContent",
+          "promptVersion": null,
+          "rpd": 500,
+          "rpm": 15,
+          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+          "tpm": 250000,
+          "verifiedAt": "2026-10-21T17:48:55+00:00"
+        },
+        {
+          "apiEndpoint": "generateContent",
+          "promptVersion": "term-best-fit-15-categories-ordered-groups-10-v2",
+          "rpd": 500,
+          "rpm": 15,
+          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+          "tpm": 250000,
+          "verifiedAt": "2026-10-21T17:48:55+00:00"
+        },
+        {
+          "apiEndpoint": "generateContent",
+          "promptVersion": "term-best-fit-15-categories-ordered-groups-10-v2",
+          "rpd": 500,
+          "rpm": 15,
+          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+          "tpm": 250000,
+          "verifiedAt": "2026-10-21T17:48:55+00:00"
+        },
+        {
+          "apiEndpoint": "generateContent",
+          "promptVersion": "term-best-fit-15-categories-ordered-code-array-v3",
+          "rpd": 500,
+          "rpm": 15,
+          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+          "tpm": 250000,
+          "verifiedAt": "2026-10-21T17:48:55+00:00"
+        },
+        {
+          "apiEndpoint": "generateContent",
+          "promptVersion": "term-best-fit-15-categories-ordered-code-array-v3",
+          "rpd": 500,
+          "rpm": 15,
+          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+          "tpm": 250000,
+          "verifiedAt": "2026-10-21T17:48:55+00:00"
+        }
+      ],
+      "model": "gemini-3.5-flash-lite",
+      "projectId": "gen-lang-client-0548563154",
+      "promptVersion": "term-best-fit-15-categories-ordered-code-array-v3",
+      "sourceCandidateSha256": "6909ea156e6973e651a2fe1e4858810d4ded340bce8c082e286597fb4cfde8fc",
+      "sourceTermRecords": 108618,
+      "taxonomySha256": "890e9d1d045f10308aa32cdc39e534b5113c199de3d79404bd22be3cf796bb96",
+      "uniquePairs": 108591
     }
   },
   "inputs": {
@@ -2945,12 +3023,15 @@
     "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl": "7585c7afb2c8413500eab761ad429c461f139a414148c9be907442daeb141d5a",
     "src/main/classification/person-additions/joc-paris2024-2026-10-21.jsonl": "756f05ac434375e66f3ef023e8586cae01ceaf5493f1c64a4ce4826e472fdce5",
     "src/main/classification/person-taxonomy.json": "965772a3cf645deac29d8d219a06d184553231136408946bc16c4d637d074f36",
-    "src/main/classification/person-additions/joc-tokyo2020-2026-10-21.jsonl": "c2744d010e6a99b47e4415a99411657e8de4a3997c865f8630d9b8665f8099e3"
+    "src/main/classification/person-additions/joc-tokyo2020-2026-10-21.jsonl": "c2744d010e6a99b47e4415a99411657e8de4a3997c865f8630d9b8665f8099e3",
+    "src/main/classification/term-taxonomy.json": "890e9d1d045f10308aa32cdc39e534b5113c199de3d79404bd22be3cf796bb96",
+    "src/main/classification/term-classifications.tsv.gz": "2a1414eff371092bf5cadfd8ab9b183e750cbf8f6534fdb0e72710ee3612f45a",
+    "src/main/classification/term-classifications-manifest.json": "249f29bc46496088191861e1124392bf4a955c89ecc6912b68683a8b8d2e36b1"
   },
   "files": {
-    "categories.json": "4fd9d1c05f21789bffe2622ec7269abaff8b7904d2ae2485e072a35df1d10556",
-    "distribution-candidates.tsv.gz": "6909ea156e6973e651a2fe1e4858810d4ded340bce8c082e286597fb4cfde8fc",
-    "distribution-decisions.tsv.gz": "6a40db9cb69969fe3242d9994f1474b412dc04d57145c80318b113ec513f1eb0"
+    "categories.json": "a8265bdd3903cf69332f17b988e77e1bf67e55911109c7b861878badb71c81a2",
+    "distribution-candidates.tsv.gz": "84289265cef551c0a53a09af99180896a7a81f200b744e1b9bd642a71b23fd50",
+    "distribution-decisions.tsv.gz": "0704fb276c80590da1e7f88fd504ec6fc716c5d2778e85eb52b75a10fcf14fee"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "sourceRows": {
@@ -2993,7 +3074,21 @@
     "award": 1167,
     "agreement": 425,
     "initiative": 1072,
-    "term": 108618,
+    "term/general/products_daily_goods": 1159,
+    "term/general/food_drink_cooking": 4077,
+    "term/general/internet_slang_culture": 570,
+    "term/general/neologisms_trends_youth_language": 483,
+    "term/general/other_general": 20520,
+    "term/specialist/information_communications": 6064,
+    "term/specialist/mathematics_physics": 4171,
+    "term/specialist/chemistry_life_sciences": 27571,
+    "term/specialist/engineering_technology": 3512,
+    "term/specialist/earth_environment_resources": 2112,
+    "term/specialist/economics_management": 5784,
+    "term/specialist/law_politics": 5280,
+    "term/specialist/humanities_social_sciences": 17902,
+    "term/specialist/culture_arts_sports": 5368,
+    "term/specialist/transport_safety_defense": 4045,
     "work_franchise": 849,
     "work_manga": 5144,
     "work_anime": 1104,
@@ -3009,5 +3104,40 @@
   "dictionaryRows": 760341,
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified."
+  ],
+  "categoryGroups": [
+    {
+      "id": "term",
+      "name": "一般語・専門用語",
+      "groups": [
+        {
+          "id": "term/general",
+          "name": "一般語",
+          "categories": [
+            "term/general/products_daily_goods",
+            "term/general/food_drink_cooking",
+            "term/general/internet_slang_culture",
+            "term/general/neologisms_trends_youth_language",
+            "term/general/other_general"
+          ]
+        },
+        {
+          "id": "term/specialist",
+          "name": "専門語",
+          "categories": [
+            "term/specialist/information_communications",
+            "term/specialist/mathematics_physics",
+            "term/specialist/chemistry_life_sciences",
+            "term/specialist/engineering_technology",
+            "term/specialist/earth_environment_resources",
+            "term/specialist/economics_management",
+            "term/specialist/law_politics",
+            "term/specialist/humanities_social_sciences",
+            "term/specialist/culture_arts_sports",
+            "term/specialist/transport_safety_defense"
+          ]
+        }
+      ]
+    }
   ]
 }

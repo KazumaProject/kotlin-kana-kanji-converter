@@ -70,6 +70,18 @@ def subsequent_reviews(root, current, baseline):
     else:
         provenance.pop('personAdditions', None)
     inputs = dict(current['inputs'])
+    term_data = d.term_classification_data(root) if 'termClassification' in provenance else None
+    if 'termClassification' in provenance:
+        if term_data is None:
+            raise ValueError('Frozen term classification input is missing')
+        expected_term_provenance = {key: value for key, value in term_data['metadata'].items()
+                                    if key != 'schemaVersion'}
+        if provenance.pop('termClassification', None) != expected_term_provenance:
+            raise ValueError('Term classification provenance differs from its frozen input')
+        for path in (d.TERM_TAXONOMY_PATH, d.TERM_CLASSIFICATIONS_PATH,
+                     d.TERM_CLASSIFICATIONS_MANIFEST_PATH):
+            if inputs.pop(path, None) != d.sha(root/path):
+                raise ValueError('Term classification input hash mismatch')
     for path in added:
         if inputs.pop(path, None) != d.sha(root/path):
             raise ValueError('Subsequent review input hash mismatch')
@@ -92,6 +104,7 @@ def subsequent_reviews(root, current, baseline):
 
 
 PERSON_SOURCE = 'src/main/bin/names.txt'
+TERM_PARENT_DEFINITION = '独立した語義と読みが辞書原資料で対応する一般語・専門用語。未分類語の受け皿にはしない。'
 
 
 def person_additions_after_baseline(root, current, baseline):
@@ -145,6 +158,50 @@ def restore_person_source(root, current, baseline, additions):
         raise ValueError('Appended person rows do not restore the original source hash')
     return hashes[expected]
 
+
+def term_hierarchy_restores_baseline(root, current, baseline):
+    """Allow only the recorded 15-leaf replacement of the pinned term parent."""
+    taxonomy_data = d.term_taxonomy(root)
+    if taxonomy_data is None or 'termClassification' not in current.get('provenance', {}):
+        return False
+    parent, leaves = taxonomy_data
+    expanded = json.loads((root/'src/main/classification/categories.json').read_text(encoding='utf-8'))
+    leaf_ids = {category['id'] for category in leaves}
+    collapsed_categories = []
+    inserted_parent = False
+    for category in expanded.get('categories', []):
+        if category.get('id') in leaf_ids:
+            if not inserted_parent:
+                collapsed_categories.append({
+                    'id': 'term', 'name': parent['name'], 'definition': TERM_PARENT_DEFINITION,
+                })
+                inserted_parent = True
+        else:
+            collapsed_categories.append(category)
+    if not inserted_parent:
+        return False
+    collapsed = dict(expanded)
+    collapsed.pop('categoryGroups', None)
+    collapsed['categories'] = collapsed_categories
+    if d.merged_categories(collapsed, taxonomy_data) != expanded:
+        return False
+    reconstructed = json.dumps(collapsed, ensure_ascii=False, indent=2) + '\n'
+    expected_hash = baseline.get('files', {}).get('categories.json')
+    if hashlib.sha256(reconstructed.encode('utf-8')).hexdigest() != expected_hash:
+        return False
+    category_ids = {category['id'] for category in expanded['categories']}
+    data = d.term_classification_data(root, category_ids)
+    expected_provenance = ({key: value for key, value in data['metadata'].items()
+                            if key != 'schemaVersion'} if data is not None else None)
+    if expected_provenance is None or current['provenance'].get('termClassification') != expected_provenance:
+        return False
+    for relative in (d.TERM_TAXONOMY_PATH, d.TERM_CLASSIFICATIONS_PATH,
+                     d.TERM_CLASSIFICATIONS_MANIFEST_PATH):
+        if current.get('inputs', {}).get(relative) != d.sha(root/relative):
+            return False
+    return True
+
+
 def snapshot(root):
     out = root / REL
     m = json.loads((out/'manifest.json').read_text())
@@ -166,7 +223,8 @@ def snapshot(root):
         if actual != expected: raise ValueError('Source input hash mismatch: '+path)
     if d.sha(root/'src/main/resources/id.def') != baseline['idDefSha256']:
         raise ValueError('id.def changed since export')
-    if d.sha(root/'src/main/classification/categories.json') != baseline['files']['categories.json']:
+    if (d.sha(root/'src/main/classification/categories.json') != baseline['files']['categories.json']
+            and not term_hierarchy_restores_baseline(root, current, baseline)):
         raise ValueError('Taxonomy changed since export')
     if 'lunaReclassification' not in current['provenance']:
         if current != baseline: raise ValueError('Distribution manifest changed since export')
@@ -356,6 +414,8 @@ def verify_ledger(root):
             if pair in base or pair not in person_entries:
                 raise ValueError('Person addition conflicts with the pinned decision ledger')
             base[pair] = [reading, surface, 'person', 'verified', 'classified']
+    base = d.apply_term_classifications(
+        root, base, force='termClassification' in manifest['provenance'], reviewed_pairs=entries)
     exclusion_delta = sum(r[4]=='excluded' for r in base.values()) - before_excluded
     if (manifest['excludedCandidatePairs']!=m['baselineManifest']['excludedCandidatePairs']+sum(r['effective_action']=='reject' for r in ledger)+exclusion_delta
             or manifest['excludedClassifiedPairs']!=sum(r[4]=='excluded' for r in base.values())):

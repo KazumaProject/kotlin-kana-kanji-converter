@@ -94,6 +94,55 @@ class DistributionTest(unittest.TestCase):
         self.freeze()
         self.assertEqual(first,p.read_bytes())
 
+    def test_term_hierarchy_migration_preserves_records_and_other_memberships(self):
+        self.freeze()
+        directory = self.root / 'src/main/classification'
+        taxonomy = json.loads(Path('src/main/classification/term-taxonomy.json').read_text(encoding='utf-8'))
+        taxonomy_path = directory / 'term-taxonomy.json'
+        taxonomy_path.write_text(json.dumps(taxonomy, ensure_ascii=False), encoding='utf-8')
+        first_leaf = taxonomy['groups'][0]['categories'][0]['id']
+        term_map = directory / 'term-classifications.tsv.gz'
+        d.write_gzip(term_map, [('う', '丙', first_leaf)])
+        metadata = {
+            'schemaVersion': 1,
+            'model': 'gemini-3.5-flash-lite',
+            'apiEndpoint': 'generateContent',
+            'projectId': 'gen-lang-client-0548563154',
+            'freeTierOnly': True,
+            'billingEnabled': False,
+            'promptVersion': 'term-best-fit-15-categories-ordered-groups-10-v2',
+            'sourceCandidateSha256': 'a' * 64,
+            'taxonomySha256': d.sha(taxonomy_path),
+            'sourceTermRecords': 1,
+            'uniquePairs': 1,
+            'batchCount': 1,
+            'categoryCounts': {category['id']: int(category['id'] == first_leaf)
+                               for group in taxonomy['groups'] for category in group['categories']},
+            'freeTierProofs': [{'sha256': 'b' * 64, 'verifiedAt': '2026-10-21T04:00:18+00:00',
+                                'rpm': 15, 'tpm': 250000, 'rpd': 500}],
+            'classificationStatus': 'Gemini best-fit; not independently reviewed',
+        }
+        (directory / 'term-classifications-manifest.json').write_text(
+            json.dumps(metadata, ensure_ascii=False), encoding='utf-8')
+        with contextlib.redirect_stdout(io.StringIO()):
+            d.apply_term_classifications_snapshot(self.root)
+        self.verify()
+        with gzip.open(directory / 'distribution-candidates.tsv.gz', 'rt', encoding='utf-8') as stream:
+            rows = {tuple(line.rstrip('\n').split('\t')) for line in stream}
+        self.assertIn((first_leaf, *self.rows[2]), rows)
+        self.assertIn(('place', *self.rows[1]), rows)
+        self.assertIn(('person', *self.rows[1]), rows)
+        self.assertNotIn(('term', *self.rows[2]), rows)
+        categories = json.loads((directory / 'categories.json').read_text(encoding='utf-8'))
+        self.assertEqual(len(categories['categories']), 42)
+        self.assertEqual(categories['categoryGroups'][0]['id'], 'term')
+        manifest = json.loads((directory / 'distribution-manifest.json').read_text(encoding='utf-8'))
+        self.assertEqual(manifest['dictionaryRows'], 4)
+        self.assertEqual(manifest['schemaVersion'], 2)
+        self.assertTrue(manifest['provenance']['termClassification']['freeTierOnly'])
+        self.freeze()
+        self.verify()
+
     def test_failed_results_are_counted_and_not_admitted(self):
         with sqlite3.connect(self.database) as con:
             k=d.key('う','丙')

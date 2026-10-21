@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "id": "term",
+  "name": "一般語・専門用語",
+  "groups": [
+    {
+      "id": "general",
+      "name": "一般語",
+      "categories": [
+        {
+          "id": "term/general/products_daily_goods",
+          "name": "商品・日用品（一般名称）",
+          "definition": "ブランドや固有の商品名ではない、商品、消費財、日用品、道具などの一般名称。"
+        },
+        {
+          "id": "term/general/food_drink_cooking",
+          "name": "食品・飲料・料理",
+          "definition": "食品、食材、飲料、料理、調理法、食文化に関する一般語。"
+        },
+        {
+          "id": "term/general/internet_slang_culture",
+          "name": "ネットスラング・ネット文化",
+          "definition": "インターネット上の俗語、ネットミーム、オンラインサービス利用者の文化や慣用表現。"
+        },
+        {
+          "id": "term/general/neologisms_trends_youth_language",
+          "name": "新語・流行語・若者言葉",
+          "definition": "比較的新しい語、流行語、若者言葉。ネット文化に特有の語はネットスラング・ネット文化を優先する。"
+        },
+        {
+          "id": "term/general/other_general",
+          "name": "その他の一般語",
+          "definition": "上記の一般語カテゴリに当てはまらず、専門分野に限定されない一般語。一般語と専門語の境界で専門用法が明確でない語もここに含める。"
+        }
+      ]
+    },
+    {
+      "id": "specialist",
+      "name": "専門語",
+      "categories": [
+        {
+          "id": "term/specialist/information_communications",
+          "name": "情報・通信",
+          "definition": "IT、ソフトウェア、AI、通信、ネットワーク、情報セキュリティに関する専門用語。"
+        },
+        {
+          "id": "term/specialist/mathematics_physics",
+          "name": "数学・物理",
+          "definition": "数学、統計、物理学、天文学に関する専門用語。"
+        },
+        {
+          "id": "term/specialist/chemistry_life_sciences",
+          "name": "化学・生命科学",
+          "definition": "化学、材料科学、生物学、生命科学、遺伝学に関する専門用語。"
+        },
+        {
+          "id": "term/specialist/engineering_technology",
+          "name": "工学・技術",
+          "definition": "電気、電子、機械、制御、建築、製造など工学・産業技術の専門用語。"
+        },
+        {
+          "id": "term/specialist/earth_environment_resources",
+          "name": "地球・環境・資源",
+          "definition": "地学、地質、気象、環境、エネルギー、農林水産に関する専門用語。"
+        },
+        {
+          "id": "term/specialist/economics_management",
+          "name": "経済・経営",
+          "definition": "経済、金融、会計、経営、マーケティングに関する専門用語。"
+        },
+        {
+          "id": "term/specialist/law_politics",
+          "name": "法律・政治",
+          "definition": "法律、司法、政治、行政、外交に関する専門用語。"
+        },
+        {
+          "id": "term/specialist/humanities_social_sciences",
+          "name": "人文・社会科学",
+          "definition": "歴史、哲学、宗教、社会学、心理学、教育に関する専門用語。"
+        },
+        {
+          "id": "term/specialist/culture_arts_sports",
+          "name": "文化・芸術・スポーツ",
+          "definition": "文学、言語学、音楽、美術、芸能、競技の専門用語。"
+        },
+        {
+          "id": "term/specialist/transport_safety_defense",
+          "name": "交通・安全・防衛",
+          "definition": "運輸、物流、航空、海事、防災、安全保障、防衛、軍事に関する専門用語。"
+        }
+      ]
+    }
+  ]
+}

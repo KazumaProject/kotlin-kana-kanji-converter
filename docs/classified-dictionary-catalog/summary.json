@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "6909ea156e6973e651a2fe1e4858810d4ded340bce8c082e286597fb4cfde8fc",
+  "inputSha256": "84289265cef551c0a53a09af99180896a7a81f200b744e1b9bd642a71b23fd50",
   "uniquePairs": 832083,
   "records": 848517,
   "categories": [
@@ -198,16 +198,198 @@
       }
     },
     {
-      "id": "term",
-      "name": "一般語・専門用語",
-      "pairs": 108591,
-      "readings": 104245,
-      "records": 108618,
-      "pages": 73,
+      "id": "term/general/products_daily_goods",
+      "name": "商品・日用品（一般名称）",
+      "pairs": 1159,
+      "readings": 1122,
+      "records": 1159,
+      "pages": 1,
       "recordsByOrigin": {
-        "gemini": 67258,
-        "verified": 14579,
-        "manual": 26781
+        "verified": 185,
+        "gemini": 586,
+        "manual": 388
+      }
+    },
+    {
+      "id": "term/general/food_drink_cooking",
+      "name": "食品・飲料・料理",
+      "pairs": 4076,
+      "readings": 3753,
+      "records": 4077,
+      "pages": 3,
+      "recordsByOrigin": {
+        "gemini": 2323,
+        "verified": 620,
+        "manual": 1134
+      }
+    },
+    {
+      "id": "term/general/internet_slang_culture",
+      "name": "ネットスラング・ネット文化",
+      "pairs": 568,
+      "readings": 547,
+      "records": 570,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 218,
+        "gemini": 318,
+        "verified": 34
+      }
+    },
+    {
+      "id": "term/general/neologisms_trends_youth_language",
+      "name": "新語・流行語・若者言葉",
+      "pairs": 483,
+      "readings": 472,
+      "records": 483,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 266,
+        "manual": 170,
+        "verified": 47
+      }
+    },
+    {
+      "id": "term/general/other_general",
+      "name": "その他の一般語",
+      "pairs": 20509,
+      "readings": 19788,
+      "records": 20520,
+      "pages": 14,
+      "recordsByOrigin": {
+        "gemini": 11699,
+        "verified": 2617,
+        "manual": 6204
+      }
+    },
+    {
+      "id": "term/specialist/information_communications",
+      "name": "情報・通信",
+      "pairs": 6063,
+      "readings": 5996,
+      "records": 6064,
+      "pages": 5,
+      "recordsByOrigin": {
+        "gemini": 3930,
+        "manual": 1724,
+        "verified": 410
+      }
+    },
+    {
+      "id": "term/specialist/mathematics_physics",
+      "name": "数学・物理",
+      "pairs": 4171,
+      "readings": 4133,
+      "records": 4171,
+      "pages": 3,
+      "recordsByOrigin": {
+        "manual": 856,
+        "gemini": 2706,
+        "verified": 609
+      }
+    },
+    {
+      "id": "term/specialist/chemistry_life_sciences",
+      "name": "化学・生命科学",
+      "pairs": 27568,
+      "readings": 26086,
+      "records": 27571,
+      "pages": 19,
+      "recordsByOrigin": {
+        "gemini": 18979,
+        "verified": 3482,
+        "manual": 5110
+      }
+    },
+    {
+      "id": "term/specialist/engineering_technology",
+      "name": "工学・技術",
+      "pairs": 3511,
+      "readings": 3452,
+      "records": 3512,
+      "pages": 3,
+      "recordsByOrigin": {
+        "gemini": 2188,
+        "manual": 818,
+        "verified": 506
+      }
+    },
+    {
+      "id": "term/specialist/earth_environment_resources",
+      "name": "地球・環境・資源",
+      "pairs": 2112,
+      "readings": 2077,
+      "records": 2112,
+      "pages": 2,
+      "recordsByOrigin": {
+        "manual": 496,
+        "gemini": 1256,
+        "verified": 360
+      }
+    },
+    {
+      "id": "term/specialist/economics_management",
+      "name": "経済・経営",
+      "pairs": 5784,
+      "readings": 5709,
+      "records": 5784,
+      "pages": 4,
+      "recordsByOrigin": {
+        "manual": 1311,
+        "gemini": 3606,
+        "verified": 867
+      }
+    },
+    {
+      "id": "term/specialist/law_politics",
+      "name": "法律・政治",
+      "pairs": 5279,
+      "readings": 5208,
+      "records": 5280,
+      "pages": 4,
+      "recordsByOrigin": {
+        "manual": 1402,
+        "gemini": 3011,
+        "verified": 867
+      }
+    },
+    {
+      "id": "term/specialist/humanities_social_sciences",
+      "name": "人文・社会科学",
+      "pairs": 17897,
+      "readings": 17520,
+      "records": 17902,
+      "pages": 12,
+      "recordsByOrigin": {
+        "gemini": 10882,
+        "manual": 4327,
+        "verified": 2693
+      }
+    },
+    {
+      "id": "term/specialist/culture_arts_sports",
+      "name": "文化・芸術・スポーツ",
+      "pairs": 5368,
+      "readings": 5241,
+      "records": 5368,
+      "pages": 4,
+      "recordsByOrigin": {
+        "gemini": 3286,
+        "manual": 1400,
+        "verified": 682
+      }
+    },
+    {
+      "id": "term/specialist/transport_safety_defense",
+      "name": "交通・安全・防衛",
+      "pairs": 4043,
+      "readings": 3995,
+      "records": 4045,
+      "pages": 3,
+      "recordsByOrigin": {
+        "manual": 1223,
+        "gemini": 2222,
+        "verified": 600
       }
     },
     {
