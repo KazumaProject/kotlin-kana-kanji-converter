@@ -23,6 +23,7 @@ SOURCES = {
     'web': ('src/main/bin/wiki_neologd_common.txt.zip', 'wiki_neologd_common.txt'),
 }
 TERM_ADDITIONS_PATH = 'src/main/classification/term-additions.tsv'
+LEGACY_PERSON_SPORT_IDS = {'mma', 'kickboxing', 'boxing'}
 
 
 def sha(path):
@@ -112,8 +113,14 @@ def person_reading(value):
 def person_entries(root, path):
     ids = {int(line.split(maxsplit=1)[0]) for line in
            (root / 'src/main/resources/id.def').read_text(encoding='utf-8').splitlines()}
-    taxonomy = json.loads((root / 'src/main/classification/person-taxonomy.json').read_text(encoding='utf-8'))
-    allowed_sports = set(taxonomy.get('sport_subcategories', {}))
+    taxonomy_path = root / 'src/main/classification/person-taxonomy.json'
+    if taxonomy_path.is_file():
+        taxonomy = json.loads(taxonomy_path.read_text(encoding='utf-8'))
+        allowed_sports = set(taxonomy.get('sport_subcategories', {}))
+    else:
+        # Older minimal snapshots and verification fixtures predate taxonomy
+        # metadata. Restrict their fallback to the original three sport IDs.
+        allowed_sports = LEGACY_PERSON_SPORT_IDS
     entries = {}
     for number, line in enumerate(path.read_text(encoding='utf-8').splitlines(), 1):
         entry = json.loads(line)
@@ -211,7 +218,9 @@ def add_person_names(root, path):
     manifest['dictionaryRows'] += record_count
     manifest['inputs'][relative] = sha(path)
     taxonomy_path = 'src/main/classification/person-taxonomy.json'
-    manifest['inputs'][taxonomy_path] = sha(root / taxonomy_path)
+    taxonomy_file = root / taxonomy_path
+    if taxonomy_file.is_file():
+        manifest['inputs'][taxonomy_path] = sha(taxonomy_file)
     manifest['provenance'].setdefault('personAdditions', []).append({
         'path': relative, 'sha256': sha(path), 'reviewedPairs': len(entries),
         'addedPairs': [[row[0], row[4]] for row in additions], 'addedRecords': record_count,
@@ -223,10 +232,12 @@ def add_person_names(root, path):
         staging = Path(temporary)
         staged_directory = staging / 'src/main/classification'
         staged_directory.mkdir(parents=True)
-        for relative_path in dict.fromkeys([
-                *manifest['inputs'], 'src/main/resources/id.def',
-                'src/main/classification/categories.json',
-                'src/main/classification/person-taxonomy.json']):
+        staged_paths = list(dict.fromkeys([
+            *manifest['inputs'], 'src/main/resources/id.def',
+            'src/main/classification/categories.json']))
+        if taxonomy_file.is_file() and taxonomy_path not in staged_paths:
+            staged_paths.append(taxonomy_path)
+        for relative_path in staged_paths:
             target = staging / relative_path
             target.parent.mkdir(parents=True, exist_ok=True)
             if relative_path != names_path:
