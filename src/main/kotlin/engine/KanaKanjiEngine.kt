@@ -87,7 +87,7 @@ class KanaKanjiEngine(
         return convert(input).value
     }
 
-    private fun buildEngineFromResourceDirectory(
+    fun buildEngineFromResourceDirectory(
         resourceDirectory: String,
         mode: Int,
     ) {
@@ -102,7 +102,7 @@ class KanaKanjiEngine(
         graphBuilder = GraphBuilder()
         tokenArray = TokenArray()
         tokenArray.readExternalNotCompress(objectInputTokenArray)
-        tokenArray.readPOSTable(mode)
+        tokenArray.readPOSTable(mode, "$resourceDirectory/pos_table.dat")
         connectionMatrix = ConnectionIdBuilder().readMatrix(objectInputConnectionId, "$resourceDirectory/connectionId.dat")
         findPath = FindPath(systemNgramDictionary, systemUnigramDictionary, standaloneUnigramDictionary)
     }

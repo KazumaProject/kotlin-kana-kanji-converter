@@ -828,6 +828,91 @@ tasks.register<JavaExec>("convertCandidates") {
     dependsOn("classes")
 }
 
+val personDictionaryArchive = layout.buildDirectory.file(
+    "person-dictionary/internal/person-category-dictionaries.zip",
+)
+val buildPersonDictionaryDistribution = tasks.register<JavaExec>("buildPersonDictionaryDistribution") {
+    group = "distribution"
+    description = "Builds the 30 standard-enabled person category dictionaries against the shared POS table."
+    mainClass.set("com.kazumaproject.classification.PersonDictionaryAssetsKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("run")
+    args("--build", personDictionaryArchive.get().asFile.path)
+    maxHeapSize = "3g"
+    inputs.files(
+        classificationDirectory.file("person-taxonomy.json"),
+        classificationDirectory.file("person-dictionary-candidates.tsv.gz"),
+    )
+    inputs.files(mozcIdDefFileProvider, mozcConnectionFileProvider)
+    outputs.files(
+        personDictionaryArchive,
+        layout.buildDirectory.file("person-dictionary/internal/DICTIONARY-SHA256SUMS"),
+    )
+}
+
+val personReplacementArchive = layout.buildDirectory.file(
+    "person-dictionary/japanese_keyboard_dictionary_assets_person_replaced.zip",
+)
+val personReplacementManifest = layout.buildDirectory.file(
+    "person-dictionary/person-replacement-dictionary-manifest.json",
+)
+val personReplacementChecksums = layout.buildDirectory.file(
+    "person-dictionary/DICTIONARY-SHA256SUMS",
+)
+val buildPersonDictionaryReplacementDistribution = tasks.register<JavaExec>("buildPersonDictionaryReplacementDistribution") {
+    group = "distribution"
+    description = "Replaces the generic person category with the 30 standard-enabled person subcategories."
+    mainClass.set("com.kazumaproject.classification.PersonDictionaryReplacementDistributionKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn(
+        buildPersonDictionaryDistribution,
+        "verifyClassifiedDictionaryAssets",
+        "verifySpecialistDictionaryAssets",
+        "buildDictionaryDistributionManifest",
+    )
+    args(
+        "--build",
+        "--base", japaneseKeyboardAssetsReleaseZip.asFile.path,
+        "--person", personDictionaryArchive.get().asFile.path,
+        "--archive", personReplacementArchive.get().asFile.path,
+        "--manifest", personReplacementManifest.get().asFile.path,
+        "--checksums", personReplacementChecksums.get().asFile.path,
+    )
+    maxHeapSize = "3g"
+    inputs.files(
+        japaneseKeyboardAssetsReleaseZip,
+        personDictionaryArchive,
+        classificationDirectory.file("person-taxonomy.json"),
+        classificationDirectory.file("person-dictionary-candidates.tsv.gz"),
+        classificationDirectory.file("distribution-manifest.json"),
+        specialistDirectory.file("categories.json"),
+        specialistDirectory.file("distribution-manifest.json"),
+    )
+    outputs.files(personReplacementArchive, personReplacementManifest, personReplacementChecksums)
+}
+
+tasks.register<JavaExec>("verifyPersonDictionaryArchive") {
+    group = "verification"
+    description = "Verifies the prerelease bundle with the generic person category replaced by subcategories."
+    mainClass.set("com.kazumaproject.classification.PersonDictionaryReplacementDistributionKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn(buildPersonDictionaryReplacementDistribution)
+    args(
+        "--verify",
+        "--base", japaneseKeyboardAssetsReleaseZip.asFile.path,
+        "--archive", personReplacementArchive.get().asFile.path,
+        "--manifest", personReplacementManifest.get().asFile.path,
+    )
+}
+
+tasks.register<JavaExec>("convertPersonCandidates") {
+    group = "application"
+    description = "Loads a person-category prerelease ZIP with KanaKanjiEngine and converts readings."
+    mainClass.set("ConvertPersonCandidatesKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("classes")
+}
+
 val generateMozcZeroQueryData = tasks.register<JavaExec>("generateMozcZeroQueryData") {
     group = "distribution"
     description = "Generates Mozc-compatible zero query binary data from official resources and the custom overlay."

@@ -91,6 +91,106 @@ def generate_excluded(root, output, manifest):
     return dict(pairs=len(excluded), pages=len(pages))
 
 
+def generate_person_taxonomy(root, output):
+    source = root / 'src/main/classification'
+    taxonomy = json.loads((source / 'person-taxonomy.json').read_text(encoding='utf-8'))
+    categories = [category for category in taxonomy['categories'] if category['standard_enabled']]
+    category_ids = [category['id'] for category in categories]
+    if len(categories) != 30 or len(set(category_ids)) != len(category_ids):
+        raise ValueError('Expected 30 unique standard-enabled person categories')
+    names = {category['id']: category['label'] for category in categories}
+    records = {category_id: [] for category_id in category_ids}
+    source_file = source / 'person-dictionary-candidates.tsv.gz'
+    source_hash = distribution.sha(source_file)
+    with gzip.open(source_file, 'rt', encoding='utf-8') as stream:
+        for number, line in enumerate(stream, 1):
+            fields = line.rstrip('\n').split('\t')
+            if len(fields) != 7:
+                raise ValueError(f'{source_file}:{number}: expected seven columns')
+            category, reading, left, right, cost, surface, sports = fields
+            if category not in records:
+                raise ValueError(f'{source_file}:{number}: non-standard person category: {category}')
+            if not reading or not surface:
+                raise ValueError(f'{source_file}:{number}: empty reading or surface')
+            records[category].append((reading, surface, left, right, cost))
+
+    output.mkdir(parents=True)
+    summary = []
+    table = ['| 人物カテゴリ | ID | レコード数 | 読み・表記の組 | 例（読み順から選択） |',
+             '|---|---|---:|---:|---|']
+    for category in categories:
+        category_id = category['id']
+        rows = records[category_id]
+        pairs = sorted({(row[0], row[1]) for row in rows})
+        directory = output / category_id
+        directory.mkdir()
+        pages = []
+        page = []
+        byte_count = 0
+
+        def flush():
+            nonlocal page, byte_count
+            if not page:
+                return
+            filename = f'page-{len(pages)+1:04d}.md'
+            (directory / filename).write_text(''.join(page), encoding='utf-8')
+            pages.append(filename)
+            page, byte_count = [], 0
+
+        for reading, surface in pairs:
+            row = f'| {code(reading)} | {code(surface)} |\n'
+            size = len(row.encode('utf-8'))
+            if page and (len(page) >= MAX_ROWS or byte_count + size > MAX_BYTES):
+                flush()
+            page.append(row)
+            byte_count += size
+        flush()
+
+        for index, filename in enumerate(pages):
+            navigation = ['[人物カテゴリ一覧](../index.md)']
+            if index:
+                navigation.append(f'[前のページ]({pages[index-1]})')
+            if index + 1 < len(pages):
+                navigation.append(f'[次のページ]({pages[index+1]})')
+            nav = ' · '.join(navigation)
+            path = directory / filename
+            header = (f'# {names[category_id]} — {index+1}/{len(pages)}\n\n{nav}\n\n'
+                      '標準配布対象の読み・表記の組を掲載しています。同じ組の複数品詞・コストレコードは一組にまとめています。\n\n'
+                      '| 読み | 表記 |\n|---|---|\n')
+            path.write_text(header + path.read_text(encoding='utf-8') + '\n' + nav + '\n', encoding='utf-8')
+
+        samples = []
+        if pairs:
+            sample_indexes = sorted({round(i * (len(pairs) - 1) / 9) for i in range(10)})
+            samples = [pairs[index] for index in sample_indexes]
+        sample_text = '、'.join(f'{reading} → {surface}' for reading, surface in samples) or '—'
+        table.append(f'| [{names[category_id]}]({category_id}/index.md) | `{category_id}` | {len(rows):,} | {len(pairs):,} | {sample_text} |')
+        links = '\n'.join(f'- [{index+1}ページ]({filename})' for index, filename in enumerate(pages))
+        if not pages:
+            links = '収録0件。'
+        (directory / 'index.md').write_text(
+            f'# {names[category_id]}\n\n[人物カテゴリ一覧](../index.md)\n\n'
+            f'親カテゴリ: `person` · レコード数: **{len(rows):,}** · 読み・表記の組: **{len(pairs):,}**。\n\n{links}\n',
+            encoding='utf-8')
+        summary.append(dict(id=category_id, name=names[category_id], records=len(rows), pairs=len(pairs), pages=len(pages)))
+
+    record_count = sum(item['records'] for item in summary)
+    pair_count = sum(item['pairs'] for item in summary)
+    (output / 'index.md').write_text(
+        '# 人物細分類の収録一覧\n\n'
+        '人物カテゴリを親カテゴリ `person` の下に分けた特別プレリリース向けデータです。'
+        '標準配布対象の30カテゴリを掲載し、成人関連・宗教・犯罪・諜報・テロ・組織犯罪などの制限カテゴリと未分類の個人データは含めていません。\n\n'
+        f'全 **{len(categories)}カテゴリ**、**{record_count:,}レコード**、カテゴリ内の重複を除いた **{pair_count:,}組**を収録しています。'
+        'ページにはカテゴリごとの読み・表記の全組を掲載します。例は読み順から最大10組を選んでいます。\n\n'
+        '[分類定義](../../../src/main/classification/person-taxonomy.json) · '
+        '[通常配布カテゴリ一覧](../index.md) · '
+        '[人物細分類への置換プレリリース](../../classified-dictionary-distribution.md#人物細分類への置換プレリリース)\n\n'
+        + '\n'.join(table) + '\n\n'
+        f'人物候補データSHA-256: `{source_hash}`\n',
+        encoding='utf-8')
+    return dict(categories=summary, records=record_count, uniquePairs=pair_count, sourceSha256=source_hash)
+
+
 def generate(root, output):
     source = root / 'src/main/classification'
     manifest = json.loads((source / 'distribution-manifest.json').read_text())
@@ -125,6 +225,7 @@ def generate(root, output):
         manifest['uniqueAdmittedPairs'] += extra['uniqueAdmittedPairs']
         manifest['dictionaryRows'] += extra['dictionaryRows']
     output.mkdir(parents=True)
+    person_taxonomy_summary = generate_person_taxonomy(root, output / 'person-taxonomy')
     summary = []
     with gzip.open(source / 'distribution-candidates.tsv.gz', 'rt', encoding='utf-8') as stream:
         rows = heapq.merge((line.rstrip('\n').split('\t') for line in stream), specialist_rows)
@@ -201,6 +302,7 @@ def generate(root, output):
         '一覧は配布対象の固定データから全件生成しています。Geminiとassistantの暫定分類・未確認の読みを含みます。'
         '既存28カテゴリのコストと品詞は元辞書の値です。漢方・医療は提供元の読みと空欄へのGemini推定読み（未確認）を採用し、個別の読み訂正には出典を記録します。品詞とコストは本プロジェクトで設定しています。分類取得失敗・未分類・除外候補はこの一覧には含めません。\n\n'
         '[不採用語と判断理由](excluded/index.md) · [品詞IDと品詞名](pos.md) · [生成・配布手順](../classified-dictionary-distribution.md) · [漢方・医療の出典記録](../specialist-dictionaries.md)\n\n'
+        '[人物細分類の全収録語](person-taxonomy/index.md)（特別プレリリース向け）\n\n'
         + '\n'.join(table) + '\n\n'
         f'元データSHA-256: `{manifest["files"]["distribution-candidates.tsv.gz"]}`\n\n'
         '再生成: `python3 scripts/write_classified_dictionary_catalog.py`\n'
@@ -213,6 +315,7 @@ def generate(root, output):
     result = dict(schemaVersion=1, inputSha256=manifest['files']['distribution-candidates.tsv.gz'],
                   uniquePairs=manifest['uniqueAdmittedPairs'], records=manifest['dictionaryRows'], categories=summary)
     result['excluded'] = generate_excluded(root, output, manifest)
+    result['personTaxonomy'] = person_taxonomy_summary
     if specialist_file.exists(): result['specialistInputSha256'] = extra['files']['distribution-candidates.tsv.gz']
     (output / 'summary.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     if sum(c['records'] for c in summary) != manifest['dictionaryRows']:

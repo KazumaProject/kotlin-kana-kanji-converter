@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "b7613d16c1db378fbafff5351082d5866779c3863fe3fbc7d34ea609292af3e3",
-  "uniquePairs": 836819,
-  "records": 853352,
+  "inputSha256": "6909ea156e6973e651a2fe1e4858810d4ded340bce8c082e286597fb4cfde8fc",
+  "uniquePairs": 836923,
+  "records": 853456,
   "categories": [
     {
       "id": "person",
       "name": "人物・人名",
-      "pairs": 266847,
-      "readings": 237814,
-      "records": 268795,
+      "pairs": 266950,
+      "readings": 237899,
+      "records": 268898,
       "pages": 180,
       "recordsByOrigin": {
-        "manual": 219167,
+        "manual": 219166,
         "gemini": 25575,
-        "verified": 24053
+        "verified": 24157
       }
     },
     {
@@ -111,14 +111,14 @@
     {
       "id": "organization",
       "name": "組織",
-      "pairs": 47407,
-      "readings": 46635,
-      "records": 47486,
+      "pairs": 47408,
+      "readings": 46636,
+      "records": 47487,
       "pages": 35,
       "recordsByOrigin": {
         "gemini": 24630,
         "manual": 21401,
-        "verified": 1455
+        "verified": 1456
       }
     },
     {
@@ -391,8 +391,225 @@
     }
   ],
   "excluded": {
-    "pairs": 323184,
+    "pairs": 323182,
     "pages": 601
+  },
+  "personTaxonomy": {
+    "categories": [
+      {
+        "id": "surname_origin_unconfirmed",
+        "name": "姓・名字（由来未確認）",
+        "records": 49614,
+        "pairs": 49325,
+        "pages": 33
+      },
+      {
+        "id": "given_name_origin_unconfirmed",
+        "name": "名・下の名前（由来未確認）",
+        "records": 7163,
+        "pairs": 7085,
+        "pages": 5
+      },
+      {
+        "id": "personal_name_origin_unconfirmed",
+        "name": "人名・姓名（由来未確認）",
+        "records": 170661,
+        "pairs": 169292,
+        "pages": 113
+      },
+      {
+        "id": "actor",
+        "name": "俳優",
+        "records": 6433,
+        "pairs": 6378,
+        "pages": 5
+      },
+      {
+        "id": "voice_actor",
+        "name": "声優",
+        "records": 568,
+        "pairs": 561,
+        "pages": 1
+      },
+      {
+        "id": "musician",
+        "name": "歌手・音楽家",
+        "records": 943,
+        "pairs": 942,
+        "pages": 1
+      },
+      {
+        "id": "idol",
+        "name": "アイドル",
+        "records": 150,
+        "pairs": 149,
+        "pages": 1
+      },
+      {
+        "id": "comedian",
+        "name": "お笑い芸人",
+        "records": 46,
+        "pairs": 44,
+        "pages": 1
+      },
+      {
+        "id": "broadcaster",
+        "name": "タレント・モデル・放送・報道",
+        "records": 1297,
+        "pairs": 1294,
+        "pages": 1
+      },
+      {
+        "id": "online_creator",
+        "name": "配信者・動画投稿者",
+        "records": 57,
+        "pairs": 56,
+        "pages": 1
+      },
+      {
+        "id": "sports",
+        "name": "スポーツ関係者",
+        "records": 4620,
+        "pairs": 4618,
+        "pages": 4
+      },
+      {
+        "id": "competitive_games",
+        "name": "棋士・競技ゲーム選手",
+        "records": 104,
+        "pairs": 104,
+        "pages": 1
+      },
+      {
+        "id": "writer",
+        "name": "作家・文筆家",
+        "records": 1110,
+        "pairs": 1109,
+        "pages": 1
+      },
+      {
+        "id": "manga_illustration",
+        "name": "漫画家・イラストレーター",
+        "records": 183,
+        "pairs": 182,
+        "pages": 1
+      },
+      {
+        "id": "film_game_creator",
+        "name": "映画・映像・ゲーム制作者",
+        "records": 189,
+        "pairs": 189,
+        "pages": 1
+      },
+      {
+        "id": "art_design",
+        "name": "美術・写真・建築・デザイン",
+        "records": 916,
+        "pairs": 916,
+        "pages": 1
+      },
+      {
+        "id": "performing_arts",
+        "name": "舞台・伝統芸能",
+        "records": 272,
+        "pairs": 271,
+        "pages": 1
+      },
+      {
+        "id": "science_education",
+        "name": "研究・技術・教育",
+        "records": 7088,
+        "pairs": 7061,
+        "pages": 5
+      },
+      {
+        "id": "politics_public",
+        "name": "政治・行政・外交・社会運動",
+        "records": 1545,
+        "pairs": 1545,
+        "pages": 2
+      },
+      {
+        "id": "business",
+        "name": "実業・経営",
+        "records": 4034,
+        "pairs": 4015,
+        "pages": 3
+      },
+      {
+        "id": "military",
+        "name": "軍事",
+        "records": 767,
+        "pairs": 767,
+        "pages": 1
+      },
+      {
+        "id": "royalty_nobility",
+        "name": "皇室・王室・貴族",
+        "records": 222,
+        "pairs": 222,
+        "pages": 1
+      },
+      {
+        "id": "other_identified",
+        "name": "その他の特定人物",
+        "records": 4766,
+        "pairs": 4761,
+        "pages": 4
+      },
+      {
+        "id": "thought",
+        "name": "思想・哲学",
+        "records": 155,
+        "pairs": 155,
+        "pages": 1
+      },
+      {
+        "id": "japanese_surname",
+        "name": "日本由来の姓・名字",
+        "records": 0,
+        "pairs": 0,
+        "pages": 0
+      },
+      {
+        "id": "overseas_surname",
+        "name": "海外由来の姓・名字",
+        "records": 0,
+        "pairs": 0,
+        "pages": 0
+      },
+      {
+        "id": "japanese_given_name",
+        "name": "日本由来の名・下の名前",
+        "records": 0,
+        "pairs": 0,
+        "pages": 0
+      },
+      {
+        "id": "overseas_given_name",
+        "name": "海外由来の名・下の名前",
+        "records": 0,
+        "pairs": 0,
+        "pages": 0
+      },
+      {
+        "id": "japanese_personal_name",
+        "name": "日本由来の人名・姓名",
+        "records": 0,
+        "pairs": 0,
+        "pages": 0
+      },
+      {
+        "id": "overseas_personal_name",
+        "name": "海外由来の人名・姓名",
+        "records": 0,
+        "pairs": 0,
+        "pages": 0
+      }
+    ],
+    "records": 262903,
+    "uniquePairs": 261041,
+    "sourceSha256": "620898238f2fef905ff36aaddc5e06eaba9eb27f6815e289911938563e8e83c5"
   },
   "specialistInputSha256": "de25b742784973e59532d3ec86b670ab5dd25ed6c0558aa72d9eb2e6afb628dc"
 }

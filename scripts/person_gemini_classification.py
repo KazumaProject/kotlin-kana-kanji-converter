@@ -184,6 +184,13 @@ def manifest_for(root, batch_size, include_candidate_keys_path=None,
         'standard_dictionary_excluded_categories', []))
     if not excluded_categories:
         raise ValueError('Taxonomy must define standard dictionary exclusions before Gemini preparation')
+    adult_hold = taxonomy.get('policy', {}).get('adult_related_hold')
+    if not isinstance(adult_hold, dict) or adult_hold.get('distribution') != 'metadata_only':
+        raise ValueError('Taxonomy must keep adult-related hold data metadata-only')
+    # This is a metadata-only policy bucket, not a Gemini output category. It
+    # is accepted only in the external hash exclusion file to prevent known
+    # adult-related creators from being sent for classification.
+    excluded_categories.add('adult_related_hold')
     items, _ = collect_items(root)
     all_keys = {item['candidate_key'] for item in items}
     include_keys = candidate_keys_from_file(input_paths[0])
@@ -789,10 +796,10 @@ def main():
     commands = parser.add_subparsers(dest='command', required=True)
     prepare_parser = commands.add_parser('prepare', help='Snapshot and batch person pairs; no API calls')
     prepare_parser.add_argument('--batch-size', type=int, default=5000)
-    prepare_parser.add_argument('--include-candidate-keys', type=Path,
-                               help='Required prefiltered JSONL or newline-delimited SHA-256 allowlist of keys to classify')
-    prepare_parser.add_argument('--exclude-candidate-keys', type=Path,
-                               help='Optional JSONL or newline-delimited SHA-256 keys never to send to Gemini')
+    prepare_parser.add_argument('--include-candidate-keys', type=Path, required=True,
+                               help='Prefiltered JSONL or newline-delimited SHA-256 allowlist of keys to classify')
+    prepare_parser.add_argument('--exclude-candidate-keys', type=Path, required=True,
+                               help='External JSONL of restricted candidate hashes never to send to Gemini')
     run_parser = commands.add_parser('run', help='Call the verified free-tier Gemini project and resume saved batches')
     run_parser.add_argument('--free-proof', type=Path, default=Path(WORK_PATH) / 'free-tier-proof.json')
     run_parser.add_argument('--workers', type=int, default=2)
