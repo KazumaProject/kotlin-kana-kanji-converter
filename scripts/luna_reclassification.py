@@ -4,6 +4,7 @@ import argparse
 import collections
 import fcntl
 import gzip
+import hashlib
 import io
 import json
 import os
@@ -63,14 +64,86 @@ def subsequent_reviews(root, current, baseline):
     if 'reviewBaseExcludedCandidatePairs' not in baseline['provenance']:
         if provenance.pop('reviewBaseExcludedCandidatePairs', baseline['excludedCandidatePairs']) != baseline['excludedCandidatePairs']:
             raise ValueError('Review baseline exclusion count changed')
+    additions = person_additions_after_baseline(root, current, baseline)
+    if 'personAdditions' in baseline['provenance']:
+        provenance['personAdditions'] = baseline['provenance']['personAdditions']
+    else:
+        provenance.pop('personAdditions', None)
     inputs = dict(current['inputs'])
     for path in added:
         if inputs.pop(path, None) != d.sha(root/path):
             raise ValueError('Subsequent review input hash mismatch')
+    for batch, _ in additions:
+        if inputs.pop(batch['path'], None) != batch['sha256']:
+            raise ValueError('Subsequent person-addition input hash mismatch')
+    taxonomy_path = 'src/main/classification/person-taxonomy.json'
+    if taxonomy_path not in baseline['inputs'] and taxonomy_path in inputs:
+        if inputs.pop(taxonomy_path) != d.sha(root/taxonomy_path):
+            raise ValueError('Person taxonomy input hash mismatch')
+    if PERSON_SOURCE in baseline['inputs']:
+        restored = restore_person_source(root, current, baseline, additions)
+        if hashlib.sha256(restored).hexdigest() != baseline['inputs'][PERSON_SOURCE]:
+            raise ValueError('Person additions do not restore the source snapshot')
+        inputs[PERSON_SOURCE] = baseline['inputs'][PERSON_SOURCE]
     if (provenance != baseline['provenance'] or inputs != baseline['inputs']
             or current['idDefSha256'] != baseline['idDefSha256']):
         raise ValueError('Unrelated distribution provenance changed')
     return entries
+
+
+PERSON_SOURCE = 'src/main/bin/names.txt'
+
+
+def person_additions_after_baseline(root, current, baseline):
+    """Load only new, manifest-registered person additions layered over the Luna snapshot."""
+    base_batches = baseline.get('provenance', {}).get('personAdditions', [])
+    current_batches = current.get('provenance', {}).get('personAdditions', [])
+    if current_batches[:len(base_batches)] != base_batches:
+        raise ValueError('Baseline person-addition provenance is missing or changed')
+    additions = []
+    for batch in current_batches[len(base_batches):]:
+        path = batch.get('path')
+        if (not isinstance(path, str) or not path.startswith('src/main/classification/person-additions/')
+                or not path.endswith('.jsonl') or batch.get('sha256') != d.sha(root/path)
+                or current.get('inputs', {}).get(path) != batch.get('sha256')):
+            raise ValueError('Invalid subsequent person-addition provenance')
+        entries = d.person_entries(root, root/path)
+        added_pairs = [tuple(pair) for pair in batch.get('addedPairs', [])]
+        appended_pairs = [tuple(pair) for pair in batch.get('appendedPairs', [])]
+        if (len(entries) != batch.get('reviewedPairs') or not added_pairs
+                or len(added_pairs) != len(set(added_pairs))
+                or not set(added_pairs) <= entries.keys()
+                or len(appended_pairs) != batch.get('addedSourceRows')
+                or len(appended_pairs) != len(set(appended_pairs))
+                or not set(appended_pairs) <= set(added_pairs)):
+            raise ValueError('Person-addition rows differ from recorded provenance')
+        additions.append((batch, entries))
+    return additions
+
+
+def restore_person_source(root, current, baseline, additions):
+    """Remove recorded appended person rows and return the pinned source bytes."""
+    if current.get('inputs', {}).get(PERSON_SOURCE) != d.sha(root/PERSON_SOURCE):
+        raise ValueError('Current person source hash differs from distribution manifest')
+    appended = []
+    for batch, entries in additions:
+        for pair in (tuple(pair) for pair in batch['appendedPairs']):
+            entry = entries[pair]
+            appended.append('\t'.join((pair[0], str(entry['left_id']), str(entry['right_id']),
+                                       str(entry['cost']), pair[1])).encode('utf-8') + b'\n')
+    current_bytes = (root/PERSON_SOURCE).read_bytes()
+    suffix = b''.join(appended)
+    if suffix and not current_bytes.endswith(suffix):
+        raise ValueError('Recorded person additions are not the appended source rows')
+    candidate = current_bytes[:-len(suffix)] if suffix else current_bytes
+    expected = baseline.get('inputs', {}).get(PERSON_SOURCE)
+    hashes = {hashlib.sha256(candidate).hexdigest(): candidate}
+    if candidate.endswith(b'\n'):
+        without_separator = candidate[:-1]
+        hashes[hashlib.sha256(without_separator).hexdigest()] = without_separator
+    if expected not in hashes:
+        raise ValueError('Appended person rows do not restore the original source hash')
+    return hashes[expected]
 
 def snapshot(root):
     out = root / REL
@@ -80,16 +153,21 @@ def snapshot(root):
     for name, value in m['files'].items():
         if d.sha(out/name) != value: raise ValueError('Snapshot hash mismatch: '+name)
     baseline = m['baselineManifest']
+    current = json.loads((root/'src/main/classification/distribution-manifest.json').read_text())
+    additions = person_additions_after_baseline(root, current, baseline)
+    restored_person_source = (restore_person_source(root, current, baseline, additions)
+                              if PERSON_SOURCE in baseline['inputs'] else None)
     for name in FILES[:2]:
         if m['files']['baseline-'+name.removeprefix('distribution-')] != baseline['files'][name]:
             raise ValueError('Baseline snapshot hash mismatch')
     for path, expected in baseline['inputs'].items():
-        if d.sha(root/path) != expected: raise ValueError('Source input hash mismatch: '+path)
+        actual = (hashlib.sha256(restored_person_source).hexdigest()
+                  if path == PERSON_SOURCE and restored_person_source is not None else d.sha(root/path))
+        if actual != expected: raise ValueError('Source input hash mismatch: '+path)
     if d.sha(root/'src/main/resources/id.def') != baseline['idDefSha256']:
         raise ValueError('id.def changed since export')
     if d.sha(root/'src/main/classification/categories.json') != baseline['files']['categories.json']:
         raise ValueError('Taxonomy changed since export')
-    current = json.loads((root/'src/main/classification/distribution-manifest.json').read_text())
     if 'lunaReclassification' not in current['provenance']:
         if current != baseline: raise ValueError('Distribution manifest changed since export')
     else:
@@ -272,6 +350,12 @@ def verify_ledger(root):
     import classification_reviews as reviews
     before_excluded = sum(r[4]=='excluded' for r in base.values())
     base = reviews.apply(base, entries)
+    for batch, person_entries in person_additions_after_baseline(root, manifest, m['baselineManifest']):
+        for reading, surface in batch['addedPairs']:
+            pair = reading, surface
+            if pair in base or pair not in person_entries:
+                raise ValueError('Person addition conflicts with the pinned decision ledger')
+            base[pair] = [reading, surface, 'person', 'verified', 'classified']
     exclusion_delta = sum(r[4]=='excluded' for r in base.values()) - before_excluded
     if (manifest['excludedCandidatePairs']!=m['baselineManifest']['excludedCandidatePairs']+sum(r['effective_action']=='reject' for r in ledger)+exclusion_delta
             or manifest['excludedClassifiedPairs']!=sum(r[4]=='excluded' for r in base.values())):

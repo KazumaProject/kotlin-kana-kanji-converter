@@ -1,8 +1,9 @@
 {
   "schema_version": 1,
-  "taxonomy_version": "2026-10-21.4",
+  "taxonomy_version": "2026-10-21.6",
   "policy": {
-    "version": "2026-10-21.4",
+    "version": "2026-10-21.6",
+    "name_origin_definition": "日本由来／海外由来は人の国籍や文字種ではなく、姓・名・姓名の命名慣習上の由来を指す。読みや表記だけから推測せず、由来に確信がない場合は対応する由来未確認カテゴリにする。複数の命名慣習が混在し判別できない場合も由来未確認にする。",
     "adult_scope": [
       "video",
       "game",
@@ -34,34 +35,34 @@
     "restricted_category_records": "aggregate_counts_only",
     "adult_related_hold": {
       "label": "成人関連保留（別枠）",
-      "definition": "成人関連の可能性はあるが、作品の性質または候補との対応を確認できない項目を、出演者・未分類と分けて保留する。個別候補名は保存・配布せず、件数のみ集計する。",
+      "definition": "成人関連の可能性はあるが作品の性質または候補との対応を確認できない項目に加え、成人向け作品の制作者など出演者カテゴリとは別の成人関連活動を確認した項目を、一般配布から保留する。個別候補名は保存・配布せず、件数のみ集計する。",
       "distribution": "metadata_only"
     }
   },
   "categories": [
     {
       "number": 1,
-      "id": "surname",
-      "label": "姓・名字",
+      "id": "surname_origin_unconfirmed",
+      "label": "姓・名字（由来未確認）",
       "standard_enabled": true,
-      "definition": "姓そのものの読み・表記を独立資料で確認する。",
-      "boundary": "特定個人の姓を切り出すだけでは不可。"
+      "definition": "姓と確認できるが、日本由来か海外由来かを確認できない項目。",
+      "boundary": "文字種や個人の国籍だけから由来を決めない。"
     },
     {
       "number": 2,
-      "id": "given_name",
-      "label": "名・下の名前",
+      "id": "given_name_origin_unconfirmed",
+      "label": "名・下の名前（由来未確認）",
       "standard_enabled": true,
-      "definition": "下の名前そのものを独立した人名資料で確認する。",
-      "boundary": "短い表記や有名人の名と一致するだけでは不可。"
+      "definition": "名と確認できるが、日本由来か海外由来かを確認できない項目。",
+      "boundary": "文字種や個人の国籍だけから由来を決めない。"
     },
     {
       "number": 3,
-      "id": "personal_name",
-      "label": "人名・姓名",
+      "id": "personal_name_origin_unconfirmed",
+      "label": "人名・姓名（由来未確認）",
       "standard_enabled": true,
-      "definition": "特定個人に結びつけず、人名・姓名として独立資料で確認する。",
-      "boundary": "同定できない個人の受け皿にしない。"
+      "definition": "人名・姓名と確認できるが、日本由来か海外由来かを確認できない項目。",
+      "boundary": "特定個人の国籍、姓名の文字種、読みだけから由来を決めない。"
     },
     {
       "number": 4,
@@ -157,7 +158,7 @@
       "label": "漫画家・イラストレーター",
       "standard_enabled": true,
       "definition": "漫画・イラストを主に制作する個人、または資料で漫画家の合作名義と確認できる活動名。",
-      "boundary": "成人向け制作だけでは出演者とみなさない。合作ペンネームは姓・名に分解しない。"
+      "boundary": "成人向け作品の制作者は一般配布せず、adult_related_holdに集計する。制作だけでは出演者とみなさない。合作ペンネームは姓・名に分解しない。"
     },
     {
       "number": 16,
@@ -278,6 +279,54 @@
       "standard_enabled": true,
       "definition": "哲学者、思想家等として公開された著作・職業資料で確認できる個人。",
       "boundary": "本人の信仰や宗教的背景だけでは宗教関係者にせず、聖職・宗教指導・宗教研究の公的役割が確認できる場合はreligionへ分類する。"
+    },
+    {
+      "number": 31,
+      "id": "japanese_surname",
+      "label": "日本由来の姓・名字",
+      "standard_enabled": true,
+      "definition": "日本の命名慣習に由来する姓。",
+      "boundary": "日本人が持つ姓というだけでは不可。読みや表記だけで判断できず、由来に確信がなければsurname_origin_unconfirmedにする。"
+    },
+    {
+      "number": 32,
+      "id": "overseas_surname",
+      "label": "海外由来の姓・名字",
+      "standard_enabled": true,
+      "definition": "日本以外の命名慣習に由来する姓。日本語に音写された姓も含む。",
+      "boundary": "海外出身者が持つ姓というだけでは不可。由来に確信がなければsurname_origin_unconfirmedにする。"
+    },
+    {
+      "number": 33,
+      "id": "japanese_given_name",
+      "label": "日本由来の名・下の名前",
+      "standard_enabled": true,
+      "definition": "日本の命名慣習に由来する名。",
+      "boundary": "日本人が持つ名というだけでは不可。読みや表記だけで判断できず、由来に確信がなければgiven_name_origin_unconfirmedにする。"
+    },
+    {
+      "number": 34,
+      "id": "overseas_given_name",
+      "label": "海外由来の名・下の名前",
+      "standard_enabled": true,
+      "definition": "日本以外の命名慣習に由来する名。日本語に音写された名も含む。",
+      "boundary": "海外出身者が持つ名というだけでは不可。由来に確信がなければgiven_name_origin_unconfirmedにする。"
+    },
+    {
+      "number": 35,
+      "id": "japanese_personal_name",
+      "label": "日本由来の人名・姓名",
+      "standard_enabled": true,
+      "definition": "姓名全体が日本の命名慣習に由来する人名。",
+      "boundary": "個人の国籍や日本語表記だけで判断しない。姓名の一部が別の慣習に由来する場合や、全体の由来が不明な場合はpersonal_name_origin_unconfirmedにする。"
+    },
+    {
+      "number": 36,
+      "id": "overseas_personal_name",
+      "label": "海外由来の人名・姓名",
+      "standard_enabled": true,
+      "definition": "姓名全体が日本以外の命名慣習に由来する人名。日本語に音写された姓名も含む。",
+      "boundary": "個人の国籍やカタカナ表記だけで判断しない。複数の命名慣習が混在する場合や、全体の由来が不明な場合はpersonal_name_origin_unconfirmedにする。"
     }
   ],
   "sport_subcategories": {
@@ -335,6 +384,10 @@
     "weightlifting": "重量挙げ",
     "lawn_bowls": "ローンボウルズ",
     "skateboarding": "スケートボード",
+    "modern_pentathlon": "近代五種",
+    "sport_climbing": "スポーツクライミング",
+    "surfing": "サーフィン",
+    "breaking": "ブレイキン",
     "sport_unspecified": "競技未特定"
   },
   "sport_subcategory_policy": {
@@ -342,7 +395,8 @@
     "multiple_allowed": true,
     "source_priority": [
       "Wikidata P641 on an exact person name and reading match",
-      "explicit Wikidata occupation P106 on an exact person name and reading match"
+      "explicit Wikidata occupation P106 on an exact person name and reading match",
+      "official national Olympic team profile confirming name and reading, paired with an official team roster identifying the sport"
     ],
     "unmapped_or_missing": "sport_unspecified",
     "competitive_games": "Keep chess, poker, e-sports, and similar competitive games in competitive_games."

@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'
+      - 'person-dictionaries-v*'
   workflow_dispatch:
     inputs:
       mozc_ref:
@@ -358,7 +359,19 @@ jobs:
             verifyJapaneseKeyboardDictionaryAssets \
             buildDictionaryDistributionManifest
 
+      - name: Build the person-category replacement bundle
+        if: startsWith(github.ref, 'refs/tags/person-dictionaries-v')
+        run: ./gradlew buildPersonDictionaryReplacementDistribution
+
+      - name: Exercise replacement category dictionaries with KanaKanjiEngine
+        if: startsWith(github.ref, 'refs/tags/person-dictionaries-v')
+        run: |
+          ./gradlew --quiet convertPersonCandidates --no-daemon --args="--archive build/person-dictionary/japanese_keyboard_dictionary_assets_person_replaced.zip --base release_zips/japanese_keyboard_dictionary_assets.zip --category sports --count 10 --expect-candidate 堀米雄斗 ほりごめゆうと"
+          ./gradlew --quiet convertPersonCandidates --no-daemon --args="--archive build/person-dictionary/japanese_keyboard_dictionary_assets_person_replaced.zip --base release_zips/japanese_keyboard_dictionary_assets.zip --category manga_illustration --count 10 --expect-candidate あいおいやよい あいおいやよい"
+          ./gradlew --quiet convertPersonCandidates --no-daemon --args="--archive build/person-dictionary/japanese_keyboard_dictionary_assets_person_replaced.zip --base release_zips/japanese_keyboard_dictionary_assets.zip --category performing_arts --count 10 --expect-candidate 玉川太福 たまがわだいふく"
+
       - name: Upload verified dictionary distribution
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
         with:
           name: japanese-keyboard-dictionary-assets
@@ -388,6 +401,23 @@ jobs:
           prerelease: true
           makeLatest: false
           artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./release_zips/dictionary-distribution-manifest.json,./release_zips/DICTIONARY-SHA256SUMS,./release_zips/DICTIONARY-LICENSES.txt
+          allowUpdates: true
+          artifactErrorsFailBuild: true
+          removeArtifacts: true
+          replacesArtifacts: true
+
+      - name: Create person-category replacement prerelease
+        if: startsWith(github.ref, 'refs/tags/person-dictionaries-v')
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref_name }}
+          name: Person category replacement ${{ github.ref_name }}
+          body: |
+            The generic `person` dictionary is removed from this prerelease bundle and replaced by the taxonomy's 30 standard-enabled person subcategory dictionaries. The bundle has 59 categories in total. Each replacement category is identified in `dictionary-distribution-manifest.json` with `parentCategoryId: person`. Restricted and unresolved person records are not included.
+          prerelease: true
+          makeLatest: false
+          artifacts: build/person-dictionary/japanese_keyboard_dictionary_assets_person_replaced.zip,build/person-dictionary/person-replacement-dictionary-manifest.json,build/person-dictionary/DICTIONARY-SHA256SUMS,release_zips/DICTIONARY-LICENSES.txt
           allowUpdates: true
           artifactErrorsFailBuild: true
           removeArtifacts: true

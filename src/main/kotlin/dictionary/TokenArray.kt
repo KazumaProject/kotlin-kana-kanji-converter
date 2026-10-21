@@ -274,8 +274,10 @@ class TokenArray {
      * @param mode 0:test else:main
      *
      **/
-    fun readPOSTable(mode: Int) {
-        val objectInput = ObjectInputStream(BufferedInputStream(FileInputStream(defaultPosTablePath(mode))))
+    fun readPOSTable(mode: Int, inputPath: String? = null) {
+        val objectInput = ObjectInputStream(
+            BufferedInputStream(FileInputStream(inputPath ?: defaultPosTablePath(mode))),
+        )
         objectInput.apply {
             leftIds = (readObject() as ShortArray).toList()
             rightIds = (readObject() as ShortArray).toList()

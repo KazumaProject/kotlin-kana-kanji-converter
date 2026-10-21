@@ -86,6 +86,10 @@ SPORT_LABELS = {
     'weightlifting': '重量挙げ',
     'lawn_bowls': 'ローンボウルズ',
     'skateboarding': 'スケートボード',
+    'modern_pentathlon': '近代五種',
+    'sport_climbing': 'スポーツクライミング',
+    'surfing': 'サーフィン',
+    'breaking': 'ブレイキン',
     'sport_unspecified': '競技未特定',
 }
 
@@ -153,6 +157,10 @@ def labels_for_sport():
     add('weightlifting', '重量挙げ')
     add('lawn_bowls', 'ローンボウルズ')
     add('skateboarding', 'スケートボード')
+    add('modern_pentathlon', '近代五種')
+    add('sport_climbing', 'スポーツクライミング')
+    add('surfing', 'サーフィン')
+    add('breaking', 'ブレイキン')
     add('combat_unspecified', '格闘技')
     return labels
 
@@ -200,6 +208,10 @@ OCCUPATION_SPORTS = [
     ('triathlon', re.compile(r'トライアスロン選手')),
     ('darts', re.compile(r'ダーツ選手')),
     ('archery', re.compile(r'アーチェリー選手')),
+    ('modern_pentathlon', re.compile(r'近代五種選手|近代五種')),
+    ('sport_climbing', re.compile(r'スポーツクライミング選手|スポーツクライマー')),
+    ('surfing', re.compile(r'サーファー|サーフィン選手')),
+    ('breaking', re.compile(r'ブレイキン選手|ブレイクダンサー')),
     ('weightlifting', re.compile(r'重量挙げ選手')),
     ('lawn_bowls', re.compile(r'ローンボウルズ選手')),
     ('skateboarding', re.compile(r'スケートボーダー')),
@@ -270,9 +282,9 @@ def taxonomy_maps(path):
         raise ValueError('Taxonomy must exclude the restricted categories from standard dictionaries')
     if policy.get('restricted_category_records') != 'aggregate_counts_only':
         raise ValueError('Taxonomy must keep restricted category records as aggregate counts only')
-    if any(next((row['standard_enabled'] for row in taxonomy['categories']
-                if row['id'] == category_id), None) is not False
-           for category_id in AGGREGATE_ONLY_CATEGORY_IDS):
+    disabled_ids = {row['id'] for row in taxonomy['categories']
+                    if row.get('standard_enabled') is False}
+    if disabled_ids != AGGREGATE_ONLY_CATEGORY_IDS:
         raise ValueError('Restricted categories must have standard distribution disabled')
     if policy.get('adult_distribution') != 'metadata_only':
         raise ValueError('Adult performer data must be metadata only')
@@ -422,6 +434,17 @@ def load_overrides(path, category_by_id,
             raise ValueError(f'Unknown override category ID: {category_id!r}')
         if category_id in aggregate_only_category_ids:
             raise ValueError('Restricted categories cannot have named source overrides')
+        sport_tags = row.get('sport_subcategories')
+        if sport_tags is not None:
+            if (category_id != 'sports' or not isinstance(sport_tags, list)
+                    or not all(isinstance(tag, str) for tag in sport_tags)
+                    or not sport_tags or len(set(sport_tags)) != len(sport_tags)
+                    or not set(sport_tags) <= set(SPORT_LABELS)):
+                raise ValueError(f'Invalid sport subcategories in override: {key}')
+        source_hash = row.get('source_sha256')
+        if source_hash is not None and (not isinstance(source_hash, str)
+                                        or not re.fullmatch(r'[0-9a-f]{64}', source_hash)):
+            raise ValueError(f'Invalid source SHA-256 in override: {key}')
         for field in ('reading', 'surface', 'source_url', 'reason', 'checked_on'):
             if not isinstance(row.get(field), str) or not row[field]:
                 raise ValueError(f'Override is missing {field}: {key}')
@@ -432,7 +455,7 @@ def load_overrides(path, category_by_id,
 
 
 def apply_source_overrides(rows, overrides, category_by_id, category_by_code,
-                           changes, after):
+                           changes, after, tag_keys=None, examples=None):
     applied = []
     matched = collections.Counter()
     for row in rows:
@@ -456,6 +479,18 @@ def apply_source_overrides(rows, overrides, category_by_id, category_by_code,
             'reason': override['reason'],
             'checked_on': override['checked_on'],
         }
+        if override.get('source_section'):
+            row['review_evidence']['source_section'] = override['source_section']
+        sport_tags = set(row.get('sport_subcategories', []))
+        sport_tags.update(override.get('sport_subcategories', []))
+        if sport_tags:
+            row['sport_subcategories'] = sorted(sport_tags)
+            for tag in sport_tags:
+                if tag_keys is not None:
+                    tag_keys[tag].add(override['candidate_key'])
+                if (examples is not None and len(examples[tag]) < 3
+                        and f"{row['reading']} → {row['surface']}" not in examples[tag]):
+                    examples[tag].append(f"{row['reading']} → {row['surface']}")
         if old_code != target_code:
             after[old_code] -= 1
             after[target_code] += 1
@@ -518,6 +553,12 @@ def review_gemini_results(input_dir, output_dir, overrides, category_by_id,
                     'reason': override['reason'],
                     'checked_on': override['checked_on'],
                 }
+                if override.get('source_section'):
+                    row['review_evidence']['source_section'] = override['source_section']
+                sport_tags = set(row.get('sport_subcategories', []))
+                sport_tags.update(override.get('sport_subcategories', []))
+                if sport_tags:
+                    row['sport_subcategories'] = sorted(sport_tags)
                 matched[override['candidate_key']] += 1
                 applied.append({
                     'candidate_key': override['candidate_key'],
@@ -579,7 +620,8 @@ def main():
     source_keys = {row['candidate_key'] for row in reviewed}
     source_overrides = {key: value for key, value in overrides.items() if key in source_keys}
     source_applied = apply_source_overrides(
-        reviewed, source_overrides, category_by_id, category_by_code, changes, after)
+        reviewed, source_overrides, category_by_id, category_by_code,
+        changes, after, tag_keys, tag_examples)
     gemini_output = output / 'gemini-results'
     initial_applied, initial_demoted = review_gemini_results(
         args.gemini_results, gemini_output, overrides, category_by_id,
@@ -628,7 +670,7 @@ def main():
         'recovery_gemini_override_rows_applied': recovery_applied,
         'initial_gemini_manual_only_rows_demoted': initial_demoted,
         'recovery_gemini_manual_only_rows_demoted': recovery_demoted,
-        'classification_policy': 'Reviewed outputs omit person-level rows in restricted categories and retain aggregate counts only; raw source and Gemini input files remain unchanged. Restricted categories are excluded from standard dictionaries.',
+        'classification_policy': 'Reviewed outputs omit person-level rows in restricted categories and retain aggregate counts only. Raw source and Gemini workspaces are external to the repository; future Gemini runs require an external restricted-category hash exclusion file. The current broad person dictionary snapshot does not apply person-subcategory exclusions.',
         'taxonomy_version': taxonomy['taxonomy_version'],
     }
     write_json(output / 'summary.json', summary)
