@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "taxonomy_version": "2026-10-22.1",
+  "taxonomy_version": "2026-10-22.2",
   "policy": {
-    "version": "2026-10-22.1",
-    "name_origin_definition": "日本由来／海外由来は人の国籍や文字種ではなく、姓・名・姓名の命名慣習上の由来を指す。読みや表記だけから推測せず、由来に確信がない場合は対応する由来未確認カテゴリにする。複数の命名慣習が混在し判別できない場合も由来未確認にする。",
+    "version": "2026-10-22.2",
+    "name_origin_definition": "日本由来／海外由来は人の国籍や文字種ではなく、姓・名・姓名の命名慣習上の由来を指す。読み・表記の文字種や印象だけで推測せず、由来に確信がない場合は対応する由来未確認カテゴリにする。複数の命名慣習が混在し判別できない場合も由来未確認にする。",
     "adult_scope": [
       "video",
       "game",
@@ -47,7 +47,27 @@
     "standard_dictionary_withheld_categories": [
       "military",
       "thought"
-    ]
+    ],
+    "name_origin_classification": {
+      "method": "gemini_only_provisional",
+      "independent_review": "not_performed",
+      "unknown_result": "retain_source_category",
+      "japanese_categories": [
+        "surname_origin_japanese",
+        "given_name_origin_japanese",
+        "personal_name_origin_japanese"
+      ],
+      "foreign_categories": [
+        "surname_origin_foreign",
+        "given_name_origin_foreign",
+        "personal_name_origin_foreign"
+      ],
+      "unconfirmed_categories": [
+        "surname_origin_unconfirmed",
+        "given_name_origin_unconfirmed",
+        "personal_name_origin_unconfirmed"
+      ]
+    }
   },
   "categories": [
     {
@@ -305,6 +325,54 @@
       "standard_enabled": false,
       "definition": "人物候補と確認できるが、読み・表記や利用可能な根拠から他の配布カテゴリを確定できない項目。",
       "boundary": "辞書へ収録しない。既存カテゴリに根拠を持って再分類できた候補だけを配布し、その他は候補データから除外する。"
+    },
+    {
+      "number": 33,
+      "id": "surname_origin_japanese",
+      "label": "姓・名字（日本由来）",
+      "standard_enabled": true,
+      "definition": "命名慣習上、日本に由来するとGeminiが暫定分類した姓・名字。個人の国籍や文字種を示す分類ではない。独立した出典確認は行っていない。",
+      "boundary": "姓・名字の候補に限る。命名慣習を判断できない、または複数の慣習が混在する場合は surname_origin_unconfirmed に残す。"
+    },
+    {
+      "number": 34,
+      "id": "surname_origin_foreign",
+      "label": "姓・名字（海外由来）",
+      "standard_enabled": true,
+      "definition": "命名慣習上、日本以外に由来するとGeminiが暫定分類した姓・名字。個人の国籍や文字種を示す分類ではない。独立した出典確認は行っていない。",
+      "boundary": "姓・名字の候補に限る。命名慣習を判断できない、または複数の慣習が混在する場合は surname_origin_unconfirmed に残す。"
+    },
+    {
+      "number": 35,
+      "id": "given_name_origin_japanese",
+      "label": "名・下の名前（日本由来）",
+      "standard_enabled": true,
+      "definition": "命名慣習上、日本に由来するとGeminiが暫定分類した名・下の名前。個人の国籍や文字種を示す分類ではない。独立した出典確認は行っていない。",
+      "boundary": "名・下の名前の候補に限る。命名慣習を判断できない、または複数の慣習が混在する場合は given_name_origin_unconfirmed に残す。"
+    },
+    {
+      "number": 36,
+      "id": "given_name_origin_foreign",
+      "label": "名・下の名前（海外由来）",
+      "standard_enabled": true,
+      "definition": "命名慣習上、日本以外に由来するとGeminiが暫定分類した名・下の名前。個人の国籍や文字種を示す分類ではない。独立した出典確認は行っていない。",
+      "boundary": "名・下の名前の候補に限る。命名慣習を判断できない、または複数の慣習が混在する場合は given_name_origin_unconfirmed に残す。"
+    },
+    {
+      "number": 37,
+      "id": "personal_name_origin_japanese",
+      "label": "人名・姓名（日本由来）",
+      "standard_enabled": true,
+      "definition": "命名慣習上、日本に由来するとGeminiが暫定分類した人名・姓名全体。個人の国籍や文字種を示す分類ではない。独立した出典確認は行っていない。",
+      "boundary": "人名・姓名全体の候補に限る。命名慣習を判断できない、または複数の慣習が混在する場合は personal_name_origin_unconfirmed に残す。"
+    },
+    {
+      "number": 38,
+      "id": "personal_name_origin_foreign",
+      "label": "人名・姓名（海外由来）",
+      "standard_enabled": true,
+      "definition": "命名慣習上、日本以外に由来するとGeminiが暫定分類した人名・姓名全体。個人の国籍や文字種を示す分類ではない。独立した出典確認は行っていない。",
+      "boundary": "人名・姓名全体の候補に限る。命名慣習を判断できない、または複数の慣習が混在する場合は personal_name_origin_unconfirmed に残す。"
     }
   ],
   "sport_subcategories": {

@@ -18,10 +18,26 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import review_person_classifications as reviews  # noqa: E402
+import person_name_origin_classification as name_origins  # noqa: E402
 
 
 def candidate_key(reading, surface):
     return hashlib.sha256((reading + "\0" + surface).encode("utf-8")).hexdigest()
+
+
+def previously_distributed_sports(path):
+    """Load sports records so unrelated name-origin changes do not drop them."""
+    rows_by_key = defaultdict(list)
+    if not path.is_file():
+        return rows_by_key
+    with gzip.open(path, "rt", encoding="utf-8") as source:
+        for number, line in enumerate(source, 1):
+            fields = line.rstrip("\n").split("\t")
+            if len(fields) != 7:
+                raise ValueError(f"{path}:{number}: expected seven columns")
+            if fields[0] == "sports":
+                rows_by_key[candidate_key(fields[1], fields[5])].append(fields)
+    return rows_by_key
 
 
 def load_exclusions(path, root):
@@ -86,13 +102,40 @@ def restricted_proposal_keys(paths, category_by_code):
     return keys
 
 
+def apply_name_origin_mapping(final, mapping, source_keys=None):
+    """Apply the fixed hash-keyed mapping to exactly the unresolved name buckets."""
+    origin_source = {
+        key: value for key, value in final.items()
+        if value[2] in name_origins.SOURCE_CATEGORIES
+        and (source_keys is None or key in source_keys)
+    }
+    applicable_mapping = (mapping if source_keys is None else
+                          {key: value for key, value in mapping.items()
+                           if key in source_keys})
+    if set(applicable_mapping) != set(origin_source):
+        missing = len(set(origin_source) - set(applicable_mapping))
+        extra = len(set(applicable_mapping) - set(origin_source))
+        raise ValueError(
+            f"Name-origin classifications do not exactly cover unresolved name candidates "
+            f"(missing={missing}, extra={extra})")
+    for key, (reading, surface, source_category, tags) in origin_source.items():
+        mapped_source, target_category = applicable_mapping[key]
+        if mapped_source != source_category or candidate_key(reading, surface) != key:
+            raise ValueError("Name-origin mapping source category or candidate key is inconsistent")
+        final[key] = (reading, surface, target_category, tags)
+    return len(origin_source)
+
+
 def export(args):
+    previous_sports = previously_distributed_sports(
+        args.root / "src/main/classification/person-dictionary-candidates.tsv.gz"
+    )
     exclusions = load_exclusions(args.excluded_candidates, args.root)
     taxonomy, category_by_code, category_by_id = reviews.taxonomy_maps(args.root / "src/main/classification/person-taxonomy.json")
     enabled = {row["id"] for row in taxonomy["categories"] if row.get("standard_enabled") is True}
     category_order = {row["id"]: row["number"] for row in taxonomy["categories"]}
-    if len(enabled) != 22:
-        raise ValueError("Expected exactly 22 standard-enabled person categories")
+    if len(enabled) != 28:
+        raise ValueError("Expected exactly 28 standard-enabled person categories")
 
     overrides = reviews.load_overrides(
         args.root / "src/main/classification/person-category-overrides.jsonl",
@@ -167,6 +210,21 @@ def export(args):
             else:
                 final.pop(key, None)
 
+        records_by_pair = defaultdict(list)
+        source_keys = set()
+        with gzip.open(args.root / "src/main/classification/distribution-candidates.tsv.gz", "rt", encoding="utf-8") as source:
+            for number, line in enumerate(source, 1):
+                fields = line.rstrip("\n").split("\t")
+                if len(fields) != 6:
+                    raise ValueError(f"Malformed classified dictionary source row {number}")
+                if fields[0] != "person":
+                    continue
+                reading, surface = fields[1], fields[5]
+                key = candidate_key(reading, surface)
+                source_keys.add(key)
+                if key in final:
+                    records_by_pair[key].append(fields[1:])
+
         restricted_source_keys = {
             row["candidate_key"] for row in reviewed
             if row.get("category_id") in reviews.AGGREGATE_ONLY_CATEGORY_IDS
@@ -205,21 +263,6 @@ def export(args):
             tags.add(sport)
             final[key] = (row["reading"], row["surface"], "sports", tags)
 
-    records_by_pair = defaultdict(list)
-    source_keys = set()
-    with gzip.open(args.root / "src/main/classification/distribution-candidates.tsv.gz", "rt", encoding="utf-8") as source:
-        for number, line in enumerate(source, 1):
-            fields = line.rstrip("\n").split("\t")
-            if len(fields) != 6:
-                raise ValueError(f"Malformed classified dictionary source row {number}")
-            if fields[0] != "person":
-                continue
-            reading, surface = fields[1], fields[5]
-            key = candidate_key(reading, surface)
-            source_keys.add(key)
-            if key in final:
-                records_by_pair[key].append(fields[1:])
-
     unknown_exclusions = set(exclusions) - source_keys
     if unknown_exclusions:
         raise ValueError(f"Restricted candidate exclusion file contains {len(unknown_exclusions)} keys absent from the person source")
@@ -230,14 +273,33 @@ def export(args):
     for key in exclusions:
         final.pop(key, None)
 
-    unresolved_keys = (source_keys - set(final) - set(exclusions)
-                       - restricted_source_keys - restricted_gemini_keys)
     ime_filtered_keys = set()
     for key, (reading, surface, _, _) in list(final.items()):
         if reviews.ime_candidate_issue(reading, surface):
             final.pop(key)
             records_by_pair.pop(key, None)
             ime_filtered_keys.add(key)
+
+    origin_mapping, _origin_manifest = name_origins.load_fixed_mapping(args.root)
+    apply_name_origin_mapping(final, origin_mapping, source_keys)
+
+    # Preserve previously shipped sports when this snapshot has no replacement
+    # decision or source row to rebuild the POS data. Explicit restrictions,
+    # exclusions, and name-origin decisions take priority.
+    preserved_sports = {
+        key: rows for key, rows in previous_sports.items()
+        if key in source_keys
+        and (key not in final or
+             (final[key][2] == "sports" and not records_by_pair.get(key)))
+        and key not in exclusions
+        and key not in restricted_source_keys
+        and key not in restricted_gemini_keys
+        and key not in origin_mapping
+        and not reviews.ime_candidate_issue(rows[0][1], rows[0][5])
+    }
+    unresolved_keys = (source_keys - set(final) - set(exclusions)
+                       - restricted_source_keys - restricted_gemini_keys
+                       - set(preserved_sports))
 
     output_rows = []
     matched = set()
@@ -255,6 +317,20 @@ def export(args):
                 int(fields[3]), surface, ",".join(sport_ids),
             ))
             matched.add(key)
+
+    for key, rows in preserved_sports.items():
+        current = final.get(key)
+        sport_ids = sorted(current[3]) if current and current[2] == "sports" else []
+        for row in rows:
+            row_tags = {value for value in row[6].split(",") if value}
+            tags = set(sport_ids) if sport_ids else row_tags
+            if not tags <= set(reviews.SPORT_LABELS):
+                raise ValueError("Previously distributed sports record has an unknown subcategory")
+            output_rows.append((
+                "sports", row[1], int(row[2]), int(row[3]), int(row[4]), row[5],
+                ",".join(sorted(tags)),
+            ))
+        matched.add(key)
 
     if not output_rows:
         raise ValueError("No standard-enabled person dictionary rows were produced")

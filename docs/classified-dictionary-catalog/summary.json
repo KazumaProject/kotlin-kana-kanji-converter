@@ -626,23 +626,23 @@
     {
       "id": "surname_origin_unconfirmed",
       "name": "姓・名字（由来未確認）",
-      "records": 49617,
-      "pairs": 49328,
-      "pages": 33
+      "records": 24297,
+      "pairs": 24153,
+      "pages": 17
     },
     {
       "id": "given_name_origin_unconfirmed",
       "name": "名・下の名前（由来未確認）",
-      "records": 7163,
-      "pairs": 7085,
-      "pages": 5
+      "records": 4348,
+      "pairs": 4306,
+      "pages": 3
     },
     {
       "id": "personal_name_origin_unconfirmed",
       "name": "人名・姓名（由来未確認）",
-      "records": 170660,
-      "pairs": 169291,
-      "pages": 113
+      "records": 93992,
+      "pairs": 93219,
+      "pages": 63
     },
     {
       "id": "actor",
@@ -776,6 +776,48 @@
       "records": 5038,
       "pairs": 5031,
       "pages": 4
+    },
+    {
+      "id": "surname_origin_japanese",
+      "name": "姓・名字（日本由来）",
+      "records": 25073,
+      "pairs": 24928,
+      "pages": 17
+    },
+    {
+      "id": "surname_origin_foreign",
+      "name": "姓・名字（海外由来）",
+      "records": 247,
+      "pairs": 247,
+      "pages": 1
+    },
+    {
+      "id": "given_name_origin_japanese",
+      "name": "名・下の名前（日本由来）",
+      "records": 2234,
+      "pairs": 2208,
+      "pages": 2
+    },
+    {
+      "id": "given_name_origin_foreign",
+      "name": "名・下の名前（海外由来）",
+      "records": 581,
+      "pairs": 571,
+      "pages": 1
+    },
+    {
+      "id": "personal_name_origin_japanese",
+      "name": "人名・姓名（日本由来）",
+      "records": 75446,
+      "pairs": 74856,
+      "pages": 50
+    },
+    {
+      "id": "personal_name_origin_foreign",
+      "name": "人名・姓名（海外由来）",
+      "records": 1222,
+      "pairs": 1216,
+      "pages": 1
     }
   ],
   "excluded": {

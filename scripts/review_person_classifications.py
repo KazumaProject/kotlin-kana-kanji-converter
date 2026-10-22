@@ -23,6 +23,9 @@ TAXONOMY = ROOT / 'src/main/classification/person-taxonomy.json'
 MANUAL_ONLY_CATEGORY_IDS = {
     'adult_performer', 'adult_work_creator', 'religion', 'crime_offender', 'espionage', 'terrorism',
     'organized_crime', 'military', 'thought', 'unclassified_person',
+    'surname_origin_japanese', 'surname_origin_foreign',
+    'given_name_origin_japanese', 'given_name_origin_foreign',
+    'personal_name_origin_japanese', 'personal_name_origin_foreign',
 }
 WITHHELD_CATEGORY_IDS = {'military', 'thought'}
 AGGREGATE_ONLY_CATEGORY_IDS = {

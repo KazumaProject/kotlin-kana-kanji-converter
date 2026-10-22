@@ -42,8 +42,8 @@ class PersonDictionaryReplacementDistribution(
         require(mainCategories.size == 47 && mainCategories.containsKey("person"))
         require(specialistCategories.size == 2)
         require(baseCategoryIds.size == 49 && baseCategoryIds.toSet().size == 49)
-        require(standardPersonCategoryIds.size == 22)
-        require(expectedCategoryCount == 70)
+        require(standardPersonCategoryIds.size == 28)
+        require(expectedCategoryCount == 76)
         require(baseCounts.keys == baseCategoryIds.toSet())
     }
 
