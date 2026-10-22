@@ -197,12 +197,16 @@ def export(args):
     for path in sorted(additions_dir.glob("*.jsonl")):
         for row in reviews.read_jsonl(path):
             sport = row.get("sport")
-            if sport not in reviews.SPORT_LABELS:
+            sports = row.get("sports", [sport])
+            if (not isinstance(sports, list) or not sports
+                    or any(value not in reviews.SPORT_LABELS for value in sports)
+                    or len(sports) != len(set(sports))
+                    or sport not in sports):
                 raise ValueError("A reviewed person addition has an unknown sport label")
             key = candidate_key(row["reading"], row["surface"])
             prior = final.get(key)
             tags = set(prior[3]) if prior else set()
-            tags.add(sport)
+            tags.update(sports)
             final[key] = (row["reading"], row["surface"], "sports", tags)
 
     records_by_pair = defaultdict(list)

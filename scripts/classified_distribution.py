@@ -850,6 +850,7 @@ def person_dictionary_exclusions(manifest):
 def person_reading(value):
     """Only mechanical kana normalization; never transliterate Latin names."""
     value = unicodedata.normalize('NFC', value)
+    value = re.sub(r'([うウ])[\u3099\u309b]', lambda match: 'ゔ' if match[1] == 'う' else 'ヴ', value)
     return ''.join(chr(ord(c) - 0x60) if '\u30a1' <= c <= '\u30f6' else c
                    for c in value if not c.isspace() and c not in '・“”「」')
 
@@ -887,7 +888,12 @@ def person_entries(root, path):
                 or entry['surface'] != ''.join(entry['source_surface'].split())
                 or unicodedata.normalize('NFC', entry['surface']) != entry['surface']):
             raise ValueError(f'{path}:{number}: reading/surface differs from kana evidence')
-        if entry['sport'] not in allowed_sports:
+        sport_tags = entry.get('sports', [entry['sport']])
+        if (not isinstance(sport_tags, list) or not sport_tags
+                or any(not isinstance(sport, str) or sport not in allowed_sports
+                       for sport in sport_tags)
+                or len(sport_tags) != len(set(sport_tags))
+                or entry['sport'] not in sport_tags):
             raise ValueError(f'{path}:{number}: invalid sport')
         url = urlsplit(entry['source_url'])
         if url.scheme != 'https' or not url.hostname or url.username or url.password:
