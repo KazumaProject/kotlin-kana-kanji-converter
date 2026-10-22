@@ -4254,6 +4254,212 @@
             "ヴガール・ケラモフ"
           ]
         ]
+      },
+      {
+        "path": "src/main/classification/person-additions/japanese-mma-2026-10-22.jsonl",
+        "sha256": "d56bf861d7478133e2e39d149f02fa4f8f94fbd2a91dff12f9073a864f2fa02e",
+        "reviewedPairs": 18,
+        "addedPairs": [
+          [
+            "いのうえなおき",
+            "井上直樹"
+          ],
+          [
+            "おうぎくぼひろまさ",
+            "扇久保博正"
+          ],
+          [
+            "もとやゆうき",
+            "元谷友貴"
+          ],
+          [
+            "やまもとみゆう",
+            "山本美憂"
+          ]
+        ],
+        "addedRecords": 4,
+        "addedSourceRows": 4,
+        "appendedPairs": [
+          [
+            "いのうえなおき",
+            "井上直樹"
+          ],
+          [
+            "おうぎくぼひろまさ",
+            "扇久保博正"
+          ],
+          [
+            "もとやゆうき",
+            "元谷友貴"
+          ],
+          [
+            "やまもとみゆう",
+            "山本美憂"
+          ]
+        ]
+      },
+      {
+        "path": "src/main/classification/person-additions/japanese-mma-gamis-2026-10-22.jsonl",
+        "sha256": "70462df28342a860d720b79e5a9bf498de8ecf0a20566be72ec1551a3f0b7d3c",
+        "reviewedPairs": 60,
+        "addedPairs": [
+          [
+            "いしづかこういち",
+            "石司晃一"
+          ],
+          [
+            "いまなりまさかず",
+            "今成正和"
+          ],
+          [
+            "かねはらまさのり",
+            "金原正徳"
+          ],
+          [
+            "かわなますと",
+            "河名マスト"
+          ],
+          [
+            "きんたろう",
+            "金太郎"
+          ],
+          [
+            "さいがきざえもん",
+            "才賀紀左衛門"
+          ],
+          [
+            "しびさいしょうま",
+            "シビサイ頌真"
+          ],
+          [
+            "しょうじ",
+            "昇侍"
+          ],
+          [
+            "すずきひろあき",
+            "鈴木博昭"
+          ],
+          [
+            "すだりおつよし",
+            "スダリオ剛"
+          ],
+          [
+            "たかけんしん",
+            "貴賢神"
+          ],
+          [
+            "とくどめかずき",
+            "徳留一樹"
+          ],
+          [
+            "なかむらけいいちろう",
+            "中村京一郎"
+          ],
+          [
+            "なかむらけいたろう",
+            "中村K太郎"
+          ],
+          [
+            "なかむらゆうさく",
+            "中村優作"
+          ],
+          [
+            "はらぐちしん",
+            "原口伸"
+          ],
+          [
+            "みうらこうた",
+            "三浦孝太"
+          ],
+          [
+            "やちゆうすけ",
+            "矢地祐介"
+          ],
+          [
+            "やーまん",
+            "YA-MAN"
+          ]
+        ],
+        "addedRecords": 19,
+        "addedSourceRows": 19,
+        "appendedPairs": [
+          [
+            "いしづかこういち",
+            "石司晃一"
+          ],
+          [
+            "いまなりまさかず",
+            "今成正和"
+          ],
+          [
+            "かねはらまさのり",
+            "金原正徳"
+          ],
+          [
+            "かわなますと",
+            "河名マスト"
+          ],
+          [
+            "きんたろう",
+            "金太郎"
+          ],
+          [
+            "さいがきざえもん",
+            "才賀紀左衛門"
+          ],
+          [
+            "しびさいしょうま",
+            "シビサイ頌真"
+          ],
+          [
+            "しょうじ",
+            "昇侍"
+          ],
+          [
+            "すずきひろあき",
+            "鈴木博昭"
+          ],
+          [
+            "すだりおつよし",
+            "スダリオ剛"
+          ],
+          [
+            "たかけんしん",
+            "貴賢神"
+          ],
+          [
+            "とくどめかずき",
+            "徳留一樹"
+          ],
+          [
+            "なかむらけいいちろう",
+            "中村京一郎"
+          ],
+          [
+            "なかむらけいたろう",
+            "中村K太郎"
+          ],
+          [
+            "なかむらゆうさく",
+            "中村優作"
+          ],
+          [
+            "はらぐちしん",
+            "原口伸"
+          ],
+          [
+            "みうらこうた",
+            "三浦孝太"
+          ],
+          [
+            "やちゆうすけ",
+            "矢地祐介"
+          ],
+          [
+            "やーまん",
+            "YA-MAN"
+          ]
+        ]
       }
     ],
     "reviews": [
@@ -5465,7 +5671,7 @@
     }
   },
   "inputs": {
-    "src/main/bin/names.txt": "cddbb9ccf38edb20346b35d892fcc08ab551561715e7c10de7d217f0c0f719bf",
+    "src/main/bin/names.txt": "ac10c06988fc5ee62890df461ef3e91500e4c88e6b7a73fb964ec9c6f63fd4e6",
     "src/main/bin/place.txt.zip": "bae15eb6755a2e6aa30d1d9ece7970c7d97d761b6e430c59bc11222f8e2e6f01",
     "src/main/bin/only_wiki.txt.zip": "2c3ca451484900edee55ae4ebe79284e1301b077572f64e9100889a5755bed10",
     "src/main/bin/only_neologd.txt.zip": "64222fa806e424556b662619fb7cba9ac9683f89959afee909dadb112027458e",
@@ -5523,16 +5729,18 @@
     "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl": "59f4fb8499430452c3e32a12c9fafaceadbd096256a227f60cb7546454fa5cd7",
     "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl": "6b65e3c0092f7113000199e7dd7f530cc5e5f9911913ecb3c741a65aeef0a42b",
     "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl": "7585c7afb2c8413500eab761ad429c461f139a414148c9be907442daeb141d5a",
-    "src/main/classification/person-additions/combat-sports-2026-10-22.jsonl": "8fe4dd882d71791591a16e181174290d0ea5bee545d575d28d09460ba7b9843a"
+    "src/main/classification/person-additions/combat-sports-2026-10-22.jsonl": "8fe4dd882d71791591a16e181174290d0ea5bee545d575d28d09460ba7b9843a",
+    "src/main/classification/person-additions/japanese-mma-2026-10-22.jsonl": "d56bf861d7478133e2e39d149f02fa4f8f94fbd2a91dff12f9073a864f2fa02e",
+    "src/main/classification/person-additions/japanese-mma-gamis-2026-10-22.jsonl": "70462df28342a860d720b79e5a9bf498de8ecf0a20566be72ec1551a3f0b7d3c"
   },
   "files": {
     "categories.json": "2f2c436d9015eb5d321b543b568fce2fe52a2acddfac25a0151e798fea5c63ff",
-    "distribution-candidates.tsv.gz": "0681246df0b8d1487e1f988c372dd5991b935c367856b39dce70931d40ebd762",
-    "distribution-decisions.tsv.gz": "32a0261ddd18e83e9d742ea2d271cb929052308cf1f63641dab38ef904f9de15"
+    "distribution-candidates.tsv.gz": "f04342e4043a938feeb4d89d419a61cef424419f0bf9124747c0559913e92f2e",
+    "distribution-decisions.tsv.gz": "a2b51a0239a5fa8da9c8800b8ef1bffbf6d37a16e0346eb7c3245c990e3378eb"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "sourceRows": {
-    "person": 71174,
+    "person": 71197,
     "place": 170145,
     "wiki": 150132,
     "neologd": 404817,
@@ -5542,9 +5750,9 @@
   "admittedPairsByOrigin": {
     "manual": 384259,
     "gemini": 183166,
-    "verified": 174451
+    "verified": 174474
   },
-  "uniqueAdmittedPairs": 741876,
+  "uniqueAdmittedPairs": 741899,
   "excludedCandidatePairs": 328586,
   "excludedClassifiedPairs": 322861,
   "unclassifiedPairs": 0,
@@ -5555,7 +5763,7 @@
     "verified_over_manual": 8
   },
   "categoryRows": {
-    "person": 268154,
+    "person": 268177,
     "character": 6871,
     "mythological_figure": 3436,
     "place": 45088,
@@ -5603,7 +5811,7 @@
     "work_periodical": 1812,
     "work_other": 2683
   },
-  "dictionaryRows": 758404,
+  "dictionaryRows": 758427,
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified."
   ],
