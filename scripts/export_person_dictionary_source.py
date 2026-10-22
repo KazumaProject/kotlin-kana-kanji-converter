@@ -12,6 +12,7 @@ import hashlib
 import json
 import sys
 import tempfile
+from urllib.parse import urlsplit
 from collections import defaultdict
 from pathlib import Path
 
@@ -86,13 +87,40 @@ def restricted_proposal_keys(paths, category_by_code):
     return keys
 
 
+def apply_person_additions(final, additions_dir, enabled):
+    for path in sorted(additions_dir.glob("*.jsonl")):
+        for row in reviews.read_jsonl(path):
+            key = candidate_key(row["reading"], row["surface"])
+            if "category_id" in row:
+                category = row["category_id"]
+                role_source = urlsplit(row.get("classification_source_url", ""))
+                if (category != "thought" or category not in enabled or "sport" in row
+                        or role_source.scheme != "https" or not role_source.hostname
+                        or role_source.username or role_source.password
+                        or not isinstance(row.get("classification_source_section"), str)
+                        or not row["classification_source_section"]):
+                    raise ValueError("A category-specific person addition has invalid source evidence")
+                prior = final.get(key)
+                if prior and prior[2] not in ("thought", "personal_name_origin_unconfirmed"):
+                    raise ValueError("A category-specific person addition conflicts with a reviewed category")
+                final[key] = (row["reading"], row["surface"], category, set())
+            else:
+                sport = row.get("sport")
+                if sport not in reviews.SPORT_LABELS:
+                    raise ValueError("A reviewed person addition has an unknown sport label")
+                prior = final.get(key)
+                tags = set(prior[3]) if prior else set()
+                tags.add(sport)
+                final[key] = (row["reading"], row["surface"], "sports", tags)
+
+
 def export(args):
     exclusions = load_exclusions(args.excluded_candidates, args.root)
     taxonomy, category_by_code, category_by_id = reviews.taxonomy_maps(args.root / "src/main/classification/person-taxonomy.json")
     enabled = {row["id"] for row in taxonomy["categories"] if row.get("standard_enabled") is True}
     category_order = {row["id"]: row["number"] for row in taxonomy["categories"]}
-    if len(enabled) != 22:
-        raise ValueError("Expected exactly 22 standard-enabled person categories")
+    if len(enabled) != 23:
+        raise ValueError("Expected exactly 23 standard-enabled person categories")
 
     overrides = reviews.load_overrides(
         args.root / "src/main/classification/person-category-overrides.jsonl",
@@ -194,16 +222,7 @@ def export(args):
             final.pop(key, None)
 
     additions_dir = args.root / "src/main/classification/person-additions"
-    for path in sorted(additions_dir.glob("*.jsonl")):
-        for row in reviews.read_jsonl(path):
-            sport = row.get("sport")
-            if sport not in reviews.SPORT_LABELS:
-                raise ValueError("A reviewed person addition has an unknown sport label")
-            key = candidate_key(row["reading"], row["surface"])
-            prior = final.get(key)
-            tags = set(prior[3]) if prior else set()
-            tags.add(sport)
-            final[key] = (row["reading"], row["surface"], "sports", tags)
+    apply_person_additions(final, additions_dir, enabled)
 
     records_by_pair = defaultdict(list)
     source_keys = set()
