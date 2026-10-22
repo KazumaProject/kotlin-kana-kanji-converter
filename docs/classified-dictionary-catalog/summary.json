@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "2f32406e4cfe4ae66cc6338e10a80286e02bd51a640853561b64a83cb3569428",
-  "uniquePairs": 829990,
-  "records": 846419,
+  "inputSha256": "44529c207dcbd30bda6e8c87e3860cba8ea415eb340f3af03d10c1cf57f26f47",
+  "uniquePairs": 831667,
+  "records": 848096,
   "categories": [
     {
       "id": "character",
@@ -675,9 +675,9 @@
     {
       "id": "comedian",
       "name": "お笑い芸人",
-      "records": 72,
-      "pairs": 70,
-      "pages": 1
+      "records": 1749,
+      "pairs": 1747,
+      "pages": 2
     },
     {
       "id": "broadcaster",
@@ -780,7 +780,7 @@
   ],
   "excluded": {
     "pairs": 322861,
-    "pages": 593
+    "pages": 601
   },
   "specialistInputSha256": "de25b742784973e59532d3ec86b670ab5dd25ed6c0558aa72d9eb2e6afb628dc"
 }
