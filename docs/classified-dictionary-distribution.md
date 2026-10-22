@@ -48,7 +48,7 @@ freezeはSQLiteを読み取り専用の一つのトランザクションで読�
 
 ## 公式資料で確認した人名の追加
 
-`src/main/classification/person-additions/` に、確認済みの名簿をUTF-8 JSONLで保存します。各行に `reading`、`surface`、`sport`、`left_id`、`right_id`、`cost`、`source_url`、`source_surface`、`source_reading`、`checked_on`（YYYY-MM-DD）を記録します。`sport` は `person-taxonomy.json` の `sport_subcategories` にあるIDを使用します。今回の名簿には、確認したページのSHA-256と確認箇所も保存しています。ページ本文はGitへ保存せず、出典は各行のURLで参照します。
+`src/main/classification/person-additions/` に、確認済みの名簿をUTF-8 JSONLで保存します。各行に `reading`、`surface`、`left_id`、`right_id`、`cost`、`source_url`、`source_surface`、`source_reading`、`checked_on`（YYYY-MM-DD）を記録し、人物の区分として `sport` または `category_id` のどちらか一方を指定します。`sport` は `person-taxonomy.json` の `sport_subcategories` にあるIDを使い、`category_id` は標準配布が有効な人物カテゴリを使います（`sports` は `sport` で指定します）。名簿には確認箇所を記録し、取得できたページのSHA-256も保存しています。ページ本文はGitへ保存せず、出典は各行のURLで参照します。
 
 2026-10-21のJOCパリ2024名鑑は20競技135人を確認しました。既存のperson収録81組に競技タグを付与し、過去の除外2組を出典付きで戻し、未収録52組を追加します。名簿の全行にJOC公式プロフィールURL、氏名・読み、競技、確認箇所、取得ページのSHA-256を保存します。
 
@@ -66,6 +66,8 @@ python3 scripts/write_classified_dictionary_catalog.py --check
 取り込み前と、一時領域に作成した更新後の固定データを検証してから元人名辞書・固定データ・マニフェストを更新します。既存のperson収録は変更せず、既存の別分類・未分類・取得失敗・除外の判断と衝突する候補はエラーにします。分類判断自体がない既存の元辞書レコードは、公式資料で確認した場合に限り、元の品詞・コストを保持してpersonへ収録します。新しい元人名辞書レコードは左右品詞ID 1851（名詞,一般）・コスト8400です。同じ組に複数の元レコードがある場合、追加人数より配布レコードの増加数が多くなります。
 
 新規判断の分類元は `verified` とし、元の分類履歴を保持したまま、名簿のハッシュ・新規の組・配布レコード数・元辞書への追加行数を `provenance.personAdditions` へ記録します。`verify` はその名簿と配布レコードの一致も確認し、外部サイトを取得しません。同じ名簿を再実行しても重複追加しません。後続の追加には別の名簿ファイルを使用します。`freeze` を改めて実行する場合は、その後に保存済みの追加名簿を取り込み直してください。
+
+2026-10-22には、人物辞書全体を照合したうえで、既存の読み・表記の組を除いたお笑い芸人3人を `comedian` に追加しました。大会優勝コンビの個人メンバーと、公式プロフィールで芸人として確認できる個人を含みます。コンビ名・ユニット名は加えず、落語・伝統芸能など `performing_arts` に属する候補も対象外です。読み・表記・区分・出典URL・確認箇所は[追加名簿](../src/main/classification/person-additions/comedian-2026-10-22.jsonl)に記録しています。
 
 ## 配布しない人物カテゴリとAI分類
 

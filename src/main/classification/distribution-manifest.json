@@ -2819,6 +2819,41 @@
             "吉田拓馬"
           ]
         ]
+      },
+      {
+        "path": "src/main/classification/person-additions/comedian-2026-10-22.jsonl",
+        "sha256": "e66a986e3c0aca05afdfb33f14c2395461e95ab6514116fd3ac967f81f49d34d",
+        "reviewedPairs": 3,
+        "addedPairs": [
+          [
+            "さんしゃいんいけざき",
+            "サンシャイン池崎"
+          ],
+          [
+            "のだくりすたる",
+            "野田クリスタル"
+          ],
+          [
+            "ますだひでひこ",
+            "増田英彦"
+          ]
+        ],
+        "addedRecords": 3,
+        "addedSourceRows": 3,
+        "appendedPairs": [
+          [
+            "さんしゃいんいけざき",
+            "サンシャイン池崎"
+          ],
+          [
+            "のだくりすたる",
+            "野田クリスタル"
+          ],
+          [
+            "ますだひでひこ",
+            "増田英彦"
+          ]
+        ]
       }
     ],
     "reviews": [
@@ -4030,7 +4065,7 @@
     }
   },
   "inputs": {
-    "src/main/bin/names.txt": "96bed83531072a52898ce80363a21e3848088e4ca8823da082cbf30d4f095e96",
+    "src/main/bin/names.txt": "7053d963e704c5984de236234f5120d84aff353fb8f019009f985d76d9865be2",
     "src/main/bin/place.txt.zip": "bae15eb6755a2e6aa30d1d9ece7970c7d97d761b6e430c59bc11222f8e2e6f01",
     "src/main/bin/only_wiki.txt.zip": "2c3ca451484900edee55ae4ebe79284e1301b077572f64e9100889a5755bed10",
     "src/main/bin/only_neologd.txt.zip": "64222fa806e424556b662619fb7cba9ac9683f89959afee909dadb112027458e",
@@ -4087,16 +4122,17 @@
     "src/main/classification/reviews/2026-10-16-pr128-luna-0036.jsonl": "8940d95708577f08838139e6f7e65b9ce67cccf02bed5099ca3f555d6993cf9c",
     "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl": "59f4fb8499430452c3e32a12c9fafaceadbd096256a227f60cb7546454fa5cd7",
     "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl": "6b65e3c0092f7113000199e7dd7f530cc5e5f9911913ecb3c741a65aeef0a42b",
-    "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl": "7585c7afb2c8413500eab761ad429c461f139a414148c9be907442daeb141d5a"
+    "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl": "7585c7afb2c8413500eab761ad429c461f139a414148c9be907442daeb141d5a",
+    "src/main/classification/person-additions/comedian-2026-10-22.jsonl": "e66a986e3c0aca05afdfb33f14c2395461e95ab6514116fd3ac967f81f49d34d"
   },
   "files": {
     "categories.json": "2f2c436d9015eb5d321b543b568fce2fe52a2acddfac25a0151e798fea5c63ff",
-    "distribution-candidates.tsv.gz": "e8fbe7d5a77d802792e2f70a1e936675ac92c4e8716c50c83a7142cd38d4663e",
-    "distribution-decisions.tsv.gz": "4f8283489cd457f5dbab97050ccd311aaf44556943437f6304fdf12216a3a2e1"
+    "distribution-candidates.tsv.gz": "e791bf097322b1c863e1393bd1f71373dd6817513594ba1794d2ac6f25a4afa8",
+    "distribution-decisions.tsv.gz": "114d64f119ce24845fb7d0bd46614b666180d0062f27417354a454b49e8cb023"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "sourceRows": {
-    "person": 70996,
+    "person": 70999,
     "place": 170145,
     "wiki": 150132,
     "neologd": 404817,
@@ -4106,9 +4142,9 @@
   "admittedPairsByOrigin": {
     "manual": 384259,
     "gemini": 183166,
-    "verified": 174273
+    "verified": 174276
   },
-  "uniqueAdmittedPairs": 741698,
+  "uniqueAdmittedPairs": 741701,
   "excludedCandidatePairs": 328586,
   "excludedClassifiedPairs": 322861,
   "unclassifiedPairs": 0,
@@ -4119,7 +4155,7 @@
     "verified_over_manual": 8
   },
   "categoryRows": {
-    "person": 267976,
+    "person": 267979,
     "character": 6871,
     "mythological_figure": 3436,
     "place": 45088,
@@ -4167,7 +4203,7 @@
     "work_periodical": 1812,
     "work_other": 2683
   },
-  "dictionaryRows": 758226,
+  "dictionaryRows": 758229,
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified."
   ],

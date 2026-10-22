@@ -17,6 +17,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
+import classified_distribution as distribution  # noqa: E402
 import review_person_classifications as reviews  # noqa: E402
 
 
@@ -84,6 +85,40 @@ def restricted_proposal_keys(paths, category_by_code):
                     raise ValueError("Restricted Gemini proposal has an invalid candidate key")
                 keys.add(key)
     return keys
+
+
+def apply_person_additions(root, final, enabled):
+    """Apply reviewed person additions, including explicit person subcategories."""
+    additions = {}
+    additions_dir = root / "src/main/classification/person-additions"
+    for path in sorted(additions_dir.glob("*.jsonl")):
+        for (reading, surface), row in distribution.person_entries(root, path).items():
+            key = candidate_key(reading, surface)
+            if "sport" in row:
+                sport = row["sport"]
+                if sport not in reviews.SPORT_LABELS:
+                    raise ValueError("A reviewed person addition has an unknown sport label")
+                category = "sports"
+                tags = {sport}
+            else:
+                category = row["category_id"]
+                if category not in enabled:
+                    raise ValueError("A reviewed person addition uses a nonstandard category")
+                tags = set()
+
+            prior = additions.get(key)
+            if prior is not None:
+                if prior[2] != category:
+                    raise ValueError("Reviewed person additions assign conflicting categories")
+                tags.update(prior[3])
+            additions[key] = (reading, surface, category, tags)
+
+    for key, (reading, surface, category, tags) in additions.items():
+        if category == "sports":
+            prior = final.get(key)
+            if prior is not None:
+                tags.update(prior[3])
+        final[key] = (reading, surface, category, tags)
 
 
 def export(args):
@@ -193,17 +228,7 @@ def export(args):
         for key in restricted_gemini_keys - source_approved_keys:
             final.pop(key, None)
 
-    additions_dir = args.root / "src/main/classification/person-additions"
-    for path in sorted(additions_dir.glob("*.jsonl")):
-        for row in reviews.read_jsonl(path):
-            sport = row.get("sport")
-            if sport not in reviews.SPORT_LABELS:
-                raise ValueError("A reviewed person addition has an unknown sport label")
-            key = candidate_key(row["reading"], row["surface"])
-            prior = final.get(key)
-            tags = set(prior[3]) if prior else set()
-            tags.add(sport)
-            final[key] = (row["reading"], row["surface"], "sports", tags)
+    apply_person_additions(args.root, final, enabled)
 
     records_by_pair = defaultdict(list)
     source_keys = set()

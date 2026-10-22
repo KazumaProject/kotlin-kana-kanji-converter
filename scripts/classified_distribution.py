@@ -861,18 +861,22 @@ def person_entries(root, path):
     if taxonomy_path.is_file():
         taxonomy = json.loads(taxonomy_path.read_text(encoding='utf-8'))
         allowed_sports = set(taxonomy.get('sport_subcategories', {}))
+        enabled_categories = {category['id'] for category in taxonomy.get('categories', [])
+                              if category.get('standard_enabled') is True}
     else:
         # Older minimal snapshots and verification fixtures predate taxonomy
         # metadata. Restrict their fallback to the original three sport IDs.
         allowed_sports = LEGACY_PERSON_SPORT_IDS
+        enabled_categories = set()
     entries = {}
     for number, line in enumerate(path.read_text(encoding='utf-8').splitlines(), 1):
         entry = json.loads(line)
-        required = ('reading', 'surface', 'sport', 'left_id', 'right_id', 'cost',
+        required = ('reading', 'surface', 'left_id', 'right_id', 'cost',
                     'source_url', 'source_surface', 'source_reading', 'checked_on')
-        if not isinstance(entry, dict) or any(k not in entry for k in required):
+        if (not isinstance(entry, dict) or any(k not in entry for k in required)
+                or ('sport' in entry) == ('category_id' in entry)):
             raise ValueError(f'{path}:{number}: missing person entry/evidence fields')
-        for field in ('reading', 'surface', 'sport', 'source_url', 'source_surface', 'source_reading', 'checked_on'):
+        for field in ('reading', 'surface', 'source_url', 'source_surface', 'source_reading', 'checked_on'):
             if not isinstance(entry[field], str) or not entry[field] or any(c in entry[field] for c in '\t\r\n\0'):
                 raise ValueError(f'{path}:{number}: invalid {field}')
         if ('source_section' in entry and
@@ -887,8 +891,14 @@ def person_entries(root, path):
                 or entry['surface'] != ''.join(entry['source_surface'].split())
                 or unicodedata.normalize('NFC', entry['surface']) != entry['surface']):
             raise ValueError(f'{path}:{number}: reading/surface differs from kana evidence')
-        if entry['sport'] not in allowed_sports:
-            raise ValueError(f'{path}:{number}: invalid sport')
+        if 'sport' in entry:
+            if (not isinstance(entry['sport'], str) or not entry['sport']
+                    or entry['sport'] not in allowed_sports):
+                raise ValueError(f'{path}:{number}: invalid sport')
+        elif (not isinstance(entry['category_id'], str)
+              or entry['category_id'] not in enabled_categories
+              or entry['category_id'] == 'sports'):
+            raise ValueError(f'{path}:{number}: invalid standard person category')
         url = urlsplit(entry['source_url'])
         if url.scheme != 'https' or not url.hostname or url.username or url.password:
             raise ValueError(f'{path}:{number}: invalid evidence URL')
