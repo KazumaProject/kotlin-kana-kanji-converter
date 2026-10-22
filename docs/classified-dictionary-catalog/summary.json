@@ -787,8 +787,8 @@
     {
       "id": "surname_origin_foreign",
       "name": "姓・名字（海外由来）",
-      "records": 247,
-      "pairs": 247,
+      "records": 236,
+      "pairs": 236,
       "pages": 1
     },
     {
@@ -801,22 +801,22 @@
     {
       "id": "given_name_origin_foreign",
       "name": "名・下の名前（海外由来）",
-      "records": 581,
-      "pairs": 571,
+      "records": 533,
+      "pairs": 527,
       "pages": 1
     },
     {
       "id": "personal_name_origin_japanese",
       "name": "人名・姓名（日本由来）",
-      "records": 75446,
-      "pairs": 74856,
+      "records": 75509,
+      "pairs": 74915,
       "pages": 50
     },
     {
       "id": "personal_name_origin_foreign",
       "name": "人名・姓名（海外由来）",
-      "records": 1222,
-      "pairs": 1216,
+      "records": 1218,
+      "pairs": 1212,
       "pages": 1
     }
   ],

@@ -79,8 +79,8 @@
 | [皇室・王室・貴族](person/royalty_nobility/index.md) | `royalty_nobility` | 286 | 286 | [全件](person/royalty_nobility/index.md) |
 | [その他の特定人物](person/other_identified/index.md) | `other_identified` | 5,031 | 5,038 | [全件](person/other_identified/index.md) |
 | [姓・名字（日本由来）](person/surname_origin_japanese/index.md) | `surname_origin_japanese` | 24,928 | 25,073 | [全件](person/surname_origin_japanese/index.md) |
-| [姓・名字（海外由来）](person/surname_origin_foreign/index.md) | `surname_origin_foreign` | 247 | 247 | [全件](person/surname_origin_foreign/index.md) |
+| [姓・名字（海外由来）](person/surname_origin_foreign/index.md) | `surname_origin_foreign` | 236 | 236 | [全件](person/surname_origin_foreign/index.md) |
 | [名・下の名前（日本由来）](person/given_name_origin_japanese/index.md) | `given_name_origin_japanese` | 2,208 | 2,234 | [全件](person/given_name_origin_japanese/index.md) |
-| [名・下の名前（海外由来）](person/given_name_origin_foreign/index.md) | `given_name_origin_foreign` | 571 | 581 | [全件](person/given_name_origin_foreign/index.md) |
-| [人名・姓名（日本由来）](person/personal_name_origin_japanese/index.md) | `personal_name_origin_japanese` | 74,856 | 75,446 | [全件](person/personal_name_origin_japanese/index.md) |
-| [人名・姓名（海外由来）](person/personal_name_origin_foreign/index.md) | `personal_name_origin_foreign` | 1,216 | 1,222 | [全件](person/personal_name_origin_foreign/index.md) |
+| [名・下の名前（海外由来）](person/given_name_origin_foreign/index.md) | `given_name_origin_foreign` | 527 | 533 | [全件](person/given_name_origin_foreign/index.md) |
+| [人名・姓名（日本由来）](person/personal_name_origin_japanese/index.md) | `personal_name_origin_japanese` | 74,915 | 75,509 | [全件](person/personal_name_origin_japanese/index.md) |
+| [人名・姓名（海外由来）](person/personal_name_origin_foreign/index.md) | `personal_name_origin_foreign` | 1,212 | 1,218 | [全件](person/personal_name_origin_foreign/index.md) |

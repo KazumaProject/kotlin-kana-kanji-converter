@@ -511,6 +511,7 @@ def load_fixed_mapping(root, mapping_path=None, manifest_path=None):
     if manifest.get('mapping_sha256') != gemini.sha(mapping_path):
         raise ValueError('Name-origin mapping hash does not match its manifest')
     mapping = {}
+    cross_type_keys = []
     with gzip.open(mapping_path, 'rt', encoding='utf-8', newline='') as stream:
         for number, line in enumerate(stream, 1):
             fields = line.rstrip('\n').split('\t')
@@ -520,12 +521,32 @@ def load_fixed_mapping(root, mapping_path=None, manifest_path=None):
             if (source_id not in SOURCE_CATEGORIES or len(key) != 64 or
                     any(char not in '0123456789abcdef' for char in key)):
                 raise ValueError(f'{mapping_path}:{number}: invalid name-origin mapping row')
-            valid_targets = {source_id, *SOURCE_CATEGORIES[source_id]}
+            # A targeted type review can correct a surname/given-name source
+            # classification to a full personal name (or vice versa). Keep the
+            # original source category for provenance; the manifest below
+            # restricts cross-type targets to the reviewed candidate-key set.
+            valid_targets = {source_id, *ALL_ORIGIN_CATEGORY_IDS}
             if target_id not in valid_targets:
                 raise ValueError(f'{mapping_path}:{number}: target is invalid for {source_id}')
+            source_type = source_id.split('_origin_', 1)[0]
+            target_type = target_id.split('_origin_', 1)[0]
+            if source_type != target_type:
+                cross_type_keys.append(key)
             if key in mapping:
                 raise ValueError(f'{mapping_path}:{number}: duplicate candidate key')
             mapping[key] = (source_id, target_id)
+    if cross_type_keys:
+        targeted = manifest.get('targeted_reclassification')
+        if not isinstance(targeted, dict):
+            raise ValueError('Cross-type name-origin mappings require a targeted review manifest')
+        target_id = targeted.get('manual_type_review_target')
+        expected_hash = hashlib.sha256('\n'.join(sorted(cross_type_keys)).encode('ascii')).hexdigest()
+        if (target_id not in ALL_ORIGIN_CATEGORY_IDS or
+                type(targeted.get('cross_type_pairs')) is not int or
+                targeted['cross_type_pairs'] != len(cross_type_keys) or
+                targeted.get('cross_type_candidate_keys_sha256') != expected_hash or
+                any(mapping[key][1] != target_id for key in cross_type_keys)):
+            raise ValueError('Cross-type mappings do not match the targeted manual review record')
     if len(mapping) != manifest.get('unique_pairs'):
         raise ValueError('Name-origin mapping count differs from the fixed manifest')
     target_counts = {}
