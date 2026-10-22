@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "e8fbe7d5a77d802792e2f70a1e936675ac92c4e8716c50c83a7142cd38d4663e",
-  "uniquePairs": 829973,
-  "records": 846402,
+  "inputSha256": "83450164d545aeeae46f7fe813e22df20b3eeeff0d49101cd666be55018e152b",
+  "uniquePairs": 830220,
+  "records": 846649,
   "categories": [
     {
       "id": "character",
@@ -640,8 +640,8 @@
     {
       "id": "personal_name_origin_unconfirmed",
       "name": "人名・姓名（由来未確認）",
-      "records": 170660,
-      "pairs": 169291,
+      "records": 170652,
+      "pairs": 169283,
       "pages": 113
     },
     {
@@ -776,11 +776,18 @@
       "records": 5038,
       "pairs": 5031,
       "pages": 4
+    },
+    {
+      "id": "thought",
+      "name": "哲学者・思想家",
+      "records": 255,
+      "pairs": 255,
+      "pages": 1
     }
   ],
   "excluded": {
     "pairs": 322861,
-    "pages": 593
+    "pages": 601
   },
   "specialistInputSha256": "de25b742784973e59532d3ec86b670ab5dd25ed6c0558aa72d9eb2e6afb628dc"
 }
