@@ -94,6 +94,53 @@ class DistributionTest(unittest.TestCase):
         self.freeze()
         self.assertEqual(first,p.read_bytes())
 
+    def test_person_dictionary_exclusions_survive_freeze_without_changing_sources(self):
+        self.freeze()
+        directory = self.root / 'src/main/classification'
+        manifest_path = directory / 'distribution-manifest.json'
+        manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+        excluded_key = d.key('あ', '甲')
+        manifest['provenance']['personDictionaryExclusions'] = {
+            'categoryIds': ['military', 'thought'],
+            'candidateKeys': [excluded_key],
+            'uniquePairs': 1,
+        }
+        d.write_json(manifest_path, manifest)
+        decisions_path = directory / 'distribution-decisions.tsv.gz'
+        with gzip.open(decisions_path, 'rt', encoding='utf-8') as stream:
+            baseline = next(line.rstrip('\n').split('\t') for line in stream
+                            if line.startswith('あ\t甲\t'))
+        review_directory = directory / 'reviews'
+        review_directory.mkdir()
+        review = dict(action='keep', reading='あ', surface='甲', candidate_key=excluded_key,
+                      baseline=baseline, reason='confirmed source', categories=['person'],
+                      evidence=dict(kind='user_confirmation', reading='あ', surface='甲',
+                                    categories=['person'], reference='user confirmation'))
+        (review_directory / '001.jsonl').write_text(json.dumps(review) + '\n', encoding='utf-8')
+        source_path = self.root / d.SOURCES['person'][0]
+        original_source = source_path.read_bytes()
+
+        self.freeze()
+        self.verify()
+
+        with gzip.open(directory / 'distribution-candidates.tsv.gz', 'rt', encoding='utf-8') as stream:
+            rows = {tuple(line.rstrip('\n').split('\t')) for line in stream}
+        with gzip.open(directory / 'distribution-decisions.tsv.gz', 'rt', encoding='utf-8') as stream:
+            decisions = {tuple(line.rstrip('\n').split('\t')[:2]) for line in stream}
+        self.assertFalse(any(row[1:] == self.rows[0] for row in rows))
+        self.assertNotIn(('あ', '甲'), decisions)
+        self.assertEqual(source_path.read_bytes(), original_source)
+
+    def test_person_dictionary_exclusion_hashes_are_validated(self):
+        with self.assertRaisesRegex(ValueError, 'Invalid person dictionary exclusion provenance'):
+            d.person_dictionary_exclusions({'provenance': {
+                'personDictionaryExclusions': {
+                    'categoryIds': ['military', 'thought'],
+                    'candidateKeys': ['not-a-hash'],
+                    'uniquePairs': 1,
+                },
+            }})
+
     def test_term_hierarchy_migration_preserves_records_and_other_memberships(self):
         self.freeze()
         directory = self.root / 'src/main/classification'

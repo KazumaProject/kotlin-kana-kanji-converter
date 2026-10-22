@@ -22,8 +22,9 @@ OVERRIDES = ROOT / 'src/main/classification/person-category-overrides.jsonl'
 TAXONOMY = ROOT / 'src/main/classification/person-taxonomy.json'
 MANUAL_ONLY_CATEGORY_IDS = {
     'adult_performer', 'adult_work_creator', 'religion', 'crime_offender', 'espionage', 'terrorism',
-    'organized_crime', 'thought', 'unclassified_person',
+    'organized_crime', 'military', 'thought', 'unclassified_person',
 }
+WITHHELD_CATEGORY_IDS = {'military', 'thought'}
 AGGREGATE_ONLY_CATEGORY_IDS = {
     'adult_performer', 'adult_work_creator', 'religion', 'crime_offender', 'espionage', 'terrorism',
     'organized_crime',
@@ -304,15 +305,18 @@ def taxonomy_maps(path):
     by_code = {row['number']: row for row in taxonomy['categories']}
     by_id = {row['id']: row['number'] for row in taxonomy['categories']}
     policy = taxonomy.get('policy', {})
-    if set(policy.get('standard_dictionary_excluded_categories', [])) != AGGREGATE_ONLY_CATEGORY_IDS:
-        raise ValueError('Taxonomy must exclude the restricted categories from standard dictionaries')
+    excluded_categories = AGGREGATE_ONLY_CATEGORY_IDS | WITHHELD_CATEGORY_IDS
+    if set(policy.get('standard_dictionary_excluded_categories', [])) != excluded_categories:
+        raise ValueError('Taxonomy must exclude restricted and withheld categories from standard dictionaries')
+    if set(policy.get('standard_dictionary_withheld_categories', [])) != WITHHELD_CATEGORY_IDS:
+        raise ValueError('Taxonomy must identify the withheld person categories')
     if policy.get('restricted_category_records') != 'aggregate_counts_only':
         raise ValueError('Taxonomy must keep restricted category records as aggregate counts only')
     disabled_ids = {row['id'] for row in taxonomy['categories']
                     if row.get('standard_enabled') is False}
-    expected_disabled_ids = AGGREGATE_ONLY_CATEGORY_IDS | {'unclassified_person'}
+    expected_disabled_ids = excluded_categories | {'unclassified_person'}
     if disabled_ids != expected_disabled_ids:
-        raise ValueError('Restricted and non-classified categories must be disabled for standard distribution')
+        raise ValueError('Restricted, withheld and non-classified categories must be disabled for standard distribution')
     if policy.get('unreviewed_distribution') != 'excluded':
         raise ValueError('Unreviewed person candidates must be excluded from standard distribution')
     if policy.get('adult_distribution') != {
@@ -701,7 +705,7 @@ def main():
         'recovery_gemini_override_rows_applied': recovery_applied,
         'initial_gemini_manual_only_rows_demoted': initial_demoted,
         'recovery_gemini_manual_only_rows_demoted': recovery_demoted,
-        'classification_policy': 'Reviewed outputs omit person-level rows in restricted categories and retain aggregate counts only. Raw source and Gemini workspaces are external to the repository; future Gemini runs require an external restricted-category hash exclusion file. The current broad person dictionary snapshot does not apply person-subcategory exclusions.',
+        'classification_policy': 'Reviewed outputs omit person-level rows in restricted categories and retain aggregate counts only. Military and thought records are excluded from the standard person dictionary export; raw source corpora remain unchanged. Raw source and Gemini workspaces are external to the repository; future Gemini runs require an external restricted-category hash exclusion file.',
         'taxonomy_version': taxonomy['taxonomy_version'],
     }
     write_json(output / 'summary.json', summary)

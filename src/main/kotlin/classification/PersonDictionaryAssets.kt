@@ -53,6 +53,7 @@ class PersonDictionaryData(
     private val requiredRestrictedCategoryIds = setOf(
         "adult_performer", "adult_work_creator", "crime_offender", "espionage", "organized_crime", "religion", "terrorism",
     )
+    private val withheldCategoryIds = setOf("military", "thought")
     private val sportIds = taxonomy.getValue("sport_subcategories").jsonObject.keys
     private val idCount = if (idDef.isFile) MozcIdDefParser.parse(idDef.toPath()).size else null
     private val rows: List<PersonDictionaryRow>
@@ -60,11 +61,13 @@ class PersonDictionaryData(
     private val sportTagsByPair: Map<Pair<String, String>, Set<String>>
 
     init {
-        require(categoryIds.size == 24 && categoryIds.distinct().size == categoryIds.size)
-        require(nonStandardCategoryIds == requiredRestrictedCategoryIds + "unclassified_person")
+        require(categoryIds.size == 22 && categoryIds.distinct().size == categoryIds.size)
+        require(nonStandardCategoryIds == requiredRestrictedCategoryIds + withheldCategoryIds + "unclassified_person")
         val policy = taxonomy.getValue("policy").jsonObject
         require(policy.getValue("standard_dictionary_excluded_categories").jsonArray
-            .map { it.jsonPrimitive.content }.toSet() == requiredRestrictedCategoryIds)
+            .map { it.jsonPrimitive.content }.toSet() == requiredRestrictedCategoryIds + withheldCategoryIds)
+        require(policy.getValue("standard_dictionary_withheld_categories").jsonArray
+            .map { it.jsonPrimitive.content }.toSet() == withheldCategoryIds)
         require(policy.getValue("restricted_category_records").jsonPrimitive.content == "aggregate_counts_only")
         require(policy.getValue("adult_distribution").jsonObject.let { adultDistribution ->
             adultDistribution.getValue("adult_performer").jsonPrimitive.content == "metadata_only" &&
