@@ -94,6 +94,7 @@ class PersonNameOriginClassificationTest(unittest.TestCase):
     def test_merged_inputs_are_checked_against_the_name_origin_projection(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
+            key = origins.candidate_key('かな', '表記')
             taxonomy_path = root / origins.TAXONOMY_PATH
             taxonomy_path.parent.mkdir(parents=True)
             taxonomy_path.write_bytes((ROOT / origins.TAXONOMY_PATH).read_bytes())
@@ -103,8 +104,8 @@ class PersonNameOriginClassificationTest(unittest.TestCase):
             mapping_path = root / origins.MAPPING_PATH
             mapping_path.parent.mkdir(parents=True, exist_ok=True)
             with gzip.open(mapping_path, 'wt', encoding='utf-8') as stream:
-                stream.write('surname_origin_unconfirmed\t' + 'a' * 64 + '\tsurname_origin_japanese\n')
-            source_projection = origins.mapped_distribution_source_projection(root, {'a' * 64})
+                stream.write('surname_origin_unconfirmed\t' + key + '\tsurname_origin_japanese\n')
+            source_projection = origins.mapped_distribution_source_projection(root, {key})
             taxonomy = json.loads(taxonomy_path.read_text(encoding='utf-8'))
             taxonomy_projection_hash = origins.hashlib.sha256(
                 origins.json_bytes(origins.name_origin_taxonomy_projection(taxonomy))).hexdigest()
@@ -129,11 +130,11 @@ class PersonNameOriginClassificationTest(unittest.TestCase):
                 },
             }), encoding='utf-8')
             mapping, _ = origins.load_fixed_mapping(root)
-            self.assertIn('a' * 64, mapping)
+            self.assertIn(key, mapping)
 
             with gzip.open(distribution_source, 'wt', encoding='utf-8') as stream:
-                stream.write('person\tかな\t1\t1\t8000\t別表記\n')
-            with self.assertRaisesRegex(ValueError, 'mapped name-origin source rows'):
+                stream.write('person\tかな\t2\t1\t8000\t表記\n')
+            with self.assertRaisesRegex(ValueError, 'Mapped name-origin source rows'):
                 origins.load_fixed_mapping(root)
 
 

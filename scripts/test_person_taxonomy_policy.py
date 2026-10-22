@@ -43,16 +43,31 @@ class PersonTaxonomyPolicyTest(unittest.TestCase):
         from pathlib import Path
 
         with tempfile.TemporaryDirectory() as temporary:
-            additions = Path(temporary)
+            root = Path(temporary)
+            id_def = root / 'src/main/resources/id.def'
+            id_def.parent.mkdir(parents=True)
+            id_def.write_text('1851 test\n', encoding='utf-8')
+            taxonomy_path = root / 'src/main/classification/person-taxonomy.json'
+            taxonomy_path.parent.mkdir(parents=True)
+            taxonomy_path.write_text(json.dumps({
+                'categories': [{'id': 'thought', 'standard_enabled': True}],
+                'sport_subcategories': {},
+            }), encoding='utf-8')
+            additions = root / 'src/main/classification/person-additions'
+            additions.mkdir(parents=True)
             row = {
                 'reading': 'かんと', 'surface': 'カント', 'category_id': 'thought',
+                'left_id': 1851, 'right_id': 1851, 'cost': 8400,
+                'source_url': 'https://www.wikidata.org/wiki/Q9312',
+                'source_surface': 'カント', 'source_reading': 'カント',
+                'checked_on': '2026-10-22',
                 'classification_source_url': 'https://www.wikidata.org/wiki/Q9312',
                 'classification_source_section': 'occupation statement P106: philosopher',
             }
             (additions / 'philosophers.jsonl').write_text(
                 json.dumps(row, ensure_ascii=False) + '\n', encoding='utf-8')
             final = {}
-            person_export.apply_person_additions(final, additions, {'thought'})
+            person_export.apply_person_additions(root, final, {'thought'})
             self.assertEqual(final, {
                 person_export.candidate_key('かんと', 'カント'):
                     ('かんと', 'カント', 'thought', set()),
