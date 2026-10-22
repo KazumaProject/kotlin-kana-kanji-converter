@@ -44,5 +44,34 @@ class PersonAdditionExportTest(unittest.TestCase):
                              ('やきゅうせんしゅ', '野球選手', 'sports', {'baseball'}))
 
 
+class PersonNameOriginExportTest(unittest.TestCase):
+    def test_applies_origin_targets_and_preserves_dictionary_tags(self):
+        reading, surface = 'たなか', '田中'
+        key = exporter.candidate_key(reading, surface)
+        final = {key: (reading, surface, 'surname_origin_unconfirmed', {'野球'})}
+        count = exporter.apply_name_origin_mapping(
+            final, {key: ('surname_origin_unconfirmed', 'surname_origin_japanese')})
+        self.assertEqual(count, 1)
+        self.assertEqual(final[key], (reading, surface, 'surname_origin_japanese', {'野球'}))
+
+    def test_skips_mapping_for_candidates_already_reclassified_by_a_later_review(self):
+        reading, surface = 'あやなん', 'あやなん'
+        key = exporter.candidate_key(reading, surface)
+        final = {key: (reading, surface, 'online_creator', set())}
+        mapping = {key: ('personal_name_origin_unconfirmed', 'personal_name_origin_japanese')}
+        self.assertEqual(exporter.apply_name_origin_mapping(final, mapping, {key}), 0)
+        self.assertEqual(final[key][2], 'online_creator')
+
+    def test_rejects_missing_or_mismatched_origin_source(self):
+        reading, surface = 'たなか', '田中'
+        key = exporter.candidate_key(reading, surface)
+        final = {key: (reading, surface, 'surname_origin_unconfirmed', set())}
+        with self.assertRaisesRegex(ValueError, 'do not cover unresolved'):
+            exporter.apply_name_origin_mapping(final, {}, {key})
+        with self.assertRaisesRegex(ValueError, 'source category'):
+            exporter.apply_name_origin_mapping(
+                final, {key: ('given_name_origin_unconfirmed', 'surname_origin_japanese')}, {key})
+
+
 if __name__ == '__main__':
     unittest.main()

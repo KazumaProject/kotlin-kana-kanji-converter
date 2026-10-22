@@ -27979,6 +27979,97 @@
         ],
         "categoryPairs": [],
         "categoryRecords": 0
+      },
+      {
+        "path": "src/main/classification/person-additions/github-issues-2026-10-22.jsonl",
+        "sha256": "b4d518aad86e271163243f4e9ec7e713701c89d610bb9b751a06c8bb1dd8bd91",
+        "reviewedPairs": 5,
+        "addedPairs": [
+          [
+            "いばやしたつのり",
+            "井林辰憲"
+          ],
+          [
+            "ごとうけいすけ",
+            "後藤啓介"
+          ],
+          [
+            "せきよしひろ",
+            "関芳弘"
+          ],
+          [
+            "はなしやすひろ",
+            "葉梨康弘"
+          ],
+          [
+            "ふじいひさゆき",
+            "藤井比早之"
+          ]
+        ],
+        "addedRecords": 5,
+        "addedSourceRows": 5,
+        "appendedPairs": [
+          [
+            "いばやしたつのり",
+            "井林辰憲"
+          ],
+          [
+            "ごとうけいすけ",
+            "後藤啓介"
+          ],
+          [
+            "せきよしひろ",
+            "関芳弘"
+          ],
+          [
+            "はなしやすひろ",
+            "葉梨康弘"
+          ],
+          [
+            "ふじいひさゆき",
+            "藤井比早之"
+          ]
+        ],
+        "categoryPairs": [
+          [
+            "politics_public",
+            "いばやしたつのり",
+            "井林辰憲"
+          ],
+          [
+            "politics_public",
+            "せきよしひろ",
+            "関芳弘"
+          ],
+          [
+            "politics_public",
+            "はなしやすひろ",
+            "葉梨康弘"
+          ],
+          [
+            "politics_public",
+            "ふじいひさゆき",
+            "藤井比早之"
+          ]
+        ],
+        "categoryRecords": 4
+      },
+      {
+        "path": "src/main/classification/person-additions/github-issues-2026-10-22-category-followup.jsonl",
+        "sha256": "eeb551f4f67387b7d348e667454152c3e0bce240f2afe2b8fabd4fd838182959",
+        "reviewedPairs": 1,
+        "addedPairs": [],
+        "addedRecords": 0,
+        "addedSourceRows": 0,
+        "appendedPairs": [],
+        "categoryPairs": [
+          [
+            "sports",
+            "ごとうけいすけ",
+            "後藤啓介"
+          ]
+        ],
+        "categoryRecords": 1
       }
     ],
     "reviews": [
@@ -28023,7 +28114,8 @@
       "src/main/classification/reviews/2026-10-16-pr128-luna-0036.jsonl",
       "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl",
       "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl",
-      "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl"
+      "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl",
+      "src/main/classification/reviews/2026-10-22-github-issues.jsonl"
     ],
     "reviewBaseExcludedCandidatePairs": 5725,
     "termAdditions": [
@@ -29190,7 +29282,7 @@
     }
   },
   "inputs": {
-    "src/main/bin/names.txt": "572714c3786db6ecfbaf820f09d5f9a3a794812cb736dbe33790a37bd32457ef",
+    "src/main/bin/names.txt": "1f4faaa6c43a24f8d599476d10e978c5d3990ea0de26fe08f137cdb8c61b731a",
     "src/main/bin/place.txt.zip": "bae15eb6755a2e6aa30d1d9ece7970c7d97d761b6e430c59bc11222f8e2e6f01",
     "src/main/bin/only_wiki.txt.zip": "2c3ca451484900edee55ae4ebe79284e1301b077572f64e9100889a5755bed10",
     "src/main/bin/only_neologd.txt.zip": "64222fa806e424556b662619fb7cba9ac9683f89959afee909dadb112027458e",
@@ -29198,7 +29290,7 @@
     "src/main/classification/person-additions/fighters-2026-10-14.jsonl": "21ba7b7db33feb7c1b55abfacb1fb6c451dd11d8a06175cfee7d36de53043eaf",
     "src/main/classification/term-additions.tsv": "031b9446633274363467d229074607e495abb0904061dc9b333298af6ebb339b",
     "src/main/classification/person-additions/joc-paris2024-2026-10-21.jsonl": "756f05ac434375e66f3ef023e8586cae01ceaf5493f1c64a4ce4826e472fdce5",
-    "src/main/classification/person-taxonomy.json": "5bd730b2e9a618f8709e5d75927865e600b5cc48fbfeaab36f7409f4006b41e1",
+    "src/main/classification/person-taxonomy.json": "cce0204d9e00d15516ae5d013f47087e993e2b7c73197d973afab481c772993f",
     "src/main/classification/person-additions/joc-tokyo2020-2026-10-21.jsonl": "c2744d010e6a99b47e4415a99411657e8de4a3997c865f8630d9b8665f8099e3",
     "src/main/classification/term-taxonomy.json": "890e9d1d045f10308aa32cdc39e534b5113c199de3d79404bd22be3cf796bb96",
     "src/main/classification/term-classifications.tsv.gz": "2a1414eff371092bf5cadfd8ab9b183e750cbf8f6534fdb0e72710ee3612f45a",
@@ -29206,6 +29298,14 @@
     "src/main/classification/event-taxonomy.json": "a84e0e3a84ae8700a2cd7076cb5ace14bab90890a0faff7cf742fe9a153e8d10",
     "src/main/classification/event-classifications.tsv.gz": "976c5d281e037f9704ea86f17a40031ce30f424c8e45fad948341c336236c64b",
     "src/main/classification/event-classifications-manifest.json": "5e42d9903f24e511f948ef68f79b385329ee0131b19ead4aa2062926347e26c0",
+    "src/main/classification/person-additions/philosophers-2026-10-22.jsonl": "3b1152f50e64257ad1595e345d94b78713e8c2c4e735e338385294066b525fb4",
+    "src/main/classification/person-additions/comedian-2026-10-22.jsonl": "e66a986e3c0aca05afdfb33f14c2395461e95ab6514116fd3ac967f81f49d34d",
+    "src/main/classification/person-additions/comedian-followup-2026-10-22.jsonl": "6524701ab8f27a8af3af74ba421c005a76d76ae70434bb119ee367501c4d6386",
+    "src/main/classification/person-additions/comedian-research-2026-10-22.jsonl": "975744437fad3f6bb8644355c85c3e756cd2ba4f4ff398e124397acd4fc67200",
+    "src/main/classification/person-additions/combat-sports-2026-10-22.jsonl": "8fe4dd882d71791591a16e181174290d0ea5bee545d575d28d09460ba7b9843a",
+    "src/main/classification/person-additions/japanese-mma-2026-10-22.jsonl": "d56bf861d7478133e2e39d149f02fa4f8f94fbd2a91dff12f9073a864f2fa02e",
+    "src/main/classification/person-additions/japanese-mma-gamis-2026-10-22.jsonl": "70462df28342a860d720b79e5a9bf498de8ecf0a20566be72ec1551a3f0b7d3c",
+    "src/main/classification/person-additions/japanese-combat-sports-jitenon-2026-10-22.jsonl": "c5569f580d8dfdb971ec601ee1cf5ac6f7edae6259e41121360a70656f47aaf0",
     "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl": "574794d0df19f8afd09d06b66897d7b7fce97dd3652bc005674a3ecae28bb30a",
     "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl": "5a373897bbade57c507d08e4813baa7d5975bc752a568cdaee8aaebd9d18f155",
     "src/main/classification/reviews/2026-10-16-pr128-luna-0000.jsonl": "3ab59c82e6e0645da8f513606038212b601c0c4c46273db4faf8122d6812cf1d",
@@ -29248,23 +29348,18 @@
     "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl": "59f4fb8499430452c3e32a12c9fafaceadbd096256a227f60cb7546454fa5cd7",
     "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl": "6b65e3c0092f7113000199e7dd7f530cc5e5f9911913ecb3c741a65aeef0a42b",
     "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl": "7585c7afb2c8413500eab761ad429c461f139a414148c9be907442daeb141d5a",
-    "src/main/classification/person-additions/philosophers-2026-10-22.jsonl": "3b1152f50e64257ad1595e345d94b78713e8c2c4e735e338385294066b525fb4",
-    "src/main/classification/person-additions/comedian-2026-10-22.jsonl": "e66a986e3c0aca05afdfb33f14c2395461e95ab6514116fd3ac967f81f49d34d",
-    "src/main/classification/person-additions/comedian-followup-2026-10-22.jsonl": "6524701ab8f27a8af3af74ba421c005a76d76ae70434bb119ee367501c4d6386",
-    "src/main/classification/person-additions/comedian-research-2026-10-22.jsonl": "975744437fad3f6bb8644355c85c3e756cd2ba4f4ff398e124397acd4fc67200",
-    "src/main/classification/person-additions/combat-sports-2026-10-22.jsonl": "8fe4dd882d71791591a16e181174290d0ea5bee545d575d28d09460ba7b9843a",
-    "src/main/classification/person-additions/japanese-mma-2026-10-22.jsonl": "d56bf861d7478133e2e39d149f02fa4f8f94fbd2a91dff12f9073a864f2fa02e",
-    "src/main/classification/person-additions/japanese-mma-gamis-2026-10-22.jsonl": "70462df28342a860d720b79e5a9bf498de8ecf0a20566be72ec1551a3f0b7d3c",
-    "src/main/classification/person-additions/japanese-combat-sports-jitenon-2026-10-22.jsonl": "c5569f580d8dfdb971ec601ee1cf5ac6f7edae6259e41121360a70656f47aaf0"
+    "src/main/classification/reviews/2026-10-22-github-issues.jsonl": "053d827a1f2c9358db0f099742b85e737ee3cdf4314f0bc41221eef837b4c730",
+    "src/main/classification/person-additions/github-issues-2026-10-22.jsonl": "b4d518aad86e271163243f4e9ec7e713701c89d610bb9b751a06c8bb1dd8bd91",
+    "src/main/classification/person-additions/github-issues-2026-10-22-category-followup.jsonl": "eeb551f4f67387b7d348e667454152c3e0bce240f2afe2b8fabd4fd838182959"
   },
   "files": {
     "categories.json": "2f2c436d9015eb5d321b543b568fce2fe52a2acddfac25a0151e798fea5c63ff",
-    "distribution-candidates.tsv.gz": "84ed2e60656929a662c35dc40d2f327dbb8a6bf0015a88912681a40b41870fac",
-    "distribution-decisions.tsv.gz": "83a407c265c793ef4539680fdedcb0673a9f136e25a964b6f0fc1e4fb085c3ba"
+    "distribution-candidates.tsv.gz": "e0348e8a7285a2ab80542485d5194bf85270b9a7dec0e97c38d0aa2555c05d12",
+    "distribution-decisions.tsv.gz": "52648217449eaa546b3c4a26f1352ea738db69ad62213311ff66aa2ee417e063"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "sourceRows": {
-    "person": 73968,
+    "person": 73973,
     "place": 170145,
     "wiki": 150132,
     "neologd": 404817,
@@ -29274,9 +29369,9 @@
   "admittedPairsByOrigin": {
     "manual": 384259,
     "gemini": 183166,
-    "verified": 177246
+    "verified": 177295
   },
-  "uniqueAdmittedPairs": 744671,
+  "uniqueAdmittedPairs": 744720,
   "excludedCandidatePairs": 328586,
   "excludedClassifiedPairs": 322861,
   "unclassifiedPairs": 0,
@@ -29287,19 +29382,19 @@
     "verified_over_manual": 8
   },
   "categoryRows": {
-    "person": 270949,
+    "person": 270954,
     "character": 6871,
     "mythological_figure": 3436,
     "place": 45088,
     "address": 152874,
     "station": 12758,
-    "facility": 35069,
+    "facility": 35070,
     "transport_route": 4230,
-    "organization": 47482,
+    "organization": 47484,
     "lineage": 2019,
-    "product": 9882,
-    "vehicle": 2579,
-    "event/occasion/organized_event": 4058,
+    "product": 9890,
+    "vehicle": 2580,
+    "event/occasion/organized_event": 4059,
     "event/occasion/observance": 802,
     "event/occasion/exam_qualification": 169,
     "event/incident/natural_disaster": 456,
@@ -29310,32 +29405,32 @@
     "initiative": 1061,
     "term/general/products_daily_goods": 1159,
     "term/general/food_drink_cooking": 4077,
-    "term/general/internet_slang_culture": 570,
-    "term/general/neologisms_trends_youth_language": 481,
+    "term/general/internet_slang_culture": 573,
+    "term/general/neologisms_trends_youth_language": 483,
     "term/general/other_general": 20503,
-    "term/specialist/information_communications": 6063,
+    "term/specialist/information_communications": 6073,
     "term/specialist/mathematics_physics": 4171,
-    "term/specialist/chemistry_life_sciences": 27565,
+    "term/specialist/chemistry_life_sciences": 27566,
     "term/specialist/engineering_technology": 3509,
-    "term/specialist/earth_environment_resources": 2109,
-    "term/specialist/economics_management": 5778,
-    "term/specialist/law_politics": 5271,
+    "term/specialist/earth_environment_resources": 2110,
+    "term/specialist/economics_management": 5779,
+    "term/specialist/law_politics": 5273,
     "term/specialist/humanities_social_sciences": 17877,
     "term/specialist/culture_arts_sports": 5360,
     "term/specialist/transport_safety_defense": 4037,
     "work_franchise": 849,
-    "work_manga": 5144,
+    "work_manga": 5148,
     "work_anime": 1104,
     "work_film": 6504,
-    "work_program": 9310,
+    "work_program": 9311,
     "work_book": 7660,
-    "work_game": 3151,
-    "work_music": 10336,
+    "work_game": 3156,
+    "work_music": 10337,
     "work_stage": 571,
     "work_periodical": 1812,
     "work_other": 2683
   },
-  "dictionaryRows": 761199,
+  "dictionaryRows": 761248,
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified."
   ],

@@ -377,6 +377,39 @@ jobs:
           cp build/person-dictionary/person-replacement-dictionary-manifest.json release_zips/dictionary-distribution-manifest.json
           cp build/person-dictionary/DICTIONARY-SHA256SUMS release_zips/DICTIONARY-SHA256SUMS
 
+      - name: Verify issue additions and regressions with the shipped dictionary ZIP
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ARCHIVE=release_zips/japanese_keyboard_dictionary_assets.zip
+
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category system --count 30 --expect-conversion しろ=白 --expect-conversion しろい=白い --expect-conversion しろくろ=白黒 --expect-conversion しろあり=シロアリ しろ しろい しろくろ しろあり"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/general/internet_slang_culture --count 30 --expect-conversion ほびあか=ホビ垢 --expect-conversion うまかく=うま確 --expect-conversion ふれねみー=フレネミー ほびあか うまかく ふれねみー"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/general/other_general --count 30 --expect-conversion どぱがき=ドパガキ どぱがき"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/general/neologisms_trends_youth_language --count 30 --expect-conversion めろい=メロい --expect-conversion せろかつ=セロ活 めろい せろかつ"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/specialist/information_communications --count 30 --expect-conversion えーつーえー=A2A --expect-conversion えふでぃーいー=FDE --expect-conversion けーぶいきゃっしゅ=KVキャッシュ --expect-conversion えむしーぴー=MCP --expect-conversion ふぃじかるえーあい=フィジカルAI --expect-conversion えーじぇんてぃっくえーあい=エージェンティックAI --expect-conversion えーじぇんてぃっくこーでぃんぐ=エージェンティックコーディング --expect-conversion ばいぶこーでぃんぐ=バイブコーディング --expect-conversion こんてきすとえんじにありんぐ=コンテキストエンジニアリング --expect-conversion そぶりんえーあい=ソブリンAI --expect-conversion おーぷんうぇいと=オープンウェイト えーつーえー えふでぃーいー けーぶいきゃっしゅ えむしーぴー ふぃじかるえーあい えーじぇんてぃっくえーあい えーじぇんてぃっくこーでぃんぐ ばいぶこーでぃんぐ こんてきすとえんじにありんぐ そぶりんえーあい おーぷんうぇいと"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/specialist/law_politics --count 30 --expect-conversion まいなきゅうきゅう=マイナ救急 --expect-conversion きんきゅうじゅうりょう=緊急銃猟 まいなきゅうきゅう きんきゅうじゅうりょう"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/specialist/chemistry_life_sciences --count 30 --expect-conversion ぺろぶすかいとたいようでんち=ペロブスカイト太陽電池 ぺろぶすかいとたいようでんち"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/specialist/economics_management --count 30 --expect-conversion とーくんかよきん=トークン化預金 とーくんかよきん"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/specialist/earth_environment_resources --count 30 --expect-conversion ふゅーじょんえねるぎー=フュージョンエネルギー ふゅーじょんえねるぎー"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category product --count 30 --expect-conversion めぐりそうか=巡草花 --expect-conversion 'えくすぺりあてんまーくえいと=Xperia 10 VIII' --expect-conversion 'ふぁんしんく=Fan Sync' --expect-conversion 'どるつでんてぃすとりー=ドルツ デンティストリー' --expect-conversion ぷらーくすきゃんぶらし=プラークスキャンブラシ --expect-conversion 'ゔぃらぷりんす=VILLA PRINCE' --expect-conversion ぼんぼんどろっぷしーる=ボンボンドロップシール --expect-conversion えーあいもーど=AIモード --expect-conversion まいなめんきょしょう=マイナ免許証 めぐりそうか えくすぺりあてんまーくえいと ふぁんしんく どるつでんてぃすとりー ぷらーくすきゃんぶらし ゔぃらぷりんす ぼんぼんどろっぷしーる えーあいもーど まいなめんきょしょう"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category organization --count 30 --expect-conversion ぷろけみあ=プロケミア --expect-conversion にほんでぃーえっくすあんてな=日本DXアンテナ ぷろけみあ にほんでぃーえっくすあんてな"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category vehicle --count 30 --expect-conversion 'いーすかい=e SKY' いーすかい"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category facility --count 30 --expect-conversion 'とふろむやえす=TOFROM YAESU' --expect-conversion べーすげーとよこはまかんない=BASEGATE横浜関内 とふろむやえす べーすげーとよこはまかんない"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category work_music --count 30 --expect-conversion あいかろちゅう=愛カロ厨 あいかろちゅう"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category work_program --count 30 --expect-conversion ろすとてん=LOST10 ろすとてん"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category work_game --count 30 --expect-conversion 'れゔのわーる=Rev. NOiR' --expect-conversion 'さんりおぱーてぃらんど=サンリオ パーティランド' --expect-conversion 'ふぁいなるふぁんたじーれぞなんす=ファイナルファンタジー レゾナンス' --expect-conversion すてらーこーど=ステラーコード --expect-conversion あのまりす=アノマリス れゔのわーる さんりおぱーてぃらんど ふぁいなるふぁんたじーれぞなんす すてらーこーど あのまりす"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category work_manga --count 30 --expect-conversion さいれん=PSYREN --expect-conversion おだろく=オダロク --expect-conversion らびっとちぇいさー=ラビットチェイサー --expect-conversion ひがんのほたる=彼岸の螢 --expect-conversion れいばいでい=レイバイデイ さいれん おだろく らびっとちぇいさー ひがんのほたる れいばいでい"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category event/occasion/organized_event --count 30 --expect-conversion じむとふにせんにじゅうろく=JIMTOF2026 じむとふにせんにじゅうろく"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category person/politics_public --count 30 --expect-conversion ふじいひさゆき=藤井比早之 --expect-conversion せきよしひろ=関芳弘 --expect-conversion いばやしたつのり=井林辰憲 --expect-conversion はなしやすひろ=葉梨康弘 ふじいひさゆき せきよしひろ いばやしたつのり はなしやすひろ"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category person/surname_origin_japanese --count 30 --expect-conversion ひらぬましょうじろう=平沼正二郎 ひらぬましょうじろう"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category person/personal_name_origin_japanese --count 30 --expect-conversion はやかわともき=早川友基 --expect-conversion せこあゆむ=瀬古歩夢 --expect-conversion すずきゆいと=鈴木唯人 はやかわともき せこあゆむ すずきゆいと"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category person/personal_name_origin_unconfirmed --count 30 --expect-conversion おおぞらこうき=大空幸星 --expect-conversion しおがいけんと=塩貝健人 --expect-conversion まちのしゅうと=町野修斗 おおぞらこうき しおがいけんと まちのしゅうと"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category person/actor --count 30 --expect-conversion さのかいしゅう=佐野海舟 さのかいしゅう"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category person/sports --count 30 --expect-conversion ごとうけいすけ=後藤啓介 ごとうけいすけ"
+
       - name: Upload verified dictionary distribution
         if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
@@ -411,14 +444,14 @@ jobs:
             - `term` 辞書を一般語・専門用語の階層カテゴリに再編しました。
             - `event` 辞書を「催し・行事」「事件・事故・災害」「歴史的出来事」の3群に整理し、6つの配布カテゴリを追加しました。
             - 犯罪・テロ・事故に該当する読み・表記ペアは分類専用とし、辞書配布データから除外しました。
-            - 汎用 `person` 辞書を人物細分類23カテゴリに置き換え、軍事関係者を除外しました。哲学者・思想家は出典を確認した候補だけを含めます。
+            - 汎用 `person` 辞書を人物細分類29カテゴリに置き換え、軍事関係者を除外しました。姓・名・姓名は由来別に分類し、哲学者・思想家は出典を確認した候補だけを含めます。
 
             ## English
 
             - Reorganized the `term` dictionary into hierarchical general and specialist categories.
             - Organized the `event` dictionary into three groups and added six distributable categories.
             - Kept crime, terrorism, and accident pairs for classification only and excluded them from dictionary distribution data.
-            - Replaced the generic `person` dictionary with 23 categorized dictionaries, excluding military records and admitting philosophers and thinkers only from source-verified entries.
+            - Replaced the generic `person` dictionary with 29 categorized dictionaries, including surname and given-name origin categories, excluding military records, and admitting philosophers and thinkers only from source-verified entries.
           prerelease: false
           makeLatest: true
           artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./release_zips/dictionary-distribution-manifest.json,./release_zips/DICTIONARY-SHA256SUMS,./release_zips/DICTIONARY-LICENSES.txt
@@ -450,7 +483,7 @@ jobs:
           tag: ${{ github.ref_name }}
           name: Person category replacement ${{ github.ref_name }}
           body: |
-            The generic `person` dictionary is removed from this prerelease bundle and replaced by the taxonomy's 23 standard-enabled person subcategory dictionaries under `app/src/main/assets/categories/person/<category-id>/`. The bundle has 71 categories in total. Each replacement category is identified in `dictionary-distribution-manifest.json` with `parentCategoryId: person`. Candidates that cannot be reclassified or fail the IME format filter are excluded; military, adult-related, and other restricted categories are excluded. Philosopher and thinker entries are admitted through manually reviewed, source-backed additions.
+            The generic `person` dictionary is removed from this prerelease bundle and replaced by the taxonomy's 29 standard-enabled person subcategory dictionaries under `app/src/main/assets/categories/person/<category-id>/`. The bundle has 77 categories in total. Each replacement category is identified in `dictionary-distribution-manifest.json` with `parentCategoryId: person`. Candidates that cannot be reclassified or fail the IME format filter are excluded; military, adult-related, and other restricted categories are excluded. Name-origin labels are provisional, with only partial targeted source review. Philosopher and thinker entries are admitted through manually reviewed, source-backed additions.
           prerelease: true
           makeLatest: false
           artifacts: build/person-dictionary/japanese_keyboard_dictionary_assets.zip,build/person-dictionary/person-replacement-dictionary-manifest.json,build/person-dictionary/DICTIONARY-SHA256SUMS,release_zips/DICTIONARY-LICENSES.txt

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "84ed2e60656929a662c35dc40d2f327dbb8a6bf0015a88912681a40b41870fac",
-  "uniquePairs": 832952,
-  "records": 849390,
+  "inputSha256": "e0348e8a7285a2ab80542485d5194bf85270b9a7dec0e97c38d0aa2555c05d12",
+  "uniquePairs": 832999,
+  "records": 849437,
   "categories": [
     {
       "id": "character",
@@ -72,14 +72,14 @@
     {
       "id": "facility",
       "name": "施設",
-      "pairs": 35062,
-      "readings": 33472,
-      "records": 35069,
+      "pairs": 35063,
+      "readings": 33473,
+      "records": 35070,
       "pages": 25,
       "recordsByOrigin": {
         "gemini": 17227,
         "manual": 16248,
-        "verified": 1594
+        "verified": 1595
       }
     },
     {
@@ -98,14 +98,14 @@
     {
       "id": "organization",
       "name": "組織",
-      "pairs": 47403,
-      "readings": 46632,
-      "records": 47482,
+      "pairs": 47405,
+      "readings": 46634,
+      "records": 47484,
       "pages": 35,
       "recordsByOrigin": {
         "gemini": 24630,
         "manual": 21396,
-        "verified": 1456
+        "verified": 1458
       }
     },
     {
@@ -124,40 +124,40 @@
     {
       "id": "product",
       "name": "商品・サービス",
-      "pairs": 9880,
-      "readings": 9662,
-      "records": 9882,
+      "pairs": 9888,
+      "readings": 9670,
+      "records": 9890,
       "pages": 7,
       "recordsByOrigin": {
         "gemini": 5930,
         "manual": 3928,
-        "verified": 24
+        "verified": 32
       }
     },
     {
       "id": "vehicle",
       "name": "車両・船舶",
-      "pairs": 2579,
-      "readings": 2546,
-      "records": 2579,
+      "pairs": 2580,
+      "readings": 2547,
+      "records": 2580,
       "pages": 2,
       "recordsByOrigin": {
         "manual": 769,
         "gemini": 1803,
-        "verified": 7
+        "verified": 8
       }
     },
     {
       "id": "event/occasion/organized_event",
       "name": "催し・行事",
-      "pairs": 4058,
-      "readings": 4014,
-      "records": 4058,
+      "pairs": 4059,
+      "readings": 4015,
+      "records": 4059,
       "pages": 3,
       "recordsByOrigin": {
         "gemini": 2679,
         "manual": 1359,
-        "verified": 20
+        "verified": 21
       }
     },
     {
@@ -291,27 +291,27 @@
     {
       "id": "term/general/internet_slang_culture",
       "name": "ネットスラング・ネット文化",
-      "pairs": 568,
-      "readings": 547,
-      "records": 570,
+      "pairs": 571,
+      "readings": 550,
+      "records": 573,
       "pages": 1,
       "recordsByOrigin": {
         "manual": 218,
         "gemini": 318,
-        "verified": 34
+        "verified": 37
       }
     },
     {
       "id": "term/general/neologisms_trends_youth_language",
       "name": "新語・流行語・若者言葉",
-      "pairs": 481,
-      "readings": 470,
-      "records": 481,
+      "pairs": 483,
+      "readings": 472,
+      "records": 483,
       "pages": 1,
       "recordsByOrigin": {
         "gemini": 266,
         "manual": 168,
-        "verified": 47
+        "verified": 49
       }
     },
     {
@@ -330,14 +330,14 @@
     {
       "id": "term/specialist/information_communications",
       "name": "情報・通信",
-      "pairs": 6062,
-      "readings": 5995,
-      "records": 6063,
+      "pairs": 6072,
+      "readings": 6005,
+      "records": 6073,
       "pages": 5,
       "recordsByOrigin": {
         "gemini": 3930,
         "manual": 1723,
-        "verified": 410
+        "verified": 420
       }
     },
     {
@@ -356,13 +356,13 @@
     {
       "id": "term/specialist/chemistry_life_sciences",
       "name": "化学・生命科学",
-      "pairs": 27562,
-      "readings": 26080,
-      "records": 27565,
+      "pairs": 27563,
+      "readings": 26081,
+      "records": 27566,
       "pages": 19,
       "recordsByOrigin": {
         "gemini": 18979,
-        "verified": 3482,
+        "verified": 3483,
         "manual": 5104
       }
     },
@@ -382,40 +382,40 @@
     {
       "id": "term/specialist/earth_environment_resources",
       "name": "地球・環境・資源",
-      "pairs": 2109,
-      "readings": 2074,
-      "records": 2109,
+      "pairs": 2110,
+      "readings": 2075,
+      "records": 2110,
       "pages": 2,
       "recordsByOrigin": {
         "manual": 493,
         "gemini": 1256,
-        "verified": 360
+        "verified": 361
       }
     },
     {
       "id": "term/specialist/economics_management",
       "name": "経済・経営",
-      "pairs": 5778,
-      "readings": 5703,
-      "records": 5778,
+      "pairs": 5779,
+      "readings": 5704,
+      "records": 5779,
       "pages": 4,
       "recordsByOrigin": {
         "manual": 1305,
         "gemini": 3606,
-        "verified": 867
+        "verified": 868
       }
     },
     {
       "id": "term/specialist/law_politics",
       "name": "法律・政治",
-      "pairs": 5270,
-      "readings": 5199,
-      "records": 5271,
+      "pairs": 5272,
+      "readings": 5201,
+      "records": 5273,
       "pages": 4,
       "recordsByOrigin": {
         "manual": 1393,
         "gemini": 3011,
-        "verified": 867
+        "verified": 869
       }
     },
     {
@@ -472,13 +472,13 @@
     {
       "id": "work_manga",
       "name": "漫画作品",
-      "pairs": 5143,
-      "readings": 5103,
-      "records": 5144,
+      "pairs": 5147,
+      "readings": 5107,
+      "records": 5148,
       "pages": 4,
       "recordsByOrigin": {
         "manual": 4595,
-        "verified": 116,
+        "verified": 120,
         "gemini": 433
       }
     },
@@ -511,14 +511,14 @@
     {
       "id": "work_program",
       "name": "番組",
-      "pairs": 9309,
-      "readings": 9235,
-      "records": 9310,
+      "pairs": 9310,
+      "readings": 9236,
+      "records": 9311,
       "pages": 8,
       "recordsByOrigin": {
         "manual": 7997,
         "gemini": 1161,
-        "verified": 152
+        "verified": 153
       }
     },
     {
@@ -537,27 +537,27 @@
     {
       "id": "work_game",
       "name": "ゲーム作品",
-      "pairs": 3151,
-      "readings": 3061,
-      "records": 3151,
+      "pairs": 3156,
+      "readings": 3066,
+      "records": 3156,
       "pages": 3,
       "recordsByOrigin": {
         "manual": 2104,
         "gemini": 1006,
-        "verified": 41
+        "verified": 46
       }
     },
     {
       "id": "work_music",
       "name": "音楽作品",
-      "pairs": 10333,
-      "readings": 10200,
-      "records": 10336,
+      "pairs": 10334,
+      "readings": 10201,
+      "records": 10337,
       "pages": 8,
       "recordsByOrigin": {
         "manual": 8786,
         "gemini": 1394,
-        "verified": 156
+        "verified": 157
       }
     },
     {
@@ -626,23 +626,23 @@
     {
       "id": "surname_origin_unconfirmed",
       "name": "姓・名字（由来未確認）",
-      "records": 49405,
-      "pairs": 49117,
-      "pages": 33
+      "records": 24182,
+      "pairs": 24039,
+      "pages": 17
     },
     {
       "id": "given_name_origin_unconfirmed",
       "name": "名・下の名前（由来未確認）",
-      "records": 7124,
-      "pairs": 7046,
-      "pages": 5
+      "records": 4332,
+      "pairs": 4290,
+      "pages": 3
     },
     {
       "id": "personal_name_origin_unconfirmed",
       "name": "人名・姓名（由来未確認）",
-      "records": 170031,
-      "pairs": 168662,
-      "pages": 113
+      "records": 93650,
+      "pairs": 92876,
+      "pages": 62
     },
     {
       "id": "actor",
@@ -696,8 +696,8 @@
     {
       "id": "sports",
       "name": "スポーツ関係者",
-      "records": 6570,
-      "pairs": 6565,
+      "records": 6571,
+      "pairs": 6566,
       "pages": 5
     },
     {
@@ -752,8 +752,8 @@
     {
       "id": "politics_public",
       "name": "政治・行政・外交・社会運動",
-      "records": 1549,
-      "pairs": 1549,
+      "records": 1553,
+      "pairs": 1553,
       "pages": 2
     },
     {
@@ -782,6 +782,48 @@
       "name": "哲学者・思想家",
       "records": 255,
       "pairs": 255,
+      "pages": 1
+    },
+    {
+      "id": "surname_origin_japanese",
+      "name": "姓・名字（日本由来）",
+      "records": 25012,
+      "pairs": 24867,
+      "pages": 17
+    },
+    {
+      "id": "surname_origin_foreign",
+      "name": "姓・名字（海外由来）",
+      "records": 57,
+      "pairs": 57,
+      "pages": 1
+    },
+    {
+      "id": "given_name_origin_japanese",
+      "name": "名・下の名前（日本由来）",
+      "records": 2286,
+      "pairs": 2259,
+      "pages": 2
+    },
+    {
+      "id": "given_name_origin_foreign",
+      "name": "名・下の名前（海外由来）",
+      "records": 47,
+      "pairs": 47,
+      "pages": 1
+    },
+    {
+      "id": "personal_name_origin_japanese",
+      "name": "人名・姓名（日本由来）",
+      "records": 75946,
+      "pairs": 75343,
+      "pages": 51
+    },
+    {
+      "id": "personal_name_origin_foreign",
+      "name": "人名・姓名（海外由来）",
+      "records": 1046,
+      "pairs": 1045,
       "pages": 1
     }
   ],

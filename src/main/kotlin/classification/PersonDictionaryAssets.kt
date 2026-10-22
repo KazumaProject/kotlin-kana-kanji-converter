@@ -61,7 +61,7 @@ class PersonDictionaryData(
     private val sportTagsByPair: Map<Pair<String, String>, Set<String>>
 
     init {
-        require(categoryIds.size == 23 && categoryIds.distinct().size == categoryIds.size)
+        require(categoryIds.size == 29 && categoryIds.distinct().size == categoryIds.size)
         require(nonStandardCategoryIds == requiredRestrictedCategoryIds + withheldCategoryIds + "unclassified_person")
         val policy = taxonomy.getValue("policy").jsonObject
         require(policy.getValue("standard_dictionary_excluded_categories").jsonArray

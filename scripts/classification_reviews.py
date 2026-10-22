@@ -225,6 +225,9 @@ def _apply_saved(root, commit=False):
         taxonomy_path = str(DIRECTORY / 'person-taxonomy.json')
         if taxonomy_path not in staged_paths and (root / taxonomy_path).is_file():
             staged_paths.append(taxonomy_path)
+        person_dictionary_path = str(DIRECTORY / 'person-dictionary-candidates.tsv.gz')
+        if person_dictionary_path not in staged_paths and (root / person_dictionary_path).is_file():
+            staged_paths.append(person_dictionary_path)
         for relative in staged_paths:
             target = staging / relative; target.parent.mkdir(parents=True, exist_ok=True)
             target.symlink_to(root / relative)

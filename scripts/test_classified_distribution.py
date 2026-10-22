@@ -6,6 +6,7 @@ from pathlib import Path
 import sqlite3
 import tempfile
 import unittest
+from unittest.mock import patch
 import zipfile
 
 import classified_distribution as d
@@ -46,6 +47,9 @@ class DistributionTest(unittest.TestCase):
         self.manual = self.root / 'manual.jsonl'
         self.manual.write_text(''.join(json.dumps(dict(reading=r, surface=s, candidate_key=d.key(r,s), categories=c)) + '\n'
                                       for r,s,c in [('あ','甲',['place']),('い','乙',['place','person']),('お','戊',[])]))
+        person_dictionary = self.root / 'src/main/classification/person-dictionary-candidates.tsv.gz'
+        person_dictionary.parent.mkdir(parents=True, exist_ok=True)
+        d.write_gzip(person_dictionary, [])
 
     def freeze(self):
         with contextlib.redirect_stdout(io.StringIO()):
@@ -101,7 +105,7 @@ class DistributionTest(unittest.TestCase):
         manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
         excluded_key = d.key('あ', '甲')
         manifest['provenance']['personDictionaryExclusions'] = {
-            'categoryIds': ['military'],
+            'categoryIds': ['military', 'thought'],
             'candidateKeys': [excluded_key],
             'uniquePairs': 1,
         }
@@ -215,6 +219,24 @@ class DistributionTest(unittest.TestCase):
         self.assertIn(('term',*self.rows[1]),rows)
         self.assertNotIn(('place',*self.rows[1]),rows)
 
+    def test_source_backed_term_addition_does_not_need_a_gemini_result(self):
+        pair = ('めろい', 'メロい')
+        category = 'term/general/neologisms_trends_youth_language'
+        entry = {
+            'action': 'add',
+            'added_record': {'left_id': 1, 'right_id': 1, 'cost': 8400},
+            'evidence': {'kind': 'independent_source'},
+        }
+        decisions = {pair: [*pair, category, 'verified', 'classified']}
+        data = {'results': {}, 'categoryIds': {category}}
+        with patch.object(d, 'term_classification_data', return_value=data):
+            result = d.apply_term_classifications(
+                self.root, decisions, force=True, reviewed_pairs={pair: entry})
+        self.assertEqual(result[pair][2], category)
+        with patch.object(d, 'term_classification_data', return_value=data):
+            with self.assertRaisesRegex(ValueError, 'valid provenance'):
+                d.apply_term_classifications(self.root, decisions, force=True)
+
     def person_file(self, entries=None):
         entry = dict(reading='かくとうか', surface='格闘家', sport='mma', left_id=1, right_id=1, cost=8400,
                      source_url='https://example.org/fighters/test', source_surface='格闘家',
@@ -229,6 +251,7 @@ class DistributionTest(unittest.TestCase):
     def snapshot(self):
         paths = [self.root / p for p, _ in d.SOURCES.values()]
         paths += list((self.root / 'src/main/classification').glob('distribution-*'))
+        paths.append(self.root / 'src/main/classification/person-dictionary-candidates.tsv.gz')
         return {p: p.read_bytes() for p in paths}
 
     def test_person_additions_preserve_baseline_and_are_idempotent(self):
@@ -271,6 +294,7 @@ class DistributionTest(unittest.TestCase):
         path = self.root / 'src/main/classification/person-comedy.jsonl'
         path.write_text(''.join(json.dumps(entry, ensure_ascii=False) + '\n' for entry in entries),
                         encoding='utf-8')
+        d.write_gzip(self.root / 'src/main/classification/person-dictionary-candidates.tsv.gz', [])
 
         self.add_people(path)
         self.verify()
@@ -283,11 +307,19 @@ class DistributionTest(unittest.TestCase):
         self.assertEqual(batch['reviewedPairs'], 2)
         self.assertEqual(batch['addedPairs'], [['おわらい', 'お笑い']])
         self.assertEqual(batch['addedRecords'], 1)
+        with gzip.open(self.root / 'src/main/classification/person-dictionary-candidates.tsv.gz',
+                       'rt', encoding='utf-8') as stream:
+            category_rows = {tuple(line.rstrip('\n').split('\t')) for line in stream}
+        self.assertIn(('comedian', 'おわらい', '1', '1', '8400', 'お笑い', ''), category_rows)
 
     def test_already_admitted_person_is_not_changed(self):
         self.freeze()
         _, entry = self.person_file()
         entry.update(reading='あ', surface='甲', source_reading='ア', source_surface='甲')
+        d.write_gzip(self.root / 'src/main/classification/person-dictionary-candidates.tsv.gz', [
+            ('sports', 'あ', '1', '1', '100', '甲', 'mma'),
+            ('sports', 'あ', '1', '1', '8400', '甲', 'mma'),
+        ])
         path, _ = self.person_file([entry])
         before = self.snapshot()
         self.add_people(path)
@@ -340,8 +372,28 @@ class DistributionTest(unittest.TestCase):
 
         entry.pop('classification_source_url')
         invalid, _ = self.person_file([entry])
-        with self.assertRaisesRegex(ValueError, 'category-specific'):
+        with self.assertRaisesRegex(ValueError, 'classification_source_url'):
             d.person_entries(self.root, invalid)
+
+    def test_source_backed_event_addition_can_supply_a_distributable_leaf(self):
+        pair = ('じむとふにせんにじゅうろく', 'JIMTOF2026')
+        entry = {
+            'action': 'add',
+            'added_record': {'left_id': 1851, 'right_id': 1851, 'cost': 8400},
+            'baseline': None,
+            'categories': ['event/occasion/organized_event'],
+            'evidence': {
+                'kind': 'independent_source', 'categories': ['event/occasion/organized_event'],
+                'reading': pair[0], 'surface': pair[1], 'reference': 'https://example.org/event',
+            },
+            'reading': pair[0], 'surface': pair[1], 'reason': 'Official exhibition source',
+        }
+        with patch.object(d, 'event_classification_data', return_value={
+                'results': {}, 'categoryIds': {'event/occasion/organized_event'}}):
+            result = d.apply_event_classifications(self.root, {
+                pair: [*pair, 'event/occasion/organized_event', 'verified', 'classified']
+            }, force=True, reviewed_pairs={pair: entry})
+        self.assertEqual(result[pair][2], 'event/occasion/organized_event')
 
     def test_person_conflicts_and_exclusions_do_not_mutate_snapshot(self):
         self.freeze()

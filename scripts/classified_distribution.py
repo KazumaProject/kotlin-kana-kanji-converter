@@ -315,6 +315,7 @@ def apply_term_classifications(root, decisions, force=False, reviewed_pairs=()):
     if data is None:
         return {pair: list(row) for pair, row in decisions.items()}
     results = data['results']
+    review_entries = reviewed_pairs if isinstance(reviewed_pairs, dict) else {}
     reviewed_pairs = set(reviewed_pairs)
     output = {}
     for pair, original in decisions.items():
@@ -330,8 +331,14 @@ def apply_term_classifications(root, decisions, force=False, reviewed_pairs=()):
             row[2] = ','.join(sorted(categories))
         elif any(category.startswith('term/') for category in categories):
             leaf_categories = categories & data['categoryIds']
-            if len(leaf_categories) != 1 or pair not in results:
-                raise ValueError(f'Each admitted term pair must have exactly one Gemini leaf category: {pair}')
+            review = review_entries.get(pair)
+            source_backed_addition = (
+                isinstance(review, dict) and review.get('action') == 'add'
+                and isinstance(review.get('added_record'), dict)
+                and review.get('evidence', {}).get('kind') == 'independent_source'
+            )
+            if len(leaf_categories) != 1 or (pair not in results and not source_backed_addition):
+                raise ValueError(f'Each admitted term pair must have one leaf category and valid provenance: {pair}')
             for category in leaf_categories:
                 if pair not in reviewed_pairs and results.get(pair) != category:
                     raise ValueError(f'Frozen term category differs from Gemini result: {pair}')
@@ -353,7 +360,8 @@ def apply_event_classifications(root, decisions, force=False, reviewed_pairs=())
     if data is None:
         return {pair: list(row) for pair, row in decisions.items()}
     results = data['results']
-    reviewed_pairs = set(reviewed_pairs)
+    review_entries = reviewed_pairs if isinstance(reviewed_pairs, dict) else {}
+    reviewed_pairs = set(review_entries)
     output = {}
     for pair, original in decisions.items():
         row = list(original)
@@ -368,7 +376,13 @@ def apply_event_classifications(root, decisions, force=False, reviewed_pairs=())
             row[2] = ','.join(sorted(categories))
         elif any(category.startswith('event/') for category in categories):
             leaf_categories = categories & data['categoryIds']
-            if len(leaf_categories) != 1 or pair not in results:
+            review = review_entries.get(pair)
+            source_backed_addition = (
+                isinstance(review, dict) and review.get('action') == 'add'
+                and isinstance(review.get('added_record'), dict)
+                and review.get('evidence', {}).get('kind') == 'independent_source'
+            )
+            if len(leaf_categories) != 1 or (pair not in results and not source_backed_addition):
                 raise ValueError(f'Each retained event pair must have exactly one distributable category: {pair}')
             for category in leaf_categories:
                 if pair not in reviewed_pairs and results.get(pair) != category:
@@ -943,10 +957,7 @@ def add_person_names(root, path):
     verify(root)
     entries = person_entries(root, path)
     directory = root / 'src/main/classification'
-    category_additions = {
-        pair: entry for pair, entry in entries.items()
-        if entry.get('category_id') == 'thought'
-    }
+    category_additions = dict(entries)
     person_dictionary_path = directory / 'person-dictionary-candidates.tsv.gz'
     manifest = json.loads((directory / 'distribution-manifest.json').read_text())
     with gzip.open(directory / 'distribution-decisions.tsv.gz', 'rt', encoding='utf-8') as f:
@@ -977,10 +988,11 @@ def add_person_names(root, path):
         rows.update(('person', *existing) for existing in sources_by_pair[pair] | {row})
         decisions[pair] = [*pair, 'person', 'verified', 'classified']
     category_row_records = set()
+    already_categorized_pairs = set()
     categorized_rows = None
     if category_additions:
         if not person_dictionary_path.is_file():
-            raise ValueError('Thought additions require the existing person dictionary snapshot')
+            raise ValueError('Category additions require the existing person dictionary snapshot')
         with gzip.open(person_dictionary_path, 'rt', encoding='utf-8') as stream:
             categorized_rows = {tuple(line.rstrip('\n').split('\t')) for line in stream}
         for pair, entry in category_additions.items():
@@ -988,21 +1000,33 @@ def add_person_names(root, path):
             if pair not in already_admitted_person_pairs:
                 variants.add((pair[0], str(entry['left_id']), str(entry['right_id']),
                               str(entry['cost']), pair[1]))
-            expected_rows = {('thought', *variant, '') for variant in variants}
+            category_id = 'sports' if 'sport' in entry else entry['category_id']
+            sport_ids = sorted(entry.get('sports', [entry['sport']])) if 'sport' in entry else []
+            expected_rows = {(category_id, *variant, ','.join(sport_ids)) for variant in variants}
             if not expected_rows:
-                raise ValueError(f'No person dictionary source rows exist for thought addition: {pair}')
+                raise ValueError(f'No person dictionary source rows exist for category addition: {pair}')
             existing = {row for row in categorized_rows
-                        if len(row) in (6, 7) and row[0] in ('thought', 'personal_name_origin_unconfirmed')
+                        if len(row) in (6, 7) and row[0] in (category_id, 'personal_name_origin_unconfirmed')
                         and (row[1], row[5]) == pair}
-            legacy_thought_rows = {row for row in existing if row[0] == 'thought' and len(row) == 6}
-            categorized_rows.difference_update(legacy_thought_rows)
-            existing.difference_update(legacy_thought_rows)
+            legacy_rows = {row for row in existing if row[0] == category_id and len(row) == 6}
+            categorized_rows.difference_update(legacy_rows)
+            existing.difference_update(legacy_rows)
+            target_rows = {row for row in existing if row[0] == category_id}
+            if pair in already_admitted_person_pairs and target_rows:
+                if not expected_rows <= target_rows:
+                    raise ValueError(f'Existing person category does not cover source rows: {pair}')
+                already_categorized_pairs.add(pair)
+                continue
             if existing and existing != expected_rows:
                 if {row[0] for row in existing} != {'personal_name_origin_unconfirmed'}:
-                    raise ValueError(f'Person dictionary category conflicts with thought addition: {pair}')
+                    raise ValueError(f'Person dictionary category conflicts with category addition: {pair}')
                 categorized_rows.difference_update(existing)
             category_row_records.update(expected_rows)
             categorized_rows.update(expected_rows)
+        category_additions = {
+            pair: entry for pair, entry in category_additions.items()
+            if pair not in already_categorized_pairs
+        }
     if not additions and not category_additions:
         print('Person additions: 0 (all names already admitted)')
         return
@@ -1030,7 +1054,7 @@ def add_person_names(root, path):
         'addedPairs': [[row[0], row[4]] for row in additions], 'addedRecords': record_count,
         'addedSourceRows': len(appended),
         'appendedPairs': [[row[0], row[4]] for row in appended],
-        'categoryPairs': [[entry['category_id'], pair[0], pair[1]]
+        'categoryPairs': [['sports' if 'sport' in entry else entry['category_id'], pair[0], pair[1]]
                           for pair, entry in sorted(category_additions.items())],
         'categoryRecords': len(category_row_records),
     })
@@ -1456,13 +1480,19 @@ def verify(root, allow_pending_reviews=False):
                 categorized_person_rows = {tuple(line.rstrip('\n').split('\t')) for line in stream}
         for category_id, reading, surface in category_pairs:
             entry = reviewed.get((reading, surface))
-            if (category_id != 'thought' or entry is None
-                    or entry.get('category_id') != category_id):
+            entry_category = 'sports' if entry and 'sport' in entry else entry.get('category_id') if entry else None
+            if entry is None or entry_category != category_id:
                 raise ValueError('Person category-addition provenance differs from evidence')
-        category_pair_keys = {(reading, surface) for _, reading, surface in category_pairs}
+        category_by_pair = {(reading, surface): category_id
+                            for category_id, reading, surface in category_pairs}
+        category_tags = {
+            pair: ','.join(sorted(entry.get('sports', [entry['sport']]))) if 'sport' in entry else ''
+            for pair, entry in reviewed.items() if pair in category_by_pair
+        }
+        category_pair_keys = set(category_by_pair)
         expected_category_rows = {
-            ('thought', *row[1:], '') for row in actual
-            if row[0] == 'person' and (row[1], row[5]) in category_pair_keys
+            (category_by_pair[(row[1], row[5])], *row[1:], category_tags[(row[1], row[5])]) for row in actual
+            if row[0] == 'person' and (row[1], row[5]) in category_by_pair
         }
         expected_category_pairs = {(row[1], row[5]) for row in expected_category_rows}
         if (category_records != len(expected_category_rows)

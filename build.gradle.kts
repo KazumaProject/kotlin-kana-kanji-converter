@@ -822,7 +822,7 @@ tasks.named<JavaExec>("run") {
 
 tasks.register<JavaExec>("convertCandidates") {
     group = "application"
-    description = "Converts one or more readings and prints candidates as JSON Lines."
+    description = "Converts readings from local resources or an exact packaged dictionary release ZIP."
     mainClass.set("ConvertCandidatesKt")
     classpath = sourceSets["main"].runtimeClasspath
     dependsOn("classes")
@@ -833,7 +833,7 @@ val personDictionaryArchive = layout.buildDirectory.file(
 )
 val buildPersonDictionaryDistribution = tasks.register<JavaExec>("buildPersonDictionaryDistribution") {
     group = "distribution"
-    description = "Builds the 23 standard-enabled person category dictionaries against the shared POS table."
+    description = "Builds the 29 standard-enabled person category dictionaries against the shared POS table."
     mainClass.set("com.kazumaproject.classification.PersonDictionaryAssetsKt")
     classpath = sourceSets["main"].runtimeClasspath
     dependsOn("run")
@@ -861,7 +861,7 @@ val personReplacementChecksums = layout.buildDirectory.file(
 )
 val buildPersonDictionaryReplacementDistribution = tasks.register<JavaExec>("buildPersonDictionaryReplacementDistribution") {
     group = "distribution"
-    description = "Replaces the generic person category with the 23 standard-enabled person subcategories."
+    description = "Replaces the generic person category with the 29 standard-enabled person subcategories."
     mainClass.set("com.kazumaproject.classification.PersonDictionaryReplacementDistributionKt")
     classpath = sourceSets["main"].runtimeClasspath
     dependsOn(

@@ -19,6 +19,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import review_person_classifications as reviews  # noqa: E402
+import person_name_origin_classification as name_origins  # noqa: E402
+import classified_distribution as distribution  # noqa: E402
 
 
 def candidate_key(reading, surface):
@@ -125,13 +127,36 @@ def apply_person_additions(root, final, enabled):
         final[key] = (reading, surface, category, tags)
 
 
+def apply_name_origin_mapping(final, mapping, source_keys=None):
+    """Apply fixed origin labels only to candidates still in an unconfirmed bucket."""
+    origin_source = {
+        key: value for key, value in final.items()
+        if value[2] in name_origins.SOURCE_CATEGORIES
+        and (source_keys is None or key in source_keys)
+    }
+    applicable_mapping = {key: mapping[key] for key in origin_source if key in mapping}
+    if set(applicable_mapping) != set(origin_source):
+        missing = len(set(origin_source) - set(applicable_mapping))
+        raise ValueError(
+            f"Name-origin classifications do not cover unresolved name candidates (missing={missing})")
+    for key, (reading, surface, source_category, tags) in origin_source.items():
+        mapped_source, target_category = applicable_mapping[key]
+        if mapped_source != source_category or candidate_key(reading, surface) != key:
+            raise ValueError("Name-origin mapping source category or candidate key is inconsistent")
+        if target_category == "excluded_non_person":
+            final.pop(key)
+        else:
+            final[key] = (reading, surface, target_category, tags)
+    return len(origin_source)
+
+
 def export(args):
     exclusions = load_exclusions(args.excluded_candidates, args.root)
     taxonomy, category_by_code, category_by_id = reviews.taxonomy_maps(args.root / "src/main/classification/person-taxonomy.json")
     enabled = {row["id"] for row in taxonomy["categories"] if row.get("standard_enabled") is True}
     category_order = {row["id"]: row["number"] for row in taxonomy["categories"]}
-    if len(enabled) != 23:
-        raise ValueError("Expected exactly 23 standard-enabled person categories")
+    if len(enabled) != 29:
+        raise ValueError("Expected exactly 29 standard-enabled person categories")
 
     overrides = reviews.load_overrides(
         args.root / "src/main/classification/person-category-overrides.jsonl",
@@ -267,6 +292,9 @@ def export(args):
             final.pop(key)
             records_by_pair.pop(key, None)
             ime_filtered_keys.add(key)
+
+    origin_mapping, _origin_manifest = name_origins.load_fixed_mapping(args.root)
+    apply_name_origin_mapping(final, origin_mapping, source_keys)
 
     output_rows = []
     matched = set()
