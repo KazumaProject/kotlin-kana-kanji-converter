@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "taxonomy_version": "2026-10-21.8",
+  "taxonomy_version": "2026-10-22.1",
   "policy": {
-    "version": "2026-10-21.8",
+    "version": "2026-10-22.1",
     "name_origin_definition": "日本由来／海外由来は人の国籍や文字種ではなく、姓・名・姓名の命名慣習上の由来を指す。読みや表記だけから推測せず、由来に確信がない場合は対応する由来未確認カテゴリにする。複数の命名慣習が混在し判別できない場合も由来未確認にする。",
     "adult_scope": [
       "video",
@@ -32,16 +32,22 @@
       "adult_work_creator",
       "crime_offender",
       "espionage",
+      "military",
       "organized_crime",
       "religion",
-      "terrorism"
+      "terrorism",
+      "thought"
     ],
     "restricted_category_records": "aggregate_counts_only",
     "adult_related_hold": {
       "label": "成人関連保留（別枠）",
       "definition": "成人関連の可能性があるが作品の性質または候補との対応を確認できない項目を保留する。個別候補名は保存・配布せず、件数のみ集計する。確認済みの制作者はadult_work_creator、出演者はadult_performerに分ける。",
       "distribution": "metadata_only"
-    }
+    },
+    "standard_dictionary_withheld_categories": [
+      "military",
+      "thought"
+    ]
   },
   "categories": [
     {
@@ -216,7 +222,7 @@
       "number": 22,
       "id": "military",
       "label": "軍事",
-      "standard_enabled": true,
+      "standard_enabled": false,
       "definition": "軍人、軍事指導者等。歴史上の個人も同じ基準。",
       "boundary": "神話・架空は既存カテゴリの修正候補。"
     },
@@ -280,7 +286,7 @@
       "number": 30,
       "id": "thought",
       "label": "思想・哲学",
-      "standard_enabled": true,
+      "standard_enabled": false,
       "definition": "哲学者、思想家等として公開された著作・職業資料で確認できる個人。",
       "boundary": "本人の信仰や宗教的背景だけでは宗教関係者にせず、聖職・宗教指導・宗教研究の公的役割が確認できる場合はreligionへ分類する。"
     },

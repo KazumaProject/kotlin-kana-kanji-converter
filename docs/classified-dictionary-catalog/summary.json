@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "3a9450a47c3ec9f0e725f478bc373a6095faaea8f75495d4621026f95ad28d42",
-  "uniquePairs": 830895,
-  "records": 847324,
+  "inputSha256": "e8fbe7d5a77d802792e2f70a1e936675ac92c4e8716c50c83a7142cd38d4663e",
+  "uniquePairs": 829973,
+  "records": 846402,
   "categories": [
     {
       "id": "character",
@@ -764,13 +764,6 @@
       "pages": 3
     },
     {
-      "id": "military",
-      "name": "軍事",
-      "records": 768,
-      "pairs": 768,
-      "pages": 1
-    },
-    {
       "id": "royalty_nobility",
       "name": "皇室・王室・貴族",
       "records": 286,
@@ -783,18 +776,11 @@
       "records": 5038,
       "pairs": 5031,
       "pages": 4
-    },
-    {
-      "id": "thought",
-      "name": "思想・哲学",
-      "records": 154,
-      "pairs": 154,
-      "pages": 1
     }
   ],
   "excluded": {
     "pairs": 322861,
-    "pages": 601
+    "pages": 593
   },
   "specialistInputSha256": "de25b742784973e59532d3ec86b670ab5dd25ed6c0558aa72d9eb2e6afb628dc"
 }

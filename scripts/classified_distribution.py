@@ -830,6 +830,23 @@ def key(reading, surface):
     return hashlib.sha256((reading + '\0' + surface).encode()).hexdigest()
 
 
+def person_dictionary_exclusions(manifest):
+    value = manifest.get('provenance', {}).get('personDictionaryExclusions')
+    if value is None:
+        return set()
+    if (not isinstance(value, dict)
+            or set(value) != {'categoryIds', 'candidateKeys', 'uniquePairs'}
+            or value['categoryIds'] != ['military', 'thought']
+            or type(value['uniquePairs']) is not int
+            or not isinstance(value['candidateKeys'], list)
+            or any(not isinstance(item, str) or not re.fullmatch('[0-9a-f]{64}', item)
+                   for item in value['candidateKeys'])
+            or len(value['candidateKeys']) != len(set(value['candidateKeys']))
+            or value['uniquePairs'] != len(value['candidateKeys'])):
+        raise ValueError('Invalid person dictionary exclusion provenance')
+    return set(value['candidateKeys'])
+
+
 def person_reading(value):
     """Only mechanical kana normalization; never transliterate Latin names."""
     value = unicodedata.normalize('NFC', value)
@@ -991,8 +1008,9 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
     out = root / 'src/main/classification'
     out.mkdir(parents=True, exist_ok=True)
     prior_manifest_path = out / 'distribution-manifest.json'
-    prior_batches = (json.loads(prior_manifest_path.read_text()).get('provenance', {}).get('personAdditions', [])
-                     if prior_manifest_path.exists() else [])
+    prior_manifest = json.loads(prior_manifest_path.read_text()) if prior_manifest_path.exists() else {}
+    prior_batches = prior_manifest.get('provenance', {}).get('personAdditions', [])
+    person_exclusions = person_dictionary_exclusions(prior_manifest)
     term_tax = term_taxonomy(root)
     event_tax = event_taxonomy(root)
     term_data = term_classification_data(root)
@@ -1114,11 +1132,19 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
                                           reviewed_pairs=review_entries)
     reviewed = apply_event_classifications(root, reviewed, force=event_data is not None,
                                            reviewed_pairs=review_entries)
+    for pair in list(reviewed):
+        if key(*pair) in person_exclusions:
+            row = reviewed[pair]
+            remaining = set(filter(None, row[2].split(','))) - {'person'}
+            if remaining:
+                row[2] = ','.join(sorted(remaining))
+            else:
+                del reviewed[pair]
     rows = reviews.candidate_rows(root, reviewed, review_entries)
     (out / 'categories.json').write_text(json.dumps(categories, ensure_ascii=False, indent=2) + '\n')
     write_gzip(out / 'distribution-candidates.tsv.gz', sorted(rows))
     write_gzip(out / 'distribution-decisions.tsv.gz', (reviewed[pair] for pair in sorted(reviewed)))
-    admitted = collections.Counter(origin for pair, (cats, origin) in decisions.items() if cats and pair not in excluded)
+    admitted = collections.Counter(row[3] for row in reviewed.values() if row[4] == 'classified')
     category_counts = collections.Counter(row[0] for row in rows)
     inputs = {path: sha(root / path) for path, _ in SOURCES.values()}
     term_classification_provenance = None
@@ -1166,9 +1192,9 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
         'admittedPairsByOrigin': dict(admitted),
         'uniqueAdmittedPairs': sum(admitted.values()),
         'excludedCandidatePairs': len(excluded),
-        'excludedClassifiedPairs': sum(pair in excluded for pair in decisions),
-        'unclassifiedPairs': sum(not cats and pair not in excluded and origin != 'no_result' for pair, (cats, origin) in decisions.items()),
-        'noResultPairs': sum(origin == 'no_result' and pair not in excluded for pair, (_, origin) in decisions.items()),
+        'excludedClassifiedPairs': sum(row[4] == 'excluded' for row in reviewed.values()),
+        'unclassifiedPairs': sum(row[4] == 'unclassified' for row in reviewed.values()),
+        'noResultPairs': sum(row[4] == 'no_result' for row in reviewed.values()),
         'conflicts': dict(conflicts),
         'categoryRows': {c['id']: category_counts[c['id']] for c in categories['categories']},
         'dictionaryRows': len(rows),
@@ -1178,6 +1204,12 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
         manifest['provenance']['termClassification'] = term_classification_provenance
     if event_classification_provenance is not None:
         manifest['provenance']['eventClassification'] = event_classification_provenance
+    if person_exclusions:
+        manifest['provenance']['personDictionaryExclusions'] = {
+            'categoryIds': ['military', 'thought'],
+            'candidateKeys': sorted(person_exclusions),
+            'uniquePairs': len(person_exclusions),
+        }
     if prior_batches:
         manifest['provenance']['personAdditions'] = prior_batches
         manifest['inputs'].update({batch['path']: batch['sha256'] for batch in prior_batches})
@@ -1192,6 +1224,7 @@ def verify(root, allow_pending_reviews=False):
     directory = root / 'src/main/classification'
     manifest = json.loads((directory / 'distribution-manifest.json').read_text())
     selected_reviews = manifest['provenance'].get('reviews', [])
+    person_exclusions = person_dictionary_exclusions(manifest)
     if not allow_pending_reviews and selected_reviews != reviews.paths(root):
         raise ValueError('Review history changed: run apply-reviews before building')
     for path, expected in manifest['inputs'].items():
@@ -1243,6 +1276,9 @@ def verify(root, allow_pending_reviews=False):
             if pair in decisions or origin not in [*manifest['precedence'], 'no_result']:
                 raise ValueError('Duplicate decision or invalid origin')
             values = set(cats.split(',')) if cats else set()
+            if (key(reading, surface) in person_exclusions
+                    and ('person' in values or not values)):
+                raise ValueError('Withheld person dictionary pair appears in frozen decisions')
             allowed = set(categories) | ({'term', 'event'} if status == 'excluded' else set())
             if not values <= allowed or status not in ('excluded', 'classified', 'unclassified', 'no_result'):
                 raise ValueError('Invalid decision')
@@ -1278,6 +1314,14 @@ def verify(root, allow_pending_reviews=False):
                                                     reviewed_pairs=review_entries)
     replayed_decisions = apply_event_classifications(root, replayed_decisions, force=event_data is not None,
                                                      reviewed_pairs=review_entries)
+    for pair in list(replayed_decisions):
+        if key(*pair) in person_exclusions:
+            row = replayed_decisions[pair]
+            remaining = set(filter(None, row[2].split(','))) - {'person'}
+            if remaining:
+                row[2] = ','.join(sorted(remaining))
+            else:
+                del replayed_decisions[pair]
     if replayed_decisions != decision_rows:
         raise ValueError('Frozen decisions differ from saved review history')
     actual = set()

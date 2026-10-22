@@ -91,8 +91,8 @@ def export(args):
     taxonomy, category_by_code, category_by_id = reviews.taxonomy_maps(args.root / "src/main/classification/person-taxonomy.json")
     enabled = {row["id"] for row in taxonomy["categories"] if row.get("standard_enabled") is True}
     category_order = {row["id"]: row["number"] for row in taxonomy["categories"]}
-    if len(enabled) != 24:
-        raise ValueError("Expected exactly 24 standard-enabled person categories")
+    if len(enabled) != 22:
+        raise ValueError("Expected exactly 22 standard-enabled person categories")
 
     overrides = reviews.load_overrides(
         args.root / "src/main/classification/person-category-overrides.jsonl",

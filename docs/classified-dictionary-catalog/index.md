@@ -1,8 +1,8 @@
 # 人物辞書置換プレリリース — 全配布カテゴリ
 
-特別プレリリースZIPのカテゴリ一覧です。通常配布の49カテゴリから汎用 `person` を除き、人物細分類24カテゴリに置き換えた **72カテゴリ**を掲載しています。未分類候補と成人関連など配布対象外の候補は含めていません。
+人物細分類辞書を含む配布ZIPのカテゴリ一覧です。通常配布の49カテゴリから汎用 `person` を除き、標準配布対象の人物細分類22カテゴリに置き換えた **70カテゴリ**を掲載しています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **847,324**、読み・表記の組数の合計は **839,275**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **846,402**、読み・表記の組数の合計は **838,353**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換プレリリース) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -76,7 +76,5 @@
 | [研究・技術・教育](person/science_education/index.md) | `science_education` | 7,575 | 7,605 | [全件](person/science_education/index.md) |
 | [政治・行政・外交・社会運動](person/politics_public/index.md) | `politics_public` | 1,549 | 1,549 | [全件](person/politics_public/index.md) |
 | [実業・経営](person/business/index.md) | `business` | 4,016 | 4,035 | [全件](person/business/index.md) |
-| [軍事](person/military/index.md) | `military` | 768 | 768 | [全件](person/military/index.md) |
 | [皇室・王室・貴族](person/royalty_nobility/index.md) | `royalty_nobility` | 286 | 286 | [全件](person/royalty_nobility/index.md) |
 | [その他の特定人物](person/other_identified/index.md) | `other_identified` | 5,031 | 5,038 | [全件](person/other_identified/index.md) |
-| [思想・哲学](person/thought/index.md) | `thought` | 154 | 154 | [全件](person/thought/index.md) |
