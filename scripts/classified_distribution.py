@@ -8,6 +8,7 @@ import io
 import json
 import os
 import re
+import shutil
 import tempfile
 import unicodedata
 from datetime import date, datetime
@@ -844,20 +845,31 @@ def person_entries(root, path):
     if taxonomy_path.is_file():
         taxonomy = json.loads(taxonomy_path.read_text(encoding='utf-8'))
         allowed_sports = set(taxonomy.get('sport_subcategories', {}))
+        allowed_categories = {category['id'] for category in taxonomy.get('categories', [])
+                              if category.get('standard_enabled') is True}
     else:
         # Older minimal snapshots and verification fixtures predate taxonomy
         # metadata. Restrict their fallback to the original three sport IDs.
         allowed_sports = LEGACY_PERSON_SPORT_IDS
+        allowed_categories = {'sports'}
     entries = {}
     for number, line in enumerate(path.read_text(encoding='utf-8').splitlines(), 1):
         entry = json.loads(line)
-        required = ('reading', 'surface', 'sport', 'left_id', 'right_id', 'cost',
+        required = ('reading', 'surface', 'left_id', 'right_id', 'cost',
                     'source_url', 'source_surface', 'source_reading', 'checked_on')
         if not isinstance(entry, dict) or any(k not in entry for k in required):
             raise ValueError(f'{path}:{number}: missing person entry/evidence fields')
-        for field in ('reading', 'surface', 'sport', 'source_url', 'source_surface', 'source_reading', 'checked_on'):
+        category_id = entry.get('category_id', 'sports')
+        if not isinstance(category_id, str) or category_id not in allowed_categories:
+            raise ValueError(f'{path}:{number}: invalid or nonstandard category_id')
+        if (category_id == 'sports' and 'sport' not in entry
+                or category_id != 'sports' and 'sport' in entry):
+            raise ValueError(f'{path}:{number}: sports entries need sport; other categories must omit it')
+        for field in ('reading', 'surface', 'source_url', 'source_surface', 'source_reading', 'checked_on'):
             if not isinstance(entry[field], str) or not entry[field] or any(c in entry[field] for c in '\t\r\n\0'):
                 raise ValueError(f'{path}:{number}: invalid {field}')
+        if 'sport' in entry and (not isinstance(entry['sport'], str) or not entry['sport']):
+            raise ValueError(f'{path}:{number}: invalid sport')
         if ('source_section' in entry and
                 (not isinstance(entry['source_section'], str) or not entry['source_section'])):
             raise ValueError(f'{path}:{number}: invalid source_section')
@@ -870,7 +882,7 @@ def person_entries(root, path):
                 or entry['surface'] != ''.join(entry['source_surface'].split())
                 or unicodedata.normalize('NFC', entry['surface']) != entry['surface']):
             raise ValueError(f'{path}:{number}: reading/surface differs from kana evidence')
-        if entry['sport'] not in allowed_sports:
+        if 'sport' in entry and entry['sport'] not in allowed_sports:
             raise ValueError(f'{path}:{number}: invalid sport')
         url = urlsplit(entry['source_url'])
         if url.scheme != 'https' or not url.hostname or url.username or url.password:
@@ -888,6 +900,15 @@ def person_entries(root, path):
     if not entries:
         raise ValueError('Empty person entries')
     return entries
+
+
+def person_category_assignments(entries):
+    """Return the reviewed standard category for each person alias."""
+    return [
+        {'category_id': entry.get('category_id', 'sports'),
+         'reading': reading, 'surface': surface}
+        for (reading, surface), entry in sorted(entries.items())
+    ]
 
 
 def add_person_names(root, path):
@@ -912,6 +933,7 @@ def add_person_names(root, path):
         if source == 'person': names_rows.add(row)
     additions = []
     appended = []
+    category_assignments = person_category_assignments(entries)
     previous_rows = len(rows)
     for pair, entry in sorted(entries.items()):
         prior = decisions.get(pair)
@@ -926,9 +948,6 @@ def add_person_names(root, path):
         # Admit those unchanged as well, as required by the source-to-distribution verifier.
         rows.update(('person', *existing) for existing in sources_by_pair[pair] | {row})
         decisions[pair] = [*pair, 'person', 'verified', 'classified']
-    if not additions:
-        print('Person additions: 0 (all names already admitted)')
-        return
     if any(item['path'] == relative for item in manifest['provenance'].get('personAdditions', [])):
         raise ValueError('Use a new evidence file for a subsequent person addition batch')
     names_path = SOURCES['person'][0]
@@ -938,11 +957,12 @@ def add_person_names(root, path):
     names += ''.join('\t'.join(row) + '\n' for row in appended)
     count = len(additions)
     record_count = len(rows) - previous_rows
-    manifest['sourceRows']['person'] += len(appended)
-    manifest['admittedPairsByOrigin']['verified'] = manifest['admittedPairsByOrigin'].get('verified', 0) + count
-    manifest['uniqueAdmittedPairs'] += count
-    manifest['categoryRows']['person'] += record_count
-    manifest['dictionaryRows'] += record_count
+    if count:
+        manifest['sourceRows']['person'] += len(appended)
+        manifest['admittedPairsByOrigin']['verified'] = manifest['admittedPairsByOrigin'].get('verified', 0) + count
+        manifest['uniqueAdmittedPairs'] += count
+        manifest['categoryRows']['person'] += record_count
+        manifest['dictionaryRows'] += record_count
     manifest['inputs'][relative] = sha(path)
     taxonomy_path = 'src/main/classification/person-taxonomy.json'
     taxonomy_file = root / taxonomy_path
@@ -953,6 +973,7 @@ def add_person_names(root, path):
         'addedPairs': [[row[0], row[4]] for row in additions], 'addedRecords': record_count,
         'addedSourceRows': len(appended),
         'appendedPairs': [[row[0], row[4]] for row in appended],
+        'categoryAssignments': category_assignments,
     })
     # Validate a staged snapshot first. Invalid batches never partially edit the inputs.
     with tempfile.TemporaryDirectory(prefix='person-additions-') as temporary:
@@ -985,6 +1006,191 @@ def add_person_names(root, path):
                               'src/main/classification/distribution-manifest.json']:
             (root / relative_path).write_bytes((staging / relative_path).read_bytes())
     print(f'Person additions: {count} new pairs, {record_count} records, {len(entries) - count} already admitted')
+
+
+def add_term_classifications(root, results_path, result_manifest_path):
+    """Apply an incremental saved term-classification batch to the frozen snapshot."""
+    root = root.resolve()
+    results_path = results_path.resolve()
+    result_manifest_path = result_manifest_path.resolve()
+    if root == results_path or root in results_path.parents or root == result_manifest_path or root in result_manifest_path.parents:
+        raise ValueError('Incremental classifier outputs must remain outside the repository')
+    directory = root / 'src/main/classification'
+    distribution_manifest = json.loads((directory / 'distribution-manifest.json').read_text(encoding='utf-8'))
+    prior_term_data = term_classification_data(root)
+    if prior_term_data is None:
+        raise ValueError('Complete term classifications are required before an incremental update')
+    prior_metadata = prior_term_data['metadata']
+    incremental_metadata = json.loads(result_manifest_path.read_text(encoding='utf-8'))
+    if (incremental_metadata.get('model') != prior_metadata.get('model')
+            or incremental_metadata.get('apiEndpoint') != prior_metadata.get('apiEndpoint')
+            or incremental_metadata.get('projectId') != prior_metadata.get('projectId')
+            or incremental_metadata.get('freeTierOnly') is not True
+            or incremental_metadata.get('billingEnabled') is not False
+            or incremental_metadata.get('promptVersion') != prior_metadata.get('promptVersion')
+            or incremental_metadata.get('taxonomySha256') != sha(root / TERM_TAXONOMY_PATH)
+            or not re.fullmatch(r'[0-9a-f]{64}', incremental_metadata.get('sourceCandidateSha256', ''))):
+        raise ValueError('Incremental term classification provenance differs from the frozen classifier')
+    if any(type(incremental_metadata.get(field)) is not int or incremental_metadata[field] < 1
+           for field in ('sourceTermRecords', 'uniquePairs', 'batchCount')):
+        raise ValueError('Incremental term classification manifest has invalid counts')
+    if incremental_metadata['sourceTermRecords'] < incremental_metadata['uniquePairs']:
+        raise ValueError('Incremental term source-record count is below its pair count')
+
+    addition_records = [row for _, row in term_addition_rows(root)]
+    addition_pairs = {(row[0], row[4]) for row in addition_records}
+    new_pairs = addition_pairs - prior_term_data['results'].keys()
+    if not new_pairs:
+        raise ValueError('There are no new term additions to classify')
+    new_records = [row for row in addition_records if (row[0], row[4]) in new_pairs]
+    if incremental_metadata['sourceTermRecords'] != len(new_records):
+        raise ValueError('Incremental classifier input does not match new term-addition records')
+
+    with tempfile.TemporaryDirectory(prefix='term-incremental-source-') as temporary:
+        source_path = Path(temporary) / 'distribution-candidates.tsv.gz'
+        write_gzip(source_path, (('term', *row) for row in sorted(new_records)))
+        if sha(source_path) != incremental_metadata['sourceCandidateSha256']:
+            raise ValueError('Incremental classifier source hash differs from the new term additions')
+
+    incremental_results = {}
+    with gzip.open(results_path, 'rt', encoding='utf-8', newline='') as stream:
+        for number, line in enumerate(stream, 1):
+            fields = line.rstrip('\n').split('\t')
+            if len(fields) != 3 or not fields[0] or not fields[1] or fields[2] not in prior_term_data['categoryIds']:
+                raise ValueError(f'{results_path}:{number}: invalid incremental category result')
+            pair = fields[0], fields[1]
+            if pair in incremental_results:
+                raise ValueError(f'{results_path}:{number}: duplicate incremental term pair')
+            incremental_results[pair] = fields[2]
+    if set(incremental_results) != new_pairs or len(incremental_results) != incremental_metadata['uniquePairs']:
+        raise ValueError('Incremental results do not classify the exact new term pair set')
+    incremental_counts = collections.Counter(incremental_results.values())
+    expected_incremental_counts = {category: incremental_counts[category]
+                                   for category in prior_term_data['categoryIds']}
+    if incremental_metadata.get('categoryCounts') != expected_incremental_counts:
+        raise ValueError('Incremental result counts differ from their manifest')
+    incremental_proofs = incremental_metadata.get('freeTierProofs')
+    if not isinstance(incremental_proofs, list) or not incremental_proofs:
+        raise ValueError('Incremental classification has no free-tier proof')
+
+    combined_results = dict(prior_term_data['results'])
+    combined_results.update(incremental_results)
+    combined_counts = collections.Counter(combined_results.values())
+    metadata = dict(prior_metadata)
+    metadata['sourceTermRecords'] += len(new_records)
+    metadata['uniquePairs'] = len(combined_results)
+    metadata['batchCount'] += incremental_metadata['batchCount']
+    metadata['categoryCounts'] = {category: combined_counts[category]
+                                  for category in prior_term_data['categoryIds']}
+    metadata['freeTierProofs'] = [*prior_metadata['freeTierProofs'], *incremental_proofs]
+    runs = list(prior_metadata.get('incrementalRuns', []))
+    runs.append({
+        'sourceCandidateSha256': incremental_metadata['sourceCandidateSha256'],
+        'sourceTermRecords': incremental_metadata['sourceTermRecords'],
+        'uniquePairs': incremental_metadata['uniquePairs'],
+        'batchCount': incremental_metadata['batchCount'],
+        'taxonomySha256': incremental_metadata['taxonomySha256'],
+        'resultsSha256': sha(results_path),
+        'manifestSha256': sha(result_manifest_path),
+    })
+    metadata['incrementalRuns'] = runs
+
+    with gzip.open(directory / 'distribution-decisions.tsv.gz', 'rt', encoding='utf-8') as stream:
+        decisions = {tuple(fields[:2]): fields for fields in
+                     (line.rstrip('\n').split('\t') for line in stream)}
+    with gzip.open(directory / 'distribution-candidates.tsv.gz', 'rt', encoding='utf-8') as stream:
+        rows = {tuple(line.rstrip('\n').split('\t')) for line in stream}
+    nonaddition_pairs = {(row[0], row[4]) for source, row in source_rows(root)
+                         if source != 'term_additions'}
+    for pair in sorted(new_pairs):
+        if pair in decisions or pair in nonaddition_pairs:
+            raise ValueError(f'New term addition conflicts with an existing source decision: {pair}')
+    for row in new_records:
+        pair = row[0], row[4]
+        category = incremental_results[pair]
+        rows.add((category, *row))
+    for pair, category in incremental_results.items():
+        if pair in new_pairs:
+            decisions[pair] = [*pair, category, 'verified', 'classified']
+
+    term_pairs = sorted(addition_pairs)
+    distribution_manifest['inputs'][TERM_ADDITIONS_PATH] = sha(root / TERM_ADDITIONS_PATH)
+    for path in (TERM_TAXONOMY_PATH, TERM_CLASSIFICATIONS_PATH, TERM_CLASSIFICATIONS_MANIFEST_PATH):
+        distribution_manifest['inputs'][path] = sha(root / path)
+    distribution_manifest['provenance']['termAdditions'] = [{
+        'path': TERM_ADDITIONS_PATH,
+        'sha256': sha(root / TERM_ADDITIONS_PATH),
+        'pairs': [list(pair) for pair in term_pairs],
+    }]
+    distribution_manifest['provenance']['termClassification'] = {
+        key: value for key, value in metadata.items() if key != 'schemaVersion'
+    }
+    distribution_manifest['sourceRows']['term_additions'] = (
+        distribution_manifest['sourceRows'].get('term_additions', 0) + len(new_records))
+    distribution_manifest['admittedPairsByOrigin']['verified'] = (
+        distribution_manifest['admittedPairsByOrigin'].get('verified', 0) + len(new_pairs))
+    distribution_manifest['uniqueAdmittedPairs'] += len(new_pairs)
+    for row in new_records:
+        category = incremental_results[(row[0], row[4])]
+        distribution_manifest['categoryRows'][category] += 1
+    distribution_manifest['dictionaryRows'] += len(new_records)
+
+    local_files = {
+        'src/main/classification/categories.json',
+        'src/main/classification/distribution-candidates.tsv.gz',
+        'src/main/classification/distribution-decisions.tsv.gz',
+        'src/main/classification/distribution-manifest.json',
+        TERM_CLASSIFICATIONS_PATH,
+        TERM_CLASSIFICATIONS_MANIFEST_PATH,
+    }
+    with tempfile.TemporaryDirectory(prefix='term-additions-') as temporary:
+        staging = Path(temporary)
+        staged_directory = staging / 'src/main/classification'
+        staged_directory.mkdir(parents=True)
+        staged_paths = list(dict.fromkeys([
+            *distribution_manifest['inputs'], TERM_ADDITIONS_PATH,
+            'src/main/resources/id.def', 'src/main/classification/categories.json',
+            *(path for path, _ in SOURCES.values()),
+        ]))
+        for relative in staged_paths:
+            if relative in local_files:
+                continue
+            target = staging / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.symlink_to(root / relative, target_is_directory=(root / relative).is_dir())
+        if 'lunaReclassification' in distribution_manifest['provenance']:
+            (staged_directory / 'luna-reclassification').symlink_to(
+                directory / 'luna-reclassification', target_is_directory=True)
+        shutil.copyfile(root / 'src/main/classification/categories.json', staged_directory / 'categories.json')
+        write_gzip(staged_directory / 'distribution-candidates.tsv.gz', sorted(rows))
+        write_gzip(staged_directory / 'distribution-decisions.tsv.gz',
+                   (decisions[pair] for pair in sorted(decisions)))
+        write_gzip(staging / TERM_CLASSIFICATIONS_PATH,
+                   ((*pair, combined_results[pair]) for pair in sorted(combined_results)))
+        write_json(staging / TERM_CLASSIFICATIONS_MANIFEST_PATH, metadata)
+        distribution_manifest['inputs'][TERM_TAXONOMY_PATH] = sha(root / TERM_TAXONOMY_PATH)
+        distribution_manifest['inputs'][TERM_CLASSIFICATIONS_PATH] = sha(staging / TERM_CLASSIFICATIONS_PATH)
+        distribution_manifest['inputs'][TERM_CLASSIFICATIONS_MANIFEST_PATH] = sha(
+            staging / TERM_CLASSIFICATIONS_MANIFEST_PATH)
+        distribution_manifest['files'] = {
+            name: sha(staged_directory / name)
+            for name in ('categories.json', 'distribution-candidates.tsv.gz', 'distribution-decisions.tsv.gz')
+        }
+        write_json(staged_directory / 'distribution-manifest.json', distribution_manifest)
+        verify(staging)
+        changed = [
+            TERM_CLASSIFICATIONS_PATH, TERM_CLASSIFICATIONS_MANIFEST_PATH,
+            'src/main/classification/distribution-candidates.tsv.gz',
+            'src/main/classification/distribution-decisions.tsv.gz',
+            'src/main/classification/distribution-manifest.json',
+        ]
+        for relative in changed:
+            target = root / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            pending = target.with_name(target.name + '.term-tmp')
+            shutil.copyfile(staging / relative, pending)
+            pending.replace(target)
+    print(f'Term additions: {len(new_pairs)} new pairs, {len(new_records)} records')
 
 
 def freeze(root, accepted, dispositions, database, manual, taxonomy):
@@ -1317,6 +1523,9 @@ def verify(root, allow_pending_reviews=False):
                 or len(reviewed) != batch['reviewedPairs'] or not pairs <= reviewed.keys()
                 or not pairs <= baseline_person_pairs):
             raise ValueError('Person addition provenance differs from decisions')
+        if ('categoryAssignments' in batch
+                and batch['categoryAssignments'] != person_category_assignments(reviewed)):
+            raise ValueError('Person category assignments differ from reviewed evidence')
         for pair in pairs:
             entry = reviewed[pair]
             if ('person', pair[0], str(entry['left_id']), str(entry['right_id']), str(entry['cost']), pair[1]) not in baseline_person_rows:
@@ -1380,11 +1589,15 @@ def release_manifest(root, archive, revision):
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('command', choices=['freeze', 'verify', 'release-manifest', 'add-person-names',
-                                       'apply-reviews', 'recover-reviews', 'apply-term-classifications'])
+                                       'add-term-classifications', 'apply-reviews', 'recover-reviews',
+                                       'apply-term-classifications'])
     p.add_argument('--commit', action='store_true', help='Apply reviewed data; otherwise show a dry-run summary')
     p.add_argument('--root', type=Path, default=Path('.'))
     for name in ('accepted', 'dispositions', 'database', 'manual', 'taxonomy', 'archive', 'entries'):
         p.add_argument('--' + name, type=Path)
+    p.add_argument('--results', type=Path, help='Saved incremental term-classification TSV.GZ')
+    p.add_argument('--classification-manifest', type=Path,
+                   help='Manifest exported with the incremental term-classification results')
     p.add_argument('--revision', default='local')
     args = p.parse_args()
     if args.command == 'freeze':
@@ -1396,6 +1609,10 @@ if __name__ == '__main__':
     elif args.command == 'add-person-names':
         if args.entries is None: p.error('--entries is required')
         add_person_names(args.root, args.entries)
+    elif args.command == 'add-term-classifications':
+        if args.results is None or args.classification_manifest is None:
+            p.error('--results and --classification-manifest are required')
+        add_term_classifications(args.root, args.results, args.classification_manifest)
     elif args.command == 'apply-reviews':
         import classification_reviews as reviews
         reviews.apply_saved(args.root, commit=args.commit)

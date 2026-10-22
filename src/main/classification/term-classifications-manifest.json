@@ -1,1 +1,99 @@
-{"apiEndpoint":"generateContent","batchCount":218,"billingEnabled":false,"categoryCounts":{"term/general/food_drink_cooking":4076,"term/general/internet_slang_culture":568,"term/general/neologisms_trends_youth_language":483,"term/general/other_general":20509,"term/general/products_daily_goods":1159,"term/specialist/chemistry_life_sciences":27568,"term/specialist/culture_arts_sports":5368,"term/specialist/earth_environment_resources":2112,"term/specialist/economics_management":5784,"term/specialist/engineering_technology":3511,"term/specialist/humanities_social_sciences":17897,"term/specialist/information_communications":6063,"term/specialist/law_politics":5279,"term/specialist/mathematics_physics":4171,"term/specialist/transport_safety_defense":4043},"classificationStatus":"Gemini best-fit; not independently reviewed","freeTierOnly":true,"freeTierProofs":[{"apiEndpoint":"generateContent","promptVersion":null,"rpd":500,"rpm":15,"sha256":"7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac","tpm":250000,"verifiedAt":"2026-10-21T17:48:55+00:00"},{"apiEndpoint":"generateContent","promptVersion":"term-best-fit-15-categories-ordered-groups-10-v2","rpd":500,"rpm":15,"sha256":"7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac","tpm":250000,"verifiedAt":"2026-10-21T17:48:55+00:00"},{"apiEndpoint":"generateContent","promptVersion":"term-best-fit-15-categories-ordered-groups-10-v2","rpd":500,"rpm":15,"sha256":"7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac","tpm":250000,"verifiedAt":"2026-10-21T17:48:55+00:00"},{"apiEndpoint":"generateContent","promptVersion":"term-best-fit-15-categories-ordered-code-array-v3","rpd":500,"rpm":15,"sha256":"7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac","tpm":250000,"verifiedAt":"2026-10-21T17:48:55+00:00"},{"apiEndpoint":"generateContent","promptVersion":"term-best-fit-15-categories-ordered-code-array-v3","rpd":500,"rpm":15,"sha256":"7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac","tpm":250000,"verifiedAt":"2026-10-21T17:48:55+00:00"}],"model":"gemini-3.5-flash-lite","projectId":"gen-lang-client-0548563154","promptVersion":"term-best-fit-15-categories-ordered-code-array-v3","schemaVersion":1,"sourceCandidateSha256":"6909ea156e6973e651a2fe1e4858810d4ded340bce8c082e286597fb4cfde8fc","sourceTermRecords":108618,"taxonomySha256":"890e9d1d045f10308aa32cdc39e534b5113c199de3d79404bd22be3cf796bb96","uniquePairs":108591}
+{
+  "apiEndpoint": "generateContent",
+  "batchCount": 219,
+  "billingEnabled": false,
+  "categoryCounts": {
+    "term/specialist/humanities_social_sciences": 17898,
+    "term/general/internet_slang_culture": 569,
+    "term/specialist/information_communications": 6063,
+    "term/specialist/culture_arts_sports": 5368,
+    "term/general/other_general": 20512,
+    "term/specialist/mathematics_physics": 4171,
+    "term/general/food_drink_cooking": 4076,
+    "term/general/products_daily_goods": 1159,
+    "term/specialist/chemistry_life_sciences": 27568,
+    "term/specialist/law_politics": 5280,
+    "term/specialist/engineering_technology": 3511,
+    "term/specialist/economics_management": 5784,
+    "term/specialist/earth_environment_resources": 2112,
+    "term/specialist/transport_safety_defense": 4044,
+    "term/general/neologisms_trends_youth_language": 486
+  },
+  "classificationStatus": "Gemini best-fit; not independently reviewed",
+  "freeTierOnly": true,
+  "freeTierProofs": [
+    {
+      "apiEndpoint": "generateContent",
+      "promptVersion": null,
+      "rpd": 500,
+      "rpm": 15,
+      "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+      "tpm": 250000,
+      "verifiedAt": "2026-10-21T17:48:55+00:00"
+    },
+    {
+      "apiEndpoint": "generateContent",
+      "promptVersion": "term-best-fit-15-categories-ordered-groups-10-v2",
+      "rpd": 500,
+      "rpm": 15,
+      "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+      "tpm": 250000,
+      "verifiedAt": "2026-10-21T17:48:55+00:00"
+    },
+    {
+      "apiEndpoint": "generateContent",
+      "promptVersion": "term-best-fit-15-categories-ordered-groups-10-v2",
+      "rpd": 500,
+      "rpm": 15,
+      "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+      "tpm": 250000,
+      "verifiedAt": "2026-10-21T17:48:55+00:00"
+    },
+    {
+      "apiEndpoint": "generateContent",
+      "promptVersion": "term-best-fit-15-categories-ordered-code-array-v3",
+      "rpd": 500,
+      "rpm": 15,
+      "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+      "tpm": 250000,
+      "verifiedAt": "2026-10-21T17:48:55+00:00"
+    },
+    {
+      "apiEndpoint": "generateContent",
+      "promptVersion": "term-best-fit-15-categories-ordered-code-array-v3",
+      "rpd": 500,
+      "rpm": 15,
+      "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+      "tpm": 250000,
+      "verifiedAt": "2026-10-21T17:48:55+00:00"
+    },
+    {
+      "apiEndpoint": "generateContent",
+      "promptVersion": "term-best-fit-15-categories-ordered-code-array-v3",
+      "rpd": 500,
+      "rpm": 15,
+      "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+      "tpm": 250000,
+      "verifiedAt": "2026-10-21T17:48:55+00:00"
+    }
+  ],
+  "model": "gemini-3.5-flash-lite",
+  "projectId": "gen-lang-client-0548563154",
+  "promptVersion": "term-best-fit-15-categories-ordered-code-array-v3",
+  "schemaVersion": 1,
+  "sourceCandidateSha256": "6909ea156e6973e651a2fe1e4858810d4ded340bce8c082e286597fb4cfde8fc",
+  "sourceTermRecords": 108628,
+  "taxonomySha256": "890e9d1d045f10308aa32cdc39e534b5113c199de3d79404bd22be3cf796bb96",
+  "uniquePairs": 108601,
+  "incrementalRuns": [
+    {
+      "sourceCandidateSha256": "4a6cceaa3eed00ed002baf73308f7a424fff75ca3127584865462b22980fc936",
+      "sourceTermRecords": 10,
+      "uniquePairs": 10,
+      "batchCount": 1,
+      "taxonomySha256": "890e9d1d045f10308aa32cdc39e534b5113c199de3d79404bd22be3cf796bb96",
+      "resultsSha256": "c18499764d26dd96b98403ed2566c6a3d8f0a58e319602efde589e03a2542d42",
+      "manifestSha256": "f0f4439c65dcbe8d37820a88e764e1b9ed630a79654e3e7bbdfa36badc3b139d"
+    }
+  ]
+}

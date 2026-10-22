@@ -2819,6 +2819,1776 @@
             "吉田拓馬"
           ]
         ]
+      },
+      {
+        "path": "src/main/classification/person-additions/sparse-categories-mma-2026-10-21.jsonl",
+        "sha256": "aa32949d8556943345dde7acd3afb42087c4fe68a3c6bb988c46a7a581e06a87",
+        "reviewedPairs": 153,
+        "addedPairs": [
+          [
+            "あいあんあおやま",
+            "アイアン青山"
+          ],
+          [
+            "あいしていくれたん",
+            "愛志亭暮太"
+          ],
+          [
+            "あきら",
+            "アキラ"
+          ],
+          [
+            "あさんげぇいで",
+            "アサン・ゲェイデ"
+          ],
+          [
+            "あしるべっく",
+            "アシルベック"
+          ],
+          [
+            "あっしゅ",
+            "あっしゅ"
+          ],
+          [
+            "あにんたあり",
+            "アニンタ・アリ"
+          ],
+          [
+            "あべりゅー",
+            "アベリュー"
+          ],
+          [
+            "あまんだるーかす",
+            "アマンダ・ルーカス"
+          ],
+          [
+            "あらいけんじ",
+            "アライケンジ"
+          ],
+          [
+            "あらいふぁるこん",
+            "荒井ファルコン"
+          ],
+          [
+            "あらや",
+            "アラヤ"
+          ],
+          [
+            "あれっくすくっく",
+            "アレックスクック"
+          ],
+          [
+            "あんでぃこんぐ",
+            "アンディコング"
+          ],
+          [
+            "あんでぃさかい",
+            "アンディ・サカイ"
+          ],
+          [
+            "あんでうそんしうば",
+            "アンデウソンシウバ"
+          ],
+          [
+            "あんとにおしばたー",
+            "アントニオシバター"
+          ],
+          [
+            "あーる",
+            "あーる"
+          ],
+          [
+            "いいえじぇ",
+            "イ・イエジェ"
+          ],
+          [
+            "いとう",
+            "イトウ"
+          ],
+          [
+            "いりーぷろはーすか",
+            "イリー・プロハースカ"
+          ],
+          [
+            "いるほむのじもふ",
+            "イルホム・ノジモフ"
+          ],
+          [
+            "うでぃ",
+            "うでぃ"
+          ],
+          [
+            "うめはら",
+            "ウメハラ"
+          ],
+          [
+            "えるなにぺるぺとぅお",
+            "エルナニペルペトゥオ"
+          ],
+          [
+            "おがたあきら",
+            "緒方明"
+          ],
+          [
+            "おにぼうず",
+            "オニボウズ"
+          ],
+          [
+            "かきのたね",
+            "かきのたね"
+          ],
+          [
+            "かつお",
+            "カツオ"
+          ],
+          [
+            "かつらうたちか",
+            "桂歌近"
+          ],
+          [
+            "かめざわけんすけ",
+            "亀沢健介"
+          ],
+          [
+            "かめれおん",
+            "カメレオン"
+          ],
+          [
+            "かるろすあれっしゃんどりぺれいら",
+            "カルロスアレッシャンドリペレイラ"
+          ],
+          [
+            "かわの",
+            "カワノ"
+          ],
+          [
+            "がちくん",
+            "ガチくん"
+          ],
+          [
+            "きむそゆる",
+            "キム・ソユル"
+          ],
+          [
+            "くらっしゃー",
+            "クラッシャー"
+          ],
+          [
+            "くりすぶれなん",
+            "クリスブレナン"
+          ],
+          [
+            "くれべるこいけ",
+            "クレベル・コイケ"
+          ],
+          [
+            "けんぴ",
+            "けんぴ"
+          ],
+          [
+            "こびーれおん",
+            "コビー・レオン"
+          ],
+          [
+            "こーた",
+            "こーた"
+          ],
+          [
+            "さらまふむーど",
+            "サラ・マフムード"
+          ],
+          [
+            "しお",
+            "しお"
+          ],
+          [
+            "しまず",
+            "シマズ"
+          ],
+          [
+            "しもづるだいち",
+            "下鶴大地"
+          ],
+          [
+            "しゅーや",
+            "しゅーや"
+          ],
+          [
+            "しょうふくていはねたろう",
+            "笑福亭羽太郎"
+          ],
+          [
+            "しょーんほまれー",
+            "ショーン・ホマレー"
+          ],
+          [
+            "しろくる",
+            "しろくる"
+          ],
+          [
+            "じぇいそんぶりっつちるだーず",
+            "ジェイソンブリッツチルダーズ"
+          ],
+          [
+            "じぇふかーらん",
+            "ジェフカーラン"
+          ],
+          [
+            "じゃんぬ",
+            "じゃんぬ"
+          ],
+          [
+            "じょんほーき",
+            "ジョンホーキ"
+          ],
+          [
+            "じんざべす",
+            "じんざべす"
+          ],
+          [
+            "すてふぁんぱーりんぐ",
+            "ステファンパーリング"
+          ],
+          [
+            "せなる",
+            "せなる"
+          ],
+          [
+            "たかし",
+            "たかし"
+          ],
+          [
+            "たくじ",
+            "たくじ"
+          ],
+          [
+            "たくみ",
+            "タクミ"
+          ],
+          [
+            "たこどっと",
+            "たこどっと"
+          ],
+          [
+            "たこらいす",
+            "たこらいす"
+          ],
+          [
+            "たつま",
+            "たつま"
+          ],
+          [
+            "だにーさばてろ",
+            "ダニー・サバテロ"
+          ],
+          [
+            "ちくりん",
+            "チクリン"
+          ],
+          [
+            "ちさこ",
+            "ちさこ"
+          ],
+          [
+            "ちささこ",
+            "ちささこ"
+          ],
+          [
+            "ちさめ",
+            "ちさめ"
+          ],
+          [
+            "つつみ",
+            "ツツミ"
+          ],
+          [
+            "つつみたいせい",
+            "堤大晟"
+          ],
+          [
+            "てぃーわい",
+            "ティーワイ"
+          ],
+          [
+            "とみーでぷれっと",
+            "トミーデプレット"
+          ],
+          [
+            "とろろ",
+            "とろろ"
+          ],
+          [
+            "とんちゃん",
+            "とんちゃん"
+          ],
+          [
+            "はいたに",
+            "ハイタニ"
+          ],
+          [
+            "はむぎわん",
+            "ハム・ギワン"
+          ],
+          [
+            "はむそひ",
+            "ハム・ソヒ"
+          ],
+          [
+            "ばるご",
+            "バルゴ"
+          ],
+          [
+            "ぱうえる",
+            "パウエル"
+          ],
+          [
+            "ぱくじょんじゅん",
+            "パクジョンジュン"
+          ],
+          [
+            "ぱりか",
+            "パリカ"
+          ],
+          [
+            "ひぐち",
+            "ひぐち"
+          ],
+          [
+            "びた",
+            "びた"
+          ],
+          [
+            "ふあんあーちゅれった",
+            "フアン・アーチュレッタ"
+          ],
+          [
+            "ふぃるだうすふぇいじえふ",
+            "フィルダウスフェイジエフ"
+          ],
+          [
+            "ふうはや",
+            "ふうはや"
+          ],
+          [
+            "ふくなが",
+            "フクナガ"
+          ],
+          [
+            "ふらんくとりっぐ",
+            "フランクトリッグ"
+          ],
+          [
+            "ぺこす",
+            "ペコス"
+          ],
+          [
+            "ぺるえくるんど",
+            "ペルエクルンド"
+          ],
+          [
+            "ほべるとさとしそうざ",
+            "ホベルト・サトシ・ソウザ"
+          ],
+          [
+            "ぽーるろどりげす",
+            "ポールロドリゲス"
+          ],
+          [
+            "まご",
+            "マゴ"
+          ],
+          [
+            "まさちゅう",
+            "まさちゅう"
+          ],
+          [
+            "ませろあぐあ",
+            "マセロアグア"
+          ],
+          [
+            "まつばらつよし",
+            "松原つよし"
+          ],
+          [
+            "まもる",
+            "マモル"
+          ],
+          [
+            "まーさん",
+            "まーさん"
+          ],
+          [
+            "みずたのぶお",
+            "水田伸生"
+          ],
+          [
+            "みちこ",
+            "みちこ"
+          ],
+          [
+            "みのわまん",
+            "ミノワマン"
+          ],
+          [
+            "むたかいさな",
+            "ムタカイサナ"
+          ],
+          [
+            "もけ",
+            "もけ"
+          ],
+          [
+            "もっちー",
+            "もっちー"
+          ],
+          [
+            "ゆきや",
+            "ゆきや"
+          ],
+          [
+            "ゆくちょび",
+            "ゆくちょび"
+          ],
+          [
+            "ゆめ",
+            "由芽"
+          ],
+          [
+            "よしたに",
+            "よしたに"
+          ],
+          [
+            "よしまつめつ",
+            "よしまつめつ"
+          ],
+          [
+            "らじゃぶありしぇいどぅらえふ",
+            "ラジャブアリ・シェイドゥラエフ"
+          ],
+          [
+            "りもこん",
+            "りもこん"
+          ],
+          [
+            "りゅうせい",
+            "りゅうせい"
+          ],
+          [
+            "るいすあぜれど",
+            "ルイスアゼレド"
+          ],
+          [
+            "るいすぐすたぼ",
+            "ルイス・グスタボ"
+          ],
+          [
+            "れおさんとす",
+            "レオサントス"
+          ],
+          [
+            "れおらお",
+            "レオラオ"
+          ],
+          [
+            "ればなでおぐらしゃす",
+            "レバナ・デオグラシャス"
+          ],
+          [
+            "ろっきーまるてぃねす",
+            "ロッキーマルティネス"
+          ],
+          [
+            "わかさこばと",
+            "わかさこばと"
+          ],
+          [
+            "わたなべしんいち",
+            "ワタナベシンイチ"
+          ],
+          [
+            "わっふる",
+            "わっふる"
+          ],
+          [
+            "ゔぃにしうす",
+            "ヴィニシウス"
+          ],
+          [
+            "ゔぃらみーしけりむ",
+            "ヴィラミーシケリム"
+          ],
+          [
+            "ゔがーるけらもふ",
+            "ヴガール・ケラモフ"
+          ]
+        ],
+        "addedRecords": 124,
+        "addedSourceRows": 124,
+        "appendedPairs": [
+          [
+            "あいあんあおやま",
+            "アイアン青山"
+          ],
+          [
+            "あいしていくれたん",
+            "愛志亭暮太"
+          ],
+          [
+            "あきら",
+            "アキラ"
+          ],
+          [
+            "あさんげぇいで",
+            "アサン・ゲェイデ"
+          ],
+          [
+            "あしるべっく",
+            "アシルベック"
+          ],
+          [
+            "あっしゅ",
+            "あっしゅ"
+          ],
+          [
+            "あにんたあり",
+            "アニンタ・アリ"
+          ],
+          [
+            "あべりゅー",
+            "アベリュー"
+          ],
+          [
+            "あまんだるーかす",
+            "アマンダ・ルーカス"
+          ],
+          [
+            "あらいけんじ",
+            "アライケンジ"
+          ],
+          [
+            "あらいふぁるこん",
+            "荒井ファルコン"
+          ],
+          [
+            "あらや",
+            "アラヤ"
+          ],
+          [
+            "あれっくすくっく",
+            "アレックスクック"
+          ],
+          [
+            "あんでぃこんぐ",
+            "アンディコング"
+          ],
+          [
+            "あんでぃさかい",
+            "アンディ・サカイ"
+          ],
+          [
+            "あんでうそんしうば",
+            "アンデウソンシウバ"
+          ],
+          [
+            "あんとにおしばたー",
+            "アントニオシバター"
+          ],
+          [
+            "あーる",
+            "あーる"
+          ],
+          [
+            "いいえじぇ",
+            "イ・イエジェ"
+          ],
+          [
+            "いとう",
+            "イトウ"
+          ],
+          [
+            "いりーぷろはーすか",
+            "イリー・プロハースカ"
+          ],
+          [
+            "いるほむのじもふ",
+            "イルホム・ノジモフ"
+          ],
+          [
+            "うでぃ",
+            "うでぃ"
+          ],
+          [
+            "うめはら",
+            "ウメハラ"
+          ],
+          [
+            "えるなにぺるぺとぅお",
+            "エルナニペルペトゥオ"
+          ],
+          [
+            "おがたあきら",
+            "緒方明"
+          ],
+          [
+            "おにぼうず",
+            "オニボウズ"
+          ],
+          [
+            "かきのたね",
+            "かきのたね"
+          ],
+          [
+            "かつお",
+            "カツオ"
+          ],
+          [
+            "かつらうたちか",
+            "桂歌近"
+          ],
+          [
+            "かめざわけんすけ",
+            "亀沢健介"
+          ],
+          [
+            "かめれおん",
+            "カメレオン"
+          ],
+          [
+            "かるろすあれっしゃんどりぺれいら",
+            "カルロスアレッシャンドリペレイラ"
+          ],
+          [
+            "かわの",
+            "カワノ"
+          ],
+          [
+            "がちくん",
+            "ガチくん"
+          ],
+          [
+            "きむそゆる",
+            "キム・ソユル"
+          ],
+          [
+            "くらっしゃー",
+            "クラッシャー"
+          ],
+          [
+            "くりすぶれなん",
+            "クリスブレナン"
+          ],
+          [
+            "くれべるこいけ",
+            "クレベル・コイケ"
+          ],
+          [
+            "けんぴ",
+            "けんぴ"
+          ],
+          [
+            "こびーれおん",
+            "コビー・レオン"
+          ],
+          [
+            "こーた",
+            "こーた"
+          ],
+          [
+            "さらまふむーど",
+            "サラ・マフムード"
+          ],
+          [
+            "しお",
+            "しお"
+          ],
+          [
+            "しまず",
+            "シマズ"
+          ],
+          [
+            "しもづるだいち",
+            "下鶴大地"
+          ],
+          [
+            "しゅーや",
+            "しゅーや"
+          ],
+          [
+            "しょうふくていはねたろう",
+            "笑福亭羽太郎"
+          ],
+          [
+            "しょーんほまれー",
+            "ショーン・ホマレー"
+          ],
+          [
+            "しろくる",
+            "しろくる"
+          ],
+          [
+            "じぇいそんぶりっつちるだーず",
+            "ジェイソンブリッツチルダーズ"
+          ],
+          [
+            "じぇふかーらん",
+            "ジェフカーラン"
+          ],
+          [
+            "じゃんぬ",
+            "じゃんぬ"
+          ],
+          [
+            "じょんほーき",
+            "ジョンホーキ"
+          ],
+          [
+            "じんざべす",
+            "じんざべす"
+          ],
+          [
+            "すてふぁんぱーりんぐ",
+            "ステファンパーリング"
+          ],
+          [
+            "せなる",
+            "せなる"
+          ],
+          [
+            "たかし",
+            "たかし"
+          ],
+          [
+            "たくじ",
+            "たくじ"
+          ],
+          [
+            "たくみ",
+            "タクミ"
+          ],
+          [
+            "たこどっと",
+            "たこどっと"
+          ],
+          [
+            "たこらいす",
+            "たこらいす"
+          ],
+          [
+            "たつま",
+            "たつま"
+          ],
+          [
+            "だにーさばてろ",
+            "ダニー・サバテロ"
+          ],
+          [
+            "ちくりん",
+            "チクリン"
+          ],
+          [
+            "ちさこ",
+            "ちさこ"
+          ],
+          [
+            "ちささこ",
+            "ちささこ"
+          ],
+          [
+            "ちさめ",
+            "ちさめ"
+          ],
+          [
+            "つつみ",
+            "ツツミ"
+          ],
+          [
+            "つつみたいせい",
+            "堤大晟"
+          ],
+          [
+            "てぃーわい",
+            "ティーワイ"
+          ],
+          [
+            "とみーでぷれっと",
+            "トミーデプレット"
+          ],
+          [
+            "とろろ",
+            "とろろ"
+          ],
+          [
+            "とんちゃん",
+            "とんちゃん"
+          ],
+          [
+            "はいたに",
+            "ハイタニ"
+          ],
+          [
+            "はむぎわん",
+            "ハム・ギワン"
+          ],
+          [
+            "はむそひ",
+            "ハム・ソヒ"
+          ],
+          [
+            "ばるご",
+            "バルゴ"
+          ],
+          [
+            "ぱうえる",
+            "パウエル"
+          ],
+          [
+            "ぱくじょんじゅん",
+            "パクジョンジュン"
+          ],
+          [
+            "ぱりか",
+            "パリカ"
+          ],
+          [
+            "ひぐち",
+            "ひぐち"
+          ],
+          [
+            "びた",
+            "びた"
+          ],
+          [
+            "ふあんあーちゅれった",
+            "フアン・アーチュレッタ"
+          ],
+          [
+            "ふぃるだうすふぇいじえふ",
+            "フィルダウスフェイジエフ"
+          ],
+          [
+            "ふうはや",
+            "ふうはや"
+          ],
+          [
+            "ふくなが",
+            "フクナガ"
+          ],
+          [
+            "ふらんくとりっぐ",
+            "フランクトリッグ"
+          ],
+          [
+            "ぺこす",
+            "ペコス"
+          ],
+          [
+            "ぺるえくるんど",
+            "ペルエクルンド"
+          ],
+          [
+            "ほべるとさとしそうざ",
+            "ホベルト・サトシ・ソウザ"
+          ],
+          [
+            "ぽーるろどりげす",
+            "ポールロドリゲス"
+          ],
+          [
+            "まご",
+            "マゴ"
+          ],
+          [
+            "まさちゅう",
+            "まさちゅう"
+          ],
+          [
+            "ませろあぐあ",
+            "マセロアグア"
+          ],
+          [
+            "まつばらつよし",
+            "松原つよし"
+          ],
+          [
+            "まもる",
+            "マモル"
+          ],
+          [
+            "まーさん",
+            "まーさん"
+          ],
+          [
+            "みずたのぶお",
+            "水田伸生"
+          ],
+          [
+            "みちこ",
+            "みちこ"
+          ],
+          [
+            "みのわまん",
+            "ミノワマン"
+          ],
+          [
+            "むたかいさな",
+            "ムタカイサナ"
+          ],
+          [
+            "もけ",
+            "もけ"
+          ],
+          [
+            "もっちー",
+            "もっちー"
+          ],
+          [
+            "ゆきや",
+            "ゆきや"
+          ],
+          [
+            "ゆくちょび",
+            "ゆくちょび"
+          ],
+          [
+            "ゆめ",
+            "由芽"
+          ],
+          [
+            "よしたに",
+            "よしたに"
+          ],
+          [
+            "よしまつめつ",
+            "よしまつめつ"
+          ],
+          [
+            "らじゃぶありしぇいどぅらえふ",
+            "ラジャブアリ・シェイドゥラエフ"
+          ],
+          [
+            "りもこん",
+            "りもこん"
+          ],
+          [
+            "りゅうせい",
+            "りゅうせい"
+          ],
+          [
+            "るいすあぜれど",
+            "ルイスアゼレド"
+          ],
+          [
+            "るいすぐすたぼ",
+            "ルイス・グスタボ"
+          ],
+          [
+            "れおさんとす",
+            "レオサントス"
+          ],
+          [
+            "れおらお",
+            "レオラオ"
+          ],
+          [
+            "ればなでおぐらしゃす",
+            "レバナ・デオグラシャス"
+          ],
+          [
+            "ろっきーまるてぃねす",
+            "ロッキーマルティネス"
+          ],
+          [
+            "わかさこばと",
+            "わかさこばと"
+          ],
+          [
+            "わたなべしんいち",
+            "ワタナベシンイチ"
+          ],
+          [
+            "わっふる",
+            "わっふる"
+          ],
+          [
+            "ゔぃにしうす",
+            "ヴィニシウス"
+          ],
+          [
+            "ゔぃらみーしけりむ",
+            "ヴィラミーシケリム"
+          ],
+          [
+            "ゔがーるけらもふ",
+            "ヴガール・ケラモフ"
+          ]
+        ],
+        "categoryAssignments": [
+          {
+            "category_id": "comedian",
+            "reading": "あいあんあおやま",
+            "surface": "アイアン青山"
+          },
+          {
+            "category_id": "comedian",
+            "reading": "あいしていくれたん",
+            "surface": "愛志亭暮太"
+          },
+          {
+            "category_id": "sports",
+            "reading": "あきら",
+            "surface": "アキラ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "あさんげぇいで",
+            "surface": "アサン・ゲェイデ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "あしるべっく",
+            "surface": "アシルベック"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "あっしゅ",
+            "surface": "あっしゅ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "あにんたあり",
+            "surface": "アニンタ・アリ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "あべりゅー",
+            "surface": "アベリュー"
+          },
+          {
+            "category_id": "sports",
+            "reading": "あまんだるーかす",
+            "surface": "アマンダ・ルーカス"
+          },
+          {
+            "category_id": "sports",
+            "reading": "あらいけんじ",
+            "surface": "アライケンジ"
+          },
+          {
+            "category_id": "comedian",
+            "reading": "あらいふぁるこん",
+            "surface": "荒井ファルコン"
+          },
+          {
+            "category_id": "sports",
+            "reading": "あらや",
+            "surface": "アラヤ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "あれっくすくっく",
+            "surface": "アレックスクック"
+          },
+          {
+            "category_id": "sports",
+            "reading": "あんでぃこんぐ",
+            "surface": "アンディコング"
+          },
+          {
+            "category_id": "sports",
+            "reading": "あんでぃさかい",
+            "surface": "アンディ・サカイ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "あんでうそんしうば",
+            "surface": "アンデウソンシウバ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "あんとにおしばたー",
+            "surface": "アントニオシバター"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "あーる",
+            "surface": "あーる"
+          },
+          {
+            "category_id": "sports",
+            "reading": "いいえじぇ",
+            "surface": "イ・イエジェ"
+          },
+          {
+            "category_id": "comedian",
+            "reading": "いとう",
+            "surface": "イトウ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "いりーぷろはーすか",
+            "surface": "イリー・プロハースカ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "いるほむのじもふ",
+            "surface": "イルホム・ノジモフ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "うでぃ",
+            "surface": "うでぃ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "うめはら",
+            "surface": "ウメハラ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "えるなにぺるぺとぅお",
+            "surface": "エルナニペルペトゥオ"
+          },
+          {
+            "category_id": "film_game_creator",
+            "reading": "おがたあきら",
+            "surface": "緒方明"
+          },
+          {
+            "category_id": "sports",
+            "reading": "おにぼうず",
+            "surface": "オニボウズ"
+          },
+          {
+            "category_id": "manga_illustration",
+            "reading": "かきのたね",
+            "surface": "かきのたね"
+          },
+          {
+            "category_id": "manga_illustration",
+            "reading": "かさいちあき",
+            "surface": "かさいちあき"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "かっつー",
+            "surface": "かっつー"
+          },
+          {
+            "category_id": "sports",
+            "reading": "かつお",
+            "surface": "カツオ"
+          },
+          {
+            "category_id": "performing_arts",
+            "reading": "かつらうたちか",
+            "surface": "桂歌近"
+          },
+          {
+            "category_id": "performing_arts",
+            "reading": "かつらしょうふく",
+            "surface": "桂松福"
+          },
+          {
+            "category_id": "performing_arts",
+            "reading": "かつらたけちよ",
+            "surface": "桂竹千代"
+          },
+          {
+            "category_id": "film_game_creator",
+            "reading": "かむいきょうじ",
+            "surface": "神威杏次"
+          },
+          {
+            "category_id": "comedian",
+            "reading": "かめざわけんすけ",
+            "surface": "亀沢健介"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "かめれおん",
+            "surface": "カメレオン"
+          },
+          {
+            "category_id": "sports",
+            "reading": "かるろすあれっしゃんどりぺれいら",
+            "surface": "カルロスアレッシャンドリペレイラ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "かわの",
+            "surface": "カワノ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "がちくん",
+            "surface": "ガチくん"
+          },
+          {
+            "category_id": "sports",
+            "reading": "きむそゆる",
+            "surface": "キム・ソユル"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "くらっしゃー",
+            "surface": "クラッシャー"
+          },
+          {
+            "category_id": "sports",
+            "reading": "くりすぶれなん",
+            "surface": "クリスブレナン"
+          },
+          {
+            "category_id": "sports",
+            "reading": "くれべるこいけ",
+            "surface": "クレベル・コイケ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "けんぴ",
+            "surface": "けんぴ"
+          },
+          {
+            "category_id": "performing_arts",
+            "reading": "ここんていいまいち",
+            "surface": "古今亭今いち"
+          },
+          {
+            "category_id": "film_game_creator",
+            "reading": "こだまけんじ",
+            "surface": "こだま兼嗣"
+          },
+          {
+            "category_id": "sports",
+            "reading": "こびーれおん",
+            "surface": "コビー・レオン"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "こーた",
+            "surface": "こーた"
+          },
+          {
+            "category_id": "idol",
+            "reading": "さくらいゆい",
+            "surface": "櫻井優衣"
+          },
+          {
+            "category_id": "sports",
+            "reading": "さらまふむーど",
+            "surface": "サラ・マフムード"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "しお",
+            "surface": "しお"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "しまず",
+            "surface": "シマズ"
+          },
+          {
+            "category_id": "comedian",
+            "reading": "しもづるだいち",
+            "surface": "下鶴大地"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "しゅーや",
+            "surface": "しゅーや"
+          },
+          {
+            "category_id": "performing_arts",
+            "reading": "しょうふくていはねたろう",
+            "surface": "笑福亭羽太郎"
+          },
+          {
+            "category_id": "sports",
+            "reading": "しょーんほまれー",
+            "surface": "ショーン・ホマレー"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "しろくる",
+            "surface": "しろくる"
+          },
+          {
+            "category_id": "sports",
+            "reading": "じぇいそんぶりっつちるだーず",
+            "surface": "ジェイソンブリッツチルダーズ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "じぇふかーらん",
+            "surface": "ジェフカーラン"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "じゃんぬ",
+            "surface": "じゃんぬ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "じょんほーき",
+            "surface": "ジョンホーキ"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "じんざべす",
+            "surface": "じんざべす"
+          },
+          {
+            "category_id": "sports",
+            "reading": "すてふぁんぱーりんぐ",
+            "surface": "ステファンパーリング"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "せなる",
+            "surface": "せなる"
+          },
+          {
+            "category_id": "manga_illustration",
+            "reading": "そのだつくし",
+            "surface": "そのだつくし"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "たかし",
+            "surface": "たかし"
+          },
+          {
+            "category_id": "comedian",
+            "reading": "たくじ",
+            "surface": "たくじ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "たくみ",
+            "surface": "タクミ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "たこどっと",
+            "surface": "たこどっと"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "たこらいす",
+            "surface": "たこらいす"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "たつま",
+            "surface": "たつま"
+          },
+          {
+            "category_id": "performing_arts",
+            "reading": "たてかわだんこう",
+            "surface": "立川談幸"
+          },
+          {
+            "category_id": "sports",
+            "reading": "だにーさばてろ",
+            "surface": "ダニー・サバテロ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "ちくりん",
+            "surface": "チクリン"
+          },
+          {
+            "category_id": "manga_illustration",
+            "reading": "ちさこ",
+            "surface": "ちさこ"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "ちささこ",
+            "surface": "ちささこ"
+          },
+          {
+            "category_id": "manga_illustration",
+            "reading": "ちさめ",
+            "surface": "ちさめ"
+          },
+          {
+            "category_id": "idol",
+            "reading": "ちんぜいすずか",
+            "surface": "鎮西寿々歌"
+          },
+          {
+            "category_id": "idol",
+            "reading": "つきあしあまね",
+            "surface": "月足天音"
+          },
+          {
+            "category_id": "comedian",
+            "reading": "つつみ",
+            "surface": "ツツミ"
+          },
+          {
+            "category_id": "comedian",
+            "reading": "つつみたいせい",
+            "surface": "堤大晟"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "てぃーわい",
+            "surface": "ティーワイ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "ときど",
+            "surface": "ときど"
+          },
+          {
+            "category_id": "sports",
+            "reading": "とみーでぷれっと",
+            "surface": "トミーデプレット"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "とろろ",
+            "surface": "とろろ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "とんちゃん",
+            "surface": "とんちゃん"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "どぐら",
+            "surface": "どぐら"
+          },
+          {
+            "category_id": "idol",
+            "reading": "なかがわるな",
+            "surface": "仲川瑠夏"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "なっち",
+            "surface": "なっち"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "はいたに",
+            "surface": "ハイタニ"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "はじめしゃちょー",
+            "surface": "はじめしゃちょー"
+          },
+          {
+            "category_id": "sports",
+            "reading": "はむぎわん",
+            "surface": "ハム・ギワン"
+          },
+          {
+            "category_id": "sports",
+            "reading": "はむそひ",
+            "surface": "ハム・ソヒ"
+          },
+          {
+            "category_id": "idol",
+            "reading": "はやせのえる",
+            "surface": "早瀬ノエル"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "ばるご",
+            "surface": "バルゴ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "ぱうえる",
+            "surface": "パウエル"
+          },
+          {
+            "category_id": "sports",
+            "reading": "ぱくじょんじゅん",
+            "surface": "パクジョンジュン"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "ぱりか",
+            "surface": "パリカ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "ひぐち",
+            "surface": "ひぐち"
+          },
+          {
+            "category_id": "film_game_creator",
+            "reading": "ひもとじゅん",
+            "surface": "樋本淳"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "びた",
+            "surface": "びた"
+          },
+          {
+            "category_id": "sports",
+            "reading": "ふあんあーちゅれった",
+            "surface": "フアン・アーチュレッタ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "ふぃるだうすふぇいじえふ",
+            "surface": "フィルダウスフェイジエフ"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "ふうはや",
+            "surface": "ふうはや"
+          },
+          {
+            "category_id": "film_game_creator",
+            "reading": "ふくだようへい",
+            "surface": "福田陽平"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "ふくなが",
+            "surface": "フクナガ"
+          },
+          {
+            "category_id": "film_game_creator",
+            "reading": "ふじやまけんいちろう",
+            "surface": "藤山顕一郎"
+          },
+          {
+            "category_id": "sports",
+            "reading": "ふらんくとりっぐ",
+            "surface": "フランクトリッグ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "ぺこす",
+            "surface": "ペコス"
+          },
+          {
+            "category_id": "sports",
+            "reading": "ぺるえくるんど",
+            "surface": "ペルエクルンド"
+          },
+          {
+            "category_id": "sports",
+            "reading": "ほべるとさとしそうざ",
+            "surface": "ホベルト・サトシ・ソウザ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "ぽーるろどりげす",
+            "surface": "ポールロドリゲス"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "まご",
+            "surface": "マゴ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "まさちゅう",
+            "surface": "まさちゅう"
+          },
+          {
+            "category_id": "sports",
+            "reading": "ませろあぐあ",
+            "surface": "マセロアグア"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "まちゃぼー",
+            "surface": "まちゃぼー"
+          },
+          {
+            "category_id": "film_game_creator",
+            "reading": "まつばらつよし",
+            "surface": "松原つよし"
+          },
+          {
+            "category_id": "idol",
+            "reading": "まつもとかれん",
+            "surface": "松本かれん"
+          },
+          {
+            "category_id": "idol",
+            "reading": "まなかまな",
+            "surface": "真中まな"
+          },
+          {
+            "category_id": "sports",
+            "reading": "まねるけいぷ",
+            "surface": "マネル・ケイプ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "まもる",
+            "surface": "マモル"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "まーさん",
+            "surface": "まーさん"
+          },
+          {
+            "category_id": "film_game_creator",
+            "reading": "みずたのぶお",
+            "surface": "水田伸生"
+          },
+          {
+            "category_id": "comedian",
+            "reading": "みちこ",
+            "surface": "みちこ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "みのわまん",
+            "surface": "ミノワマン"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "みやゆう",
+            "surface": "みやゆう"
+          },
+          {
+            "category_id": "comedian",
+            "reading": "むたかいさな",
+            "surface": "ムタカイサナ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "もけ",
+            "surface": "もけ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "もっちー",
+            "surface": "もっちー"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "ゆきや",
+            "surface": "ゆきや"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "ゆきりぬ",
+            "surface": "ゆきりぬ"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "ゆくちょび",
+            "surface": "ゆくちょび"
+          },
+          {
+            "category_id": "comedian",
+            "reading": "ゆめ",
+            "surface": "由芽"
+          },
+          {
+            "category_id": "manga_illustration",
+            "reading": "よしたに",
+            "surface": "よしたに"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "よしなま",
+            "surface": "よしなま"
+          },
+          {
+            "category_id": "manga_illustration",
+            "reading": "よしまつめつ",
+            "surface": "よしまつめつ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "らじゃぶありしぇいどぅらえふ",
+            "surface": "ラジャブアリ・シェイドゥラエフ"
+          },
+          {
+            "category_id": "online_creator",
+            "reading": "りもこん",
+            "surface": "りもこん"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "りゅうせい",
+            "surface": "りゅうせい"
+          },
+          {
+            "category_id": "sports",
+            "reading": "るいすあぜれど",
+            "surface": "ルイスアゼレド"
+          },
+          {
+            "category_id": "sports",
+            "reading": "るいすぐすたぼ",
+            "surface": "ルイス・グスタボ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "れおさんとす",
+            "surface": "レオサントス"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "れおらお",
+            "surface": "レオラオ"
+          },
+          {
+            "category_id": "sports",
+            "reading": "ればなでおぐらしゃす",
+            "surface": "レバナ・デオグラシャス"
+          },
+          {
+            "category_id": "sports",
+            "reading": "ろっきーまるてぃねす",
+            "surface": "ロッキーマルティネス"
+          },
+          {
+            "category_id": "manga_illustration",
+            "reading": "わかさこばと",
+            "surface": "わかさこばと"
+          },
+          {
+            "category_id": "manga_illustration",
+            "reading": "わかなはなび",
+            "surface": "わかなはなび"
+          },
+          {
+            "category_id": "film_game_creator",
+            "reading": "わたなべしんいち",
+            "surface": "ワタナベシンイチ"
+          },
+          {
+            "category_id": "competitive_games",
+            "reading": "わっふる",
+            "surface": "わっふる"
+          },
+          {
+            "category_id": "sports",
+            "reading": "ゔぃにしうす",
+            "surface": "ヴィニシウス"
+          },
+          {
+            "category_id": "sports",
+            "reading": "ゔぃらみーしけりむ",
+            "surface": "ヴィラミーシケリム"
+          },
+          {
+            "category_id": "sports",
+            "reading": "ゔがーるけらもふ",
+            "surface": "ヴガール・ケラモフ"
+          }
+        ]
       }
     ],
     "reviews": [
@@ -2869,11 +4639,51 @@
     "termAdditions": [
       {
         "path": "src/main/classification/term-additions.tsv",
-        "sha256": "031b9446633274363467d229074607e495abb0904061dc9b333298af6ebb339b",
+        "sha256": "96f5bc426f8df852754cf7e0a5498cc2741b078473697f5f033131e6e1373db5",
         "pairs": [
+          [
+            "あだぷてぃぶらーにんぐ",
+            "アダプティブラーニング"
+          ],
+          [
+            "えっほえっほ",
+            "えっほえっほ"
+          ],
+          [
+            "おーるどめでぃあ",
+            "オールドメディア"
+          ],
+          [
+            "しゃばい",
+            "しゃばい"
+          ],
+          [
+            "たいけんかくさ",
+            "体験格差"
+          ],
+          [
+            "ともづれ",
+            "共連れ"
+          ],
+          [
+            "とりてきほう",
+            "取適法"
+          ],
           [
             "どぱがき",
             "ドパガキ"
+          ],
+          [
+            "びじゅ",
+            "ビジュ"
+          ],
+          [
+            "ふれねみー",
+            "フレネミー"
+          ],
+          [
+            "めろい",
+            "メロい"
           ]
         ]
       }
@@ -2894,24 +4704,24 @@
     },
     "termClassification": {
       "apiEndpoint": "generateContent",
-      "batchCount": 218,
+      "batchCount": 219,
       "billingEnabled": false,
       "categoryCounts": {
+        "term/specialist/humanities_social_sciences": 17898,
+        "term/general/internet_slang_culture": 569,
+        "term/specialist/information_communications": 6063,
+        "term/specialist/culture_arts_sports": 5368,
+        "term/general/other_general": 20512,
+        "term/specialist/mathematics_physics": 4171,
         "term/general/food_drink_cooking": 4076,
-        "term/general/internet_slang_culture": 568,
-        "term/general/neologisms_trends_youth_language": 483,
-        "term/general/other_general": 20509,
         "term/general/products_daily_goods": 1159,
         "term/specialist/chemistry_life_sciences": 27568,
-        "term/specialist/culture_arts_sports": 5368,
-        "term/specialist/earth_environment_resources": 2112,
-        "term/specialist/economics_management": 5784,
+        "term/specialist/law_politics": 5280,
         "term/specialist/engineering_technology": 3511,
-        "term/specialist/humanities_social_sciences": 17897,
-        "term/specialist/information_communications": 6063,
-        "term/specialist/law_politics": 5279,
-        "term/specialist/mathematics_physics": 4171,
-        "term/specialist/transport_safety_defense": 4043
+        "term/specialist/economics_management": 5784,
+        "term/specialist/earth_environment_resources": 2112,
+        "term/specialist/transport_safety_defense": 4044,
+        "term/general/neologisms_trends_youth_language": 486
       },
       "classificationStatus": "Gemini best-fit; not independently reviewed",
       "freeTierOnly": true,
@@ -2960,15 +4770,35 @@
           "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
           "tpm": 250000,
           "verifiedAt": "2026-10-21T17:48:55+00:00"
+        },
+        {
+          "apiEndpoint": "generateContent",
+          "promptVersion": "term-best-fit-15-categories-ordered-code-array-v3",
+          "rpd": 500,
+          "rpm": 15,
+          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+          "tpm": 250000,
+          "verifiedAt": "2026-10-21T17:48:55+00:00"
         }
       ],
       "model": "gemini-3.5-flash-lite",
       "projectId": "gen-lang-client-0548563154",
       "promptVersion": "term-best-fit-15-categories-ordered-code-array-v3",
       "sourceCandidateSha256": "6909ea156e6973e651a2fe1e4858810d4ded340bce8c082e286597fb4cfde8fc",
-      "sourceTermRecords": 108618,
+      "sourceTermRecords": 108628,
       "taxonomySha256": "890e9d1d045f10308aa32cdc39e534b5113c199de3d79404bd22be3cf796bb96",
-      "uniquePairs": 108591
+      "uniquePairs": 108601,
+      "incrementalRuns": [
+        {
+          "sourceCandidateSha256": "4a6cceaa3eed00ed002baf73308f7a424fff75ca3127584865462b22980fc936",
+          "sourceTermRecords": 10,
+          "uniquePairs": 10,
+          "batchCount": 1,
+          "taxonomySha256": "890e9d1d045f10308aa32cdc39e534b5113c199de3d79404bd22be3cf796bb96",
+          "resultsSha256": "c18499764d26dd96b98403ed2566c6a3d8f0a58e319602efde589e03a2542d42",
+          "manifestSha256": "f0f4439c65dcbe8d37820a88e764e1b9ed630a79654e3e7bbdfa36badc3b139d"
+        }
+      ]
     },
     "eventClassification": {
       "model": "gemini-3.5-flash-lite",
@@ -3099,19 +4929,19 @@
     }
   },
   "inputs": {
-    "src/main/bin/names.txt": "96bed83531072a52898ce80363a21e3848088e4ca8823da082cbf30d4f095e96",
+    "src/main/bin/names.txt": "6c36ba035a026053d7a31ad76a2bfddcb7de49b519c43cb3d3260a92972d4624",
     "src/main/bin/place.txt.zip": "bae15eb6755a2e6aa30d1d9ece7970c7d97d761b6e430c59bc11222f8e2e6f01",
     "src/main/bin/only_wiki.txt.zip": "2c3ca451484900edee55ae4ebe79284e1301b077572f64e9100889a5755bed10",
     "src/main/bin/only_neologd.txt.zip": "64222fa806e424556b662619fb7cba9ac9683f89959afee909dadb112027458e",
     "src/main/bin/wiki_neologd_common.txt.zip": "1b0638f24e057077c1b1471dc30e741670b547979db458eb447af5cc7221283c",
     "src/main/classification/person-additions/fighters-2026-10-14.jsonl": "21ba7b7db33feb7c1b55abfacb1fb6c451dd11d8a06175cfee7d36de53043eaf",
-    "src/main/classification/term-additions.tsv": "031b9446633274363467d229074607e495abb0904061dc9b333298af6ebb339b",
+    "src/main/classification/term-additions.tsv": "96f5bc426f8df852754cf7e0a5498cc2741b078473697f5f033131e6e1373db5",
     "src/main/classification/person-additions/joc-paris2024-2026-10-21.jsonl": "756f05ac434375e66f3ef023e8586cae01ceaf5493f1c64a4ce4826e472fdce5",
     "src/main/classification/person-taxonomy.json": "965772a3cf645deac29d8d219a06d184553231136408946bc16c4d637d074f36",
     "src/main/classification/person-additions/joc-tokyo2020-2026-10-21.jsonl": "c2744d010e6a99b47e4415a99411657e8de4a3997c865f8630d9b8665f8099e3",
     "src/main/classification/term-taxonomy.json": "890e9d1d045f10308aa32cdc39e534b5113c199de3d79404bd22be3cf796bb96",
-    "src/main/classification/term-classifications.tsv.gz": "2a1414eff371092bf5cadfd8ab9b183e750cbf8f6534fdb0e72710ee3612f45a",
-    "src/main/classification/term-classifications-manifest.json": "249f29bc46496088191861e1124392bf4a955c89ecc6912b68683a8b8d2e36b1",
+    "src/main/classification/term-classifications.tsv.gz": "298da7d9d322ca04708c9df55be4ba3c8ccbfa9470bef77f3f695cd3d7f07c3c",
+    "src/main/classification/term-classifications-manifest.json": "0ba856413bba9c2bd5fc44c0ab0b4604daff6d1d06fe07fe60dcd1cfd19a500f",
     "src/main/classification/event-taxonomy.json": "a84e0e3a84ae8700a2cd7076cb5ace14bab90890a0faff7cf742fe9a153e8d10",
     "src/main/classification/event-classifications.tsv.gz": "976c5d281e037f9704ea86f17a40031ce30f424c8e45fad948341c336236c64b",
     "src/main/classification/event-classifications-manifest.json": "5e42d9903f24e511f948ef68f79b385329ee0131b19ead4aa2062926347e26c0",
@@ -3156,28 +4986,29 @@
     "src/main/classification/reviews/2026-10-16-pr128-luna-0036.jsonl": "8940d95708577f08838139e6f7e65b9ce67cccf02bed5099ca3f555d6993cf9c",
     "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl": "59f4fb8499430452c3e32a12c9fafaceadbd096256a227f60cb7546454fa5cd7",
     "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl": "6b65e3c0092f7113000199e7dd7f530cc5e5f9911913ecb3c741a65aeef0a42b",
-    "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl": "7585c7afb2c8413500eab761ad429c461f139a414148c9be907442daeb141d5a"
+    "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl": "7585c7afb2c8413500eab761ad429c461f139a414148c9be907442daeb141d5a",
+    "src/main/classification/person-additions/sparse-categories-mma-2026-10-21.jsonl": "aa32949d8556943345dde7acd3afb42087c4fe68a3c6bb988c46a7a581e06a87"
   },
   "files": {
     "categories.json": "2f2c436d9015eb5d321b543b568fce2fe52a2acddfac25a0151e798fea5c63ff",
-    "distribution-candidates.tsv.gz": "3a9450a47c3ec9f0e725f478bc373a6095faaea8f75495d4621026f95ad28d42",
-    "distribution-decisions.tsv.gz": "926e8d36082dea5568d405fe8480a020d970e5a8babd7b30a05482519277fcac"
+    "distribution-candidates.tsv.gz": "7ff32fffce5399b83d98a4769eb72f9f3f4bc1b7c9ed85bdb791a9be2d372703",
+    "distribution-decisions.tsv.gz": "a02145b8d314ddb5a048af04b70797148ed724b08003909c59e578badfa0eb07"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "sourceRows": {
-    "person": 70996,
+    "person": 71120,
     "place": 170145,
     "wiki": 150132,
     "neologd": 404817,
     "web": 308185,
-    "term_additions": 1
+    "term_additions": 11
   },
   "admittedPairsByOrigin": {
     "manual": 385103,
     "gemini": 183172,
-    "verified": 174345
+    "verified": 174479
   },
-  "uniqueAdmittedPairs": 742620,
+  "uniqueAdmittedPairs": 742754,
   "excludedCandidatePairs": 328586,
   "excludedClassifiedPairs": 322861,
   "unclassifiedPairs": 0,
@@ -3188,7 +5019,7 @@
     "verified_over_manual": 8
   },
   "categoryRows": {
-    "person": 268898,
+    "person": 269022,
     "character": 6871,
     "mythological_figure": 3436,
     "place": 45088,
@@ -3211,19 +5042,19 @@
     "initiative": 1061,
     "term/general/products_daily_goods": 1159,
     "term/general/food_drink_cooking": 4077,
-    "term/general/internet_slang_culture": 570,
-    "term/general/neologisms_trends_youth_language": 481,
-    "term/general/other_general": 20503,
+    "term/general/internet_slang_culture": 571,
+    "term/general/neologisms_trends_youth_language": 484,
+    "term/general/other_general": 20506,
     "term/specialist/information_communications": 6063,
     "term/specialist/mathematics_physics": 4171,
     "term/specialist/chemistry_life_sciences": 27565,
     "term/specialist/engineering_technology": 3509,
     "term/specialist/earth_environment_resources": 2109,
     "term/specialist/economics_management": 5778,
-    "term/specialist/law_politics": 5271,
-    "term/specialist/humanities_social_sciences": 17877,
+    "term/specialist/law_politics": 5272,
+    "term/specialist/humanities_social_sciences": 17878,
     "term/specialist/culture_arts_sports": 5360,
-    "term/specialist/transport_safety_defense": 4037,
+    "term/specialist/transport_safety_defense": 4038,
     "work_franchise": 849,
     "work_manga": 5144,
     "work_anime": 1104,
@@ -3236,7 +5067,7 @@
     "work_periodical": 1812,
     "work_other": 2683
   },
-  "dictionaryRows": 759148,
+  "dictionaryRows": 759282,
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified."
   ],

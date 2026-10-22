@@ -194,16 +194,33 @@ def export(args):
             final.pop(key, None)
 
     additions_dir = args.root / "src/main/classification/person-additions"
+    additions_by_key = defaultdict(list)
     for path in sorted(additions_dir.glob("*.jsonl")):
         for row in reviews.read_jsonl(path):
+            category = row.get("category_id", "sports")
+            if category not in enabled:
+                raise ValueError("A reviewed person addition has a nonstandard or unknown category")
             sport = row.get("sport")
-            if sport not in reviews.SPORT_LABELS:
-                raise ValueError("A reviewed person addition has an unknown sport label")
+            if category == "sports":
+                if sport not in reviews.SPORT_LABELS:
+                    raise ValueError("A reviewed sports addition has an unknown sport label")
+            elif sport is not None:
+                raise ValueError("A non-sports person addition cannot have a sport tag")
             key = candidate_key(row["reading"], row["surface"])
+            additions_by_key[key].append((row["reading"], row["surface"], category, sport))
+
+    for key, additions in additions_by_key.items():
+        categories = {row[2] for row in additions}
+        if len(categories) != 1:
+            raise ValueError("Reviewed person additions assign one alias to conflicting categories")
+        reading, surface, category, _ = additions[0]
+        if category == "sports":
             prior = final.get(key)
-            tags = set(prior[3]) if prior else set()
-            tags.add(sport)
-            final[key] = (row["reading"], row["surface"], "sports", tags)
+            tags = set(prior[3]) if prior and prior[2] == "sports" else set()
+            tags.update(row[3] for row in additions)
+        else:
+            tags = set()
+        final[key] = (reading, surface, category, tags)
 
     records_by_pair = defaultdict(list)
     source_keys = set()
@@ -262,6 +279,51 @@ def export(args):
     output_rows.sort(key=lambda row: (
         category_order[row[0]], len(row[1]), row[1], row[5], row[2], row[3], row[4], row[6],
     ))
+    if args.preserve_existing:
+        if not args.output.is_file():
+            raise ValueError("--preserve-existing requires an existing person dictionary source")
+        frozen = json.loads((args.root / "src/main/classification/distribution-manifest.json").read_text(
+            encoding="utf-8"))
+        batches = frozen.get("provenance", {}).get("personAdditions", [])
+        if not batches:
+            raise ValueError("--preserve-existing requires a frozen person-addition batch")
+        latest_path = batches[-1].get("path", "")
+        additions_root = (args.root / "src/main/classification/person-additions").resolve()
+        latest_file = (args.root / latest_path).resolve()
+        if additions_root not in latest_file.parents or not latest_file.is_file():
+            raise ValueError("The newest frozen person-addition batch is unavailable")
+        latest_keys = {
+            candidate_key(row["reading"], row["surface"])
+            for row in reviews.read_jsonl(latest_file)
+        }
+        if not latest_keys <= additions_by_key.keys():
+            raise ValueError("The newest frozen person-addition batch is absent from reviewed additions")
+        updated_rows = [row for row in output_rows
+                        if candidate_key(row[1], row[5]) in latest_keys]
+        updated_keys = {candidate_key(row[1], row[5]) for row in updated_rows}
+        if updated_keys != latest_keys:
+            raise ValueError("Reviewed person additions do not all have standard dictionary rows")
+        for key in latest_keys:
+            additions = additions_by_key[key]
+            expected_category = additions[0][2]
+            if any(row[0] != expected_category for row in updated_rows
+                   if candidate_key(row[1], row[5]) == key):
+                raise ValueError("Reviewed person addition has conflicting category output")
+        preserved_rows = []
+        with gzip.open(args.output, "rt", encoding="utf-8") as existing:
+            for number, line in enumerate(existing, 1):
+                fields = line.rstrip("\n").split("\t")
+                if len(fields) != 7:
+                    raise ValueError(f"Malformed existing person dictionary source row {number}")
+                if candidate_key(fields[1], fields[5]) in latest_keys:
+                    continue
+                preserved_rows.append((fields[0], fields[1], int(fields[2]), int(fields[3]),
+                                       int(fields[4]), fields[5], fields[6]))
+        output_rows = preserved_rows + updated_rows
+        matched = {candidate_key(row[1], row[5]) for row in output_rows}
+        output_rows.sort(key=lambda row: (
+            category_order[row[0]], len(row[1]), row[1], row[5], row[2], row[3], row[4], row[6],
+        ))
     args.output.parent.mkdir(parents=True, exist_ok=True)
     temporary_output = args.output.with_suffix(args.output.suffix + ".tmp")
     with temporary_output.open("wb") as raw:
@@ -294,6 +356,8 @@ def main():
     parser.add_argument("--excluded-candidates", type=Path, required=True,
                         help="External JSONL of candidate_key/category_id rows; restricted candidates never enter the dictionary")
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--preserve-existing", action="store_true",
+                        help="Update only the newest frozen person-additions batch and keep other rows unchanged")
     export(parser.parse_args())
 
 

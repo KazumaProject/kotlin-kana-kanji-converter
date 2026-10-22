@@ -2,7 +2,7 @@
 
 特別プレリリースZIPのカテゴリ一覧です。通常配布の49カテゴリから汎用 `person` を除き、人物細分類24カテゴリに置き換えた **72カテゴリ**を掲載しています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **847,324**、読み・表記の組数の合計は **839,275**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **847,459**、読み・表記の組数の合計は **839,410**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換プレリリース) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -30,19 +30,19 @@
 | [事業・キャンペーン](initiative/index.md) | `initiative` | 1,061 | 1,061 | [全件](initiative/index.md) |
 | [商品・日用品（一般名称）](term/general/products_daily_goods/index.md) | `term/general/products_daily_goods` | 1,159 | 1,159 | [全件](term/general/products_daily_goods/index.md) |
 | [食品・飲料・料理](term/general/food_drink_cooking/index.md) | `term/general/food_drink_cooking` | 4,076 | 4,077 | [全件](term/general/food_drink_cooking/index.md) |
-| [ネットスラング・ネット文化](term/general/internet_slang_culture/index.md) | `term/general/internet_slang_culture` | 568 | 570 | [全件](term/general/internet_slang_culture/index.md) |
-| [新語・流行語・若者言葉](term/general/neologisms_trends_youth_language/index.md) | `term/general/neologisms_trends_youth_language` | 481 | 481 | [全件](term/general/neologisms_trends_youth_language/index.md) |
-| [その他の一般語](term/general/other_general/index.md) | `term/general/other_general` | 20,492 | 20,503 | [全件](term/general/other_general/index.md) |
+| [ネットスラング・ネット文化](term/general/internet_slang_culture/index.md) | `term/general/internet_slang_culture` | 569 | 571 | [全件](term/general/internet_slang_culture/index.md) |
+| [新語・流行語・若者言葉](term/general/neologisms_trends_youth_language/index.md) | `term/general/neologisms_trends_youth_language` | 484 | 484 | [全件](term/general/neologisms_trends_youth_language/index.md) |
+| [その他の一般語](term/general/other_general/index.md) | `term/general/other_general` | 20,495 | 20,506 | [全件](term/general/other_general/index.md) |
 | [情報・通信](term/specialist/information_communications/index.md) | `term/specialist/information_communications` | 6,062 | 6,063 | [全件](term/specialist/information_communications/index.md) |
 | [数学・物理](term/specialist/mathematics_physics/index.md) | `term/specialist/mathematics_physics` | 4,171 | 4,171 | [全件](term/specialist/mathematics_physics/index.md) |
 | [化学・生命科学](term/specialist/chemistry_life_sciences/index.md) | `term/specialist/chemistry_life_sciences` | 27,562 | 27,565 | [全件](term/specialist/chemistry_life_sciences/index.md) |
 | [工学・技術](term/specialist/engineering_technology/index.md) | `term/specialist/engineering_technology` | 3,508 | 3,509 | [全件](term/specialist/engineering_technology/index.md) |
 | [地球・環境・資源](term/specialist/earth_environment_resources/index.md) | `term/specialist/earth_environment_resources` | 2,109 | 2,109 | [全件](term/specialist/earth_environment_resources/index.md) |
 | [経済・経営](term/specialist/economics_management/index.md) | `term/specialist/economics_management` | 5,778 | 5,778 | [全件](term/specialist/economics_management/index.md) |
-| [法律・政治](term/specialist/law_politics/index.md) | `term/specialist/law_politics` | 5,270 | 5,271 | [全件](term/specialist/law_politics/index.md) |
-| [人文・社会科学](term/specialist/humanities_social_sciences/index.md) | `term/specialist/humanities_social_sciences` | 17,872 | 17,877 | [全件](term/specialist/humanities_social_sciences/index.md) |
+| [法律・政治](term/specialist/law_politics/index.md) | `term/specialist/law_politics` | 5,271 | 5,272 | [全件](term/specialist/law_politics/index.md) |
+| [人文・社会科学](term/specialist/humanities_social_sciences/index.md) | `term/specialist/humanities_social_sciences` | 17,873 | 17,878 | [全件](term/specialist/humanities_social_sciences/index.md) |
 | [文化・芸術・スポーツ](term/specialist/culture_arts_sports/index.md) | `term/specialist/culture_arts_sports` | 5,360 | 5,360 | [全件](term/specialist/culture_arts_sports/index.md) |
-| [交通・安全・防衛](term/specialist/transport_safety_defense/index.md) | `term/specialist/transport_safety_defense` | 4,035 | 4,037 | [全件](term/specialist/transport_safety_defense/index.md) |
+| [交通・安全・防衛](term/specialist/transport_safety_defense/index.md) | `term/specialist/transport_safety_defense` | 4,036 | 4,038 | [全件](term/specialist/transport_safety_defense/index.md) |
 | [作品シリーズ](work_franchise/index.md) | `work_franchise` | 849 | 849 | [全件](work_franchise/index.md) |
 | [漫画作品](work_manga/index.md) | `work_manga` | 5,143 | 5,144 | [全件](work_manga/index.md) |
 | [アニメ作品](work_anime/index.md) | `work_anime` | 1,104 | 1,104 | [全件](work_anime/index.md) |
@@ -56,23 +56,23 @@
 | [媒体未特定の作品・美術作品](work_other/index.md) | `work_other` | 2,682 | 2,683 | [全件](work_other/index.md) |
 | [漢方・生薬](kampo/index.md) | `kampo` | 432 | 432 | [全件](kampo/index.md) |
 | [医療](medical/index.md) | `medical` | 92,683 | 92,683 | [全件](medical/index.md) |
-| [姓・名字（由来未確認）](person/surname_origin_unconfirmed/index.md) | `surname_origin_unconfirmed` | 49,328 | 49,617 | [全件](person/surname_origin_unconfirmed/index.md) |
-| [名・下の名前（由来未確認）](person/given_name_origin_unconfirmed/index.md) | `given_name_origin_unconfirmed` | 7,085 | 7,163 | [全件](person/given_name_origin_unconfirmed/index.md) |
-| [人名・姓名（由来未確認）](person/personal_name_origin_unconfirmed/index.md) | `personal_name_origin_unconfirmed` | 169,291 | 170,660 | [全件](person/personal_name_origin_unconfirmed/index.md) |
+| [姓・名字（由来未確認）](person/surname_origin_unconfirmed/index.md) | `surname_origin_unconfirmed` | 49,324 | 49,613 | [全件](person/surname_origin_unconfirmed/index.md) |
+| [名・下の名前（由来未確認）](person/given_name_origin_unconfirmed/index.md) | `given_name_origin_unconfirmed` | 7,084 | 7,162 | [全件](person/given_name_origin_unconfirmed/index.md) |
+| [人名・姓名（由来未確認）](person/personal_name_origin_unconfirmed/index.md) | `personal_name_origin_unconfirmed` | 169,272 | 170,641 | [全件](person/personal_name_origin_unconfirmed/index.md) |
 | [俳優](person/actor/index.md) | `actor` | 6,395 | 6,450 | [全件](person/actor/index.md) |
 | [声優](person/voice_actor/index.md) | `voice_actor` | 572 | 579 | [全件](person/voice_actor/index.md) |
 | [歌手・音楽家](person/musician/index.md) | `musician` | 969 | 971 | [全件](person/musician/index.md) |
-| [アイドル](person/idol/index.md) | `idol` | 153 | 154 | [全件](person/idol/index.md) |
-| [お笑い芸人](person/comedian/index.md) | `comedian` | 53 | 55 | [全件](person/comedian/index.md) |
+| [アイドル](person/idol/index.md) | `idol` | 159 | 160 | [全件](person/idol/index.md) |
+| [お笑い芸人](person/comedian/index.md) | `comedian` | 65 | 67 | [全件](person/comedian/index.md) |
 | [タレント・モデル・放送・報道](person/broadcaster/index.md) | `broadcaster` | 1,305 | 1,308 | [全件](person/broadcaster/index.md) |
-| [配信者・動画投稿者](person/online_creator/index.md) | `online_creator` | 70 | 71 | [全件](person/online_creator/index.md) |
-| [スポーツ関係者](person/sports/index.md) | `sports` | 4,624 | 4,626 | [全件](person/sports/index.md) |
-| [棋士・競技ゲーム選手](person/competitive_games/index.md) | `competitive_games` | 104 | 104 | [全件](person/competitive_games/index.md) |
+| [配信者・動画投稿者](person/online_creator/index.md) | `online_creator` | 86 | 87 | [全件](person/online_creator/index.md) |
+| [スポーツ関係者](person/sports/index.md) | `sports` | 4,678 | 4,680 | [全件](person/sports/index.md) |
+| [棋士・競技ゲーム選手](person/competitive_games/index.md) | `competitive_games` | 143 | 143 | [全件](person/competitive_games/index.md) |
 | [作家・文筆家](person/writer/index.md) | `writer` | 1,133 | 1,134 | [全件](person/writer/index.md) |
-| [漫画家・イラストレーター](person/manga_illustration/index.md) | `manga_illustration` | 214 | 215 | [全件](person/manga_illustration/index.md) |
-| [映画・映像・ゲーム制作者](person/film_game_creator/index.md) | `film_game_creator` | 199 | 200 | [全件](person/film_game_creator/index.md) |
+| [漫画家・イラストレーター](person/manga_illustration/index.md) | `manga_illustration` | 222 | 223 | [全件](person/manga_illustration/index.md) |
+| [映画・映像・ゲーム制作者](person/film_game_creator/index.md) | `film_game_creator` | 208 | 209 | [全件](person/film_game_creator/index.md) |
 | [美術・写真・建築・デザイン](person/art_design/index.md) | `art_design` | 922 | 922 | [全件](person/art_design/index.md) |
-| [舞台・伝統芸能](person/performing_arts/index.md) | `performing_arts` | 294 | 295 | [全件](person/performing_arts/index.md) |
+| [舞台・伝統芸能](person/performing_arts/index.md) | `performing_arts` | 299 | 300 | [全件](person/performing_arts/index.md) |
 | [研究・技術・教育](person/science_education/index.md) | `science_education` | 7,575 | 7,605 | [全件](person/science_education/index.md) |
 | [政治・行政・外交・社会運動](person/politics_public/index.md) | `politics_public` | 1,549 | 1,549 | [全件](person/politics_public/index.md) |
 | [実業・経営](person/business/index.md) | `business` | 4,016 | 4,035 | [全件](person/business/index.md) |

@@ -48,11 +48,11 @@ freezeはSQLiteを読み取り専用の一つのトランザクションで読�
 
 ## 公式資料で確認した人名の追加
 
-`src/main/classification/person-additions/` に、確認済みの名簿をUTF-8 JSONLで保存します。各行に `reading`、`surface`、`sport`、`left_id`、`right_id`、`cost`、`source_url`、`source_surface`、`source_reading`、`checked_on`（YYYY-MM-DD）を記録します。`sport` は `person-taxonomy.json` の `sport_subcategories` にあるIDを使用します。今回の名簿には、確認したページのSHA-256と確認箇所も保存しています。ページ本文はGitへ保存せず、出典は各行のURLで参照します。
+`src/main/classification/person-additions/` に、確認済みの名簿をUTF-8 JSONLで保存します。各行に `reading`、`surface`、左右品詞ID、コスト、出典URL、資料に記載された表記・読み、確認日（YYYY-MM-DD）を記録します。分類先は `category_id` に `person-taxonomy.json` の `standard_enabled: true` のIDを指定します。スポーツは従来形式の `sport` のみでも登録でき、その場合も分類先は `sports` です。`sports` を明示する行には `sport` の競技IDが必要です。スポーツ以外の行では `sport` を省略します。確認したページのSHA-256と箇所も記録できます。ページ本文はGitへ保存せず、出典は各行のURLで参照します。
 
 2026-10-21のJOCパリ2024名鑑は20競技135人を確認しました。既存のperson収録81組に競技タグを付与し、過去の除外2組を出典付きで戻し、未収録52組を追加します。名簿の全行にJOC公式プロフィールURL、氏名・読み、競技、確認箇所、取得ページのSHA-256を保存します。
 
-読みは公式のカナ・ふりがなから、カタカナをひらがなへ変換して空白・中黒・引用符（“”「」）を除去します。長音は保持します。外国人名は公式日本語カタカナ表記を使い、英字名から読みを推定しません。表記は公式名・リングネームの姓名間の空白を除き、中黒などは保持します。競技の区分は名簿の整理用で、過去に別競技へ出場した選手も含みます。
+読みは公式のカナ・ふりがなから、カタカナをひらがなへ変換して空白・中黒・引用符（“”「」）を除去します。長音は保持します。外国人名は公式日本語カタカナ表記を使い、英字名から読みを推定しません。表記は公式名・活動名の空白を除き、中黒などは保持します。スポーツの区分は名簿の整理用で、過去に別競技へ出場した選手も含みます。`category_id` と元JSONLの対応は固定マニフェストの `provenance.personAdditions[].categoryAssignments` でも検証します。
 
 ```sh
 python3 scripts/classified_distribution.py add-person-names \
@@ -107,7 +107,7 @@ PR #141の分類台帳と後続レビューは、元のスナップショット�
 
 `person-dictionaries-v*` タグでは、通常の49カテゴリから汎用 `person` を除き、`person-taxonomy.json` の `standard_enabled: true` の24人物細分類に置き換えます。未分類の候補を受け入れる辞書は作りません。追加調査でも分類できない候補と、IME候補としての形式条件を満たさない候補は配布元データから除きます。プレリリースZIPは合計72カテゴリ（既存49から `person` を除いた48カテゴリと、人物細分類24カテゴリ）です。カテゴリ別の収録数と全収録語は[最終プレリリースの配布カテゴリ一覧](classified-dictionary-catalog/index.md)にまとめています。新しい人物バイナリは他辞書と共通のPOSテーブルを使います。通常の `v*` プレリリース生成はこの変更の対象外です。
 
-`person-dictionary-candidates.tsv.gz` には許可カテゴリの読み・表記・品詞・コスト・競技タグだけを保存します。未分類候補は、再分類できた項目だけを既存カテゴリに移し、なお確定できない項目は出力しません。空の読み・表記、空白・制御文字を含む候補、かな以外の読み、文字を含まない表記も除外します。根拠データと分類作業用キャッシュはリポジトリ外に置き、`scripts/export_person_dictionary_source.py` は許可24カテゴリの行だけを書き出します。成人制作者は `adult_work_creator` として漫画カテゴリから分けますが、出演者・制作者・成人関連保留を含む候補は個人データをリポジトリにも配布用データにも入れません。成人関連の候補キーはリポジトリ外の除外JSONLにハッシュだけを保持し、今後のGemini候補送信前にも網羅を検査します。置換ZIPには汎用 `person` の辞書ファイルを含めません。
+`person-dictionary-candidates.tsv.gz` には許可カテゴリの読み・表記・品詞・コスト・競技タグだけを保存します。未分類候補は、再分類できた項目だけを既存カテゴリに移し、なお確定できない項目は出力しません。空の読み・表記、空白・制御文字を含む候補、かな以外の読み、文字を含まない表記も除外します。根拠データと分類作業用キャッシュはリポジトリ外に置き、`scripts/export_person_dictionary_source.py` は許可24カテゴリの行だけを書き出します。`--preserve-existing` を指定すると、現在の収録語を保ち、`person-additions` に記録した別名だけを更新します。成人制作者は `adult_work_creator` として漫画カテゴリから分けますが、出演者・制作者・成人関連保留を含む候補は個人データをリポジトリにも配布用データにも入れません。成人関連の候補キーはリポジトリ外の除外JSONLにハッシュだけを保持し、今後のGemini候補送信前にも網羅を検査します。置換ZIPには汎用 `person` の辞書ファイルを含めません。
 
 置換ZIPの人物辞書は `app/src/main/assets/categories/person/<カテゴリID>/` の下に配置します。`person/` は親ディレクトリで、各サブディレクトリに `yomi.dat.zip`、`tango.dat.zip`、`token.dat.zip` を格納します。他の48カテゴリは `categories/<カテゴリID>/` に置きます。
 
