@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "e644eb3cab620e5956c18fabfcecb35118b5c40c7ffb3da401f14d7ae95f3338",
-  "uniquePairs": 831011,
-  "records": 847487,
+  "inputSha256": "84ed2e60656929a662c35dc40d2f327dbb8a6bf0015a88912681a40b41870fac",
+  "uniquePairs": 832952,
+  "records": 849390,
   "categories": [
     {
       "id": "character",
@@ -626,22 +626,22 @@
     {
       "id": "surname_origin_unconfirmed",
       "name": "姓・名字（由来未確認）",
-      "records": 49415,
-      "pairs": 49126,
+      "records": 49405,
+      "pairs": 49117,
       "pages": 33
     },
     {
       "id": "given_name_origin_unconfirmed",
       "name": "名・下の名前（由来未確認）",
-      "records": 7127,
-      "pairs": 7049,
+      "records": 7124,
+      "pairs": 7046,
       "pages": 5
     },
     {
       "id": "personal_name_origin_unconfirmed",
       "name": "人名・姓名（由来未確認）",
-      "records": 170078,
-      "pairs": 168709,
+      "records": 170031,
+      "pairs": 168662,
       "pages": 113
     },
     {
@@ -675,9 +675,9 @@
     {
       "id": "comedian",
       "name": "お笑い芸人",
-      "records": 55,
-      "pairs": 53,
-      "pages": 1
+      "records": 1749,
+      "pairs": 1747,
+      "pages": 2
     },
     {
       "id": "broadcaster",
@@ -689,14 +689,14 @@
     {
       "id": "online_creator",
       "name": "配信者・動画投稿者",
-      "records": 71,
-      "pairs": 70,
+      "records": 124,
+      "pairs": 122,
       "pages": 1
     },
     {
       "id": "sports",
       "name": "スポーツ関係者",
-      "records": 6608,
+      "records": 6570,
       "pairs": 6565,
       "pages": 5
     },
@@ -745,8 +745,8 @@
     {
       "id": "science_education",
       "name": "研究・技術・教育",
-      "records": 7586,
-      "pairs": 7556,
+      "records": 7585,
+      "pairs": 7555,
       "pages": 6
     },
     {
@@ -776,6 +776,13 @@
       "records": 5020,
       "pairs": 5013,
       "pages": 4
+    },
+    {
+      "id": "thought",
+      "name": "哲学者・思想家",
+      "records": 255,
+      "pairs": 255,
+      "pages": 1
     }
   ],
   "excluded": {
