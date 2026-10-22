@@ -2,7 +2,7 @@
 
 人物細分類辞書を含む配布ZIPのカテゴリ一覧です。通常配布の49カテゴリから汎用 `person` を除き、標準配布対象の人物細分類22カテゴリに置き換えた **70カテゴリ**を掲載しています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **846,402**、読み・表記の組数の合計は **838,353**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **846,580**、読み・表記の組数の合計は **838,531**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換プレリリース) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -66,7 +66,7 @@
 | [お笑い芸人](person/comedian/index.md) | `comedian` | 53 | 55 | [全件](person/comedian/index.md) |
 | [タレント・モデル・放送・報道](person/broadcaster/index.md) | `broadcaster` | 1,305 | 1,308 | [全件](person/broadcaster/index.md) |
 | [配信者・動画投稿者](person/online_creator/index.md) | `online_creator` | 70 | 71 | [全件](person/online_creator/index.md) |
-| [スポーツ関係者](person/sports/index.md) | `sports` | 4,624 | 4,626 | [全件](person/sports/index.md) |
+| [スポーツ関係者](person/sports/index.md) | `sports` | 4,802 | 4,804 | [全件](person/sports/index.md) |
 | [棋士・競技ゲーム選手](person/competitive_games/index.md) | `competitive_games` | 104 | 104 | [全件](person/competitive_games/index.md) |
 | [作家・文筆家](person/writer/index.md) | `writer` | 1,133 | 1,134 | [全件](person/writer/index.md) |
 | [漫画家・イラストレーター](person/manga_illustration/index.md) | `manga_illustration` | 214 | 215 | [全件](person/manga_illustration/index.md) |

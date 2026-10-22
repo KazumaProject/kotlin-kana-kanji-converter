@@ -2,7 +2,7 @@
 
 [スポーツ関係者の全件一覧](../index.md) · [最終配布カテゴリ一覧](../../../index.md)
 
-競技タグ別に **59競技**、延べ **4,683レコード**、**4,681組**を掲載しています。複数競技に分類された語は各競技に重複して掲載するため、競技別合計には重複があります。競技タグが未設定または特定できない語は「競技未特定」に含めています。
+競技タグ別に **59競技**、延べ **4,861レコード**、**4,859組**を掲載しています。複数競技に分類された語は各競技に重複して掲載するため、競技別合計には重複があります。競技タグが未設定または特定できない語は「競技未特定」に含めています。
 
 | 競技 | 読み・表記の組 | レコード数 | 全件一覧 |
 |---|---:|---:|---|
@@ -37,9 +37,9 @@
 | [バドミントン](badminton/index.md) | 28 | 28 | [全件](badminton/index.md) |
 | [卓球](table_tennis/index.md) | 20 | 20 | [全件](table_tennis/index.md) |
 | [アメリカンフットボール](american_football/index.md) | 9 | 9 | [全件](american_football/index.md) |
-| [ボクシング](boxing/index.md) | 459 | 460 | [全件](boxing/index.md) |
-| [総合格闘技](mma/index.md) | 105 | 105 | [全件](mma/index.md) |
-| [キックボクシング](kickboxing/index.md) | 114 | 115 | [全件](kickboxing/index.md) |
+| [ボクシング](boxing/index.md) | 460 | 461 | [全件](boxing/index.md) |
+| [総合格闘技](mma/index.md) | 159 | 159 | [全件](mma/index.md) |
+| [キックボクシング](kickboxing/index.md) | 237 | 238 | [全件](kickboxing/index.md) |
 | [空手](karate/index.md) | 31 | 31 | [全件](karate/index.md) |
 | [サンボ](sambo/index.md) | 2 | 2 | [全件](sambo/index.md) |
 | [合気道](aikido/index.md) | 1 | 1 | [全件](aikido/index.md) |

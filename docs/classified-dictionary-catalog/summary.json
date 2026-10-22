@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "e8fbe7d5a77d802792e2f70a1e936675ac92c4e8716c50c83a7142cd38d4663e",
-  "uniquePairs": 829973,
-  "records": 846402,
+  "inputSha256": "0681246df0b8d1487e1f988c372dd5991b935c367856b39dce70931d40ebd762",
+  "uniquePairs": 830151,
+  "records": 846580,
   "categories": [
     {
       "id": "character",
@@ -696,8 +696,8 @@
     {
       "id": "sports",
       "name": "スポーツ関係者",
-      "records": 4626,
-      "pairs": 4624,
+      "records": 4804,
+      "pairs": 4802,
       "pages": 4
     },
     {

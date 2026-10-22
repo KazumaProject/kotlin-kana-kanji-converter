@@ -52,6 +52,8 @@ freezeはSQLiteを読み取り専用の一つのトランザクションで読�
 
 2026-10-21のJOCパリ2024名鑑は20競技135人を確認しました。既存のperson収録81組に競技タグを付与し、過去の除外2組を出典付きで戻し、未収録52組を追加します。名簿の全行にJOC公式プロフィールURL、氏名・読み、競技、確認箇所、取得ページのSHA-256を保存します。
 
+MMAは、既存の2026-10-14 UFC公式選手プロフィール61組に加え、2026-10-22に[RIZIN](https://jp.rizinff.com/fighters)、[DEEP](https://www.deep2001.com/fighter/)、[PANCRASE](https://www.pancrase.co.jp/data/prfl2/index.html)、[修斗](https://www.shooto-mma.com/fighters/)の名簿から新たに54組を追加しました。同日にボクシング1組を[大橋ボクシングジム](https://www.ohashi-gym.com/boxers/?page=class_a)の選手紹介から、キックボクシング123組を[RISE選手一覧](https://rise-rc.com/fighter/)の日本語カナ表記から確認しました。漢字名・英字名からの読みの推定はしていません。新規178組のURL、確認箇所、取得ページのSHA-256は[追加名簿](../src/main/classification/person-additions/combat-sports-2026-10-22.jsonl)に記録します。
+
 読みは公式のカナ・ふりがなから、カタカナをひらがなへ変換して空白・中黒・引用符（“”「」）を除去します。長音は保持します。外国人名は公式日本語カタカナ表記を使い、英字名から読みを推定しません。表記は公式名・リングネームの姓名間の空白を除き、中黒などは保持します。競技の区分は名簿の整理用で、過去に別競技へ出場した選手も含みます。
 
 ```sh
