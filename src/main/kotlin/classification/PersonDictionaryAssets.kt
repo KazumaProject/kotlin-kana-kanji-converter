@@ -53,7 +53,7 @@ class PersonDictionaryData(
     private val requiredRestrictedCategoryIds = setOf(
         "adult_performer", "adult_work_creator", "crime_offender", "espionage", "organized_crime", "religion", "terrorism",
     )
-    private val withheldCategoryIds = setOf("military", "thought")
+    private val withheldCategoryIds = setOf("military")
     private val sportIds = taxonomy.getValue("sport_subcategories").jsonObject.keys
     private val idCount = if (idDef.isFile) MozcIdDefParser.parse(idDef.toPath()).size else null
     private val rows: List<PersonDictionaryRow>
@@ -61,7 +61,7 @@ class PersonDictionaryData(
     private val sportTagsByPair: Map<Pair<String, String>, Set<String>>
 
     init {
-        require(categoryIds.size == 28 && categoryIds.distinct().size == categoryIds.size)
+        require(categoryIds.size == 29 && categoryIds.distinct().size == categoryIds.size)
         require(nonStandardCategoryIds == requiredRestrictedCategoryIds + withheldCategoryIds + "unclassified_person")
         val policy = taxonomy.getValue("policy").jsonObject
         require(policy.getValue("standard_dictionary_excluded_categories").jsonArray

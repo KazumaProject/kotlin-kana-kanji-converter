@@ -27,7 +27,7 @@ MANUAL_ONLY_CATEGORY_IDS = {
     'given_name_origin_japanese', 'given_name_origin_foreign',
     'personal_name_origin_japanese', 'personal_name_origin_foreign',
 }
-WITHHELD_CATEGORY_IDS = {'military', 'thought'}
+WITHHELD_CATEGORY_IDS = {'military'}
 AGGREGATE_ONLY_CATEGORY_IDS = {
     'adult_performer', 'adult_work_creator', 'religion', 'crime_offender', 'espionage', 'terrorism',
     'organized_crime',
@@ -708,7 +708,7 @@ def main():
         'recovery_gemini_override_rows_applied': recovery_applied,
         'initial_gemini_manual_only_rows_demoted': initial_demoted,
         'recovery_gemini_manual_only_rows_demoted': recovery_demoted,
-        'classification_policy': 'Reviewed outputs omit person-level rows in restricted categories and retain aggregate counts only. Military and thought records are excluded from the standard person dictionary export; raw source corpora remain unchanged. Raw source and Gemini workspaces are external to the repository; future Gemini runs require an external restricted-category hash exclusion file.',
+        'classification_policy': 'Reviewed outputs omit person-level rows in restricted categories and retain aggregate counts only. Military records are excluded from the standard person dictionary export. Thought records enter the standard person dictionary only through manually reviewed, source-backed additions; raw source corpora remain unchanged. Raw source and Gemini workspaces are external to the repository; future Gemini runs require an external restricted-category hash exclusion file.',
         'taxonomy_version': taxonomy['taxonomy_version'],
     }
     write_json(output / 'summary.json', summary)

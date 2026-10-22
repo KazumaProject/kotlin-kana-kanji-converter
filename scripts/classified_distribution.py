@@ -315,6 +315,7 @@ def apply_term_classifications(root, decisions, force=False, reviewed_pairs=()):
     if data is None:
         return {pair: list(row) for pair, row in decisions.items()}
     results = data['results']
+    review_entries = reviewed_pairs if isinstance(reviewed_pairs, dict) else {}
     reviewed_pairs = set(reviewed_pairs)
     output = {}
     for pair, original in decisions.items():
@@ -330,8 +331,14 @@ def apply_term_classifications(root, decisions, force=False, reviewed_pairs=()):
             row[2] = ','.join(sorted(categories))
         elif any(category.startswith('term/') for category in categories):
             leaf_categories = categories & data['categoryIds']
-            if len(leaf_categories) != 1 or pair not in results:
-                raise ValueError(f'Each admitted term pair must have exactly one Gemini leaf category: {pair}')
+            review = review_entries.get(pair)
+            source_backed_addition = (
+                isinstance(review, dict) and review.get('action') == 'add'
+                and isinstance(review.get('added_record'), dict)
+                and review.get('evidence', {}).get('kind') == 'independent_source'
+            )
+            if len(leaf_categories) != 1 or (pair not in results and not source_backed_addition):
+                raise ValueError(f'Each admitted term pair must have one leaf category and valid provenance: {pair}')
             for category in leaf_categories:
                 if pair not in reviewed_pairs and results.get(pair) != category:
                     raise ValueError(f'Frozen term category differs from Gemini result: {pair}')
@@ -353,7 +360,8 @@ def apply_event_classifications(root, decisions, force=False, reviewed_pairs=())
     if data is None:
         return {pair: list(row) for pair, row in decisions.items()}
     results = data['results']
-    reviewed_pairs = set(reviewed_pairs)
+    review_entries = reviewed_pairs if isinstance(reviewed_pairs, dict) else {}
+    reviewed_pairs = set(review_entries)
     output = {}
     for pair, original in decisions.items():
         row = list(original)
@@ -368,7 +376,13 @@ def apply_event_classifications(root, decisions, force=False, reviewed_pairs=())
             row[2] = ','.join(sorted(categories))
         elif any(category.startswith('event/') for category in categories):
             leaf_categories = categories & data['categoryIds']
-            if len(leaf_categories) != 1 or pair not in results:
+            review = review_entries.get(pair)
+            source_backed_addition = (
+                isinstance(review, dict) and review.get('action') == 'add'
+                and isinstance(review.get('added_record'), dict)
+                and review.get('evidence', {}).get('kind') == 'independent_source'
+            )
+            if len(leaf_categories) != 1 or (pair not in results and not source_backed_addition):
                 raise ValueError(f'Each retained event pair must have exactly one distributable category: {pair}')
             for category in leaf_categories:
                 if pair not in reviewed_pairs and results.get(pair) != category:
@@ -850,8 +864,9 @@ def person_dictionary_exclusions(manifest):
 def person_reading(value):
     """Only mechanical kana normalization; never transliterate Latin names."""
     value = unicodedata.normalize('NFC', value)
+    value = re.sub(r'([うウ])[\u3099\u309b]', lambda match: 'ゔ' if match[1] == 'う' else 'ヴ', value)
     return ''.join(chr(ord(c) - 0x60) if '\u30a1' <= c <= '\u30f6' else c
-                   for c in value if not c.isspace() and c not in '・“”「」')
+                   for c in value if not c.isspace() and c not in '・＝“”「」')
 
 
 def person_entries(root, path):
@@ -861,20 +876,39 @@ def person_entries(root, path):
     if taxonomy_path.is_file():
         taxonomy = json.loads(taxonomy_path.read_text(encoding='utf-8'))
         allowed_sports = set(taxonomy.get('sport_subcategories', {}))
+        enabled_categories = {category['id'] for category in taxonomy.get('categories', [])
+                              if category.get('standard_enabled') is True}
     else:
         # Older minimal snapshots and verification fixtures predate taxonomy
         # metadata. Restrict their fallback to the original three sport IDs.
         allowed_sports = LEGACY_PERSON_SPORT_IDS
+        enabled_categories = set()
     entries = {}
     for number, line in enumerate(path.read_text(encoding='utf-8').splitlines(), 1):
         entry = json.loads(line)
-        required = ('reading', 'surface', 'sport', 'left_id', 'right_id', 'cost',
+        required = ('reading', 'surface', 'left_id', 'right_id', 'cost',
                     'source_url', 'source_surface', 'source_reading', 'checked_on')
         if not isinstance(entry, dict) or any(k not in entry for k in required):
             raise ValueError(f'{path}:{number}: missing person entry/evidence fields')
-        for field in ('reading', 'surface', 'sport', 'source_url', 'source_surface', 'source_reading', 'checked_on'):
+        if ('sport' in entry) == ('category_id' in entry):
+            raise ValueError(f'{path}:{number}: expected exactly one of sport or category_id')
+        for field in ('reading', 'surface', 'source_url', 'source_surface', 'source_reading', 'checked_on'):
             if not isinstance(entry[field], str) or not entry[field] or any(c in entry[field] for c in '\t\r\n\0'):
                 raise ValueError(f'{path}:{number}: invalid {field}')
+        if 'sport' in entry and (not isinstance(entry['sport'], str) or not entry['sport']):
+            raise ValueError(f'{path}:{number}: invalid sport')
+        if 'category_id' in entry:
+            if (entry['category_id'] not in enabled_categories
+                    or entry['category_id'] == 'sports' or 'sport' in entry):
+                raise ValueError(f'{path}:{number}: invalid category-specific person evidence')
+            if entry['category_id'] == 'thought':
+                if (not isinstance(entry.get('classification_source_section'), str)
+                        or not entry['classification_source_section']):
+                    raise ValueError(f'{path}:{number}: invalid category-specific person evidence')
+                category_source = urlsplit(entry.get('classification_source_url', ''))
+                if (category_source.scheme != 'https' or not category_source.hostname
+                        or category_source.username or category_source.password):
+                    raise ValueError(f'{path}:{number}: invalid classification_source_url')
         if ('source_section' in entry and
                 (not isinstance(entry['source_section'], str) or not entry['source_section'])):
             raise ValueError(f'{path}:{number}: invalid source_section')
@@ -887,8 +921,14 @@ def person_entries(root, path):
                 or entry['surface'] != ''.join(entry['source_surface'].split())
                 or unicodedata.normalize('NFC', entry['surface']) != entry['surface']):
             raise ValueError(f'{path}:{number}: reading/surface differs from kana evidence')
-        if entry['sport'] not in allowed_sports:
-            raise ValueError(f'{path}:{number}: invalid sport')
+        if 'sport' in entry:
+            sport_tags = entry.get('sports', [entry['sport']])
+            if (not isinstance(sport_tags, list) or not sport_tags
+                    or any(not isinstance(sport, str) or sport not in allowed_sports
+                           for sport in sport_tags)
+                    or len(sport_tags) != len(set(sport_tags))
+                    or entry['sport'] not in sport_tags):
+                raise ValueError(f'{path}:{number}: invalid sport')
         url = urlsplit(entry['source_url'])
         if url.scheme != 'https' or not url.hostname or url.username or url.password:
             raise ValueError(f'{path}:{number}: invalid evidence URL')
@@ -917,6 +957,8 @@ def add_person_names(root, path):
     verify(root)
     entries = person_entries(root, path)
     directory = root / 'src/main/classification'
+    category_additions = dict(entries)
+    person_dictionary_path = directory / 'person-dictionary-candidates.tsv.gz'
     manifest = json.loads((directory / 'distribution-manifest.json').read_text())
     with gzip.open(directory / 'distribution-decisions.tsv.gz', 'rt', encoding='utf-8') as f:
         decisions = {tuple(row[:2]): row for row in (line.rstrip('\n').split('\t') for line in f)}
@@ -929,11 +971,13 @@ def add_person_names(root, path):
         if source == 'person': names_rows.add(row)
     additions = []
     appended = []
+    already_admitted_person_pairs = set()
     previous_rows = len(rows)
     for pair, entry in sorted(entries.items()):
         prior = decisions.get(pair)
         if prior is not None:
             if prior[4] == 'classified' and 'person' in prior[2].split(','):
+                already_admitted_person_pairs.add(pair)
                 continue
             raise ValueError(f'Existing classification/exclusion conflicts with person entry: {pair}')
         row = (pair[0], str(entry['left_id']), str(entry['right_id']), str(entry['cost']), pair[1])
@@ -943,7 +987,47 @@ def add_person_names(root, path):
         # Admit those unchanged as well, as required by the source-to-distribution verifier.
         rows.update(('person', *existing) for existing in sources_by_pair[pair] | {row})
         decisions[pair] = [*pair, 'person', 'verified', 'classified']
-    if not additions:
+    category_row_records = set()
+    already_categorized_pairs = set()
+    categorized_rows = None
+    if category_additions:
+        if not person_dictionary_path.is_file():
+            raise ValueError('Category additions require the existing person dictionary snapshot')
+        with gzip.open(person_dictionary_path, 'rt', encoding='utf-8') as stream:
+            categorized_rows = {tuple(line.rstrip('\n').split('\t')) for line in stream}
+        for pair, entry in category_additions.items():
+            variants = set(sources_by_pair[pair])
+            if pair not in already_admitted_person_pairs:
+                variants.add((pair[0], str(entry['left_id']), str(entry['right_id']),
+                              str(entry['cost']), pair[1]))
+            category_id = 'sports' if 'sport' in entry else entry['category_id']
+            sport_ids = sorted(entry.get('sports', [entry['sport']])) if 'sport' in entry else []
+            expected_rows = {(category_id, *variant, ','.join(sport_ids)) for variant in variants}
+            if not expected_rows:
+                raise ValueError(f'No person dictionary source rows exist for category addition: {pair}')
+            existing = {row for row in categorized_rows
+                        if len(row) in (6, 7) and row[0] in (category_id, 'personal_name_origin_unconfirmed')
+                        and (row[1], row[5]) == pair}
+            legacy_rows = {row for row in existing if row[0] == category_id and len(row) == 6}
+            categorized_rows.difference_update(legacy_rows)
+            existing.difference_update(legacy_rows)
+            target_rows = {row for row in existing if row[0] == category_id}
+            if pair in already_admitted_person_pairs and target_rows:
+                if not expected_rows <= target_rows:
+                    raise ValueError(f'Existing person category does not cover source rows: {pair}')
+                already_categorized_pairs.add(pair)
+                continue
+            if existing and existing != expected_rows:
+                if {row[0] for row in existing} != {'personal_name_origin_unconfirmed'}:
+                    raise ValueError(f'Person dictionary category conflicts with category addition: {pair}')
+                categorized_rows.difference_update(existing)
+            category_row_records.update(expected_rows)
+            categorized_rows.update(expected_rows)
+        category_additions = {
+            pair: entry for pair, entry in category_additions.items()
+            if pair not in already_categorized_pairs
+        }
+    if not additions and not category_additions:
         print('Person additions: 0 (all names already admitted)')
         return
     if any(item['path'] == relative for item in manifest['provenance'].get('personAdditions', [])):
@@ -970,6 +1054,9 @@ def add_person_names(root, path):
         'addedPairs': [[row[0], row[4]] for row in additions], 'addedRecords': record_count,
         'addedSourceRows': len(appended),
         'appendedPairs': [[row[0], row[4]] for row in appended],
+        'categoryPairs': [['sports' if 'sport' in entry else entry['category_id'], pair[0], pair[1]]
+                          for pair, entry in sorted(category_additions.items())],
+        'categoryRecords': len(category_row_records),
     })
     # Validate a staged snapshot first. Invalid batches never partially edit the inputs.
     with tempfile.TemporaryDirectory(prefix='person-additions-') as temporary:
@@ -981,6 +1068,9 @@ def add_person_names(root, path):
             'src/main/classification/categories.json']))
         if taxonomy_file.is_file() and taxonomy_path not in staged_paths:
             staged_paths.append(taxonomy_path)
+        person_dictionary_relative = 'src/main/classification/person-dictionary-candidates.tsv.gz'
+        if person_dictionary_path.is_file() and person_dictionary_relative not in staged_paths:
+            staged_paths.append(person_dictionary_relative)
         for relative_path in staged_paths:
             target = staging / relative_path
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -989,6 +1079,8 @@ def add_person_names(root, path):
         (staging / names_path).write_text(names, encoding='utf-8')
         write_gzip(staged_directory / 'distribution-candidates.tsv.gz', sorted(rows))
         write_gzip(staged_directory / 'distribution-decisions.tsv.gz', (decisions[pair] for pair in sorted(decisions)))
+        if category_additions:
+            write_gzip(staged_directory / 'person-dictionary-candidates.tsv.gz', sorted(categorized_rows))
         if 'lunaReclassification' in manifest['provenance']:
             (staged_directory / 'luna-reclassification').symlink_to(
                 directory / 'luna-reclassification', target_is_directory=True)
@@ -1001,6 +1093,9 @@ def add_person_names(root, path):
                               'src/main/classification/distribution-decisions.tsv.gz',
                               'src/main/classification/distribution-manifest.json']:
             (root / relative_path).write_bytes((staging / relative_path).read_bytes())
+        if category_additions:
+            person_dictionary_path.write_bytes(
+                (staged_directory / 'person-dictionary-candidates.tsv.gz').read_bytes())
     print(f'Person additions: {count} new pairs, {record_count} records, {len(entries) - count} already admitted')
 
 
@@ -1347,6 +1442,7 @@ def verify(root, allow_pending_reviews=False):
         term_membership = bool(pair_categories & (term_data['categoryIds'] if term_data else {'term'}))
         if (not term_membership or decision_status.get(pair) != ('verified', 'classified')):
             raise ValueError(f'Term addition is not classified in term: {pair}')
+    categorized_person_rows = None
     for batch in manifest['provenance'].get('personAdditions', []):
         if manifest['inputs'].get(batch['path']) != batch['sha256']:
             raise ValueError('Person evidence hash differs from recorded input')
@@ -1365,6 +1461,44 @@ def verify(root, allow_pending_reviews=False):
             entry = reviewed[pair]
             if ('person', pair[0], str(entry['left_id']), str(entry['right_id']), str(entry['cost']), pair[1]) not in baseline_person_rows:
                 raise ValueError(f'Person addition differs from reviewed POS/cost: {pair}')
+        category_pairs = batch.get('categoryPairs', [])
+        category_records = batch.get('categoryRecords', 0)
+        if (not isinstance(category_pairs, list)
+                or any(not isinstance(pair, list) or len(pair) != 3
+                       or any(not isinstance(value, str) for value in pair)
+                       for pair in category_pairs)
+                or type(category_records) is not int
+                or category_records < 0):
+            raise ValueError('Person category-addition provenance is invalid')
+        if len(category_pairs) != len({tuple(pair) for pair in category_pairs}):
+            raise ValueError('Person category-addition provenance contains duplicates')
+        if category_pairs and categorized_person_rows is None:
+            candidate_path = directory / 'person-dictionary-candidates.tsv.gz'
+            if not candidate_path.is_file():
+                raise ValueError('Person category additions require the categorized person dictionary')
+            with gzip.open(candidate_path, 'rt', encoding='utf-8') as stream:
+                categorized_person_rows = {tuple(line.rstrip('\n').split('\t')) for line in stream}
+        for category_id, reading, surface in category_pairs:
+            entry = reviewed.get((reading, surface))
+            entry_category = 'sports' if entry and 'sport' in entry else entry.get('category_id') if entry else None
+            if entry is None or entry_category != category_id:
+                raise ValueError('Person category-addition provenance differs from evidence')
+        category_by_pair = {(reading, surface): category_id
+                            for category_id, reading, surface in category_pairs}
+        category_tags = {
+            pair: ','.join(sorted(entry.get('sports', [entry['sport']]))) if 'sport' in entry else ''
+            for pair, entry in reviewed.items() if pair in category_by_pair
+        }
+        category_pair_keys = set(category_by_pair)
+        expected_category_rows = {
+            (category_by_pair[(row[1], row[5])], *row[1:], category_tags[(row[1], row[5])]) for row in actual
+            if row[0] == 'person' and (row[1], row[5]) in category_by_pair
+        }
+        expected_category_pairs = {(row[1], row[5]) for row in expected_category_rows}
+        if (category_records != len(expected_category_rows)
+                or category_pair_keys != expected_category_pairs
+                or (category_pairs and not expected_category_rows <= categorized_person_rows)):
+            raise ValueError('Person category additions differ from dictionary candidates')
     counts = collections.Counter(row[0] for row in actual)
     if ({c: counts[c] for c in categories} != manifest['categoryRows'] or len(actual) != manifest['dictionaryRows']
             or dict(origins) != manifest['admittedPairsByOrigin'] or sum(origins.values()) != manifest['uniqueAdmittedPairs']

@@ -71,6 +71,12 @@ def subsequent_reviews(root, current, baseline):
         provenance['personAdditions'] = baseline['provenance']['personAdditions']
     else:
         provenance.pop('personAdditions', None)
+    if 'personDictionaryExclusions' not in baseline['provenance']:
+        # Person dictionary exclusions were introduced after this Luna snapshot.
+        # Validate the retained source-backed exclusion hashes, then treat their
+        # metadata as a supported person-policy overlay while comparing the snapshot.
+        d.person_dictionary_exclusions(current)
+        provenance.pop('personDictionaryExclusions', None)
     inputs = dict(current['inputs'])
     term_data = d.term_classification_data(root) if 'termClassification' in provenance else None
     if 'termClassification' in provenance:
@@ -470,11 +476,29 @@ def verify_ledger(root, required=False):
         root, base, force='termClassification' in manifest['provenance'], reviewed_pairs=entries)
     base = d.apply_event_classifications(
         root, base, force='eventClassification' in manifest['provenance'], reviewed_pairs=entries)
+    person_exclusions = d.person_dictionary_exclusions(manifest)
+    for pair in list(base):
+        if d.key(*pair) in person_exclusions:
+            row = base[pair]
+            remaining = set(filter(None, row[2].split(','))) - {'person'}
+            if remaining:
+                row[2] = ','.join(sorted(remaining))
+            else:
+                del base[pair]
     exclusion_delta = sum(r[4]=='excluded' for r in base.values()) - before_excluded
     if (manifest['excludedCandidatePairs']!=m['baselineManifest']['excludedCandidatePairs']+sum(r['effective_action']=='reject' for r in ledger)+exclusion_delta
             or manifest['excludedClassifiedPairs']!=sum(r[4]=='excluded' for r in base.values())):
         raise ValueError('Exclusion counts differ from ledger')
-    if base!=decisions(directory/FILES[0]): raise ValueError('Decisions differ from baseline plus ledger')
+    saved_decisions = decisions(directory/FILES[0])
+    if base != saved_decisions:
+        missing = sorted(set(base) - set(saved_decisions))
+        extra = sorted(set(saved_decisions) - set(base))
+        changed = sorted(pair for pair in set(base) & set(saved_decisions)
+                         if base[pair] != saved_decisions[pair])
+        raise ValueError(
+            'Decisions differ from baseline plus ledger: '
+            f'missing={len(missing)} {missing[:5]}, extra={len(extra)} {extra[:5]}, '
+            f'changed={len(changed)} {[(pair, base[pair], saved_decisions[pair]) for pair in changed[:5]]}')
     if (record['targetSha256']!=m['files']['targets.jsonl.gz'] or record['completedPairs']!=len(ledger)
             or record.get('policy_version')!=POLICY or record.get('model')!=MODEL or record.get('reasoningEffort')!=EFFORT
             or record.get('effectiveActions')!=dict(collections.Counter(r['effective_action'] for r in ledger))): raise ValueError('Ledger provenance mismatch')

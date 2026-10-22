@@ -2,13 +2,13 @@
 
 [スポーツ関係者の全件一覧](../index.md) · [最終配布カテゴリ一覧](../../../index.md)
 
-競技タグ別に **59競技**、延べ **4,683レコード**、**4,681組**を掲載しています。複数競技に分類された語は各競技に重複して掲載するため、競技別合計には重複があります。競技タグが未設定または特定できない語は「競技未特定」に含めています。
+競技タグ別に **59競技**、延べ **6,643レコード**、**6,638組**を掲載しています。複数競技に分類された語は各競技に重複して掲載するため、競技別合計には重複があります。競技タグが未設定または特定できない語は「競技未特定」に含めています。
 
 | 競技 | 読み・表記の組 | レコード数 | 全件一覧 |
 |---|---:|---:|---|
 | [野球](baseball/index.md) | 858 | 858 | [全件](baseball/index.md) |
 | [ソフトボール](softball/index.md) | 1 | 1 | [全件](softball/index.md) |
-| [サッカー](soccer/index.md) | 740 | 740 | [全件](soccer/index.md) |
+| [サッカー](soccer/index.md) | 741 | 741 | [全件](soccer/index.md) |
 | [フットサル](futsal/index.md) | 3 | 3 | [全件](futsal/index.md) |
 | [相撲](sumo/index.md) | 279 | 279 | [全件](sumo/index.md) |
 | [ラグビー](rugby/index.md) | 303 | 303 | [全件](rugby/index.md) |
@@ -37,9 +37,9 @@
 | [バドミントン](badminton/index.md) | 28 | 28 | [全件](badminton/index.md) |
 | [卓球](table_tennis/index.md) | 20 | 20 | [全件](table_tennis/index.md) |
 | [アメリカンフットボール](american_football/index.md) | 9 | 9 | [全件](american_football/index.md) |
-| [ボクシング](boxing/index.md) | 459 | 460 | [全件](boxing/index.md) |
-| [総合格闘技](mma/index.md) | 105 | 105 | [全件](mma/index.md) |
-| [キックボクシング](kickboxing/index.md) | 114 | 115 | [全件](kickboxing/index.md) |
+| [ボクシング](boxing/index.md) | 1,312 | 1,313 | [全件](boxing/index.md) |
+| [総合格闘技](mma/index.md) | 670 | 673 | [全件](mma/index.md) |
+| [キックボクシング](kickboxing/index.md) | 655 | 656 | [全件](kickboxing/index.md) |
 | [空手](karate/index.md) | 31 | 31 | [全件](karate/index.md) |
 | [サンボ](sambo/index.md) | 2 | 2 | [全件](sambo/index.md) |
 | [合気道](aikido/index.md) | 1 | 1 | [全件](aikido/index.md) |
@@ -64,4 +64,4 @@
 | [スポーツクライミング](sport_climbing/index.md) | 6 | 6 | [全件](sport_climbing/index.md) |
 | [サーフィン](surfing/index.md) | 7 | 7 | [全件](surfing/index.md) |
 | [ブレイキン](breaking/index.md) | 4 | 4 | [全件](breaking/index.md) |
-| [競技未特定](sport_unspecified/index.md) | 175 | 175 | [全件](sport_unspecified/index.md) |
+| [競技未特定](sport_unspecified/index.md) | 172 | 172 | [全件](sport_unspecified/index.md) |

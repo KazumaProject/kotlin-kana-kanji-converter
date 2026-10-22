@@ -18,7 +18,7 @@ class PersonNameOriginClassificationTest(unittest.TestCase):
         self.assertEqual(len(gemini.load_taxonomy(ROOT)['categories']), 38)
         self.assertEqual(len(taxonomy['categories']), 38)
         self.assertEqual(sum(row.get('standard_enabled') is True
-                             for row in taxonomy['categories']), 28)
+                             for row in taxonomy['categories']), 29)
         for source_id, targets in origins.SOURCE_CATEGORIES.items():
             self.assertTrue(all(by_id[target]['standard_enabled'] for target in targets))
             self.assertEqual(origins.target_for_code(source_id, 0), source_id)
@@ -90,6 +90,51 @@ class PersonNameOriginClassificationTest(unittest.TestCase):
             mapping, _ = origins.load_fixed_mapping(root)
             self.assertEqual(mapping['a' * 64],
                              ('surname_origin_unconfirmed', 'surname_origin_japanese'))
+
+    def test_merged_inputs_are_checked_against_the_name_origin_projection(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            taxonomy_path = root / origins.TAXONOMY_PATH
+            taxonomy_path.parent.mkdir(parents=True)
+            taxonomy_path.write_bytes((ROOT / origins.TAXONOMY_PATH).read_bytes())
+            distribution_source = root / origins.DISTRIBUTION_SOURCE_PATH
+            with gzip.open(distribution_source, 'wt', encoding='utf-8') as stream:
+                stream.write('person\tかな\t1\t1\t8000\t表記\n')
+            mapping_path = root / origins.MAPPING_PATH
+            mapping_path.parent.mkdir(parents=True, exist_ok=True)
+            with gzip.open(mapping_path, 'wt', encoding='utf-8') as stream:
+                stream.write('surname_origin_unconfirmed\t' + 'a' * 64 + '\tsurname_origin_japanese\n')
+            source_projection = origins.mapped_distribution_source_projection(root, {'a' * 64})
+            taxonomy = json.loads(taxonomy_path.read_text(encoding='utf-8'))
+            taxonomy_projection_hash = origins.hashlib.sha256(
+                origins.json_bytes(origins.name_origin_taxonomy_projection(taxonomy))).hexdigest()
+            manifest_path = root / origins.MANIFEST_PATH
+            manifest_path.write_text(json.dumps({
+                'schema_version': 1,
+                'completed': True,
+                'model': gemini.MODEL,
+                'project_id': gemini.PROJECT,
+                'prompt_version': origins.PROMPT_VERSION,
+                'classification_status': 'Gemini-only provisional; not independently reviewed',
+                'initial_run_free_tier_only': True,
+                'taxonomy_sha256': 'b' * 64,
+                'distribution_source_sha256': 'c' * 64,
+                'mapping_path': origins.MAPPING_PATH,
+                'mapping_sha256': gemini.sha(mapping_path),
+                'unique_pairs': 1,
+                'target_pair_counts': {'surname_origin_japanese': 1},
+                'merge_compatibility': {
+                    'name_origin_taxonomy_projection_sha256': taxonomy_projection_hash,
+                    'mapped_distribution_source': source_projection,
+                },
+            }), encoding='utf-8')
+            mapping, _ = origins.load_fixed_mapping(root)
+            self.assertIn('a' * 64, mapping)
+
+            with gzip.open(distribution_source, 'wt', encoding='utf-8') as stream:
+                stream.write('person\tかな\t1\t1\t8000\t別表記\n')
+            with self.assertRaisesRegex(ValueError, 'mapped name-origin source rows'):
+                origins.load_fixed_mapping(root)
 
 
 if __name__ == '__main__':
