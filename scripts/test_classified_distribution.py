@@ -253,6 +253,37 @@ class DistributionTest(unittest.TestCase):
         self.assertEqual(manifest['provenance']['personAdditions'][0]['reviewedPairs'], 1)
         self.assertEqual(manifest['categoryRows']['person'], 3)
 
+    def test_explicit_person_category_addition_is_recorded_and_verified(self):
+        self.freeze()
+        taxonomy_path = self.root / 'src/main/classification/person-taxonomy.json'
+        taxonomy_path.write_text(json.dumps({
+            'categories': [{'id': 'comedian', 'standard_enabled': True}],
+            'sport_subcategories': {},
+        }), encoding='utf-8')
+        entries = [
+            dict(reading='おわらい', surface='お笑い', category_id='comedian',
+                 left_id=1, right_id=1, cost=8400, source_url='https://example.org/comedy/test',
+                 source_surface='お笑い', source_reading='オワライ', checked_on='2026-10-14'),
+            dict(reading='あ', surface='甲', category_id='comedian',
+                 left_id=1, right_id=1, cost=8400, source_url='https://example.org/comedy/test',
+                 source_surface='甲', source_reading='ア', checked_on='2026-10-14'),
+        ]
+        path = self.root / 'src/main/classification/person-comedy.jsonl'
+        path.write_text(''.join(json.dumps(entry, ensure_ascii=False) + '\n' for entry in entries),
+                        encoding='utf-8')
+
+        self.add_people(path)
+        self.verify()
+        with gzip.open(self.root / 'src/main/classification/distribution-candidates.tsv.gz',
+                       'rt', encoding='utf-8') as stream:
+            rows = {tuple(line.rstrip('\n').split('\t')) for line in stream}
+        self.assertIn(('person', 'おわらい', '1', '1', '8400', 'お笑い'), rows)
+        manifest = json.loads((self.root / 'src/main/classification/distribution-manifest.json').read_text())
+        batch = manifest['provenance']['personAdditions'][0]
+        self.assertEqual(batch['reviewedPairs'], 2)
+        self.assertEqual(batch['addedPairs'], [['おわらい', 'お笑い']])
+        self.assertEqual(batch['addedRecords'], 1)
+
     def test_already_admitted_person_is_not_changed(self):
         self.freeze()
         _, entry = self.person_file()

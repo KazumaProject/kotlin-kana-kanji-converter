@@ -87,31 +87,39 @@ def restricted_proposal_keys(paths, category_by_code):
     return keys
 
 
-def apply_person_additions(final, additions_dir, enabled):
+def apply_person_additions(root, final, enabled):
+    additions = {}
+    additions_dir = root / "src/main/classification/person-additions"
     for path in sorted(additions_dir.glob("*.jsonl")):
-        for row in reviews.read_jsonl(path):
-            key = candidate_key(row["reading"], row["surface"])
-            if "category_id" in row:
-                category = row["category_id"]
-                role_source = urlsplit(row.get("classification_source_url", ""))
-                if (category != "thought" or category not in enabled or "sport" in row
-                        or role_source.scheme != "https" or not role_source.hostname
-                        or role_source.username or role_source.password
-                        or not isinstance(row.get("classification_source_section"), str)
-                        or not row["classification_source_section"]):
-                    raise ValueError("A category-specific person addition has invalid source evidence")
-                prior = final.get(key)
-                if prior and prior[2] not in ("thought", "personal_name_origin_unconfirmed"):
-                    raise ValueError("A category-specific person addition conflicts with a reviewed category")
-                final[key] = (row["reading"], row["surface"], category, set())
-            else:
-                sport = row.get("sport")
+        for (reading, surface), row in distribution.person_entries(root, path).items():
+            key = candidate_key(reading, surface)
+            if "sport" in row:
+                sport = row["sport"]
                 if sport not in reviews.SPORT_LABELS:
                     raise ValueError("A reviewed person addition has an unknown sport label")
-                prior = final.get(key)
-                tags = set(prior[3]) if prior else set()
-                tags.add(sport)
-                final[key] = (row["reading"], row["surface"], "sports", tags)
+                category = "sports"
+                tags = {sport}
+            else:
+                category = row["category_id"]
+                if category not in enabled:
+                    raise ValueError("A reviewed person addition uses a nonstandard category")
+                tags = set()
+
+            prior = additions.get(key)
+            if prior is not None:
+                if prior[2] != category:
+                    raise ValueError("Reviewed person additions assign conflicting categories")
+                tags.update(prior[3])
+            additions[key] = (reading, surface, category, tags)
+
+    for key, (reading, surface, category, tags) in additions.items():
+        prior = final.get(key)
+        if category == "sports" and prior is not None:
+            tags.update(prior[3])
+        if category == "thought" and prior and prior[2] not in (
+                "thought", "personal_name_origin_unconfirmed"):
+            raise ValueError("A category-specific person addition conflicts with a reviewed category")
+        final[key] = (reading, surface, category, tags)
 
 
 def export(args):
@@ -221,8 +229,7 @@ def export(args):
         for key in restricted_gemini_keys - source_approved_keys:
             final.pop(key, None)
 
-    additions_dir = args.root / "src/main/classification/person-additions"
-    apply_person_additions(final, additions_dir, enabled)
+    apply_person_additions(args.root, final, enabled)
 
     records_by_pair = defaultdict(list)
     source_keys = set()

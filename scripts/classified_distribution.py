@@ -883,16 +883,17 @@ def person_entries(root, path):
         if 'sport' in entry and (not isinstance(entry['sport'], str) or not entry['sport']):
             raise ValueError(f'{path}:{number}: invalid sport')
         if 'category_id' in entry:
-            if (entry['category_id'] != 'thought'
-                    or entry['category_id'] not in enabled_categories
-                    or 'sport' in entry
-                    or not isinstance(entry.get('classification_source_section'), str)
-                    or not entry['classification_source_section']):
+            if (entry['category_id'] not in enabled_categories
+                    or entry['category_id'] == 'sports' or 'sport' in entry):
                 raise ValueError(f'{path}:{number}: invalid category-specific person evidence')
-            category_source = urlsplit(entry.get('classification_source_url', ''))
-            if (category_source.scheme != 'https' or not category_source.hostname
-                    or category_source.username or category_source.password):
-                raise ValueError(f'{path}:{number}: invalid classification_source_url')
+            if entry['category_id'] == 'thought':
+                if (not isinstance(entry.get('classification_source_section'), str)
+                        or not entry['classification_source_section']):
+                    raise ValueError(f'{path}:{number}: invalid category-specific person evidence')
+                category_source = urlsplit(entry.get('classification_source_url', ''))
+                if (category_source.scheme != 'https' or not category_source.hostname
+                        or category_source.username or category_source.password):
+                    raise ValueError(f'{path}:{number}: invalid classification_source_url')
         if ('source_section' in entry and
                 (not isinstance(entry['source_section'], str) or not entry['source_section'])):
             raise ValueError(f'{path}:{number}: invalid source_section')
@@ -1036,6 +1037,9 @@ def add_person_names(root, path):
             'src/main/classification/categories.json']))
         if taxonomy_file.is_file() and taxonomy_path not in staged_paths:
             staged_paths.append(taxonomy_path)
+        person_dictionary_relative = 'src/main/classification/person-dictionary-candidates.tsv.gz'
+        if person_dictionary_path.is_file() and person_dictionary_relative not in staged_paths:
+            staged_paths.append(person_dictionary_relative)
         for relative_path in staged_paths:
             target = staging / relative_path
             target.parent.mkdir(parents=True, exist_ok=True)

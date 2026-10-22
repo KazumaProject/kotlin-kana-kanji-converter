@@ -176,6 +176,83 @@ def generate_sport_subcategories(directory, rows, sport_names):
     return summary
 
 
+def generate_comedian_additions(root, directory):
+    """Publish dated, readable lists of comedian pairs from their evidence files."""
+    additions_dir = root / 'src/main/classification/person-additions'
+    by_date = {}
+    for path in sorted(additions_dir.glob('comedian-*.jsonl')):
+        with path.open(encoding='utf-8') as stream:
+            for number, line in enumerate(stream, 1):
+                entry = json.loads(line)
+                if entry.get('category_id') != 'comedian':
+                    continue
+                checked_on = entry.get('checked_on')
+                reading, surface = entry.get('reading'), entry.get('surface')
+                if not checked_on or not reading or not surface:
+                    raise ValueError(f'{path}:{number}: comedian addition needs a date, reading, and surface')
+                report = by_date.setdefault(checked_on, {'pairs': {}, 'sources': set()})
+                report['pairs'].setdefault((reading, surface), entry)
+                report['sources'].add(path.name)
+
+    summaries = []
+    for checked_on, report in sorted(by_date.items()):
+        pairs = sorted(report['pairs'])
+        surfaces = {surface for _, surface in pairs}
+        report_dir = directory / f'additions-{checked_on}'
+        report_dir.mkdir(parents=True)
+        pages, page, page_pairs, byte_count = [], [], [], 0
+
+        def flush():
+            nonlocal page, page_pairs, byte_count
+            if not page:
+                return
+            filename = f'page-{len(pages)+1:04d}.md'
+            (report_dir / filename).write_text(''.join(page), encoding='utf-8')
+            pages.append((filename, page_pairs[0], page_pairs[-1]))
+            page, page_pairs, byte_count = [], [], 0
+
+        for reading, surface in pairs:
+            row = f'| {code(reading)} | {code(surface)} |\n'
+            size = len(row.encode('utf-8'))
+            if page and (len(page) >= MAX_ROWS or byte_count + size > MAX_BYTES):
+                flush()
+            page.append(row)
+            page_pairs.append((reading, surface))
+            byte_count += size
+        flush()
+
+        page_ranges = []
+        for index, (filename, first_pair, last_pair) in enumerate(pages):
+            navigation = ['[追加名一覧](index.md)', '[芸人の全収録一覧](../index.md)']
+            if index:
+                navigation.append(f'[前のページ]({pages[index-1][0]})')
+            if index + 1 < len(pages):
+                navigation.append(f'[次のページ]({pages[index+1][0]})')
+            nav = ' · '.join(navigation)
+            path = report_dir / filename
+            header = (f'# {checked_on}に追加した芸人名 — {index+1}/{len(pages)}\n\n{nav}\n\n'
+                      '| 読み | 表記 |\n|---|---|\n')
+            path.write_text(header + path.read_text(encoding='utf-8') + '\n' + nav + '\n', encoding='utf-8')
+            page_ranges.append((filename, first_pair[0], last_pair[0]))
+
+        source_links = '\n'.join(
+            f'- [{name}](../../../../../src/main/classification/person-additions/{name})'
+            for name in sorted(report['sources']))
+        page_links = '\n'.join(
+            f'- [{index+1}ページ]({filename}): {code(first)} ～ {code(last)}'
+            for index, (filename, first, last) in enumerate(page_ranges))
+        (report_dir / 'index.md').write_text(
+            f'# {checked_on}に追加した芸人名\n\n'
+            '[芸人の全収録一覧](../index.md) · [最終配布カテゴリ一覧](../../../index.md)\n\n'
+            f'この日に確認した追加名は、読み・表記の組 **{len(pairs):,}組**、'
+            f'異なる表記 **{len(surfaces):,}件**です。読み順で全件を掲載します。\n\n'
+            '根拠の公式URLとページSHA-256を含む調査名簿:\n\n'
+            f'{source_links}\n\n{page_links}\n',
+            encoding='utf-8')
+        summaries.append(dict(date=checked_on, pairs=len(pairs), surfaces=len(surfaces), pages=len(pages)))
+    return summaries
+
+
 def generate_person_taxonomy(root, output, final_pairs):
     source = root / 'src/main/classification'
     taxonomy = json.loads((source / 'person-taxonomy.json').read_text(encoding='utf-8'))
@@ -247,14 +324,20 @@ def generate_person_taxonomy(root, output, final_pairs):
         if category_id == 'sports':
             sport_subcategories = generate_sport_subcategories(
                 directory, rows, taxonomy['sport_subcategories'])
+        addition_reports = generate_comedian_additions(root, directory) if category_id == 'comedian' else []
         links = '\n'.join(f'- [{index+1}ページ]({filename})' for index, filename in enumerate(pages))
         if not pages:
             links = '収録0件。'
+        addition_links = '\n'.join(
+            f'- [{item["date"]}追加分: 表記{item["surfaces"]:,}件・読み表記{item["pairs"]:,}組]'
+            f'(additions-{item["date"]}/index.md)'
+            for item in addition_reports)
         (directory / 'index.md').write_text(
             f'# {names[category_id]}\n\n[最終配布カテゴリ一覧](../../index.md)\n\n'
             f'親カテゴリ: `person` · レコード数: **{len(rows):,}** · 読み・表記の組: **{len(pairs):,}**。\n\n'
             + ('[競技別一覧](by-sport/index.md)\n\n' if sport_subcategories else '')
-            + f'{links}\n',
+            + f'{links}\n'
+            + (f'\n## 追加名一覧\n\n{addition_links}\n' if addition_links else ''),
             encoding='utf-8')
         summary.append(dict(id=category_id, name=names[category_id], records=len(rows), pairs=len(pairs), pages=len(pages)))
 
