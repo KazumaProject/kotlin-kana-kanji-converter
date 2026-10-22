@@ -626,22 +626,22 @@
     {
       "id": "surname_origin_unconfirmed",
       "name": "姓・名字（由来未確認）",
-      "records": 49617,
-      "pairs": 49328,
+      "records": 49614,
+      "pairs": 49326,
       "pages": 33
     },
     {
       "id": "given_name_origin_unconfirmed",
       "name": "名・下の名前（由来未確認）",
-      "records": 7163,
-      "pairs": 7085,
+      "records": 7162,
+      "pairs": 7084,
       "pages": 5
     },
     {
       "id": "personal_name_origin_unconfirmed",
       "name": "人名・姓名（由来未確認）",
-      "records": 170660,
-      "pairs": 169291,
+      "records": 170636,
+      "pairs": 169267,
       "pages": 113
     },
     {
@@ -689,8 +689,8 @@
     {
       "id": "online_creator",
       "name": "配信者・動画投稿者",
-      "records": 71,
-      "pairs": 70,
+      "records": 99,
+      "pairs": 97,
       "pages": 1
     },
     {
@@ -780,7 +780,7 @@
   ],
   "excluded": {
     "pairs": 322861,
-    "pages": 593
+    "pages": 601
   },
   "specialistInputSha256": "de25b742784973e59532d3ec86b670ab5dd25ed6c0558aa72d9eb2e6afb628dc"
 }
