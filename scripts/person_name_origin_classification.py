@@ -86,10 +86,10 @@ def taxonomy_maps(root):
                for category_id in expected_ids):
             raise ValueError(f'Name-origin categories must be standard-enabled: {source_id}')
     policy = taxonomy.get('policy', {}).get('name_origin_classification', {})
-    if (policy.get('method') != 'gemini_only_provisional'
-            or policy.get('independent_review') != 'not_performed'
+    if (policy.get('method') != 'gemini_provisional_with_targeted_source_review'
+            or policy.get('independent_review') != 'targeted_partial'
             or policy.get('unknown_result') != 'retain_source_category'):
-        raise ValueError('Taxonomy must state the provisional name-origin classification policy')
+        raise ValueError('Taxonomy must record provisional labels and partial source review')
     return taxonomy, by_id
 
 
@@ -470,8 +470,8 @@ def write_mapping(root, workspace, mapping_path, manifest_path):
         'gemini_submitted_pairs': manifest['submitted_pairs'],
         'withheld_restricted_pairs': manifest['withheld_restricted_pairs'],
         'target_pair_counts': dict(sorted(target_counts.items())),
-        'free_tier_only': True,
-        'free_tier_proof_sha256': proof_hash,
+        'initial_run_free_tier_only': True,
+        'initial_run_free_tier_proof_sha256': proof_hash,
         'completed': True,
         'generated_at': datetime.datetime.now(datetime.timezone.utc).isoformat(),
     }
@@ -496,9 +496,11 @@ def load_fixed_mapping(root, mapping_path=None, manifest_path=None):
             or manifest.get('model') != gemini.MODEL
             or manifest.get('project_id') != gemini.PROJECT
             or manifest.get('prompt_version') != PROMPT_VERSION
-            or manifest.get('classification_status') !=
-            'Gemini-only provisional; not independently reviewed'
-            or manifest.get('free_tier_only') is not True):
+            or manifest.get('classification_status') not in {
+                'Gemini-only provisional; not independently reviewed',
+                'Gemini provisional; limited targeted source review',
+            }
+            or manifest.get('initial_run_free_tier_only') is not True):
         raise ValueError('Name-origin classification manifest is incomplete or unsupported')
     taxonomy, _ = taxonomy_maps(root)
     if manifest.get('taxonomy_sha256') != gemini.sha(root / TAXONOMY_PATH):
@@ -512,6 +514,8 @@ def load_fixed_mapping(root, mapping_path=None, manifest_path=None):
         raise ValueError('Name-origin mapping hash does not match its manifest')
     mapping = {}
     cross_type_keys = []
+    excluded_non_person_keys = []
+    special_targets = {'excluded_non_person'}
     with gzip.open(mapping_path, 'rt', encoding='utf-8', newline='') as stream:
         for number, line in enumerate(stream, 1):
             fields = line.rstrip('\n').split('\t')
@@ -525,33 +529,61 @@ def load_fixed_mapping(root, mapping_path=None, manifest_path=None):
             # classification to a full personal name (or vice versa). Keep the
             # original source category for provenance; the manifest below
             # restricts cross-type targets to the reviewed candidate-key set.
-            valid_targets = {source_id, *ALL_ORIGIN_CATEGORY_IDS}
+            valid_targets = {
+                source_id, *ALL_ORIGIN_CATEGORY_IDS, *SOURCE_CATEGORIES, *special_targets
+            }
             if target_id not in valid_targets:
                 raise ValueError(f'{mapping_path}:{number}: target is invalid for {source_id}')
-            source_type = source_id.split('_origin_', 1)[0]
-            target_type = target_id.split('_origin_', 1)[0]
-            if source_type != target_type:
+            if target_id in special_targets:
+                excluded_non_person_keys.append(key)
+            elif source_id.split('_origin_', 1)[0] != target_id.split('_origin_', 1)[0]:
                 cross_type_keys.append(key)
             if key in mapping:
                 raise ValueError(f'{mapping_path}:{number}: duplicate candidate key')
             mapping[key] = (source_id, target_id)
+    excluded_record = manifest.get('non_person_exclusions')
+    if excluded_non_person_keys:
+        expected_hash = hashlib.sha256(
+            '\n'.join(sorted(excluded_non_person_keys)).encode('ascii')).hexdigest()
+        if (not isinstance(excluded_record, dict)
+                or type(excluded_record.get('pairs')) is not int
+                or excluded_record['pairs'] != len(excluded_non_person_keys)
+                or excluded_record.get('candidate_keys_sha256') != expected_hash):
+            raise ValueError('Non-person exclusions do not match the fixed exclusion record')
+    elif excluded_record is not None and excluded_record.get('pairs') != 0:
+        raise ValueError('The fixed manifest declares non-person exclusions absent from the mapping')
     if cross_type_keys:
-        targeted = manifest.get('targeted_reclassification')
-        if not isinstance(targeted, dict):
-            raise ValueError('Cross-type name-origin mappings require a targeted review manifest')
-        target_id = targeted.get('manual_type_review_target')
         expected_hash = hashlib.sha256('\n'.join(sorted(cross_type_keys)).encode('ascii')).hexdigest()
-        if (target_id not in ALL_ORIGIN_CATEGORY_IDS or
-                type(targeted.get('cross_type_pairs')) is not int or
-                targeted['cross_type_pairs'] != len(cross_type_keys) or
-                targeted.get('cross_type_candidate_keys_sha256') != expected_hash or
-                any(mapping[key][1] != target_id for key in cross_type_keys)):
-            raise ValueError('Cross-type mappings do not match the targeted manual review record')
+        cross_type_counts = {}
+        for key in cross_type_keys:
+            target_id = mapping[key][1]
+            cross_type_counts[target_id] = cross_type_counts.get(target_id, 0) + 1
+        cross_type_record = manifest.get('cross_type_reclassification')
+        if isinstance(cross_type_record, dict):
+            if (type(cross_type_record.get('pairs')) is not int
+                    or cross_type_record['pairs'] != len(cross_type_keys)
+                    or cross_type_record.get('candidate_keys_sha256') != expected_hash
+                    or cross_type_record.get('target_pair_counts') != dict(sorted(cross_type_counts.items()))):
+                raise ValueError('Cross-type mappings do not match the fixed reclassification record')
+        else:
+            targeted = manifest.get('targeted_reclassification')
+            if not isinstance(targeted, dict):
+                raise ValueError('Cross-type name-origin mappings require a targeted review manifest')
+            target_id = targeted.get('manual_type_review_target')
+            if (target_id not in ALL_ORIGIN_CATEGORY_IDS or
+                    type(targeted.get('cross_type_pairs')) is not int or
+                    targeted['cross_type_pairs'] != len(cross_type_keys) or
+                    targeted.get('cross_type_candidate_keys_sha256') != expected_hash or
+                    any(mapping[key][1] != target_id for key in cross_type_keys)):
+                raise ValueError('Cross-type mappings do not match the targeted manual review record')
     if len(mapping) != manifest.get('unique_pairs'):
         raise ValueError('Name-origin mapping count differs from the fixed manifest')
     target_counts = {}
     for _source_id, target_id in mapping.values():
         target_counts[target_id] = target_counts.get(target_id, 0) + 1
+    excluded_count = target_counts.pop('excluded_non_person', 0)
+    if excluded_count != manifest.get('non_person_exclusions', {}).get('pairs', 0):
+        raise ValueError('Name-origin non-person exclusion count differs from its manifest')
     if target_counts != manifest.get('target_pair_counts'):
         raise ValueError('Name-origin target counts differ from the fixed manifest')
     return mapping, manifest

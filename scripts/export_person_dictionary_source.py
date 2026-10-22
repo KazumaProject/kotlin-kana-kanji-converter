@@ -122,7 +122,10 @@ def apply_name_origin_mapping(final, mapping, source_keys=None):
         mapped_source, target_category = applicable_mapping[key]
         if mapped_source != source_category or candidate_key(reading, surface) != key:
             raise ValueError("Name-origin mapping source category or candidate key is inconsistent")
-        final[key] = (reading, surface, target_category, tags)
+        if target_category == "excluded_non_person":
+            final.pop(key)
+        else:
+            final[key] = (reading, surface, target_category, tags)
     return len(origin_source)
 
 

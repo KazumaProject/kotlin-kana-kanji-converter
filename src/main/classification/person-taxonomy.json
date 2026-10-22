@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "taxonomy_version": "2026-10-22.2",
+  "taxonomy_version": "2026-10-22.3",
   "policy": {
-    "version": "2026-10-22.2",
+    "version": "2026-10-22.3",
     "name_origin_definition": "日本由来／海外由来は人の国籍や文字種ではなく、姓・名・姓名の命名慣習上の由来を指す。読み・表記の文字種や印象だけで推測せず、由来に確信がない場合は対応する由来未確認カテゴリにする。複数の命名慣習が混在し判別できない場合も由来未確認にする。",
     "adult_scope": [
       "video",
@@ -49,8 +49,8 @@
       "thought"
     ],
     "name_origin_classification": {
-      "method": "gemini_only_provisional",
-      "independent_review": "not_performed",
+      "method": "gemini_provisional_with_targeted_source_review",
+      "independent_review": "targeted_partial",
       "unknown_result": "retain_source_category",
       "japanese_categories": [
         "surname_origin_japanese",
@@ -66,7 +66,8 @@
         "surname_origin_unconfirmed",
         "given_name_origin_unconfirmed",
         "personal_name_origin_unconfirmed"
-      ]
+      ],
+      "source_review_scope": "一部の再レビュー対象を出典で照合。全件の独立検証はしていない。"
     }
   },
   "categories": [
@@ -92,7 +93,7 @@
       "label": "人名・姓名（由来未確認）",
       "standard_enabled": true,
       "definition": "人名・姓名と確認できるが、日本由来か海外由来かを確認できない項目。",
-      "boundary": "特定個人の国籍、姓名の文字種、読みだけから由来を決めない。"
+      "boundary": "姓名全体に加え、単独名・芸名・筆名・法名・称号など姓と名に分解できない人名も含む。姓だけ・名だけの候補は含めない。由来を判断できない場合は personal_name_origin_unconfirmed に残す。"
     },
     {
       "number": 4,
@@ -331,7 +332,7 @@
       "id": "surname_origin_japanese",
       "label": "姓・名字（日本由来）",
       "standard_enabled": true,
-      "definition": "命名慣習上、日本に由来するとGeminiが暫定分類した姓・名字。個人の国籍や文字種を示す分類ではない。独立した出典確認は行っていない。",
+      "definition": "命名慣習上、日本に由来すると暫定分類した姓・名字。Geminiの分類を基礎とし、一部候補を出典で再確認したが、全件の独立検証はしていない。個人の国籍や文字種を示す分類ではない。",
       "boundary": "姓・名字の候補に限る。命名慣習を判断できない、または複数の慣習が混在する場合は surname_origin_unconfirmed に残す。"
     },
     {
@@ -339,7 +340,7 @@
       "id": "surname_origin_foreign",
       "label": "姓・名字（海外由来）",
       "standard_enabled": true,
-      "definition": "命名慣習上、日本以外に由来するとGeminiが暫定分類した姓・名字。個人の国籍や文字種を示す分類ではない。独立した出典確認は行っていない。",
+      "definition": "命名慣習上、日本以外に由来すると暫定分類した姓・名字。Geminiの分類を基礎とし、一部候補を出典で再確認したが、全件の独立検証はしていない。個人の国籍や文字種を示す分類ではない。",
       "boundary": "姓・名字の候補に限る。命名慣習を判断できない、または複数の慣習が混在する場合は surname_origin_unconfirmed に残す。"
     },
     {
@@ -347,7 +348,7 @@
       "id": "given_name_origin_japanese",
       "label": "名・下の名前（日本由来）",
       "standard_enabled": true,
-      "definition": "命名慣習上、日本に由来するとGeminiが暫定分類した名・下の名前。個人の国籍や文字種を示す分類ではない。独立した出典確認は行っていない。",
+      "definition": "命名慣習上、日本に由来すると暫定分類した名・下の名前。Geminiの分類を基礎とし、一部候補を出典で再確認したが、全件の独立検証はしていない。個人の国籍や文字種を示す分類ではない。",
       "boundary": "名・下の名前の候補に限る。命名慣習を判断できない、または複数の慣習が混在する場合は given_name_origin_unconfirmed に残す。"
     },
     {
@@ -355,7 +356,7 @@
       "id": "given_name_origin_foreign",
       "label": "名・下の名前（海外由来）",
       "standard_enabled": true,
-      "definition": "命名慣習上、日本以外に由来するとGeminiが暫定分類した名・下の名前。個人の国籍や文字種を示す分類ではない。独立した出典確認は行っていない。",
+      "definition": "命名慣習上、日本以外に由来すると暫定分類した名・下の名前。Geminiの分類を基礎とし、一部候補を出典で再確認したが、全件の独立検証はしていない。個人の国籍や文字種を示す分類ではない。",
       "boundary": "名・下の名前の候補に限る。命名慣習を判断できない、または複数の慣習が混在する場合は given_name_origin_unconfirmed に残す。"
     },
     {
@@ -363,16 +364,16 @@
       "id": "personal_name_origin_japanese",
       "label": "人名・姓名（日本由来）",
       "standard_enabled": true,
-      "definition": "命名慣習上、日本に由来するとGeminiが暫定分類した人名・姓名全体。個人の国籍や文字種を示す分類ではない。独立した出典確認は行っていない。",
-      "boundary": "人名・姓名全体の候補に限る。命名慣習を判断できない、または複数の慣習が混在する場合は personal_name_origin_unconfirmed に残す。"
+      "definition": "命名慣習上、日本に由来すると暫定分類した人名・姓名。Geminiの分類を基礎とし、一部候補を出典で再確認したが、全件の独立検証はしていない。個人の国籍や文字種を示す分類ではない。",
+      "boundary": "姓名全体に加え、単独名・芸名・筆名・法名・称号など姓と名に分解できない人名も含む。姓だけ・名だけの候補は含めない。由来を判断できない場合は personal_name_origin_unconfirmed に残す。"
     },
     {
       "number": 38,
       "id": "personal_name_origin_foreign",
       "label": "人名・姓名（海外由来）",
       "standard_enabled": true,
-      "definition": "命名慣習上、日本以外に由来するとGeminiが暫定分類した人名・姓名全体。個人の国籍や文字種を示す分類ではない。独立した出典確認は行っていない。",
-      "boundary": "人名・姓名全体の候補に限る。命名慣習を判断できない、または複数の慣習が混在する場合は personal_name_origin_unconfirmed に残す。"
+      "definition": "命名慣習上、日本以外に由来すると暫定分類した人名・姓名。Geminiの分類を基礎とし、一部候補を出典で再確認したが、全件の独立検証はしていない。個人の国籍や文字種を示す分類ではない。",
+      "boundary": "姓名全体に加え、単独名・芸名・筆名・法名・称号など姓と名に分解できない人名も含む。姓だけ・名だけの候補は含めない。由来を判断できない場合は personal_name_origin_unconfirmed に残す。"
     }
   ],
   "sport_subcategories": {

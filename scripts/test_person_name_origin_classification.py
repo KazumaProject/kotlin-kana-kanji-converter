@@ -79,7 +79,7 @@ class PersonNameOriginClassificationTest(unittest.TestCase):
                 'project_id': gemini.PROJECT,
                 'prompt_version': origins.PROMPT_VERSION,
                 'classification_status': 'Gemini-only provisional; not independently reviewed',
-                'free_tier_only': True,
+                'initial_run_free_tier_only': True,
                 'taxonomy_sha256': gemini.sha(taxonomy_path),
                 'distribution_source_sha256': gemini.sha(distribution_source),
                 'mapping_path': origins.MAPPING_PATH,

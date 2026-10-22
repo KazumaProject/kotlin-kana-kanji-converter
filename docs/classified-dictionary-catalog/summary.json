@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "inputSha256": "e8fbe7d5a77d802792e2f70a1e936675ac92c4e8716c50c83a7142cd38d4663e",
-  "uniquePairs": 829973,
-  "records": 846402,
+  "uniquePairs": 829971,
+  "records": 846400,
   "categories": [
     {
       "id": "character",
@@ -640,8 +640,8 @@
     {
       "id": "personal_name_origin_unconfirmed",
       "name": "人名・姓名（由来未確認）",
-      "records": 93992,
-      "pairs": 93219,
+      "records": 94000,
+      "pairs": 93226,
       "pages": 63
     },
     {
@@ -780,43 +780,43 @@
     {
       "id": "surname_origin_japanese",
       "name": "姓・名字（日本由来）",
-      "records": 25073,
-      "pairs": 24928,
+      "records": 25109,
+      "pairs": 24964,
       "pages": 17
     },
     {
       "id": "surname_origin_foreign",
       "name": "姓・名字（海外由来）",
-      "records": 236,
-      "pairs": 236,
+      "records": 57,
+      "pairs": 57,
       "pages": 1
     },
     {
       "id": "given_name_origin_japanese",
       "name": "名・下の名前（日本由来）",
-      "records": 2234,
-      "pairs": 2208,
+      "records": 2304,
+      "pairs": 2277,
       "pages": 2
     },
     {
       "id": "given_name_origin_foreign",
       "name": "名・下の名前（海外由来）",
-      "records": 533,
-      "pairs": 527,
+      "records": 47,
+      "pairs": 47,
       "pages": 1
     },
     {
       "id": "personal_name_origin_japanese",
       "name": "人名・姓名（日本由来）",
-      "records": 75509,
-      "pairs": 74915,
-      "pages": 50
+      "records": 76228,
+      "pairs": 75625,
+      "pages": 51
     },
     {
       "id": "personal_name_origin_foreign",
       "name": "人名・姓名（海外由来）",
-      "records": 1218,
-      "pairs": 1212,
+      "records": 1048,
+      "pairs": 1047,
       "pages": 1
     }
   ],

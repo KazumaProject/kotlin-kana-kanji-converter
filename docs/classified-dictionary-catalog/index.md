@@ -2,7 +2,7 @@
 
 人物細分類辞書を含む配布ZIPのカテゴリ一覧です。通常配布の49カテゴリから汎用 `person` を除き、標準配布対象の人物細分類28カテゴリに置き換えた **76カテゴリ**を掲載しています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **846,402**、読み・表記の組数の合計は **838,353**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **846,400**、読み・表記の組数の合計は **838,351**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換プレリリース) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -58,7 +58,7 @@
 | [医療](medical/index.md) | `medical` | 92,683 | 92,683 | [全件](medical/index.md) |
 | [姓・名字（由来未確認）](person/surname_origin_unconfirmed/index.md) | `surname_origin_unconfirmed` | 24,153 | 24,297 | [全件](person/surname_origin_unconfirmed/index.md) |
 | [名・下の名前（由来未確認）](person/given_name_origin_unconfirmed/index.md) | `given_name_origin_unconfirmed` | 4,306 | 4,348 | [全件](person/given_name_origin_unconfirmed/index.md) |
-| [人名・姓名（由来未確認）](person/personal_name_origin_unconfirmed/index.md) | `personal_name_origin_unconfirmed` | 93,219 | 93,992 | [全件](person/personal_name_origin_unconfirmed/index.md) |
+| [人名・姓名（由来未確認）](person/personal_name_origin_unconfirmed/index.md) | `personal_name_origin_unconfirmed` | 93,226 | 94,000 | [全件](person/personal_name_origin_unconfirmed/index.md) |
 | [俳優](person/actor/index.md) | `actor` | 6,395 | 6,450 | [全件](person/actor/index.md) |
 | [声優](person/voice_actor/index.md) | `voice_actor` | 572 | 579 | [全件](person/voice_actor/index.md) |
 | [歌手・音楽家](person/musician/index.md) | `musician` | 969 | 971 | [全件](person/musician/index.md) |
@@ -78,9 +78,9 @@
 | [実業・経営](person/business/index.md) | `business` | 4,016 | 4,035 | [全件](person/business/index.md) |
 | [皇室・王室・貴族](person/royalty_nobility/index.md) | `royalty_nobility` | 286 | 286 | [全件](person/royalty_nobility/index.md) |
 | [その他の特定人物](person/other_identified/index.md) | `other_identified` | 5,031 | 5,038 | [全件](person/other_identified/index.md) |
-| [姓・名字（日本由来）](person/surname_origin_japanese/index.md) | `surname_origin_japanese` | 24,928 | 25,073 | [全件](person/surname_origin_japanese/index.md) |
-| [姓・名字（海外由来）](person/surname_origin_foreign/index.md) | `surname_origin_foreign` | 236 | 236 | [全件](person/surname_origin_foreign/index.md) |
-| [名・下の名前（日本由来）](person/given_name_origin_japanese/index.md) | `given_name_origin_japanese` | 2,208 | 2,234 | [全件](person/given_name_origin_japanese/index.md) |
-| [名・下の名前（海外由来）](person/given_name_origin_foreign/index.md) | `given_name_origin_foreign` | 527 | 533 | [全件](person/given_name_origin_foreign/index.md) |
-| [人名・姓名（日本由来）](person/personal_name_origin_japanese/index.md) | `personal_name_origin_japanese` | 74,915 | 75,509 | [全件](person/personal_name_origin_japanese/index.md) |
-| [人名・姓名（海外由来）](person/personal_name_origin_foreign/index.md) | `personal_name_origin_foreign` | 1,212 | 1,218 | [全件](person/personal_name_origin_foreign/index.md) |
+| [姓・名字（日本由来）](person/surname_origin_japanese/index.md) | `surname_origin_japanese` | 24,964 | 25,109 | [全件](person/surname_origin_japanese/index.md) |
+| [姓・名字（海外由来）](person/surname_origin_foreign/index.md) | `surname_origin_foreign` | 57 | 57 | [全件](person/surname_origin_foreign/index.md) |
+| [名・下の名前（日本由来）](person/given_name_origin_japanese/index.md) | `given_name_origin_japanese` | 2,277 | 2,304 | [全件](person/given_name_origin_japanese/index.md) |
+| [名・下の名前（海外由来）](person/given_name_origin_foreign/index.md) | `given_name_origin_foreign` | 47 | 47 | [全件](person/given_name_origin_foreign/index.md) |
+| [人名・姓名（日本由来）](person/personal_name_origin_japanese/index.md) | `personal_name_origin_japanese` | 75,625 | 76,228 | [全件](person/personal_name_origin_japanese/index.md) |
+| [人名・姓名（海外由来）](person/personal_name_origin_foreign/index.md) | `personal_name_origin_foreign` | 1,047 | 1,048 | [全件](person/personal_name_origin_foreign/index.md) |
