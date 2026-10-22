@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "e791bf097322b1c863e1393bd1f71373dd6817513594ba1794d2ac6f25a4afa8",
-  "uniquePairs": 829976,
-  "records": 846405,
+  "inputSha256": "2f32406e4cfe4ae66cc6338e10a80286e02bd51a640853561b64a83cb3569428",
+  "uniquePairs": 829990,
+  "records": 846419,
   "categories": [
     {
       "id": "character",
@@ -675,8 +675,8 @@
     {
       "id": "comedian",
       "name": "お笑い芸人",
-      "records": 58,
-      "pairs": 56,
+      "records": 72,
+      "pairs": 70,
       "pages": 1
     },
     {

@@ -2854,6 +2854,129 @@
             "増田英彦"
           ]
         ]
+      },
+      {
+        "path": "src/main/classification/person-additions/comedian-followup-2026-10-22.jsonl",
+        "sha256": "6524701ab8f27a8af3af74ba421c005a76d76ae70434bb119ee367501c4d6386",
+        "reviewedPairs": 14,
+        "addedPairs": [
+          [
+            "いとうたかゆき",
+            "依藤たかゆき"
+          ],
+          [
+            "きしたいすけ",
+            "岸大将"
+          ],
+          [
+            "けつ",
+            "ケツ"
+          ],
+          [
+            "ささきたかふみ",
+            "佐々木隆史"
+          ],
+          [
+            "たかのまさなり",
+            "高野正成"
+          ],
+          [
+            "つじくらしっく",
+            "辻クラシック"
+          ],
+          [
+            "としだたかひで",
+            "トシダタカヒデ"
+          ],
+          [
+            "なかむらしゅん",
+            "なかむらしゅん"
+          ],
+          [
+            "なかむらふー",
+            "中村フー"
+          ],
+          [
+            "にききょうへい",
+            "仁木恭平"
+          ],
+          [
+            "ひがしりょうすけ",
+            "東良介"
+          ],
+          [
+            "ふるかわしょうご",
+            "古川彰悟"
+          ],
+          [
+            "まちだかずき",
+            "町田和樹"
+          ],
+          [
+            "もうちゅうがくせい",
+            "もう中学生"
+          ]
+        ],
+        "addedRecords": 14,
+        "addedSourceRows": 14,
+        "appendedPairs": [
+          [
+            "いとうたかゆき",
+            "依藤たかゆき"
+          ],
+          [
+            "きしたいすけ",
+            "岸大将"
+          ],
+          [
+            "けつ",
+            "ケツ"
+          ],
+          [
+            "ささきたかふみ",
+            "佐々木隆史"
+          ],
+          [
+            "たかのまさなり",
+            "高野正成"
+          ],
+          [
+            "つじくらしっく",
+            "辻クラシック"
+          ],
+          [
+            "としだたかひで",
+            "トシダタカヒデ"
+          ],
+          [
+            "なかむらしゅん",
+            "なかむらしゅん"
+          ],
+          [
+            "なかむらふー",
+            "中村フー"
+          ],
+          [
+            "にききょうへい",
+            "仁木恭平"
+          ],
+          [
+            "ひがしりょうすけ",
+            "東良介"
+          ],
+          [
+            "ふるかわしょうご",
+            "古川彰悟"
+          ],
+          [
+            "まちだかずき",
+            "町田和樹"
+          ],
+          [
+            "もうちゅうがくせい",
+            "もう中学生"
+          ]
+        ]
       }
     ],
     "reviews": [
@@ -4065,7 +4188,7 @@
     }
   },
   "inputs": {
-    "src/main/bin/names.txt": "7053d963e704c5984de236234f5120d84aff353fb8f019009f985d76d9865be2",
+    "src/main/bin/names.txt": "93a73f24d0a78663925ab25ed21ca9d2ea329d7d7b8a98a98127d20c22e02cd4",
     "src/main/bin/place.txt.zip": "bae15eb6755a2e6aa30d1d9ece7970c7d97d761b6e430c59bc11222f8e2e6f01",
     "src/main/bin/only_wiki.txt.zip": "2c3ca451484900edee55ae4ebe79284e1301b077572f64e9100889a5755bed10",
     "src/main/bin/only_neologd.txt.zip": "64222fa806e424556b662619fb7cba9ac9683f89959afee909dadb112027458e",
@@ -4123,16 +4246,17 @@
     "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl": "59f4fb8499430452c3e32a12c9fafaceadbd096256a227f60cb7546454fa5cd7",
     "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl": "6b65e3c0092f7113000199e7dd7f530cc5e5f9911913ecb3c741a65aeef0a42b",
     "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl": "7585c7afb2c8413500eab761ad429c461f139a414148c9be907442daeb141d5a",
-    "src/main/classification/person-additions/comedian-2026-10-22.jsonl": "e66a986e3c0aca05afdfb33f14c2395461e95ab6514116fd3ac967f81f49d34d"
+    "src/main/classification/person-additions/comedian-2026-10-22.jsonl": "e66a986e3c0aca05afdfb33f14c2395461e95ab6514116fd3ac967f81f49d34d",
+    "src/main/classification/person-additions/comedian-followup-2026-10-22.jsonl": "6524701ab8f27a8af3af74ba421c005a76d76ae70434bb119ee367501c4d6386"
   },
   "files": {
     "categories.json": "2f2c436d9015eb5d321b543b568fce2fe52a2acddfac25a0151e798fea5c63ff",
-    "distribution-candidates.tsv.gz": "e791bf097322b1c863e1393bd1f71373dd6817513594ba1794d2ac6f25a4afa8",
-    "distribution-decisions.tsv.gz": "114d64f119ce24845fb7d0bd46614b666180d0062f27417354a454b49e8cb023"
+    "distribution-candidates.tsv.gz": "2f32406e4cfe4ae66cc6338e10a80286e02bd51a640853561b64a83cb3569428",
+    "distribution-decisions.tsv.gz": "c70e40a38c13f10964e62e89891e859a5d87ac095cc77d54aa0702e4d79bd3c6"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "sourceRows": {
-    "person": 70999,
+    "person": 71013,
     "place": 170145,
     "wiki": 150132,
     "neologd": 404817,
@@ -4142,9 +4266,9 @@
   "admittedPairsByOrigin": {
     "manual": 384259,
     "gemini": 183166,
-    "verified": 174276
+    "verified": 174290
   },
-  "uniqueAdmittedPairs": 741701,
+  "uniqueAdmittedPairs": 741715,
   "excludedCandidatePairs": 328586,
   "excludedClassifiedPairs": 322861,
   "unclassifiedPairs": 0,
@@ -4155,7 +4279,7 @@
     "verified_over_manual": 8
   },
   "categoryRows": {
-    "person": 267979,
+    "person": 267993,
     "character": 6871,
     "mythological_figure": 3436,
     "place": 45088,
@@ -4203,7 +4327,7 @@
     "work_periodical": 1812,
     "work_other": 2683
   },
-  "dictionaryRows": 758229,
+  "dictionaryRows": 758243,
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified."
   ],

@@ -67,7 +67,7 @@ python3 scripts/write_classified_dictionary_catalog.py --check
 
 新規判断の分類元は `verified` とし、元の分類履歴を保持したまま、名簿のハッシュ・新規の組・配布レコード数・元辞書への追加行数を `provenance.personAdditions` へ記録します。`verify` はその名簿と配布レコードの一致も確認し、外部サイトを取得しません。同じ名簿を再実行しても重複追加しません。後続の追加には別の名簿ファイルを使用します。`freeze` を改めて実行する場合は、その後に保存済みの追加名簿を取り込み直してください。
 
-2026-10-22には、人物辞書全体を照合したうえで、既存の読み・表記の組を除いたお笑い芸人3人を `comedian` に追加しました。大会優勝コンビの個人メンバーと、公式プロフィールで芸人として確認できる個人を含みます。コンビ名・ユニット名は加えず、落語・伝統芸能など `performing_arts` に属する候補も対象外です。読み・表記・区分・出典URL・確認箇所は[追加名簿](../src/main/classification/person-additions/comedian-2026-10-22.jsonl)に記録しています。
+2026-10-22には、人物辞書全体と固定分類履歴を照合し、未収録・未除外のお笑い芸人17人を `comedian` に追加しました。コンビ名・ユニット名は加えず、公式プロフィールで芸人として確認できる個人を収録しています。候補のうち大東翔生、田中ショータイム、谷口理、楢原真樹には既存の明示的な除外判断があるため、今回追加していません。読み・表記・区分・出典URL・確認箇所は[初回名簿](../src/main/classification/person-additions/comedian-2026-10-22.jsonl)と[追加名簿](../src/main/classification/person-additions/comedian-followup-2026-10-22.jsonl)に記録しています。
 
 ## 配布しない人物カテゴリとAI分類
 
