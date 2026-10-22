@@ -1,8 +1,8 @@
 # 人物辞書置換プレリリース — 全配布カテゴリ
 
-人物細分類辞書を含む配布ZIPのカテゴリ一覧です。通常配布の49カテゴリから汎用 `person` を除き、標準配布対象の人物細分類22カテゴリに置き換えた **70カテゴリ**を掲載しています。未分類候補と成人関連など配布対象外の候補は含めていません。
+人物細分類辞書を含む配布ZIPのカテゴリ一覧です。通常配布の49カテゴリから汎用 `person` を除き、標準配布対象の人物細分類23カテゴリに置き換えた **71カテゴリ**を掲載しています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **846,402**、読み・表記の組数の合計は **838,353**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **848,343**、読み・表記の組数の合計は **840,294**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換プレリリース) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -58,12 +58,12 @@
 | [医療](medical/index.md) | `medical` | 92,683 | 92,683 | [全件](medical/index.md) |
 | [姓・名字（由来未確認）](person/surname_origin_unconfirmed/index.md) | `surname_origin_unconfirmed` | 49,319 | 49,607 | [全件](person/surname_origin_unconfirmed/index.md) |
 | [名・下の名前（由来未確認）](person/given_name_origin_unconfirmed/index.md) | `given_name_origin_unconfirmed` | 7,082 | 7,160 | [全件](person/given_name_origin_unconfirmed/index.md) |
-| [人名・姓名（由来未確認）](person/personal_name_origin_unconfirmed/index.md) | `personal_name_origin_unconfirmed` | 169,252 | 170,621 | [全件](person/personal_name_origin_unconfirmed/index.md) |
+| [人名・姓名（由来未確認）](person/personal_name_origin_unconfirmed/index.md) | `personal_name_origin_unconfirmed` | 169,244 | 170,613 | [全件](person/personal_name_origin_unconfirmed/index.md) |
 | [俳優](person/actor/index.md) | `actor` | 6,395 | 6,450 | [全件](person/actor/index.md) |
 | [声優](person/voice_actor/index.md) | `voice_actor` | 572 | 579 | [全件](person/voice_actor/index.md) |
 | [歌手・音楽家](person/musician/index.md) | `musician` | 969 | 971 | [全件](person/musician/index.md) |
 | [アイドル](person/idol/index.md) | `idol` | 153 | 154 | [全件](person/idol/index.md) |
-| [お笑い芸人](person/comedian/index.md) | `comedian` | 53 | 55 | [全件](person/comedian/index.md) |
+| [お笑い芸人](person/comedian/index.md) | `comedian` | 1,747 | 1,749 | [全件](person/comedian/index.md) |
 | [タレント・モデル・放送・報道](person/broadcaster/index.md) | `broadcaster` | 1,305 | 1,308 | [全件](person/broadcaster/index.md) |
 | [配信者・動画投稿者](person/online_creator/index.md) | `online_creator` | 122 | 124 | [全件](person/online_creator/index.md) |
 | [スポーツ関係者](person/sports/index.md) | `sports` | 4,624 | 4,626 | [全件](person/sports/index.md) |
@@ -78,3 +78,4 @@
 | [実業・経営](person/business/index.md) | `business` | 4,016 | 4,035 | [全件](person/business/index.md) |
 | [皇室・王室・貴族](person/royalty_nobility/index.md) | `royalty_nobility` | 286 | 286 | [全件](person/royalty_nobility/index.md) |
 | [その他の特定人物](person/other_identified/index.md) | `other_identified` | 5,031 | 5,038 | [全件](person/other_identified/index.md) |
+| [哲学者・思想家](person/thought/index.md) | `thought` | 255 | 255 | [全件](person/thought/index.md) |

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "e8fbe7d5a77d802792e2f70a1e936675ac92c4e8716c50c83a7142cd38d4663e",
-  "uniquePairs": 829973,
-  "records": 846402,
+  "inputSha256": "a213cd18eb0426088c925483e4a751c981f989929a3a772351658b2f54014744",
+  "uniquePairs": 831914,
+  "records": 848343,
   "categories": [
     {
       "id": "character",
@@ -640,8 +640,8 @@
     {
       "id": "personal_name_origin_unconfirmed",
       "name": "人名・姓名（由来未確認）",
-      "records": 170621,
-      "pairs": 169252,
+      "records": 170613,
+      "pairs": 169244,
       "pages": 113
     },
     {
@@ -675,9 +675,9 @@
     {
       "id": "comedian",
       "name": "お笑い芸人",
-      "records": 55,
-      "pairs": 53,
-      "pages": 1
+      "records": 1749,
+      "pairs": 1747,
+      "pages": 2
     },
     {
       "id": "broadcaster",
@@ -776,6 +776,13 @@
       "records": 5038,
       "pairs": 5031,
       "pages": 4
+    },
+    {
+      "id": "thought",
+      "name": "哲学者・思想家",
+      "records": 255,
+      "pairs": 255,
+      "pages": 1
     }
   ],
   "excluded": {

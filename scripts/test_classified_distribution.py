@@ -101,7 +101,7 @@ class DistributionTest(unittest.TestCase):
         manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
         excluded_key = d.key('あ', '甲')
         manifest['provenance']['personDictionaryExclusions'] = {
-            'categoryIds': ['military', 'thought'],
+            'categoryIds': ['military'],
             'candidateKeys': [excluded_key],
             'uniquePairs': 1,
         }
@@ -135,7 +135,7 @@ class DistributionTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Invalid person dictionary exclusion provenance'):
             d.person_dictionary_exclusions({'provenance': {
                 'personDictionaryExclusions': {
-                    'categoryIds': ['military', 'thought'],
+                    'categoryIds': ['military'],
                     'candidateKeys': ['not-a-hash'],
                     'uniquePairs': 1,
                 },
@@ -253,6 +253,37 @@ class DistributionTest(unittest.TestCase):
         self.assertEqual(manifest['provenance']['personAdditions'][0]['reviewedPairs'], 1)
         self.assertEqual(manifest['categoryRows']['person'], 3)
 
+    def test_explicit_person_category_addition_is_recorded_and_verified(self):
+        self.freeze()
+        taxonomy_path = self.root / 'src/main/classification/person-taxonomy.json'
+        taxonomy_path.write_text(json.dumps({
+            'categories': [{'id': 'comedian', 'standard_enabled': True}],
+            'sport_subcategories': {},
+        }), encoding='utf-8')
+        entries = [
+            dict(reading='おわらい', surface='お笑い', category_id='comedian',
+                 left_id=1, right_id=1, cost=8400, source_url='https://example.org/comedy/test',
+                 source_surface='お笑い', source_reading='オワライ', checked_on='2026-10-14'),
+            dict(reading='あ', surface='甲', category_id='comedian',
+                 left_id=1, right_id=1, cost=8400, source_url='https://example.org/comedy/test',
+                 source_surface='甲', source_reading='ア', checked_on='2026-10-14'),
+        ]
+        path = self.root / 'src/main/classification/person-comedy.jsonl'
+        path.write_text(''.join(json.dumps(entry, ensure_ascii=False) + '\n' for entry in entries),
+                        encoding='utf-8')
+
+        self.add_people(path)
+        self.verify()
+        with gzip.open(self.root / 'src/main/classification/distribution-candidates.tsv.gz',
+                       'rt', encoding='utf-8') as stream:
+            rows = {tuple(line.rstrip('\n').split('\t')) for line in stream}
+        self.assertIn(('person', 'おわらい', '1', '1', '8400', 'お笑い'), rows)
+        manifest = json.loads((self.root / 'src/main/classification/distribution-manifest.json').read_text())
+        batch = manifest['provenance']['personAdditions'][0]
+        self.assertEqual(batch['reviewedPairs'], 2)
+        self.assertEqual(batch['addedPairs'], [['おわらい', 'お笑い']])
+        self.assertEqual(batch['addedRecords'], 1)
+
     def test_already_admitted_person_is_not_changed(self):
         self.freeze()
         _, entry = self.person_file()
@@ -280,6 +311,37 @@ class DistributionTest(unittest.TestCase):
         del missing['source_reading']
         path, _ = self.person_file([missing])
         with self.assertRaisesRegex(ValueError, 'missing'): self.add_people(path)
+
+    def test_source_backed_thought_addition_is_validated_and_added_as_person_source(self):
+        self.freeze()
+        _, entry = self.person_file()
+        entry.pop('sport')
+        entry.update(reading='かんと', surface='カント', source_reading='カント',
+                     source_surface='カント',
+                     source_url='https://id.ndl.go.jp/auth/ndlna/00445131',
+                     source_section='Web NDL Authorities altLabel',
+                     source_sha256='a' * 64,
+                     category_id='thought',
+                     classification_source_url='https://www.wikidata.org/wiki/Q9312',
+                     classification_source_section='occupation: philosopher')
+        taxonomy = self.root / 'src/main/classification/person-taxonomy.json'
+        taxonomy.write_text(json.dumps({'categories': [
+            {'id': 'thought', 'standard_enabled': True}], 'sport_subcategories': {}}), encoding='utf-8')
+        d.write_gzip(self.root / 'src/main/classification/person-dictionary-candidates.tsv.gz', [])
+        path, _ = self.person_file([entry])
+        self.add_people(path)
+        self.verify()
+        with gzip.open(self.root / 'src/main/classification/distribution-candidates.tsv.gz', 'rt') as stream:
+            rows = {tuple(line.rstrip('\n').split('\t')) for line in stream}
+        self.assertIn(('person', 'かんと', '1', '1', '8400', 'カント'), rows)
+        with gzip.open(self.root / 'src/main/classification/person-dictionary-candidates.tsv.gz', 'rt') as stream:
+            rows = {tuple(line.rstrip('\n').split('\t')) for line in stream}
+        self.assertIn(('thought', 'かんと', '1', '1', '8400', 'カント', ''), rows)
+
+        entry.pop('classification_source_url')
+        invalid, _ = self.person_file([entry])
+        with self.assertRaisesRegex(ValueError, 'category-specific'):
+            d.person_entries(self.root, invalid)
 
     def test_person_conflicts_and_exclusions_do_not_mutate_snapshot(self):
         self.freeze()
