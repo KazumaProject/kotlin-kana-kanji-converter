@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "a213cd18eb0426088c925483e4a751c981f989929a3a772351658b2f54014744",
-  "uniquePairs": 831914,
-  "records": 848343,
+  "inputSha256": "84ed2e60656929a662c35dc40d2f327dbb8a6bf0015a88912681a40b41870fac",
+  "uniquePairs": 832952,
+  "records": 849390,
   "categories": [
     {
       "id": "character",
@@ -626,29 +626,29 @@
     {
       "id": "surname_origin_unconfirmed",
       "name": "姓・名字（由来未確認）",
-      "records": 49607,
-      "pairs": 49319,
+      "records": 49405,
+      "pairs": 49117,
       "pages": 33
     },
     {
       "id": "given_name_origin_unconfirmed",
       "name": "名・下の名前（由来未確認）",
-      "records": 7160,
-      "pairs": 7082,
+      "records": 7124,
+      "pairs": 7046,
       "pages": 5
     },
     {
       "id": "personal_name_origin_unconfirmed",
       "name": "人名・姓名（由来未確認）",
-      "records": 170613,
-      "pairs": 169244,
+      "records": 170031,
+      "pairs": 168662,
       "pages": 113
     },
     {
       "id": "actor",
       "name": "俳優",
-      "records": 6450,
-      "pairs": 6395,
+      "records": 6428,
+      "pairs": 6373,
       "pages": 5
     },
     {
@@ -682,8 +682,8 @@
     {
       "id": "broadcaster",
       "name": "タレント・モデル・放送・報道",
-      "records": 1308,
-      "pairs": 1305,
+      "records": 1307,
+      "pairs": 1304,
       "pages": 1
     },
     {
@@ -696,15 +696,15 @@
     {
       "id": "sports",
       "name": "スポーツ関係者",
-      "records": 4626,
-      "pairs": 4624,
-      "pages": 4
+      "records": 6570,
+      "pairs": 6565,
+      "pages": 5
     },
     {
       "id": "competitive_games",
       "name": "棋士・競技ゲーム選手",
-      "records": 104,
-      "pairs": 104,
+      "records": 103,
+      "pairs": 103,
       "pages": 1
     },
     {
@@ -745,8 +745,8 @@
     {
       "id": "science_education",
       "name": "研究・技術・教育",
-      "records": 7604,
-      "pairs": 7574,
+      "records": 7585,
+      "pairs": 7555,
       "pages": 6
     },
     {
@@ -759,8 +759,8 @@
     {
       "id": "business",
       "name": "実業・経営",
-      "records": 4035,
-      "pairs": 4016,
+      "records": 4019,
+      "pairs": 4000,
       "pages": 3
     },
     {
@@ -773,8 +773,8 @@
     {
       "id": "other_identified",
       "name": "その他の特定人物",
-      "records": 5038,
-      "pairs": 5031,
+      "records": 5020,
+      "pairs": 5013,
       "pages": 4
     },
     {
@@ -787,7 +787,7 @@
   ],
   "excluded": {
     "pairs": 322861,
-    "pages": 601
+    "pages": 593
   },
   "specialistInputSha256": "de25b742784973e59532d3ec86b670ab5dd25ed6c0558aa72d9eb2e6afb628dc"
 }

@@ -95,10 +95,13 @@ def apply_person_additions(root, final, enabled):
             key = candidate_key(reading, surface)
             if "sport" in row:
                 sport = row["sport"]
-                if sport not in reviews.SPORT_LABELS:
+                sports = row.get("sports", [sport])
+                if (not isinstance(sports, list) or not sports
+                        or any(value not in reviews.SPORT_LABELS for value in sports)
+                        or len(sports) != len(set(sports)) or sport not in sports):
                     raise ValueError("A reviewed person addition has an unknown sport label")
                 category = "sports"
-                tags = {sport}
+                tags = set(sports)
             else:
                 category = row["category_id"]
                 if category not in enabled:
