@@ -12,12 +12,12 @@ import hashlib
 import json
 import sys
 import tempfile
+from urllib.parse import urlsplit
 from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-import classified_distribution as distribution  # noqa: E402
 import review_person_classifications as reviews  # noqa: E402
 
 
@@ -88,7 +88,6 @@ def restricted_proposal_keys(paths, category_by_code):
 
 
 def apply_person_additions(root, final, enabled):
-    """Apply reviewed person additions, including explicit person subcategories."""
     additions = {}
     additions_dir = root / "src/main/classification/person-additions"
     for path in sorted(additions_dir.glob("*.jsonl")):
@@ -114,10 +113,12 @@ def apply_person_additions(root, final, enabled):
             additions[key] = (reading, surface, category, tags)
 
     for key, (reading, surface, category, tags) in additions.items():
-        if category == "sports":
-            prior = final.get(key)
-            if prior is not None:
-                tags.update(prior[3])
+        prior = final.get(key)
+        if category == "sports" and prior is not None:
+            tags.update(prior[3])
+        if category == "thought" and prior and prior[2] not in (
+                "thought", "personal_name_origin_unconfirmed"):
+            raise ValueError("A category-specific person addition conflicts with a reviewed category")
         final[key] = (reading, surface, category, tags)
 
 
@@ -126,8 +127,8 @@ def export(args):
     taxonomy, category_by_code, category_by_id = reviews.taxonomy_maps(args.root / "src/main/classification/person-taxonomy.json")
     enabled = {row["id"] for row in taxonomy["categories"] if row.get("standard_enabled") is True}
     category_order = {row["id"]: row["number"] for row in taxonomy["categories"]}
-    if len(enabled) != 22:
-        raise ValueError("Expected exactly 22 standard-enabled person categories")
+    if len(enabled) != 23:
+        raise ValueError("Expected exactly 23 standard-enabled person categories")
 
     overrides = reviews.load_overrides(
         args.root / "src/main/classification/person-category-overrides.jsonl",

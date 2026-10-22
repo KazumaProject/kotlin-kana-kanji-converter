@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "taxonomy_version": "2026-10-22.1",
+  "taxonomy_version": "2026-10-22.2",
   "policy": {
-    "version": "2026-10-22.1",
+    "version": "2026-10-22.2",
     "name_origin_definition": "日本由来／海外由来は人の国籍や文字種ではなく、姓・名・姓名の命名慣習上の由来を指す。読みや表記だけから推測せず、由来に確信がない場合は対応する由来未確認カテゴリにする。複数の命名慣習が混在し判別できない場合も由来未確認にする。",
     "adult_scope": [
       "video",
@@ -35,8 +35,7 @@
       "military",
       "organized_crime",
       "religion",
-      "terrorism",
-      "thought"
+      "terrorism"
     ],
     "restricted_category_records": "aggregate_counts_only",
     "adult_related_hold": {
@@ -45,8 +44,7 @@
       "distribution": "metadata_only"
     },
     "standard_dictionary_withheld_categories": [
-      "military",
-      "thought"
+      "military"
     ]
   },
   "categories": [
@@ -285,8 +283,8 @@
     {
       "number": 30,
       "id": "thought",
-      "label": "思想・哲学",
-      "standard_enabled": false,
+      "label": "哲学者・思想家",
+      "standard_enabled": true,
       "definition": "哲学者、思想家等として公開された著作・職業資料で確認できる個人。",
       "boundary": "本人の信仰や宗教的背景だけでは宗教関係者にせず、聖職・宗教指導・宗教研究の公的役割が確認できる場合はreligionへ分類する。"
     },
