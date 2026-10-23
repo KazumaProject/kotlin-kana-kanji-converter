@@ -445,6 +445,7 @@ jobs:
             - `event` 辞書を「催し・行事」「事件・事故・災害」「歴史的出来事」の3群に整理し、6つの配布カテゴリを追加しました。
             - 犯罪・テロ・事故に該当する読み・表記ペアは分類専用とし、辞書配布データから除外しました。
             - 汎用 `person` 辞書を人物細分類29カテゴリに置き換え、軍事関係者を除外しました。姓・名・姓名は由来別に分類し、哲学者・思想家は出典を確認した候補だけを含めます。
+            - アニメ・漫画作品と架空キャラクターを対象層に分類し、成人向け104組を辞書から除外しました。
 
             ## English
 
@@ -452,6 +453,7 @@ jobs:
             - Organized the `event` dictionary into three groups and added six distributable categories.
             - Kept crime, terrorism, and accident pairs for classification only and excluded them from dictionary distribution data.
             - Replaced the generic `person` dictionary with 29 categorized dictionaries, including surname and given-name origin categories, excluding military records, and admitting philosophers and thinkers only from source-verified entries.
+            - Classified anime and manga works and fictional characters by target audience, and excluded 104 adult-labeled pairs from the dictionary.
           prerelease: false
           makeLatest: true
           artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./release_zips/dictionary-distribution-manifest.json,./release_zips/DICTIONARY-SHA256SUMS,./release_zips/DICTIONARY-LICENSES.txt
@@ -460,41 +462,9 @@ jobs:
           removeArtifacts: true
           replacesArtifacts: true
 
-      - name: Create GitHub prerelease
-        if: startsWith(github.ref, 'refs/tags/v') && contains(github.ref_name, '-')
-        uses: ncipollo/release-action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
-          name: Pre-release ${{ github.ref_name }}
-          prerelease: true
-          makeLatest: false
-          artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./release_zips/dictionary-distribution-manifest.json,./release_zips/DICTIONARY-SHA256SUMS,./release_zips/DICTIONARY-LICENSES.txt
-          allowUpdates: true
-          artifactErrorsFailBuild: true
-          removeArtifacts: true
-          replacesArtifacts: true
-
-      - name: Create person-category replacement prerelease
-        if: startsWith(github.ref, 'refs/tags/person-dictionaries-v')
-        uses: ncipollo/release-action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
-          name: Person category replacement ${{ github.ref_name }}
-          body: |
-            The generic `person` dictionary is removed from this prerelease bundle and replaced by the taxonomy's 29 standard-enabled person subcategory dictionaries under `app/src/main/assets/categories/person/<category-id>/`. The bundle has 77 categories in total. Each replacement category is identified in `dictionary-distribution-manifest.json` with `parentCategoryId: person`. Candidates that cannot be reclassified or fail the IME format filter are excluded; military, adult-related, and other restricted categories are excluded. Name-origin labels are provisional, with only partial targeted source review. Philosopher and thinker entries are admitted through manually reviewed, source-backed additions.
-          prerelease: true
-          makeLatest: false
-          artifacts: build/person-dictionary/japanese_keyboard_dictionary_assets.zip,build/person-dictionary/person-replacement-dictionary-manifest.json,build/person-dictionary/DICTIONARY-SHA256SUMS,release_zips/DICTIONARY-LICENSES.txt
-          allowUpdates: true
-          artifactErrorsFailBuild: true
-          removeArtifacts: true
-          replacesArtifacts: true
-
-      # Retain five prereleases; regular releases and their tags are not removed.
-      - name: Retain the latest five prereleases and tags
-        if: startsWith(github.ref, 'refs/tags/v')
+      # Keep five stable dictionary releases and remove prereleases and their tags.
+      - name: Retain the latest five stable releases and delete prereleases
+        if: startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/tags/person-dictionaries-v')
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -508,15 +478,31 @@ jobs:
               }
             );
 
-            const publishedReleases = releases
-              .filter((release) => !release.draft && release.prerelease)
+            const isStableDictionaryRelease = (release) =>
+              !release.draft &&
+              !release.prerelease &&
+              /^v\d+\.\d+\.\d+$/.test(release.tag_name);
+
+            const stableReleases = releases
+              .filter(isStableDictionaryRelease)
               .sort(
                 (left, right) =>
                   new Date(right.published_at || right.created_at) -
                   new Date(left.published_at || left.created_at)
               );
 
-            const expiredReleases = publishedReleases.slice(5);
+            const prereleases = releases.filter(
+              (release) =>
+                !release.draft &&
+                !isStableDictionaryRelease(release) &&
+                (
+                  release.prerelease ||
+                  release.tag_name.startsWith('person-dictionaries-v') ||
+                  /^v\d+\.\d+\.\d+-.+$/.test(release.tag_name)
+                )
+            );
+            const expiredStableReleases = stableReleases.slice(5);
+            const expiredReleases = [...prereleases, ...expiredStableReleases];
 
             for (const release of expiredReleases) {
               core.info(`Deleting release ${release.tag_name}`);
@@ -556,8 +542,10 @@ jobs:
 
             core.info(
               `Retained ${
-                Math.min(publishedReleases.length, 5)
-              } releases; processed ${
-                expiredReleases.length
-              } older releases.`
+                Math.min(stableReleases.length, 5)
+              } stable dictionary releases; deleted ${
+                prereleases.length
+              } prereleases and ${
+                expiredStableReleases.length
+              } older stable releases.`
             );

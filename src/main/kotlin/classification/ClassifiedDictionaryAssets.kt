@@ -20,7 +20,7 @@ import java.util.zip.ZipInputStream
 class ClassifiedDictionaryData(
     directory: File = File("src/main/classification"),
     private val idDef: File = File("src/main/resources/id.def"),
-    expectedCategoryCount: Int = 47,
+    expectedCategoryCount: Int = 55,
 ) {
     val categoryIds = Json.parseToJsonElement(File(directory, "categories.json").readText())
         .jsonObject.getValue("categories").jsonArray.map { it.jsonObject.getValue("id").jsonPrimitive.content }

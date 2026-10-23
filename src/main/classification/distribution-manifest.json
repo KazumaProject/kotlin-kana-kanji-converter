@@ -1,5 +1,256 @@
 {
-  "schemaVersion": 3,
+  "admittedPairsByOrigin": {
+    "manual": 378757,
+    "gemini": 188639,
+    "verified": 177220
+  },
+  "categoryGroups": [
+    {
+      "id": "event",
+      "name": "イベント・事件",
+      "groups": [
+        {
+          "id": "event/occasion",
+          "name": "催し・行事",
+          "categories": [
+            "event/occasion/organized_event",
+            "event/occasion/observance",
+            "event/occasion/exam_qualification"
+          ]
+        },
+        {
+          "id": "event/incident",
+          "name": "事件・事故・災害",
+          "categories": [
+            "event/incident/natural_disaster",
+            "event/incident/social_issue_litigation"
+          ]
+        },
+        {
+          "id": "event/history",
+          "name": "歴史的出来事・紛争",
+          "categories": [
+            "event/history/conflict"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "term",
+      "name": "一般語・専門用語",
+      "groups": [
+        {
+          "id": "term/general",
+          "name": "一般語",
+          "categories": [
+            "term/general/products_daily_goods",
+            "term/general/food_drink_cooking",
+            "term/general/internet_slang_culture",
+            "term/general/neologisms_trends_youth_language",
+            "term/general/other_general"
+          ]
+        },
+        {
+          "id": "term/specialist",
+          "name": "専門語",
+          "categories": [
+            "term/specialist/information_communications",
+            "term/specialist/mathematics_physics",
+            "term/specialist/chemistry_life_sciences",
+            "term/specialist/engineering_technology",
+            "term/specialist/earth_environment_resources",
+            "term/specialist/economics_management",
+            "term/specialist/law_politics",
+            "term/specialist/humanities_social_sciences",
+            "term/specialist/culture_arts_sports",
+            "term/specialist/transport_safety_defense"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "media_demographic",
+      "name": "作品・キャラクターの対象層",
+      "groups": [
+        {
+          "id": "media_demographic/audience",
+          "name": "対象読者・出典タグ",
+          "categories": [
+            "media_demographic/audience/shonen",
+            "media_demographic/audience/seinen",
+            "media_demographic/audience/shojo",
+            "media_demographic/audience/josei",
+            "media_demographic/audience/kids",
+            "media_demographic/audience/mixed",
+            "media_demographic/audience/unspecified"
+          ]
+        },
+        {
+          "id": "media_demographic/resolution",
+          "name": "出典照合状態",
+          "categories": [
+            "media_demographic/resolution/source_unverified"
+          ]
+        }
+      ]
+    }
+  ],
+  "categoryRows": {
+    "person": 270954,
+    "character": 6848,
+    "mythological_figure": 3436,
+    "place": 45088,
+    "address": 152874,
+    "station": 12758,
+    "facility": 35070,
+    "transport_route": 4230,
+    "organization": 47484,
+    "lineage": 2019,
+    "product": 9890,
+    "vehicle": 2580,
+    "event/occasion/organized_event": 4059,
+    "event/occasion/observance": 802,
+    "event/occasion/exam_qualification": 169,
+    "event/incident/natural_disaster": 456,
+    "event/incident/social_issue_litigation": 641,
+    "event/history/conflict": 1534,
+    "award": 1163,
+    "agreement": 424,
+    "initiative": 1061,
+    "term/general/products_daily_goods": 1159,
+    "term/general/food_drink_cooking": 4077,
+    "term/general/internet_slang_culture": 573,
+    "term/general/neologisms_trends_youth_language": 483,
+    "term/general/other_general": 20502,
+    "term/specialist/information_communications": 6073,
+    "term/specialist/mathematics_physics": 4171,
+    "term/specialist/chemistry_life_sciences": 27566,
+    "term/specialist/engineering_technology": 3509,
+    "term/specialist/earth_environment_resources": 2110,
+    "term/specialist/economics_management": 5779,
+    "term/specialist/law_politics": 5273,
+    "term/specialist/humanities_social_sciences": 17877,
+    "term/specialist/culture_arts_sports": 5360,
+    "term/specialist/transport_safety_defense": 4037,
+    "work_franchise": 849,
+    "work_manga": 5080,
+    "work_anime": 1088,
+    "media_demographic/audience/shonen": 4117,
+    "media_demographic/audience/seinen": 1731,
+    "media_demographic/audience/shojo": 826,
+    "media_demographic/audience/josei": 355,
+    "media_demographic/audience/kids": 549,
+    "media_demographic/audience/mixed": 0,
+    "media_demographic/audience/unspecified": 5099,
+    "media_demographic/resolution/source_unverified": 0,
+    "work_film": 6504,
+    "work_program": 9309,
+    "work_book": 7659,
+    "work_game": 3155,
+    "work_music": 10337,
+    "work_stage": 571,
+    "work_periodical": 1811,
+    "work_other": 2683
+  },
+  "conflicts": {
+    "manual_over_gemini": 4321,
+    "verified_over_gemini": 30,
+    "verified_over_manual": 8
+  },
+  "dictionaryRows": 773812,
+  "excludedCandidatePairs": 328690,
+  "excludedClassifiedPairs": 322965,
+  "files": {
+    "categories.json": "70906d21e5be76fd38cdd4c93569dc8c3896438b101f5e105a4fddf83b961f98",
+    "distribution-candidates.tsv.gz": "4e65e87dc1bb533732cc8fc12fd8ceb76ae2af50d3d07482daabba8b8ca95542",
+    "distribution-decisions.tsv.gz": "ab5f333bd3f3eb03bc207c9fc61d85800d0448c76c4f5a7f3932895e00b06eb4"
+  },
+  "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
+  "inputs": {
+    "src/main/bin/names.txt": "1f4faaa6c43a24f8d599476d10e978c5d3990ea0de26fe08f137cdb8c61b731a",
+    "src/main/bin/only_neologd.txt.zip": "64222fa806e424556b662619fb7cba9ac9683f89959afee909dadb112027458e",
+    "src/main/bin/only_wiki.txt.zip": "2c3ca451484900edee55ae4ebe79284e1301b077572f64e9100889a5755bed10",
+    "src/main/bin/place.txt.zip": "bae15eb6755a2e6aa30d1d9ece7970c7d97d761b6e430c59bc11222f8e2e6f01",
+    "src/main/bin/wiki_neologd_common.txt.zip": "1b0638f24e057077c1b1471dc30e741670b547979db458eb447af5cc7221283c",
+    "src/main/classification/event-classifications-manifest.json": "5e42d9903f24e511f948ef68f79b385329ee0131b19ead4aa2062926347e26c0",
+    "src/main/classification/event-classifications.tsv.gz": "976c5d281e037f9704ea86f17a40031ce30f424c8e45fad948341c336236c64b",
+    "src/main/classification/event-taxonomy.json": "a84e0e3a84ae8700a2cd7076cb5ace14bab90890a0faff7cf742fe9a153e8d10",
+    "src/main/classification/media-demographic-taxonomy.json": "09678c212942d363d9bb7035630308fc4b274f2351266e0ce9f6e90d409e0822",
+    "src/main/classification/person-additions/combat-sports-2026-10-22.jsonl": "8fe4dd882d71791591a16e181174290d0ea5bee545d575d28d09460ba7b9843a",
+    "src/main/classification/person-additions/comedian-2026-10-22.jsonl": "e66a986e3c0aca05afdfb33f14c2395461e95ab6514116fd3ac967f81f49d34d",
+    "src/main/classification/person-additions/comedian-followup-2026-10-22.jsonl": "6524701ab8f27a8af3af74ba421c005a76d76ae70434bb119ee367501c4d6386",
+    "src/main/classification/person-additions/comedian-research-2026-10-22.jsonl": "975744437fad3f6bb8644355c85c3e756cd2ba4f4ff398e124397acd4fc67200",
+    "src/main/classification/person-additions/fighters-2026-10-14.jsonl": "21ba7b7db33feb7c1b55abfacb1fb6c451dd11d8a06175cfee7d36de53043eaf",
+    "src/main/classification/person-additions/github-issues-2026-10-22-category-followup.jsonl": "eeb551f4f67387b7d348e667454152c3e0bce240f2afe2b8fabd4fd838182959",
+    "src/main/classification/person-additions/github-issues-2026-10-22.jsonl": "b4d518aad86e271163243f4e9ec7e713701c89d610bb9b751a06c8bb1dd8bd91",
+    "src/main/classification/person-additions/japanese-combat-sports-jitenon-2026-10-22.jsonl": "c5569f580d8dfdb971ec601ee1cf5ac6f7edae6259e41121360a70656f47aaf0",
+    "src/main/classification/person-additions/japanese-mma-2026-10-22.jsonl": "d56bf861d7478133e2e39d149f02fa4f8f94fbd2a91dff12f9073a864f2fa02e",
+    "src/main/classification/person-additions/japanese-mma-gamis-2026-10-22.jsonl": "70462df28342a860d720b79e5a9bf498de8ecf0a20566be72ec1551a3f0b7d3c",
+    "src/main/classification/person-additions/joc-paris2024-2026-10-21.jsonl": "756f05ac434375e66f3ef023e8586cae01ceaf5493f1c64a4ce4826e472fdce5",
+    "src/main/classification/person-additions/joc-tokyo2020-2026-10-21.jsonl": "c2744d010e6a99b47e4415a99411657e8de4a3997c865f8630d9b8665f8099e3",
+    "src/main/classification/person-additions/philosophers-2026-10-22.jsonl": "3b1152f50e64257ad1595e345d94b78713e8c2c4e735e338385294066b525fb4",
+    "src/main/classification/person-taxonomy.json": "cce0204d9e00d15516ae5d013f47087e993e2b7c73197d973afab481c772993f",
+    "src/main/classification/term-additions.tsv": "031b9446633274363467d229074607e495abb0904061dc9b333298af6ebb339b",
+    "src/main/classification/term-classifications-manifest.json": "249f29bc46496088191861e1124392bf4a955c89ecc6912b68683a8b8d2e36b1",
+    "src/main/classification/term-classifications.tsv.gz": "2a1414eff371092bf5cadfd8ab9b183e750cbf8f6534fdb0e72710ee3612f45a",
+    "src/main/classification/term-taxonomy.json": "890e9d1d045f10308aa32cdc39e534b5113c199de3d79404bd22be3cf796bb96",
+    "src/main/classification/media-demographic-gemini-manifest.json": "449f348e10c9f3ebc74209908d3dd2363b44c8864fe2ddd545285100c2eb3f3a",
+    "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl": "574794d0df19f8afd09d06b66897d7b7fce97dd3652bc005674a3ecae28bb30a",
+    "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl": "5a373897bbade57c507d08e4813baa7d5975bc752a568cdaee8aaebd9d18f155",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0000.jsonl": "3ab59c82e6e0645da8f513606038212b601c0c4c46273db4faf8122d6812cf1d",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0001.jsonl": "aeb954b3b768dbc66269fdbc5b6c168317cdf186dd284d0c26174c3a88f12385",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0002.jsonl": "0c6b091c4f9c63a525923521e4b5d316b866ef34572a7550a87303f45adb3399",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0003.jsonl": "fb3208e6dfd4c2c0982ce1b9bb3e10e994ae764f6f46b8e9bba815cf8b148c7c",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0004.jsonl": "30c75b6990484bf9ed686ed675e8dc1ef2c57e3dc59bc5c70621c8e288c694d1",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0005.jsonl": "bd71a58bfcc91e63a015aae7d98ab2f93f6c6d2e0b4c9ae2a48fb8b661d9fbe6",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0006.jsonl": "0242528087fc0179cca9a3e0fdbeb121623207a042071f7078965fca2fe71cf6",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0007.jsonl": "e36021678abce248008ab443123bf76854d134026cb8428ca0ea3206252b23a7",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0008.jsonl": "ae9c02c0d685e3d9ace813045c7f68d402763c019df388cd268d3f0632e538ef",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0009.jsonl": "64d9be2102fead7c25c327da32a8079242c77b4822ce01cf35319038f13bca0f",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0010.jsonl": "30c710d16f302b21d120a3c8100a977554f12818f94a6bf4e0404b5de945f5ab",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0011.jsonl": "26861e29d76756aea164aa436ec24305b905d2c20acf224a7236b83f48d1a9e1",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0012.jsonl": "ee789e6fdacabf4856757ef46b7915fec47000694f01d27f4d96829fb2ec9085",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0013.jsonl": "9597cc8a1da7657f18f478dc0d1f2a49429b056d44e3597ddd78021d6791e7a5",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0014.jsonl": "a51c1ba44a45511971d1a181fd8e73f08412853dcaecac309db3018f44c9f2a9",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0015.jsonl": "7e3d71a7e1bb19756c6a7085b00605404d0e08a44159f5f87ed5aacbb901d691",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0016.jsonl": "3a52e2e016ad55b7781dd441d4ba764601ac2f1d92e894ac2b87be519a155017",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0017.jsonl": "0a9e3a334010d6434918e3987484a6f769eb0b75a34dfe571aed102fff7f9bcb",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0018.jsonl": "3f14a3379366f64729c9b1282c13b76b545277ccaf6919322c87da87c5c206f5",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0019.jsonl": "8c70a873d81a92a0f986a2f5e65b8bac262e3afc596c459ec4cd746765afc3ce",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0020.jsonl": "99ee7a4fde4c2e7eff65d17614e45e2b46eeb2adc22fcce8dd4aef1866b7c1c7",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0021.jsonl": "5b72cb7963fcc64f8d204fbf3ac13f4fad7b742afaa281915fe815a20e10e2ce",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0022.jsonl": "7de12b3846a48b25337e3019d8b83d296451663bafc2fcab5e8cdd2f560baead",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0023.jsonl": "5e76d3d0ae202cf4a7923160934b166ec80e7c37b099de40c64d25b5552c9840",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0024.jsonl": "a386e98c7b73da6c22c58fd8a257a129155b6cc324a67304225e4479e8a9a2a5",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0025.jsonl": "6c75c3febe40b3f8eeffcedb30c6b35345cef94fe93c930ff7c75554ac2340a9",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0026.jsonl": "69e094a7a2878851ff8d819a25d442daf3304c8b9a0eaabbd69012021729f5c4",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0027.jsonl": "25d91067d3a221ff9a953b8c5a5118b5c52bf5f18c99a09fabd31885bc264d52",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0028.jsonl": "ac8efca12d7a02e1e6a4091d117abaff1084b695609bd50bcd3724e9c68080e4",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0029.jsonl": "8ea54ea6f7d90d57d13a3ab3b6fa350bf152dcc95bd96bab09e801199b0cef68",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0030.jsonl": "d7702cb0d2c72ef5090f459b979c760eaf221b32a3d222f4e1f93865837df8bc",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0031.jsonl": "33094b3250f76462a4cbe17b1b92200121d85b23cba0e295c04cfb9651effb9c",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0032.jsonl": "8a7314bf9af38d703433ce388990b7bbfd909342caf4611feb351760b1c998a3",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0033.jsonl": "42e5712f6e4d46901ed3a5d9dbf8858a75f72447a6e1b10171fcd0a9fd70ad60",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0034.jsonl": "af17352f502fd8e5e71aeacebde27c25fec24b8c87e06673d363a03b6901b613",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0035.jsonl": "0439e2e64405711c66843dd368f0f266c9537a21b7d61cd6a3265be21f95030d",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0036.jsonl": "8940d95708577f08838139e6f7e65b9ce67cccf02bed5099ca3f555d6993cf9c",
+    "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl": "59f4fb8499430452c3e32a12c9fafaceadbd096256a227f60cb7546454fa5cd7",
+    "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl": "6b65e3c0092f7113000199e7dd7f530cc5e5f9911913ecb3c741a65aeef0a42b",
+    "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl": "7585c7afb2c8413500eab761ad429c461f139a414148c9be907442daeb141d5a",
+    "src/main/classification/reviews/2026-10-22-github-issues.jsonl": "053d827a1f2c9358db0f099742b85e737ee3cdf4314f0bc41221eef837b4c730",
+    "src/main/classification/reviews/2026-10-23-media-demographics-complete.jsonl": "996974d5728c7660513139887a6cdec116a2d10b5680026c3d0f280ca5bb681c",
+    "src/main/classification/reviews/2026-10-23-media-demographics-gemini.jsonl": "0caeaa4aaa8b8da53a1e695b999de23fc3a98a904e3c73d4f938567e35093de9",
+    "src/main/classification/reviews/2026-10-23-media-demographics-resolution.jsonl": "9be414bfb3e0e437a616461768e00d2032124357cc52dbd9a023dd8dce754e7c",
+    "src/main/classification/reviews/2026-10-23-media-demographics.jsonl": "d326f3428b5f3afd24c6a7e13a802134561a0de0ef3b092e63f406b63b7f8137",
+    "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl": "259b1e1d1c68283803d79b6129ac0afedc85f0c34eb23945d6735ba4a3a4d53a"
+  },
+  "limitations": [
+    "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified.",
+    "Media demographic labels cover source-reviewed pairs only; unreviewed media and source-linked characters are not guaranteed classified or excluded.",
+    "A matched source with no demographic tag is labeled unspecified, not general audience. Pairs without a unique source match are explicitly labeled source-unverified; neither label means general audience. Only pairs with an explicit adult source tag are guaranteed to be excluded as adult.",
+    "A missing demographic tag is not proof of general-audience suitability. Source-unverified pairs may receive a Gemini best-fit demographic based on names and model knowledge; mixed source/model labels may receive an assistant best-fit single-audience tie-break. These labels are not independently source-verified. Explicit adult source tags and Gemini adult judgments are excluded, but model errors may leave adult works in other categories."
+  ],
+  "noResultPairs": 0,
   "precedence": [
     "verified",
     "manual",
@@ -7,16 +258,154 @@
   ],
   "provenance": {
     "acceptedSha256": "dd5bb556894771b751c64c38bf11c1f3ce6ad509c4239ba3277889edcc19bae0",
-    "dispositionsSha256": "ce5f91032f49f9cdf2cf8e1433186dc5189c54583c66981125e9becaaa37b714",
-    "databaseReadSnapshotSha256": "9dbd95e39e022382d32b6082bf2e99c6575b5028ebef1b16ffa88af76ae64135",
-    "manualSha256": "424933a57e13d3093e600ed69e3c8a72c58e965888d442ea6d73422f1f04cc47",
-    "manualCandidates": 4901,
     "baselineVerifiedPairs": 257471,
+    "databaseReadSnapshotSha256": "9dbd95e39e022382d32b6082bf2e99c6575b5028ebef1b16ffa88af76ae64135",
+    "dispositionsSha256": "ce5f91032f49f9cdf2cf8e1433186dc5189c54583c66981125e9becaaa37b714",
+    "eventClassification": {
+      "apiEndpoint": "generateContent",
+      "batchCount": 50,
+      "billingEnabled": false,
+      "categoryCounts": {
+        "event/history/conflict": 2085,
+        "event/incident/accident": 288,
+        "event/incident/crime": 1175,
+        "event/incident/natural_disaster": 611,
+        "event/incident/social_issue_litigation": 996,
+        "event/incident/terrorism": 46,
+        "event/occasion/exam_qualification": 243,
+        "event/occasion/observance": 1104,
+        "event/occasion/organized_event": 5929
+      },
+      "classificationStatus": "Gemini best-fit; not independently reviewed",
+      "freeTierOnly": true,
+      "freeTierProofs": [
+        {
+          "apiEndpoint": "generateContent",
+          "promptVersion": "event-six-distributable-three-classification-only-v1",
+          "rpd": 500,
+          "rpm": 15,
+          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+          "tpm": 250000,
+          "verifiedAt": "2026-10-21T17:48:55+00:00"
+        }
+      ],
+      "model": "gemini-3.5-flash-lite",
+      "projectId": "gen-lang-client-0548563154",
+      "promptVersion": "event-six-distributable-three-classification-only-v1",
+      "sourceFiles": {
+        "src/main/classification/distribution-candidates.tsv.gz": "84289265cef551c0a53a09af99180896a7a81f200b744e1b9bd642a71b23fd50",
+        "src/main/classification/distribution-decisions.tsv.gz": "0704fb276c80590da1e7f88fd504ec6fc716c5d2778e85eb52b75a10fcf14fee",
+        "src/main/classification/luna-reclassification/baseline-candidates.tsv.gz": "769a601735284d6361e2da0f4305c73b6ec2637839afea6ad9efbdbc34473ae6",
+        "src/main/classification/luna-reclassification/baseline-decisions.tsv.gz": "dbdb4b455c4fa766402bd16c265513ab54c1e1925fc65d2ea010aee8ed59bf82",
+        "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl": "574794d0df19f8afd09d06b66897d7b7fce97dd3652bc005674a3ecae28bb30a",
+        "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl": "5a373897bbade57c507d08e4813baa7d5975bc752a568cdaee8aaebd9d18f155",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0000.jsonl": "5eaebf4828887cf0ea8351dc63598e2b24e836ad670c40fb8ab3a69d517c0f4d",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0001.jsonl": "b6bee8c6e4350fe3f154351219b24d01fd13960ef90dbf553bcefd3e1bb1bed2",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0002.jsonl": "345d1cf7132bd1e3f1c4ba91df00b1247af8ea61f662e3e592d834f1a1f7e5f5",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0003.jsonl": "9b4987ccd2f30c13863c4b238a9bf05109bdee5dcfdf5aa42eab4f7ce33deb78",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0004.jsonl": "7ebfd811359beff12247188f94bf424981bad0c4f83d521da654a51b536a64aa",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0005.jsonl": "b4c86b0d78d67a9af9d2295de7a67ef5ebbec057b341ed4b16d89fd4ccc9e163",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0006.jsonl": "adaea509c1b7c826820bb7b2d087a4eabc637e4b1ce0bcaf367ed15b8916af18",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0007.jsonl": "57d433272f8b898f1dbfc014844f61d07d0163d4d9506e0079bbd7c53bd699b8",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0008.jsonl": "3bc5c15aa29f71ad8b01ae0af43308d280ec64ae992025e658785c5453ffb3c7",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0009.jsonl": "8f1b39c3e2f0f8c17fc78291ad50289f9762abec793f5cf44d6f1e85f1ed8a9d",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0010.jsonl": "21bf60a65d754d5c508db0cc3662f2fa1a5e7cb7a96f3f9bf4e4111264a34456",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0011.jsonl": "e8a3d42cfb65ee580fcff495fd64c199d69d48b436a8939a27207438d69a4635",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0012.jsonl": "fc3514e09d4f98a15ae3f118261c2e991c188f4b34deb00e284405faca806168",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0013.jsonl": "27750f64459fd3c11c64439d9e3483c9490676166fa4d75af6cc9c46c337be55",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0014.jsonl": "1f7c735c691b42c125d97bb2cf14e28d79323b288cde8cd2220a421a27fd5f5b",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0015.jsonl": "dd27d95dea28b168d97a6d00d5bb68bce788ac385b4b4649f4cdad4e294f4966",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0016.jsonl": "0c5a8bbb4b5ad26bbce6a1845f957a55bdb0342556cd168a39e01bbe5f410266",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0017.jsonl": "dd80c4156ff6e3117f1c6db94fff9687f387160f88b983048a37741f3c97c2f1",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0018.jsonl": "c799379a4e4db31f67c685eca18b63e196ae2bd6ed0b109d00b2ea4122473c48",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0019.jsonl": "84980351295ca883097f8aea1afea37f532e5aa3553553db56f7b0d46c3be88c",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0020.jsonl": "eed6452589ed3471804d1ffd7782b86d0b30c97563484ba48c35e1bb6720837d",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0021.jsonl": "b765423c668d59a5ee65e99c3b6857803b29ebc642414b92eed6e30d6e5284bc",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0022.jsonl": "4bce6ec686e6d37fcf3488afef068a1e7521063ca9ab712730acc8591a4aa70b",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0023.jsonl": "a7972f5ddcb56879c05307495d65ea702d36a94fd73f64f52fb279f91ba2f9f4",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0024.jsonl": "ce2cec645210f75b4ef61f982fe2a306c509136f59d8814f723b43bfbd401d22",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0025.jsonl": "3036ca1ad2d9946ea3d4f132e800465b9b158a26f884d547e001194e7322f969",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0026.jsonl": "ac6f596a28e9c0fb016e6d8388760794918e7e51475e5e524e4e49b8d7c3323e",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0027.jsonl": "3f320ac860eb0d6030c848a35e63d38b72d70ae13147193950c931fc047e657c",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0028.jsonl": "cdb0636ce4ea364f7d7a5d29d951722434134440373e12c1318ad33eabdda9a9",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0029.jsonl": "91487e3492b8540b39d3e44a2afcccc34d3f362a848de00c650a11db20628f3e",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0030.jsonl": "ff1543cb5f508c3a88314888e0c3a2d53c460fdbef4deb05f557dee49ca07b92",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0031.jsonl": "1ddb7637758de1abbe4a14eeeff89f1ba8114861982c9cfa9c16356b21055972",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0032.jsonl": "19bdd708a037ace8e38c2ccc84c9abd7920be6eeb288d0de590ac4490c9a22a7",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0033.jsonl": "84637398e3fb1518b53f6bc81470ed3316c48c5bb29c9629c4a76dfe821f4af0",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0034.jsonl": "ad31487ccded464ffc35d442b016879cc020a0d32e510c3d1c0d5ca029854127",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0035.jsonl": "e0397e26a62a4802077af40afecd176dd9f32e8ca6e9db0c0c15a99b67210067",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0036.jsonl": "05fb5fef150cbd033c6c031916b4f583bd1e6c7fd82c1ccdcc90465450614e75",
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl": "59f4fb8499430452c3e32a12c9fafaceadbd096256a227f60cb7546454fa5cd7",
+        "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl": "6b65e3c0092f7113000199e7dd7f530cc5e5f9911913ecb3c741a65aeef0a42b",
+        "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl": "7585c7afb2c8413500eab761ad429c461f139a414148c9be907442daeb141d5a"
+      },
+      "sourcePairRecords": {
+        "src/main/classification/distribution-candidates.tsv.gz": 8717,
+        "src/main/classification/distribution-decisions.tsv.gz": 11237,
+        "src/main/classification/luna-reclassification/baseline-candidates.tsv.gz": 9955,
+        "src/main/classification/luna-reclassification/baseline-decisions.tsv.gz": 9953,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0000.jsonl": 73,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0001.jsonl": 88,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0002.jsonl": 77,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0003.jsonl": 73,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0004.jsonl": 111,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0005.jsonl": 168,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0006.jsonl": 94,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0007.jsonl": 155,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0008.jsonl": 61,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0009.jsonl": 108,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0010.jsonl": 143,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0011.jsonl": 118,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0012.jsonl": 229,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0013.jsonl": 127,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0014.jsonl": 58,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0015.jsonl": 132,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0016.jsonl": 181,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0017.jsonl": 168,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0018.jsonl": 199,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0019.jsonl": 82,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0020.jsonl": 267,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0021.jsonl": 150,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0022.jsonl": 166,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0023.jsonl": 107,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0024.jsonl": 89,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0025.jsonl": 190,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0026.jsonl": 81,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0027.jsonl": 145,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0028.jsonl": 101,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0029.jsonl": 158,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0030.jsonl": 82,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0031.jsonl": 89,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0032.jsonl": 61,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0033.jsonl": 77,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0034.jsonl": 57,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0035.jsonl": 63,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0036.jsonl": 128,
+        "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl": 48
+      },
+      "sourcePairSha256": "eda03b21a0436e0bf10861c0592a73bbd0d4de7c256d32a3cd88d5a0c1e5394d",
+      "taxonomySha256": "a84e0e3a84ae8700a2cd7076cb5ace14bab90890a0faff7cf742fe9a153e8d10",
+      "uniquePairs": 12477
+    },
+    "lunaReclassification": {
+      "completedPairs": 332618,
+      "effectiveActions": {
+        "adopt": 321267,
+        "reject": 11351
+      },
+      "model": "gpt-5.6-luna",
+      "path": "build/luna-classification/ledger/results.jsonl.gz",
+      "policy_version": "ime-adopt-reject-v1",
+      "reasoningEffort": "max",
+      "sha256": "18619c2c1f36bb33d579890d4746d9543175bd464673ca0fe1a11f25d72449a4",
+      "snapshotManifestSha256": "e1f9c989b51321087525a8b5d27e658aa0f86c84c85976e1f1a72f6d425908de",
+      "targetSha256": "cc775b8dbe7884ed692231c1ff14e487ec46d08ecc7c0952348a27222297c0df"
+    },
+    "manualCandidates": 4901,
+    "manualSha256": "424933a57e13d3093e600ed69e3c8a72c58e965888d442ea6d73422f1f04cc47",
     "personAdditions": [
       {
-        "path": "src/main/classification/person-additions/fighters-2026-10-14.jsonl",
-        "sha256": "21ba7b7db33feb7c1b55abfacb1fb6c451dd11d8a06175cfee7d36de53043eaf",
-        "reviewedPairs": 490,
         "addedPairs": [
           [
             "あいたかりょう",
@@ -1980,12 +2369,12 @@
           ]
         ],
         "addedRecords": 492,
-        "addedSourceRows": 489
+        "addedSourceRows": 489,
+        "path": "src/main/classification/person-additions/fighters-2026-10-14.jsonl",
+        "reviewedPairs": 490,
+        "sha256": "21ba7b7db33feb7c1b55abfacb1fb6c451dd11d8a06175cfee7d36de53043eaf"
       },
       {
-        "path": "src/main/classification/person-additions/joc-paris2024-2026-10-21.jsonl",
-        "sha256": "756f05ac434375e66f3ef023e8586cae01ceaf5493f1c64a4ce4826e472fdce5",
-        "reviewedPairs": 135,
         "addedPairs": [
           [
             "あさいゆう",
@@ -2407,12 +2796,12 @@
             "わだあみ",
             "和田彩未"
           ]
-        ]
+        ],
+        "path": "src/main/classification/person-additions/joc-paris2024-2026-10-21.jsonl",
+        "reviewedPairs": 135,
+        "sha256": "756f05ac434375e66f3ef023e8586cae01ceaf5493f1c64a4ce4826e472fdce5"
       },
       {
-        "path": "src/main/classification/person-additions/joc-tokyo2020-2026-10-21.jsonl",
-        "sha256": "c2744d010e6a99b47e4415a99411657e8de4a3997c865f8630d9b8665f8099e3",
-        "reviewedPairs": 165,
         "addedPairs": [
           [
             "いかわひろゆき",
@@ -2818,12 +3207,12 @@
             "よしだたくま",
             "吉田拓馬"
           ]
-        ]
+        ],
+        "path": "src/main/classification/person-additions/joc-tokyo2020-2026-10-21.jsonl",
+        "reviewedPairs": 165,
+        "sha256": "c2744d010e6a99b47e4415a99411657e8de4a3997c865f8630d9b8665f8099e3"
       },
       {
-        "path": "src/main/classification/person-additions/philosophers-2026-10-22.jsonl",
-        "sha256": "3b1152f50e64257ad1595e345d94b78713e8c2c4e735e338385294066b525fb4",
-        "reviewedPairs": 255,
         "addedPairs": [
           [
             "あいざいあばーりん",
@@ -6083,12 +6472,12 @@
             "ヴォルテール"
           ]
         ],
-        "categoryRecords": 255
+        "categoryRecords": 255,
+        "path": "src/main/classification/person-additions/philosophers-2026-10-22.jsonl",
+        "reviewedPairs": 255,
+        "sha256": "3b1152f50e64257ad1595e345d94b78713e8c2c4e735e338385294066b525fb4"
       },
       {
-        "path": "src/main/classification/person-additions/comedian-2026-10-22.jsonl",
-        "sha256": "e66a986e3c0aca05afdfb33f14c2395461e95ab6514116fd3ac967f81f49d34d",
-        "reviewedPairs": 3,
         "addedPairs": [
           [
             "さんしゃいんいけざき",
@@ -6120,12 +6509,12 @@
           ]
         ],
         "categoryPairs": [],
-        "categoryRecords": 0
+        "categoryRecords": 0,
+        "path": "src/main/classification/person-additions/comedian-2026-10-22.jsonl",
+        "reviewedPairs": 3,
+        "sha256": "e66a986e3c0aca05afdfb33f14c2395461e95ab6514116fd3ac967f81f49d34d"
       },
       {
-        "path": "src/main/classification/person-additions/comedian-followup-2026-10-22.jsonl",
-        "sha256": "6524701ab8f27a8af3af74ba421c005a76d76ae70434bb119ee367501c4d6386",
-        "reviewedPairs": 14,
         "addedPairs": [
           [
             "いとうたかゆき",
@@ -6245,12 +6634,12 @@
           ]
         ],
         "categoryPairs": [],
-        "categoryRecords": 0
+        "categoryRecords": 0,
+        "path": "src/main/classification/person-additions/comedian-followup-2026-10-22.jsonl",
+        "reviewedPairs": 14,
+        "sha256": "6524701ab8f27a8af3af74ba421c005a76d76ae70434bb119ee367501c4d6386"
       },
       {
-        "path": "src/main/classification/person-additions/comedian-research-2026-10-22.jsonl",
-        "sha256": "975744437fad3f6bb8644355c85c3e756cd2ba4f4ff398e124397acd4fc67200",
-        "reviewedPairs": 1677,
         "addedPairs": [
           [
             "あいかわしゅんすけ",
@@ -19670,12 +20059,12 @@
           ]
         ],
         "categoryPairs": [],
-        "categoryRecords": 0
+        "categoryRecords": 0,
+        "path": "src/main/classification/person-additions/comedian-research-2026-10-22.jsonl",
+        "reviewedPairs": 1677,
+        "sha256": "975744437fad3f6bb8644355c85c3e756cd2ba4f4ff398e124397acd4fc67200"
       },
       {
-        "path": "src/main/classification/person-additions/combat-sports-2026-10-22.jsonl",
-        "sha256": "8fe4dd882d71791591a16e181174290d0ea5bee545d575d28d09460ba7b9843a",
-        "reviewedPairs": 178,
         "addedPairs": [
           [
             "あいまんらまー",
@@ -21107,12 +21496,12 @@
           ]
         ],
         "categoryPairs": [],
-        "categoryRecords": 0
+        "categoryRecords": 0,
+        "path": "src/main/classification/person-additions/combat-sports-2026-10-22.jsonl",
+        "reviewedPairs": 178,
+        "sha256": "8fe4dd882d71791591a16e181174290d0ea5bee545d575d28d09460ba7b9843a"
       },
       {
-        "path": "src/main/classification/person-additions/japanese-mma-2026-10-22.jsonl",
-        "sha256": "d56bf861d7478133e2e39d149f02fa4f8f94fbd2a91dff12f9073a864f2fa02e",
-        "reviewedPairs": 18,
         "addedPairs": [
           [
             "いのうえなおき",
@@ -21152,12 +21541,12 @@
           ]
         ],
         "categoryPairs": [],
-        "categoryRecords": 0
+        "categoryRecords": 0,
+        "path": "src/main/classification/person-additions/japanese-mma-2026-10-22.jsonl",
+        "reviewedPairs": 18,
+        "sha256": "d56bf861d7478133e2e39d149f02fa4f8f94fbd2a91dff12f9073a864f2fa02e"
       },
       {
-        "path": "src/main/classification/person-additions/japanese-mma-gamis-2026-10-22.jsonl",
-        "sha256": "70462df28342a860d720b79e5a9bf498de8ecf0a20566be72ec1551a3f0b7d3c",
-        "reviewedPairs": 60,
         "addedPairs": [
           [
             "いしづかこういち",
@@ -21317,12 +21706,12 @@
           ]
         ],
         "categoryPairs": [],
-        "categoryRecords": 0
+        "categoryRecords": 0,
+        "path": "src/main/classification/person-additions/japanese-mma-gamis-2026-10-22.jsonl",
+        "reviewedPairs": 60,
+        "sha256": "70462df28342a860d720b79e5a9bf498de8ecf0a20566be72ec1551a3f0b7d3c"
       },
       {
-        "path": "src/main/classification/person-additions/japanese-combat-sports-jitenon-2026-10-22.jsonl",
-        "sha256": "c5569f580d8dfdb971ec601ee1cf5ac6f7edae6259e41121360a70656f47aaf0",
-        "reviewedPairs": 1946,
         "addedPairs": [
           [
             "あい",
@@ -27978,12 +28367,12 @@
           ]
         ],
         "categoryPairs": [],
-        "categoryRecords": 0
+        "categoryRecords": 0,
+        "path": "src/main/classification/person-additions/japanese-combat-sports-jitenon-2026-10-22.jsonl",
+        "reviewedPairs": 1946,
+        "sha256": "c5569f580d8dfdb971ec601ee1cf5ac6f7edae6259e41121360a70656f47aaf0"
       },
       {
-        "path": "src/main/classification/person-additions/github-issues-2026-10-22.jsonl",
-        "sha256": "b4d518aad86e271163243f4e9ec7e713701c89d610bb9b751a06c8bb1dd8bd91",
-        "reviewedPairs": 5,
         "addedPairs": [
           [
             "いばやしたつのり",
@@ -28052,12 +28441,12 @@
             "藤井比早之"
           ]
         ],
-        "categoryRecords": 4
+        "categoryRecords": 4,
+        "path": "src/main/classification/person-additions/github-issues-2026-10-22.jsonl",
+        "reviewedPairs": 5,
+        "sha256": "b4d518aad86e271163243f4e9ec7e713701c89d610bb9b751a06c8bb1dd8bd91"
       },
       {
-        "path": "src/main/classification/person-additions/github-issues-2026-10-22-category-followup.jsonl",
-        "sha256": "eeb551f4f67387b7d348e667454152c3e0bce240f2afe2b8fabd4fd838182959",
-        "reviewedPairs": 1,
         "addedPairs": [],
         "addedRecords": 0,
         "addedSourceRows": 0,
@@ -28069,291 +28458,13 @@
             "後藤啓介"
           ]
         ],
-        "categoryRecords": 1
+        "categoryRecords": 1,
+        "path": "src/main/classification/person-additions/github-issues-2026-10-22-category-followup.jsonl",
+        "reviewedPairs": 1,
+        "sha256": "eeb551f4f67387b7d348e667454152c3e0bce240f2afe2b8fabd4fd838182959"
       }
     ],
-    "reviews": [
-      "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl",
-      "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0000.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0001.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0002.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0003.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0004.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0005.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0006.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0007.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0008.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0009.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0010.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0011.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0012.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0013.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0014.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0015.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0016.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0017.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0018.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0019.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0020.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0021.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0022.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0023.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0024.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0025.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0026.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0027.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0028.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0029.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0030.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0031.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0032.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0033.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0034.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0035.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0036.jsonl",
-      "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl",
-      "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl",
-      "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl",
-      "src/main/classification/reviews/2026-10-22-github-issues.jsonl"
-    ],
-    "reviewBaseExcludedCandidatePairs": 5725,
-    "termAdditions": [
-      {
-        "path": "src/main/classification/term-additions.tsv",
-        "sha256": "031b9446633274363467d229074607e495abb0904061dc9b333298af6ebb339b",
-        "pairs": [
-          [
-            "どぱがき",
-            "ドパガキ"
-          ]
-        ]
-      }
-    ],
-    "lunaReclassification": {
-      "path": "build/luna-classification/ledger/results.jsonl.gz",
-      "snapshotManifestSha256": "e1f9c989b51321087525a8b5d27e658aa0f86c84c85976e1f1a72f6d425908de",
-      "sha256": "18619c2c1f36bb33d579890d4746d9543175bd464673ca0fe1a11f25d72449a4",
-      "targetSha256": "cc775b8dbe7884ed692231c1ff14e487ec46d08ecc7c0952348a27222297c0df",
-      "completedPairs": 332618,
-      "effectiveActions": {
-        "adopt": 321267,
-        "reject": 11351
-      },
-      "policy_version": "ime-adopt-reject-v1",
-      "model": "gpt-5.6-luna",
-      "reasoningEffort": "max"
-    },
-    "termClassification": {
-      "apiEndpoint": "generateContent",
-      "batchCount": 218,
-      "billingEnabled": false,
-      "categoryCounts": {
-        "term/general/food_drink_cooking": 4076,
-        "term/general/internet_slang_culture": 568,
-        "term/general/neologisms_trends_youth_language": 483,
-        "term/general/other_general": 20509,
-        "term/general/products_daily_goods": 1159,
-        "term/specialist/chemistry_life_sciences": 27568,
-        "term/specialist/culture_arts_sports": 5368,
-        "term/specialist/earth_environment_resources": 2112,
-        "term/specialist/economics_management": 5784,
-        "term/specialist/engineering_technology": 3511,
-        "term/specialist/humanities_social_sciences": 17897,
-        "term/specialist/information_communications": 6063,
-        "term/specialist/law_politics": 5279,
-        "term/specialist/mathematics_physics": 4171,
-        "term/specialist/transport_safety_defense": 4043
-      },
-      "classificationStatus": "Gemini best-fit; not independently reviewed",
-      "freeTierOnly": true,
-      "freeTierProofs": [
-        {
-          "apiEndpoint": "generateContent",
-          "promptVersion": null,
-          "rpd": 500,
-          "rpm": 15,
-          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
-          "tpm": 250000,
-          "verifiedAt": "2026-10-21T17:48:55+00:00"
-        },
-        {
-          "apiEndpoint": "generateContent",
-          "promptVersion": "term-best-fit-15-categories-ordered-groups-10-v2",
-          "rpd": 500,
-          "rpm": 15,
-          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
-          "tpm": 250000,
-          "verifiedAt": "2026-10-21T17:48:55+00:00"
-        },
-        {
-          "apiEndpoint": "generateContent",
-          "promptVersion": "term-best-fit-15-categories-ordered-groups-10-v2",
-          "rpd": 500,
-          "rpm": 15,
-          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
-          "tpm": 250000,
-          "verifiedAt": "2026-10-21T17:48:55+00:00"
-        },
-        {
-          "apiEndpoint": "generateContent",
-          "promptVersion": "term-best-fit-15-categories-ordered-code-array-v3",
-          "rpd": 500,
-          "rpm": 15,
-          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
-          "tpm": 250000,
-          "verifiedAt": "2026-10-21T17:48:55+00:00"
-        },
-        {
-          "apiEndpoint": "generateContent",
-          "promptVersion": "term-best-fit-15-categories-ordered-code-array-v3",
-          "rpd": 500,
-          "rpm": 15,
-          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
-          "tpm": 250000,
-          "verifiedAt": "2026-10-21T17:48:55+00:00"
-        }
-      ],
-      "model": "gemini-3.5-flash-lite",
-      "projectId": "gen-lang-client-0548563154",
-      "promptVersion": "term-best-fit-15-categories-ordered-code-array-v3",
-      "sourceCandidateSha256": "6909ea156e6973e651a2fe1e4858810d4ded340bce8c082e286597fb4cfde8fc",
-      "sourceTermRecords": 108618,
-      "taxonomySha256": "890e9d1d045f10308aa32cdc39e534b5113c199de3d79404bd22be3cf796bb96",
-      "uniquePairs": 108591
-    },
-    "eventClassification": {
-      "model": "gemini-3.5-flash-lite",
-      "apiEndpoint": "generateContent",
-      "projectId": "gen-lang-client-0548563154",
-      "freeTierOnly": true,
-      "billingEnabled": false,
-      "promptVersion": "event-six-distributable-three-classification-only-v1",
-      "sourcePairSha256": "eda03b21a0436e0bf10861c0592a73bbd0d4de7c256d32a3cd88d5a0c1e5394d",
-      "taxonomySha256": "a84e0e3a84ae8700a2cd7076cb5ace14bab90890a0faff7cf742fe9a153e8d10",
-      "sourcePairRecords": {
-        "src/main/classification/distribution-candidates.tsv.gz": 8717,
-        "src/main/classification/distribution-decisions.tsv.gz": 11237,
-        "src/main/classification/luna-reclassification/baseline-candidates.tsv.gz": 9955,
-        "src/main/classification/luna-reclassification/baseline-decisions.tsv.gz": 9953,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0000.jsonl": 73,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0001.jsonl": 88,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0002.jsonl": 77,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0003.jsonl": 73,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0004.jsonl": 111,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0005.jsonl": 168,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0006.jsonl": 94,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0007.jsonl": 155,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0008.jsonl": 61,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0009.jsonl": 108,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0010.jsonl": 143,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0011.jsonl": 118,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0012.jsonl": 229,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0013.jsonl": 127,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0014.jsonl": 58,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0015.jsonl": 132,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0016.jsonl": 181,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0017.jsonl": 168,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0018.jsonl": 199,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0019.jsonl": 82,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0020.jsonl": 267,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0021.jsonl": 150,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0022.jsonl": 166,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0023.jsonl": 107,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0024.jsonl": 89,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0025.jsonl": 190,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0026.jsonl": 81,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0027.jsonl": 145,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0028.jsonl": 101,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0029.jsonl": 158,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0030.jsonl": 82,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0031.jsonl": 89,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0032.jsonl": 61,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0033.jsonl": 77,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0034.jsonl": 57,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0035.jsonl": 63,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0036.jsonl": 128,
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl": 48
-      },
-      "sourceFiles": {
-        "src/main/classification/distribution-candidates.tsv.gz": "84289265cef551c0a53a09af99180896a7a81f200b744e1b9bd642a71b23fd50",
-        "src/main/classification/distribution-decisions.tsv.gz": "0704fb276c80590da1e7f88fd504ec6fc716c5d2778e85eb52b75a10fcf14fee",
-        "src/main/classification/luna-reclassification/baseline-candidates.tsv.gz": "769a601735284d6361e2da0f4305c73b6ec2637839afea6ad9efbdbc34473ae6",
-        "src/main/classification/luna-reclassification/baseline-decisions.tsv.gz": "dbdb4b455c4fa766402bd16c265513ab54c1e1925fc65d2ea010aee8ed59bf82",
-        "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl": "574794d0df19f8afd09d06b66897d7b7fce97dd3652bc005674a3ecae28bb30a",
-        "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl": "5a373897bbade57c507d08e4813baa7d5975bc752a568cdaee8aaebd9d18f155",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0000.jsonl": "5eaebf4828887cf0ea8351dc63598e2b24e836ad670c40fb8ab3a69d517c0f4d",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0001.jsonl": "b6bee8c6e4350fe3f154351219b24d01fd13960ef90dbf553bcefd3e1bb1bed2",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0002.jsonl": "345d1cf7132bd1e3f1c4ba91df00b1247af8ea61f662e3e592d834f1a1f7e5f5",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0003.jsonl": "9b4987ccd2f30c13863c4b238a9bf05109bdee5dcfdf5aa42eab4f7ce33deb78",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0004.jsonl": "7ebfd811359beff12247188f94bf424981bad0c4f83d521da654a51b536a64aa",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0005.jsonl": "b4c86b0d78d67a9af9d2295de7a67ef5ebbec057b341ed4b16d89fd4ccc9e163",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0006.jsonl": "adaea509c1b7c826820bb7b2d087a4eabc637e4b1ce0bcaf367ed15b8916af18",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0007.jsonl": "57d433272f8b898f1dbfc014844f61d07d0163d4d9506e0079bbd7c53bd699b8",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0008.jsonl": "3bc5c15aa29f71ad8b01ae0af43308d280ec64ae992025e658785c5453ffb3c7",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0009.jsonl": "8f1b39c3e2f0f8c17fc78291ad50289f9762abec793f5cf44d6f1e85f1ed8a9d",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0010.jsonl": "21bf60a65d754d5c508db0cc3662f2fa1a5e7cb7a96f3f9bf4e4111264a34456",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0011.jsonl": "e8a3d42cfb65ee580fcff495fd64c199d69d48b436a8939a27207438d69a4635",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0012.jsonl": "fc3514e09d4f98a15ae3f118261c2e991c188f4b34deb00e284405faca806168",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0013.jsonl": "27750f64459fd3c11c64439d9e3483c9490676166fa4d75af6cc9c46c337be55",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0014.jsonl": "1f7c735c691b42c125d97bb2cf14e28d79323b288cde8cd2220a421a27fd5f5b",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0015.jsonl": "dd27d95dea28b168d97a6d00d5bb68bce788ac385b4b4649f4cdad4e294f4966",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0016.jsonl": "0c5a8bbb4b5ad26bbce6a1845f957a55bdb0342556cd168a39e01bbe5f410266",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0017.jsonl": "dd80c4156ff6e3117f1c6db94fff9687f387160f88b983048a37741f3c97c2f1",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0018.jsonl": "c799379a4e4db31f67c685eca18b63e196ae2bd6ed0b109d00b2ea4122473c48",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0019.jsonl": "84980351295ca883097f8aea1afea37f532e5aa3553553db56f7b0d46c3be88c",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0020.jsonl": "eed6452589ed3471804d1ffd7782b86d0b30c97563484ba48c35e1bb6720837d",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0021.jsonl": "b765423c668d59a5ee65e99c3b6857803b29ebc642414b92eed6e30d6e5284bc",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0022.jsonl": "4bce6ec686e6d37fcf3488afef068a1e7521063ca9ab712730acc8591a4aa70b",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0023.jsonl": "a7972f5ddcb56879c05307495d65ea702d36a94fd73f64f52fb279f91ba2f9f4",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0024.jsonl": "ce2cec645210f75b4ef61f982fe2a306c509136f59d8814f723b43bfbd401d22",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0025.jsonl": "3036ca1ad2d9946ea3d4f132e800465b9b158a26f884d547e001194e7322f969",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0026.jsonl": "ac6f596a28e9c0fb016e6d8388760794918e7e51475e5e524e4e49b8d7c3323e",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0027.jsonl": "3f320ac860eb0d6030c848a35e63d38b72d70ae13147193950c931fc047e657c",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0028.jsonl": "cdb0636ce4ea364f7d7a5d29d951722434134440373e12c1318ad33eabdda9a9",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0029.jsonl": "91487e3492b8540b39d3e44a2afcccc34d3f362a848de00c650a11db20628f3e",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0030.jsonl": "ff1543cb5f508c3a88314888e0c3a2d53c460fdbef4deb05f557dee49ca07b92",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0031.jsonl": "1ddb7637758de1abbe4a14eeeff89f1ba8114861982c9cfa9c16356b21055972",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0032.jsonl": "19bdd708a037ace8e38c2ccc84c9abd7920be6eeb288d0de590ac4490c9a22a7",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0033.jsonl": "84637398e3fb1518b53f6bc81470ed3316c48c5bb29c9629c4a76dfe821f4af0",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0034.jsonl": "ad31487ccded464ffc35d442b016879cc020a0d32e510c3d1c0d5ca029854127",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0035.jsonl": "e0397e26a62a4802077af40afecd176dd9f32e8ca6e9db0c0c15a99b67210067",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0036.jsonl": "05fb5fef150cbd033c6c031916b4f583bd1e6c7fd82c1ccdcc90465450614e75",
-        "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl": "59f4fb8499430452c3e32a12c9fafaceadbd096256a227f60cb7546454fa5cd7",
-        "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl": "6b65e3c0092f7113000199e7dd7f530cc5e5f9911913ecb3c741a65aeef0a42b",
-        "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl": "7585c7afb2c8413500eab761ad429c461f139a414148c9be907442daeb141d5a"
-      },
-      "uniquePairs": 12477,
-      "batchCount": 50,
-      "categoryCounts": {
-        "event/history/conflict": 2085,
-        "event/incident/accident": 288,
-        "event/incident/crime": 1175,
-        "event/incident/natural_disaster": 611,
-        "event/incident/social_issue_litigation": 996,
-        "event/incident/terrorism": 46,
-        "event/occasion/exam_qualification": 243,
-        "event/occasion/observance": 1104,
-        "event/occasion/organized_event": 5929
-      },
-      "freeTierProofs": [
-        {
-          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
-          "verifiedAt": "2026-10-21T17:48:55+00:00",
-          "apiEndpoint": "generateContent",
-          "promptVersion": "event-six-distributable-three-classification-only-v1",
-          "rpm": 15,
-          "tpm": 250000,
-          "rpd": 500
-        }
-      ],
-      "classificationStatus": "Gemini best-fit; not independently reviewed"
-    },
     "personDictionaryExclusions": {
-      "categoryIds": [
-        "military",
-        "thought"
-      ],
       "candidateKeys": [
         "010dc07d10c491a5ed078058539bf120bb40332bf7c862dbfb81afb34a45f5b1",
         "014916145ca079cfae11677447ab8ad24a519a740e4f2c53787ff15d49162a22",
@@ -29278,225 +29389,163 @@
         "ff448a79670ed5f59b64f88c2d3a4421cbae63d51fa97e7f60a91b2362cfe8ae",
         "ff76572fbea0a2a179841fb7d38dc0033b824faff3cbe3b4cbb6ec3b45dfb52f"
       ],
+      "categoryIds": [
+        "military",
+        "thought"
+      ],
       "uniquePairs": 922
+    },
+    "reviewBaseExcludedCandidatePairs": 5725,
+    "reviews": [
+      "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl",
+      "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0000.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0001.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0002.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0003.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0004.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0005.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0006.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0007.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0008.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0009.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0010.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0011.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0012.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0013.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0014.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0015.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0016.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0017.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0018.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0019.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0020.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0021.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0022.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0023.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0024.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0025.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0026.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0027.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0028.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0029.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0030.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0031.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0032.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0033.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0034.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0035.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0036.jsonl",
+      "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl",
+      "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl",
+      "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl",
+      "src/main/classification/reviews/2026-10-22-github-issues.jsonl",
+      "src/main/classification/reviews/2026-10-23-media-demographics-complete.jsonl",
+      "src/main/classification/reviews/2026-10-23-media-demographics-gemini.jsonl",
+      "src/main/classification/reviews/2026-10-23-media-demographics-resolution.jsonl",
+      "src/main/classification/reviews/2026-10-23-media-demographics.jsonl",
+      "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl"
+    ],
+    "termAdditions": [
+      {
+        "pairs": [
+          [
+            "どぱがき",
+            "ドパガキ"
+          ]
+        ],
+        "path": "src/main/classification/term-additions.tsv",
+        "sha256": "031b9446633274363467d229074607e495abb0904061dc9b333298af6ebb339b"
+      }
+    ],
+    "termClassification": {
+      "apiEndpoint": "generateContent",
+      "batchCount": 218,
+      "billingEnabled": false,
+      "categoryCounts": {
+        "term/general/food_drink_cooking": 4076,
+        "term/general/internet_slang_culture": 568,
+        "term/general/neologisms_trends_youth_language": 483,
+        "term/general/other_general": 20509,
+        "term/general/products_daily_goods": 1159,
+        "term/specialist/chemistry_life_sciences": 27568,
+        "term/specialist/culture_arts_sports": 5368,
+        "term/specialist/earth_environment_resources": 2112,
+        "term/specialist/economics_management": 5784,
+        "term/specialist/engineering_technology": 3511,
+        "term/specialist/humanities_social_sciences": 17897,
+        "term/specialist/information_communications": 6063,
+        "term/specialist/law_politics": 5279,
+        "term/specialist/mathematics_physics": 4171,
+        "term/specialist/transport_safety_defense": 4043
+      },
+      "classificationStatus": "Gemini best-fit; not independently reviewed",
+      "freeTierOnly": true,
+      "freeTierProofs": [
+        {
+          "apiEndpoint": "generateContent",
+          "promptVersion": null,
+          "rpd": 500,
+          "rpm": 15,
+          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+          "tpm": 250000,
+          "verifiedAt": "2026-10-21T17:48:55+00:00"
+        },
+        {
+          "apiEndpoint": "generateContent",
+          "promptVersion": "term-best-fit-15-categories-ordered-groups-10-v2",
+          "rpd": 500,
+          "rpm": 15,
+          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+          "tpm": 250000,
+          "verifiedAt": "2026-10-21T17:48:55+00:00"
+        },
+        {
+          "apiEndpoint": "generateContent",
+          "promptVersion": "term-best-fit-15-categories-ordered-groups-10-v2",
+          "rpd": 500,
+          "rpm": 15,
+          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+          "tpm": 250000,
+          "verifiedAt": "2026-10-21T17:48:55+00:00"
+        },
+        {
+          "apiEndpoint": "generateContent",
+          "promptVersion": "term-best-fit-15-categories-ordered-code-array-v3",
+          "rpd": 500,
+          "rpm": 15,
+          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+          "tpm": 250000,
+          "verifiedAt": "2026-10-21T17:48:55+00:00"
+        },
+        {
+          "apiEndpoint": "generateContent",
+          "promptVersion": "term-best-fit-15-categories-ordered-code-array-v3",
+          "rpd": 500,
+          "rpm": 15,
+          "sha256": "7f32ea5339f1cce4cccf0f991f920571435951cd230285fef13fdecc9a95eaac",
+          "tpm": 250000,
+          "verifiedAt": "2026-10-21T17:48:55+00:00"
+        }
+      ],
+      "model": "gemini-3.5-flash-lite",
+      "projectId": "gen-lang-client-0548563154",
+      "promptVersion": "term-best-fit-15-categories-ordered-code-array-v3",
+      "sourceCandidateSha256": "6909ea156e6973e651a2fe1e4858810d4ded340bce8c082e286597fb4cfde8fc",
+      "sourceTermRecords": 108618,
+      "taxonomySha256": "890e9d1d045f10308aa32cdc39e534b5113c199de3d79404bd22be3cf796bb96",
+      "uniquePairs": 108591
     }
   },
-  "inputs": {
-    "src/main/bin/names.txt": "1f4faaa6c43a24f8d599476d10e978c5d3990ea0de26fe08f137cdb8c61b731a",
-    "src/main/bin/place.txt.zip": "bae15eb6755a2e6aa30d1d9ece7970c7d97d761b6e430c59bc11222f8e2e6f01",
-    "src/main/bin/only_wiki.txt.zip": "2c3ca451484900edee55ae4ebe79284e1301b077572f64e9100889a5755bed10",
-    "src/main/bin/only_neologd.txt.zip": "64222fa806e424556b662619fb7cba9ac9683f89959afee909dadb112027458e",
-    "src/main/bin/wiki_neologd_common.txt.zip": "1b0638f24e057077c1b1471dc30e741670b547979db458eb447af5cc7221283c",
-    "src/main/classification/person-additions/fighters-2026-10-14.jsonl": "21ba7b7db33feb7c1b55abfacb1fb6c451dd11d8a06175cfee7d36de53043eaf",
-    "src/main/classification/term-additions.tsv": "031b9446633274363467d229074607e495abb0904061dc9b333298af6ebb339b",
-    "src/main/classification/person-additions/joc-paris2024-2026-10-21.jsonl": "756f05ac434375e66f3ef023e8586cae01ceaf5493f1c64a4ce4826e472fdce5",
-    "src/main/classification/person-taxonomy.json": "cce0204d9e00d15516ae5d013f47087e993e2b7c73197d973afab481c772993f",
-    "src/main/classification/person-additions/joc-tokyo2020-2026-10-21.jsonl": "c2744d010e6a99b47e4415a99411657e8de4a3997c865f8630d9b8665f8099e3",
-    "src/main/classification/term-taxonomy.json": "890e9d1d045f10308aa32cdc39e534b5113c199de3d79404bd22be3cf796bb96",
-    "src/main/classification/term-classifications.tsv.gz": "2a1414eff371092bf5cadfd8ab9b183e750cbf8f6534fdb0e72710ee3612f45a",
-    "src/main/classification/term-classifications-manifest.json": "249f29bc46496088191861e1124392bf4a955c89ecc6912b68683a8b8d2e36b1",
-    "src/main/classification/event-taxonomy.json": "a84e0e3a84ae8700a2cd7076cb5ace14bab90890a0faff7cf742fe9a153e8d10",
-    "src/main/classification/event-classifications.tsv.gz": "976c5d281e037f9704ea86f17a40031ce30f424c8e45fad948341c336236c64b",
-    "src/main/classification/event-classifications-manifest.json": "5e42d9903f24e511f948ef68f79b385329ee0131b19ead4aa2062926347e26c0",
-    "src/main/classification/person-additions/philosophers-2026-10-22.jsonl": "3b1152f50e64257ad1595e345d94b78713e8c2c4e735e338385294066b525fb4",
-    "src/main/classification/person-additions/comedian-2026-10-22.jsonl": "e66a986e3c0aca05afdfb33f14c2395461e95ab6514116fd3ac967f81f49d34d",
-    "src/main/classification/person-additions/comedian-followup-2026-10-22.jsonl": "6524701ab8f27a8af3af74ba421c005a76d76ae70434bb119ee367501c4d6386",
-    "src/main/classification/person-additions/comedian-research-2026-10-22.jsonl": "975744437fad3f6bb8644355c85c3e756cd2ba4f4ff398e124397acd4fc67200",
-    "src/main/classification/person-additions/combat-sports-2026-10-22.jsonl": "8fe4dd882d71791591a16e181174290d0ea5bee545d575d28d09460ba7b9843a",
-    "src/main/classification/person-additions/japanese-mma-2026-10-22.jsonl": "d56bf861d7478133e2e39d149f02fa4f8f94fbd2a91dff12f9073a864f2fa02e",
-    "src/main/classification/person-additions/japanese-mma-gamis-2026-10-22.jsonl": "70462df28342a860d720b79e5a9bf498de8ecf0a20566be72ec1551a3f0b7d3c",
-    "src/main/classification/person-additions/japanese-combat-sports-jitenon-2026-10-22.jsonl": "c5569f580d8dfdb971ec601ee1cf5ac6f7edae6259e41121360a70656f47aaf0",
-    "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl": "574794d0df19f8afd09d06b66897d7b7fce97dd3652bc005674a3ecae28bb30a",
-    "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl": "5a373897bbade57c507d08e4813baa7d5975bc752a568cdaee8aaebd9d18f155",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0000.jsonl": "3ab59c82e6e0645da8f513606038212b601c0c4c46273db4faf8122d6812cf1d",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0001.jsonl": "aeb954b3b768dbc66269fdbc5b6c168317cdf186dd284d0c26174c3a88f12385",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0002.jsonl": "0c6b091c4f9c63a525923521e4b5d316b866ef34572a7550a87303f45adb3399",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0003.jsonl": "fb3208e6dfd4c2c0982ce1b9bb3e10e994ae764f6f46b8e9bba815cf8b148c7c",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0004.jsonl": "30c75b6990484bf9ed686ed675e8dc1ef2c57e3dc59bc5c70621c8e288c694d1",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0005.jsonl": "bd71a58bfcc91e63a015aae7d98ab2f93f6c6d2e0b4c9ae2a48fb8b661d9fbe6",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0006.jsonl": "0242528087fc0179cca9a3e0fdbeb121623207a042071f7078965fca2fe71cf6",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0007.jsonl": "e36021678abce248008ab443123bf76854d134026cb8428ca0ea3206252b23a7",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0008.jsonl": "ae9c02c0d685e3d9ace813045c7f68d402763c019df388cd268d3f0632e538ef",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0009.jsonl": "64d9be2102fead7c25c327da32a8079242c77b4822ce01cf35319038f13bca0f",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0010.jsonl": "30c710d16f302b21d120a3c8100a977554f12818f94a6bf4e0404b5de945f5ab",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0011.jsonl": "26861e29d76756aea164aa436ec24305b905d2c20acf224a7236b83f48d1a9e1",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0012.jsonl": "ee789e6fdacabf4856757ef46b7915fec47000694f01d27f4d96829fb2ec9085",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0013.jsonl": "9597cc8a1da7657f18f478dc0d1f2a49429b056d44e3597ddd78021d6791e7a5",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0014.jsonl": "a51c1ba44a45511971d1a181fd8e73f08412853dcaecac309db3018f44c9f2a9",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0015.jsonl": "7e3d71a7e1bb19756c6a7085b00605404d0e08a44159f5f87ed5aacbb901d691",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0016.jsonl": "3a52e2e016ad55b7781dd441d4ba764601ac2f1d92e894ac2b87be519a155017",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0017.jsonl": "0a9e3a334010d6434918e3987484a6f769eb0b75a34dfe571aed102fff7f9bcb",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0018.jsonl": "3f14a3379366f64729c9b1282c13b76b545277ccaf6919322c87da87c5c206f5",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0019.jsonl": "8c70a873d81a92a0f986a2f5e65b8bac262e3afc596c459ec4cd746765afc3ce",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0020.jsonl": "99ee7a4fde4c2e7eff65d17614e45e2b46eeb2adc22fcce8dd4aef1866b7c1c7",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0021.jsonl": "5b72cb7963fcc64f8d204fbf3ac13f4fad7b742afaa281915fe815a20e10e2ce",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0022.jsonl": "7de12b3846a48b25337e3019d8b83d296451663bafc2fcab5e8cdd2f560baead",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0023.jsonl": "5e76d3d0ae202cf4a7923160934b166ec80e7c37b099de40c64d25b5552c9840",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0024.jsonl": "a386e98c7b73da6c22c58fd8a257a129155b6cc324a67304225e4479e8a9a2a5",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0025.jsonl": "6c75c3febe40b3f8eeffcedb30c6b35345cef94fe93c930ff7c75554ac2340a9",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0026.jsonl": "69e094a7a2878851ff8d819a25d442daf3304c8b9a0eaabbd69012021729f5c4",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0027.jsonl": "25d91067d3a221ff9a953b8c5a5118b5c52bf5f18c99a09fabd31885bc264d52",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0028.jsonl": "ac8efca12d7a02e1e6a4091d117abaff1084b695609bd50bcd3724e9c68080e4",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0029.jsonl": "8ea54ea6f7d90d57d13a3ab3b6fa350bf152dcc95bd96bab09e801199b0cef68",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0030.jsonl": "d7702cb0d2c72ef5090f459b979c760eaf221b32a3d222f4e1f93865837df8bc",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0031.jsonl": "33094b3250f76462a4cbe17b1b92200121d85b23cba0e295c04cfb9651effb9c",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0032.jsonl": "8a7314bf9af38d703433ce388990b7bbfd909342caf4611feb351760b1c998a3",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0033.jsonl": "42e5712f6e4d46901ed3a5d9dbf8858a75f72447a6e1b10171fcd0a9fd70ad60",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0034.jsonl": "af17352f502fd8e5e71aeacebde27c25fec24b8c87e06673d363a03b6901b613",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0035.jsonl": "0439e2e64405711c66843dd368f0f266c9537a21b7d61cd6a3265be21f95030d",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0036.jsonl": "8940d95708577f08838139e6f7e65b9ce67cccf02bed5099ca3f555d6993cf9c",
-    "src/main/classification/reviews/2026-10-16-pr128-luna-0037.jsonl": "59f4fb8499430452c3e32a12c9fafaceadbd096256a227f60cb7546454fa5cd7",
-    "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl": "6b65e3c0092f7113000199e7dd7f530cc5e5f9911913ecb3c741a65aeef0a42b",
-    "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl": "7585c7afb2c8413500eab761ad429c461f139a414148c9be907442daeb141d5a",
-    "src/main/classification/reviews/2026-10-22-github-issues.jsonl": "053d827a1f2c9358db0f099742b85e737ee3cdf4314f0bc41221eef837b4c730",
-    "src/main/classification/person-additions/github-issues-2026-10-22.jsonl": "b4d518aad86e271163243f4e9ec7e713701c89d610bb9b751a06c8bb1dd8bd91",
-    "src/main/classification/person-additions/github-issues-2026-10-22-category-followup.jsonl": "eeb551f4f67387b7d348e667454152c3e0bce240f2afe2b8fabd4fd838182959"
-  },
-  "files": {
-    "categories.json": "2f2c436d9015eb5d321b543b568fce2fe52a2acddfac25a0151e798fea5c63ff",
-    "distribution-candidates.tsv.gz": "e0348e8a7285a2ab80542485d5194bf85270b9a7dec0e97c38d0aa2555c05d12",
-    "distribution-decisions.tsv.gz": "52648217449eaa546b3c4a26f1352ea738db69ad62213311ff66aa2ee417e063"
-  },
-  "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
+  "schemaVersion": 3,
   "sourceRows": {
+    "neologd": 404817,
     "person": 73973,
     "place": 170145,
-    "wiki": 150132,
-    "neologd": 404817,
+    "term_additions": 1,
     "web": 308185,
-    "term_additions": 1
+    "wiki": 150132
   },
-  "admittedPairsByOrigin": {
-    "manual": 384259,
-    "gemini": 183166,
-    "verified": 177295
-  },
-  "uniqueAdmittedPairs": 744720,
-  "excludedCandidatePairs": 328586,
-  "excludedClassifiedPairs": 322861,
   "unclassifiedPairs": 0,
-  "noResultPairs": 0,
-  "conflicts": {
-    "verified_over_gemini": 30,
-    "manual_over_gemini": 4321,
-    "verified_over_manual": 8
-  },
-  "categoryRows": {
-    "person": 270954,
-    "character": 6871,
-    "mythological_figure": 3436,
-    "place": 45088,
-    "address": 152874,
-    "station": 12758,
-    "facility": 35070,
-    "transport_route": 4230,
-    "organization": 47484,
-    "lineage": 2019,
-    "product": 9890,
-    "vehicle": 2580,
-    "event/occasion/organized_event": 4059,
-    "event/occasion/observance": 802,
-    "event/occasion/exam_qualification": 169,
-    "event/incident/natural_disaster": 456,
-    "event/incident/social_issue_litigation": 641,
-    "event/history/conflict": 1534,
-    "award": 1163,
-    "agreement": 424,
-    "initiative": 1061,
-    "term/general/products_daily_goods": 1159,
-    "term/general/food_drink_cooking": 4077,
-    "term/general/internet_slang_culture": 573,
-    "term/general/neologisms_trends_youth_language": 483,
-    "term/general/other_general": 20503,
-    "term/specialist/information_communications": 6073,
-    "term/specialist/mathematics_physics": 4171,
-    "term/specialist/chemistry_life_sciences": 27566,
-    "term/specialist/engineering_technology": 3509,
-    "term/specialist/earth_environment_resources": 2110,
-    "term/specialist/economics_management": 5779,
-    "term/specialist/law_politics": 5273,
-    "term/specialist/humanities_social_sciences": 17877,
-    "term/specialist/culture_arts_sports": 5360,
-    "term/specialist/transport_safety_defense": 4037,
-    "work_franchise": 849,
-    "work_manga": 5148,
-    "work_anime": 1104,
-    "work_film": 6504,
-    "work_program": 9311,
-    "work_book": 7660,
-    "work_game": 3156,
-    "work_music": 10337,
-    "work_stage": 571,
-    "work_periodical": 1812,
-    "work_other": 2683
-  },
-  "dictionaryRows": 761248,
-  "limitations": [
-    "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified."
-  ],
-  "categoryGroups": [
-    {
-      "id": "event",
-      "name": "イベント・事件",
-      "groups": [
-        {
-          "id": "event/occasion",
-          "name": "催し・行事",
-          "categories": [
-            "event/occasion/organized_event",
-            "event/occasion/observance",
-            "event/occasion/exam_qualification"
-          ]
-        },
-        {
-          "id": "event/incident",
-          "name": "事件・事故・災害",
-          "categories": [
-            "event/incident/natural_disaster",
-            "event/incident/social_issue_litigation"
-          ]
-        },
-        {
-          "id": "event/history",
-          "name": "歴史的出来事・紛争",
-          "categories": [
-            "event/history/conflict"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "term",
-      "name": "一般語・専門用語",
-      "groups": [
-        {
-          "id": "term/general",
-          "name": "一般語",
-          "categories": [
-            "term/general/products_daily_goods",
-            "term/general/food_drink_cooking",
-            "term/general/internet_slang_culture",
-            "term/general/neologisms_trends_youth_language",
-            "term/general/other_general"
-          ]
-        },
-        {
-          "id": "term/specialist",
-          "name": "専門語",
-          "categories": [
-            "term/specialist/information_communications",
-            "term/specialist/mathematics_physics",
-            "term/specialist/chemistry_life_sciences",
-            "term/specialist/engineering_technology",
-            "term/specialist/earth_environment_resources",
-            "term/specialist/economics_management",
-            "term/specialist/law_politics",
-            "term/specialist/humanities_social_sciences",
-            "term/specialist/culture_arts_sports",
-            "term/specialist/transport_safety_defense"
-          ]
-        }
-      ]
-    }
-  ]
+  "uniqueAdmittedPairs": 744616
 }

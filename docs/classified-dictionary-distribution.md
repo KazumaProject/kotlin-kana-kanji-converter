@@ -1,6 +1,6 @@
 # 分類辞書の生成と配布
 
-既存の Web・Person・Place・Neologd・wiki の5辞書は、47種類の意味カテゴリ辞書へ置き換えます。追加の漢方・医療2カテゴリを合わせ、計49カテゴリを配布します。[専門辞書の入力と条件](specialist-dictionaries.md) を参照してください。元の5辞書のテキストは、分類結果との照合と品詞・コストの復元に使用します。
+既存の Web・Person・Place・Neologd・wiki の5辞書は、55種類の意味カテゴリ辞書へ置き換えます。追加の漢方・医療2カテゴリを合わせ、計57カテゴリを配布します。[専門辞書の入力と条件](specialist-dictionaries.md) を参照してください。元の5辞書のテキストは、分類結果との照合と品詞・コストの復元に使用します。
 
 一般語・専門用語の `term` は親ディレクトリです。`term/general/` に一般語5分類、`term/specialist/` に専門語10分類を置きます。15分類すべてに収録する用語はGemini 3.5 Flash-Liteの無料枠で `generateContent` APIを並列利用して分類し、読み・表記ごとに最も適合する分類を1つ選びます。分類結果と無料枠の実行情報は固定データに保存し、候補・応答・途中経過はリポジトリ外に置きます。結果は未独立検証のGemini分類として扱います。
 
@@ -8,9 +8,26 @@
 
 イベント辞書は `src/main/classification/event-taxonomy.json` で「催し・行事」「事件・事故・災害」「歴史的出来事」の3群に分類します。配布するのは催し・行事、記念日・啓発日、試験・検定、自然災害、社会問題・騒動・訴訟、歴史的紛争・政変の6カテゴリです。現在の配布データには合計7,660組を収録し、各カテゴリの件数は[収録一覧](classified-dictionary-catalog/index.md)に掲載しています。犯罪事件・テロ事件・事故は分類用ラベルだけを定義し、該当する読み・表記ペアを分類結果、候補、判断台帳、カタログ、配布データに保存しません。分類はGemini 3.5 Flash-Liteの無料枠を2ワーカーで利用し、候補語と応答本文は保存しません。途中の分類結果は読み・表記と切り離した数値ID・カテゴリIDとしてリポジトリ外の作業領域に一時保存し、完了後に削除します。進捗ではカテゴリ別件数を報告します。無料枠の利用上限に達した場合は処理を停止し、未完了分を再開します。元の広域辞書テキストは分類の入力として維持します。
 
+アニメ・漫画作品と架空キャラクターの分類は `src/main/classification/media-demographic-taxonomy.json` で定義します。配布ラベルは少年向け・青年向け・少女向け・女性向け（Josei）・子ども向け（Kids）・対象層の指定なし／一般向けの6種類です。複数対象層はレビュー用の中間ラベルとして残し、配布前に最も近い単一対象層へ割り当てます。出典未確認・対象層未確定は照合時点の作業状態として定義し、今回の配布辞書には残しません。MyAnimeListは二次的なコミュニティ編集データで、Geminiの判定も個別出典の確認ではありません。アニメは出典が漫画と記録され同名の原作漫画を照合できる場合に限り対象層を継承します。架空キャラクターは出典作品の対象層を継承し、設定年齢では分類しません。公開資料で成人向けと明示された作品、MyAnimeListのHentai／Rx - Hentaiタグが付く作品、またはGeminiが成人向けと判定した作品・キャラクターは全配布カテゴリから除外します。Geminiの成人判定にも誤りがあり得るため、成人向け作品を完全に検出できるとは保証しません。
+
+2026-10-23時点で対象層レビューがある12,708組のうち、成人ラベル104組を除く12,604組を6つの配布カテゴリに収録しました。少年向け4,106組（4,117レコード）、青年向け1,730組（1,731レコード）、少女向け822組（826レコード）、女性向け349組（355レコード）、子ども向け546組（549レコード）、対象層の指定なし／一般向け5,051組（5,099レコード）です。`mixed`、出典未確認、対象層未確定の配布件数はすべて0組・0レコード、辞書全体の `unclassifiedPairs` と `noResultPairs` も0です。
+
+複数対象層だった54組（56レコード）は、出典タグが複数だった38組とGeminiが複数対象層とした16組を、保存済みの `nearest-single-demographic-v1` レビューで一つに決めました。割り当て先は少年向け12組、青年向け17組、少女向け5組、女性向け7組、子ども向け11組、対象層の指定なし2組です。この54組の単一カテゴリ選択はassistantのベストフィット判断で、Gemini APIによる追加分類や独立した出典確認は行っていません。成人向けと判定した34組は公開資料で確認済みの70組と合わせた104組すべてが配布対象外です。Geminiを用いた8,197組の最善推定は独立した出典確認ではなく、対象層や成人判定の誤りが残る可能性があります。
+公開スナップショット照合の10,329件は `src/main/classification/reviews/2026-10-23-media-demographics-complete.jsonl` に、`source_unverified` だった8,197件のモデル再分類は `src/main/classification/reviews/2026-10-23-media-demographics-gemini.jsonl` に保存しました。再生成用のKaggle/Hugging Face CSVはリポジトリに含めません。`scripts/generate_media_demographic_reviews.py` はローカルCSVを標準ライブラリで照合し、外部APIを呼びません。Gemini判定のモデル名、プロンプト・入力ハッシュ、件数、トークン使用量は `src/main/classification/media-demographic-gemini-manifest.json` に記録し、候補名・応答本文・APIキーは含めません。各レビューに応答ハッシュとマニフェストハッシュを保存します。出典と帰属表示は [LICENSE-DATA.md](../LICENSE-DATA.md) を参照してください。
+
+```sh
+python3 scripts/generate_media_demographic_reviews.py \
+  --anime-csv /path/to/anime_dataset.csv \
+  --manga-csv /path/to/manga_dataset.csv \
+  --characters-csv /path/to/anime-characters-dataset.csv \
+  --write
+```
+
+書き込み前は `--write` を省略して件数だけ確認できます。曖昧なタイトル一致、未付与のdemographics、Josei・Kidsタグは少年・青年・少女へ推定変換しません。Hentai／Rx - Hentaiタグが読者層タグと同じレコードに併記される場合は、成人向けを優先して除外します。出典未確認カテゴリは、照合不能・複数一致・異なる対象層の食い違いを明示します。
+
 ## 固定入力
 
-`src/main/classification/categories.json` は配布カテゴリの一覧、`term-taxonomy.json` は用語の親カテゴリと15の葉カテゴリ、`event-taxonomy.json` はイベントの3群と分類ラベルの定義です。`term-classifications.tsv.gz` と `event-classifications.tsv.gz` は配布可能なカテゴリに分類された読み・表記ペアのGemini分類結果を固定します。イベントの分類専用ラベルに該当するペアは分類結果にも保存しません。`distribution-decisions.tsv.gz` は読み・表記ごとの最終分類、分類元、収録状態を保存します。分類取得失敗は `no_result` として未分類と区別し、バイナリには収録しません。`distribution-candidates.tsv.gz` はカテゴリ・読み・左品詞ID・右品詞ID・コスト・表記の6列で、元辞書のレコードを保持します。TSVはUTF-8、ヘッダーなしです。
+`src/main/classification/categories.json` は配布カテゴリの一覧、`term-taxonomy.json` は用語の親カテゴリと15の葉カテゴリ、`event-taxonomy.json` はイベントの3群と分類ラベル、`media-demographic-taxonomy.json` は作品・キャラクターの対象層、出典未確認状態、成人除外ラベルを定義します。`term-classifications.tsv.gz` と `event-classifications.tsv.gz` は配布可能なカテゴリに分類された読み・表記ペアのGemini分類結果を固定します。イベントの分類専用ラベルと成人向けラベルは配布カテゴリに含めません。成人向けラベルを持つレビューは全カテゴリからの除外として検証します。`distribution-decisions.tsv.gz` は読み・表記ごとの最終分類、分類元、収録状態を保存します。分類取得失敗は `no_result` として未分類と区別し、バイナリには収録しません。`distribution-candidates.tsv.gz` はカテゴリ・読み・左品詞ID・右品詞ID・コスト・表記の6列で、元辞書のレコードを保持します。TSVはUTF-8、ヘッダーなしです。
 
 詳細なLuna再分類台帳はGitへ含めず、`.gitignore` 対象の `build/luna-classification/ledger/results.jsonl.gz` にローカル保存します。台帳がない環境でも固定済み配布データとカテゴリ別カタログを検証できますが、Luna応答からの再現監査はスキップされます。カタログの `--check` は不採用理由ページとその要約の照合をスキップし、完全な照合と再生成にはローカル台帳が必要です。
 
@@ -73,7 +90,7 @@ python3 scripts/write_classified_dictionary_catalog.py --check
 
 Gemini分類器は標準配布が無効なカテゴリを選択肢から外し、軍事関係者や哲学者・思想家、出演者・制作者など手動確認が必要なコードも受け付けません。成人関連項目は公開資料による手動確認を行い、個人名はリポジトリに残しません。Gemini実行には、リポジトリ外に置いた候補の許可リストと、制限カテゴリまたはメタデータ専用の成人関連保留に属する候補キーを示す除外リストの両方が必要です。除外JSONLは候補キーのSHA-256とカテゴリIDだけを含めます（例：`{"candidate_key":"<64桁SHA-256>","category_id":"adult_related_hold"}`）。コードは分類記録で確認済みの出演者・制作者・成人関連保留候補のハッシュがすべて除外リストにあり、送信候補から外れていることを確認します。未知の成人関連候補が外部の確認記録にない場合までは検出できません。候補名を含む分類ワークスペースとAI応答もリポジトリ外に置きます。過去の一括Gemini実行では候補許可・除外リストを使った記録を確認できなかったため、成人候補を除外していたとは確認できません。この確認強化は今回以降の実行を対象にします。
 
-通常の `v*` リリースでも、汎用 `person` を削除し、`standard_enabled: true` の人物細分類29カテゴリに置き換えた配布ZIPを作成します。既存の非人物カテゴリ48件を含め、ZIPの配布カテゴリは合計77件です。`person-dictionaries-v*` タグは同じ置換ZIPを専用プレリリース添付物としても公開します。軍事関係者は配布対象外です。姓・名・姓名の由来分類は暫定的で一部のみ出典を再確認しています。哲学者・思想家は、典拠資料で表記と読みを、職業・著作資料で分類を個別に確認した追加だけを収録します。元の人名・Web・Wiki・Neologd各入力コーパスは変更しません。
+通常の `v*` リリースでも、汎用 `person` を削除し、`standard_enabled: true` の人物細分類29カテゴリに置き換えた配布ZIPを作成します。既存の非人物カテゴリ51件を含め、ZIPの配布カテゴリは合計80件です。`person-dictionaries-v*` タグは専用プレリリースとして公開しません。軍事関係者は配布対象外です。姓・名・姓名の由来分類は暫定的で一部のみ出典を再確認しています。哲学者・思想家は、典拠資料で表記と読みを、職業・著作資料で分類を個別に確認した追加だけを収録します。元の人名・Web・Wiki・Neologd各入力コーパスは変更しません。
 
 2026-10-21の追加調査では、JOC東京2020公式TEAM JAPAN名鑑の18競技168プロフィールを確認しました。明示的な除外判断と衝突した3組は変更せず、残る165組を競技別名簿に記録しました。115組は既存の人物辞書に収録済みで、新規追加は50組です。新規追加の内訳はアーティスティックスイミング4、バドミントン2、カヌー5、飛込4、フェンシング2、射撃8、セーリング6、卓球3、水球11、重量挙げ3、アーチェリー1、スケートボード1です。ゴルフ・近代五種・ローイング・スポーツクライミング・サーフィン・トライアスロンは確認した名簿候補が既に辞書にあったため、追加していません。公式名鑑は[JOC東京2020 TEAM JAPAN](https://www.joc.or.jp/games/olympic/tokyo/japan/)で確認できます。全165組の読み・表記・競技・プロフィールURL・確認箇所・取得ページSHA-256は [joc-tokyo2020-2026-10-21.jsonl](../src/main/classification/person-additions/joc-tokyo2020-2026-10-21.jsonl) に記録しています。
 
@@ -97,19 +114,21 @@ Gemini分類器は標準配布が無効なカテゴリを選択肢から外し�
 
 PR #141の分類台帳と後続レビューは、元のスナップショット→Lunaの実効判断→後続レビューの順に検証します。両PRの配布用TSVを単純に上書きせず、`python3 scripts/classified_distribution.py apply-reviews --commit` で統合し、既存辞書一覧・専門辞書・カタログを再生成します。原スナップショット・台帳・レビューのハッシュを保持し、対象外の判断変更は検証で拒否します。
 
-配布は既存の [GitHub Actions](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/workflows/build-and-release.yml) を使用します。手動実行ではビルド・検証後にActions成果物を保存し、`v*` タグのpushでは同じ検証後にGitHubのプレリリースへ辞書ZIP・配布マニフェスト・SHA-256・ライセンスを添付します。閲覧用一覧の固定データとの一致も配布前に検証します。
+PRでは [`Build classified dictionary for PR`](../.github/workflows/build-classified-dictionary.yml) が実行され、PRの固定分類から辞書ZIPを生成します。Geminiなどの分類APIは呼び出しません。カタログと固定データの一致、辞書バイナリの生成・読み戻し、配布マニフェストを検証し、辞書ZIP・配布マニフェスト・SHA-256・ライセンスを14日間Actions成果物として保存します。PRのChecksから該当実行を開くとArtifactsからダウンロードできます。入力はMozcコミット `c4b2aef7c65e61be394bacadaec200eb5b97f91c` とJapaneseCorpusリリース `v2026.1019.20` に固定します。上流辞書を更新するときは両方の入力と専門辞書の重複除外データを一緒に更新します。
 
-既存Actionsを手動実行すると、人物細分類済みZIPと `dictionary-distribution-manifest.json`、`DICTIONARY-SHA256SUMS`、`DICTIONARY-LICENSES.txt` を成果物として取得できます。`v*` タグでは通常リリースまたはバージョン付きプレリリースに4ファイルを添付し、通常リリースをLatestに設定します。最新5プレリリースを保持し、通常リリースとそのタグは削除対象に含めません。
+通常配布は既存の [GitHub Actions](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/workflows/build-and-release.yml) を使用します。手動実行ではビルド・検証後にActions成果物を保存し、`vX.Y.Z` タグのpushでは同じ検証後に通常版GitHub Releaseを作成して、辞書ZIP・配布マニフェスト・SHA-256・ライセンスを添付します。今回の作品・キャラクター対象層辞書もこの手順で配布します。閲覧用一覧の固定データとの一致も配布前に検証します。
 
-利用側IMEは旧5辞書の固定パスを49カテゴリの読み込みへ変更する必要があります。用語カテゴリは `categories/term/general/<分類ID>/` と `categories/term/specialist/<分類ID>/`、イベントカテゴリは `categories/event/<群>/<分類ID>/` の下へ配置します。辞書バイナリの読み戻し検証と、実IMEの候補表示・順位の検証は別です。
+既存Actionsを手動実行すると、人物細分類済みZIPと `dictionary-distribution-manifest.json`、`DICTIONARY-SHA256SUMS`、`DICTIONARY-LICENSES.txt` を成果物として取得できます。安定版 `vX.Y.Z` タグでは通常リリースに4ファイルを添付し、最新リリースをLatestに設定します。タグ実行後は、すべてのプレリリースと関連タグを削除し、通常版辞書リリースと関連タグを新しい順に5件だけ残します。古い通常版とタグも削除します。ハイフン付き `v*` タグおよび `person-dictionaries-v*` タグではReleaseを公開しません。
+
+利用側IMEは旧5辞書の固定パスを52カテゴリの読み込みへ変更する必要があります。用語カテゴリは `categories/term/general/<分類ID>/` と `categories/term/specialist/<分類ID>/`、イベントカテゴリは `categories/event/<群>/<分類ID>/`、対象層カテゴリは `categories/media_demographic/audience/<分類ID>/` の下へ配置します。成人向けラベルに該当する候補は配布データへ作成しません。辞書バイナリの読み戻し検証と、実IMEの候補表示・順位の検証は別です。
 
 ## 人物細分類への置換配布
 
-`person-dictionaries-v*` タグでは、通常の49カテゴリから汎用 `person` を除き、`person-taxonomy.json` の `standard_enabled: true` の29人物細分類に置き換えます。未分類の候補を受け入れる辞書は作りません。追加調査でも分類できない候補と、IME候補としての形式条件を満たさない候補は配布元データから除きます。哲学者・思想家カテゴリはGeminiの自動分類対象にせず、出典付きの人名追加だけを受け入れます。姓・名・姓名の由来ラベルは暫定的で、一部を対象とした再確認のみです。プレリリースZIPは合計77カテゴリ（既存49から `person` を除いた48カテゴリと、人物細分類29カテゴリ）です。カテゴリ別の収録数と全収録語は[最終プレリリースの配布カテゴリ一覧](classified-dictionary-catalog/index.md)にまとめています。新しい人物バイナリは他辞書と共通のPOSテーブルを使います。通常の v* タグのリリースにも同じ置換ZIPを添付します。
+人物細分類の置換辞書は、通常版 `vX.Y.Z` リリースに含まれます。通常の52カテゴリから汎用 `person` を除き、`person-taxonomy.json` の `standard_enabled: true` の29人物細分類に置き換えます。未分類の候補を受け入れる辞書は作りません。追加調査でも分類できない候補と、IME候補としての形式条件を満たさない候補は配布元データから除きます。哲学者・思想家カテゴリはGeminiの自動分類対象にせず、出典付きの人名追加だけを受け入れます。姓・名・姓名の由来ラベルは暫定的で、一部を対象とした再確認のみです。置換後のZIPは合計80カテゴリ（既存52から `person` を除いた51カテゴリと、人物細分類29カテゴリ）です。カテゴリ別の収録数と全収録語は[配布カテゴリ一覧](classified-dictionary-catalog/index.md)にまとめています。新しい人物バイナリは他辞書と共通のPOSテーブルを使います。
 
 `person-dictionary-candidates.tsv.gz` には許可カテゴリの読み・表記・品詞・コスト・競技タグだけを保存します。未分類候補は、再分類できた項目だけを既存カテゴリに移し、なお確定できない項目は出力しません。空の読み・表記、空白・制御文字を含む候補、かな以外の読み、文字を含まない表記も除外します。根拠データと分類作業用キャッシュはリポジトリ外に置き、`scripts/export_person_dictionary_source.py` は許可29カテゴリの行だけを書き出します。由来未確認の候補は、固定済みの暫定分類を反映して由来別カテゴリへ移しますが、元の人名・Web・Wiki・Neologd各入力コーパスは変更しません。人物追加行は読み・表記の典拠URLと原資料の読み・表記を記録し、哲学者・思想家の場合は分類根拠のURLと確認箇所も記録します。成人制作者は `adult_work_creator` として漫画カテゴリから分けますが、出演者・制作者・成人関連保留を含む候補は個人データをリポジトリにも配布用データにも入れません。成人関連の候補キーはリポジトリ外の除外JSONLにハッシュだけを保持し、今後のGemini候補送信前にも網羅を検査します。置換ZIPには汎用 `person` の辞書ファイルを含めません。
 
-置換ZIPの人物辞書は `app/src/main/assets/categories/person/<カテゴリID>/` の下に配置します。`person/` は親ディレクトリで、各サブディレクトリに `yomi.dat.zip`、`tango.dat.zip`、`token.dat.zip` を格納します。他の48カテゴリは `categories/<カテゴリID>/` に置きます。
+置換ZIPの人物辞書は `app/src/main/assets/categories/person/<カテゴリID>/` の下に配置します。`person/` は親ディレクトリで、各サブディレクトリに `yomi.dat.zip`、`tango.dat.zip`、`token.dat.zip` を格納します。他の51カテゴリは `categories/<カテゴリID>/` に置きます。
 
 ZIPルートの `dictionary-distribution-manifest.json` は機械可読の分類メタデータです。人物細分類それぞれに `parentCategoryId: "person"` とカテゴリID、表示名、収録件数、辞書ファイルのパスを記録し、`replacesCategory: "person"` で置換関係を示します。個々の候補名や除外候補はマニフェストに含めません。GitHub Releaseには辞書ZIP、同じマニフェスト、チェックサム、ライセンス表示を添付します。
 

@@ -1,0 +1,45 @@
+{
+  "billingEnabled": false,
+  "failedRequests": [
+    {
+      "batchId": "batch-01",
+      "httpStatus": 400,
+      "usageMetadata": "not returned"
+    }
+  ],
+  "finishedAt": "2026-10-23T13:11:30.514211+00:00",
+  "freeTierOnly": true,
+  "freeTierProofSha256": "0311c209dc0e95849531ca3b898d6c9f7c3c50c44c8e023773194a48f840b57e",
+  "freeTierProofVerifiedAt": "2026-10-22T14:58:04+00:00",
+  "itemCount": 8197,
+  "labelCounts": {
+    "adult": 34,
+    "josei": 135,
+    "kids": 394,
+    "mixed": 16,
+    "seinen": 787,
+    "shojo": 269,
+    "shonen": 3153,
+    "unspecified": 3409
+  },
+  "limitations": [
+    "Best-fit labels inferred from public names and model knowledge; not independently source-verified.",
+    "Model may misclassify adult-directed works as another audience category.",
+    "Raw prompts and responses are retained outside the repository; only individual response hashes are in review evidence."
+  ],
+  "model": "gemini-3.5-flash-lite",
+  "projectId": "gen-lang-client-0548563154",
+  "promptSha256": "62d7022457028bceb749d8af7471a669713edeeeb350a0142f2c31877af9d002",
+  "promptVersion": "media-demographic-best-fit-8-categories-v1",
+  "reusedPilotItems": 24,
+  "schemaVersion": 1,
+  "sourceReviewPath": "src/main/classification/reviews/2026-10-23-media-demographics-complete.jsonl",
+  "sourceSha256": "996974d5728c7660513139887a6cdec116a2d10b5680026c3d0f280ca5bb681c",
+  "startedAt": "2026-10-23T13:00:24.637491+00:00",
+  "successfulRequests": 83,
+  "successfulResponseTokenUsage": {
+    "candidatesTokenCount": 28131,
+    "promptTokenCount": 161207,
+    "totalTokenCount": 189338
+  }
+}

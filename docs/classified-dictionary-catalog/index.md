@@ -1,14 +1,14 @@
 # 人物辞書置換プレリリース — 全配布カテゴリ
 
-人物細分類辞書を含む配布ZIPのカテゴリ一覧です。通常配布の49カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えた **77カテゴリ**を掲載しています。未分類候補と成人関連など配布対象外の候補は含めていません。
+人物細分類辞書を含む配布ZIPのカテゴリ一覧です。通常配布の57カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えた **85カテゴリ**を掲載しています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **849,437**、読み・表記の組数の合計は **841,385**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **862,001**、読み・表記の組数の合計は **853,876**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換プレリリース) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
 | カテゴリ | ID | 読み・表記の組 | レコード数 | 全件一覧 |
 |---|---|---:|---:|---|
-| [架空キャラクター](character/index.md) | `character` | 6,799 | 6,871 | [全件](character/index.md) |
+| [架空キャラクター](character/index.md) | `character` | 6,776 | 6,848 | [全件](character/index.md) |
 | [神話・伝承の存在](mythological_figure/index.md) | `mythological_figure` | 3,435 | 3,436 | [全件](mythological_figure/index.md) |
 | [地名](place/index.md) | `place` | 43,376 | 45,088 | [全件](place/index.md) |
 | [住所](address/index.md) | `address` | 148,606 | 152,874 | [全件](address/index.md) |
@@ -32,7 +32,7 @@
 | [食品・飲料・料理](term/general/food_drink_cooking/index.md) | `term/general/food_drink_cooking` | 4,076 | 4,077 | [全件](term/general/food_drink_cooking/index.md) |
 | [ネットスラング・ネット文化](term/general/internet_slang_culture/index.md) | `term/general/internet_slang_culture` | 571 | 573 | [全件](term/general/internet_slang_culture/index.md) |
 | [新語・流行語・若者言葉](term/general/neologisms_trends_youth_language/index.md) | `term/general/neologisms_trends_youth_language` | 483 | 483 | [全件](term/general/neologisms_trends_youth_language/index.md) |
-| [その他の一般語](term/general/other_general/index.md) | `term/general/other_general` | 20,492 | 20,503 | [全件](term/general/other_general/index.md) |
+| [その他の一般語](term/general/other_general/index.md) | `term/general/other_general` | 20,491 | 20,502 | [全件](term/general/other_general/index.md) |
 | [情報・通信](term/specialist/information_communications/index.md) | `term/specialist/information_communications` | 6,072 | 6,073 | [全件](term/specialist/information_communications/index.md) |
 | [数学・物理](term/specialist/mathematics_physics/index.md) | `term/specialist/mathematics_physics` | 4,171 | 4,171 | [全件](term/specialist/mathematics_physics/index.md) |
 | [化学・生命科学](term/specialist/chemistry_life_sciences/index.md) | `term/specialist/chemistry_life_sciences` | 27,563 | 27,566 | [全件](term/specialist/chemistry_life_sciences/index.md) |
@@ -44,15 +44,23 @@
 | [文化・芸術・スポーツ](term/specialist/culture_arts_sports/index.md) | `term/specialist/culture_arts_sports` | 5,360 | 5,360 | [全件](term/specialist/culture_arts_sports/index.md) |
 | [交通・安全・防衛](term/specialist/transport_safety_defense/index.md) | `term/specialist/transport_safety_defense` | 4,035 | 4,037 | [全件](term/specialist/transport_safety_defense/index.md) |
 | [作品シリーズ](work_franchise/index.md) | `work_franchise` | 849 | 849 | [全件](work_franchise/index.md) |
-| [漫画作品](work_manga/index.md) | `work_manga` | 5,147 | 5,148 | [全件](work_manga/index.md) |
-| [アニメ作品](work_anime/index.md) | `work_anime` | 1,104 | 1,104 | [全件](work_anime/index.md) |
+| [漫画作品](work_manga/index.md) | `work_manga` | 5,079 | 5,080 | [全件](work_manga/index.md) |
+| [アニメ作品](work_anime/index.md) | `work_anime` | 1,088 | 1,088 | [全件](work_anime/index.md) |
+| [少年向け](media_demographic/audience/shonen/index.md) | `media_demographic/audience/shonen` | 4,106 | 4,117 | [全件](media_demographic/audience/shonen/index.md) |
+| [青年向け](media_demographic/audience/seinen/index.md) | `media_demographic/audience/seinen` | 1,730 | 1,731 | [全件](media_demographic/audience/seinen/index.md) |
+| [少女向け](media_demographic/audience/shojo/index.md) | `media_demographic/audience/shojo` | 822 | 826 | [全件](media_demographic/audience/shojo/index.md) |
+| [女性向け（Josei）](media_demographic/audience/josei/index.md) | `media_demographic/audience/josei` | 349 | 355 | [全件](media_demographic/audience/josei/index.md) |
+| [子ども向け（Kids）](media_demographic/audience/kids/index.md) | `media_demographic/audience/kids` | 546 | 549 | [全件](media_demographic/audience/kids/index.md) |
+| [複数対象層](media_demographic/audience/mixed/index.md) | `media_demographic/audience/mixed` | 0 | 0 | [全件](media_demographic/audience/mixed/index.md) |
+| [対象層の指定なし・一般向け](media_demographic/audience/unspecified/index.md) | `media_demographic/audience/unspecified` | 5,051 | 5,099 | [全件](media_demographic/audience/unspecified/index.md) |
+| [出典未確認・対象層未確定](media_demographic/resolution/source_unverified/index.md) | `media_demographic/resolution/source_unverified` | 0 | 0 | [全件](media_demographic/resolution/source_unverified/index.md) |
 | [映画作品](work_film/index.md) | `work_film` | 6,503 | 6,504 | [全件](work_film/index.md) |
-| [番組](work_program/index.md) | `work_program` | 9,310 | 9,311 | [全件](work_program/index.md) |
-| [書籍作品](work_book/index.md) | `work_book` | 7,659 | 7,660 | [全件](work_book/index.md) |
-| [ゲーム作品](work_game/index.md) | `work_game` | 3,156 | 3,156 | [全件](work_game/index.md) |
+| [番組](work_program/index.md) | `work_program` | 9,308 | 9,309 | [全件](work_program/index.md) |
+| [書籍作品](work_book/index.md) | `work_book` | 7,658 | 7,659 | [全件](work_book/index.md) |
+| [ゲーム作品](work_game/index.md) | `work_game` | 3,155 | 3,155 | [全件](work_game/index.md) |
 | [音楽作品](work_music/index.md) | `work_music` | 10,334 | 10,337 | [全件](work_music/index.md) |
 | [舞台作品](work_stage/index.md) | `work_stage` | 571 | 571 | [全件](work_stage/index.md) |
-| [定期刊行物](work_periodical/index.md) | `work_periodical` | 1,811 | 1,812 | [全件](work_periodical/index.md) |
+| [定期刊行物](work_periodical/index.md) | `work_periodical` | 1,810 | 1,811 | [全件](work_periodical/index.md) |
 | [媒体未特定の作品・美術作品](work_other/index.md) | `work_other` | 2,682 | 2,683 | [全件](work_other/index.md) |
 | [漢方・生薬](kampo/index.md) | `kampo` | 432 | 432 | [全件](kampo/index.md) |
 | [医療](medical/index.md) | `medical` | 92,683 | 92,683 | [全件](medical/index.md) |

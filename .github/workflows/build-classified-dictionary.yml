@@ -1,0 +1,126 @@
+name: Build classified dictionary for PR
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Checkout google/mozc
+        uses: actions/checkout@v4
+        with:
+          repository: google/mozc
+          ref: c4b2aef7c65e61be394bacadaec200eb5b97f91c
+          path: mozc-src
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Mozc dictionary resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ./src/main/resources
+
+          cp ./mozc-src/src/data/dictionary_oss/id.def ./src/main/resources/id.def
+          for i in $(seq -w 00 09); do
+            cp "./mozc-src/src/data/dictionary_oss/dictionary${i}.txt" \
+              "./src/main/resources/dictionary${i}.txt"
+          done
+          cp ./mozc-src/src/data/dictionary_oss/connection_single_column.txt \
+            ./src/main/resources/connection_single_column.txt
+          cp ./mozc-src/src/data/dictionary_oss/suffix.txt ./src/main/resources/suffix.txt
+          cp ./mozc-src/src/data/single_kanji/single_kanji.tsv ./src/main/resources/single_kanji.tsv
+          cp ./mozc-src/src/data/zero_query/zero_query.def ./src/main/resources/zero_query.def
+          cp ./mozc-src/src/data/zero_query/zero_query_number.def \
+            ./src/main/resources/zero_query_number.def
+          cp ./mozc-src/src/data/emoji/emoji_data.tsv ./src/main/resources/mozc_emoji_data.tsv
+          cp ./mozc-src/src/data/emoticon/categorized.tsv \
+            ./src/main/resources/mozc_emoticon_categorized.tsv
+          cp ./mozc-src/src/data/symbol/symbol.tsv ./src/main/resources/mozc_symbol.tsv
+
+          test -f ./src/main/custom_zero_query.def
+          for file in id.def connection_single_column.txt suffix.txt single_kanji.tsv \
+            zero_query.def zero_query_number.def mozc_emoji_data.tsv \
+            mozc_emoticon_categorized.tsv mozc_symbol.tsv; do
+            test -s "./src/main/resources/${file}"
+          done
+          for i in $(seq -w 00 09); do
+            test -s "./src/main/resources/dictionary${i}.txt"
+          done
+
+      - name: Download the pinned JapaneseCorpus English dictionary
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          repository='KazumaProject/JapaneseCorpus'
+          version='v2026.1019.20'
+          asset='mozc-english-reading-unigram-00000.txt.zst'
+          manifest='english-dictionary-manifest.json'
+          checksums='ENGLISH-DICTIONARY-SHA256SUMS'
+
+          download_dir="${RUNNER_TEMP}/japanese-corpus"
+          mkdir -p "${download_dir}"
+          gh release download "${version}" --repo "${repository}" \
+            --pattern "${asset}" --pattern "${manifest}" --pattern "${checksums}" \
+            --dir "${download_dir}"
+
+          asset_path="${download_dir}/${asset}"
+          manifest_path="${download_dir}/${manifest}"
+          checksums_path="${download_dir}/${checksums}"
+          test -s "${asset_path}"
+          test -s "${manifest_path}"
+          test -s "${checksums_path}"
+
+          expected="$(awk -v asset="${asset}" '$2 == asset || $2 == ("*" asset) { print $1; exit }' "${checksums_path}")"
+          [[ "${expected}" =~ ^[0-9a-fA-F]{64}$ ]]
+          actual="$(sha256sum "${asset_path}" | awk '{print $1}')"
+          test "${actual}" = "${expected}"
+
+          jq -e --arg asset "${asset}" --arg sha "${expected}" '
+            .parameters.dictionary_kind == "direct-loanword"
+            and (.assets[] | select(.name == $asset) | .sha256) == $sha
+          ' "${manifest_path}" >/dev/null
+
+          zstd --test "${asset_path}"
+          zstd --decompress --stdout "${asset_path}" \
+            > ./src/main/resources/english-dictionary.txt
+          test -s ./src/main/resources/english-dictionary.txt
+
+      - name: Verify the frozen classification and word catalog
+        run: python3 scripts/write_classified_dictionary_catalog.py --check
+
+      - name: Build and verify the dictionary archive
+        run: |
+          ./gradlew \
+            packageJapaneseKeyboardDictionaryAssets \
+            verifyJapaneseKeyboardDictionaryAssets \
+            buildDictionaryDistributionManifest
+
+      - name: Upload the classified dictionary
+        uses: actions/upload-artifact@v4
+        with:
+          name: classified-dictionary-${{ github.event.pull_request.number || github.run_number }}
+          path: |
+            release_zips/japanese_keyboard_dictionary_assets.zip
+            release_zips/dictionary-distribution-manifest.json
+            release_zips/DICTIONARY-SHA256SUMS
+            release_zips/DICTIONARY-LICENSES.txt
+          if-no-files-found: error
+          retention-days: 14

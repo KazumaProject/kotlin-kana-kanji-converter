@@ -112,6 +112,10 @@ def subsequent_reviews(root, current, baseline):
     if taxonomy_path not in baseline['inputs'] and taxonomy_path in inputs:
         if inputs.pop(taxonomy_path) != d.sha(root/taxonomy_path):
             raise ValueError('Person taxonomy input hash mismatch')
+    demographic_path = d.MEDIA_DEMOGRAPHIC_TAXONOMY_PATH
+    if demographic_path not in baseline['inputs'] and demographic_path in inputs:
+        if inputs.pop(demographic_path) != d.sha(root/demographic_path):
+            raise ValueError('Media demographic taxonomy input hash mismatch')
     if PERSON_SOURCE in baseline['inputs']:
         restored = restore_person_source(root, current, baseline, additions)
         if hashlib.sha256(restored).hexdigest() != baseline['inputs'][PERSON_SOURCE]:
@@ -195,6 +199,7 @@ def term_hierarchy_restores_baseline(root, current, baseline):
     replacements = []
     term_data = d.term_taxonomy(root)
     event_data = d.event_taxonomy(root)
+    media_data = d.media_demographic_taxonomy(root)
     if term_data is not None and 'termClassification' in current.get('provenance', {}):
         replacements.append(('term', term_data[0], term_data[1], TERM_PARENT_DEFINITION))
     if event_data is not None and 'eventClassification' in current.get('provenance', {}):
@@ -206,7 +211,9 @@ def term_hierarchy_restores_baseline(root, current, baseline):
         parent_id: (structure, {category['id'] for category in leaves}, definition)
         for parent_id, structure, leaves, definition in replacements
     }
-    collapsed_categories = []
+    demographic_ids = {category['id'] for category in media_data[1]} if media_data is not None else set()
+    collapsed_current_categories = []
+    collapsed_baseline_categories = []
     inserted_parents = set()
     for category in expanded.get('categories', []):
         parent_id = next((parent for parent, (_, leaf_ids, _) in replacement_map.items()
@@ -214,21 +221,29 @@ def term_hierarchy_restores_baseline(root, current, baseline):
         if parent_id is not None:
             if parent_id not in inserted_parents:
                 structure, _, definition = replacement_map[parent_id]
-                collapsed_categories.append({
+                parent_category = {
                     'id': parent_id, 'name': structure['name'], 'definition': definition,
-                })
+                }
+                collapsed_current_categories.append(parent_category)
+                collapsed_baseline_categories.append(parent_category)
                 inserted_parents.add(parent_id)
+        elif category.get('id') in demographic_ids:
+            collapsed_current_categories.append(category)
         else:
-            collapsed_categories.append(category)
+            collapsed_current_categories.append(category)
+            collapsed_baseline_categories.append(category)
     if inserted_parents != set(replacement_map):
         return False
-    collapsed = dict(expanded)
-    collapsed.pop('categoryGroups', None)
-    collapsed['categories'] = collapsed_categories
-    if d.merged_categories(collapsed, term_data if 'term' in replacement_map else None,
-                           event_data if 'event' in replacement_map else None) != expanded:
+    collapsed_current = dict(expanded)
+    collapsed_current.pop('categoryGroups', None)
+    collapsed_current['categories'] = collapsed_current_categories
+    if d.merged_categories(collapsed_current, term_data if 'term' in replacement_map else None,
+                          event_data if 'event' in replacement_map else None, media_data) != expanded:
         return False
-    reconstructed = json.dumps(collapsed, ensure_ascii=False, indent=2) + '\n'
+    collapsed_baseline = dict(expanded)
+    collapsed_baseline.pop('categoryGroups', None)
+    collapsed_baseline['categories'] = collapsed_baseline_categories
+    reconstructed = json.dumps(collapsed_baseline, ensure_ascii=False, indent=2) + '\n'
     expected_hash = baseline.get('files', {}).get('categories.json')
     if hashlib.sha256(reconstructed.encode('utf-8')).hexdigest() != expected_hash:
         return False

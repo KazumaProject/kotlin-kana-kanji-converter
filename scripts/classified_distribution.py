@@ -30,6 +30,25 @@ TERM_CLASSIFICATIONS_MANIFEST_PATH = 'src/main/classification/term-classificatio
 EVENT_TAXONOMY_PATH = 'src/main/classification/event-taxonomy.json'
 EVENT_CLASSIFICATIONS_PATH = 'src/main/classification/event-classifications.tsv.gz'
 EVENT_CLASSIFICATIONS_MANIFEST_PATH = 'src/main/classification/event-classifications-manifest.json'
+MEDIA_DEMOGRAPHIC_TAXONOMY_PATH = 'src/main/classification/media-demographic-taxonomy.json'
+MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES = {
+    'shonen': 'media_demographic/audience/shonen',
+    'seinen': 'media_demographic/audience/seinen',
+    'shojo': 'media_demographic/audience/shojo',
+    'josei': 'media_demographic/audience/josei',
+    'kids': 'media_demographic/audience/kids',
+    'mixed': 'media_demographic/audience/mixed',
+    'unspecified': 'media_demographic/audience/unspecified',
+    'source_unverified': 'media_demographic/resolution/source_unverified',
+}
+MEDIA_DEMOGRAPHIC_LABELS = {*MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES, 'adult'}
+MEDIA_DEMOGRAPHIC_LIMITATION = (
+    'A missing demographic tag is not proof of general-audience suitability. Source-unverified pairs may receive a '
+    'Gemini best-fit demographic based on names and model knowledge; mixed source/model labels may receive an assistant '
+    'best-fit single-audience tie-break. These labels are not independently source-verified. '
+    'Explicit adult source tags and Gemini adult judgments are excluded, but model errors may leave adult works in other '
+    'categories.'
+)
 TERM_CLASSIFICATION_PROMPT_VERSIONS = {
     'term-best-fit-15-categories-ordered-groups-10-v2',
     'term-best-fit-15-categories-ordered-code-array-v3',
@@ -128,8 +147,74 @@ def event_taxonomy(root):
     return {'id': 'event', 'name': data['name'], 'groups': group_metadata}, flattened
 
 
-def merged_categories(base, term_data, event_data=None):
-    if term_data is None and event_data is None:
+def media_demographic_taxonomy(root, allowed=None):
+    path = root / MEDIA_DEMOGRAPHIC_TAXONOMY_PATH
+    if not path.is_file():
+        return None
+    data = json.loads(path.read_text(encoding='utf-8'))
+    groups = data.get('groups') if isinstance(data, dict) else None
+    if (not isinstance(data, dict) or data.get('schemaVersion') != 1 or data.get('id') != 'media_demographic'
+            or data.get('name') != '作品・キャラクターの対象層'
+            or not isinstance(data.get('definition'), str) or not data['definition']
+            or not isinstance(groups, list) or len(groups) != 2
+            or any(not isinstance(group, dict) for group in groups)
+            or [group.get('id') for group in groups] != ['audience', 'resolution']
+            or any(not isinstance(group.get('name'), str) or not group['name'] for group in groups)):
+        raise ValueError('Unsupported media demographic taxonomy')
+    expected_by_group = {
+        'audience': {category for category in MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES.values()
+                     if category.startswith('media_demographic/audience/')},
+        'resolution': {category for category in MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES.values()
+                       if category.startswith('media_demographic/resolution/')},
+    }
+    expected_ids = set().union(*expected_by_group.values())
+    flattened = []
+    ids = []
+    normalized_groups = []
+    for group in groups:
+        entries = group.get('categories')
+        group_ids = expected_by_group[group['id']]
+        if not isinstance(entries, list) or len(entries) != len(group_ids):
+            raise ValueError(f"Media demographic {group['id']} taxonomy has an unexpected category count")
+        current_ids = []
+        for category in entries:
+            if (not isinstance(category, dict) or not isinstance(category.get('id'), str)
+                    or category['id'] not in group_ids
+                    or not isinstance(category.get('name'), str) or not category['name']
+                    or not isinstance(category.get('definition'), str) or not category['definition']
+                    or category.get('distribution') is not True):
+                raise ValueError(f"Invalid media demographic {group['id']} category")
+            ids.append(category['id'])
+            current_ids.append(category['id'])
+            flattened.append({key: category[key] for key in ('id', 'name', 'definition')})
+        if set(current_ids) != group_ids or len(set(current_ids)) != len(current_ids):
+            raise ValueError(f"Media demographic {group['id']} taxonomy is incomplete or duplicated")
+        normalized_groups.append({
+            'id': f"media_demographic/{group['id']}",
+            'name': group['name'],
+            'categories': current_ids,
+        })
+    excluded = data.get('excludedCategories')
+    if (set(ids) != expected_ids or len(set(ids)) != len(ids)
+            or not isinstance(excluded, list) or len(excluded) != 1):
+        raise ValueError('Media demographic taxonomy must contain all categories and one excluded label')
+    adult = excluded[0]
+    if (not isinstance(adult, dict) or adult.get('id') != 'adult' or adult.get('name') != '成人向け'
+            or not isinstance(adult.get('definition'), str) or not adult['definition']
+            or adult.get('distribution') is not False):
+        raise ValueError('Adult media demographic label must be excluded from distribution')
+    if allowed is not None and not set(ids) <= allowed:
+        raise ValueError('Media demographic categories are absent from categories.json')
+    taxonomy = {
+        'id': 'media_demographic',
+        'name': data['name'],
+        'groups': normalized_groups,
+    }
+    return taxonomy, flattened
+
+
+def merged_categories(base, term_data, event_data=None, media_demographic_data=None):
+    if term_data is None and event_data is None and media_demographic_data is None:
         return base
     categories = list(base.get('categories', []))
     ids = [category.get('id') for category in categories]
@@ -142,6 +227,9 @@ def merged_categories(base, term_data, event_data=None):
     if event_data is not None:
         structure, event_categories = event_data
         structures.append(('event', structure, event_categories))
+    if media_demographic_data is not None:
+        structure, demographic_categories = media_demographic_data
+        structures.append(('media_demographic', structure, demographic_categories))
     inserted_at = {}
     for parent_id, structure, leaf_categories in structures:
         leaf_ids = {category['id'] for category in leaf_categories}
@@ -154,9 +242,19 @@ def merged_categories(base, term_data, event_data=None):
         elif leaf_ids <= set(ids):
             existing = {category['id']: category for category in categories}
             for category in leaf_categories:
-                if existing[category['id']].get('name') != category['name']:
+                if (existing[category['id']].get('name') != category['name']
+                        and parent_id != 'media_demographic'):
                     raise ValueError(f'{parent_id.title()} category name differs from taxonomy: {category["id"]}')
+                existing[category['id']]['name'] = category['name']
+                existing[category['id']]['definition'] = category['definition']
+            categories = [existing[category_id] for category_id in ids]
             inserted_at[parent_id] = min(ids.index(category_id) for category_id in leaf_ids)
+        elif leaf_ids & set(ids):
+            insertion = min(ids.index(category_id) for category_id in leaf_ids & set(ids))
+            categories = [category for category in categories if category.get('id') not in leaf_ids]
+            categories[insertion:insertion] = leaf_categories
+            ids = [category.get('id') for category in categories]
+            inserted_at[parent_id] = insertion
         else:
             raise ValueError(f'Source taxonomy must contain {parent_id} or all expanded {parent_id} categories')
     result = dict(base)
@@ -486,9 +584,10 @@ def apply_event_classifications_snapshot(root, classification_map, run_metadata)
             target.write_text(''.join(retained), encoding='utf-8')
 
         event_data = event_taxonomy(root)
+        media_data = media_demographic_taxonomy(root)
         term_data = term_taxonomy(root)
         base_taxonomy = json.loads((directory / 'categories.json').read_text(encoding='utf-8'))
-        categories = merged_categories(base_taxonomy, term_data, event_data)
+        categories = merged_categories(base_taxonomy, term_data, event_data, media_data)
         write_json(staged_directory / 'categories.json', categories)
         write_gzip(staged_directory / EVENT_CLASSIFICATIONS_PATH.split('/')[-1],
                    ((*pair, classification_map[pair]) for pair in sorted(classification_map)
@@ -708,7 +807,8 @@ def apply_term_classifications_snapshot(root):
     base = json.loads((directory / 'categories.json').read_text(encoding='utf-8'))
     if any(category['id'].startswith('term/') for category in base['categories']):
         raise ValueError('Term categories are already expanded')
-    expanded = merged_categories(base, term_taxonomy(root))
+    expanded = merged_categories(base, term_taxonomy(root),
+                                 media_demographic_data=media_demographic_taxonomy(root))
     category_ids = {category['id'] for category in expanded['categories']}
     data = term_classification_data(root, category_ids)
     if data is None:
@@ -1108,10 +1208,12 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
     person_exclusions = person_dictionary_exclusions(prior_manifest)
     term_tax = term_taxonomy(root)
     event_tax = event_taxonomy(root)
+    media_demographic_tax = media_demographic_taxonomy(root)
     term_data = term_classification_data(root)
     event_data = event_classification_data(root)
     categories = merged_categories(json.loads(taxonomy.read_text()), term_tax,
-                                   event_tax if event_data is not None else None)
+                                   event_tax if event_data is not None else None,
+                                   media_demographic_tax)
     allowed = {c['id'] for c in categories['categories']}
     term_data = term_classification_data(root, allowed)
     event_data = event_classification_data(root, allowed)
@@ -1222,6 +1324,7 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
                 for pair, (cats, origin) in decisions.items()}
     review_paths = reviews.paths(root)
     review_entries = reviews.load(root) if review_paths else {}
+    reviews.ensure_no_mixed_demographics(review_entries)
     reviewed = reviews.apply(baseline, review_entries) if review_paths else baseline
     reviewed = apply_term_classifications(root, reviewed, force=term_data is not None,
                                           reviewed_pairs=review_entries)
@@ -1242,6 +1345,8 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
     admitted = collections.Counter(row[3] for row in reviewed.values() if row[4] == 'classified')
     category_counts = collections.Counter(row[0] for row in rows)
     inputs = {path: sha(root / path) for path, _ in SOURCES.values()}
+    if media_demographic_tax is not None:
+        inputs[MEDIA_DEMOGRAPHIC_TAXONOMY_PATH] = sha(root / MEDIA_DEMOGRAPHIC_TAXONOMY_PATH)
     term_classification_provenance = None
     if term_data is not None:
         for path in (TERM_TAXONOMY_PATH, TERM_CLASSIFICATIONS_PATH, TERM_CLASSIFICATIONS_MANIFEST_PATH):
@@ -1295,6 +1400,8 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
         'dictionaryRows': len(rows),
         'limitations': ['Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified.'],
     }
+    if media_demographic_tax is not None:
+        manifest['limitations'].append(MEDIA_DEMOGRAPHIC_LIMITATION)
     if term_classification_provenance is not None:
         manifest['provenance']['termClassification'] = term_classification_provenance
     if event_classification_provenance is not None:
@@ -1326,18 +1433,31 @@ def verify(root, allow_pending_reviews=False):
         if sha(root / path) != expected:
             raise ValueError(f'Input hash mismatch: {path}')
     for name, expected in manifest['files'].items():
+        if allow_pending_reviews and name == 'categories.json':
+            continue
         if sha(directory / name) != expected:
             raise ValueError(f'Classification hash mismatch: {name}')
     if sha(root / 'src/main/resources/id.def') != manifest['idDefSha256']:
         raise ValueError('id.def changed: regenerate and review distribution input')
     categories = [c['id'] for c in json.loads((directory / 'categories.json').read_text())['categories']]
     review_entries = reviews.load(root, selected_reviews)
+    if not allow_pending_reviews:
+        reviews.ensure_no_mixed_demographics(review_entries)
     if len(categories) != len(set(categories)) or not categories:
         raise ValueError('Expected unique category IDs')
     expanded_terms = any(category.startswith('term/') for category in categories)
     term_data = term_classification_data(root, set(categories)) if expanded_terms else None
     expanded_events = any(category.startswith('event/') for category in categories)
     event_data = event_classification_data(root, set(categories)) if expanded_events else None
+    expanded_demographics = any(category.startswith('media_demographic/') for category in categories)
+    media_demographic_data = media_demographic_taxonomy(root, set(categories)) if expanded_demographics else None
+    if expanded_demographics and media_demographic_data is None:
+        raise ValueError('Expanded media demographic categories require their taxonomy')
+    if media_demographic_data is not None and not allow_pending_reviews:
+        if manifest['inputs'].get(MEDIA_DEMOGRAPHIC_TAXONOMY_PATH) != sha(root / MEDIA_DEMOGRAPHIC_TAXONOMY_PATH):
+            raise ValueError('Media demographic taxonomy is absent from distribution inputs')
+        if MEDIA_DEMOGRAPHIC_LIMITATION not in manifest.get('limitations', []):
+            raise ValueError('Media demographic review coverage limitation is absent from the manifest')
     saved_taxonomy = json.loads((directory / 'categories.json').read_text(encoding='utf-8'))
     if term_data is not None:
         if manifest.get('schemaVersion') not in (2, 3):
@@ -1346,7 +1466,7 @@ def verify(root, allow_pending_reviews=False):
         raise ValueError('Expanded event categories require complete Gemini classifications')
     if event_data is not None and manifest.get('schemaVersion') != 3:
         raise ValueError('Expanded event categories require distribution manifest schema 3')
-    if term_data is not None or event_data is not None:
+    if term_data is not None or event_data is not None or media_demographic_data is not None:
         expected_groups = []
         groups = []
         if event_data is not None:
@@ -1355,9 +1475,12 @@ def verify(root, allow_pending_reviews=False):
         if term_data is not None:
             groups.append((min(categories.index(category['id']) for category in term_data['categories']),
                            term_data['taxonomy']))
+        if media_demographic_data is not None:
+            groups.append((min(categories.index(category['id']) for category in media_demographic_data[1]),
+                           media_demographic_data[0]))
         expected_groups = [group for _, group in sorted(groups, key=lambda item: item[0])]
-        if (saved_taxonomy.get('categoryGroups') != expected_groups
-                or manifest.get('categoryGroups') != expected_groups):
+        if (not allow_pending_reviews and (saved_taxonomy.get('categoryGroups') != expected_groups
+                or manifest.get('categoryGroups') != expected_groups)):
             raise ValueError('Classified dictionary category hierarchy differs from its taxonomy')
     decisions = {}
     decision_status = {}
@@ -1428,6 +1551,11 @@ def verify(root, allow_pending_reviews=False):
             actual.add(row)
     if actual != expected:
         raise ValueError(f'Distribution differs from sources: missing={len(expected-actual)}, extra={len(actual-expected)}')
+    adult_pairs = {pair for pair, entry in review_entries.items()
+                   if entry.get('media_demographic') == 'adult'}
+    if (any(pair not in decision_rows or decision_rows[pair][4] != 'excluded' for pair in adult_pairs)
+            or any((row[1], row[5]) in adult_pairs for row in actual)):
+        raise ValueError('Adult-classified media must be excluded from every dictionary category')
     term_additions = [row for _, row in term_addition_rows(root)]
     term_pairs = sorted({(row[0], row[4]) for row in term_additions})
     expected_term_provenance = ([{
@@ -1500,7 +1628,9 @@ def verify(root, allow_pending_reviews=False):
                 or (category_pairs and not expected_category_rows <= categorized_person_rows)):
             raise ValueError('Person category additions differ from dictionary candidates')
     counts = collections.Counter(row[0] for row in actual)
-    if ({c: counts[c] for c in categories} != manifest['categoryRows'] or len(actual) != manifest['dictionaryRows']
+    expected_category_rows = ({c: counts[c] for c in manifest['categoryRows']} if allow_pending_reviews
+                              else {c: counts[c] for c in categories})
+    if (expected_category_rows != manifest['categoryRows'] or len(actual) != manifest['dictionaryRows']
             or dict(origins) != manifest['admittedPairsByOrigin'] or sum(origins.values()) != manifest['uniqueAdmittedPairs']
             or dict(source_counts) != manifest['sourceRows']
             or excluded != manifest['excludedClassifiedPairs'] or unclassified != manifest['unclassifiedPairs'] or no_result != manifest['noResultPairs']):
