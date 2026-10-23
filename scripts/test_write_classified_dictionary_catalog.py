@@ -103,6 +103,25 @@ class CatalogTest(unittest.TestCase):
         page = next((output/'medical').glob('page-*.md')).read_text()
         self.assertIn('| <code>きょぜつ</code> | <code>巨舌</code> | 1 | 1 | 9000 | 出典確認済みの読み訂正 |', page)
 
+    def test_catalog_identifies_collected_official_readings_separately_from_upstream(self):
+        directory = self.root / 'src/main/specialist'
+        directory.mkdir(parents=True)
+        (directory / 'categories.json').write_text(Path('src/main/specialist/categories.json').read_text())
+        candidates = directory / 'distribution-candidates.tsv.gz'
+        distribution.write_gzip(candidates, [('kampo', 'しんかんぽう', '1', '1', '9000', '新漢方')])
+        provenance = directory / 'provenance.jsonl.gz'
+        provenance.write_bytes(specialist.compressed_json([dict(
+            reading='しんかんぽう', surface='新漢方', status='adopted', readingOrigin='source_backed_collection')]))
+        (directory / 'distribution-manifest.json').write_text(json.dumps(dict(
+            rules=specialist.RULES, inputs={}, idDefSha256=distribution.sha(self.root / 'src/main/resources/id.def'),
+            files={'distribution-candidates.tsv.gz': distribution.sha(candidates), 'provenance.jsonl.gz': distribution.sha(provenance)},
+            categoryRows={'kampo': 1, 'medical': 0}, dictionaryRows=1, uniqueAdmittedPairs=1)))
+        output = self.root / 'catalog'
+        catalog.generate(self.root, output)
+        page = next((output / 'kampo').glob('page-*.md')).read_text()
+        self.assertIn('公式資料の表記・読み', page)
+        self.assertNotIn('提供元の読み（正確性未確認）', page)
+
     def test_exclusions_are_complete_paginated_and_use_final_saved_reasons(self):
         source = self.root/'src/main/classification'
         distribution.write_gzip(source/'distribution-decisions.tsv.gz',[

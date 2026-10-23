@@ -2,7 +2,7 @@
 
 通常版GitHub Releaseの辞書ZIPに含まれる全85カテゴリを掲載します。通常配布の57カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **862,003**、読み・表記の組数の合計は **853,878**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **862,228**、読み・表記の組数の合計は **854,103**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換配布) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -44,7 +44,7 @@
 | [交通路線](transport_route/index.md) | `transport_route` | 4,229 | 4,230 | [全件](transport_route/index.md) |
 | [組織](organization/index.md) | `organization` | 47,405 | 47,484 | [全件](organization/index.md) |
 | [家系・氏族](lineage/index.md) | `lineage` | 2,019 | 2,019 | [全件](lineage/index.md) |
-| [商品・サービス](product/index.md) | `product` | 9,888 | 9,890 | [全件](product/index.md) |
+| [商品・サービス](product/index.md) | `product` | 10,111 | 10,113 | [全件](product/index.md) |
 | [車両・船舶](vehicle/index.md) | `vehicle` | 2,580 | 2,580 | [全件](vehicle/index.md) |
 | [催し・行事](event/occasion/organized_event/index.md) | `event/occasion/organized_event` | 4,059 | 4,059 | [全件](event/occasion/organized_event/index.md) |
 | [記念日・啓発日](event/occasion/observance/index.md) | `event/occasion/observance` | 802 | 802 | [全件](event/occasion/observance/index.md) |
@@ -89,7 +89,7 @@
 | [舞台作品](work_stage/index.md) | `work_stage` | 571 | 571 | [全件](work_stage/index.md) |
 | [定期刊行物](work_periodical/index.md) | `work_periodical` | 1,810 | 1,811 | [全件](work_periodical/index.md) |
 | [媒体未特定の作品・美術作品](work_other/index.md) | `work_other` | 2,682 | 2,683 | [全件](work_other/index.md) |
-| [漢方・生薬](kampo/index.md) | `kampo` | 432 | 432 | [全件](kampo/index.md) |
+| [漢方・生薬](kampo/index.md) | `kampo` | 434 | 434 | [全件](kampo/index.md) |
 | [医療](medical/index.md) | `medical` | 92,683 | 92,683 | [全件](medical/index.md) |
 | [姓・名字（由来未確認）](person/surname_origin_unconfirmed/index.md) | `surname_origin_unconfirmed` | 24,039 | 24,182 | [全件](person/surname_origin_unconfirmed/index.md) |
 | [名・下の名前（由来未確認）](person/given_name_origin_unconfirmed/index.md) | `given_name_origin_unconfirmed` | 4,290 | 4,332 | [全件](person/given_name_origin_unconfirmed/index.md) |

@@ -15,6 +15,7 @@ import urllib.request
 import zipfile
 
 import classified_distribution as distribution
+import collected_terms
 
 DIRECTORY = 'src/main/specialist'
 NOUN = '名詞,一般,*,*,*,*,*'
@@ -159,6 +160,17 @@ def load_inventory(path):
     return existing
 
 
+def inventory_sha256(path):
+    """Hash the normalized inventory used for duplicate filtering, independent of gzip bytes."""
+    existing = load_inventory(path)
+    digest = hashlib.sha256()
+    for reading, surface in sorted(existing):
+        row = json.dumps([reading, surface, sorted(existing[(reading, surface)])],
+                         ensure_ascii=False, separators=(',', ':'))
+        digest.update(row.encode('utf-8') + b'\n')
+    return digest.hexdigest()
+
+
 def prepare(root, inventory):
     directory = root / DIRECTORY
     config = json.loads((directory / 'sources.json').read_text(encoding='utf-8'))
@@ -227,6 +239,28 @@ def prepare(root, inventory):
     for name in ('categories.json', 'sources.json'):
         inputs[str((directory / name).relative_to(root))] = distribution.sha(directory / name)
     ordered = sorted(config['sources'], key=lambda s: (RULES['categoryPriority'].index(s['category']), s['id']))
+    for path, number, entry in collected_terms.load(root):
+        inputs[str(path.relative_to(root))] = distribution.sha(path)
+        pair = entry['reading'], entry['surface']
+        reason = invalid_reason(entry['source_reading'], entry['source_surface'], *pair)
+        if reason:
+            raise ValueError('Invalid collected specialist term: ' + reason)
+        source_id = 'collected/' + str(path.relative_to(directory))
+        status = ('excluded_by_classification_review' if pair in excluded else
+                  'existing_duplicate' if pair in existing else
+                  'source_duplicate' if pair in adopted else 'adopted')
+        if status == 'adopted':
+            adopted[pair] = 'kampo'
+            origins['source_backed_collection'] += 1
+        record = dict(source=source_id, sourceRow=number, originalReading=entry['source_reading'],
+                      originalSurface=entry['source_surface'], reading=pair[0], surface=pair[1],
+                      category='kampo', status=status, readingOrigin='source_backed_collection',
+                      collectionEvidence=entry)
+        provenance.append(record)
+        counts[status] += 1
+        stats = source_counts.setdefault(source_id, dict(rows=0, dispositions={}))
+        stats['rows'] += 1
+        stats['dispositions'][status] = stats['dispositions'].get(status, 0) + 1
     for spec in ordered:
         path = directory / 'sources' / (spec['id'] + '.jsonl.gz')
         inputs[str(path.relative_to(root))] = distribution.sha(path)
@@ -280,7 +314,7 @@ def prepare(root, inventory):
     data = {'distribution-candidates.tsv.gz': candidates.getvalue(), 'provenance.jsonl.gz': compressed_json(provenance)}
     manifest = dict(schemaVersion=1, rules=RULES, inputs=inputs,
                     idDefSha256=distribution.sha(root/'src/main/resources/id.def'),
-                    existingInventorySha256=distribution.sha(inventory),
+                    existingInventorySha256=inventory_sha256(inventory),
                     existingDictionaryIds=sorted({name for names in existing.values() for name in names}),
                     existingUniquePairs=len(existing), sourceRows=source_counts, dispositions=dict(sorted(counts.items())),
                     categoryRows={c['id']: sum(r[0] == c['id'] for r in records) for c in categories},
@@ -304,6 +338,10 @@ def verify_files(root):
     directory = root / DIRECTORY
     manifest = json.loads((directory / 'distribution-manifest.json').read_text(encoding='utf-8'))
     if manifest['rules'] != RULES: raise ValueError('Specialist selection rules changed: regenerate input')
+    registered = {p for p in manifest['inputs'] if p.startswith(str(collected_terms.DIRECTORY) + '/')}
+    present = {str(p.relative_to(root)) for p in (root / collected_terms.DIRECTORY).glob('*.jsonl')}
+    if registered != present:
+        raise ValueError('Collected specialist terms changed: regenerate and verify input')
     for path, expected in manifest['inputs'].items():
         if distribution.sha(root / path) != expected: raise ValueError('Specialist input hash mismatch: ' + path)
     for name, expected in manifest['files'].items():
@@ -315,7 +353,7 @@ def verify_files(root):
 
 def verify(root, inventory):
     saved = verify_files(root)
-    if distribution.sha(inventory) != saved['existingInventorySha256']:
+    if inventory_sha256(inventory) != saved['existingInventorySha256']:
         raise ValueError('Existing dictionary inventory changed: refreeze specialist inputs after review')
     data, wanted = prepare(root, inventory)
     if saved != wanted: raise ValueError('Specialist manifest differs from recomputed source selection')
@@ -336,6 +374,11 @@ def licenses(root):
                  'Original readings include automatic readings; supplementary readings are Gemini inferences. Accuracy and IME ranking are not verified.\n')
     for spec in config['sources']:
         parts.append('\n' + spec['attribution'] + '\nSource: ' + spec['page'] + '\nLicense: ' + spec['license'] + '\n')
+    collected_sources = sorted({entry['source_url'] for _, _, entry in collected_terms.load(root)})
+    if collected_sources:
+        parts.append('\n=== Additional vocabulary facts ===\n'
+                     'Names and explicitly published readings only; original web pages are not redistributed.\n'
+                     + '\n'.join(collected_sources) + '\n')
     for path in sorted(directory.glob('notices/*.txt')):
         parts.append('\n=== ' + path.name + ' ===\n' + path.read_text(encoding='utf-8'))
     for path in sorted((root / 'src/main/resources/third-party').iterdir()):
