@@ -118,7 +118,9 @@ PRでは [`Build classified dictionary for PR`](../.github/workflows/build-class
 
 通常配布は既存の [GitHub Actions](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/workflows/build-and-release.yml) を使用します。手動実行ではビルド・検証後にActions成果物を保存し、`vX.Y.Z` タグのpushでは同じ検証後に通常版GitHub Releaseを作成して、辞書ZIP・配布マニフェスト・SHA-256・ライセンスを添付します。今回の作品・キャラクター対象層辞書もこの手順で配布します。閲覧用一覧の固定データとの一致も配布前に検証します。
 
-既存Actionsを手動実行すると、人物細分類済みZIPと `dictionary-distribution-manifest.json`、`DICTIONARY-SHA256SUMS`、`DICTIONARY-LICENSES.txt` を成果物として取得できます。安定版 `vX.Y.Z` タグでは通常リリースに4ファイルを添付し、最新リリースをLatestに設定します。タグ実行後は、すべてのプレリリースと関連タグを削除し、通常版辞書リリースと関連タグを新しい順に5件だけ残します。古い通常版とタグも削除します。ハイフン付き `v*` タグおよび `person-dictionaries-v*` タグではReleaseを公開しません。
+既存Actionsを手動実行すると、人物細分類済みZIPと `dictionary-distribution-manifest.json`、`DICTIONARY-SHA256SUMS`、`DICTIONARY-LICENSES.txt` を成果物として取得できます。安定版 `vX.Y.Z` タグでは通常リリースに4ファイルを添付し、最新リリースをLatestに設定します。タグ実行後は、すべてのプレリリースと関連タグを削除し、通常版辞書リリースと関連タグを新しい順に5件だけ残します。古い通常版とタグも削除します。
+
+2026-10-23に [v1.7.270](https://github.com/KazumaProject/kotlin-kana-kanji-converter/releases/tag/v1.7.270) を安定版として公開しました。実行結果は[GitHub Actions run 39980585048](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/runs/39980585048)で確認できます。公開後に保持している安定版は v1.7.270、v1.7.268、v1.7.266、v1.7.265、v1.7.262 の5件で、プレリリースはありません。ハイフン付き `v*` タグおよび `person-dictionaries-v*` タグではReleaseを公開しません。
 
 利用側IMEは旧5辞書の固定パスを52カテゴリの読み込みへ変更する必要があります。用語カテゴリは `categories/term/general/<分類ID>/` と `categories/term/specialist/<分類ID>/`、イベントカテゴリは `categories/event/<群>/<分類ID>/`、対象層カテゴリは `categories/media_demographic/audience/<分類ID>/` の下へ配置します。成人向けラベルに該当する候補は配布データへ作成しません。辞書バイナリの読み戻し検証と、実IMEの候補表示・順位の検証は別です。
 
