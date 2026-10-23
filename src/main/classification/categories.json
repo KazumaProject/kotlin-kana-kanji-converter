@@ -212,6 +212,31 @@
       "definition": "出版社・掲載誌など、またはMyAnimeListのdemographicsタグが少女向けと明示する作品。アニメ作品と架空キャラクターは、特定した出典の対象読者を継承します。登場人物の年齢や題材だけでは分類しません。"
     },
     {
+      "id": "media_demographic/audience/josei",
+      "name": "女性向け（Josei）",
+      "definition": "出版社・掲載誌など、またはMyAnimeListのJosei demographicsタグが女性向けとして明示する作品。アニメ作品と架空キャラクターは、特定した出典の対象読者を継承します。"
+    },
+    {
+      "id": "media_demographic/audience/kids",
+      "name": "子ども向け（Kids）",
+      "definition": "出版社・掲載誌など、またはMyAnimeListのKids demographicsタグが子ども向けとして明示する作品。アニメ作品と架空キャラクターは、特定した出典の対象読者を継承します。"
+    },
+    {
+      "id": "media_demographic/audience/mixed",
+      "name": "複数対象層",
+      "definition": "MyAnimeListのdemographicsタグまたは特定した複数の出典が、異なる対象層を明示する作品・キャラクター。"
+    },
+    {
+      "id": "media_demographic/audience/unspecified",
+      "name": "対象層タグなし",
+      "definition": "MyAnimeListのレコードは特定できたもののdemographics欄が空の作品・キャラクター。全年齢向けを示す分類ではありません。"
+    },
+    {
+      "id": "media_demographic/resolution/source_unverified",
+      "name": "出典未確認・対象層未確定",
+      "definition": "アニメ・漫画・キャラクターの候補を固定した公開データスナップショットで一意に照合できなかったもの。対象層が不明であり、全年齢向けを意味しません。"
+    },
+    {
       "id": "work_film",
       "name": "映画作品",
       "definition": "個別に特定できる映画。"
@@ -322,11 +347,22 @@
       "groups": [
         {
           "id": "media_demographic/audience",
-          "name": "対象読者",
+          "name": "対象読者・出典タグ",
           "categories": [
             "media_demographic/audience/shonen",
             "media_demographic/audience/seinen",
-            "media_demographic/audience/shojo"
+            "media_demographic/audience/shojo",
+            "media_demographic/audience/josei",
+            "media_demographic/audience/kids",
+            "media_demographic/audience/mixed",
+            "media_demographic/audience/unspecified"
+          ]
+        },
+        {
+          "id": "media_demographic/resolution",
+          "name": "出典照合状態",
+          "categories": [
+            "media_demographic/resolution/source_unverified"
           ]
         }
       ]

@@ -1,6 +1,6 @@
 # 分類辞書の生成と配布
 
-既存の Web・Person・Place・Neologd・wiki の5辞書は、50種類の意味カテゴリ辞書へ置き換えます。追加の漢方・医療2カテゴリを合わせ、計52カテゴリを配布します。[専門辞書の入力と条件](specialist-dictionaries.md) を参照してください。元の5辞書のテキストは、分類結果との照合と品詞・コストの復元に使用します。
+既存の Web・Person・Place・Neologd・wiki の5辞書は、55種類の意味カテゴリ辞書へ置き換えます。追加の漢方・医療2カテゴリを合わせ、計57カテゴリを配布します。[専門辞書の入力と条件](specialist-dictionaries.md) を参照してください。元の5辞書のテキストは、分類結果との照合と品詞・コストの復元に使用します。
 
 一般語・専門用語の `term` は親ディレクトリです。`term/general/` に一般語5分類、`term/specialist/` に専門語10分類を置きます。15分類すべてに収録する用語はGemini 3.5 Flash-Liteの無料枠で `generateContent` APIを並列利用して分類し、読み・表記ごとに最も適合する分類を1つ選びます。分類結果と無料枠の実行情報は固定データに保存し、候補・応答・途中経過はリポジトリ外に置きます。結果は未独立検証のGemini分類として扱います。
 
@@ -8,11 +8,11 @@
 
 イベント辞書は `src/main/classification/event-taxonomy.json` で「催し・行事」「事件・事故・災害」「歴史的出来事」の3群に分類します。配布するのは催し・行事、記念日・啓発日、試験・検定、自然災害、社会問題・騒動・訴訟、歴史的紛争・政変の6カテゴリです。現在の配布データには合計7,660組を収録し、各カテゴリの件数は[収録一覧](classified-dictionary-catalog/index.md)に掲載しています。犯罪事件・テロ事件・事故は分類用ラベルだけを定義し、該当する読み・表記ペアを分類結果、候補、判断台帳、カタログ、配布データに保存しません。分類はGemini 3.5 Flash-Liteの無料枠を2ワーカーで利用し、候補語と応答本文は保存しません。途中の分類結果は読み・表記と切り離した数値ID・カテゴリIDとしてリポジトリ外の作業領域に一時保存し、完了後に削除します。進捗ではカテゴリ別件数を報告します。無料枠の利用上限に達した場合は処理を停止し、未完了分を再開します。元の広域辞書テキストは分類の入力として維持します。
 
-アニメ・漫画作品と、出典作品を特定できる架空キャラクターの対象層は `src/main/classification/media-demographic-taxonomy.json` で定義します。少年向け・青年向け・少女向けは、出版社・掲載誌などの情報またはMyAnimeListのdemographicsタグを根拠にします。MyAnimeListは二次的なコミュニティ編集データなので、出版社の一次資料と同等とは扱いません。キャラクターの設定年齢では分類せず、キャラクターは出典作品の対象層を継承します。成人向けは出版社・販売元・公的書誌などで18歳以上向けと確認できる作品、またはMyAnimeListでHentaiジャンル／Rx - Hentai評価が付いた作品に限ります。成人ラベルは分類レビューに記録しますが辞書カテゴリにはせず、その作品・キャラクターの候補を全カテゴリから除外します。根拠を確認できないものは対象層を推定しません。
+アニメ・漫画作品と架空キャラクターの分類は `src/main/classification/media-demographic-taxonomy.json` で定義します。対象層カテゴリは少年向け・青年向け・少女向け・女性向け（Josei）・子ども向け（Kids）・複数対象層・対象層タグなしです。別に出典未確認・対象層未確定カテゴリを設け、タイトルやキャラクターIDを固定した公開データで一意に照合できない候補も明示して収録します。このカテゴリは読者層や全年齢を意味しません。MyAnimeListは二次的なコミュニティ編集データで、出版社の一次資料と同等とは扱いません。アニメは出典が漫画と記録され、同名の原作漫画を照合できる場合に限り対象層を継承します。架空キャラクターは確認できた出典作品の対象層を継承し、設定年齢では分類しません。MyAnimeListでHentaiジャンルまたはRx - Hentai評価が確認できた作品と、その出典キャラクターは成人向けとし、全カテゴリから除外します。出典未確認の候補には成人向けが含まれる可能性があり、成人向けの全件除外までは保証しません。
 
-2026-10-23の固定データ照合では、配布対象の作品・キャラクター候補12,701組のうち、既存レビュー10組に加えて2,362組を追加で確認しました（少年向け888、青年向け896、少女向け536、成人向け42）。成人向け42組は全カテゴリから除外します。残る10,329組は、公開データに対象層タグがない、候補名を一意に結び付けられない、またはデータ間で判定が食い違うため未分類のままです。これは無料の公開スナップショットで根拠を得られた範囲であり、全候補の網羅分類や未レビュー作品の成人向け除外を保証しません。
+2026-10-23の固定データ照合では、処理開始時点で配布対象だった作品・キャラクター候補12,659組をすべて分類しました。既存の対象層レビュー2,330組に、今回の10,329組を加えています。今回分は、少年向け47、青年向け28、少女向け10、女性向け207、子ども向け141、複数対象層38、対象層タグなし1,640、成人向け21、出典未確認8,197組です。成人向けは既存分49組を含む合計70組を全カテゴリから除外しました。出典未確認の8,197組は専用カテゴリに収録し、未分類状態のまま残していません。固定データの `unclassifiedPairs` は0です。対象層や成人判定の根拠は無料の公開スナップショットで照合した範囲に限られ、出典未確認の候補が成人向けでないことまでは保証しません。
 
-対象レビューは `src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl` に保存します。再生成には、Kaggleの[Anime and Manga Dataset 2026](https://www.kaggle.com/datasets/patelris/anime-and-manga-dataset-2026) version 6（`anime_dataset.csv`、`manga_dataset.csv`）と、Hugging Faceの[Anime Characters Dataset](https://huggingface.co/datasets/fadhilakbar/anime-characters-dataset)のCSVを使います。ファイルSHA-256、対象となったMyAnimeListのID、参照先、利用ライセンスを各レビューに記録します。生成器 `scripts/generate_media_demographic_reviews.py` はローカルCSVをPython標準ライブラリで照合し、外部API・LLM・トークンを使いません。入力CSVは配布物・リポジトリに含めません。データ出典と帰属表示は [LICENSE-DATA.md](../LICENSE-DATA.md) に記載しています。例:
+今回の完了レビュー10,329件は `src/main/classification/reviews/2026-10-23-media-demographics-complete.jsonl` に保存し、先行レビュー台帳も履歴として残します。再生成には、Kaggleの[Anime and Manga Dataset 2026](https://www.kaggle.com/datasets/patelris/anime-and-manga-dataset-2026) version 6（`anime_dataset.csv`、`manga_dataset.csv`）と、Hugging Faceの[Anime Characters Dataset](https://huggingface.co/datasets/fadhilakbar/anime-characters-dataset)のCSVを使います。ファイルSHA-256、対象となったMyAnimeListのID、参照先、利用ライセンスを各レビューに記録します。生成器 `scripts/generate_media_demographic_reviews.py` はローカルCSVをPython標準ライブラリで照合し、外部API・LLM・トークンを使いません。入力CSVは配布物・リポジトリに含めません。データ出典と帰属表示は [LICENSE-DATA.md](../LICENSE-DATA.md) に記載しています。例:
 
 ```sh
 python3 scripts/generate_media_demographic_reviews.py \
@@ -22,11 +22,11 @@ python3 scripts/generate_media_demographic_reviews.py \
   --write
 ```
 
-書き込み前は `--write` を省略して件数だけ確認できます。曖昧なタイトル一致、未付与のdemographics、Josei・Kidsタグは少年・青年・少女へ推定変換しません。Hentai／Rx - Hentaiと読者層タグが同じレコードに併記される場合も自動分類を保留します。
+書き込み前は `--write` を省略して件数だけ確認できます。曖昧なタイトル一致、未付与のdemographics、Josei・Kidsタグは少年・青年・少女へ推定変換しません。Hentai／Rx - Hentaiタグが読者層タグと同じレコードに併記される場合は、成人向けを優先して除外します。出典未確認カテゴリは、照合不能・複数一致・異なる対象層の食い違いを明示します。
 
 ## 固定入力
 
-`src/main/classification/categories.json` は配布カテゴリの一覧、`term-taxonomy.json` は用語の親カテゴリと15の葉カテゴリ、`event-taxonomy.json` はイベントの3群と分類ラベル、`media-demographic-taxonomy.json` は作品・キャラクターの対象層と成人除外ラベルを定義します。`term-classifications.tsv.gz` と `event-classifications.tsv.gz` は配布可能なカテゴリに分類された読み・表記ペアのGemini分類結果を固定します。イベントの分類専用ラベルと成人向けラベルは配布カテゴリに含めません。成人向けラベルを持つレビューは全カテゴリからの除外として検証します。`distribution-decisions.tsv.gz` は読み・表記ごとの最終分類、分類元、収録状態を保存します。分類取得失敗は `no_result` として未分類と区別し、バイナリには収録しません。`distribution-candidates.tsv.gz` はカテゴリ・読み・左品詞ID・右品詞ID・コスト・表記の6列で、元辞書のレコードを保持します。TSVはUTF-8、ヘッダーなしです。
+`src/main/classification/categories.json` は配布カテゴリの一覧、`term-taxonomy.json` は用語の親カテゴリと15の葉カテゴリ、`event-taxonomy.json` はイベントの3群と分類ラベル、`media-demographic-taxonomy.json` は作品・キャラクターの対象層、出典未確認状態、成人除外ラベルを定義します。`term-classifications.tsv.gz` と `event-classifications.tsv.gz` は配布可能なカテゴリに分類された読み・表記ペアのGemini分類結果を固定します。イベントの分類専用ラベルと成人向けラベルは配布カテゴリに含めません。成人向けラベルを持つレビューは全カテゴリからの除外として検証します。`distribution-decisions.tsv.gz` は読み・表記ごとの最終分類、分類元、収録状態を保存します。分類取得失敗は `no_result` として未分類と区別し、バイナリには収録しません。`distribution-candidates.tsv.gz` はカテゴリ・読み・左品詞ID・右品詞ID・コスト・表記の6列で、元辞書のレコードを保持します。TSVはUTF-8、ヘッダーなしです。
 
 詳細なLuna再分類台帳はGitへ含めず、`.gitignore` 対象の `build/luna-classification/ledger/results.jsonl.gz` にローカル保存します。台帳がない環境でも固定済み配布データとカテゴリ別カタログを検証できますが、Luna応答からの再現監査はスキップされます。カタログの `--check` は不採用理由ページとその要約の照合をスキップし、完全な照合と再生成にはローカル台帳が必要です。
 

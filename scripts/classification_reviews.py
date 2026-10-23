@@ -93,7 +93,9 @@ def load(root, selected=None):
                         or not valid_source_baseline
                         or entry.get('classification_origin') not in ('verified', 'manual', 'gemini')
                         or entry.get('classification_origin') != expected_origin
-                        or evidence.get('kind') != 'media_demographic_source'
+                        or evidence.get('kind') != ('media_demographic_source_search'
+                                                    if demographic == 'source_unverified'
+                                                    else 'media_demographic_source')
                         or evidence.get('reading') != pair[0] or evidence.get('surface') != pair[1]
                         or evidence.get('categories') != review_categories
                         or not isinstance(reference, str) or not reference.startswith('https://')):
@@ -105,7 +107,28 @@ def load(root, selected=None):
                     expected_category = d.MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES[demographic]
                     if (action not in ('keep', 'reclassify') or expected_category not in review_categories
                             or tagged_categories != {expected_category}):
-                        raise ValueError('Audience demographic reviews must include exactly their matching category')
+                        raise ValueError('Media demographic reviews must include exactly their matching category')
+                    if demographic == 'source_unverified':
+                        datasets = evidence.get('searchedDatasets')
+                        allowed_statuses = {
+                            'no_source_match', 'ambiguous_character_match',
+                            'source_record_without_supported_demographic', 'conflicting_source_labels',
+                        }
+                        if (evidence.get('resolutionStatus') not in allowed_statuses
+                                or not isinstance(evidence.get('matchMethod'), str) or not evidence['matchMethod']
+                                or not isinstance(datasets, list) or not datasets
+                                or not isinstance(datasets[0], dict)
+                                or evidence.get('reference') != datasets[0].get('sourceDataset')
+                                or any(not isinstance(dataset, dict)
+                                       or not isinstance(dataset.get('sourceDataset'), str)
+                                       or not dataset['sourceDataset'].startswith('https://')
+                                       or not isinstance(dataset.get('sourceDatasetVersion'), str)
+                                       or not isinstance(dataset.get('sourceDatasetLicense'), str)
+                                       or not isinstance(dataset.get('sourceDatasetFile'), str)
+                                       or not isinstance(dataset.get('sourceDatasetSha256'), str)
+                                       or not re.fullmatch('[0-9a-f]{64}', dataset['sourceDatasetSha256'])
+                                       for dataset in datasets)):
+                            raise ValueError('Source-unverified media review requires pinned source searches')
             elif tagged_categories:
                 raise ValueError('Media demographic category requires its review label and source evidence')
             if evidence.get('kind') == 'model_review':
@@ -128,7 +151,8 @@ def load(root, selected=None):
                         or len(set(cats)) != len(cats) or not set(cats) <= allowed):
                     raise ValueError('Invalid review categories')
                 if evidence.get('kind') not in (
-                        'user_confirmation', 'independent_source', 'media_demographic_source', 'model_review'):
+                        'user_confirmation', 'independent_source', 'media_demographic_source',
+                        'media_demographic_source_search', 'model_review'):
                     raise ValueError('Review requires an identified evidence kind')
                 if (evidence.get('reading') != pair[0] or evidence.get('surface') != pair[1]
                         or evidence.get('categories') != cats or not evidence.get('reference')):

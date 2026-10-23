@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "id": "media_demographic",
   "name": "作品・キャラクターの対象層",
-  "definition": "作品は出版社・掲載誌などが示す原作の対象読者、またはMyAnimeListのdemographicsタグを根拠に分類します。架空キャラクターは出典作品の対象読者を継承し、設定年齢だけでは分類しません。MyAnimeListは二次的なコミュニティ編集データです。",
+  "definition": "作品は出版社・掲載誌などが示す原作の対象読者、またはMyAnimeListのdemographicsタグを根拠に分類します。アニメは対象層が不明で、出典が漫画と記録され同名の漫画を照合できる場合に限り、その漫画の対象層を継承します。架空キャラクターは出典作品の対象層を継承し、設定年齢だけでは分類しません。対象層タグなしは、照合できたMyAnimeListレコードのdemographics欄が空であることを示し、全年齢向けという意味ではありません。出典未確認は候補名・キャラクターIDをデータスナップショットで一意に照合できなかった状態で、対象層や全年齢を示すものではありません。MyAnimeListは二次的なコミュニティ編集データです。",
   "groups": [
     {
       "id": "audience",
-      "name": "対象読者",
+      "name": "対象読者・出典タグ",
       "categories": [
         {
           "id": "media_demographic/audience/shonen",
@@ -24,6 +24,42 @@
           "id": "media_demographic/audience/shojo",
           "name": "少女向け",
           "definition": "出版社・掲載誌など、またはMyAnimeListのdemographicsタグが少女向けと明示する作品。アニメ作品と架空キャラクターは、特定した出典の対象読者を継承します。登場人物の年齢や題材だけでは分類しません。",
+          "distribution": true
+        },
+        {
+          "id": "media_demographic/audience/josei",
+          "name": "女性向け（Josei）",
+          "definition": "出版社・掲載誌など、またはMyAnimeListのJosei demographicsタグが女性向けとして明示する作品。アニメ作品と架空キャラクターは、特定した出典の対象読者を継承します。",
+          "distribution": true
+        },
+        {
+          "id": "media_demographic/audience/kids",
+          "name": "子ども向け（Kids）",
+          "definition": "出版社・掲載誌など、またはMyAnimeListのKids demographicsタグが子ども向けとして明示する作品。アニメ作品と架空キャラクターは、特定した出典の対象読者を継承します。",
+          "distribution": true
+        },
+        {
+          "id": "media_demographic/audience/mixed",
+          "name": "複数対象層",
+          "definition": "MyAnimeListのdemographicsタグまたは特定した複数の出典が、異なる対象層を明示する作品・キャラクター。",
+          "distribution": true
+        },
+        {
+          "id": "media_demographic/audience/unspecified",
+          "name": "対象層タグなし",
+          "definition": "MyAnimeListのレコードは特定できたもののdemographics欄が空の作品・キャラクター。全年齢向けを示す分類ではありません。",
+          "distribution": true
+        }
+      ]
+    },
+    {
+      "id": "resolution",
+      "name": "出典照合状態",
+      "categories": [
+        {
+          "id": "media_demographic/resolution/source_unverified",
+          "name": "出典未確認・対象層未確定",
+          "definition": "アニメ・漫画・キャラクターの候補を固定した公開データスナップショットで一意に照合できなかったもの。対象層が不明であり、全年齢向けを意味しません。",
           "distribution": true
         }
       ]

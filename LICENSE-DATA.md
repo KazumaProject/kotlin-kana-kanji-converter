@@ -51,7 +51,7 @@ JapaneseCorpus由来データの原本表記は
 
 ## アニメ・漫画・架空キャラクターの対象層レビュー
 
-`src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl` の一括レビューは、
+`src/main/classification/reviews/2026-10-23-media-demographics-complete.jsonl` の完了レビューは、
 [patelris の Anime and Manga Dataset 2026](https://www.kaggle.com/datasets/patelris/anime-and-manga-dataset-2026)
 version 6（CC BY 4.0）の `demographics`、`genres`、`rating`、MyAnimeList IDを利用します。
 架空キャラクターの名前と出典IDには

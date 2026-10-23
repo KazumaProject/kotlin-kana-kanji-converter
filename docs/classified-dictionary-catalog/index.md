@@ -1,8 +1,8 @@
 # 人物辞書置換プレリリース — 全配布カテゴリ
 
-人物細分類辞書を含む配布ZIPのカテゴリ一覧です。通常配布の52カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えた **80カテゴリ**を掲載しています。未分類候補と成人関連など配布対象外の候補は含めていません。
+人物細分類辞書を含む配布ZIPのカテゴリ一覧です。通常配布の57カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えた **85カテゴリ**を掲載しています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **851,715**、読み・表記の組数の合計は **843,663**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **862,071**、読み・表記の組数の合計は **853,946**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換プレリリース) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -44,13 +44,18 @@
 | [文化・芸術・スポーツ](term/specialist/culture_arts_sports/index.md) | `term/specialist/culture_arts_sports` | 5,360 | 5,360 | [全件](term/specialist/culture_arts_sports/index.md) |
 | [交通・安全・防衛](term/specialist/transport_safety_defense/index.md) | `term/specialist/transport_safety_defense` | 4,035 | 4,037 | [全件](term/specialist/transport_safety_defense/index.md) |
 | [作品シリーズ](work_franchise/index.md) | `work_franchise` | 849 | 849 | [全件](work_franchise/index.md) |
-| [漫画作品](work_manga/index.md) | `work_manga` | 5,113 | 5,114 | [全件](work_manga/index.md) |
-| [アニメ作品](work_anime/index.md) | `work_anime` | 1,095 | 1,095 | [全件](work_anime/index.md) |
-| [少年向け](media_demographic/audience/shonen/index.md) | `media_demographic/audience/shonen` | 894 | 894 | [全件](media_demographic/audience/shonen/index.md) |
-| [青年向け](media_demographic/audience/seinen/index.md) | `media_demographic/audience/seinen` | 898 | 898 | [全件](media_demographic/audience/seinen/index.md) |
-| [少女向け](media_demographic/audience/shojo/index.md) | `media_demographic/audience/shojo` | 538 | 538 | [全件](media_demographic/audience/shojo/index.md) |
+| [漫画作品](work_manga/index.md) | `work_manga` | 5,094 | 5,095 | [全件](work_manga/index.md) |
+| [アニメ作品](work_anime/index.md) | `work_anime` | 1,090 | 1,090 | [全件](work_anime/index.md) |
+| [少年向け](media_demographic/audience/shonen/index.md) | `media_demographic/audience/shonen` | 941 | 942 | [全件](media_demographic/audience/shonen/index.md) |
+| [青年向け](media_demographic/audience/seinen/index.md) | `media_demographic/audience/seinen` | 926 | 926 | [全件](media_demographic/audience/seinen/index.md) |
+| [少女向け](media_demographic/audience/shojo/index.md) | `media_demographic/audience/shojo` | 548 | 548 | [全件](media_demographic/audience/shojo/index.md) |
+| [女性向け（Josei）](media_demographic/audience/josei/index.md) | `media_demographic/audience/josei` | 207 | 208 | [全件](media_demographic/audience/josei/index.md) |
+| [子ども向け（Kids）](media_demographic/audience/kids/index.md) | `media_demographic/audience/kids` | 141 | 141 | [全件](media_demographic/audience/kids/index.md) |
+| [複数対象層](media_demographic/audience/mixed/index.md) | `media_demographic/audience/mixed` | 38 | 38 | [全件](media_demographic/audience/mixed/index.md) |
+| [対象層タグなし](media_demographic/audience/unspecified/index.md) | `media_demographic/audience/unspecified` | 1,640 | 1,642 | [全件](media_demographic/audience/unspecified/index.md) |
+| [出典未確認・対象層未確定](media_demographic/resolution/source_unverified/index.md) | `media_demographic/resolution/source_unverified` | 8,197 | 8,266 | [全件](media_demographic/resolution/source_unverified/index.md) |
 | [映画作品](work_film/index.md) | `work_film` | 6,503 | 6,504 | [全件](work_film/index.md) |
-| [番組](work_program/index.md) | `work_program` | 9,309 | 9,310 | [全件](work_program/index.md) |
+| [番組](work_program/index.md) | `work_program` | 9,308 | 9,309 | [全件](work_program/index.md) |
 | [書籍作品](work_book/index.md) | `work_book` | 7,658 | 7,659 | [全件](work_book/index.md) |
 | [ゲーム作品](work_game/index.md) | `work_game` | 3,155 | 3,155 | [全件](work_game/index.md) |
 | [音楽作品](work_music/index.md) | `work_music` | 10,334 | 10,337 | [全件](work_music/index.md) |

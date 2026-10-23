@@ -35,11 +35,17 @@ MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES = {
     'shonen': 'media_demographic/audience/shonen',
     'seinen': 'media_demographic/audience/seinen',
     'shojo': 'media_demographic/audience/shojo',
+    'josei': 'media_demographic/audience/josei',
+    'kids': 'media_demographic/audience/kids',
+    'mixed': 'media_demographic/audience/mixed',
+    'unspecified': 'media_demographic/audience/unspecified',
+    'source_unverified': 'media_demographic/resolution/source_unverified',
 }
 MEDIA_DEMOGRAPHIC_LABELS = {*MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES, 'adult'}
 MEDIA_DEMOGRAPHIC_LIMITATION = (
-    'Media demographic labels cover source-reviewed pairs only; unreviewed media and source-linked characters '
-    'are not guaranteed classified or excluded.'
+    'A matched source with no demographic tag is labeled unspecified, not general audience. Pairs without a unique '
+    'source match are explicitly labeled source-unverified; neither label means general audience. Only pairs with '
+    'an explicit adult source tag are guaranteed to be excluded as adult.'
 )
 TERM_CLASSIFICATION_PROMPT_VERSIONS = {
     'term-best-fit-15-categories-ordered-groups-10-v2',
@@ -148,30 +154,48 @@ def media_demographic_taxonomy(root, allowed=None):
     if (not isinstance(data, dict) or data.get('schemaVersion') != 1 or data.get('id') != 'media_demographic'
             or data.get('name') != '作品・キャラクターの対象層'
             or not isinstance(data.get('definition'), str) or not data['definition']
-            or not isinstance(groups, list) or len(groups) != 1 or not isinstance(groups[0], dict)
-            or [group.get('id') for group in groups] != ['audience']
-            or not isinstance(groups[0].get('name'), str) or not groups[0]['name']):
+            or not isinstance(groups, list) or len(groups) != 2
+            or any(not isinstance(group, dict) for group in groups)
+            or [group.get('id') for group in groups] != ['audience', 'resolution']
+            or any(not isinstance(group.get('name'), str) or not group['name'] for group in groups)):
         raise ValueError('Unsupported media demographic taxonomy')
-    group = groups[0]
-    entries = group.get('categories')
-    expected_ids = {f'media_demographic/audience/{label}' for label in MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES}
-    if not isinstance(entries, list) or len(entries) != len(expected_ids):
-        raise ValueError('Media demographic audience taxonomy must contain three categories')
+    expected_by_group = {
+        'audience': {category for category in MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES.values()
+                     if category.startswith('media_demographic/audience/')},
+        'resolution': {category for category in MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES.values()
+                       if category.startswith('media_demographic/resolution/')},
+    }
+    expected_ids = set().union(*expected_by_group.values())
     flattened = []
     ids = []
-    for category in entries:
-        if (not isinstance(category, dict) or not isinstance(category.get('id'), str)
-                or not re.fullmatch(r'media_demographic/audience/(shonen|seinen|shojo)', category['id'])
-                or not isinstance(category.get('name'), str) or not category['name']
-                or not isinstance(category.get('definition'), str) or not category['definition']
-                or category.get('distribution') is not True):
-            raise ValueError('Invalid media demographic audience category')
-        ids.append(category['id'])
-        flattened.append({key: category[key] for key in ('id', 'name', 'definition')})
+    normalized_groups = []
+    for group in groups:
+        entries = group.get('categories')
+        group_ids = expected_by_group[group['id']]
+        if not isinstance(entries, list) or len(entries) != len(group_ids):
+            raise ValueError(f"Media demographic {group['id']} taxonomy has an unexpected category count")
+        current_ids = []
+        for category in entries:
+            if (not isinstance(category, dict) or not isinstance(category.get('id'), str)
+                    or category['id'] not in group_ids
+                    or not isinstance(category.get('name'), str) or not category['name']
+                    or not isinstance(category.get('definition'), str) or not category['definition']
+                    or category.get('distribution') is not True):
+                raise ValueError(f"Invalid media demographic {group['id']} category")
+            ids.append(category['id'])
+            current_ids.append(category['id'])
+            flattened.append({key: category[key] for key in ('id', 'name', 'definition')})
+        if set(current_ids) != group_ids or len(set(current_ids)) != len(current_ids):
+            raise ValueError(f"Media demographic {group['id']} taxonomy is incomplete or duplicated")
+        normalized_groups.append({
+            'id': f"media_demographic/{group['id']}",
+            'name': group['name'],
+            'categories': current_ids,
+        })
     excluded = data.get('excludedCategories')
     if (set(ids) != expected_ids or len(set(ids)) != len(ids)
             or not isinstance(excluded, list) or len(excluded) != 1):
-        raise ValueError('Media demographic taxonomy must contain the three audience categories and one excluded label')
+        raise ValueError('Media demographic taxonomy must contain all categories and one excluded label')
     adult = excluded[0]
     if (not isinstance(adult, dict) or adult.get('id') != 'adult' or adult.get('name') != '成人向け'
             or not isinstance(adult.get('definition'), str) or not adult['definition']
@@ -182,7 +206,7 @@ def media_demographic_taxonomy(root, allowed=None):
     taxonomy = {
         'id': 'media_demographic',
         'name': data['name'],
-        'groups': [{'id': 'media_demographic/audience', 'name': group['name'], 'categories': ids}],
+        'groups': normalized_groups,
     }
     return taxonomy, flattened
 
@@ -221,6 +245,12 @@ def merged_categories(base, term_data, event_data=None, media_demographic_data=N
                 existing[category['id']]['definition'] = category['definition']
             categories = [existing[category_id] for category_id in ids]
             inserted_at[parent_id] = min(ids.index(category_id) for category_id in leaf_ids)
+        elif leaf_ids & set(ids):
+            insertion = min(ids.index(category_id) for category_id in leaf_ids & set(ids))
+            categories = [category for category in categories if category.get('id') not in leaf_ids]
+            categories[insertion:insertion] = leaf_categories
+            ids = [category.get('id') for category in categories]
+            inserted_at[parent_id] = insertion
         else:
             raise ValueError(f'Source taxonomy must contain {parent_id} or all expanded {parent_id} categories')
     result = dict(base)
