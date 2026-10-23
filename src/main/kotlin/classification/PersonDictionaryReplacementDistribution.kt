@@ -39,11 +39,11 @@ class PersonDictionaryReplacementDistribution(
     private val expectedCategoryCount = baseCategoryIds.size - 1 + standardPersonCategoryIds.size
 
     init {
-        require(mainCategories.size == 47 && mainCategories.containsKey("person"))
+        require(mainCategories.size == 50 && mainCategories.containsKey("person"))
         require(specialistCategories.size == 2)
-        require(baseCategoryIds.size == 49 && baseCategoryIds.toSet().size == 49)
+        require(baseCategoryIds.size == 52 && baseCategoryIds.toSet().size == 52)
         require(standardPersonCategoryIds.size == 29)
-        require(expectedCategoryCount == 77)
+        require(expectedCategoryCount == 80)
         require(baseCounts.keys == baseCategoryIds.toSet())
     }
 

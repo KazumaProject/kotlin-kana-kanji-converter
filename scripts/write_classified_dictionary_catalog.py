@@ -347,11 +347,11 @@ def generate_person_taxonomy(root, output, final_pairs):
 
 
 def generate_person_replacement_index(output, base_summary, person_summary):
-    """List the exact 77-category replacement bundle, linking to each word list."""
+    """List the exact 80-category replacement bundle, linking to each word list."""
     base_categories = [item for item in base_summary if item['id'] != 'person']
     person_categories = person_summary['categories']
-    if len(base_categories) != 48 or len(person_categories) != 29:
-        raise ValueError('Expected 48 existing non-person categories and 29 person categories')
+    if len(base_categories) != 51 or len(person_categories) != 29:
+        raise ValueError('Expected 51 existing non-person categories and 29 person categories')
 
     table = ['| カテゴリ | ID | 読み・表記の組 | レコード数 | 全件一覧 |',
              '|---|---|---:|---:|---|']
@@ -374,8 +374,8 @@ def generate_person_replacement_index(output, base_summary, person_summary):
     pair_count = sum(item['pairs'] for item in base_categories) + person_summary['uniquePairs']
     (output / 'index.md').write_text(
         '# 人物辞書置換プレリリース — 全配布カテゴリ\n\n'
-        '人物細分類辞書を含む配布ZIPのカテゴリ一覧です。通常配布の49カテゴリから汎用 `person` を除き、'
-        '標準配布対象の人物細分類29カテゴリに置き換えた **77カテゴリ**を掲載しています。'
+        '人物細分類辞書を含む配布ZIPのカテゴリ一覧です。通常配布の52カテゴリから汎用 `person` を除き、'
+        '標準配布対象の人物細分類29カテゴリに置き換えた **80カテゴリ**を掲載しています。'
         '未分類候補と成人関連など配布対象外の候補は含めていません。\n\n'
         f'カテゴリ別レコード数の合計は **{record_count:,}**、読み・表記の組数の合計は **{pair_count:,}**です。'
         '同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。\n\n'
@@ -383,7 +383,7 @@ def generate_person_replacement_index(output, base_summary, person_summary):
         '[人物分類定義](../../src/main/classification/person-taxonomy.json)\n\n'
         + '\n'.join(table) + '\n',
         encoding='utf-8')
-    return dict(categories=77, records=record_count, categoryPairCount=pair_count,
+    return dict(categories=80, records=record_count, categoryPairCount=pair_count,
                 baseCategories=len(base_categories), personCategories=len(person_categories))
 
 

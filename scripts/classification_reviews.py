@@ -10,6 +10,16 @@ from pathlib import Path
 DIRECTORY = Path('src/main/classification')
 
 
+def resulting_origin(entry):
+    baseline = entry['baseline']
+    if entry['action'] in ('hold', 'exclude'):
+        return ('manual' if entry.get('evidence', {}).get('kind') == 'model_review'
+                else baseline[3] if baseline else 'manual')
+    if entry.get('media_demographic'):
+        return entry.get('classification_origin', baseline[3] if baseline else 'manual')
+    return 'verified' if entry.get('evidence', {}).get('kind') == 'independent_source' else 'manual'
+
+
 def paths(root):
     return sorted(str(p.relative_to(root)) for p in (root / DIRECTORY / 'reviews').glob('*.jsonl'))
 
@@ -65,6 +75,35 @@ def load(root, selected=None):
                         or not -32768 <= record['cost'] <= 32767):
                     raise ValueError('Invalid review POS/cost')
             evidence = entry.get('evidence', {})
+            demographic = entry.get('media_demographic')
+            demographic_categories = set(d.MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES.values())
+            review_categories = entry.get('categories', [])
+            tagged_categories = (set(review_categories) & demographic_categories
+                                 if isinstance(review_categories, list)
+                                 and all(isinstance(value, str) for value in review_categories) else set())
+            if demographic is not None:
+                reference = evidence.get('reference')
+                previous = latest.get(pair)
+                expected_origin = resulting_origin(previous) if previous else baseline[3] if baseline else None
+                if (not isinstance(demographic, str) or demographic not in d.MEDIA_DEMOGRAPHIC_LABELS
+                        or baseline is None or baseline[4] != 'classified'
+                        or entry.get('classification_origin') not in ('verified', 'manual', 'gemini')
+                        or entry.get('classification_origin') != expected_origin
+                        or evidence.get('kind') != 'media_demographic_source'
+                        or evidence.get('reading') != pair[0] or evidence.get('surface') != pair[1]
+                        or evidence.get('categories') != review_categories
+                        or not isinstance(reference, str) or not reference.startswith('https://')):
+                    raise ValueError('Media demographic review requires a source-backed classified pair')
+                if demographic == 'adult':
+                    if action != 'exclude' or review_categories != []:
+                        raise ValueError('Adult media demographic reviews must exclude the pair from all dictionaries')
+                else:
+                    expected_category = d.MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES[demographic]
+                    if (action not in ('keep', 'reclassify') or expected_category not in review_categories
+                            or tagged_categories != {expected_category}):
+                        raise ValueError('Audience demographic reviews must include exactly their matching category')
+            elif tagged_categories:
+                raise ValueError('Media demographic category requires its review label and source evidence')
             if evidence.get('kind') == 'model_review':
                 if (action not in ('exclude', 'reclassify') or baseline is None
                         or baseline[4] != 'classified' or record is not None
@@ -81,9 +120,11 @@ def load(root, selected=None):
                     raise ValueError('Invalid model review provenance')
             if action in ('keep', 'reclassify', 'add'):
                 cats = entry.get('categories')
-                if not isinstance(cats, list) or not cats or len(set(cats)) != len(cats) or not set(cats) <= allowed:
+                if (not isinstance(cats, list) or not cats or not all(isinstance(value, str) for value in cats)
+                        or len(set(cats)) != len(cats) or not set(cats) <= allowed):
                     raise ValueError('Invalid review categories')
-                if evidence.get('kind') not in ('user_confirmation', 'independent_source', 'model_review'):
+                if evidence.get('kind') not in (
+                        'user_confirmation', 'independent_source', 'media_demographic_source', 'model_review'):
                     raise ValueError('Review requires an identified evidence kind')
                 if (evidence.get('reading') != pair[0] or evidence.get('surface') != pair[1]
                         or evidence.get('categories') != cats or not evidence.get('reference')):
@@ -101,12 +142,11 @@ def apply(decisions, entries, validate_baseline=True):
             raise ValueError(f'Review baseline differs from input: {pair}')
         baseline = entry['baseline']
         if entry['action'] in ('hold', 'exclude'):
-            origin = ('manual' if entry.get('evidence', {}).get('kind') == 'model_review'
-                      else baseline[3] if baseline else 'manual')
+            origin = resulting_origin(entry)
             result[pair] = [*pair, baseline[2] if baseline else '', origin, 'excluded']
         else:
             cats = ','.join(sorted(entry['categories']))
-            origin = 'verified' if entry['evidence']['kind'] == 'independent_source' else 'manual'
+            origin = resulting_origin(entry)
             result[pair] = [*pair, cats, origin, 'classified']
     return result
 
@@ -152,6 +192,15 @@ def update_manifest(root, manifest, decisions, rows, selected):
     luna_exclusions = manifest['provenance'].get('lunaReclassification', {}).get('effectiveActions', {}).get('reject', 0)
     manifest['provenance'].setdefault('reviewBaseExcludedCandidatePairs', manifest['excludedCandidatePairs'] - luna_exclusions)
     entries = load(root, selected)
+    category_data = json.loads((root / DIRECTORY / 'categories.json').read_text(encoding='utf-8'))
+    category_ids = [category['id'] for category in category_data['categories']]
+    demographic_taxonomy = root / d.MEDIA_DEMOGRAPHIC_TAXONOMY_PATH
+    if demographic_taxonomy.is_file():
+        manifest['inputs'][d.MEDIA_DEMOGRAPHIC_TAXONOMY_PATH] = d.sha(demographic_taxonomy)
+        limitations = manifest.setdefault('limitations', [])
+        if d.MEDIA_DEMOGRAPHIC_LIMITATION not in limitations:
+            limitations.append(d.MEDIA_DEMOGRAPHIC_LIMITATION)
+    manifest['categoryGroups'] = category_data.get('categoryGroups', [])
     new_exclusions = sum(int(entry['action'] in ('hold', 'exclude')) -
                          int(entry['baseline'] is not None and entry['baseline'][4] == 'excluded')
                          for entry in entries.values())
@@ -159,7 +208,7 @@ def update_manifest(root, manifest, decisions, rows, selected):
     origins = collections.Counter(row[3] for row in decisions.values() if row[4] == 'classified')
     counts = collections.Counter(row[0] for row in rows)
     manifest.update(admittedPairsByOrigin=dict(origins), uniqueAdmittedPairs=sum(origins.values()),
-                    categoryRows={c: counts[c] for c in manifest['categoryRows']}, dictionaryRows=len(rows),
+                    categoryRows={category: counts[category] for category in category_ids}, dictionaryRows=len(rows),
                     excludedClassifiedPairs=sum(row[4] == 'excluded' for row in decisions.values()),
                     unclassifiedPairs=sum(row[4] == 'unclassified' for row in decisions.values()),
                     noResultPairs=sum(row[4] == 'no_result' for row in decisions.values()))
@@ -210,8 +259,9 @@ def _apply_saved(root, commit=False):
     old_counts = dict(manifest['categoryRows'])
     update_manifest(root, manifest, reviewed, rows, selected)
     summary = dict(before=before, after=len(rows), reviewedPairs=len(entries),
-                   categoryChanges={c: manifest['categoryRows'][c] - old_counts[c] for c in old_counts
-                                    if manifest['categoryRows'][c] != old_counts[c]})
+                   categoryChanges={c: manifest['categoryRows'].get(c, 0) - old_counts.get(c, 0)
+                                    for c in manifest['categoryRows']
+                                    if manifest['categoryRows'].get(c, 0) != old_counts.get(c, 0)})
     if not commit:
         print(json.dumps(summary, ensure_ascii=False))
         return summary

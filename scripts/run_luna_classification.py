@@ -273,6 +273,10 @@ def main():
         if args.max_batches: jobs = jobs[:args.max_batches]
         version = subprocess.run(['codex', '--version'], capture_output=True, text=True, check=True).stdout.strip()
         taxonomy = json.loads((root / 'src/main/classification/categories.json').read_text())
+        taxonomy['categories'] = [category for category in taxonomy['categories']
+                                  if not category['id'].startswith('media_demographic/')]
+        taxonomy['categoryGroups'] = [group for group in taxonomy.get('categoryGroups', [])
+                                      if group['id'] != 'media_demographic']
         signal.signal(signal.SIGINT, stop); signal.signal(signal.SIGTERM, stop)
         with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as executor:
             active = {}; iterator = iter(jobs); had_failure = False
