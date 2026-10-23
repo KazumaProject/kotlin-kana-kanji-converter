@@ -1,0 +1,23 @@
+name: Term semantic classification contracts
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/term_semantic/**'
+      - 'scripts/test_term_semantic.py'
+      - 'src/main/classification/term-semantic/**'
+      - '.github/workflows/term-semantic.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 -m unittest discover -s scripts -p test_term_semantic.py -v
