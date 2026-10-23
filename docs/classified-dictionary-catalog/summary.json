@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "f0aa082f2a69d58b9de11aeecc011d92164a7fc527c8d47a097d1ea346580f96",
-  "uniquePairs": 832931,
-  "records": 862071,
+  "inputSha256": "8f1ddcf288c0049726b3380f0a1f2ba2623ccb0803029fd19123c5bc3d6c65fd",
+  "uniquePairs": 832897,
+  "records": 862003,
   "categories": [
     {
       "id": "character",
       "name": "架空キャラクター",
-      "pairs": 6793,
-      "readings": 6722,
-      "records": 6865,
+      "pairs": 6776,
+      "readings": 6705,
+      "records": 6848,
       "pages": 5,
       "recordsByOrigin": {
-        "manual": 3978,
-        "gemini": 2858,
-        "verified": 29
+        "gemini": 6288,
+        "manual": 558,
+        "verified": 2
       }
     },
     {
@@ -25,8 +25,8 @@
       "records": 3436,
       "pages": 3,
       "recordsByOrigin": {
-        "manual": 1567,
-        "gemini": 1771,
+        "manual": 1565,
+        "gemini": 1773,
         "verified": 98
       }
     },
@@ -38,8 +38,8 @@
       "records": 45088,
       "pages": 31,
       "recordsByOrigin": {
-        "gemini": 15893,
-        "manual": 13090,
+        "gemini": 15895,
+        "manual": 13088,
         "verified": 16105
       }
     },
@@ -103,8 +103,8 @@
       "records": 47484,
       "pages": 35,
       "recordsByOrigin": {
-        "gemini": 24630,
-        "manual": 21396,
+        "gemini": 24633,
+        "manual": 21393,
         "verified": 1458
       }
     },
@@ -129,8 +129,8 @@
       "records": 9890,
       "pages": 7,
       "recordsByOrigin": {
-        "gemini": 5930,
-        "manual": 3928,
+        "gemini": 5941,
+        "manual": 3917,
         "verified": 32
       }
     },
@@ -142,8 +142,8 @@
       "records": 2580,
       "pages": 2,
       "recordsByOrigin": {
-        "manual": 769,
-        "gemini": 1803,
+        "manual": 764,
+        "gemini": 1808,
         "verified": 8
       }
     },
@@ -207,8 +207,8 @@
       "records": 641,
       "pages": 1,
       "recordsByOrigin": {
-        "manual": 218,
-        "gemini": 415,
+        "manual": 217,
+        "gemini": 416,
         "verified": 8
       }
     },
@@ -322,9 +322,9 @@
       "records": 20502,
       "pages": 14,
       "recordsByOrigin": {
-        "gemini": 11699,
+        "gemini": 11702,
         "verified": 2617,
-        "manual": 6186
+        "manual": 6183
       }
     },
     {
@@ -361,9 +361,9 @@
       "records": 27566,
       "pages": 19,
       "recordsByOrigin": {
-        "gemini": 18979,
+        "gemini": 18981,
         "verified": 3483,
-        "manual": 5104
+        "manual": 5102
       }
     },
     {
@@ -426,8 +426,8 @@
       "records": 17877,
       "pages": 12,
       "recordsByOrigin": {
-        "gemini": 10881,
-        "manual": 4303,
+        "gemini": 10882,
+        "manual": 4302,
         "verified": 2693
       }
     },
@@ -465,97 +465,97 @@
       "records": 849,
       "pages": 1,
       "recordsByOrigin": {
-        "manual": 725,
-        "gemini": 124
+        "manual": 709,
+        "gemini": 140
       }
     },
     {
       "id": "work_manga",
       "name": "漫画作品",
-      "pairs": 5094,
-      "readings": 5056,
-      "records": 5095,
+      "pairs": 5079,
+      "readings": 5041,
+      "records": 5080,
       "pages": 4,
       "recordsByOrigin": {
-        "manual": 4549,
-        "verified": 117,
-        "gemini": 429
+        "manual": 2600,
+        "gemini": 2409,
+        "verified": 71
       }
     },
     {
       "id": "work_anime",
       "name": "アニメ作品",
-      "pairs": 1090,
-      "readings": 1074,
-      "records": 1090,
+      "pairs": 1088,
+      "readings": 1072,
+      "records": 1088,
       "pages": 1,
       "recordsByOrigin": {
-        "manual": 755,
-        "gemini": 328,
+        "manual": 581,
+        "gemini": 500,
         "verified": 7
       }
     },
     {
       "id": "media_demographic/audience/shonen",
       "name": "少年向け",
-      "pairs": 941,
-      "readings": 932,
-      "records": 942,
-      "pages": 1,
+      "pairs": 4094,
+      "readings": 4066,
+      "records": 4105,
+      "pages": 3,
       "recordsByOrigin": {
+        "gemini": 3361,
         "manual": 725,
-        "gemini": 198,
         "verified": 19
       }
     },
     {
       "id": "media_demographic/audience/seinen",
       "name": "青年向け",
-      "pairs": 926,
-      "readings": 922,
-      "records": 926,
-      "pages": 1,
+      "pairs": 1713,
+      "readings": 1701,
+      "records": 1713,
+      "pages": 2,
       "recordsByOrigin": {
+        "gemini": 889,
         "manual": 795,
-        "gemini": 102,
         "verified": 29
       }
     },
     {
       "id": "media_demographic/audience/shojo",
       "name": "少女向け",
-      "pairs": 548,
-      "readings": 546,
-      "records": 548,
+      "pairs": 817,
+      "readings": 812,
+      "records": 821,
       "pages": 1,
       "recordsByOrigin": {
         "manual": 486,
-        "gemini": 48,
+        "gemini": 321,
         "verified": 14
       }
     },
     {
       "id": "media_demographic/audience/josei",
       "name": "女性向け（Josei）",
-      "pairs": 207,
-      "readings": 207,
-      "records": 208,
+      "pairs": 342,
+      "readings": 341,
+      "records": 347,
       "pages": 1,
       "recordsByOrigin": {
         "manual": 189,
-        "gemini": 18,
+        "gemini": 157,
         "verified": 1
       }
     },
     {
       "id": "media_demographic/audience/kids",
       "name": "子ども向け（Kids）",
-      "pairs": 141,
-      "readings": 140,
-      "records": 141,
+      "pairs": 535,
+      "readings": 528,
+      "records": 538,
       "pages": 1,
       "recordsByOrigin": {
-        "gemini": 56,
+        "gemini": 453,
         "manual": 83,
         "verified": 2
       }
@@ -563,40 +563,36 @@
     {
       "id": "media_demographic/audience/mixed",
       "name": "複数対象層",
-      "pairs": 38,
-      "readings": 34,
-      "records": 38,
+      "pairs": 54,
+      "readings": 50,
+      "records": 56,
       "pages": 1,
       "recordsByOrigin": {
         "manual": 24,
-        "gemini": 14
+        "gemini": 32
       }
     },
     {
       "id": "media_demographic/audience/unspecified",
-      "name": "対象層タグなし",
-      "pairs": 1640,
-      "readings": 1635,
-      "records": 1642,
-      "pages": 2,
+      "name": "対象層の指定なし・一般向け",
+      "pairs": 5049,
+      "readings": 4998,
+      "records": 5097,
+      "pages": 4,
       "recordsByOrigin": {
+        "gemini": 3823,
         "manual": 1259,
-        "gemini": 368,
         "verified": 15
       }
     },
     {
       "id": "media_demographic/resolution/source_unverified",
       "name": "出典未確認・対象層未確定",
-      "pairs": 8197,
-      "readings": 8117,
-      "records": 8266,
-      "pages": 6,
-      "recordsByOrigin": {
-        "manual": 5519,
-        "gemini": 2674,
-        "verified": 73
-      }
+      "pairs": 0,
+      "readings": 0,
+      "records": 0,
+      "pages": 0,
+      "recordsByOrigin": {}
     },
     {
       "id": "work_film",
@@ -606,8 +602,8 @@
       "records": 6504,
       "pages": 5,
       "recordsByOrigin": {
-        "manual": 5781,
-        "gemini": 603,
+        "manual": 5738,
+        "gemini": 646,
         "verified": 120
       }
     },
@@ -619,8 +615,8 @@
       "records": 9309,
       "pages": 8,
       "recordsByOrigin": {
-        "manual": 7995,
-        "gemini": 1161,
+        "manual": 7955,
+        "gemini": 1201,
         "verified": 153
       }
     },
@@ -632,8 +628,8 @@
       "records": 7659,
       "pages": 6,
       "recordsByOrigin": {
-        "manual": 4959,
-        "gemini": 2613,
+        "manual": 4937,
+        "gemini": 2635,
         "verified": 87
       }
     },
@@ -645,8 +641,8 @@
       "records": 3155,
       "pages": 3,
       "recordsByOrigin": {
-        "manual": 2103,
-        "gemini": 1006,
+        "manual": 2097,
+        "gemini": 1012,
         "verified": 46
       }
     },
@@ -671,8 +667,8 @@
       "records": 571,
       "pages": 1,
       "recordsByOrigin": {
-        "manual": 410,
-        "gemini": 160,
+        "manual": 408,
+        "gemini": 162,
         "verified": 1
       }
     },
@@ -697,8 +693,8 @@
       "records": 2683,
       "pages": 3,
       "recordsByOrigin": {
-        "manual": 2241,
-        "gemini": 400,
+        "manual": 2239,
+        "gemini": 402,
         "verified": 42
       }
     },
@@ -931,7 +927,7 @@
     }
   ],
   "excluded": {
-    "pairs": 322931,
+    "pairs": 322965,
     "pages": 594
   },
   "specialistInputSha256": "5337722e46c7d04638c2ea5a8e36e8a8900ee65d536cbc4d9e1b15955745a2a9"

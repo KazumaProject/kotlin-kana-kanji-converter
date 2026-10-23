@@ -64,6 +64,8 @@ version 6（CC BY 4.0）の `demographics`、`genres`、`rating`、MyAnimeList I
 入力CSV、作品説明、レビュー本文はリポジトリに複製しません。ライセンス表示は元データを
 CC BY 4.0の下で利用したことを示し、原作出版社による一次資料での全件確認を意味しません。
 
+`src/main/classification/reviews/2026-10-23-media-demographics-gemini.jsonl` は、出典未確認だった候補8,197組をGemini 3.5 Flash-Liteで最善推定したレビューです。送信内容は辞書候補の読み・表記などの公開語彙データです。モデルのカテゴリ選択は独立した典拠確認ではなく、成人向けと推定した34組は全配布カテゴリから除外しています。モデル名・入力とプロンプトのハッシュ・集計・トークン使用量は `src/main/classification/media-demographic-gemini-manifest.json` に記録し、生のAPI応答とキーは含めません。実行は無料枠だけを使用し、課金は有効になっていません。Googleの[Gemini API料金・利用条件](https://ai.google.dev/gemini-api/docs/pricing)では無料枠のコンテンツがGoogle製品の改善に使用され得ると記載されています。
+
 ## 哲学者・思想家の人名データ
 
 `src/main/classification/person-additions/philosophers-2026-10-22.jsonl` の人名表記・読みは、各行の `source_url` に記録した[Web NDL Authorities](https://id.ndl.go.jp/)の典拠データを確認して採録しています。同データは国立国会図書館の出典を表示して再利用します。各行には典拠ID、原資料の表記・読み、確認箇所、確認日、典拠レスポンスのSHA-256を記録します。

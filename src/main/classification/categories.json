@@ -228,8 +228,8 @@
     },
     {
       "id": "media_demographic/audience/unspecified",
-      "name": "対象層タグなし",
-      "definition": "MyAnimeListのレコードは特定できたもののdemographics欄が空の作品・キャラクター。全年齢向けを示す分類ではありません。"
+      "name": "対象層の指定なし・一般向け",
+      "definition": "MyAnimeListのdemographics欄が空か、単一の少年・青年・少女・女性・子ども向け層に限定されないとGeminiが判定した作品・キャラクター。全年齢向けや成人向けでないことを保証する分類ではありません。"
     },
     {
       "id": "media_demographic/resolution/source_unverified",

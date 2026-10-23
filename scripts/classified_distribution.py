@@ -43,9 +43,10 @@ MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES = {
 }
 MEDIA_DEMOGRAPHIC_LABELS = {*MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES, 'adult'}
 MEDIA_DEMOGRAPHIC_LIMITATION = (
-    'A matched source with no demographic tag is labeled unspecified, not general audience. Pairs without a unique '
-    'source match are explicitly labeled source-unverified; neither label means general audience. Only pairs with '
-    'an explicit adult source tag are guaranteed to be excluded as adult.'
+    'A missing demographic tag is not proof of general-audience suitability. Source-unverified pairs may receive a '
+    'Gemini best-fit demographic based on names and model knowledge; these labels are not independently source-verified. '
+    'Explicit adult source tags and Gemini adult judgments are excluded, but model errors may leave adult works in other '
+    'categories.'
 )
 TERM_CLASSIFICATION_PROMPT_VERSIONS = {
     'term-best-fit-15-categories-ordered-groups-10-v2',
@@ -240,8 +241,10 @@ def merged_categories(base, term_data, event_data=None, media_demographic_data=N
         elif leaf_ids <= set(ids):
             existing = {category['id']: category for category in categories}
             for category in leaf_categories:
-                if existing[category['id']].get('name') != category['name']:
+                if (existing[category['id']].get('name') != category['name']
+                        and parent_id != 'media_demographic'):
                     raise ValueError(f'{parent_id.title()} category name differs from taxonomy: {category["id"]}')
+                existing[category['id']]['name'] = category['name']
                 existing[category['id']]['definition'] = category['definition']
             categories = [existing[category_id] for category_id in ids]
             inserted_at[parent_id] = min(ids.index(category_id) for category_id in leaf_ids)

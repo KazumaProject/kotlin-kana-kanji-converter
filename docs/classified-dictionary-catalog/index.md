@@ -2,13 +2,13 @@
 
 人物細分類辞書を含む配布ZIPのカテゴリ一覧です。通常配布の57カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えた **85カテゴリ**を掲載しています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **862,071**、読み・表記の組数の合計は **853,946**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **862,003**、読み・表記の組数の合計は **853,878**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換プレリリース) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
 | カテゴリ | ID | 読み・表記の組 | レコード数 | 全件一覧 |
 |---|---|---:|---:|---|
-| [架空キャラクター](character/index.md) | `character` | 6,793 | 6,865 | [全件](character/index.md) |
+| [架空キャラクター](character/index.md) | `character` | 6,776 | 6,848 | [全件](character/index.md) |
 | [神話・伝承の存在](mythological_figure/index.md) | `mythological_figure` | 3,435 | 3,436 | [全件](mythological_figure/index.md) |
 | [地名](place/index.md) | `place` | 43,376 | 45,088 | [全件](place/index.md) |
 | [住所](address/index.md) | `address` | 148,606 | 152,874 | [全件](address/index.md) |
@@ -44,16 +44,16 @@
 | [文化・芸術・スポーツ](term/specialist/culture_arts_sports/index.md) | `term/specialist/culture_arts_sports` | 5,360 | 5,360 | [全件](term/specialist/culture_arts_sports/index.md) |
 | [交通・安全・防衛](term/specialist/transport_safety_defense/index.md) | `term/specialist/transport_safety_defense` | 4,035 | 4,037 | [全件](term/specialist/transport_safety_defense/index.md) |
 | [作品シリーズ](work_franchise/index.md) | `work_franchise` | 849 | 849 | [全件](work_franchise/index.md) |
-| [漫画作品](work_manga/index.md) | `work_manga` | 5,094 | 5,095 | [全件](work_manga/index.md) |
-| [アニメ作品](work_anime/index.md) | `work_anime` | 1,090 | 1,090 | [全件](work_anime/index.md) |
-| [少年向け](media_demographic/audience/shonen/index.md) | `media_demographic/audience/shonen` | 941 | 942 | [全件](media_demographic/audience/shonen/index.md) |
-| [青年向け](media_demographic/audience/seinen/index.md) | `media_demographic/audience/seinen` | 926 | 926 | [全件](media_demographic/audience/seinen/index.md) |
-| [少女向け](media_demographic/audience/shojo/index.md) | `media_demographic/audience/shojo` | 548 | 548 | [全件](media_demographic/audience/shojo/index.md) |
-| [女性向け（Josei）](media_demographic/audience/josei/index.md) | `media_demographic/audience/josei` | 207 | 208 | [全件](media_demographic/audience/josei/index.md) |
-| [子ども向け（Kids）](media_demographic/audience/kids/index.md) | `media_demographic/audience/kids` | 141 | 141 | [全件](media_demographic/audience/kids/index.md) |
-| [複数対象層](media_demographic/audience/mixed/index.md) | `media_demographic/audience/mixed` | 38 | 38 | [全件](media_demographic/audience/mixed/index.md) |
-| [対象層タグなし](media_demographic/audience/unspecified/index.md) | `media_demographic/audience/unspecified` | 1,640 | 1,642 | [全件](media_demographic/audience/unspecified/index.md) |
-| [出典未確認・対象層未確定](media_demographic/resolution/source_unverified/index.md) | `media_demographic/resolution/source_unverified` | 8,197 | 8,266 | [全件](media_demographic/resolution/source_unverified/index.md) |
+| [漫画作品](work_manga/index.md) | `work_manga` | 5,079 | 5,080 | [全件](work_manga/index.md) |
+| [アニメ作品](work_anime/index.md) | `work_anime` | 1,088 | 1,088 | [全件](work_anime/index.md) |
+| [少年向け](media_demographic/audience/shonen/index.md) | `media_demographic/audience/shonen` | 4,094 | 4,105 | [全件](media_demographic/audience/shonen/index.md) |
+| [青年向け](media_demographic/audience/seinen/index.md) | `media_demographic/audience/seinen` | 1,713 | 1,713 | [全件](media_demographic/audience/seinen/index.md) |
+| [少女向け](media_demographic/audience/shojo/index.md) | `media_demographic/audience/shojo` | 817 | 821 | [全件](media_demographic/audience/shojo/index.md) |
+| [女性向け（Josei）](media_demographic/audience/josei/index.md) | `media_demographic/audience/josei` | 342 | 347 | [全件](media_demographic/audience/josei/index.md) |
+| [子ども向け（Kids）](media_demographic/audience/kids/index.md) | `media_demographic/audience/kids` | 535 | 538 | [全件](media_demographic/audience/kids/index.md) |
+| [複数対象層](media_demographic/audience/mixed/index.md) | `media_demographic/audience/mixed` | 54 | 56 | [全件](media_demographic/audience/mixed/index.md) |
+| [対象層の指定なし・一般向け](media_demographic/audience/unspecified/index.md) | `media_demographic/audience/unspecified` | 5,049 | 5,097 | [全件](media_demographic/audience/unspecified/index.md) |
+| [出典未確認・対象層未確定](media_demographic/resolution/source_unverified/index.md) | `media_demographic/resolution/source_unverified` | 0 | 0 | [全件](media_demographic/resolution/source_unverified/index.md) |
 | [映画作品](work_film/index.md) | `work_film` | 6,503 | 6,504 | [全件](work_film/index.md) |
 | [番組](work_program/index.md) | `work_program` | 9,308 | 9,309 | [全件](work_program/index.md) |
 | [書籍作品](work_book/index.md) | `work_book` | 7,658 | 7,659 | [全件](work_book/index.md) |

@@ -1,20 +1,26 @@
-"""Persistent, offline review overlays; model judgments remain manual, not verified."""
+"""Persistent, offline review overlays with source and model provenance."""
 import collections
 import contextlib
 import fcntl
 import gzip
+import hashlib
 import json
 import re
 from pathlib import Path
 
 DIRECTORY = Path('src/main/classification')
+MEDIA_DEMOGRAPHIC_GEMINI_MANIFEST = DIRECTORY / 'media-demographic-gemini-manifest.json'
 
 
 def resulting_origin(entry):
     baseline = entry['baseline']
     if entry['action'] in ('hold', 'exclude'):
-        return ('manual' if entry.get('evidence', {}).get('kind') == 'model_review'
-                else baseline[3] if baseline else 'manual')
+        evidence_kind = entry.get('evidence', {}).get('kind')
+        if evidence_kind == 'model_review':
+            return 'manual'
+        if evidence_kind == 'media_demographic_gemini':
+            return 'gemini'
+        return baseline[3] if baseline else 'manual'
     if entry.get('media_demographic'):
         return entry.get('classification_origin', baseline[3] if baseline else 'manual')
     return 'verified' if entry.get('evidence', {}).get('kind') == 'independent_source' else 'manual'
@@ -34,6 +40,9 @@ def load(root, selected=None):
         # Historic event review baselines use the former structural parent ID.
         allowed.add('event')
     ids = {int(line.split(maxsplit=1)[0]) for line in (root / 'src/main/resources/id.def').read_text().splitlines()}
+    gemini_manifest_path = root / MEDIA_DEMOGRAPHIC_GEMINI_MANIFEST
+    gemini_manifest_hash = (hashlib.sha256(gemini_manifest_path.read_bytes()).hexdigest()
+                            if gemini_manifest_path.is_file() else None)
     latest = {}
     for relative in paths(root) if selected is None else selected:
         path = Path(relative)
@@ -85,6 +94,7 @@ def load(root, selected=None):
                 reference = evidence.get('reference')
                 previous = latest.get(pair)
                 expected_origin = resulting_origin(previous) if previous else baseline[3] if baseline else None
+                gemini_review = evidence.get('kind') == 'media_demographic_gemini'
                 valid_source_baseline = (
                     baseline is not None and baseline[4] == 'classified'
                     or baseline is None and isinstance(entry.get('added_record'), dict)
@@ -92,14 +102,31 @@ def load(root, selected=None):
                 if (not isinstance(demographic, str) or demographic not in d.MEDIA_DEMOGRAPHIC_LABELS
                         or not valid_source_baseline
                         or entry.get('classification_origin') not in ('verified', 'manual', 'gemini')
-                        or entry.get('classification_origin') != expected_origin
-                        or evidence.get('kind') != ('media_demographic_source_search'
-                                                    if demographic == 'source_unverified'
-                                                    else 'media_demographic_source')
+                        or (entry.get('classification_origin') != 'gemini' if gemini_review
+                            else entry.get('classification_origin') != expected_origin)
+                        or (evidence.get('kind') != 'media_demographic_gemini' if gemini_review
+                            else evidence.get('kind') != ('media_demographic_source_search'
+                                                          if demographic == 'source_unverified'
+                                                          else 'media_demographic_source'))
                         or evidence.get('reading') != pair[0] or evidence.get('surface') != pair[1]
                         or evidence.get('categories') != review_categories
                         or not isinstance(reference, str) or not reference.startswith('https://')):
-                    raise ValueError('Media demographic review requires a source-backed classified pair')
+                    raise ValueError('Media demographic review requires a classified baseline and valid evidence')
+                if gemini_review and (
+                        action not in ('exclude', 'reclassify')
+                        or evidence.get('model') != 'gemini-3.5-flash-lite'
+                        or evidence.get('freeTierOnly') is not True
+                        or evidence.get('billingEnabled') is not False
+                        or not isinstance(evidence.get('proofSha256'), str)
+                        or not re.fullmatch('[0-9a-f]{64}', evidence['proofSha256'])
+                        or not isinstance(evidence.get('responseSha256'), str)
+                        or not re.fullmatch('[0-9a-f]{64}', evidence['responseSha256'])
+                        or not isinstance(evidence.get('runManifestSha256'), str)
+                        or not re.fullmatch('[0-9a-f]{64}', evidence['runManifestSha256'])
+                        or evidence['runManifestSha256'] != gemini_manifest_hash
+                        or evidence.get('promptVersion') != 'media-demographic-best-fit-8-categories-v1'
+                        or not isinstance(evidence.get('batchId'), str) or not evidence['batchId']):
+                    raise ValueError('Gemini demographic reviews require pinned free-tier model evidence')
                 if demographic == 'adult':
                     if action != 'exclude' or review_categories != []:
                         raise ValueError('Adult media demographic reviews must exclude the pair from all dictionaries')
@@ -152,7 +179,7 @@ def load(root, selected=None):
                     raise ValueError('Invalid review categories')
                 if evidence.get('kind') not in (
                         'user_confirmation', 'independent_source', 'media_demographic_source',
-                        'media_demographic_source_search', 'model_review'):
+                        'media_demographic_source_search', 'media_demographic_gemini', 'model_review'):
                     raise ValueError('Review requires an identified evidence kind')
                 if (evidence.get('reading') != pair[0] or evidence.get('surface') != pair[1]
                         or evidence.get('categories') != cats or not evidence.get('reference')):
@@ -220,6 +247,10 @@ def update_manifest(root, manifest, decisions, rows, selected):
     luna_exclusions = manifest['provenance'].get('lunaReclassification', {}).get('effectiveActions', {}).get('reject', 0)
     manifest['provenance'].setdefault('reviewBaseExcludedCandidatePairs', manifest['excludedCandidatePairs'] - luna_exclusions)
     entries = load(root, selected)
+    if any(entry.get('evidence', {}).get('kind') == 'media_demographic_gemini'
+           for entry in entries.values()):
+        manifest['inputs'][str(MEDIA_DEMOGRAPHIC_GEMINI_MANIFEST)] = d.sha(
+            root / MEDIA_DEMOGRAPHIC_GEMINI_MANIFEST)
     category_data = json.loads((root / DIRECTORY / 'categories.json').read_text(encoding='utf-8'))
     category_ids = [category['id'] for category in category_data['categories']]
     demographic_taxonomy = root / d.MEDIA_DEMOGRAPHIC_TAXONOMY_PATH

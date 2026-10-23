@@ -49,7 +49,9 @@ def generate_excluded(root, output, manifest):
                 if pair in excluded and entry['action'] in ('exclude', 'hold'):
                     kind = entry.get('evidence', {}).get('kind')
                     basis = {'user_confirmation': 'ユーザー明示判断', 'model_review': 'Luna Max（暫定）',
-                             'independent_source': '独立資料'}.get(kind, '保存済みレビュー')
+                             'independent_source': '独立資料',
+                             'media_demographic_gemini': 'Gemini 3.5 Flash-Lite（最善推定・独立確認なし）'}.get(
+                                 kind, '保存済みレビュー')
                     excluded[pair][2:] = [entry['reason'], basis]
     directory = output / 'excluded'
     directory.mkdir()
