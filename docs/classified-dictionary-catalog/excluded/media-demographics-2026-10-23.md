@@ -2,7 +2,7 @@
 
 [不採用語と判断理由の目次](index.md) · [配布カテゴリ一覧](../index.md)
 
-公開資料で確認した70組と、Gemini 3.5 Flash-Liteが成人向けと最善推定した34組です。合計104組を全配布カテゴリから除外しています。Geminiの34組は個別の出典を確認しておらず、誤判定の可能性があります。
+公開資料で確認した69組と、Gemini 3.5 Flash-Liteが成人向けと最善推定した34組です。合計103組を全配布カテゴリから除外しています。Geminiの34組は個別の出典を確認しておらず、誤判定の可能性があります。
 
 | 読み | 表記 | 判定根拠 | 除外理由 |
 |---|---|---|---|
@@ -46,7 +46,6 @@
 | <code>こどものじかん</code> | <code>こどもの時間</code> | [資料1](https://myanimelist.net/anime/4304)、[資料2](https://myanimelist.net/manga/32101) | MyAnimeList由来データでHentaiまたはRx（Hentai）と記録されているため、成人向けとして全カテゴリから除外。 |
 | <code>こはるびより</code> | <code>こはる日和</code> | [資料1](https://myanimelist.net/manga/92177) | MyAnimeList由来データでHentaiまたはRx（Hentai）と記録されているため、成人向けとして全カテゴリから除外。 |
 | <code>さいみんせいしどう</code> | <code>催眠性指導</code> | [資料1](https://myanimelist.net/manga/104219)、[資料2](https://myanimelist.net/manga/108479) | MyAnimeList由来データでHentaiまたはRx（Hentai）と記録されているため、成人向けとして全カテゴリから除外。 |
-| <code>さいれん</code> | <code>PSYREN</code> | [資料1](https://myanimelist.net/manga/30245) | MyAnimeList由来データでHentaiまたはRx（Hentai）と記録されているため、成人向けとして全カテゴリから除外。 |
 | <code>さどう</code> | <code>サ道</code> | [資料1](https://myanimelist.net/manga/11534) | MyAnimeList由来データでHentaiまたはRx（Hentai）と記録されているため、成人向けとして全カテゴリから除外。 |
 | <code>しょうじょせくと</code> | <code>少女セクト</code> | [資料1](https://myanimelist.net/manga/1394) | MyAnimeList由来データでHentaiまたはRx（Hentai）と記録されているため、成人向けとして全カテゴリから除外。 |
 | <code>しょたせん</code> | <code>しょたせん</code> | Gemini 3.5 Flash-Lite（最善推定） | Gemini 3.5 Flash-Liteによる成人向けの最善推定です。個別の出典確認はなく誤判定の可能性があります。成人向け流入を避けるため全配布辞書から除外しました。 |
