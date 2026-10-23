@@ -113,7 +113,9 @@ Gemini分類器は標準配布が無効なカテゴリを選択肢から外し�
 
 PR #141の分類台帳と後続レビューは、元のスナップショット→Lunaの実効判断→後続レビューの順に検証します。両PRの配布用TSVを単純に上書きせず、`python3 scripts/classified_distribution.py apply-reviews --commit` で統合し、既存辞書一覧・専門辞書・カタログを再生成します。原スナップショット・台帳・レビューのハッシュを保持し、対象外の判断変更は検証で拒否します。
 
-配布は既存の [GitHub Actions](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/workflows/build-and-release.yml) を使用します。手動実行ではビルド・検証後にActions成果物を保存し、`v*` タグのpushでは同じ検証後にGitHubのプレリリースへ辞書ZIP・配布マニフェスト・SHA-256・ライセンスを添付します。閲覧用一覧の固定データとの一致も配布前に検証します。
+PRでは [`Build classified dictionary for PR`](../.github/workflows/build-classified-dictionary.yml) が実行され、PRの固定分類から辞書ZIPを生成します。Geminiなどの分類APIは呼び出しません。カタログと固定データの一致、辞書バイナリの生成・読み戻し、配布マニフェストを検証し、辞書ZIP・配布マニフェスト・SHA-256・ライセンスを14日間Actions成果物として保存します。PRのChecksから該当実行を開くとArtifactsからダウンロードできます。ワークフローはMozcの `master` とJapaneseCorpusの最新リリースを入力に使うため、分類データは固定でも上流辞書の更新により成果物は変わることがあります。
+
+通常配布は既存の [GitHub Actions](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/workflows/build-and-release.yml) を使用します。手動実行ではビルド・検証後にActions成果物を保存し、`v*` タグのpushでは同じ検証後にGitHubのプレリリースへ辞書ZIP・配布マニフェスト・SHA-256・ライセンスを添付します。閲覧用一覧の固定データとの一致も配布前に検証します。
 
 既存Actionsを手動実行すると、人物細分類済みZIPと `dictionary-distribution-manifest.json`、`DICTIONARY-SHA256SUMS`、`DICTIONARY-LICENSES.txt` を成果物として取得できます。`v*` タグでは通常リリースまたはバージョン付きプレリリースに4ファイルを添付し、通常リリースをLatestに設定します。最新5プレリリースを保持し、通常リリースとそのタグは削除対象に含めません。
 
