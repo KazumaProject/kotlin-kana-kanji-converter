@@ -25,7 +25,7 @@
     "src/main/specialist/notices/kampo_core.txt": "7ca7047eedec76c3a98913dc932487aee1b89c2604842db3f5e961e4c85c4496",
     "src/main/specialist/notices/kampo_herb.txt": "7ca7047eedec76c3a98913dc932487aee1b89c2604842db3f5e961e4c85c4496",
     "src/main/specialist/notices/manbyo.txt": "2ffeab722ef92e8fa0feb0df08b273e4c7522aa948052ce03a269a7475992934",
-    "src/main/classification/distribution-decisions.tsv.gz": "ab5f333bd3f3eb03bc207c9fc61d85800d0448c76c4f5a7f3932895e00b06eb4",
+    "src/main/classification/distribution-decisions.tsv.gz": "2f333a506bbe6b03a01546faff15f1967e6d362cb6f214cb7748fa6e51769015",
     "src/main/specialist/gemini-readings.jsonl.gz": "04516a0f6b282cbac9bb0325d2f864db5f84829d4c5764e846d6411bc46eb9ec",
     "src/main/specialist/gemini-run.json": "91b4925e86a3635ed342e28861be54fe7e03f72505628de41df4b48efa6a80fb",
     "src/main/specialist/reading-corrections.json": "8474db9b83c09dec59b292cf223defc3dda290a67d3bf887a7ff1abf4f5f13a5",
@@ -37,7 +37,7 @@
     "src/main/specialist/sources/manbyo.jsonl.gz": "acf4105c8bfff7d7278fb9d2298481b3dae2d6b58eda824f31b3345e6aea9492"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
-  "existingInventorySha256": "499a6cf20ead173bfea2f070b15306d5ded2dc10be39c9b73c19bd118510c437",
+  "existingInventorySha256": "1fae671e5a432c7c676744d2c0212d9b40e6f1b5e226791fdd6f1ad99df7836a",
   "existingDictionaryIds": [
     "categories/address",
     "categories/agreement",
@@ -101,7 +101,7 @@
     "symbol",
     "system"
   ],
-  "existingUniquePairs": 1860878,
+  "existingUniquePairs": 1860879,
   "sourceRows": {
     "kampo_core": {
       "rows": 1581,

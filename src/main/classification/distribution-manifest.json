@@ -1,7 +1,7 @@
 {
   "admittedPairsByOrigin": {
     "manual": 378757,
-    "gemini": 188639,
+    "gemini": 188640,
     "verified": 177220
   },
   "categoryGroups": [
@@ -133,9 +133,9 @@
     "term/specialist/culture_arts_sports": 5360,
     "term/specialist/transport_safety_defense": 4037,
     "work_franchise": 849,
-    "work_manga": 5080,
+    "work_manga": 5081,
     "work_anime": 1088,
-    "media_demographic/audience/shonen": 4117,
+    "media_demographic/audience/shonen": 4118,
     "media_demographic/audience/seinen": 1731,
     "media_demographic/audience/shojo": 826,
     "media_demographic/audience/josei": 355,
@@ -157,13 +157,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 773812,
-  "excludedCandidatePairs": 328690,
-  "excludedClassifiedPairs": 322965,
+  "dictionaryRows": 773814,
+  "excludedCandidatePairs": 328689,
+  "excludedClassifiedPairs": 322964,
   "files": {
     "categories.json": "70906d21e5be76fd38cdd4c93569dc8c3896438b101f5e105a4fddf83b961f98",
-    "distribution-candidates.tsv.gz": "4e65e87dc1bb533732cc8fc12fd8ceb76ae2af50d3d07482daabba8b8ca95542",
-    "distribution-decisions.tsv.gz": "ab5f333bd3f3eb03bc207c9fc61d85800d0448c76c4f5a7f3932895e00b06eb4"
+    "distribution-candidates.tsv.gz": "950c177e86e1e42d0ad4c7688c199b67ec11efda6fcdf9e23e5c76f2dfbe8d6e",
+    "distribution-decisions.tsv.gz": "2f333a506bbe6b03a01546faff15f1967e6d362cb6f214cb7748fa6e51769015"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -242,7 +242,8 @@
     "src/main/classification/reviews/2026-10-23-media-demographics-gemini.jsonl": "0caeaa4aaa8b8da53a1e695b999de23fc3a98a904e3c73d4f938567e35093de9",
     "src/main/classification/reviews/2026-10-23-media-demographics-resolution.jsonl": "9be414bfb3e0e437a616461768e00d2032124357cc52dbd9a023dd8dce754e7c",
     "src/main/classification/reviews/2026-10-23-media-demographics.jsonl": "d326f3428b5f3afd24c6a7e13a802134561a0de0ef3b092e63f406b63b7f8137",
-    "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl": "259b1e1d1c68283803d79b6129ac0afedc85f0c34eb23945d6735ba4a3a4d53a"
+    "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl": "259b1e1d1c68283803d79b6129ac0afedc85f0c34eb23945d6735ba4a3a4d53a",
+    "src/main/classification/reviews/2026-10-23-source-correction.jsonl": "a7a4463f11a81a53ba314380864126cdcb2c1fc2bd08789a5b3a03bf57c63581"
   },
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified.",
@@ -29444,7 +29445,8 @@
       "src/main/classification/reviews/2026-10-23-media-demographics-gemini.jsonl",
       "src/main/classification/reviews/2026-10-23-media-demographics-resolution.jsonl",
       "src/main/classification/reviews/2026-10-23-media-demographics.jsonl",
-      "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl"
+      "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl",
+      "src/main/classification/reviews/2026-10-23-source-correction.jsonl"
     ],
     "termAdditions": [
       {
@@ -29547,5 +29549,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 744616
+  "uniqueAdmittedPairs": 744617
 }
