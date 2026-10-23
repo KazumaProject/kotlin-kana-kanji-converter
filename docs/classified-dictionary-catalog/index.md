@@ -4,7 +4,7 @@
 
 カテゴリ別レコード数の合計は **862,003**、読み・表記の組数の合計は **853,878**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
-[生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換プレリリース) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
+[生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換配布) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
 ## アニメ・漫画作品・キャラクター
 
@@ -14,14 +14,14 @@
 
 | 対象層 | 読み・表記の組 | レコード数 | 全収録語 |
 |---|---:|---:|---|
-| 少年向け | 4,107 | 4,118 | [全件](media_demographic/audience/shonen/index.md) |
-| 青年向け | 1,730 | 1,731 | [全件](media_demographic/audience/seinen/index.md) |
-| 少女向け | 822 | 826 | [全件](media_demographic/audience/shojo/index.md) |
-| 女性向け（Josei） | 349 | 355 | [全件](media_demographic/audience/josei/index.md) |
-| 子ども向け（Kids） | 546 | 549 | [全件](media_demographic/audience/kids/index.md) |
-| 対象層の指定なし・一般向け | 5,051 | 5,099 | [全件](media_demographic/audience/unspecified/index.md) |
+| [少年向け](media_demographic/audience/shonen/index.md) | 4,107 | 4,118 | [全件](media_demographic/audience/shonen/index.md) |
+| [青年向け](media_demographic/audience/seinen/index.md) | 1,730 | 1,731 | [全件](media_demographic/audience/seinen/index.md) |
+| [少女向け](media_demographic/audience/shojo/index.md) | 822 | 826 | [全件](media_demographic/audience/shojo/index.md) |
+| [女性向け（Josei）](media_demographic/audience/josei/index.md) | 349 | 355 | [全件](media_demographic/audience/josei/index.md) |
+| [子ども向け（Kids）](media_demographic/audience/kids/index.md) | 546 | 549 | [全件](media_demographic/audience/kids/index.md) |
+| [対象層の指定なし・一般向け](media_demographic/audience/unspecified/index.md) | 5,051 | 5,099 | [全件](media_demographic/audience/unspecified/index.md) |
 
-成人向けと判定した103組は辞書カテゴリにせず、[成人向け除外語と判断理由](excluded/media-demographics-2026-10-23.md)に掲載しています。複数対象層と未確定状態は配布前に解決済みで、配布カタログには残していません。
+成人向けと判定した候補は配布カテゴリに含めず、[成人向け除外語と判断理由](excluded/media-demographics-2026-10-23.md)に掲載しています。複数対象層は 0組、出典未確認・対象層未確定は 0組で、どちらも配布カタログに残していません。
 
 ### 作品種別の全収録語
 
@@ -29,9 +29,9 @@
 
 | 作品種別 | 読み・表記の組 | レコード数 | 全収録語 |
 |---|---:|---:|---|
-| アニメ作品 | 1,088 | 1,088 | [全件](work_anime/index.md) |
-| 漫画作品 | 5,080 | 5,081 | [全件](work_manga/index.md) |
-| 架空キャラクター | 6,776 | 6,848 | [全件](character/index.md) |
+| [アニメ作品](work_anime/index.md) | 1,088 | 1,088 | [全件](work_anime/index.md) |
+| [漫画作品](work_manga/index.md) | 5,080 | 5,081 | [全件](work_manga/index.md) |
+| [架空キャラクター](character/index.md) | 6,776 | 6,848 | [全件](character/index.md) |
 
 | カテゴリ | ID | 読み・表記の組 | レコード数 | 全件一覧 |
 |---|---|---:|---:|---|
