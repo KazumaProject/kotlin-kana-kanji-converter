@@ -10,6 +10,11 @@ from pathlib import Path
 
 DIRECTORY = Path('src/main/classification')
 MEDIA_DEMOGRAPHIC_GEMINI_MANIFEST = DIRECTORY / 'media-demographic-gemini-manifest.json'
+MEDIA_DEMOGRAPHIC_RESOLUTION_POLICY = 'nearest-single-demographic-v1'
+MEDIA_DEMOGRAPHIC_RESOLUTION_LABELS = {'shonen', 'seinen', 'shojo', 'josei', 'kids', 'unspecified'}
+MEDIA_DEMOGRAPHIC_SOURCE_TAG_LABELS = {
+    'Shounen': 'shonen', 'Seinen': 'seinen', 'Shoujo': 'shojo', 'Josei': 'josei', 'Kids': 'kids',
+}
 
 
 def resulting_origin(entry):
@@ -24,6 +29,12 @@ def resulting_origin(entry):
     if entry.get('media_demographic'):
         return entry.get('classification_origin', baseline[3] if baseline else 'manual')
     return 'verified' if entry.get('evidence', {}).get('kind') == 'independent_source' else 'manual'
+
+
+def ensure_no_mixed_demographics(entries):
+    unresolved = sum(entry.get('media_demographic') == 'mixed' for entry in entries.values())
+    if unresolved:
+        raise ValueError(f'{unresolved} mixed media-demographic labels must be assigned a nearest audience category')
 
 
 def paths(root):
@@ -95,6 +106,27 @@ def load(root, selected=None):
                 previous = latest.get(pair)
                 expected_origin = resulting_origin(previous) if previous else baseline[3] if baseline else None
                 gemini_review = evidence.get('kind') == 'media_demographic_gemini'
+                resolution_review = evidence.get('kind') == 'media_demographic_resolution'
+                valid_resolution_parent = (resolution_review and previous is not None
+                                           and previous.get('media_demographic') == 'mixed')
+                if resolution_review and valid_resolution_parent:
+                    source_path = ('src/main/classification/reviews/2026-10-23-media-demographics-gemini.jsonl'
+                                   if previous.get('evidence', {}).get('kind') == 'media_demographic_gemini'
+                                   else 'src/main/classification/reviews/2026-10-23-media-demographics-complete.jsonl')
+                    source_hash = hashlib.sha256((root / source_path).read_bytes()).hexdigest()
+                    source_tags = re.search(r'複数の対象層タグ（([^）]+)）', previous.get('reason', ''))
+                    expected_source_labels = (
+                        [MEDIA_DEMOGRAPHIC_SOURCE_TAG_LABELS[tag.strip()]
+                         for tag in source_tags.group(1).split('、')]
+                        if source_tags and all(tag.strip() in MEDIA_DEMOGRAPHIC_SOURCE_TAG_LABELS
+                                               for tag in source_tags.group(1).split('、'))
+                        else None
+                    )
+                    if (evidence.get('sourceReviewPath') != source_path
+                            or evidence.get('sourceReviewSha256') != source_hash
+                            or expected_source_labels is not None
+                            and set(evidence.get('candidateLabels', [])) != set(expected_source_labels)):
+                        raise ValueError('Media demographic resolution must cite its exact mixed-label review')
                 valid_source_baseline = (
                     baseline is not None and baseline[4] == 'classified'
                     or baseline is None and isinstance(entry.get('added_record'), dict)
@@ -103,8 +135,10 @@ def load(root, selected=None):
                         or not valid_source_baseline
                         or entry.get('classification_origin') not in ('verified', 'manual', 'gemini')
                         or (entry.get('classification_origin') != 'gemini' if gemini_review
+                            else entry.get('classification_origin') != 'manual' if resolution_review
                             else entry.get('classification_origin') != expected_origin)
-                        or (evidence.get('kind') != 'media_demographic_gemini' if gemini_review
+                        or (evidence.get('kind') not in ('media_demographic_gemini', 'media_demographic_resolution')
+                            if gemini_review or resolution_review
                             else evidence.get('kind') != ('media_demographic_source_search'
                                                           if demographic == 'source_unverified'
                                                           else 'media_demographic_source'))
@@ -112,6 +146,18 @@ def load(root, selected=None):
                         or evidence.get('categories') != review_categories
                         or not isinstance(reference, str) or not reference.startswith('https://')):
                     raise ValueError('Media demographic review requires a classified baseline and valid evidence')
+                if resolution_review:
+                    candidate_labels = evidence.get('candidateLabels')
+                    if (not valid_resolution_parent or action != 'reclassify'
+                            or demographic not in MEDIA_DEMOGRAPHIC_RESOLUTION_LABELS
+                            or evidence.get('resolutionPolicy') != MEDIA_DEMOGRAPHIC_RESOLUTION_POLICY
+                            or evidence.get('resolver') != 'assistant-best-fit'
+                            or not isinstance(candidate_labels, list) or len(candidate_labels) < 2
+                            or len(set(candidate_labels)) != len(candidate_labels)
+                            or not set(candidate_labels) <= MEDIA_DEMOGRAPHIC_RESOLUTION_LABELS
+                            or demographic not in candidate_labels
+                            or evidence.get('selectedLabel') != demographic):
+                        raise ValueError('Media demographic resolution must select one supported nearest audience label')
                 if gemini_review and (
                         action not in ('exclude', 'reclassify')
                         or evidence.get('model') != 'gemini-3.5-flash-lite'
@@ -179,7 +225,8 @@ def load(root, selected=None):
                     raise ValueError('Invalid review categories')
                 if evidence.get('kind') not in (
                         'user_confirmation', 'independent_source', 'media_demographic_source',
-                        'media_demographic_source_search', 'media_demographic_gemini', 'model_review'):
+                        'media_demographic_source_search', 'media_demographic_gemini',
+                        'media_demographic_resolution', 'model_review'):
                     raise ValueError('Review requires an identified evidence kind')
                 if (evidence.get('reading') != pair[0] or evidence.get('surface') != pair[1]
                         or evidence.get('categories') != cats or not evidence.get('reference')):
@@ -247,6 +294,7 @@ def update_manifest(root, manifest, decisions, rows, selected):
     luna_exclusions = manifest['provenance'].get('lunaReclassification', {}).get('effectiveActions', {}).get('reject', 0)
     manifest['provenance'].setdefault('reviewBaseExcludedCandidatePairs', manifest['excludedCandidatePairs'] - luna_exclusions)
     entries = load(root, selected)
+    ensure_no_mixed_demographics(entries)
     if any(entry.get('evidence', {}).get('kind') == 'media_demographic_gemini'
            for entry in entries.values()):
         manifest['inputs'][str(MEDIA_DEMOGRAPHIC_GEMINI_MANIFEST)] = d.sha(
@@ -257,8 +305,11 @@ def update_manifest(root, manifest, decisions, rows, selected):
     if demographic_taxonomy.is_file():
         manifest['inputs'][d.MEDIA_DEMOGRAPHIC_TAXONOMY_PATH] = d.sha(demographic_taxonomy)
         limitations = manifest.setdefault('limitations', [])
-        if d.MEDIA_DEMOGRAPHIC_LIMITATION not in limitations:
-            limitations.append(d.MEDIA_DEMOGRAPHIC_LIMITATION)
+        limitations[:] = [
+            limitation for limitation in limitations
+            if not limitation.startswith('A missing demographic tag is not proof of general-audience suitability.')
+        ]
+        limitations.append(d.MEDIA_DEMOGRAPHIC_LIMITATION)
     manifest['categoryGroups'] = category_data.get('categoryGroups', [])
     new_exclusions = sum(int(entry['action'] in ('hold', 'exclude')) -
                          int(entry['baseline'] is not None and entry['baseline'][4] == 'excluded')

@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: google/mozc
-          ref: master
+          ref: c4b2aef7c65e61be394bacadaec200eb5b97f91c
           path: mozc-src
 
       - name: Set up JDK 17
@@ -63,23 +63,21 @@ jobs:
             test -s "./src/main/resources/dictionary${i}.txt"
           done
 
-      - name: Download the latest JapaneseCorpus English dictionary
+      - name: Download the pinned JapaneseCorpus English dictionary
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           repository='KazumaProject/JapaneseCorpus'
+          version='v2026.1019.20'
           asset='mozc-english-reading-unigram-00000.txt.zst'
           manifest='english-dictionary-manifest.json'
           checksums='ENGLISH-DICTIONARY-SHA256SUMS'
-          tag="$(gh api "repos/${repository}/releases/latest" --jq '.tag_name')"
-          test -n "${tag}"
-          test "${tag}" != null
 
           download_dir="${RUNNER_TEMP}/japanese-corpus"
           mkdir -p "${download_dir}"
-          gh release download "${tag}" --repo "${repository}" \
+          gh release download "${version}" --repo "${repository}" \
             --pattern "${asset}" --pattern "${manifest}" --pattern "${checksums}" \
             --dir "${download_dir}"
 

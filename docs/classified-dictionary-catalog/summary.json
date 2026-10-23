@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "8f1ddcf288c0049726b3380f0a1f2ba2623ccb0803029fd19123c5bc3d6c65fd",
-  "uniquePairs": 832897,
-  "records": 862003,
+  "inputSha256": "4e65e87dc1bb533732cc8fc12fd8ceb76ae2af50d3d07482daabba8b8ca95542",
+  "uniquePairs": 832895,
+  "records": 862001,
   "categories": [
     {
       "id": "character",
@@ -12,8 +12,8 @@
       "records": 6848,
       "pages": 5,
       "recordsByOrigin": {
-        "gemini": 6288,
-        "manual": 558,
+        "gemini": 6263,
+        "manual": 583,
         "verified": 2
       }
     },
@@ -477,8 +477,8 @@
       "records": 5080,
       "pages": 4,
       "recordsByOrigin": {
-        "manual": 2600,
-        "gemini": 2409,
+        "manual": 2608,
+        "gemini": 2401,
         "verified": 71
       }
     },
@@ -490,46 +490,46 @@
       "records": 1088,
       "pages": 1,
       "recordsByOrigin": {
-        "manual": 581,
-        "gemini": 500,
+        "manual": 586,
+        "gemini": 495,
         "verified": 7
       }
     },
     {
       "id": "media_demographic/audience/shonen",
       "name": "少年向け",
-      "pairs": 4094,
-      "readings": 4066,
-      "records": 4105,
+      "pairs": 4106,
+      "readings": 4077,
+      "records": 4117,
       "pages": 3,
       "recordsByOrigin": {
         "gemini": 3361,
-        "manual": 725,
+        "manual": 737,
         "verified": 19
       }
     },
     {
       "id": "media_demographic/audience/seinen",
       "name": "青年向け",
-      "pairs": 1713,
-      "readings": 1701,
-      "records": 1713,
+      "pairs": 1730,
+      "readings": 1718,
+      "records": 1731,
       "pages": 2,
       "recordsByOrigin": {
         "gemini": 889,
-        "manual": 795,
+        "manual": 813,
         "verified": 29
       }
     },
     {
       "id": "media_demographic/audience/shojo",
       "name": "少女向け",
-      "pairs": 817,
-      "readings": 812,
-      "records": 821,
+      "pairs": 822,
+      "readings": 817,
+      "records": 826,
       "pages": 1,
       "recordsByOrigin": {
-        "manual": 486,
+        "manual": 491,
         "gemini": 321,
         "verified": 14
       }
@@ -537,12 +537,12 @@
     {
       "id": "media_demographic/audience/josei",
       "name": "女性向け（Josei）",
-      "pairs": 342,
-      "readings": 341,
-      "records": 347,
+      "pairs": 349,
+      "readings": 348,
+      "records": 355,
       "pages": 1,
       "recordsByOrigin": {
-        "manual": 189,
+        "manual": 197,
         "gemini": 157,
         "verified": 1
       }
@@ -550,38 +550,35 @@
     {
       "id": "media_demographic/audience/kids",
       "name": "子ども向け（Kids）",
-      "pairs": 535,
-      "readings": 528,
-      "records": 538,
+      "pairs": 546,
+      "readings": 536,
+      "records": 549,
       "pages": 1,
       "recordsByOrigin": {
         "gemini": 453,
-        "manual": 83,
+        "manual": 94,
         "verified": 2
       }
     },
     {
       "id": "media_demographic/audience/mixed",
       "name": "複数対象層",
-      "pairs": 54,
-      "readings": 50,
-      "records": 56,
-      "pages": 1,
-      "recordsByOrigin": {
-        "manual": 24,
-        "gemini": 32
-      }
+      "pairs": 0,
+      "readings": 0,
+      "records": 0,
+      "pages": 0,
+      "recordsByOrigin": {}
     },
     {
       "id": "media_demographic/audience/unspecified",
       "name": "対象層の指定なし・一般向け",
-      "pairs": 5049,
-      "readings": 4998,
-      "records": 5097,
+      "pairs": 5051,
+      "readings": 5000,
+      "records": 5099,
       "pages": 4,
       "recordsByOrigin": {
         "gemini": 3823,
-        "manual": 1259,
+        "manual": 1261,
         "verified": 15
       }
     },
@@ -701,12 +698,12 @@
     {
       "id": "kampo",
       "name": "漢方・生薬",
-      "pairs": 434,
-      "readings": 420,
-      "records": 434,
+      "pairs": 432,
+      "readings": 418,
+      "records": 432,
       "pages": 1,
       "recordsByOrigin": {
-        "specialist": 434
+        "specialist": 432
       }
     },
     {
@@ -930,5 +927,5 @@
     "pairs": 322965,
     "pages": 594
   },
-  "specialistInputSha256": "5337722e46c7d04638c2ea5a8e36e8a8900ee65d536cbc4d9e1b15955745a2a9"
+  "specialistInputSha256": "de25b742784973e59532d3ec86b670ab5dd25ed6c0558aa72d9eb2e6afb628dc"
 }

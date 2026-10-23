@@ -1,7 +1,7 @@
 {
   "admittedPairsByOrigin": {
-    "manual": 378727,
-    "gemini": 188669,
+    "manual": 378757,
+    "gemini": 188639,
     "verified": 177220
   },
   "categoryGroups": [
@@ -135,13 +135,13 @@
     "work_franchise": 849,
     "work_manga": 5080,
     "work_anime": 1088,
-    "media_demographic/audience/shonen": 4105,
-    "media_demographic/audience/seinen": 1713,
-    "media_demographic/audience/shojo": 821,
-    "media_demographic/audience/josei": 347,
-    "media_demographic/audience/kids": 538,
-    "media_demographic/audience/mixed": 56,
-    "media_demographic/audience/unspecified": 5097,
+    "media_demographic/audience/shonen": 4117,
+    "media_demographic/audience/seinen": 1731,
+    "media_demographic/audience/shojo": 826,
+    "media_demographic/audience/josei": 355,
+    "media_demographic/audience/kids": 549,
+    "media_demographic/audience/mixed": 0,
+    "media_demographic/audience/unspecified": 5099,
     "media_demographic/resolution/source_unverified": 0,
     "work_film": 6504,
     "work_program": 9309,
@@ -162,8 +162,8 @@
   "excludedClassifiedPairs": 322965,
   "files": {
     "categories.json": "70906d21e5be76fd38cdd4c93569dc8c3896438b101f5e105a4fddf83b961f98",
-    "distribution-candidates.tsv.gz": "8f1ddcf288c0049726b3380f0a1f2ba2623ccb0803029fd19123c5bc3d6c65fd",
-    "distribution-decisions.tsv.gz": "637ed269d67e373aad3edc242458dc4b2e3648a32b1f520ef7ce960e6eac67fc"
+    "distribution-candidates.tsv.gz": "4e65e87dc1bb533732cc8fc12fd8ceb76ae2af50d3d07482daabba8b8ca95542",
+    "distribution-decisions.tsv.gz": "ab5f333bd3f3eb03bc207c9fc61d85800d0448c76c4f5a7f3932895e00b06eb4"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -175,7 +175,7 @@
     "src/main/classification/event-classifications-manifest.json": "5e42d9903f24e511f948ef68f79b385329ee0131b19ead4aa2062926347e26c0",
     "src/main/classification/event-classifications.tsv.gz": "976c5d281e037f9704ea86f17a40031ce30f424c8e45fad948341c336236c64b",
     "src/main/classification/event-taxonomy.json": "a84e0e3a84ae8700a2cd7076cb5ace14bab90890a0faff7cf742fe9a153e8d10",
-    "src/main/classification/media-demographic-taxonomy.json": "44bf144613295b3c459a27f06d459f4848045059c56463c3f9651392a23ad574",
+    "src/main/classification/media-demographic-taxonomy.json": "09678c212942d363d9bb7035630308fc4b274f2351266e0ce9f6e90d409e0822",
     "src/main/classification/person-additions/combat-sports-2026-10-22.jsonl": "8fe4dd882d71791591a16e181174290d0ea5bee545d575d28d09460ba7b9843a",
     "src/main/classification/person-additions/comedian-2026-10-22.jsonl": "e66a986e3c0aca05afdfb33f14c2395461e95ab6514116fd3ac967f81f49d34d",
     "src/main/classification/person-additions/comedian-followup-2026-10-22.jsonl": "6524701ab8f27a8af3af74ba421c005a76d76ae70434bb119ee367501c4d6386",
@@ -194,6 +194,7 @@
     "src/main/classification/term-classifications-manifest.json": "249f29bc46496088191861e1124392bf4a955c89ecc6912b68683a8b8d2e36b1",
     "src/main/classification/term-classifications.tsv.gz": "2a1414eff371092bf5cadfd8ab9b183e750cbf8f6534fdb0e72710ee3612f45a",
     "src/main/classification/term-taxonomy.json": "890e9d1d045f10308aa32cdc39e534b5113c199de3d79404bd22be3cf796bb96",
+    "src/main/classification/media-demographic-gemini-manifest.json": "449f348e10c9f3ebc74209908d3dd2363b44c8864fe2ddd545285100c2eb3f3a",
     "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl": "574794d0df19f8afd09d06b66897d7b7fce97dd3652bc005674a3ecae28bb30a",
     "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl": "5a373897bbade57c507d08e4813baa7d5975bc752a568cdaee8aaebd9d18f155",
     "src/main/classification/reviews/2026-10-16-pr128-luna-0000.jsonl": "3ab59c82e6e0645da8f513606038212b601c0c4c46273db4faf8122d6812cf1d",
@@ -239,15 +240,15 @@
     "src/main/classification/reviews/2026-10-22-github-issues.jsonl": "053d827a1f2c9358db0f099742b85e737ee3cdf4314f0bc41221eef837b4c730",
     "src/main/classification/reviews/2026-10-23-media-demographics-complete.jsonl": "996974d5728c7660513139887a6cdec116a2d10b5680026c3d0f280ca5bb681c",
     "src/main/classification/reviews/2026-10-23-media-demographics-gemini.jsonl": "0caeaa4aaa8b8da53a1e695b999de23fc3a98a904e3c73d4f938567e35093de9",
+    "src/main/classification/reviews/2026-10-23-media-demographics-resolution.jsonl": "9be414bfb3e0e437a616461768e00d2032124357cc52dbd9a023dd8dce754e7c",
     "src/main/classification/reviews/2026-10-23-media-demographics.jsonl": "d326f3428b5f3afd24c6a7e13a802134561a0de0ef3b092e63f406b63b7f8137",
-    "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl": "259b1e1d1c68283803d79b6129ac0afedc85f0c34eb23945d6735ba4a3a4d53a",
-    "src/main/classification/media-demographic-gemini-manifest.json": "449f348e10c9f3ebc74209908d3dd2363b44c8864fe2ddd545285100c2eb3f3a"
+    "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl": "259b1e1d1c68283803d79b6129ac0afedc85f0c34eb23945d6735ba4a3a4d53a"
   },
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified.",
     "Media demographic labels cover source-reviewed pairs only; unreviewed media and source-linked characters are not guaranteed classified or excluded.",
     "A matched source with no demographic tag is labeled unspecified, not general audience. Pairs without a unique source match are explicitly labeled source-unverified; neither label means general audience. Only pairs with an explicit adult source tag are guaranteed to be excluded as adult.",
-    "A missing demographic tag is not proof of general-audience suitability. Source-unverified pairs may receive a Gemini best-fit demographic based on names and model knowledge; these labels are not independently source-verified. Explicit adult source tags and Gemini adult judgments are excluded, but model errors may leave adult works in other categories."
+    "A missing demographic tag is not proof of general-audience suitability. Source-unverified pairs may receive a Gemini best-fit demographic based on names and model knowledge; mixed source/model labels may receive an assistant best-fit single-audience tie-break. These labels are not independently source-verified. Explicit adult source tags and Gemini adult judgments are excluded, but model errors may leave adult works in other categories."
   ],
   "noResultPairs": 0,
   "precedence": [
@@ -29441,6 +29442,7 @@
       "src/main/classification/reviews/2026-10-22-github-issues.jsonl",
       "src/main/classification/reviews/2026-10-23-media-demographics-complete.jsonl",
       "src/main/classification/reviews/2026-10-23-media-demographics-gemini.jsonl",
+      "src/main/classification/reviews/2026-10-23-media-demographics-resolution.jsonl",
       "src/main/classification/reviews/2026-10-23-media-demographics.jsonl",
       "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl"
     ],

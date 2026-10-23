@@ -44,7 +44,8 @@ MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES = {
 MEDIA_DEMOGRAPHIC_LABELS = {*MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES, 'adult'}
 MEDIA_DEMOGRAPHIC_LIMITATION = (
     'A missing demographic tag is not proof of general-audience suitability. Source-unverified pairs may receive a '
-    'Gemini best-fit demographic based on names and model knowledge; these labels are not independently source-verified. '
+    'Gemini best-fit demographic based on names and model knowledge; mixed source/model labels may receive an assistant '
+    'best-fit single-audience tie-break. These labels are not independently source-verified. '
     'Explicit adult source tags and Gemini adult judgments are excluded, but model errors may leave adult works in other '
     'categories.'
 )
@@ -1323,6 +1324,7 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
                 for pair, (cats, origin) in decisions.items()}
     review_paths = reviews.paths(root)
     review_entries = reviews.load(root) if review_paths else {}
+    reviews.ensure_no_mixed_demographics(review_entries)
     reviewed = reviews.apply(baseline, review_entries) if review_paths else baseline
     reviewed = apply_term_classifications(root, reviewed, force=term_data is not None,
                                           reviewed_pairs=review_entries)
@@ -1439,6 +1441,8 @@ def verify(root, allow_pending_reviews=False):
         raise ValueError('id.def changed: regenerate and review distribution input')
     categories = [c['id'] for c in json.loads((directory / 'categories.json').read_text())['categories']]
     review_entries = reviews.load(root, selected_reviews)
+    if not allow_pending_reviews:
+        reviews.ensure_no_mixed_demographics(review_entries)
     if len(categories) != len(set(categories)) or not categories:
         raise ValueError('Expected unique category IDs')
     expanded_terms = any(category.startswith('term/') for category in categories)

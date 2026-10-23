@@ -2,7 +2,7 @@
 
 人物細分類辞書を含む配布ZIPのカテゴリ一覧です。通常配布の57カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えた **85カテゴリ**を掲載しています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **862,003**、読み・表記の組数の合計は **853,878**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **862,001**、読み・表記の組数の合計は **853,876**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換プレリリース) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -46,13 +46,13 @@
 | [作品シリーズ](work_franchise/index.md) | `work_franchise` | 849 | 849 | [全件](work_franchise/index.md) |
 | [漫画作品](work_manga/index.md) | `work_manga` | 5,079 | 5,080 | [全件](work_manga/index.md) |
 | [アニメ作品](work_anime/index.md) | `work_anime` | 1,088 | 1,088 | [全件](work_anime/index.md) |
-| [少年向け](media_demographic/audience/shonen/index.md) | `media_demographic/audience/shonen` | 4,094 | 4,105 | [全件](media_demographic/audience/shonen/index.md) |
-| [青年向け](media_demographic/audience/seinen/index.md) | `media_demographic/audience/seinen` | 1,713 | 1,713 | [全件](media_demographic/audience/seinen/index.md) |
-| [少女向け](media_demographic/audience/shojo/index.md) | `media_demographic/audience/shojo` | 817 | 821 | [全件](media_demographic/audience/shojo/index.md) |
-| [女性向け（Josei）](media_demographic/audience/josei/index.md) | `media_demographic/audience/josei` | 342 | 347 | [全件](media_demographic/audience/josei/index.md) |
-| [子ども向け（Kids）](media_demographic/audience/kids/index.md) | `media_demographic/audience/kids` | 535 | 538 | [全件](media_demographic/audience/kids/index.md) |
-| [複数対象層](media_demographic/audience/mixed/index.md) | `media_demographic/audience/mixed` | 54 | 56 | [全件](media_demographic/audience/mixed/index.md) |
-| [対象層の指定なし・一般向け](media_demographic/audience/unspecified/index.md) | `media_demographic/audience/unspecified` | 5,049 | 5,097 | [全件](media_demographic/audience/unspecified/index.md) |
+| [少年向け](media_demographic/audience/shonen/index.md) | `media_demographic/audience/shonen` | 4,106 | 4,117 | [全件](media_demographic/audience/shonen/index.md) |
+| [青年向け](media_demographic/audience/seinen/index.md) | `media_demographic/audience/seinen` | 1,730 | 1,731 | [全件](media_demographic/audience/seinen/index.md) |
+| [少女向け](media_demographic/audience/shojo/index.md) | `media_demographic/audience/shojo` | 822 | 826 | [全件](media_demographic/audience/shojo/index.md) |
+| [女性向け（Josei）](media_demographic/audience/josei/index.md) | `media_demographic/audience/josei` | 349 | 355 | [全件](media_demographic/audience/josei/index.md) |
+| [子ども向け（Kids）](media_demographic/audience/kids/index.md) | `media_demographic/audience/kids` | 546 | 549 | [全件](media_demographic/audience/kids/index.md) |
+| [複数対象層](media_demographic/audience/mixed/index.md) | `media_demographic/audience/mixed` | 0 | 0 | [全件](media_demographic/audience/mixed/index.md) |
+| [対象層の指定なし・一般向け](media_demographic/audience/unspecified/index.md) | `media_demographic/audience/unspecified` | 5,051 | 5,099 | [全件](media_demographic/audience/unspecified/index.md) |
 | [出典未確認・対象層未確定](media_demographic/resolution/source_unverified/index.md) | `media_demographic/resolution/source_unverified` | 0 | 0 | [全件](media_demographic/resolution/source_unverified/index.md) |
 | [映画作品](work_film/index.md) | `work_film` | 6,503 | 6,504 | [全件](work_film/index.md) |
 | [番組](work_program/index.md) | `work_program` | 9,308 | 9,309 | [全件](work_program/index.md) |
@@ -62,7 +62,7 @@
 | [舞台作品](work_stage/index.md) | `work_stage` | 571 | 571 | [全件](work_stage/index.md) |
 | [定期刊行物](work_periodical/index.md) | `work_periodical` | 1,810 | 1,811 | [全件](work_periodical/index.md) |
 | [媒体未特定の作品・美術作品](work_other/index.md) | `work_other` | 2,682 | 2,683 | [全件](work_other/index.md) |
-| [漢方・生薬](kampo/index.md) | `kampo` | 434 | 434 | [全件](kampo/index.md) |
+| [漢方・生薬](kampo/index.md) | `kampo` | 432 | 432 | [全件](kampo/index.md) |
 | [医療](medical/index.md) | `medical` | 92,683 | 92,683 | [全件](medical/index.md) |
 | [姓・名字（由来未確認）](person/surname_origin_unconfirmed/index.md) | `surname_origin_unconfirmed` | 24,039 | 24,182 | [全件](person/surname_origin_unconfirmed/index.md) |
 | [名・下の名前（由来未確認）](person/given_name_origin_unconfirmed/index.md) | `given_name_origin_unconfirmed` | 4,290 | 4,332 | [全件](person/given_name_origin_unconfirmed/index.md) |

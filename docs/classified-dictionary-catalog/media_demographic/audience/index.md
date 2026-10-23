@@ -4,10 +4,10 @@
 
 読み・表記の組: **12,604**、レコード: **12,677**。
 
-- [少年向け](shonen/index.md) — 4,094組、4,105レコード
-- [青年向け](seinen/index.md) — 1,713組、1,713レコード
-- [少女向け](shojo/index.md) — 817組、821レコード
-- [女性向け（Josei）](josei/index.md) — 342組、347レコード
-- [子ども向け（Kids）](kids/index.md) — 535組、538レコード
-- [複数対象層](mixed/index.md) — 54組、56レコード
-- [対象層の指定なし・一般向け](unspecified/index.md) — 5,049組、5,097レコード
+- [少年向け](shonen/index.md) — 4,106組、4,117レコード
+- [青年向け](seinen/index.md) — 1,730組、1,731レコード
+- [少女向け](shojo/index.md) — 822組、826レコード
+- [女性向け（Josei）](josei/index.md) — 349組、355レコード
+- [子ども向け（Kids）](kids/index.md) — 546組、549レコード
+- [複数対象層](mixed/index.md) — 0組、0レコード
+- [対象層の指定なし・一般向け](unspecified/index.md) — 5,051組、5,099レコード
