@@ -28116,7 +28116,8 @@
       "src/main/classification/reviews/2026-10-21-aiue-organization.jsonl",
       "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl",
       "src/main/classification/reviews/2026-10-22-github-issues.jsonl",
-      "src/main/classification/reviews/2026-10-23-media-demographics.jsonl"
+      "src/main/classification/reviews/2026-10-23-media-demographics.jsonl",
+      "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl"
     ],
     "reviewBaseExcludedCandidatePairs": 5725,
     "termAdditions": [
@@ -29309,6 +29310,7 @@
     "src/main/classification/person-additions/japanese-combat-sports-jitenon-2026-10-22.jsonl": "c5569f580d8dfdb971ec601ee1cf5ac6f7edae6259e41121360a70656f47aaf0",
     "src/main/classification/person-additions/github-issues-2026-10-22.jsonl": "b4d518aad86e271163243f4e9ec7e713701c89d610bb9b751a06c8bb1dd8bd91",
     "src/main/classification/person-additions/github-issues-2026-10-22-category-followup.jsonl": "eeb551f4f67387b7d348e667454152c3e0bce240f2afe2b8fabd4fd838182959",
+    "src/main/classification/media-demographic-taxonomy.json": "dcf61f04526d1aeaa1bdc421533e0a10fec4879a135e7024187a9831a7449d9e",
     "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl": "574794d0df19f8afd09d06b66897d7b7fce97dd3652bc005674a3ecae28bb30a",
     "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl": "5a373897bbade57c507d08e4813baa7d5975bc752a568cdaee8aaebd9d18f155",
     "src/main/classification/reviews/2026-10-16-pr128-luna-0000.jsonl": "3ab59c82e6e0645da8f513606038212b601c0c4c46273db4faf8122d6812cf1d",
@@ -29353,12 +29355,12 @@
     "src/main/classification/reviews/2026-10-21-joc-athletes.jsonl": "7585c7afb2c8413500eab761ad429c461f139a414148c9be907442daeb141d5a",
     "src/main/classification/reviews/2026-10-22-github-issues.jsonl": "053d827a1f2c9358db0f099742b85e737ee3cdf4314f0bc41221eef837b4c730",
     "src/main/classification/reviews/2026-10-23-media-demographics.jsonl": "d326f3428b5f3afd24c6a7e13a802134561a0de0ef3b092e63f406b63b7f8137",
-    "src/main/classification/media-demographic-taxonomy.json": "c4d780fa3a3c8671bc3aa463f8b891d853c33813ff571d3b6161f7e22082f1fa"
+    "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl": "259b1e1d1c68283803d79b6129ac0afedc85f0c34eb23945d6735ba4a3a4d53a"
   },
   "files": {
-    "categories.json": "b7dd878f6e5931a709c747d2ad005aec7e7bf4f5ee6f61baf53c07d956b6f096",
-    "distribution-candidates.tsv.gz": "18a9a013243ba2a1a873a0bbf8a6c2251830051d7ef5db8cc0555e83b3bd43f5",
-    "distribution-decisions.tsv.gz": "4ffc24fdf2bd9654cf1814c1fb6de7c3e5ee6ad151134096137f0322b717df6f"
+    "categories.json": "35bcd99b619d1958aa505e3b218ef97a5032a53236982be276706a32ac9aa800",
+    "distribution-candidates.tsv.gz": "1839820dec2025b10b357e7d489fe7e15ccc7a8054acdcf678089e655b61b1ac",
+    "distribution-decisions.tsv.gz": "a167495d23a1eef44ac965be434b6008b274576a194d8866f4c6b92b89535b62"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "sourceRows": {
@@ -29370,13 +29372,13 @@
     "term_additions": 1
   },
   "admittedPairsByOrigin": {
-    "manual": 384252,
-    "gemini": 183166,
-    "verified": 177295
+    "manual": 384215,
+    "gemini": 183164,
+    "verified": 177292
   },
-  "uniqueAdmittedPairs": 744713,
-  "excludedCandidatePairs": 328593,
-  "excludedClassifiedPairs": 322868,
+  "uniqueAdmittedPairs": 744671,
+  "excludedCandidatePairs": 328635,
+  "excludedClassifiedPairs": 322910,
   "unclassifiedPairs": 0,
   "noResultPairs": 0,
   "conflicts": {
@@ -29386,7 +29388,7 @@
   },
   "categoryRows": {
     "person": 270954,
-    "character": 6871,
+    "character": 6865,
     "mythological_figure": 3436,
     "place": 45088,
     "address": 152874,
@@ -29410,7 +29412,7 @@
     "term/general/food_drink_cooking": 4077,
     "term/general/internet_slang_culture": 573,
     "term/general/neologisms_trends_youth_language": 483,
-    "term/general/other_general": 20503,
+    "term/general/other_general": 20502,
     "term/specialist/information_communications": 6073,
     "term/specialist/mathematics_physics": 4171,
     "term/specialist/chemistry_life_sciences": 27566,
@@ -29422,21 +29424,21 @@
     "term/specialist/culture_arts_sports": 5360,
     "term/specialist/transport_safety_defense": 4037,
     "work_franchise": 849,
-    "work_manga": 5147,
-    "work_anime": 1099,
-    "media_demographic/audience/shonen": 6,
-    "media_demographic/audience/seinen": 2,
-    "media_demographic/audience/shojo": 2,
+    "work_manga": 5114,
+    "work_anime": 1095,
+    "media_demographic/audience/shonen": 894,
+    "media_demographic/audience/seinen": 898,
+    "media_demographic/audience/shojo": 538,
     "work_film": 6504,
-    "work_program": 9311,
-    "work_book": 7660,
-    "work_game": 3156,
+    "work_program": 9310,
+    "work_book": 7659,
+    "work_game": 3155,
     "work_music": 10337,
     "work_stage": 571,
     "work_periodical": 1811,
     "work_other": 2683
   },
-  "dictionaryRows": 761251,
+  "dictionaryRows": 763524,
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified.",
     "Media demographic labels cover source-reviewed pairs only; unreviewed media and source-linked characters are not guaranteed classified or excluded."

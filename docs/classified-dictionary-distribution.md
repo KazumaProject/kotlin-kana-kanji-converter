@@ -8,7 +8,21 @@
 
 イベント辞書は `src/main/classification/event-taxonomy.json` で「催し・行事」「事件・事故・災害」「歴史的出来事」の3群に分類します。配布するのは催し・行事、記念日・啓発日、試験・検定、自然災害、社会問題・騒動・訴訟、歴史的紛争・政変の6カテゴリです。現在の配布データには合計7,660組を収録し、各カテゴリの件数は[収録一覧](classified-dictionary-catalog/index.md)に掲載しています。犯罪事件・テロ事件・事故は分類用ラベルだけを定義し、該当する読み・表記ペアを分類結果、候補、判断台帳、カタログ、配布データに保存しません。分類はGemini 3.5 Flash-Liteの無料枠を2ワーカーで利用し、候補語と応答本文は保存しません。途中の分類結果は読み・表記と切り離した数値ID・カテゴリIDとしてリポジトリ外の作業領域に一時保存し、完了後に削除します。進捗ではカテゴリ別件数を報告します。無料枠の利用上限に達した場合は処理を停止し、未完了分を再開します。元の広域辞書テキストは分類の入力として維持します。
 
-アニメ・漫画作品と、出典作品を特定できる架空キャラクターの対象層は `src/main/classification/media-demographic-taxonomy.json` で定義します。少年向け・青年向け・少女向けは、出版社や掲載誌が示す原作の対象読者を根拠にします。キャラクターの設定年齢では分類せず、キャラクターは出典作品の対象層を継承します。成人向けは出版社・販売元・公的書誌などで18歳以上向けと確認できる作品に限ります。成人ラベルは分類レビューに記録しますが辞書カテゴリにはせず、その作品・キャラクターの候補を全カテゴリから除外します。根拠を確認できないものは対象層を推定しません。保存済みの対象層・成人向けレビューは出典を確認した候補だけを扱い、メディア候補全体の網羅分類ではありません。未レビュー作品の成人向け判定・除外は保証しません。
+アニメ・漫画作品と、出典作品を特定できる架空キャラクターの対象層は `src/main/classification/media-demographic-taxonomy.json` で定義します。少年向け・青年向け・少女向けは、出版社・掲載誌などの情報またはMyAnimeListのdemographicsタグを根拠にします。MyAnimeListは二次的なコミュニティ編集データなので、出版社の一次資料と同等とは扱いません。キャラクターの設定年齢では分類せず、キャラクターは出典作品の対象層を継承します。成人向けは出版社・販売元・公的書誌などで18歳以上向けと確認できる作品、またはMyAnimeListでHentaiジャンル／Rx - Hentai評価が付いた作品に限ります。成人ラベルは分類レビューに記録しますが辞書カテゴリにはせず、その作品・キャラクターの候補を全カテゴリから除外します。根拠を確認できないものは対象層を推定しません。
+
+2026-10-23の固定データ照合では、配布対象の作品・キャラクター候補12,701組のうち、既存レビュー10組に加えて2,362組を追加で確認しました（少年向け888、青年向け896、少女向け536、成人向け42）。成人向け42組は全カテゴリから除外します。残る10,329組は、公開データに対象層タグがない、候補名を一意に結び付けられない、またはデータ間で判定が食い違うため未分類のままです。これは無料の公開スナップショットで根拠を得られた範囲であり、全候補の網羅分類や未レビュー作品の成人向け除外を保証しません。
+
+対象レビューは `src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl` に保存します。再生成には、Kaggleの[Anime and Manga Dataset 2026](https://www.kaggle.com/datasets/patelris/anime-and-manga-dataset-2026) version 6（`anime_dataset.csv`、`manga_dataset.csv`）と、Hugging Faceの[Anime Characters Dataset](https://huggingface.co/datasets/fadhilakbar/anime-characters-dataset)のCSVを使います。ファイルSHA-256、対象となったMyAnimeListのID、参照先、利用ライセンスを各レビューに記録します。生成器 `scripts/generate_media_demographic_reviews.py` はローカルCSVをPython標準ライブラリで照合し、外部API・LLM・トークンを使いません。入力CSVは配布物・リポジトリに含めません。データ出典と帰属表示は [LICENSE-DATA.md](../LICENSE-DATA.md) に記載しています。例:
+
+```sh
+python3 scripts/generate_media_demographic_reviews.py \
+  --anime-csv /path/to/anime_dataset.csv \
+  --manga-csv /path/to/manga_dataset.csv \
+  --characters-csv /path/to/anime-characters-dataset.csv \
+  --write
+```
+
+書き込み前は `--write` を省略して件数だけ確認できます。曖昧なタイトル一致、未付与のdemographics、Josei・Kidsタグは少年・青年・少女へ推定変換しません。Hentai／Rx - Hentaiと読者層タグが同じレコードに併記される場合も自動分類を保留します。
 
 ## 固定入力
 

@@ -170,8 +170,8 @@ val japaneseKeyboardAssetsReleaseZip = japaneseKeyboardAssetsReleaseDir.file("ja
 val classificationDirectory = layout.projectDirectory.dir("src/main/classification")
 val classificationCategoryIds = ((JsonSlurper().parse(classificationDirectory.file("categories.json").asFile) as Map<*, *>)
     ["categories"] as List<*>).map { (it as Map<*, *>)["id"] as String }
-require(classificationCategoryIds.size == 47 && classificationCategoryIds.distinct().size == 47 &&
-    classificationCategoryIds.all { it.matches(Regex("[a-z_]+(/[a-z_]+)*")) }) { "Expected 47 unique safe category IDs" }
+require(classificationCategoryIds.size == 50 && classificationCategoryIds.distinct().size == 50 &&
+    classificationCategoryIds.all { it.matches(Regex("[a-z_]+(/[a-z_]+)*")) }) { "Expected 50 unique safe category IDs" }
 val specialistDirectory = layout.projectDirectory.dir("src/main/specialist")
 val specialistCategoryIds = ((JsonSlurper().parse(specialistDirectory.file("categories.json").asFile) as Map<*, *>)
     ["categories"] as List<*>).map { (it as Map<*, *>)["id"] as String }

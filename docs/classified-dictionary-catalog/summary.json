@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "e0348e8a7285a2ab80542485d5194bf85270b9a7dec0e97c38d0aa2555c05d12",
-  "uniquePairs": 832999,
-  "records": 849437,
+  "inputSha256": "1839820dec2025b10b357e7d489fe7e15ccc7a8054acdcf678089e655b61b1ac",
+  "uniquePairs": 832952,
+  "records": 851715,
   "categories": [
     {
       "id": "character",
       "name": "架空キャラクター",
-      "pairs": 6799,
-      "readings": 6728,
-      "records": 6871,
+      "pairs": 6793,
+      "readings": 6722,
+      "records": 6865,
       "pages": 5,
       "recordsByOrigin": {
-        "manual": 3983,
-        "gemini": 2859,
+        "manual": 3978,
+        "gemini": 2858,
         "verified": 29
       }
     },
@@ -317,14 +317,14 @@
     {
       "id": "term/general/other_general",
       "name": "その他の一般語",
-      "pairs": 20492,
-      "readings": 19771,
-      "records": 20503,
+      "pairs": 20491,
+      "readings": 19770,
+      "records": 20502,
       "pages": 14,
       "recordsByOrigin": {
         "gemini": 11699,
         "verified": 2617,
-        "manual": 6187
+        "manual": 6186
       }
     },
     {
@@ -472,27 +472,66 @@
     {
       "id": "work_manga",
       "name": "漫画作品",
-      "pairs": 5147,
-      "readings": 5107,
-      "records": 5148,
+      "pairs": 5113,
+      "readings": 5073,
+      "records": 5114,
       "pages": 4,
       "recordsByOrigin": {
-        "manual": 4595,
-        "verified": 120,
-        "gemini": 433
+        "manual": 4565,
+        "verified": 117,
+        "gemini": 432
       }
     },
     {
       "id": "work_anime",
       "name": "アニメ作品",
-      "pairs": 1104,
-      "readings": 1088,
-      "records": 1104,
+      "pairs": 1095,
+      "readings": 1079,
+      "records": 1095,
       "pages": 1,
       "recordsByOrigin": {
-        "manual": 767,
+        "manual": 758,
         "gemini": 330,
         "verified": 7
+      }
+    },
+    {
+      "id": "media_demographic/audience/shonen",
+      "name": "少年向け",
+      "pairs": 894,
+      "readings": 885,
+      "records": 894,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 689,
+        "gemini": 187,
+        "verified": 18
+      }
+    },
+    {
+      "id": "media_demographic/audience/seinen",
+      "name": "青年向け",
+      "pairs": 898,
+      "readings": 894,
+      "records": 898,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 780,
+        "gemini": 91,
+        "verified": 27
+      }
+    },
+    {
+      "id": "media_demographic/audience/shojo",
+      "name": "少女向け",
+      "pairs": 538,
+      "readings": 536,
+      "records": 538,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 477,
+        "gemini": 47,
+        "verified": 14
       }
     },
     {
@@ -511,12 +550,12 @@
     {
       "id": "work_program",
       "name": "番組",
-      "pairs": 9310,
-      "readings": 9236,
-      "records": 9311,
+      "pairs": 9309,
+      "readings": 9235,
+      "records": 9310,
       "pages": 8,
       "recordsByOrigin": {
-        "manual": 7997,
+        "manual": 7996,
         "gemini": 1161,
         "verified": 153
       }
@@ -524,12 +563,12 @@
     {
       "id": "work_book",
       "name": "書籍作品",
-      "pairs": 7659,
-      "readings": 7605,
-      "records": 7660,
+      "pairs": 7658,
+      "readings": 7604,
+      "records": 7659,
       "pages": 6,
       "recordsByOrigin": {
-        "manual": 4960,
+        "manual": 4959,
         "gemini": 2613,
         "verified": 87
       }
@@ -537,12 +576,12 @@
     {
       "id": "work_game",
       "name": "ゲーム作品",
-      "pairs": 3156,
-      "readings": 3066,
-      "records": 3156,
+      "pairs": 3155,
+      "readings": 3065,
+      "records": 3155,
       "pages": 3,
       "recordsByOrigin": {
-        "manual": 2104,
+        "manual": 2103,
         "gemini": 1006,
         "verified": 46
       }
@@ -576,13 +615,13 @@
     {
       "id": "work_periodical",
       "name": "定期刊行物",
-      "pairs": 1811,
-      "readings": 1768,
-      "records": 1812,
+      "pairs": 1810,
+      "readings": 1767,
+      "records": 1811,
       "pages": 2,
       "recordsByOrigin": {
         "gemini": 655,
-        "manual": 1128,
+        "manual": 1127,
         "verified": 29
       }
     },
@@ -602,12 +641,12 @@
     {
       "id": "kampo",
       "name": "漢方・生薬",
-      "pairs": 432,
-      "readings": 418,
-      "records": 432,
+      "pairs": 434,
+      "readings": 420,
+      "records": 434,
       "pages": 1,
       "recordsByOrigin": {
-        "specialist": 432
+        "specialist": 434
       }
     },
     {
@@ -828,8 +867,8 @@
     }
   ],
   "excluded": {
-    "pairs": 322861,
-    "pages": 593
+    "pairs": 322903,
+    "pages": 594
   },
-  "specialistInputSha256": "de25b742784973e59532d3ec86b670ab5dd25ed6c0558aa72d9eb2e6afb628dc"
+  "specialistInputSha256": "5337722e46c7d04638c2ea5a8e36e8a8900ee65d536cbc4d9e1b15955745a2a9"
 }

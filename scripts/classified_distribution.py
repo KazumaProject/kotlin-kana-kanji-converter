@@ -218,6 +218,8 @@ def merged_categories(base, term_data, event_data=None, media_demographic_data=N
             for category in leaf_categories:
                 if existing[category['id']].get('name') != category['name']:
                     raise ValueError(f'{parent_id.title()} category name differs from taxonomy: {category["id"]}')
+                existing[category['id']]['definition'] = category['definition']
+            categories = [existing[category_id] for category_id in ids]
             inserted_at[parent_id] = min(ids.index(category_id) for category_id in leaf_ids)
         else:
             raise ValueError(f'Source taxonomy must contain {parent_id} or all expanded {parent_id} categories')

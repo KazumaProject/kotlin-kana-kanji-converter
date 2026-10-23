@@ -85,8 +85,12 @@ def load(root, selected=None):
                 reference = evidence.get('reference')
                 previous = latest.get(pair)
                 expected_origin = resulting_origin(previous) if previous else baseline[3] if baseline else None
+                valid_source_baseline = (
+                    baseline is not None and baseline[4] == 'classified'
+                    or baseline is None and isinstance(entry.get('added_record'), dict)
+                )
                 if (not isinstance(demographic, str) or demographic not in d.MEDIA_DEMOGRAPHIC_LABELS
-                        or baseline is None or baseline[4] != 'classified'
+                        or not valid_source_baseline
                         or entry.get('classification_origin') not in ('verified', 'manual', 'gemini')
                         or entry.get('classification_origin') != expected_origin
                         or evidence.get('kind') != 'media_demographic_source'
