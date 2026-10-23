@@ -355,6 +355,56 @@ def generate_person_replacement_index(output, base_summary, person_summary):
     if len(base_categories) != 56 or len(person_categories) != 29:
         raise ValueError('Expected 56 existing non-person categories and 29 person categories')
 
+    categories_by_id = {item['id']: item for item in base_categories}
+    audience_ids = [
+        'media_demographic/audience/shonen',
+        'media_demographic/audience/seinen',
+        'media_demographic/audience/shojo',
+        'media_demographic/audience/josei',
+        'media_demographic/audience/kids',
+        'media_demographic/audience/unspecified',
+    ]
+    audience_table = ['| 対象層 | 読み・表記の組 | レコード数 | 全収録語 |',
+                      '|---|---:|---:|---|']
+    for category_id in audience_ids:
+        category = categories_by_id.get(category_id)
+        if category is None:
+            raise ValueError(f'Missing audience category: {category_id}')
+        audience_table.append(
+            f'| [{category["name"]}]({category_id}/index.md) | '
+            f'{category["pairs"]:,} | {category["records"]:,} | [全件]({category_id}/index.md) |'
+        )
+
+    work_type_ids = ['work_anime', 'work_manga', 'character']
+    work_type_table = ['| 作品種別 | 読み・表記の組 | レコード数 | 全収録語 |',
+                       '|---|---:|---:|---|']
+    for category_id in work_type_ids:
+        category = categories_by_id.get(category_id)
+        if category is None:
+            raise ValueError(f'Missing work or character category: {category_id}')
+        work_type_table.append(
+            f'| [{category["name"]}]({category_id}/index.md) | '
+            f'{category["pairs"]:,} | {category["records"]:,} | [全件]({category_id}/index.md) |'
+        )
+
+    mixed = categories_by_id.get('media_demographic/audience/mixed')
+    unverified = categories_by_id.get('media_demographic/resolution/source_unverified')
+    mixed_pairs = mixed['pairs'] if mixed else 0
+    unverified_pairs = unverified['pairs'] if unverified else 0
+    media_catalog = (
+        '## アニメ・漫画作品・キャラクター\n\n'
+        '### 対象層別の全収録語\n\n'
+        '各リンクから対象層ごとの収録語をすべて確認できます。読み・表記の組数と辞書レコード数を掲載しています。\n\n'
+        + '\n'.join(audience_table) + '\n\n'
+        + '成人向けと判定した候補は配布カテゴリに含めず、'
+        '[成人向け除外語と判断理由](excluded/media-demographics-2026-10-23.md)に掲載しています。'
+        f'複数対象層は {mixed_pairs:,}組、出典未確認・対象層未確定は {unverified_pairs:,}組で、'
+        'どちらも配布カタログに残していません。\n\n'
+        '### 作品種別の全収録語\n\n'
+        '作品種別の辞書と対象層別辞書は別の分類です。同じ作品・キャラクターが両方に掲載される場合があります。\n\n'
+        + '\n'.join(work_type_table) + '\n\n'
+    )
+
     table = ['| カテゴリ | ID | 読み・表記の組 | レコード数 | 全件一覧 |',
              '|---|---|---:|---:|---|']
     for category in base_categories:
@@ -375,15 +425,15 @@ def generate_person_replacement_index(output, base_summary, person_summary):
     record_count = sum(item['records'] for item in base_categories) + person_summary['records']
     pair_count = sum(item['pairs'] for item in base_categories) + person_summary['uniquePairs']
     (output / 'index.md').write_text(
-        '# 人物辞書置換プレリリース — 全配布カテゴリ\n\n'
-        '人物細分類辞書を含む配布ZIPのカテゴリ一覧です。通常配布の57カテゴリから汎用 `person` を除き、'
-        '標準配布対象の人物細分類29カテゴリに置き換えた **85カテゴリ**を掲載しています。'
+        '# 分類辞書 — 全配布カテゴリ\n\n'
+        '通常版GitHub Releaseの辞書ZIPに含まれる全85カテゴリを掲載します。'
+        '通常配布の57カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えています。'
         '未分類候補と成人関連など配布対象外の候補は含めていません。\n\n'
         f'カテゴリ別レコード数の合計は **{record_count:,}**、読み・表記の組数の合計は **{pair_count:,}**です。'
         '同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。\n\n'
-        '[生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換プレリリース) · '
+        '[生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換配布) · '
         '[人物分類定義](../../src/main/classification/person-taxonomy.json)\n\n'
-        + '\n'.join(table) + '\n',
+        + media_catalog + '\n'.join(table) + '\n',
         encoding='utf-8')
     return dict(categories=85, records=record_count, categoryPairCount=pair_count,
                 baseCategories=len(base_categories), personCategories=len(person_categories))
