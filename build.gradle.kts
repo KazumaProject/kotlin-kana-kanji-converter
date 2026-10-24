@@ -1191,7 +1191,11 @@ val exportExistingDictionaryInventory = tasks.register<JavaExec>("exportExisting
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("com.kazumaproject.specialist.ExistingDictionaryInventoryKt")
     maxHeapSize = "4g"
-    args("--output", layout.buildDirectory.file("specialist/existing-pairs.jsonl.gz").get().asFile.path)
+    args("--output", providers.gradleProperty("existingDictionaryInventoryOutput")
+        .getOrElse(layout.buildDirectory.file("specialist/existing-pairs.jsonl.gz").get().asFile.path))
+    providers.gradleProperty("existingDictionaryClassificationDirectory").orNull?.let {
+        args("--classified-directory", it)
+    }
     // Always recompute: constants, selectors, and all auxiliary sources are inputs too.
 }
 val verifySpecialistDistribution = tasks.register<Exec>("verifySpecialistDistribution") {

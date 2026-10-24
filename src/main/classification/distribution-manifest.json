@@ -2,7 +2,7 @@
   "admittedPairsByOrigin": {
     "manual": 378757,
     "gemini": 188640,
-    "verified": 177220
+    "verified": 177443
   },
   "categoryGroups": [
     {
@@ -106,7 +106,7 @@
     "transport_route": 4230,
     "organization": 47484,
     "lineage": 2019,
-    "product": 9890,
+    "product": 10113,
     "vehicle": 2580,
     "event/occasion/organized_event": 4059,
     "event/occasion/observance": 802,
@@ -157,13 +157,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 773814,
+  "dictionaryRows": 774037,
   "excludedCandidatePairs": 328689,
   "excludedClassifiedPairs": 322964,
   "files": {
     "categories.json": "70906d21e5be76fd38cdd4c93569dc8c3896438b101f5e105a4fddf83b961f98",
-    "distribution-candidates.tsv.gz": "950c177e86e1e42d0ad4c7688c199b67ec11efda6fcdf9e23e5c76f2dfbe8d6e",
-    "distribution-decisions.tsv.gz": "2f333a506bbe6b03a01546faff15f1967e6d362cb6f214cb7748fa6e51769015"
+    "distribution-candidates.tsv.gz": "c244e4f341e273fc4d8cc414e36265d5073653692dd8713577633b80fad01e3f",
+    "distribution-decisions.tsv.gz": "85199a378fb8036a8b1462b505d19e32297004539997c8d16420f34d66c47095"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -243,7 +243,8 @@
     "src/main/classification/reviews/2026-10-23-media-demographics-resolution.jsonl": "9be414bfb3e0e437a616461768e00d2032124357cc52dbd9a023dd8dce754e7c",
     "src/main/classification/reviews/2026-10-23-media-demographics.jsonl": "d326f3428b5f3afd24c6a7e13a802134561a0de0ef3b092e63f406b63b7f8137",
     "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl": "259b1e1d1c68283803d79b6129ac0afedc85f0c34eb23945d6735ba4a3a4d53a",
-    "src/main/classification/reviews/2026-10-23-source-correction.jsonl": "a7a4463f11a81a53ba314380864126cdcb2c1fc2bd08789a5b3a03bf57c63581"
+    "src/main/classification/reviews/2026-10-23-source-correction.jsonl": "a7a4463f11a81a53ba314380864126cdcb2c1fc2bd08789a5b3a03bf57c63581",
+    "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
   },
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified.",
@@ -29446,7 +29447,8 @@
       "src/main/classification/reviews/2026-10-23-media-demographics-resolution.jsonl",
       "src/main/classification/reviews/2026-10-23-media-demographics.jsonl",
       "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl",
-      "src/main/classification/reviews/2026-10-23-source-correction.jsonl"
+      "src/main/classification/reviews/2026-10-23-source-correction.jsonl",
+      "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
     "termAdditions": [
       {
@@ -29549,5 +29551,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 744617
+  "uniqueAdmittedPairs": 744840
 }

@@ -65,6 +65,8 @@ cd kotlin-kana-kanji-converter
 
 CLIはunigramの照合範囲・表記の重複排除・一致候補を優先してからコスト順にする処理をJapaneseKeyboardに合わせています。JapaneseKeyboardの文節判定、ビーム探索、学習辞書、予測候補、UI全体の表示順位まで同一とは保証しません。利用側を確認するときは実際のcheckoutと配布されたバイナリを使って検証してください。
 
+漢方・商品名を追加収集する場合は、[再利用可能な収集・差分取り込み手順](docs/dictionary-term-collection.md)を参照してください。
+
 ## ライセンス
 
 プログラムコードは [MIT ライセンス](LICENSE) のもとで提供されています。
@@ -78,6 +80,8 @@ JMdict・NGSLの出典表示と、CMUdict由来部分の著作権表示・条件
 ---
 
 ### English README
+
+See the [reusable Kampo/product vocabulary collection workflow](docs/dictionary-term-collection.md) to collect and import additional source-backed terms.
 
 # Kana-Kanji Conversion Program
 

@@ -278,8 +278,10 @@ jobs:
 
       - name: Verify frozen classified distribution
         run: |
-          python3 -m unittest discover -s scripts -p 'test_*.py' -v
-          python3 scripts/write_classified_dictionary_catalog.py --check
+          python3 -m venv "${RUNNER_TEMP}/term-collection-venv"
+          "${RUNNER_TEMP}/term-collection-venv/bin/python" -m pip install -r scripts/requirements-term-collection.txt
+          "${RUNNER_TEMP}/term-collection-venv/bin/python" -m unittest discover -s scripts -p 'test_*.py' -v
+          "${RUNNER_TEMP}/term-collection-venv/bin/python" scripts/write_classified_dictionary_catalog.py --check
 
       - name: Verify English dictionary source
         run: ./gradlew validateEnglishDictionary

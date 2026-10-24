@@ -39,6 +39,10 @@ internal fun writeInventory(inputs: Map<String, List<Dictionary>>, output: File)
 }
 
 fun main(args: Array<String>) {
-    require(args.size == 2 && args[0] == "--output") { "Usage: --output <existing-pairs.jsonl.gz>" }
-    writeInventory(BaselineDictionaryInputs.load(), File(args[1]))
+    require(args.size in listOf(2, 4) && args[0] == "--output" &&
+        (args.size == 2 || args[2] == "--classified-directory")) {
+        "Usage: --output <existing-pairs.jsonl.gz> [--classified-directory <directory>]"
+    }
+    val directory = if (args.size == 4) File(args[3]) else File("src/main/classification")
+    writeInventory(BaselineDictionaryInputs.load(directory), File(args[1]))
 }

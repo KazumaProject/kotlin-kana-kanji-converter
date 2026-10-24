@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "knapsack_kampo",
+      "category": "kampo",
+      "kind": "snapshot",
+      "path": "src/main/specialist/sources/kampo_core.jsonl.gz",
+      "page": "https://dbarchive.biosciencedbc.jp/jp/knapsack-kampo/data-1.html"
+    },
+    {
+      "id": "knapsack_herb",
+      "category": "kampo",
+      "kind": "snapshot",
+      "path": "src/main/specialist/sources/kampo_herb.jsonl.gz",
+      "page": "https://dbarchive.biosciencedbc.jp/jp/knapsack-kampo/data-2.html"
+    },
+    {
+      "id": "tsumura_kampo",
+      "category": "kampo",
+      "kind": "json",
+      "urls": ["https://www.tsumura.co.jp/products/json/id.json"],
+      "items_path": "products",
+      "surface_field": "name",
+      "reading_field": "nameKana",
+      "surface_prefix": "ツムラ",
+      "reading_prefix": "ツムラ",
+      "withhold_surfaces": {
+        "竹如温胆湯": "JSON uses 如; the manufacturer's product document uses 茹: https://medical.tsumura.co.jp/sites/default/files/resources/pdf/products/index/2082.pdf"
+      }
+    },
+    {
+      "id": "tsumura_products",
+      "category": "product",
+      "kind": "json",
+      "urls": ["https://www.tsumura.co.jp/products/json/id.json"],
+      "items_path": "products",
+      "surface_field": "name",
+      "reading_field": "nameKana",
+      "withhold_surfaces": {
+        "ツムラ竹如温胆湯": "JSON uses 如; the manufacturer's product document uses 茹: https://medical.tsumura.co.jp/sites/default/files/resources/pdf/products/index/2082.pdf"
+      }
+    },
+    {
+      "id": "tsumura_otc_kampo",
+      "category": "kampo",
+      "kind": "json",
+      "urls": ["https://www.tsumura.co.jp/brand/products/json/name.json"],
+      "items_path": "data",
+      "surface_field": "product_name",
+      "reading_field": "product_name_kana",
+      "surface_pattern": "ツムラ漢方(?P<surface>.+?)(?:料)?エキス(?:顆粒|錠).*!?"
+    },
+    {
+      "id": "kracie",
+      "category": "product",
+      "kind": "html",
+      "urls": ["https://www.kracie.co.jp/products/category/index.html"],
+      "name_selector": "[id^='modal-brand'] .c-list-content-item-title, a[href^='/products/foods/'] .c-list-content-item-title, a[href^='/products/khp/'] .c-list-content-item-title, a[href^='/products/ph/'] .c-list-content-item-title"
+    },
+    {
+      "id": "suntory",
+      "category": "product",
+      "kind": "html",
+      "urls": ["https://products.suntory.co.jp/softdrink/"],
+      "enabled": false,
+      "disabled_reason": "HTTP 403 during source verification. Inspect actual product-name markup and configure selectors before enabling."
+    },
+    {
+      "id": "kobayashi_brands",
+      "category": "product",
+      "kind": "html",
+      "urls": ["https://www.kobayashi.co.jp/seihin/menu/name_01.html"],
+      "name_selector": ".BrandOrder__text",
+      "follow_selector": "a[href*='/seihin/menu/name_']",
+      "follow_url_pattern": "https://www\\.kobayashi\\.co\\.jp/seihin/menu/name_[0-9]{2}\\.html"
+    },
+    {
+      "id": "panasonic_brands",
+      "category": "product",
+      "kind": "html",
+      "urls": ["https://panasonic.jp/"],
+      "name_selector": "a.c-product__link .cmp-list__item-title",
+      "allow_description": true,
+      "pair_surface_pattern": "[A-Za-z][A-Za-z0-9 .+&-]*",
+      "allow_kana_surface": false,
+      "kana_allowlist": ["アミューレ"]
+    },
+    {
+      "id": "wikidata_candidates",
+      "category": "product",
+      "kind": "wikidata"
+    }
+  ]
+}

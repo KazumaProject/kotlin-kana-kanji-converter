@@ -28,6 +28,7 @@ import com.kazumaproject.emoticon.EmoticonDictionaryBuilder
 import com.kazumaproject.english.EnglishDictionarySource
 import com.kazumaproject.reading_correction.ReadingCorrectionBuilder
 import com.kazumaproject.symbol.SymbolDictionaryBuilder
+import java.io.File
 
 /** The exact inputs selected by Main, shared with the specialist duplicate inventory. */
 internal object BaselineDictionaryInputs {
@@ -76,7 +77,7 @@ internal object BaselineDictionaryInputs {
         return finalList.values.flatten()
     }
 
-    fun load(): Map<String, List<Dictionary>> = linkedMapOf<String, List<Dictionary>>().apply {
+    fun load(classifiedDirectory: File = File("src/main/classification")): Map<String, List<Dictionary>> = linkedMapOf<String, List<Dictionary>>().apply {
         put("system", system())
         put("english_reading", EnglishDictionarySource.loadResources(
             contextId = IdDefConstants.`名詞,一般,*,*,*,*,*`.toInt()).runtimeEntries)
@@ -86,6 +87,6 @@ internal object BaselineDictionaryInputs {
         put("symbol", SymbolDictionaryBuilder().convertSymbolDataToDictionaryList("src/main/bin/symbol.tsv"))
         put("reading_correction", ReadingCorrectionBuilder().parseReadingCorrectionTSV("src/main/bin/reading_correction.tsv"))
         put("kotowaza", ReadingCorrectionBuilder().parseKotowazaTSV("src/main/bin/kotowaza.tsv"))
-        ClassifiedDictionaryData().records.forEach { (id, entries) -> put("categories/$id", entries.toList()) }
+        ClassifiedDictionaryData(classifiedDirectory).records.forEach { (id, entries) -> put("categories/$id", entries.toList()) }
     }
 }

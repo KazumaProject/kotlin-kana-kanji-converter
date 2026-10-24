@@ -25,19 +25,20 @@
     "src/main/specialist/notices/kampo_core.txt": "7ca7047eedec76c3a98913dc932487aee1b89c2604842db3f5e961e4c85c4496",
     "src/main/specialist/notices/kampo_herb.txt": "7ca7047eedec76c3a98913dc932487aee1b89c2604842db3f5e961e4c85c4496",
     "src/main/specialist/notices/manbyo.txt": "2ffeab722ef92e8fa0feb0df08b273e4c7522aa948052ce03a269a7475992934",
-    "src/main/classification/distribution-decisions.tsv.gz": "2f333a506bbe6b03a01546faff15f1967e6d362cb6f214cb7748fa6e51769015",
+    "src/main/classification/distribution-decisions.tsv.gz": "85199a378fb8036a8b1462b505d19e32297004539997c8d16420f34d66c47095",
     "src/main/specialist/gemini-readings.jsonl.gz": "04516a0f6b282cbac9bb0325d2f864db5f84829d4c5764e846d6411bc46eb9ec",
     "src/main/specialist/gemini-run.json": "91b4925e86a3635ed342e28861be54fe7e03f72505628de41df4b48efa6a80fb",
     "src/main/specialist/reading-corrections.json": "8474db9b83c09dec59b292cf223defc3dda290a67d3bf887a7ff1abf4f5f13a5",
     "src/main/specialist/categories.json": "d03ce6563d7439cbcdcdaabf8df2529f507b2ce12abedb75e0ec1167704a0a25",
     "src/main/specialist/sources.json": "a8bbbbe3b0fce76441acc19f3d7232d6f1f53f76709ce2990c029d0bb330c9e8",
+    "src/main/specialist/collected-terms/cf7e87c20f1b1c28.jsonl": "5576452ddee809c083e52b0d0d0d41aab73abdbdfab31f9a1ff0db336087f22a",
     "src/main/specialist/sources/kampo_core.jsonl.gz": "88b4487a56159df060c58e5c020c310f7d55def773f66cc384daab7146c0ff55",
     "src/main/specialist/sources/kampo_herb.jsonl.gz": "1146440a2e946ecd4b80f3792ecc75160ce342f4ad3302e4fb0fc544158927ed",
     "src/main/specialist/sources/hyakuyaku.jsonl.gz": "bbdefe7bec466e25d333adf2971bfd32e12ebf8eccf9e5c1dbe8132eba49027b",
     "src/main/specialist/sources/manbyo.jsonl.gz": "acf4105c8bfff7d7278fb9d2298481b3dae2d6b58eda824f31b3345e6aea9492"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
-  "existingInventorySha256": "1fae671e5a432c7c676744d2c0212d9b40e6f1b5e226791fdd6f1ad99df7836a",
+  "existingInventorySha256": "5a486d5ea2983d72ac6cbe0dac8161edbb32aceaecffda13419290bb8851cad9",
   "existingDictionaryIds": [
     "categories/address",
     "categories/agreement",
@@ -101,8 +102,14 @@
     "symbol",
     "system"
   ],
-  "existingUniquePairs": 1860879,
+  "existingUniquePairs": 1861102,
   "sourceRows": {
+    "collected/collected-terms/cf7e87c20f1b1c28.jsonl": {
+      "rows": 2,
+      "dispositions": {
+        "adopted": 2
+      }
+    },
     "kampo_core": {
       "rows": 1581,
       "dispositions": {
@@ -143,7 +150,7 @@
     }
   },
   "dispositions": {
-    "adopted": 93115,
+    "adopted": 93117,
     "cross_category_duplicate": 106,
     "excluded_by_classification_review": 69,
     "existing_duplicate": 6504,
@@ -153,19 +160,20 @@
     "unsupported_kana_surface": 19
   },
   "categoryRows": {
-    "kampo": 432,
+    "kampo": 434,
     "medical": 92683
   },
-  "dictionaryRows": 93115,
-  "uniqueAdmittedPairs": 93115,
+  "dictionaryRows": 93117,
+  "uniqueAdmittedPairs": 93117,
   "readingOrigins": {
     "curated_correction": 2,
     "gemini_inferred_unverified": 2003,
+    "source_backed_collection": 2,
     "upstream_unverified": 91110
   },
   "files": {
-    "distribution-candidates.tsv.gz": "de25b742784973e59532d3ec86b670ab5dd25ed6c0558aa72d9eb2e6afb628dc",
-    "provenance.jsonl.gz": "2857cf2718b247d3c1dac639fdb0efcfae6e14223f20bd5a3526dba404940af8"
+    "distribution-candidates.tsv.gz": "8734dda7bd19c3a1401600a751289a3062c9a2f15c7ea64a409faf40c656e5ec",
+    "provenance.jsonl.gz": "d8c3411ae205cff7a4d9b3da244d8956d8ef37b1e0fa2a9a10ed40da496448f2"
   },
   "limitations": [
     "Upstream readings include automatic readings; Gemini supplements are inferred. Neither is independently verified.",

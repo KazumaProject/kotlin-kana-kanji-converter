@@ -204,6 +204,13 @@ def load(root, selected=None):
                             raise ValueError('Source-unverified media review requires pinned source searches')
             elif tagged_categories:
                 raise ValueError('Media demographic category requires its review label and source evidence')
+            if 'collection' in evidence:
+                import collected_terms
+                collected = collected_terms.validate(evidence['collection'], 'product')
+                if (pair != (collected['reading'], collected['surface'])
+                        or evidence.get('reference') != collected['source_url']
+                        or entry.get('categories') != ['product']):
+                    raise ValueError('Collected product review differs from source evidence')
             if evidence.get('kind') == 'model_review':
                 if (action not in ('exclude', 'reclassify') or baseline is None
                         or baseline[4] != 'classified' or record is not None

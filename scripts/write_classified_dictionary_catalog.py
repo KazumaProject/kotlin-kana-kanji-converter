@@ -13,7 +13,7 @@ import tempfile
 
 import classified_distribution as distribution
 
-ORIGINS = {'verified': '資料確認済み', 'manual': 'assistant再分類（暫定）', 'gemini': 'Gemini（暫定）', 'specialist': '提供元の読み（正確性未確認）', 'inferred_reading': 'Gemini推定読み（未確認）', 'curated_correction': '出典確認済みの読み訂正'}
+ORIGINS = {'verified': '資料確認済み', 'manual': 'assistant再分類（暫定）', 'gemini': 'Gemini（暫定）', 'specialist': '提供元の読み（正確性未確認）', 'inferred_reading': 'Gemini推定読み（未確認）', 'curated_correction': '出典確認済みの読み訂正', 'source_backed_collection': '公式資料の表記・読み'}
 AUDIENCE_CATEGORIES = [
     'media_demographic/audience/shonen',
     'media_demographic/audience/seinen',
@@ -548,6 +548,8 @@ def generate(root, output):
                 origins[(record['reading'],record['surface'])]='inferred_reading'
             if record['status']=='adopted' and record.get('readingOrigin')=='curated_correction':
                 origins[(record['reading'],record['surface'])]='curated_correction'
+            if record['status']=='adopted' and record.get('readingOrigin')=='source_backed_collection':
+                origins[(record['reading'],record['surface'])]='source_backed_collection'
         manifest['categoryRows'].update(extra['categoryRows'])
         manifest['uniqueAdmittedPairs'] += extra['uniqueAdmittedPairs']
         manifest['dictionaryRows'] += extra['dictionaryRows']

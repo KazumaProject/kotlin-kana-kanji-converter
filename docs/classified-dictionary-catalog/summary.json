@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "950c177e86e1e42d0ad4c7688c199b67ec11efda6fcdf9e23e5c76f2dfbe8d6e",
-  "uniquePairs": 832896,
-  "records": 862003,
+  "inputSha256": "c244e4f341e273fc4d8cc414e36265d5073653692dd8713577633b80fad01e3f",
+  "uniquePairs": 833121,
+  "records": 862228,
   "categories": [
     {
       "id": "character",
@@ -10,7 +10,7 @@
       "pairs": 6776,
       "readings": 6705,
       "records": 6848,
-      "pages": 5,
+      "pages": 6,
       "recordsByOrigin": {
         "gemini": 6263,
         "manual": 583,
@@ -124,14 +124,14 @@
     {
       "id": "product",
       "name": "商品・サービス",
-      "pairs": 9888,
-      "readings": 9670,
-      "records": 9890,
+      "pairs": 10111,
+      "readings": 9887,
+      "records": 10113,
       "pages": 7,
       "recordsByOrigin": {
         "gemini": 5941,
         "manual": 3917,
-        "verified": 32
+        "verified": 255
       }
     },
     {
@@ -475,7 +475,7 @@
       "pairs": 5080,
       "readings": 5042,
       "records": 5081,
-      "pages": 4,
+      "pages": 5,
       "recordsByOrigin": {
         "manual": 2608,
         "gemini": 2402,
@@ -698,12 +698,13 @@
     {
       "id": "kampo",
       "name": "漢方・生薬",
-      "pairs": 432,
-      "readings": 418,
-      "records": 432,
+      "pairs": 434,
+      "readings": 420,
+      "records": 434,
       "pages": 1,
       "recordsByOrigin": {
-        "specialist": 432
+        "specialist": 432,
+        "source_backed_collection": 2
       }
     },
     {
@@ -925,7 +926,7 @@
   ],
   "excluded": {
     "pairs": 322964,
-    "pages": 601
+    "pages": 594
   },
-  "specialistInputSha256": "de25b742784973e59532d3ec86b670ab5dd25ed6c0558aa72d9eb2e6afb628dc"
+  "specialistInputSha256": "8734dda7bd19c3a1401600a751289a3062c9a2f15c7ea64a409faf40c656e5ec"
 }
