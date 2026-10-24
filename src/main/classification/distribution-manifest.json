@@ -2,7 +2,7 @@
   "admittedPairsByOrigin": {
     "manual": 378757,
     "gemini": 188640,
-    "verified": 177443
+    "verified": 177479
   },
   "categoryGroups": [
     {
@@ -277,9 +277,9 @@
     "person": 270954,
     "character": 6848,
     "mythological_figure": 3436,
-    "place": 45088,
+    "place": 45090,
     "address": 152874,
-    "station": 12758,
+    "station": 12759,
     "facility/religious/shrine": 3825,
     "facility/religious/temple": 4006,
     "facility/religious/church": 368,
@@ -308,12 +308,12 @@
     "facility/sports/golf": 47,
     "facility/sports/ski": 192,
     "facility/sports/aquatic": 11,
-    "facility/commercial/shopping": 1289,
+    "facility/commercial/shopping": 1291,
     "facility/commercial/restaurant": 474,
     "facility/commercial/market": 158,
     "facility/hospitality/hotel": 803,
     "facility/hospitality/inn": 118,
-    "facility/hospitality/hot_spring": 637,
+    "facility/hospitality/hot_spring": 638,
     "facility/transport/airport": 463,
     "facility/transport/harbor": 704,
     "facility/transport/railway_facility": 550,
@@ -340,9 +340,9 @@
     "facility/military/garrison": 16,
     "facility/military/training_ground": 40,
     "transport_route": 4230,
-    "organization": 47484,
+    "organization": 47485,
     "lineage": 2019,
-    "product": 10113,
+    "product": 10125,
     "vehicle": 2580,
     "event/occasion/organized_event": 4059,
     "event/occasion/observance": 802,
@@ -355,23 +355,23 @@
     "initiative": 1061,
     "term/general/products_daily_goods": 1159,
     "term/general/food_drink_cooking": 4077,
-    "term/general/internet_slang_culture": 573,
-    "term/general/neologisms_trends_youth_language": 483,
+    "term/general/internet_slang_culture": 574,
+    "term/general/neologisms_trends_youth_language": 485,
     "term/general/other_general": 20502,
-    "term/specialist/information_communications": 6073,
+    "term/specialist/information_communications": 6082,
     "term/specialist/mathematics_physics": 4171,
     "term/specialist/chemistry_life_sciences": 27566,
     "term/specialist/engineering_technology": 3509,
     "term/specialist/earth_environment_resources": 2110,
     "term/specialist/economics_management": 5779,
-    "term/specialist/law_politics": 5273,
+    "term/specialist/law_politics": 5274,
     "term/specialist/humanities_social_sciences": 17877,
     "term/specialist/culture_arts_sports": 5360,
     "term/specialist/transport_safety_defense": 4037,
     "work_franchise": 849,
-    "work_manga": 5081,
+    "work_manga": 5082,
     "work_anime": 1088,
-    "media_demographic/audience/shonen": 4118,
+    "media_demographic/audience/shonen": 4119,
     "media_demographic/audience/seinen": 1731,
     "media_demographic/audience/shojo": 826,
     "media_demographic/audience/josei": 355,
@@ -382,7 +382,7 @@
     "work_film": 6504,
     "work_program": 9309,
     "work_book": 7659,
-    "work_game": 3155,
+    "work_game": 3158,
     "work_music": 10337,
     "work_stage": 571,
     "work_periodical": 1811,
@@ -393,13 +393,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 774037,
-  "excludedCandidatePairs": 328689,
-  "excludedClassifiedPairs": 322964,
+  "dictionaryRows": 774074,
+  "excludedCandidatePairs": 328692,
+  "excludedClassifiedPairs": 322967,
   "files": {
     "categories.json": "6cdfb7f23de0e2d90283adc7139e52581e575d13f830e996c87948e43446ee60",
-    "distribution-candidates.tsv.gz": "804efd3d0157b4cd6dd0eb1acd9f8c9c2f965963c9bd75863a522e9814be606f",
-    "distribution-decisions.tsv.gz": "1fe54cf722db3d580c8292c7db283c9cbbbe131f851a3f394e7770becac97bac"
+    "distribution-candidates.tsv.gz": "d42b0bd54c922cdd266c193e52f58c27185121868485882a7f49f9866cc47c17",
+    "distribution-decisions.tsv.gz": "96801eb517b7a97e999c4829e122c877be660e63394059ddb2d8529eab8913cc"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -431,6 +431,9 @@
     "src/main/classification/term-classifications.tsv.gz": "2a1414eff371092bf5cadfd8ab9b183e750cbf8f6534fdb0e72710ee3612f45a",
     "src/main/classification/term-taxonomy.json": "890e9d1d045f10308aa32cdc39e534b5113c199de3d79404bd22be3cf796bb96",
     "src/main/classification/media-demographic-gemini-manifest.json": "449f348e10c9f3ebc74209908d3dd2363b44c8864fe2ddd545285100c2eb3f3a",
+    "src/main/classification/facility-taxonomy.json": "1e8446cdfea2470c992085bb17876496b67303cd93154fa05244f6489cd83fa7",
+    "src/main/classification/facility-classifications.tsv.gz": "d4d22ea8375cdc45a53ae423d865b02e97ed28a60b3418a7f673e73860abc341",
+    "src/main/classification/facility-classifications-manifest.json": "2cc62744ac63cb2cd465c907829348e26ca48a14552000dec1630ba57701a7d5",
     "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl": "574794d0df19f8afd09d06b66897d7b7fce97dd3652bc005674a3ecae28bb30a",
     "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl": "5a373897bbade57c507d08e4813baa7d5975bc752a568cdaee8aaebd9d18f155",
     "src/main/classification/reviews/2026-10-16-pr128-luna-0000.jsonl": "3ab59c82e6e0645da8f513606038212b601c0c4c46273db4faf8122d6812cf1d",
@@ -479,18 +482,19 @@
     "src/main/classification/reviews/2026-10-23-media-demographics-resolution.jsonl": "9be414bfb3e0e437a616461768e00d2032124357cc52dbd9a023dd8dce754e7c",
     "src/main/classification/reviews/2026-10-23-media-demographics.jsonl": "d326f3428b5f3afd24c6a7e13a802134561a0de0ef3b092e63f406b63b7f8137",
     "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl": "259b1e1d1c68283803d79b6129ac0afedc85f0c34eb23945d6735ba4a3a4d53a",
+    "src/main/classification/reviews/2026-10-23-ramen-shops.jsonl": "a3afa7c1066bc4e10d8c97af3e8011a905f4a90cc943aa7fa06fd21d71bde3fc",
     "src/main/classification/reviews/2026-10-23-source-correction.jsonl": "a7a4463f11a81a53ba314380864126cdcb2c1fc2bd08789a5b3a03bf57c63581",
-    "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb",
-    "src/main/classification/facility-taxonomy.json": "1e8446cdfea2470c992085bb17876496b67303cd93154fa05244f6489cd83fa7",
-    "src/main/classification/facility-classifications.tsv.gz": "d4d22ea8375cdc45a53ae423d865b02e97ed28a60b3418a7f673e73860abc341",
-    "src/main/classification/facility-classifications-manifest.json": "2cc62744ac63cb2cd465c907829348e26ca48a14552000dec1630ba57701a7d5"
+    "src/main/classification/reviews/2026-10-24-open-vocabulary-issues.jsonl": "921ef24efb34a74e16730ee68ad93477a231825ca603a54ac4a14cb9c5f52229",
+    "src/main/classification/reviews/2026-10-24-ramen-brand-corrections.jsonl": "1ccfa60102dc84a525858dca55ccaf7cf227edf5f390f8446d6a98538d63e961",
+    "src/main/classification/reviews/2026-10-24-z-media-demographic-tank-chair.jsonl": "76a35fc03ba6457987b18544b07b7a0914408b78e1b88dd98d3a67e6b7e8fb25",
+    "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
   },
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified.",
     "Media demographic labels cover source-reviewed pairs only; unreviewed media and source-linked characters are not guaranteed classified or excluded.",
     "A matched source with no demographic tag is labeled unspecified, not general audience. Pairs without a unique source match are explicitly labeled source-unverified; neither label means general audience. Only pairs with an explicit adult source tag are guaranteed to be excluded as adult.",
-    "A missing demographic tag is not proof of general-audience suitability. Source-unverified pairs may receive a Gemini best-fit demographic based on names and model knowledge; mixed source/model labels may receive an assistant best-fit single-audience tie-break. These labels are not independently source-verified. Explicit adult source tags and Gemini adult judgments are excluded, but model errors may leave adult works in other categories.",
-    "Facility rules are high-confidence name cues; Gemini labels are best-fit and were not independently source-verified. Boundary-watch entries suggest possible station, route, organization or place-category review without changing adoption."
+    "Facility rules are high-confidence name cues; Gemini labels are best-fit and were not independently source-verified. Boundary-watch entries suggest possible station, route, organization or place-category review without changing adoption.",
+    "A missing demographic tag is not proof of general-audience suitability. Source-unverified pairs may receive a Gemini best-fit demographic based on names and model knowledge; mixed source/model labels may receive an assistant best-fit single-audience tie-break. These labels are not independently source-verified. Explicit adult source tags and Gemini adult judgments are excluded, but model errors may leave adult works in other categories."
   ],
   "noResultPairs": 0,
   "precedence": [
@@ -29687,7 +29691,11 @@
       "src/main/classification/reviews/2026-10-23-media-demographics-resolution.jsonl",
       "src/main/classification/reviews/2026-10-23-media-demographics.jsonl",
       "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl",
+      "src/main/classification/reviews/2026-10-23-ramen-shops.jsonl",
       "src/main/classification/reviews/2026-10-23-source-correction.jsonl",
+      "src/main/classification/reviews/2026-10-24-open-vocabulary-issues.jsonl",
+      "src/main/classification/reviews/2026-10-24-ramen-brand-corrections.jsonl",
+      "src/main/classification/reviews/2026-10-24-z-media-demographic-tank-chair.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
     "termAdditions": [
@@ -29945,5 +29953,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 744840
+  "uniqueAdmittedPairs": 744876
 }
