@@ -30,6 +30,9 @@ TERM_CLASSIFICATIONS_MANIFEST_PATH = 'src/main/classification/term-classificatio
 EVENT_TAXONOMY_PATH = 'src/main/classification/event-taxonomy.json'
 EVENT_CLASSIFICATIONS_PATH = 'src/main/classification/event-classifications.tsv.gz'
 EVENT_CLASSIFICATIONS_MANIFEST_PATH = 'src/main/classification/event-classifications-manifest.json'
+FACILITY_TAXONOMY_PATH = 'src/main/classification/facility-taxonomy.json'
+FACILITY_CLASSIFICATIONS_PATH = 'src/main/classification/facility-classifications.tsv.gz'
+FACILITY_CLASSIFICATIONS_MANIFEST_PATH = 'src/main/classification/facility-classifications-manifest.json'
 MEDIA_DEMOGRAPHIC_TAXONOMY_PATH = 'src/main/classification/media-demographic-taxonomy.json'
 MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES = {
     'shonen': 'media_demographic/audience/shonen',
@@ -147,6 +150,59 @@ def event_taxonomy(root):
     return {'id': 'event', 'name': data['name'], 'groups': group_metadata}, flattened
 
 
+FACILITY_GROUP_IDS = [
+    'religious', 'education', 'healthcare', 'public', 'cultural', 'entertainment', 'sports', 'commercial',
+    'hospitality', 'transport', 'infrastructure', 'industrial', 'recreation', 'heritage', 'residential', 'military',
+]
+
+
+def facility_taxonomy(root):
+    path = root / FACILITY_TAXONOMY_PATH
+    if not path.is_file():
+        return None
+    data = json.loads(path.read_text(encoding='utf-8'))
+    groups = data.get('groups') if isinstance(data, dict) else None
+    if (not isinstance(data, dict) or data.get('schemaVersion') != 1 or data.get('id') != 'facility'
+            or not isinstance(data.get('name'), str) or not data['name']
+            or not isinstance(data.get('definition'), str) or not data['definition']
+            or not isinstance(groups, list) or [group.get('id') for group in groups] != FACILITY_GROUP_IDS):
+        raise ValueError('Unsupported facility taxonomy')
+    flattened = []
+    group_metadata = []
+    classifier_ids = []
+    for group in groups:
+        if (not isinstance(group.get('name'), str) or not group['name']
+                or not isinstance(group.get('definition'), str) or not group['definition']):
+            raise ValueError('Facility major categories require Japanese names and definitions')
+        entries = group.get('categories')
+        if not isinstance(entries, list) or not entries:
+            raise ValueError(f'Facility major category {group["id"]} needs at least one leaf category')
+        ids = []
+        for category in entries:
+            category_id = category.get('id')
+            leaf = category_id.rsplit('/', 1)[-1] if isinstance(category_id, str) else ''
+            if (not isinstance(category_id, str)
+                    or not re.fullmatch(r'facility/[a-z_]+/[a-z_]+', category_id)
+                    or not category_id.startswith(f'facility/{group["id"]}/')
+                    or leaf in ('other', 'unclassified', 'unknown', 'review')
+                    or not isinstance(category.get('name'), str) or not category['name']
+                    or not isinstance(category.get('definition'), str) or not category['definition']):
+                raise ValueError('Invalid facility leaf category; catch-all and unclassified leaves are forbidden')
+            classifier_ids.append(category_id)
+            flattened.append({key: category[key] for key in ('id', 'name', 'definition')})
+            ids.append(category_id)
+        if len(ids) != len(set(ids)):
+            raise ValueError(f'Duplicate facility leaf categories in {group["id"]}')
+        group_metadata.append({
+            'id': f'facility/{group["id"]}', 'name': group['name'], 'definition': group['definition'],
+            'categories': ids,
+        })
+    if not classifier_ids or len(classifier_ids) != len(set(classifier_ids)):
+        raise ValueError('Facility taxonomy must contain unique distributable leaves')
+    return {'id': 'facility', 'name': data['name'], 'definition': data['definition'],
+            'groups': group_metadata}, flattened
+
+
 def media_demographic_taxonomy(root, allowed=None):
     path = root / MEDIA_DEMOGRAPHIC_TAXONOMY_PATH
     if not path.is_file():
@@ -213,8 +269,8 @@ def media_demographic_taxonomy(root, allowed=None):
     return taxonomy, flattened
 
 
-def merged_categories(base, term_data, event_data=None, media_demographic_data=None):
-    if term_data is None and event_data is None and media_demographic_data is None:
+def merged_categories(base, term_data, event_data=None, media_demographic_data=None, facility_data=None):
+    if term_data is None and event_data is None and media_demographic_data is None and facility_data is None:
         return base
     categories = list(base.get('categories', []))
     ids = [category.get('id') for category in categories]
@@ -230,6 +286,9 @@ def merged_categories(base, term_data, event_data=None, media_demographic_data=N
     if media_demographic_data is not None:
         structure, demographic_categories = media_demographic_data
         structures.append(('media_demographic', structure, demographic_categories))
+    if facility_data is not None:
+        structure, facility_categories = facility_data
+        structures.append(('facility', structure, facility_categories))
     inserted_at = {}
     for parent_id, structure, leaf_categories in structures:
         leaf_ids = {category['id'] for category in leaf_categories}
@@ -259,9 +318,350 @@ def merged_categories(base, term_data, event_data=None, media_demographic_data=N
             raise ValueError(f'Source taxonomy must contain {parent_id} or all expanded {parent_id} categories')
     result = dict(base)
     result['categories'] = categories
-    result['categoryGroups'] = [structure for parent_id, structure, _ in
-                                sorted(structures, key=lambda item: inserted_at[item[0]])]
+    all_structures = {structure.get('id'): structure for structure in base.get('categoryGroups', [])
+                      if isinstance(structure, dict) and isinstance(structure.get('id'), str)}
+    all_structures.update({structure['id']: structure for _, structure, _ in structures})
+    def structure_position(structure):
+        descendant_ids = {category_id for group in structure.get('groups', [])
+                          for category_id in group.get('categories', [])}
+        positions = [ids.index(category_id) for category_id in descendant_ids if category_id in ids]
+        return min(positions) if positions else len(ids)
+    result['categoryGroups'] = sorted(all_structures.values(), key=structure_position)
     return result
+
+
+def facility_classification_data(root, allowed=None):
+    """Load the frozen best-fit label for every currently distributed facility pair."""
+    taxonomy_data = facility_taxonomy(root)
+    if taxonomy_data is None:
+        return None
+    taxonomy, categories = taxonomy_data
+    category_ids = {category['id'] for category in categories}
+    if allowed is not None and not category_ids <= allowed:
+        raise ValueError('Facility taxonomy leaf categories are absent from categories.json')
+    path = root / FACILITY_CLASSIFICATIONS_PATH
+    metadata_path = root / FACILITY_CLASSIFICATIONS_MANIFEST_PATH
+    if not path.is_file() or not metadata_path.is_file():
+        current = root / 'src/main/classification/categories.json'
+        if current.is_file():
+            current_ids = {category.get('id') for category in
+                           json.loads(current.read_text(encoding='utf-8')).get('categories', [])}
+            if 'facility' in current_ids and not any(
+                    category.startswith('facility/') for category in current_ids if isinstance(category, str)):
+                return None
+        raise ValueError('Frozen facility classifications and their manifest are required')
+    metadata = json.loads(metadata_path.read_text(encoding='utf-8'))
+    if (metadata.get('schemaVersion') != 1
+            or metadata.get('taxonomySha256') != sha(root / FACILITY_TAXONOMY_PATH)
+            or metadata.get('classificationSha256') != sha(path)
+            or not isinstance(metadata.get('sourcePairSha256'), str)
+            or not re.fullmatch(r'[0-9a-f]{64}', metadata['sourcePairSha256'])
+            or not isinstance(metadata.get('sourceRecordSha256'), str)
+            or not re.fullmatch(r'[0-9a-f]{64}', metadata['sourceRecordSha256'])
+            or type(metadata.get('sourceRecords')) is not int or metadata['sourceRecords'] < 1
+            or not isinstance(metadata.get('classificationCounts'), dict)
+            or set(metadata['classificationCounts']) != category_ids
+            or not isinstance(metadata.get('methods'), dict)
+            or not all(method in metadata['methods'] for method in ('rule_high', 'gemini_best_fit', 'manual_review'))):
+        raise ValueError('Facility classification manifest does not match its taxonomy or fixed data')
+    if (metadata.get('model') != 'gemini-3.5-flash-lite'
+            or metadata.get('apiEndpoint') != 'generateContent'
+            or metadata.get('projectId') != 'gen-lang-client-0548563154'
+            or metadata.get('freeTierOnly') is not True or metadata.get('billingEnabled') is not False
+            or metadata.get('promptVersion') != 'facility-use-best-fit-16-major-granular-leaves-v1'):
+        raise ValueError('Facility classification must record the verified Gemini Free-tier run')
+    proofs = metadata.get('freeTierProofs')
+    if (not isinstance(proofs, list) or not proofs
+            or any(any(type(proof.get(name)) is not int or proof[name] <= 0 for name in ('rpm', 'tpm', 'rpd'))
+                   or not re.fullmatch(r'[0-9a-f]{64}', proof.get('sha256', ''))
+                   or proof.get('apiEndpoint') != 'generateContent'
+                   or not isinstance(proof.get('verifiedAt'), str)
+                   or datetime.fromisoformat(proof['verifiedAt']).tzinfo is None for proof in proofs)):
+        raise ValueError('Facility classification manifest is missing verified free-tier proof')
+    results = {}
+    pair_bytes = []
+    pair_counts = collections.Counter()
+    method_counts = collections.Counter()
+    with gzip.open(path, 'rt', encoding='utf-8', newline='') as stream:
+        for number, line in enumerate(stream, 1):
+            fields = line.rstrip('\n').split('\t')
+            if len(fields) != 8:
+                raise ValueError(f'{FACILITY_CLASSIFICATIONS_PATH}:{number}: expected eight fields')
+            reading, surface, category_id, method, review_state, rule_id, rationale, evidence_url = fields
+            if (not reading or not surface or category_id not in category_ids
+                    or method not in ('rule_high', 'gemini_best_fit', 'manual_review')
+                    or not review_state or not rule_id or not rationale
+                    or evidence_url and not evidence_url.startswith('https://')
+                    or evidence_url and method != 'manual_review'):
+                raise ValueError(f'{FACILITY_CLASSIFICATIONS_PATH}:{number}: invalid facility classification')
+            pair = (reading, surface)
+            if pair in results:
+                raise ValueError(f'{FACILITY_CLASSIFICATIONS_PATH}:{number}: duplicate reading/surface pair')
+            results[pair] = {
+                'category': category_id, 'method': method, 'reviewState': review_state,
+                'ruleId': rule_id, 'rationale': rationale, 'evidenceUrl': evidence_url,
+            }
+            pair_bytes.append(reading + '\t' + surface + '\n')
+            pair_counts[category_id] += 1
+            method_counts[method] += 1
+    if (hashlib.sha256(''.join(pair_bytes).encode('utf-8')).hexdigest() != metadata['sourcePairSha256']
+            or len(results) != metadata.get('uniquePairs')
+            or pair_counts != collections.Counter(metadata['classificationCounts'])
+            or method_counts != collections.Counter(metadata['methods'])):
+        raise ValueError('Facility classification counts or pair snapshot differ from their manifest')
+    if metadata.get('unclassifiedPairs') != 0 or metadata.get('otherCategoryPairs') != 0:
+        raise ValueError('Facility classifications must not contain unclassified or catch-all pairs')
+    return {'taxonomy': taxonomy, 'categories': categories, 'results': results,
+            'metadata': metadata, 'categoryIds': category_ids}
+
+
+def apply_facility_classifications(root, decisions, force=False, reviewed_pairs=()):
+    """Replace the structural facility parent with one saved leaf for each admitted pair."""
+    if not force:
+        current = root / 'src/main/classification/categories.json'
+        if current.is_file():
+            current_ids = {category.get('id') for category in
+                           json.loads(current.read_text(encoding='utf-8')).get('categories', [])}
+            if 'facility' in current_ids and not any(
+                    category.startswith('facility/') for category in current_ids if isinstance(category, str)):
+                return {pair: list(row) for pair, row in decisions.items()}
+    data = facility_classification_data(root)
+    if data is None:
+        return {pair: list(row) for pair, row in decisions.items()}
+    review_entries = reviewed_pairs if isinstance(reviewed_pairs, dict) else {}
+    reviewed_set = set(review_entries)
+    results = data['results']
+    output = {}
+    for pair, original in decisions.items():
+        row = list(original)
+        categories = set(filter(None, row[2].split(',')))
+        facility_leaves = categories & data['categoryIds']
+        if row[4] == 'classified' and 'facility' in categories:
+            if pair not in results:
+                raise ValueError(f'No saved facility leaf for admitted pair: {pair}')
+            categories.remove('facility')
+            categories.add(results[pair]['category'])
+            row[2] = ','.join(sorted(categories))
+        elif 'facility' in categories or any(category.startswith('facility/') for category in categories):
+            review = review_entries.get(pair)
+            source_backed_addition = (
+                isinstance(review, dict) and review.get('action') in ('add', 'reclassify', 'keep')
+                and isinstance(review.get('evidence'), dict)
+                and review['evidence'].get('kind') == 'independent_source'
+            )
+            if row[4] == 'classified' and len(facility_leaves) != 1:
+                raise ValueError(f'Each admitted facility pair must have exactly one leaf category: {pair}')
+            if row[4] == 'classified' and pair not in results and not source_backed_addition:
+                raise ValueError(f'Facility pair is absent from the fixed classification data: {pair}')
+            if pair in results and row[4] == 'classified' and pair not in reviewed_set:
+                if facility_leaves != {results[pair]['category']}:
+                    raise ValueError(f'Frozen facility category differs from fixed classification: {pair}')
+        output[pair] = row
+    return output
+
+
+def apply_facility_classifications_snapshot(root):
+    """Atomically expand or refresh facility leaves from their frozen classifications."""
+    import shutil
+    import tempfile
+
+    root = Path(root).resolve()
+    directory = root / 'src/main/classification'
+    taxonomy_path = root / FACILITY_TAXONOMY_PATH
+    classifications_path = root / FACILITY_CLASSIFICATIONS_PATH
+    classification_manifest_path = root / FACILITY_CLASSIFICATIONS_MANIFEST_PATH
+    if not all(path.is_file() for path in (taxonomy_path, classifications_path, classification_manifest_path)):
+        raise ValueError('Facility taxonomy, fixed classifications and manifest are required')
+    manifest_path = directory / 'distribution-manifest.json'
+    manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+    taxonomy = json.loads((directory / 'categories.json').read_text(encoding='utf-8'))
+    current_ids = [category['id'] for category in taxonomy['categories']]
+    expanded = any(category_id.startswith('facility/') for category_id in current_ids)
+    facility_inputs = {FACILITY_TAXONOMY_PATH, FACILITY_CLASSIFICATIONS_PATH,
+                       FACILITY_CLASSIFICATIONS_MANIFEST_PATH}
+    for relative, expected in manifest['inputs'].items():
+        if expanded and relative in facility_inputs:
+            continue
+        if sha(root / relative) != expected:
+            raise ValueError(f'Input hash mismatch before facility migration: {relative}')
+    for name, expected in manifest['files'].items():
+        if sha(directory / name) != expected:
+            raise ValueError(f'Classification hash mismatch before facility migration: {name}')
+    if sha(root / 'src/main/resources/id.def') != manifest['idDefSha256']:
+        raise ValueError('id.def hash mismatch before facility migration')
+    data = facility_classification_data(root)
+    if data is None:
+        raise ValueError('Facility classification data is unavailable')
+    if expanded and not data['categoryIds'] <= set(current_ids):
+        raise ValueError('Expanded facility leaves differ from their taxonomy')
+    if not expanded and 'facility' not in current_ids:
+        raise ValueError('Frozen category taxonomy has no structural facility parent')
+
+    import classification_reviews as reviews
+    review_entries = reviews.load(root, manifest.get('provenance', {}).get('reviews', []))
+    facility_review_additions = {
+        pair for pair, entry in review_entries.items()
+        if entry.get('baseline') is None and isinstance(entry.get('added_record'), dict)
+        and isinstance(entry.get('categories'), list)
+        and any(isinstance(category, str) and category.startswith('facility/')
+                for category in entry['categories'])
+    }
+
+    original_rows = []
+    with gzip.open(directory / 'distribution-candidates.tsv.gz', 'rt', encoding='utf-8', newline='') as stream:
+        for number, line in enumerate(stream, 1):
+            fields = line.rstrip('\n').split('\t')
+            if len(fields) != 6:
+                raise ValueError(f'distribution-candidates.tsv.gz:{number}: expected six columns')
+            original_rows.append(tuple(fields))
+    original_facility_rows = [row for row in original_rows
+                              if row[0] == 'facility' or
+                              (row[0] in data['categoryIds'] and (row[1], row[5]) in data['results'])]
+    source_pairs = {(row[1], row[5]) for row in original_facility_rows}
+    if source_pairs != set(data['results']):
+        raise ValueError('Facility fixed classifications do not cover the exact frozen facility pairs')
+    source_records = sorted({'\t'.join(row[1:]) for row in original_facility_rows})
+    source_record_hash = hashlib.sha256((''.join(record + '\n' for record in source_records)).encode('utf-8')).hexdigest()
+    if (len(source_records) != data['metadata']['sourceRecords']
+            or source_record_hash != data['metadata']['sourceRecordSha256']):
+        raise ValueError('Facility classification source record count/hash differs from frozen records')
+
+    rewritten_rows = []
+    for row in original_rows:
+        pair = (row[1], row[5])
+        if row[0] == 'facility':
+            if pair not in data['results']:
+                raise ValueError(f'Facility source row lacks a fixed leaf: {pair}')
+            leaf = data['results'][pair]['category']
+            rewritten_rows.append((leaf, *row[1:]))
+        elif row[0] in data['categoryIds'] and pair in data['results']:
+            leaf = data['results'][pair]['category']
+            rewritten_rows.append((leaf, *row[1:]))
+        else:
+            rewritten_rows.append(row)
+    if (len(rewritten_rows) != len(original_rows)
+            or collections.Counter(row[1:] for row in rewritten_rows)
+            != collections.Counter(row[1:] for row in original_rows)):
+        raise ValueError('Facility migration changed or dropped source dictionary record fields')
+
+    decisions = {}
+    for line in gzip.open(directory / 'distribution-decisions.tsv.gz', 'rt', encoding='utf-8', newline=''):
+        reading, surface, encoded_categories, origin, status = line.rstrip('\n').split('\t')
+        pair = (reading, surface)
+        if pair in decisions:
+            raise ValueError('Duplicate facility migration decision pair')
+        categories = set(filter(None, encoded_categories.split(',')))
+        facility_labels = categories & data['categoryIds']
+        if status == 'classified' and ('facility' in categories or facility_labels):
+            if pair not in data['results']:
+                if pair not in facility_review_additions or len(facility_labels) != 1:
+                    raise ValueError(f'Facility decision pair lacks a fixed leaf: {pair}')
+            else:
+                categories.difference_update(facility_labels)
+                categories.discard('facility')
+                categories.add(data['results'][pair]['category'])
+        decisions[pair] = [reading, surface, ','.join(sorted(categories)), origin, status]
+    classified_facility_pairs = {
+        pair for pair, row in decisions.items()
+        if row[4] == 'classified' and any(value.startswith('facility/') for value in row[2].split(','))
+    }
+    if classified_facility_pairs != set(data['results']) | facility_review_additions:
+        raise ValueError('Facility decision rewrite differs from the exact fixed pair snapshot')
+
+    term_data = term_taxonomy(root)
+    event_data = event_taxonomy(root)
+    media_data = media_demographic_taxonomy(root)
+    merged = (taxonomy if expanded else
+              merged_categories(taxonomy, term_data, event_data, media_data, (data['taxonomy'], data['categories'])))
+    allowed_ids = {category['id'] for category in merged['categories']}
+    if not {result['category'] for result in data['results'].values()} <= allowed_ids:
+        raise ValueError('Facility fixed result contains a category absent from the expanded taxonomy')
+    counts = collections.Counter(row[0] for row in rewritten_rows)
+    original_nonfacility_counts = collections.Counter(
+        row[0] for row in original_rows if row[0] != 'facility' and row[0] not in data['categoryIds'])
+    rewritten_nonfacility_counts = collections.Counter(
+        row[0] for row in rewritten_rows if row[0] not in data['categoryIds'])
+    if original_nonfacility_counts != rewritten_nonfacility_counts:
+        raise ValueError('Facility migration changed counts in another dictionary category')
+
+    candidate_path = directory / 'distribution-candidates.tsv.gz'
+    decisions_path = directory / 'distribution-decisions.tsv.gz'
+    categories_path = directory / 'categories.json'
+    staged_manifest = dict(manifest)
+    staged_manifest['schemaVersion'] = 4
+    staged_manifest['categoryGroups'] = merged.get('categoryGroups', [])
+    staged_manifest['categoryRows'] = {category['id']: counts[category['id']] for category in merged['categories']}
+    staged_manifest['dictionaryRows'] = len(rewritten_rows)
+    staged_manifest.setdefault('inputs', {}).update({
+        path: sha(root / path) for path in (
+            FACILITY_TAXONOMY_PATH, FACILITY_CLASSIFICATIONS_PATH, FACILITY_CLASSIFICATIONS_MANIFEST_PATH,
+        )
+    })
+    staged_manifest.setdefault('provenance', {})['facilityClassification'] = {
+        key: value for key, value in data['metadata'].items()
+        if key not in ('schemaVersion', 'taxonomySha256', 'classificationSha256')
+    }
+    limitations = staged_manifest.setdefault('limitations', [])
+    facility_limitation = (
+        'Facility rules are high-confidence name cues; Gemini labels are best-fit and were not independently source-verified. '
+        'Boundary-watch entries suggest possible station, route, organization or place-category review without changing adoption.'
+    )
+    if facility_limitation not in limitations:
+        limitations.append(facility_limitation)
+
+    build_root = root / 'build'
+    build_root.mkdir(parents=True, exist_ok=True)
+    output_files = ('categories.json', 'distribution-candidates.tsv.gz',
+                    'distribution-decisions.tsv.gz', 'distribution-manifest.json')
+    previous = {name: (directory / name).read_bytes() for name in output_files}
+    try:
+        with tempfile.TemporaryDirectory(prefix='facility-taxonomy-migration-', dir=build_root) as temporary:
+            staging = Path(temporary)
+            for entry in root.iterdir():
+                if entry.name not in ('src', '.git', 'build'):
+                    (staging / entry.name).symlink_to(entry.resolve(), target_is_directory=entry.is_dir())
+            staged_src = staging / 'src'
+            staged_src.mkdir()
+            for entry in (root / 'src').iterdir():
+                if entry.name != 'main':
+                    (staged_src / entry.name).symlink_to(entry.resolve(), target_is_directory=entry.is_dir())
+            staged_main = staged_src / 'main'
+            staged_main.mkdir()
+            for entry in (root / 'src/main').iterdir():
+                if entry.name != 'classification':
+                    (staged_main / entry.name).symlink_to(entry.resolve(), target_is_directory=entry.is_dir())
+            staged_directory = staged_main / 'classification'
+            staged_directory.mkdir()
+            for entry in directory.iterdir():
+                if entry.name not in output_files:
+                    (staged_directory / entry.name).symlink_to(entry.resolve(), target_is_directory=entry.is_dir())
+            if expanded:
+                (staged_directory / 'categories.json').write_bytes((directory / 'categories.json').read_bytes())
+            else:
+                write_json(staged_directory / 'categories.json', merged)
+            write_gzip(staged_directory / 'distribution-candidates.tsv.gz', sorted(rewritten_rows))
+            write_gzip(staged_directory / 'distribution-decisions.tsv.gz',
+                       (decisions[pair] for pair in sorted(decisions)))
+            staged_manifest['files'] = {
+                name: sha(staged_directory / name)
+                for name in ('categories.json', 'distribution-candidates.tsv.gz', 'distribution-decisions.tsv.gz')
+            }
+            write_json(staged_directory / 'distribution-manifest.json', staged_manifest)
+            verify(staging)
+            for name in output_files:
+                os.replace(staged_directory / name, directory / name)
+        verify(root)
+    except Exception:
+        for name, content in previous.items():
+            temporary = directory / (name + '.rollback')
+            temporary.write_bytes(content)
+            os.replace(temporary, directory / name)
+        raise
+    return {
+        'alreadyApplied': expanded, 'updatedExistingLeaves': expanded, 'sourcePairs': len(data['results']),
+        'sourceRecords': data['metadata']['sourceRecords'], 'dictionaryRows': len(rewritten_rows),
+        'facilityCategories': sum(category_id.startswith('facility/') for category_id in staged_manifest['categoryRows']),
+    }
 
 
 def term_classification_data(root, allowed=None):
@@ -586,8 +986,9 @@ def apply_event_classifications_snapshot(root, classification_map, run_metadata)
         event_data = event_taxonomy(root)
         media_data = media_demographic_taxonomy(root)
         term_data = term_taxonomy(root)
+        facility_data = facility_classification_data(root)
         base_taxonomy = json.loads((directory / 'categories.json').read_text(encoding='utf-8'))
-        categories = merged_categories(base_taxonomy, term_data, event_data, media_data)
+        categories = merged_categories(base_taxonomy, term_data, event_data, media_data, facility_data)
         write_json(staged_directory / 'categories.json', categories)
         write_gzip(staged_directory / EVENT_CLASSIFICATIONS_PATH.split('/')[-1],
                    ((*pair, classification_map[pair]) for pair in sorted(classification_map)
@@ -717,6 +1118,8 @@ def apply_event_classifications_snapshot(root, classification_map, run_metadata)
                 decisions[pair] = [reading, surface, 'person', 'verified', 'classified']
         decisions = apply_term_classifications(staging, decisions, force=True, reviewed_pairs=review_entries)
         decisions = apply_event_classifications(staging, decisions, force=True, reviewed_pairs=review_entries)
+        decisions = apply_facility_classifications(staging, decisions, force=facility_data is not None,
+                                                   reviewed_pairs=review_entries)
         # Rebuild from every selected review so additions from the pinned baseline remain present.
         all_review_entries = reviews.load(staging, selected_reviews)
         rows = reviews.candidate_rows(staging, decisions, all_review_entries)
@@ -725,7 +1128,7 @@ def apply_event_classifications_snapshot(root, classification_map, run_metadata)
         write_gzip(staged_directory / 'distribution-candidates.tsv.gz', sorted(rows))
 
         manifest = current_manifest
-        manifest['schemaVersion'] = 3
+        manifest['schemaVersion'] = 4 if facility_data is not None else 3
         manifest['categoryGroups'] = categories.get('categoryGroups', [])
         manifest['categoryRows'] = {category['id']: 0 for category in categories['categories']}
         counts_by_category = collections.Counter(row[0] for row in rows)
@@ -737,6 +1140,14 @@ def apply_event_classifications_snapshot(root, classification_map, run_metadata)
         manifest['provenance']['eventClassification'] = {
             key: value for key, value in event_metadata.items() if key != 'schemaVersion'
         }
+        if facility_data is not None:
+            for relative in (FACILITY_TAXONOMY_PATH, FACILITY_CLASSIFICATIONS_PATH,
+                             FACILITY_CLASSIFICATIONS_MANIFEST_PATH):
+                manifest['inputs'][relative] = sha(staging / relative)
+            manifest['provenance']['facilityClassification'] = {
+                key: value for key, value in facility_data['metadata'].items()
+                if key not in ('schemaVersion', 'taxonomySha256', 'classificationSha256')
+            }
         manifest['provenance']['lunaReclassification'].update({
             'path': luna.LOCAL_LEDGER_PATH,
             'snapshotManifestSha256': sha(staged_luna / 'manifest.json'),
@@ -807,8 +1218,10 @@ def apply_term_classifications_snapshot(root):
     base = json.loads((directory / 'categories.json').read_text(encoding='utf-8'))
     if any(category['id'].startswith('term/') for category in base['categories']):
         raise ValueError('Term categories are already expanded')
+    facility_data = facility_classification_data(root)
     expanded = merged_categories(base, term_taxonomy(root),
-                                 media_demographic_data=media_demographic_taxonomy(root))
+                                 media_demographic_data=media_demographic_taxonomy(root),
+                                 facility_data=facility_data)
     category_ids = {category['id'] for category in expanded['categories']}
     data = term_classification_data(root, category_ids)
     if data is None:
@@ -820,11 +1233,16 @@ def apply_term_classifications_snapshot(root):
     old_term_pairs = {(row[1], row[5]) for row in old_rows if row[0] == 'term'}
     if old_term_pairs != set(data['results']):
         raise ValueError('Gemini results do not cover the exact frozen term pair set')
+    old_facility_pairs = {(row[1], row[5]) for row in old_rows if row[0] == 'facility'}
+    if facility_data is not None and old_facility_pairs != set(facility_data['results']):
+        raise ValueError('Facility classifications do not cover the exact frozen facility pair set')
     new_rows = set()
     for row in old_rows:
         category, reading, left, right, cost, surface = row
         if category == 'term':
             category = data['results'][(reading, surface)]
+        elif category == 'facility' and facility_data is not None:
+            category = facility_data['results'][(reading, surface)]['category']
         new_rows.add((category, reading, left, right, cost, surface))
     if len(new_rows) != len(old_rows):
         raise ValueError('Term category migration changed the distribution record count')
@@ -832,13 +1250,22 @@ def apply_term_classifications_snapshot(root):
         old_decisions = {tuple(fields[:2]): fields for fields in
                          (line.rstrip('\n').split('\t') for line in stream)}
     new_decisions = apply_term_classifications(root, old_decisions, force=True)
+    new_decisions = apply_facility_classifications(root, new_decisions, force=facility_data is not None)
     manifest = json.loads((directory / 'distribution-manifest.json').read_text(encoding='utf-8'))
     for path in (TERM_TAXONOMY_PATH, TERM_CLASSIFICATIONS_PATH, TERM_CLASSIFICATIONS_MANIFEST_PATH):
         manifest['inputs'][path] = sha(root / path)
     term_provenance = {key: value for key, value in data['metadata'].items()
                        if key != 'schemaVersion'}
     manifest['provenance']['termClassification'] = term_provenance
-    manifest['schemaVersion'] = 2
+    if facility_data is not None:
+        for path in (FACILITY_TAXONOMY_PATH, FACILITY_CLASSIFICATIONS_PATH,
+                     FACILITY_CLASSIFICATIONS_MANIFEST_PATH):
+            manifest['inputs'][path] = sha(root / path)
+        manifest['provenance']['facilityClassification'] = {
+            key: value for key, value in facility_data['metadata'].items()
+            if key not in ('schemaVersion', 'taxonomySha256', 'classificationSha256')
+        }
+    manifest['schemaVersion'] = 4 if facility_data is not None else max(2, manifest.get('schemaVersion', 1))
     manifest['categoryGroups'] = expanded.get('categoryGroups', [])
     counts = collections.Counter(row[0] for row in new_rows)
     manifest['categoryRows'] = {category['id']: counts[category['id']] for category in expanded['categories']}
@@ -1209,14 +1636,17 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
     term_tax = term_taxonomy(root)
     event_tax = event_taxonomy(root)
     media_demographic_tax = media_demographic_taxonomy(root)
+    facility_tax = facility_taxonomy(root)
     term_data = term_classification_data(root)
     event_data = event_classification_data(root)
+    facility_data = facility_classification_data(root)
     categories = merged_categories(json.loads(taxonomy.read_text()), term_tax,
                                    event_tax if event_data is not None else None,
-                                   media_demographic_tax)
+                                   media_demographic_tax, facility_data)
     allowed = {c['id'] for c in categories['categories']}
     term_data = term_classification_data(root, allowed)
     event_data = event_classification_data(root, allowed)
+    facility_data = facility_classification_data(root, allowed)
     if term_taxonomy(root) is not None and term_data is None:
         raise ValueError('Cannot freeze expanded term categories without complete Gemini results')
     if event_taxonomy(root) is not None and event_data is None and not any(
@@ -1312,7 +1742,7 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
         matched.add(pair)
         cats, origin = decisions[pair]
         source_allowed = allowed | ({'term'} if term_data is not None else set()) \
-            | ({'event'} if event_data is not None else set())
+            | ({'event'} if event_data is not None else set()) | ({'facility'} if facility_data is not None else set())
         if not cats <= source_allowed:
             raise ValueError(f'Unknown categories for {pair}: {cats - source_allowed}')
     if decisions.keys() - matched:
@@ -1330,6 +1760,8 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
                                           reviewed_pairs=review_entries)
     reviewed = apply_event_classifications(root, reviewed, force=event_data is not None,
                                            reviewed_pairs=review_entries)
+    reviewed = apply_facility_classifications(root, reviewed, force=facility_data is not None,
+                                              reviewed_pairs=review_entries)
     for pair in list(reviewed):
         if key(*pair) in person_exclusions:
             row = reviewed[pair]
@@ -1366,6 +1798,15 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
             key: value for key, value in event_data['metadata'].items()
             if key != 'schemaVersion'
         }
+    facility_classification_provenance = None
+    if facility_data is not None:
+        for path in (FACILITY_TAXONOMY_PATH, FACILITY_CLASSIFICATIONS_PATH,
+                     FACILITY_CLASSIFICATIONS_MANIFEST_PATH):
+            inputs[path] = sha(root / path)
+        facility_classification_provenance = {
+            key: value for key, value in facility_data['metadata'].items()
+            if key not in ('schemaVersion', 'classificationSha256', 'taxonomySha256')
+        }
     term_addition_provenance = []
     if (root / TERM_ADDITIONS_PATH).is_file():
         inputs[TERM_ADDITIONS_PATH] = sha(root / TERM_ADDITIONS_PATH)
@@ -1376,7 +1817,8 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
                 'pairs': [list(pair) for pair in sorted({(row[0], row[4]) for row in term_additions})],
             })
     manifest = {
-        'schemaVersion': 3 if event_data is not None else 2 if term_data is not None else 1,
+        'schemaVersion': (4 if facility_data is not None else 3 if event_data is not None
+                          else 2 if term_data is not None else 1),
         'precedence': ['verified', 'manual', 'gemini'],
         'provenance': {
             'acceptedSha256': sha(accepted), 'dispositionsSha256': sha(dispositions),
@@ -1406,6 +1848,8 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
         manifest['provenance']['termClassification'] = term_classification_provenance
     if event_classification_provenance is not None:
         manifest['provenance']['eventClassification'] = event_classification_provenance
+    if facility_classification_provenance is not None:
+        manifest['provenance']['facilityClassification'] = facility_classification_provenance
     if person_exclusions:
         manifest['provenance']['personDictionaryExclusions'] = {
             'categoryIds': ['military', 'thought'],
@@ -1451,8 +1895,12 @@ def verify(root, allow_pending_reviews=False):
     event_data = event_classification_data(root, set(categories)) if expanded_events else None
     expanded_demographics = any(category.startswith('media_demographic/') for category in categories)
     media_demographic_data = media_demographic_taxonomy(root, set(categories)) if expanded_demographics else None
+    expanded_facilities = any(category.startswith('facility/') for category in categories)
+    facility_data = facility_classification_data(root, set(categories)) if expanded_facilities else None
     if expanded_demographics and media_demographic_data is None:
         raise ValueError('Expanded media demographic categories require their taxonomy')
+    if expanded_facilities and facility_data is None:
+        raise ValueError('Expanded facility categories require their fixed classification data')
     if media_demographic_data is not None and not allow_pending_reviews:
         if manifest['inputs'].get(MEDIA_DEMOGRAPHIC_TAXONOMY_PATH) != sha(root / MEDIA_DEMOGRAPHIC_TAXONOMY_PATH):
             raise ValueError('Media demographic taxonomy is absent from distribution inputs')
@@ -1460,13 +1908,15 @@ def verify(root, allow_pending_reviews=False):
             raise ValueError('Media demographic review coverage limitation is absent from the manifest')
     saved_taxonomy = json.loads((directory / 'categories.json').read_text(encoding='utf-8'))
     if term_data is not None:
-        if manifest.get('schemaVersion') not in (2, 3):
-            raise ValueError('Expanded term categories require distribution manifest schema 2 or 3')
+        if manifest.get('schemaVersion') not in (2, 3, 4):
+            raise ValueError('Expanded term categories require distribution manifest schema 2, 3 or 4')
     if expanded_events and event_data is None:
         raise ValueError('Expanded event categories require complete Gemini classifications')
-    if event_data is not None and manifest.get('schemaVersion') != 3:
-        raise ValueError('Expanded event categories require distribution manifest schema 3')
-    if term_data is not None or event_data is not None or media_demographic_data is not None:
+    if event_data is not None and manifest.get('schemaVersion') not in (3, 4):
+        raise ValueError('Expanded event categories require distribution manifest schema 3 or 4')
+    if facility_data is not None and manifest.get('schemaVersion') != 4:
+        raise ValueError('Expanded facility categories require distribution manifest schema 4')
+    if term_data is not None or event_data is not None or media_demographic_data is not None or facility_data is not None:
         expected_groups = []
         groups = []
         if event_data is not None:
@@ -1478,6 +1928,9 @@ def verify(root, allow_pending_reviews=False):
         if media_demographic_data is not None:
             groups.append((min(categories.index(category['id']) for category in media_demographic_data[1]),
                            media_demographic_data[0]))
+        if facility_data is not None:
+            groups.append((min(categories.index(category['id']) for category in facility_data['categories']),
+                           facility_data['taxonomy']))
         expected_groups = [group for _, group in sorted(groups, key=lambda item: item[0])]
         if (not allow_pending_reviews and (saved_taxonomy.get('categoryGroups') != expected_groups
                 or manifest.get('categoryGroups') != expected_groups)):
@@ -1497,7 +1950,7 @@ def verify(root, allow_pending_reviews=False):
             if (key(reading, surface) in person_exclusions
                     and ('person' in values or not values)):
                 raise ValueError('Withheld person dictionary pair appears in frozen decisions')
-            allowed = set(categories) | ({'term', 'event'} if status == 'excluded' else set())
+            allowed = set(categories) | ({'term', 'event', 'facility'} if status == 'excluded' else set())
             if not values <= allowed or status not in ('excluded', 'classified', 'unclassified', 'no_result'):
                 raise ValueError('Invalid decision')
             if (status == 'classified' and not values or status in ('unclassified', 'no_result') and values
@@ -1532,6 +1985,8 @@ def verify(root, allow_pending_reviews=False):
                                                     reviewed_pairs=review_entries)
     replayed_decisions = apply_event_classifications(root, replayed_decisions, force=event_data is not None,
                                                      reviewed_pairs=review_entries)
+    replayed_decisions = apply_facility_classifications(root, replayed_decisions, force=facility_data is not None,
+                                                        reviewed_pairs=review_entries)
     for pair in list(replayed_decisions):
         if key(*pair) in person_exclusions:
             row = replayed_decisions[pair]
@@ -1551,6 +2006,50 @@ def verify(root, allow_pending_reviews=False):
             actual.add(row)
     if actual != expected:
         raise ValueError(f'Distribution differs from sources: missing={len(expected-actual)}, extra={len(actual-expected)}')
+    if facility_data is not None:
+        facility_review_additions = {
+            pair for pair, entry in review_entries.items()
+            if entry.get('baseline') is None and isinstance(entry.get('added_record'), dict)
+            and 'facility' in entry.get('categories', [])
+        }
+        classified_facility_pairs = {
+            pair for pair, row in decision_rows.items()
+            if row[4] == 'classified' and any(category in facility_data['categoryIds']
+                                               for category in row[2].split(','))
+        }
+        if not set(facility_data['results']) <= classified_facility_pairs:
+            raise ValueError('A fixed facility classification is absent from the admitted facility decisions')
+        source_record_rows = {
+            tuple(row) for _, row in source_rows(root)
+            if (row[0], row[4]) in facility_data['results']
+        }
+        source_record_rows.update(
+            tuple(row) for row in reviews.added_rows(review_entries)
+            if (row[0], row[4]) in facility_data['results'] and (row[0], row[4]) in facility_review_additions
+        )
+        source_record_hash = hashlib.sha256(''.join(
+            '\t'.join(row) + '\n' for row in sorted(source_record_rows)).encode('utf-8')).hexdigest()
+        if (len(source_record_rows) != facility_data['metadata']['sourceRecords']
+                or source_record_hash != facility_data['metadata']['sourceRecordSha256']):
+            raise ValueError('Facility source record count/hash differs from the classification snapshot')
+        source_backed_additions = {
+            pair for pair, entry in review_entries.items()
+            if entry.get('baseline') is None and isinstance(entry.get('added_record'), dict)
+            and entry.get('evidence', {}).get('kind') == 'independent_source'
+            and any(category == 'facility' or category.startswith('facility/')
+                    for category in entry.get('categories', []))
+        }
+        expected_distributed_pairs = {
+            pair for pair in facility_data['results']
+            if decision_rows[pair][4] == 'classified'
+            and any(category.startswith('facility/') for category in decision_rows[pair][2].split(','))
+        } | {
+            pair for pair in source_backed_additions
+            if pair in decision_rows and decision_rows[pair][4] == 'classified'
+        }
+        distributed_facility_pairs = {(row[1], row[5]) for row in actual if row[0].startswith('facility/')}
+        if distributed_facility_pairs != expected_distributed_pairs:
+            raise ValueError('Facility distribution has a missing or unexpected classified pair')
     adult_pairs = {pair for pair, entry in review_entries.items()
                    if entry.get('media_demographic') == 'adult'}
     if (any(pair not in decision_rows or decision_rows[pair][4] != 'excluded' for pair in adult_pairs)

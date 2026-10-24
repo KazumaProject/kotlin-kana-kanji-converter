@@ -144,8 +144,28 @@ class SpecialistTest(unittest.TestCase):
         self.assertEqual(record['status'], 'excluded_by_classification_review')
         self.assertTrue(any(row[1] == 'お' and row[5] == '症状' for row in self.rows()))
         base.write_gzip(path, [('え', '甲', 'term', 'manual', 'classified')])
-        with self.assertRaisesRegex(ValueError, 'input hash mismatch'):
+        with self.assertRaisesRegex(ValueError, 'exclusions hash mismatch'):
             s.verify(self.root, self.inventory)
+
+    def test_classification_dependency_hash_tracks_exclusions_only(self):
+        directory = self.root / 'src/main/classification'
+        directory.mkdir()
+        path = directory / 'distribution-decisions.tsv.gz'
+        base.write_gzip(path, [
+            ('え', '甲', 'term', 'manual', 'excluded'),
+            ('お', '症状', 'term', 'manual', 'classified'),
+        ])
+        original = s.classification_exclusions_sha256(s.classification_exclusions(self.root))
+        base.write_gzip(path, [
+            ('え', '甲', 'term', 'manual', 'excluded'),
+            ('お', '症状', 'facility/healthcare/hospital', 'manual', 'classified'),
+        ])
+        self.assertEqual(original, s.classification_exclusions_sha256(s.classification_exclusions(self.root)))
+        base.write_gzip(path, [
+            ('え', '甲', 'term', 'manual', 'classified'),
+            ('お', '症状', 'facility/healthcare/hospital', 'manual', 'excluded'),
+        ])
+        self.assertNotEqual(original, s.classification_exclusions_sha256(s.classification_exclusions(self.root)))
 
     def test_changed_existing_inventory_is_rejected(self):
         self.freeze();self.inventory.write_bytes(s.compressed_json([]))

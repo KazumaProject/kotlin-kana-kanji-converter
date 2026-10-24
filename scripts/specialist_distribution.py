@@ -171,6 +171,24 @@ def inventory_sha256(path):
     return digest.hexdigest()
 
 
+def classification_exclusions(root):
+    """Return only classified-dictionary pairs that affect specialist filtering."""
+    path = root / 'src/main/classification/distribution-decisions.tsv.gz'
+    excluded = set()
+    if path.exists():
+        with gzip.open(path, 'rt', encoding='utf-8') as stream:
+            for line in stream:
+                row = line.rstrip('\n').split('\t')
+                if row[-1] == 'excluded':
+                    excluded.add(key(row[0], row[1]))
+    return excluded
+
+
+def classification_exclusions_sha256(excluded):
+    material = ''.join(reading + '\t' + surface + '\n' for reading, surface in sorted(excluded))
+    return hashlib.sha256(material.encode('utf-8')).hexdigest()
+
+
 def prepare(root, inventory):
     directory = root / DIRECTORY
     config = json.loads((directory / 'sources.json').read_text(encoding='utf-8'))
@@ -184,14 +202,7 @@ def prepare(root, inventory):
     matches = [int(i) for i, name in pos if name == NOUN]
     if len(matches) != 1 or not 0 <= matches[0] <= 32767: raise ValueError('Missing or invalid noun context')
     existing = load_inventory(inventory)
-    exclusion_path = root / 'src/main/classification/distribution-decisions.tsv.gz'
-    excluded = set()
-    if exclusion_path.exists():
-        with gzip.open(exclusion_path, 'rt', encoding='utf-8') as stream:
-            for line in stream:
-                row = line.rstrip('\n').split('\t')
-                if row[-1] == 'excluded':
-                    excluded.add(key(row[0], row[1]))
+    excluded = classification_exclusions(root)
     adopted = {}; provenance = []; source_counts = {}; counts = collections.Counter()
     supplement_path = directory / 'gemini-readings.jsonl.gz'
     correction_path = directory / 'reading-corrections.json'
@@ -230,8 +241,6 @@ def prepare(root, inventory):
             supplements[number] = entry
     used_supplements = set(); origins = collections.Counter()
     inputs = {str(p.relative_to(root)): distribution.sha(p) for p in sorted(directory.glob('notices/*.txt'))}
-    if exclusion_path.exists():
-        inputs[str(exclusion_path.relative_to(root))] = distribution.sha(exclusion_path)
     if supplement_path.exists(): inputs[str(supplement_path.relative_to(root))] = distribution.sha(supplement_path)
     report_path = directory / 'gemini-run.json'
     if report_path.exists(): inputs[str(report_path.relative_to(root))] = distribution.sha(report_path)
@@ -313,6 +322,7 @@ def prepare(root, inventory):
         gz.write(''.join('\t'.join(row)+'\n' for row in records).encode())
     data = {'distribution-candidates.tsv.gz': candidates.getvalue(), 'provenance.jsonl.gz': compressed_json(provenance)}
     manifest = dict(schemaVersion=1, rules=RULES, inputs=inputs,
+                    classificationExclusionsSha256=classification_exclusions_sha256(excluded),
                     idDefSha256=distribution.sha(root/'src/main/resources/id.def'),
                     existingInventorySha256=inventory_sha256(inventory),
                     existingDictionaryIds=sorted({name for names in existing.values() for name in names}),
@@ -344,6 +354,10 @@ def verify_files(root):
         raise ValueError('Collected specialist terms changed: regenerate and verify input')
     for path, expected in manifest['inputs'].items():
         if distribution.sha(root / path) != expected: raise ValueError('Specialist input hash mismatch: ' + path)
+    if 'classificationExclusionsSha256' in manifest:
+        actual = classification_exclusions_sha256(classification_exclusions(root))
+        if actual != manifest['classificationExclusionsSha256']:
+            raise ValueError('Specialist classification exclusions hash mismatch')
     for name, expected in manifest['files'].items():
         if distribution.sha(directory / name) != expected: raise ValueError('Specialist output hash mismatch: ' + name)
     if distribution.sha(root/'src/main/resources/id.def') != manifest['idDefSha256']:

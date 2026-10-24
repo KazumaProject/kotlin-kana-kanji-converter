@@ -425,11 +425,12 @@ def generate_person_taxonomy(root, output, final_pairs):
 
 
 def generate_person_replacement_index(output, base_summary, person_summary):
-    """List the exact 85-category replacement bundle, linking to each word list."""
+    """List the person-replacement bundle and link every word list."""
     base_categories = [item for item in base_summary if item['id'] != 'person']
     person_categories = person_summary['categories']
-    if len(base_categories) != 56 or len(person_categories) != 29:
-        raise ValueError('Expected 56 existing non-person categories and 29 person categories')
+    if not base_categories or len(person_categories) != 29:
+        raise ValueError('Expected existing non-person categories and 29 person categories')
+    replacement_category_count = len(base_categories) + len(person_categories)
 
     categories_by_id = {item['id']: item for item in base_categories}
     audience_ids = [
@@ -503,8 +504,8 @@ def generate_person_replacement_index(output, base_summary, person_summary):
     pair_count = sum(item['pairs'] for item in base_categories) + person_summary['uniquePairs']
     (output / 'index.md').write_text(
         '# 分類辞書 — 全配布カテゴリ\n\n'
-        '通常版GitHub Releaseの辞書ZIPに含まれる全85カテゴリを掲載します。'
-        '通常配布の57カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えています。'
+        f'通常版GitHub Releaseの辞書ZIPに含まれる全{replacement_category_count}カテゴリを掲載します。'
+        '通常配布カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えています。'
         '未分類候補と成人関連など配布対象外の候補は含めていません。\n\n'
         f'カテゴリ別レコード数の合計は **{record_count:,}**、読み・表記の組数の合計は **{pair_count:,}**です。'
         '同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。\n\n'
@@ -512,7 +513,7 @@ def generate_person_replacement_index(output, base_summary, person_summary):
         '[人物分類定義](../../src/main/classification/person-taxonomy.json)\n\n'
         + media_catalog + '\n'.join(table) + '\n',
         encoding='utf-8')
-    return dict(categories=85, records=record_count, categoryPairCount=pair_count,
+    return dict(categories=replacement_category_count, records=record_count, categoryPairCount=pair_count,
                 baseCategories=len(base_categories), personCategories=len(person_categories))
 
 
@@ -523,6 +524,7 @@ def generate(root, output):
     categories = taxonomy['categories']
     category_groups = taxonomy.get('categoryGroups', [])
     names = {c['id']: c.get('name', c['id']) for c in categories}
+    definitions = {c['id']: c.get('definition', '') for c in categories}
     origins = {}
     with gzip.open(source / 'distribution-decisions.tsv.gz', 'rt', encoding='utf-8') as stream:
         for line in stream:
@@ -537,6 +539,7 @@ def generate(root, output):
         extra = specialist.verify_files(root)
         categories += json.loads((specialist_dir / 'categories.json').read_text())['categories']
         names = {c['id']: c.get('name', c['id']) for c in categories}
+        definitions = {c['id']: c.get('definition', '') for c in categories}
         with gzip.open(specialist_dir / 'distribution-candidates.tsv.gz', 'rt', encoding='utf-8') as f:
             specialist_rows = [line.rstrip('\n').split('\t') for line in f]
         for _, reading, _, _, _, surface in specialist_rows:
@@ -588,6 +591,7 @@ def generate(root, output):
             count = 0
             by_origin = {}
             records_by_audience = {} if category in MEDIA_WORD_CATEGORY_IDS else None
+            definition = definitions.get(category, '') if category.startswith('facility/') else ''
 
             def flush():
                 nonlocal page, byte_count
@@ -627,6 +631,8 @@ def generate(root, output):
                 raise ValueError(f'Catalog count differs from distributed records: {category}')
             item = dict(id=category, name=names[category], pairs=len(pairs), readings=len(readings), records=count,
                         pages=len(pages), recordsByOrigin=by_origin)
+            if definition:
+                item['definition'] = definition
             summary.append(item)
             for index, filename in enumerate(pages):
                 path = directory / filename
@@ -645,7 +651,8 @@ def generate(root, output):
                            '| 読み | 表記 | 左品詞ID | 右品詞ID | コスト | 分類元 |\n'
                            '|---|---|---:|---:|---:|---|\n')
                 header = (f'# {names[category]} — {index+1}/{len(pages)}\n\n{nav}\n\n'
-                          '同じ読み・表記でも品詞・コストが異なるレコードを省略せず掲載します。品詞名は上記の対応表で確認できます。\n\n'
+                          + (definition + '\n\n' if definition else '')
+                          + '同じ読み・表記でも品詞・コストが異なるレコードを省略せず掲載します。品詞名は上記の対応表で確認できます。\n\n'
                           + audience_note + columns)
                 path.write_text(header + path.read_text(encoding='utf-8') + '\n' + nav + '\n', encoding='utf-8')
             links = '\n'.join(f'- [{i+1}ページ]({filename})' for i, filename in enumerate(pages))
@@ -662,7 +669,8 @@ def generate(root, output):
                 )
             index_content = (
                 f'# {names[category]} ({category})\n\n[全カテゴリ]({root_link}index.md) · [品詞名]({root_link}pos.md)\n\n'
-                f'読み・表記の組: **{len(pairs):,}**、読み: **{len(readings):,}**、レコード: **{count:,}**。\n\n'
+                + (definition + '\n\n' if definition else '')
+                + f'読み・表記の組: **{len(pairs):,}**、読み: **{len(readings):,}**、レコード: **{count:,}**。\n\n'
             )
             if category in MEDIA_WORD_CATEGORY_IDS:
                 index_content += (
@@ -703,6 +711,7 @@ def generate(root, output):
                 group_records = sum(item['records'] for item in group_categories)
                 group_dir = output / group['id']
                 group_dir.mkdir(parents=True, exist_ok=True)
+                group_definition = group.get('definition', '') if parent_id == 'facility' else ''
                 group_root_link = '../' * len(Path(group['id']).parts)
                 leaf_links = '\n'.join(
                     f'- [{item["name"]}]({item["id"].split("/")[-1]}/index.md) — '
@@ -711,14 +720,16 @@ def generate(root, output):
                 (group_dir / 'index.md').write_text(
                     f'# {group["name"]}\n\n[{parent["name"]}](../index.md) · '
                     f'[全カテゴリ]({group_root_link}index.md)\n\n'
-                    f'読み・表記の組: **{group_pairs:,}**、レコード: **{group_records:,}**。\n\n'
+                    + (group_definition + '\n\n' if group_definition else '')
+                    + f'読み・表記の組: **{group_pairs:,}**、レコード: **{group_records:,}**。\n\n'
                     f'{leaf_links}\n', encoding='utf-8')
                 group_links.append(
                     f'- [{group["name"]}]({group["id"].split("/")[-1]}/index.md) — '
                     f'{group_pairs:,}組、{group_records:,}レコード')
             (parent_dir / 'index.md').write_text(
                 f'# {parent["name"]}\n\n[全カテゴリ](../index.md)\n\n'
-                f'読み・表記の組: **{parent_pairs:,}**、レコード: **{parent_records:,}**。\n\n'
+                + (parent.get('definition', '') + '\n\n' if parent_id == 'facility' else '')
+                + f'読み・表記の組: **{parent_pairs:,}**、レコード: **{parent_records:,}**。\n\n'
                 + '\n'.join(group_links) + '\n', encoding='utf-8')
             sections.append(
                 f'- [{parent["name"]}]({parent_id}/index.md) — {parent_pairs:,}組、{parent_records:,}レコード')
@@ -730,6 +741,8 @@ def generate(root, output):
             hierarchy_notes.append('用語カテゴリは一般語5分類・専門語10分類に分かれています。')
         elif parent['id'] == 'event':
             hierarchy_notes.append('イベント辞書は催し・行事、事件・事故・災害、歴史的出来事の3群に分かれ、配布対象の6分類を掲載しています。')
+        elif parent['id'] == 'facility':
+            hierarchy_notes.append('施設辞書は用途に基づく16大分類と、収録内容に応じた中分類に分かれています。')
         else:
             hierarchy_notes.append(f'{parent["name"]}は性質ごとのサブカテゴリに分かれています。')
     hierarchy_note_text = ' '.join(hierarchy_notes)
@@ -786,17 +799,26 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, default=Path('.'))
     parser.add_argument('--check', action='store_true')
+    parser.add_argument('--preserve-excluded-pages', action='store_true',
+                        help='when the local Luna ledger is unavailable, retain the existing excluded pages')
     args = parser.parse_args()
     destination = args.root / 'docs/classified-dictionary-catalog'
     manifest = json.loads((args.root / 'src/main/classification/distribution-manifest.json').read_text())
     luna_record = manifest.get('provenance', {}).get('lunaReclassification')
     luna_ledger_available = not luna_record or (args.root / luna_record['path']).is_file()
-    if not args.check and not luna_ledger_available:
-        raise SystemExit('Local Luna ledger required to regenerate excluded-reason pages')
+    if not args.check and not luna_ledger_available and not args.preserve_excluded_pages:
+        raise SystemExit('Local Luna ledger required to regenerate excluded-reason pages; '
+                         'use --preserve-excluded-pages to retain the existing pages')
     distribution.verify(args.root)
     with tempfile.TemporaryDirectory() as directory:
         staging = Path(directory) / 'catalog'
         summary = generate(args.root, staging)
+        if not luna_ledger_available and args.preserve_excluded_pages:
+            frozen_excluded = destination / 'excluded'
+            if not frozen_excluded.is_dir():
+                raise SystemExit('Cannot preserve excluded pages: no existing catalog is available')
+            shutil.rmtree(staging / 'excluded')
+            shutil.copytree(frozen_excluded, staging / 'excluded')
         if args.check:
             generated_hashes, frozen_hashes = hashes_for_check(
                 hashes(staging), hashes(destination), luna_ledger_available)

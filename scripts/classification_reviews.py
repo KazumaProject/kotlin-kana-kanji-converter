@@ -50,6 +50,9 @@ def load(root, selected=None):
     if (root / d.EVENT_TAXONOMY_PATH).is_file():
         # Historic event review baselines use the former structural parent ID.
         allowed.add('event')
+    if (root / d.FACILITY_TAXONOMY_PATH).is_file():
+        # Historic facility review baselines use the former structural parent ID.
+        allowed.add('facility')
     ids = {int(line.split(maxsplit=1)[0]) for line in (root / 'src/main/resources/id.def').read_text().splitlines()}
     gemini_manifest_path = root / MEDIA_DEMOGRAPHIC_GEMINI_MANIFEST
     gemini_manifest_hash = (hashlib.sha256(gemini_manifest_path.read_bytes()).hexdigest()
@@ -317,6 +320,10 @@ def update_manifest(root, manifest, decisions, rows, selected):
             if not limitation.startswith('A missing demographic tag is not proof of general-audience suitability.')
         ]
         limitations.append(d.MEDIA_DEMOGRAPHIC_LIMITATION)
+    if (root / d.FACILITY_TAXONOMY_PATH).is_file():
+        for relative in (d.FACILITY_TAXONOMY_PATH, d.FACILITY_CLASSIFICATIONS_PATH,
+                         d.FACILITY_CLASSIFICATIONS_MANIFEST_PATH):
+            manifest['inputs'][relative] = d.sha(root / relative)
     manifest['categoryGroups'] = category_data.get('categoryGroups', [])
     new_exclusions = sum(int(entry['action'] in ('hold', 'exclude')) -
                          int(entry['baseline'] is not None and entry['baseline'][4] == 'excluded')
@@ -371,6 +378,7 @@ def _apply_saved(root, commit=False):
     reviewed = apply(baseline, entries)
     reviewed = d.apply_term_classifications(root, reviewed, reviewed_pairs=entries)
     reviewed = d.apply_event_classifications(root, reviewed, reviewed_pairs=entries)
+    reviewed = d.apply_facility_classifications(root, reviewed, reviewed_pairs=entries)
     rows = candidate_rows(root, reviewed, entries)
     before = manifest['dictionaryRows']
     old_counts = dict(manifest['categoryRows'])

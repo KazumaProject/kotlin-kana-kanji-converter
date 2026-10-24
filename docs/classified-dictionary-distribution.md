@@ -122,15 +122,19 @@ PRでは [`Build classified dictionary for PR`](../.github/workflows/build-class
 
 2026-10-23に [v1.7.270](https://github.com/KazumaProject/kotlin-kana-kanji-converter/releases/tag/v1.7.270) を安定版として公開しました。実行結果は[GitHub Actions run 39980585048](https://github.com/KazumaProject/kotlin-kana-kanji-converter/actions/runs/39980585048)で確認できます。公開後に保持している安定版は v1.7.270、v1.7.268、v1.7.266、v1.7.265、v1.7.262 の5件で、プレリリースはありません。ハイフン付き `v*` タグおよび `person-dictionaries-v*` タグではReleaseを公開しません。
 
-利用側IMEは旧5辞書の固定パスを57カテゴリの読み込みへ変更する必要があります。用語カテゴリは `categories/term/general/<分類ID>/` と `categories/term/specialist/<分類ID>/`、イベントカテゴリは `categories/event/<群>/<分類ID>/`、対象層カテゴリは `categories/media_demographic/audience/<分類ID>/` の下へ配置します。成人向けラベルに該当する候補は配布データへ作成しません。辞書バイナリの読み戻し検証と、実IMEの候補表示・順位の検証は別です。
+利用側IMEは固定辞書パスではなく、`distribution-manifest.json` に列挙されたカテゴリIDを読み込みます。用語カテゴリは `categories/term/general/<分類ID>/` と `categories/term/specialist/<分類ID>/`、イベントカテゴリは `categories/event/<群>/<分類ID>/`、施設カテゴリは `categories/facility/<大分類>/<中分類>/`、対象層カテゴリは `categories/media_demographic/audience/<分類ID>/` の下へ配置します。成人向けラベルに該当する候補は配布データへ作成しません。辞書バイナリの読み戻し検証と、実IMEの候補表示・順位の検証は別です。
+
+## 施設辞書の用途別分類
+
+施設辞書は16大分類と59葉カテゴリで配布します。分類の正本、境界基準、無料枠Geminiによる再開可能な分類手順、検証方法は[施設分類ドキュメント](facility-classification.md)に記録しています。施設カテゴリには `other` や `unclassified` を設けず、既存の35,063読み・表記ペアすべてを一つの葉へ分類しました。個別のラーメン店3店舗は公式店舗情報を確認して商業・飲食施設へ追加しています。
 
 ## 人物細分類への置換配布
 
-人物細分類の置換辞書は、通常版 `vX.Y.Z` リリースに含まれます。通常の57カテゴリから汎用 `person` を除き、`person-taxonomy.json` の `standard_enabled: true` の29人物細分類に置き換えます。未分類の候補を受け入れる辞書は作りません。追加調査でも分類できない候補と、IME候補としての形式条件を満たさない候補は配布元データから除きます。哲学者・思想家カテゴリはGeminiの自動分類対象にせず、出典付きの人名追加だけを受け入れます。姓・名・姓名の由来ラベルは暫定的で、一部を対象とした再確認のみです。置換後のZIPは合計85カテゴリ（既存57から `person` を除いた56カテゴリと、人物細分類29カテゴリ）です。カテゴリ別の収録数と全収録語は[配布カテゴリ一覧](classified-dictionary-catalog/index.md)にまとめています。新しい人物バイナリは他辞書と共通のPOSテーブルを使います。
+人物細分類の置換辞書は、通常版 `vX.Y.Z` リリースに含まれます。配布カテゴリから汎用 `person` を除き、`person-taxonomy.json` の `standard_enabled: true` の29人物細分類に置き換えます。未分類の候補を受け入れる辞書は作りません。追加調査でも分類できない候補と、IME候補としての形式条件を満たさない候補は配布元データから除きます。哲学者・思想家カテゴリはGeminiの自動分類対象にせず、出典付きの人名追加だけを受け入れます。姓・名・姓名の由来ラベルは暫定的で、一部を対象とした再確認のみです。置換後のZIPのカテゴリ数は分類マニフェストに記録します。カテゴリ別の収録数と全収録語は[配布カテゴリ一覧](classified-dictionary-catalog/index.md)にまとめています。新しい人物バイナリは他辞書と共通のPOSテーブルを使います。
 
 `person-dictionary-candidates.tsv.gz` には許可カテゴリの読み・表記・品詞・コスト・競技タグだけを保存します。未分類候補は、再分類できた項目だけを既存カテゴリに移し、なお確定できない項目は出力しません。空の読み・表記、空白・制御文字を含む候補、かな以外の読み、文字を含まない表記も除外します。根拠データと分類作業用キャッシュはリポジトリ外に置き、`scripts/export_person_dictionary_source.py` は許可29カテゴリの行だけを書き出します。由来未確認の候補は、固定済みの暫定分類を反映して由来別カテゴリへ移しますが、元の人名・Web・Wiki・Neologd各入力コーパスは変更しません。人物追加行は読み・表記の典拠URLと原資料の読み・表記を記録し、哲学者・思想家の場合は分類根拠のURLと確認箇所も記録します。成人制作者は `adult_work_creator` として漫画カテゴリから分けますが、出演者・制作者・成人関連保留を含む候補は個人データをリポジトリにも配布用データにも入れません。成人関連の候補キーはリポジトリ外の除外JSONLにハッシュだけを保持し、今後のGemini候補送信前にも網羅を検査します。置換ZIPには汎用 `person` の辞書ファイルを含めません。
 
-置換ZIPの人物辞書は `app/src/main/assets/categories/person/<カテゴリID>/` の下に配置します。`person/` は親ディレクトリで、各サブディレクトリに `yomi.dat.zip`、`tango.dat.zip`、`token.dat.zip` を格納します。他の56カテゴリは `categories/<カテゴリID>/` に置きます。
+置換ZIPの人物辞書は `app/src/main/assets/categories/person/<カテゴリID>/` の下に配置します。`person/` は親ディレクトリで、各サブディレクトリに `yomi.dat.zip`、`tango.dat.zip`、`token.dat.zip` を格納します。その他のカテゴリは `categories/<カテゴリID>/` に置きます。
 
 ZIPルートの `dictionary-distribution-manifest.json` は機械可読の分類メタデータです。人物細分類それぞれに `parentCategoryId: "person"` とカテゴリID、表示名、収録件数、辞書ファイルのパスを記録し、`replacesCategory: "person"` で置換関係を示します。個々の候補名や除外候補はマニフェストに含めません。GitHub Releaseには辞書ZIP、同じマニフェスト、チェックサム、ライセンス表示を添付します。
 

@@ -140,6 +140,7 @@ def subsequent_reviews(root, current, baseline):
 PERSON_SOURCE = 'src/main/bin/names.txt'
 TERM_PARENT_DEFINITION = '独立した語義と読みが辞書原資料で対応する一般語・専門用語。未分類語の受け皿にはしない。'
 EVENT_PARENT_DEFINITION = '日付・場所等を持つ個別の出来事、催事、大会、祭り、式典。'
+FACILITY_PARENT_DEFINITION = '建物、施設、固定された交通インフラ。'
 
 
 def person_additions_after_baseline(root, current, baseline):
@@ -200,10 +201,14 @@ def term_hierarchy_restores_baseline(root, current, baseline):
     term_data = d.term_taxonomy(root)
     event_data = d.event_taxonomy(root)
     media_data = d.media_demographic_taxonomy(root)
+    facility_data = d.facility_classification_data(root)
     if term_data is not None and 'termClassification' in current.get('provenance', {}):
         replacements.append(('term', term_data[0], term_data[1], TERM_PARENT_DEFINITION))
     if event_data is not None and 'eventClassification' in current.get('provenance', {}):
         replacements.append(('event', event_data[0], event_data[1], EVENT_PARENT_DEFINITION))
+    if facility_data is not None and 'facilityClassification' in current.get('provenance', {}):
+        facility_structure = dict(facility_data['taxonomy'], name='施設')
+        replacements.append(('facility', facility_structure, facility_data['categories'], FACILITY_PARENT_DEFINITION))
     if not replacements:
         return False
     expanded = json.loads((root/'src/main/classification/categories.json').read_text(encoding='utf-8'))
@@ -238,7 +243,8 @@ def term_hierarchy_restores_baseline(root, current, baseline):
     collapsed_current.pop('categoryGroups', None)
     collapsed_current['categories'] = collapsed_current_categories
     if d.merged_categories(collapsed_current, term_data if 'term' in replacement_map else None,
-                          event_data if 'event' in replacement_map else None, media_data) != expanded:
+                          event_data if 'event' in replacement_map else None, media_data,
+                          facility_data if 'facility' in replacement_map else None) != expanded:
         return False
     collapsed_baseline = dict(expanded)
     collapsed_baseline.pop('categoryGroups', None)
@@ -267,6 +273,17 @@ def term_hierarchy_restores_baseline(root, current, baseline):
         for relative in (d.EVENT_TAXONOMY_PATH, d.EVENT_CLASSIFICATIONS_PATH,
                          d.EVENT_CLASSIFICATIONS_MANIFEST_PATH):
             if current.get('inputs', {}).get(relative) != d.sha(root/relative):
+                return False
+    if 'facility' in replacement_map:
+        data = d.facility_classification_data(root, category_ids)
+        expected_provenance = ({key: value for key, value in data['metadata'].items()
+                                if key not in ('schemaVersion', 'taxonomySha256', 'classificationSha256')}
+                               if data is not None else None)
+        if expected_provenance is None or current['provenance'].get('facilityClassification') != expected_provenance:
+            return False
+        for relative in (d.FACILITY_TAXONOMY_PATH, d.FACILITY_CLASSIFICATIONS_PATH,
+                         d.FACILITY_CLASSIFICATIONS_MANIFEST_PATH):
+            if current.get('inputs', {}).get(relative) != d.sha(root / relative):
                 return False
     return True
 
@@ -491,6 +508,8 @@ def verify_ledger(root, required=False):
         root, base, force='termClassification' in manifest['provenance'], reviewed_pairs=entries)
     base = d.apply_event_classifications(
         root, base, force='eventClassification' in manifest['provenance'], reviewed_pairs=entries)
+    base = d.apply_facility_classifications(
+        root, base, force='facilityClassification' in manifest['provenance'], reviewed_pairs=entries)
     person_exclusions = d.person_dictionary_exclusions(manifest)
     for pair in list(base):
         if d.key(*pair) in person_exclusions:

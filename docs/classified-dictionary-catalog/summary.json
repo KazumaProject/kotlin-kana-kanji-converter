@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "c244e4f341e273fc4d8cc414e36265d5073653692dd8713577633b80fad01e3f",
-  "uniquePairs": 833121,
-  "records": 862228,
+  "inputSha256": "d42b0bd54c922cdd266c193e52f58c27185121868485882a7f49f9866cc47c17",
+  "uniquePairs": 833157,
+  "records": 862265,
   "categories": [
     {
       "id": "character",
@@ -33,14 +33,14 @@
     {
       "id": "place",
       "name": "地名",
-      "pairs": 43376,
-      "readings": 41364,
-      "records": 45088,
+      "pairs": 43378,
+      "readings": 41366,
+      "records": 45090,
       "pages": 31,
       "recordsByOrigin": {
         "gemini": 15895,
         "manual": 13088,
-        "verified": 16105
+        "verified": 16107
       }
     },
     {
@@ -59,28 +59,823 @@
     {
       "id": "station",
       "name": "駅・停留所",
-      "pairs": 12756,
-      "readings": 12396,
-      "records": 12758,
+      "pairs": 12757,
+      "readings": 12397,
+      "records": 12759,
       "pages": 9,
       "recordsByOrigin": {
         "manual": 6742,
-        "verified": 4900,
+        "verified": 4901,
         "gemini": 1116
       }
     },
     {
-      "id": "facility",
-      "name": "施設",
-      "pairs": 35063,
-      "readings": 33473,
-      "records": 35070,
-      "pages": 25,
+      "id": "facility/religious/shrine",
+      "name": "神社・神宮",
+      "pairs": 3825,
+      "readings": 3614,
+      "records": 3825,
+      "pages": 3,
       "recordsByOrigin": {
-        "gemini": 17227,
-        "manual": 16248,
-        "verified": 1595
-      }
+        "gemini": 1671,
+        "manual": 1363,
+        "verified": 791
+      },
+      "definition": "神社、神宮、神社境内の社殿など、神道の祭祀を行う施設。"
+    },
+    {
+      "id": "facility/religious/temple",
+      "name": "寺院",
+      "pairs": 4006,
+      "readings": 2908,
+      "records": 4006,
+      "pages": 3,
+      "recordsByOrigin": {
+        "manual": 1586,
+        "gemini": 2107,
+        "verified": 313
+      },
+      "definition": "仏教の礼拝・法要を行う寺院、仏堂、仏教寺院内の堂宇。名称に「病院」を含む施設は含めない。"
+    },
+    {
+      "id": "facility/religious/church",
+      "name": "教会・礼拝堂",
+      "pairs": 368,
+      "readings": 368,
+      "records": 368,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 314,
+        "manual": 51,
+        "verified": 3
+      },
+      "definition": "キリスト教その他の宗教の教会、礼拝堂、宗教集会所。"
+    },
+    {
+      "id": "facility/religious/monastery",
+      "name": "修道院・宗教共同体施設",
+      "pairs": 22,
+      "readings": 22,
+      "records": 22,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 14,
+        "manual": 8
+      },
+      "definition": "修道院、僧院、神学校など、宗教者の共同生活・養成を主目的とする施設。"
+    },
+    {
+      "id": "facility/education/school",
+      "name": "学校",
+      "pairs": 603,
+      "readings": 591,
+      "records": 603,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 458,
+        "manual": 142,
+        "verified": 3
+      },
+      "definition": "小学校、中学校、高等学校、特別支援学校、高等専門学校、専門学校などの学校教育施設。"
+    },
+    {
+      "id": "facility/education/preschool",
+      "name": "保育・幼児教育施設",
+      "pairs": 94,
+      "readings": 93,
+      "records": 94,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 9,
+        "gemini": 84,
+        "verified": 1
+      },
+      "definition": "保育所、幼稚園、認定こども園、児童の就学前教育・保育施設。"
+    },
+    {
+      "id": "facility/education/university",
+      "name": "大学・高等教育施設",
+      "pairs": 63,
+      "readings": 63,
+      "records": 63,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 41,
+        "manual": 20,
+        "verified": 2
+      },
+      "definition": "大学、短期大学、大学院などの高等教育施設。大学病院は含めない。"
+    },
+    {
+      "id": "facility/education/research",
+      "name": "研究施設",
+      "pairs": 80,
+      "readings": 80,
+      "records": 80,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 23,
+        "gemini": 57
+      },
+      "definition": "大学等の研究所、研究センター、試験研究施設。発電・製造・通信など産業設備が主機能の施設は産業を優先する。"
+    },
+    {
+      "id": "facility/healthcare/hospital",
+      "name": "病院",
+      "pairs": 1013,
+      "readings": 1011,
+      "records": 1013,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 738,
+        "gemini": 260,
+        "verified": 15
+      },
+      "definition": "病院、大学病院、医療センターなど入院・総合診療を主とする医療施設。"
+    },
+    {
+      "id": "facility/healthcare/clinic",
+      "name": "診療所・専門医療施設",
+      "pairs": 59,
+      "readings": 59,
+      "records": 59,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 40,
+        "manual": 18,
+        "verified": 1
+      },
+      "definition": "診療所、医院、クリニック、歯科医院、健診・専門医療施設。"
+    },
+    {
+      "id": "facility/healthcare/care",
+      "name": "介護・福祉施設",
+      "pairs": 95,
+      "readings": 95,
+      "records": 95,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 69,
+        "manual": 24,
+        "verified": 2
+      },
+      "definition": "介護老人福祉施設、介護老人保健施設、老人ホーム、福祉作業所など介護・福祉を主目的とする施設。"
+    },
+    {
+      "id": "facility/public/government",
+      "name": "官公庁・行政窓口",
+      "pairs": 541,
+      "readings": 541,
+      "records": 541,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 150,
+        "gemini": 386,
+        "verified": 5
+      },
+      "definition": "庁舎、市区町村役場、行政機関の出先機関、公共サービス窓口。行政組織自体は含めない。"
+    },
+    {
+      "id": "facility/public/police_fire",
+      "name": "警察・消防・防災",
+      "pairs": 1299,
+      "readings": 1286,
+      "records": 1299,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 1115,
+        "gemini": 159,
+        "verified": 25
+      },
+      "definition": "警察署、交番、消防署、消防・防災拠点など治安・消防・防災施設。"
+    },
+    {
+      "id": "facility/public/judicial",
+      "name": "司法・矯正施設",
+      "pairs": 137,
+      "readings": 137,
+      "records": 137,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 58,
+        "gemini": 77,
+        "verified": 2
+      },
+      "definition": "裁判所、検察庁の庁舎、刑務所、拘置所など司法・矯正施設。"
+    },
+    {
+      "id": "facility/public/postal",
+      "name": "郵便施設",
+      "pairs": 1626,
+      "readings": 1596,
+      "records": 1626,
+      "pages": 2,
+      "recordsByOrigin": {
+        "manual": 1487,
+        "verified": 23,
+        "gemini": 116
+      },
+      "definition": "郵便局、郵便物の集配局など郵便サービスを提供する施設。郵便事業者という組織は含めない。"
+    },
+    {
+      "id": "facility/cultural/museum",
+      "name": "博物館・資料館",
+      "pairs": 1192,
+      "readings": 1192,
+      "records": 1192,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 701,
+        "manual": 470,
+        "verified": 21
+      },
+      "definition": "博物館、郷土資料館、科学館、展示資料を収集・保存・公開する施設。"
+    },
+    {
+      "id": "facility/cultural/art_museum",
+      "name": "美術館・ギャラリー",
+      "pairs": 377,
+      "readings": 375,
+      "records": 377,
+      "pages": 1,
+      "recordsByOrigin": {
+        "verified": 16,
+        "gemini": 82,
+        "manual": 279
+      },
+      "definition": "美術館、画廊、公立・私立の美術作品展示施設。"
+    },
+    {
+      "id": "facility/cultural/library",
+      "name": "図書館・文書館",
+      "pairs": 750,
+      "readings": 750,
+      "records": 750,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 432,
+        "gemini": 305,
+        "verified": 13
+      },
+      "definition": "図書館、文書館、公文書館など資料の閲覧・保存を主目的とする施設。"
+    },
+    {
+      "id": "facility/cultural/memorial",
+      "name": "記念館・文化会館",
+      "pairs": 1184,
+      "readings": 1164,
+      "records": 1184,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 810,
+        "manual": 363,
+        "verified": 11
+      },
+      "definition": "特定人物・出来事の資料展示を行う記念館、文化会館、文化交流施設。歴史的建造物自体を指す名称は歴史・文化遺産を優先する。"
+    },
+    {
+      "id": "facility/entertainment/theater",
+      "name": "劇場・演芸場",
+      "pairs": 415,
+      "readings": 409,
+      "records": 415,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 215,
+        "manual": 192,
+        "verified": 8
+      },
+      "definition": "劇場、演芸場、寄席、コンサートホールなど舞台公演を主目的とする施設。"
+    },
+    {
+      "id": "facility/entertainment/cinema",
+      "name": "映画館",
+      "pairs": 149,
+      "readings": 149,
+      "records": 149,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 73,
+        "manual": 76
+      },
+      "definition": "映画館、シネマコンプレックスなど映画上映施設。"
+    },
+    {
+      "id": "facility/entertainment/live_venue",
+      "name": "ライブ・興行会場",
+      "pairs": 146,
+      "readings": 142,
+      "records": 146,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 97,
+        "manual": 49
+      },
+      "definition": "ライブハウス、音楽・演芸の興行会場、イベントホールなど観客向け興行施設。"
+    },
+    {
+      "id": "facility/entertainment/amusement",
+      "name": "遊園地・娯楽施設",
+      "pairs": 140,
+      "readings": 138,
+      "records": 140,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 53,
+        "gemini": 87
+      },
+      "definition": "遊園地、テーマパーク、ゲームセンターなど娯楽・遊戯を主目的とする施設。"
+    },
+    {
+      "id": "facility/sports/stadium",
+      "name": "球場・競技場",
+      "pairs": 624,
+      "readings": 619,
+      "records": 624,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 509,
+        "manual": 115
+      },
+      "definition": "野球場、陸上競技場、サッカー場、競技アリーナなど競技・観戦施設。"
+    },
+    {
+      "id": "facility/sports/gymnasium",
+      "name": "体育館・運動施設",
+      "pairs": 450,
+      "readings": 448,
+      "records": 450,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 220,
+        "gemini": 219,
+        "verified": 11
+      },
+      "definition": "体育館、武道場、運動場、トレーニング施設など屋内外の運動施設。"
+    },
+    {
+      "id": "facility/sports/golf",
+      "name": "ゴルフ場",
+      "pairs": 47,
+      "readings": 47,
+      "records": 47,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 33,
+        "manual": 14
+      },
+      "definition": "ゴルフコース、ゴルフ練習場などゴルフ施設。"
+    },
+    {
+      "id": "facility/sports/ski",
+      "name": "スキー場・雪上競技施設",
+      "pairs": 192,
+      "readings": 188,
+      "records": 192,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 164,
+        "manual": 28
+      },
+      "definition": "スキー場、スノーボード場など雪上スポーツ施設。"
+    },
+    {
+      "id": "facility/sports/aquatic",
+      "name": "プール・水上スポーツ施設",
+      "pairs": 11,
+      "readings": 11,
+      "records": 11,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 8,
+        "manual": 3
+      },
+      "definition": "競泳プール、屋内外プール、ボート・水上競技施設。温泉浴場は宿泊・温浴を優先する。"
+    },
+    {
+      "id": "facility/commercial/shopping",
+      "name": "商業施設・百貨店",
+      "pairs": 1291,
+      "readings": 1279,
+      "records": 1291,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 911,
+        "manual": 365,
+        "verified": 15
+      },
+      "definition": "ショッピングモール、百貨店、商店街、専門店ビルなど買物を主目的とする施設。"
+    },
+    {
+      "id": "facility/commercial/restaurant",
+      "name": "飲食店",
+      "pairs": 474,
+      "readings": 470,
+      "records": 474,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 184,
+        "gemini": 285,
+        "verified": 5
+      },
+      "definition": "レストラン、食堂、喫茶店、ラーメン店など、飲食物を提供する個別の店舗・店舖施設。"
+    },
+    {
+      "id": "facility/commercial/market",
+      "name": "市場・商店",
+      "pairs": 158,
+      "readings": 158,
+      "records": 158,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 100,
+        "manual": 58
+      },
+      "definition": "卸売市場、青果市場、個別の小売店・商店など市場取引や物品販売を主目的とする施設。"
+    },
+    {
+      "id": "facility/hospitality/hotel",
+      "name": "ホテル・宿泊施設",
+      "pairs": 803,
+      "readings": 798,
+      "records": 803,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 228,
+        "gemini": 571,
+        "verified": 4
+      },
+      "definition": "ホテル、ビジネスホテル、宿泊型リゾートなど宿泊施設。"
+    },
+    {
+      "id": "facility/hospitality/inn",
+      "name": "旅館・民宿",
+      "pairs": 118,
+      "readings": 118,
+      "records": 118,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 54,
+        "gemini": 64
+      },
+      "definition": "旅館、温泉旅館、民宿など和式・小規模宿泊施設。"
+    },
+    {
+      "id": "facility/hospitality/hot_spring",
+      "name": "温泉・入浴施設",
+      "pairs": 638,
+      "readings": 634,
+      "records": 638,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 555,
+        "manual": 81,
+        "verified": 2
+      },
+      "definition": "温泉施設、日帰り温浴施設、銭湯、スパなど入浴・温浴を主目的とする施設。"
+    },
+    {
+      "id": "facility/transport/airport",
+      "name": "空港・航空施設",
+      "pairs": 463,
+      "readings": 460,
+      "records": 463,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 317,
+        "manual": 145,
+        "verified": 1
+      },
+      "definition": "空港、飛行場、航空機の運航・整備を支える施設。"
+    },
+    {
+      "id": "facility/transport/harbor",
+      "name": "港湾・船舶施設",
+      "pairs": 702,
+      "readings": 698,
+      "records": 704,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 272,
+        "gemini": 426,
+        "verified": 6
+      },
+      "definition": "港、埠頭、船舶ターミナル、港湾荷役施設など船舶交通を支える施設。"
+    },
+    {
+      "id": "facility/transport/railway_facility",
+      "name": "鉄道設備",
+      "pairs": 550,
+      "readings": 550,
+      "records": 550,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 311,
+        "gemini": 236,
+        "verified": 3
+      },
+      "definition": "信号場、車両基地、操車場、鉄道変電所など鉄道運行を支える設備。旅客駅は含めない。"
+    },
+    {
+      "id": "facility/transport/road_facility",
+      "name": "道路・自動車交通施設",
+      "pairs": 1638,
+      "readings": 1636,
+      "records": 1638,
+      "pages": 2,
+      "recordsByOrigin": {
+        "verified": 160,
+        "gemini": 428,
+        "manual": 1050
+      },
+      "definition": "サービスエリア、道の駅、料金所、道路管理設備など道路交通施設。道路そのものは交通路線を優先する。"
+    },
+    {
+      "id": "facility/transport/parking",
+      "name": "駐車・車庫施設",
+      "pairs": 6,
+      "readings": 6,
+      "records": 6,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 3,
+        "gemini": 3
+      },
+      "definition": "駐車場、立体駐車場、自動車車庫など車両の駐車・保管を主目的とする施設。"
+    },
+    {
+      "id": "facility/infrastructure/bridge",
+      "name": "橋梁",
+      "pairs": 1467,
+      "readings": 1449,
+      "records": 1469,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 1143,
+        "gemini": 300,
+        "verified": 26
+      },
+      "definition": "橋、歩道橋、跨線橋など河川・道路・鉄道等を渡す構造物。"
+    },
+    {
+      "id": "facility/infrastructure/tunnel",
+      "name": "トンネル",
+      "pairs": 371,
+      "readings": 370,
+      "records": 371,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 97,
+        "gemini": 273,
+        "verified": 1
+      },
+      "definition": "道路・鉄道・歩行者用トンネルなど地中を通す土木構造物。"
+    },
+    {
+      "id": "facility/infrastructure/dam",
+      "name": "ダム・堰",
+      "pairs": 93,
+      "readings": 93,
+      "records": 93,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 54,
+        "manual": 39
+      },
+      "definition": "ダム、堰、砂防堰堤など貯水・治水・砂防構造物。発電所建屋は産業を優先する。"
+    },
+    {
+      "id": "facility/infrastructure/water_control",
+      "name": "水門・水路・治水設備",
+      "pairs": 107,
+      "readings": 107,
+      "records": 107,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 58,
+        "gemini": 49
+      },
+      "definition": "水門、閘門、用水路、排水機場、河川・港湾の水利構造物。"
+    },
+    {
+      "id": "facility/industrial/factory",
+      "name": "工場・製造施設",
+      "pairs": 391,
+      "readings": 390,
+      "records": 391,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 200,
+        "gemini": 189,
+        "verified": 2
+      },
+      "definition": "工場、製造所、製油所、鉱山施設など生産・加工を主目的とする施設。"
+    },
+    {
+      "id": "facility/industrial/power",
+      "name": "発電・エネルギー施設",
+      "pairs": 432,
+      "readings": 429,
+      "records": 432,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 141,
+        "gemini": 288,
+        "verified": 3
+      },
+      "definition": "火力・水力・原子力・風力発電所、変電所、ガス供給設備などエネルギー施設。"
+    },
+    {
+      "id": "facility/industrial/logistics",
+      "name": "物流・倉庫施設",
+      "pairs": 97,
+      "readings": 97,
+      "records": 97,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 62,
+        "gemini": 34,
+        "verified": 1
+      },
+      "definition": "物流センター、配送センター、倉庫、貨物集配施設など保管・物流施設。"
+    },
+    {
+      "id": "facility/industrial/communications",
+      "name": "通信設備",
+      "pairs": 517,
+      "readings": 517,
+      "records": 517,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 94,
+        "gemini": 420,
+        "verified": 3
+      },
+      "definition": "通信局舎、電波塔、放送送信所、通信センターなど固定通信・放送設備。"
+    },
+    {
+      "id": "facility/recreation/park_garden",
+      "name": "公園・庭園",
+      "pairs": 1566,
+      "readings": 1562,
+      "records": 1567,
+      "pages": 2,
+      "recordsByOrigin": {
+        "gemini": 705,
+        "manual": 827,
+        "verified": 35
+      },
+      "definition": "公園、庭園、植物園、緑地、自然公園の整備施設。自然地形・地名自体は含めない。"
+    },
+    {
+      "id": "facility/recreation/zoo_aquarium",
+      "name": "動物園・水族館",
+      "pairs": 155,
+      "readings": 154,
+      "records": 155,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 36,
+        "gemini": 119
+      },
+      "definition": "動物園、水族館、動植物の飼育展示施設。"
+    },
+    {
+      "id": "facility/recreation/outdoor_nature",
+      "name": "自然体験・レジャー施設",
+      "pairs": 236,
+      "readings": 236,
+      "records": 236,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 71,
+        "gemini": 163,
+        "verified": 2
+      },
+      "definition": "キャンプ場、自然体験施設、ハイキング拠点など屋外体験を主目的とする施設。スポーツ競技施設は含めない。"
+    },
+    {
+      "id": "facility/heritage/castle",
+      "name": "城郭・宮殿",
+      "pairs": 1528,
+      "readings": 1508,
+      "records": 1528,
+      "pages": 2,
+      "recordsByOrigin": {
+        "manual": 987,
+        "gemini": 507,
+        "verified": 34
+      },
+      "definition": "城、城跡の主要遺構、宮殿、歴史的な城郭建築。現在の行政庁舎やテーマパークは含めない。"
+    },
+    {
+      "id": "facility/heritage/archaeological_site",
+      "name": "古墳・遺跡",
+      "pairs": 232,
+      "readings": 232,
+      "records": 232,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 151,
+        "verified": 4,
+        "manual": 77
+      },
+      "definition": "古墳、遺跡、古代遺構、史跡の発掘・保存区域。地名・自然地形としての呼称は含めない。"
+    },
+    {
+      "id": "facility/heritage/historic_residence",
+      "name": "歴史的住宅・邸宅",
+      "pairs": 504,
+      "readings": 501,
+      "records": 504,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 270,
+        "manual": 220,
+        "verified": 14
+      },
+      "definition": "歴史上の人物・家系に関係する住宅、旧邸、武家屋敷など歴史的住宅建築。"
+    },
+    {
+      "id": "facility/residential/housing_complex",
+      "name": "団地・住宅群",
+      "pairs": 118,
+      "readings": 118,
+      "records": 120,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 49,
+        "manual": 71
+      },
+      "definition": "団地、住宅団地、ニュータウン内の個別住宅群など複数住戸の集合。"
+    },
+    {
+      "id": "facility/residential/condominium",
+      "name": "マンション・集合住宅",
+      "pairs": 409,
+      "readings": 408,
+      "records": 409,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 150,
+        "gemini": 250,
+        "verified": 9
+      },
+      "definition": "個別に特定できるマンション、アパート、集合住宅。"
+    },
+    {
+      "id": "facility/residential/mixed_use_building",
+      "name": "複合建築物",
+      "pairs": 90,
+      "readings": 90,
+      "records": 90,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 53,
+        "manual": 36,
+        "verified": 1
+      },
+      "definition": "住宅・商業・業務等の用途が混在し、単一用途が主目的と判断できない複合建築物。"
+    },
+    {
+      "id": "facility/military/base",
+      "name": "基地・駐屯地",
+      "pairs": 348,
+      "readings": 348,
+      "records": 348,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 258,
+        "manual": 89,
+        "verified": 1
+      },
+      "definition": "基地、駐屯地、航空基地、海軍基地、軍事部隊の常設拠点。"
+    },
+    {
+      "id": "facility/military/garrison",
+      "name": "兵営・防衛拠点",
+      "pairs": 16,
+      "readings": 16,
+      "records": 16,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 10,
+        "manual": 6
+      },
+      "definition": "兵営、弾薬庫、防衛施設など軍事・防衛の固定拠点。"
+    },
+    {
+      "id": "facility/military/training_ground",
+      "name": "演習・訓練施設",
+      "pairs": 40,
+      "readings": 40,
+      "records": 40,
+      "pages": 1,
+      "recordsByOrigin": {
+        "gemini": 33,
+        "manual": 7
+      },
+      "definition": "演習場、射撃場、軍事訓練区域など防衛組織の訓練施設。"
     },
     {
       "id": "transport_route",
@@ -98,14 +893,14 @@
     {
       "id": "organization",
       "name": "組織",
-      "pairs": 47405,
-      "readings": 46634,
-      "records": 47484,
+      "pairs": 47406,
+      "readings": 46635,
+      "records": 47485,
       "pages": 35,
       "recordsByOrigin": {
         "gemini": 24633,
         "manual": 21393,
-        "verified": 1458
+        "verified": 1459
       }
     },
     {
@@ -124,14 +919,14 @@
     {
       "id": "product",
       "name": "商品・サービス",
-      "pairs": 10111,
-      "readings": 9887,
-      "records": 10113,
+      "pairs": 10123,
+      "readings": 9899,
+      "records": 10125,
       "pages": 7,
       "recordsByOrigin": {
         "gemini": 5941,
         "manual": 3917,
-        "verified": 255
+        "verified": 267
       }
     },
     {
@@ -291,27 +1086,27 @@
     {
       "id": "term/general/internet_slang_culture",
       "name": "ネットスラング・ネット文化",
-      "pairs": 571,
-      "readings": 550,
-      "records": 573,
+      "pairs": 572,
+      "readings": 551,
+      "records": 574,
       "pages": 1,
       "recordsByOrigin": {
         "manual": 218,
         "gemini": 318,
-        "verified": 37
+        "verified": 38
       }
     },
     {
       "id": "term/general/neologisms_trends_youth_language",
       "name": "新語・流行語・若者言葉",
-      "pairs": 483,
-      "readings": 472,
-      "records": 483,
+      "pairs": 485,
+      "readings": 474,
+      "records": 485,
       "pages": 1,
       "recordsByOrigin": {
         "gemini": 266,
         "manual": 168,
-        "verified": 49
+        "verified": 51
       }
     },
     {
@@ -330,14 +1125,14 @@
     {
       "id": "term/specialist/information_communications",
       "name": "情報・通信",
-      "pairs": 6072,
-      "readings": 6005,
-      "records": 6073,
+      "pairs": 6081,
+      "readings": 6014,
+      "records": 6082,
       "pages": 5,
       "recordsByOrigin": {
         "gemini": 3930,
         "manual": 1723,
-        "verified": 420
+        "verified": 429
       }
     },
     {
@@ -408,14 +1203,14 @@
     {
       "id": "term/specialist/law_politics",
       "name": "法律・政治",
-      "pairs": 5272,
-      "readings": 5201,
-      "records": 5273,
+      "pairs": 5273,
+      "readings": 5202,
+      "records": 5274,
       "pages": 4,
       "recordsByOrigin": {
         "manual": 1393,
         "gemini": 3011,
-        "verified": 869
+        "verified": 870
       }
     },
     {
@@ -472,14 +1267,14 @@
     {
       "id": "work_manga",
       "name": "漫画作品",
-      "pairs": 5080,
-      "readings": 5042,
-      "records": 5081,
+      "pairs": 5081,
+      "readings": 5043,
+      "records": 5082,
       "pages": 5,
       "recordsByOrigin": {
         "manual": 2608,
         "gemini": 2402,
-        "verified": 71
+        "verified": 72
       }
     },
     {
@@ -498,14 +1293,14 @@
     {
       "id": "media_demographic/audience/shonen",
       "name": "少年向け",
-      "pairs": 4107,
-      "readings": 4078,
-      "records": 4118,
+      "pairs": 4108,
+      "readings": 4079,
+      "records": 4119,
       "pages": 3,
       "recordsByOrigin": {
         "gemini": 3362,
         "manual": 737,
-        "verified": 19
+        "verified": 20
       }
     },
     {
@@ -633,14 +1428,14 @@
     {
       "id": "work_game",
       "name": "ゲーム作品",
-      "pairs": 3155,
-      "readings": 3065,
-      "records": 3155,
+      "pairs": 3158,
+      "readings": 3068,
+      "records": 3158,
       "pages": 3,
       "recordsByOrigin": {
         "manual": 2097,
         "gemini": 1012,
-        "verified": 46
+        "verified": 49
       }
     },
     {
@@ -925,7 +1720,7 @@
     }
   ],
   "excluded": {
-    "pairs": 322964,
+    "pairs": 322967,
     "pages": 594
   },
   "specialistInputSha256": "8734dda7bd19c3a1401600a751289a3062c9a2f15c7ea64a409faf40c656e5ec"

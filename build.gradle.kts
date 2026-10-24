@@ -170,8 +170,13 @@ val japaneseKeyboardAssetsReleaseZip = japaneseKeyboardAssetsReleaseDir.file("ja
 val classificationDirectory = layout.projectDirectory.dir("src/main/classification")
 val classificationCategoryIds = ((JsonSlurper().parse(classificationDirectory.file("categories.json").asFile) as Map<*, *>)
     ["categories"] as List<*>).map { (it as Map<*, *>)["id"] as String }
-require(classificationCategoryIds.size == 55 && classificationCategoryIds.distinct().size == 55 &&
-    classificationCategoryIds.all { it.matches(Regex("[a-z_]+(/[a-z_]+)*")) }) { "Expected 55 unique safe category IDs" }
+require(classificationCategoryIds.isNotEmpty() && classificationCategoryIds.distinct().size == classificationCategoryIds.size &&
+    classificationCategoryIds.all { it.matches(Regex("[a-z_]+(/[a-z_]+)*")) }) { "Expected unique safe category IDs" }
+val manifestCategoryIds = ((JsonSlurper().parse(classificationDirectory.file("distribution-manifest.json").asFile) as Map<*, *>)
+    ["categoryRows"] as Map<*, *>).keys.map { it as String }
+require(manifestCategoryIds.toSet() == classificationCategoryIds.toSet()) {
+    "Classification categories differ from the frozen distribution manifest"
+}
 val specialistDirectory = layout.projectDirectory.dir("src/main/specialist")
 val specialistCategoryIds = ((JsonSlurper().parse(specialistDirectory.file("categories.json").asFile) as Map<*, *>)
     ["categories"] as List<*>).map { (it as Map<*, *>)["id"] as String }
