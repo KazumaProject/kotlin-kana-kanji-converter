@@ -38,7 +38,8 @@ class TokenArray {
     ): List<TokenEntry> {
         val succinct = postingsSuccinct()
         val b = succinct.rank1(succinct.select0(nodeId))
-        val c = succinct.rank1(succinct.select0(nodeId + 1))
+        val endSeparator = succinct.select0(nodeId + 1)
+        val c = if (endSeparator < 0) entryCount else succinct.rank1(endSeparator)
         val tempList2 = mutableListOf<TokenEntry>()
         for (i in b..<c) {
             tempList2.add(
