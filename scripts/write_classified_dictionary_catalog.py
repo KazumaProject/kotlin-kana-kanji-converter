@@ -14,14 +14,15 @@ import tempfile
 import classified_distribution as distribution
 
 ORIGINS = {'verified': '資料確認済み', 'manual': 'assistant再分類（暫定）', 'gemini': 'Gemini（暫定）', 'specialist': '提供元の読み（正確性未確認）', 'inferred_reading': 'Gemini推定読み（未確認）', 'curated_correction': '出典確認済みの読み訂正'}
-AUDIENCE_CATEGORY_IDS = {
+AUDIENCE_CATEGORIES = [
     'media_demographic/audience/shonen',
     'media_demographic/audience/seinen',
     'media_demographic/audience/shojo',
     'media_demographic/audience/josei',
     'media_demographic/audience/kids',
     'media_demographic/audience/unspecified',
-}
+]
+AUDIENCE_CATEGORY_IDS = set(AUDIENCE_CATEGORIES)
 MEDIA_WORD_CATEGORY_IDS = {'work_anime', 'work_manga', 'character'}
 MAX_ROWS = 1500
 MAX_BYTES = 180_000
@@ -29,6 +30,72 @@ MAX_BYTES = 180_000
 
 def code(value):
     return '<code>' + html.escape(value).replace('|', '&#124;') + '</code>'
+
+
+def write_audience_subcatalog(directory, category, records_by_audience, names):
+    """Write complete word lists grouped by demographic for one media type."""
+    summary_rows = []
+    for audience_id in AUDIENCE_CATEGORIES:
+        label = names[audience_id]
+        slug = audience_id.rsplit('/', 1)[-1]
+        group_dir = directory / 'audience' / slug
+        group_dir.mkdir(parents=True, exist_ok=True)
+        records = records_by_audience.get(audience_id, [])
+        pages = []
+        page = []
+        byte_count = 0
+
+        def flush():
+            nonlocal page, byte_count
+            if page:
+                filename = f'page-{len(pages)+1:04d}.md'
+                (group_dir / filename).write_text(''.join(page), encoding='utf-8')
+                pages.append(filename)
+                page = []
+                byte_count = 0
+
+        for reading, left, right, cost, surface, origin in records:
+            row = (f'| {code(reading)} | {code(surface)} | {label} | '
+                   f'{left} | {right} | {cost} | {ORIGINS[origin]} |\n')
+            size = len(row.encode('utf-8'))
+            if page and (len(page) >= MAX_ROWS or byte_count + size > MAX_BYTES):
+                flush()
+            page.append(row)
+            byte_count += size
+        flush()
+
+        navigation = '[対象層別の目次](index.md) · [作品種別の目次](../../index.md) · [全カテゴリ](../../../index.md)'
+        for index, filename in enumerate(pages):
+            page_navigation = [navigation, f'[品詞IDと品詞名](../../../pos.md)']
+            if index:
+                page_navigation.append(f'[前のページ]({pages[index-1]})')
+            if index + 1 < len(pages):
+                page_navigation.append(f'[次のページ]({pages[index+1]})')
+            nav = ' · '.join(page_navigation)
+            path = group_dir / filename
+            header = (
+                f'# {names[category]} — {label} — {index+1}/{len(pages)}\n\n'
+                f'{nav}\n\n'
+                f'この一覧は「{label}」に分類した全レコードです。\n\n'
+                '| 読み | 表記 | 対象層 | 左品詞ID | 右品詞ID | コスト | 分類元 |\n'
+                '|---|---|---|---:|---:|---:|---|\n'
+            )
+            path.write_text(header + path.read_text(encoding='utf-8') + '\n' + nav + '\n', encoding='utf-8')
+
+        pairs = {(reading, surface) for reading, _, _, _, surface, _ in records}
+        links = '\n'.join(f'- [{index+1}ページ]({filename})' for index, filename in enumerate(pages))
+        if not records:
+            links = '収録0件。'
+        (group_dir / 'index.md').write_text(
+            f'# {names[category]} — {label}\n\n'
+            f'[作品種別の目次](../../index.md) · [全カテゴリ](../../../index.md)\n\n'
+            f'読み・表記の組: **{len(pairs):,}**、レコード: **{len(records):,}**。\n\n'
+            f'{links}\n', encoding='utf-8')
+        summary_rows.append(
+            f'| [{label}](audience/{slug}/index.md) | {len(pairs):,} | {len(records):,} | '
+            f'[単語一覧](audience/{slug}/index.md) |'
+        )
+    return summary_rows
 
 
 def generate_excluded(root, output, manifest):
@@ -410,6 +477,7 @@ def generate_person_replacement_index(output, base_summary, person_summary):
         f'複数対象層は {mixed_pairs:,}組、出典未確認・対象層未確定は {unverified_pairs:,}組で、'
         'どちらも配布カタログに残していません。\n\n'
         '### 作品種別の全収録語\n\n'
+        '各作品種別のリンク先では、少年向け・青年向けなど6つの対象層別に収録数と単語一覧を確認できます。'
         '作品種別の辞書と対象層別辞書は別の分類です。同じ作品・キャラクターが両方に掲載される場合があります。\n\n'
         + '\n'.join(work_type_table) + '\n\n'
     )
@@ -517,6 +585,7 @@ def generate(root, output):
             readings = set()
             count = 0
             by_origin = {}
+            records_by_audience = {} if category in MEDIA_WORD_CATEGORY_IDS else None
 
             def flush():
                 nonlocal page, byte_count
@@ -536,6 +605,8 @@ def generate(root, output):
                         raise ValueError(
                             f'Missing audience classification for {category}: {reading}/{surface}')
                     audience = names[audience_category]
+                    records_by_audience.setdefault(audience_category, []).append(
+                        (reading, left, right, cost, surface, origin))
                     row = (f'| {code(reading)} | {code(surface)} | {audience} | '
                            f'{left} | {right} | {cost} | {ORIGINS[origin]} |\n')
                 else:
@@ -577,11 +648,28 @@ def generate(root, output):
                 path.write_text(header + path.read_text(encoding='utf-8') + '\n' + nav + '\n', encoding='utf-8')
             links = '\n'.join(f'- [{i+1}ページ]({filename})' for i, filename in enumerate(pages))
             root_link = '../' * len(Path(category).parts)
-            (directory / 'index.md').write_text(
+            audience_section = ''
+            if category in MEDIA_WORD_CATEGORY_IDS:
+                audience_rows = write_audience_subcatalog(directory, category, records_by_audience, names)
+                audience_section = (
+                    '## 対象層別の収録語\n\n'
+                    '下表から少年向け・青年向けなどのカテゴリ別に、収録語をすべて確認できます。\n\n'
+                    '| 対象層 | 読み・表記の組 | レコード数 | 分類別の単語一覧 |\n'
+                    '|---|---:|---:|---|\n'
+                    + '\n'.join(audience_rows) + '\n\n'
+                )
+            index_content = (
                 f'# {names[category]} ({category})\n\n[全カテゴリ]({root_link}index.md) · [品詞名]({root_link}pos.md)\n\n'
                 f'読み・表記の組: **{len(pairs):,}**、読み: **{len(readings):,}**、レコード: **{count:,}**。\n\n'
-                + ('全レコードに対象層を表示しています。\n\n' if category in MEDIA_WORD_CATEGORY_IDS else '')
-                + f'{links}\n', encoding='utf-8')
+            )
+            if category in MEDIA_WORD_CATEGORY_IDS:
+                index_content += (
+                    audience_section
+                    + '## 全レコード一覧\n\n'
+                    + 'この一覧では各レコードに対象層を表示しています。\n\n'
+                )
+            index_content += f'{links}\n'
+            (directory / 'index.md').write_text(index_content, encoding='utf-8')
     present = {item['id'] for item in summary}
     for category in categories:
         if category['id'] == 'person' and person_taxonomy_summary is not None:
