@@ -2,7 +2,7 @@
 
 通常版GitHub Releaseの辞書ZIPに含まれる全143カテゴリを掲載します。通常配布カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **862,265**、読み・表記の組数の合計は **854,140**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **862,354**、読み・表記の組数の合計は **854,229**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換配布) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -40,8 +40,8 @@
 | [地名](place/index.md) | `place` | 43,378 | 45,090 | [全件](place/index.md) |
 | [住所](address/index.md) | `address` | 148,606 | 152,874 | [全件](address/index.md) |
 | [駅・停留所](station/index.md) | `station` | 12,757 | 12,759 | [全件](station/index.md) |
-| [神社・神宮](facility/religious/shrine/index.md) | `facility/religious/shrine` | 3,825 | 3,825 | [全件](facility/religious/shrine/index.md) |
-| [寺院](facility/religious/temple/index.md) | `facility/religious/temple` | 4,006 | 4,006 | [全件](facility/religious/temple/index.md) |
+| [神社・神宮](facility/religious/shrine/index.md) | `facility/religious/shrine` | 3,824 | 3,824 | [全件](facility/religious/shrine/index.md) |
+| [寺院](facility/religious/temple/index.md) | `facility/religious/temple` | 4,005 | 4,005 | [全件](facility/religious/temple/index.md) |
 | [教会・礼拝堂](facility/religious/church/index.md) | `facility/religious/church` | 368 | 368 | [全件](facility/religious/church/index.md) |
 | [修道院・宗教共同体施設](facility/religious/monastery/index.md) | `facility/religious/monastery` | 22 | 22 | [全件](facility/religious/monastery/index.md) |
 | [学校](facility/education/school/index.md) | `facility/education/school` | 603 | 603 | [全件](facility/education/school/index.md) |
@@ -58,7 +58,7 @@
 | [博物館・資料館](facility/cultural/museum/index.md) | `facility/cultural/museum` | 1,192 | 1,192 | [全件](facility/cultural/museum/index.md) |
 | [美術館・ギャラリー](facility/cultural/art_museum/index.md) | `facility/cultural/art_museum` | 377 | 377 | [全件](facility/cultural/art_museum/index.md) |
 | [図書館・文書館](facility/cultural/library/index.md) | `facility/cultural/library` | 750 | 750 | [全件](facility/cultural/library/index.md) |
-| [記念館・文化会館](facility/cultural/memorial/index.md) | `facility/cultural/memorial` | 1,184 | 1,184 | [全件](facility/cultural/memorial/index.md) |
+| [記念館・文化会館](facility/cultural/memorial/index.md) | `facility/cultural/memorial` | 1,183 | 1,183 | [全件](facility/cultural/memorial/index.md) |
 | [劇場・演芸場](facility/entertainment/theater/index.md) | `facility/entertainment/theater` | 415 | 415 | [全件](facility/entertainment/theater/index.md) |
 | [映画館](facility/entertainment/cinema/index.md) | `facility/entertainment/cinema` | 149 | 149 | [全件](facility/entertainment/cinema/index.md) |
 | [ライブ・興行会場](facility/entertainment/live_venue/index.md) | `facility/entertainment/live_venue` | 146 | 146 | [全件](facility/entertainment/live_venue/index.md) |
@@ -69,7 +69,7 @@
 | [スキー場・雪上競技施設](facility/sports/ski/index.md) | `facility/sports/ski` | 192 | 192 | [全件](facility/sports/ski/index.md) |
 | [プール・水上スポーツ施設](facility/sports/aquatic/index.md) | `facility/sports/aquatic` | 11 | 11 | [全件](facility/sports/aquatic/index.md) |
 | [商業施設・百貨店](facility/commercial/shopping/index.md) | `facility/commercial/shopping` | 1,291 | 1,291 | [全件](facility/commercial/shopping/index.md) |
-| [飲食店](facility/commercial/restaurant/index.md) | `facility/commercial/restaurant` | 474 | 474 | [全件](facility/commercial/restaurant/index.md) |
+| [飲食店](facility/commercial/restaurant/index.md) | `facility/commercial/restaurant` | 542 | 542 | [全件](facility/commercial/restaurant/index.md) |
 | [市場・商店](facility/commercial/market/index.md) | `facility/commercial/market` | 158 | 158 | [全件](facility/commercial/market/index.md) |
 | [ホテル・宿泊施設](facility/hospitality/hotel/index.md) | `facility/hospitality/hotel` | 803 | 803 | [全件](facility/hospitality/hotel/index.md) |
 | [旅館・民宿](facility/hospitality/inn/index.md) | `facility/hospitality/inn` | 118 | 118 | [全件](facility/hospitality/inn/index.md) |
@@ -100,7 +100,7 @@
 | [兵営・防衛拠点](facility/military/garrison/index.md) | `facility/military/garrison` | 16 | 16 | [全件](facility/military/garrison/index.md) |
 | [演習・訓練施設](facility/military/training_ground/index.md) | `facility/military/training_ground` | 40 | 40 | [全件](facility/military/training_ground/index.md) |
 | [交通路線](transport_route/index.md) | `transport_route` | 4,229 | 4,230 | [全件](transport_route/index.md) |
-| [組織](organization/index.md) | `organization` | 47,406 | 47,485 | [全件](organization/index.md) |
+| [組織](organization/index.md) | `organization` | 47,430 | 47,509 | [全件](organization/index.md) |
 | [家系・氏族](lineage/index.md) | `lineage` | 2,019 | 2,019 | [全件](lineage/index.md) |
 | [商品・サービス](product/index.md) | `product` | 10,123 | 10,125 | [全件](product/index.md) |
 | [車両・船舶](vehicle/index.md) | `vehicle` | 2,580 | 2,580 | [全件](vehicle/index.md) |

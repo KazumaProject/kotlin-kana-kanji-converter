@@ -1,10 +1,12 @@
 import gzip
 import hashlib
+import json
 from pathlib import Path
 import tempfile
 import unittest
 
 import classified_distribution as distribution
+import classification_reviews as review_history
 import facility_classification as rules
 import run_facility_classification as runner
 
@@ -120,6 +122,18 @@ class FacilityClassificationTest(unittest.TestCase):
     def test_frozen_results_cover_the_adopted_source_snapshot(self):
         pairs, records = runner.collect_source(ROOT)
         data = distribution.facility_classification_data(ROOT)
+        manifest = json.loads((ROOT / 'src/main/classification/distribution-manifest.json').read_text())
+        reviews = review_history.load(ROOT, manifest['provenance'].get('reviews', []))
+        moved = distribution.facility_review_moves(reviews, data['categoryIds']) & set(data['results'])
+        pairs = sorted(set(pairs) | moved)
+        records = set(records)
+        with gzip.open(ROOT / 'src/main/classification/distribution-candidates.tsv.gz',
+                       'rt', encoding='utf-8') as stream:
+            for line in stream:
+                fields = line.rstrip('\n').split('\t')
+                if (fields[1], fields[5]) in moved:
+                    records.add(tuple(fields[1:]))
+        records = sorted(records)
         self.assertEqual(set(pairs), set(data['results']))
         self.assertEqual(len(pairs), data['metadata']['uniquePairs'])
         self.assertEqual(len(records), data['metadata']['sourceRecords'])

@@ -1,8 +1,8 @@
 {
   "admittedPairsByOrigin": {
     "manual": 378757,
-    "gemini": 188640,
-    "verified": 177479
+    "gemini": 188636,
+    "verified": 177574
   },
   "categoryGroups": [
     {
@@ -280,8 +280,8 @@
     "place": 45090,
     "address": 152874,
     "station": 12759,
-    "facility/religious/shrine": 3825,
-    "facility/religious/temple": 4006,
+    "facility/religious/shrine": 3824,
+    "facility/religious/temple": 4005,
     "facility/religious/church": 368,
     "facility/religious/monastery": 22,
     "facility/education/school": 603,
@@ -298,7 +298,7 @@
     "facility/cultural/museum": 1192,
     "facility/cultural/art_museum": 377,
     "facility/cultural/library": 750,
-    "facility/cultural/memorial": 1184,
+    "facility/cultural/memorial": 1183,
     "facility/entertainment/theater": 415,
     "facility/entertainment/cinema": 149,
     "facility/entertainment/live_venue": 146,
@@ -309,7 +309,7 @@
     "facility/sports/ski": 192,
     "facility/sports/aquatic": 11,
     "facility/commercial/shopping": 1291,
-    "facility/commercial/restaurant": 474,
+    "facility/commercial/restaurant": 542,
     "facility/commercial/market": 158,
     "facility/hospitality/hotel": 803,
     "facility/hospitality/inn": 118,
@@ -340,7 +340,7 @@
     "facility/military/garrison": 16,
     "facility/military/training_ground": 40,
     "transport_route": 4230,
-    "organization": 47485,
+    "organization": 47509,
     "lineage": 2019,
     "product": 10125,
     "vehicle": 2580,
@@ -393,13 +393,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 774074,
+  "dictionaryRows": 774163,
   "excludedCandidatePairs": 328692,
   "excludedClassifiedPairs": 322967,
   "files": {
     "categories.json": "6cdfb7f23de0e2d90283adc7139e52581e575d13f830e996c87948e43446ee60",
-    "distribution-candidates.tsv.gz": "d42b0bd54c922cdd266c193e52f58c27185121868485882a7f49f9866cc47c17",
-    "distribution-decisions.tsv.gz": "96801eb517b7a97e999c4829e122c877be660e63394059ddb2d8529eab8913cc"
+    "distribution-candidates.tsv.gz": "6571d005d37610b7acb7102a12eb343b86ff157dd47b39352eab1ca3d6e79c56",
+    "distribution-decisions.tsv.gz": "30bb4ca7fcafcf559951f677f250d150fa47460b29064c8b668a1b1a2497dd58"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -484,8 +484,11 @@
     "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl": "259b1e1d1c68283803d79b6129ac0afedc85f0c34eb23945d6735ba4a3a4d53a",
     "src/main/classification/reviews/2026-10-23-ramen-shops.jsonl": "a3afa7c1066bc4e10d8c97af3e8011a905f4a90cc943aa7fa06fd21d71bde3fc",
     "src/main/classification/reviews/2026-10-23-source-correction.jsonl": "a7a4463f11a81a53ba314380864126cdcb2c1fc2bd08789a5b3a03bf57c63581",
+    "src/main/classification/reviews/2026-10-23-tokyo-kansai-ramen-shop-additions.jsonl": "4a2693a248cb87e370cb42b6830ee2b4d40c86cceee799e15bd4932f7d7f13e8",
     "src/main/classification/reviews/2026-10-24-open-vocabulary-issues.jsonl": "921ef24efb34a74e16730ee68ad93477a231825ca603a54ac4a14cb9c5f52229",
+    "src/main/classification/reviews/2026-10-24-ramen-brand-additions.jsonl": "3e85a42fee883022a422fca243ff5c24d89aa032d5b15f3ed8edd2375cdd3982",
     "src/main/classification/reviews/2026-10-24-ramen-brand-corrections.jsonl": "1ccfa60102dc84a525858dca55ccaf7cf227edf5f390f8446d6a98538d63e961",
+    "src/main/classification/reviews/2026-10-24-regional-ramen-shop-additions.jsonl": "6b76d94e46c90b76745508a3f550dfc34e3eb0d9a2ea38d30a3fb01da3ee9242",
     "src/main/classification/reviews/2026-10-24-z-media-demographic-tank-chair.jsonl": "76a35fc03ba6457987b18544b07b7a0914408b78e1b88dd98d3a67e6b7e8fb25",
     "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
   },
@@ -29693,8 +29696,11 @@
       "src/main/classification/reviews/2026-10-23-media-demographics_bulk.jsonl",
       "src/main/classification/reviews/2026-10-23-ramen-shops.jsonl",
       "src/main/classification/reviews/2026-10-23-source-correction.jsonl",
+      "src/main/classification/reviews/2026-10-23-tokyo-kansai-ramen-shop-additions.jsonl",
       "src/main/classification/reviews/2026-10-24-open-vocabulary-issues.jsonl",
+      "src/main/classification/reviews/2026-10-24-ramen-brand-additions.jsonl",
       "src/main/classification/reviews/2026-10-24-ramen-brand-corrections.jsonl",
+      "src/main/classification/reviews/2026-10-24-regional-ramen-shop-additions.jsonl",
       "src/main/classification/reviews/2026-10-24-z-media-demographic-tank-chair.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
@@ -29953,5 +29959,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 744876
+  "uniqueAdmittedPairs": 744967
 }

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "d42b0bd54c922cdd266c193e52f58c27185121868485882a7f49f9866cc47c17",
-  "uniquePairs": 833157,
-  "records": 862265,
+  "inputSha256": "6571d005d37610b7acb7102a12eb343b86ff157dd47b39352eab1ca3d6e79c56",
+  "uniquePairs": 833248,
+  "records": 862354,
   "categories": [
     {
       "id": "character",
@@ -72,12 +72,12 @@
     {
       "id": "facility/religious/shrine",
       "name": "神社・神宮",
-      "pairs": 3825,
-      "readings": 3614,
-      "records": 3825,
+      "pairs": 3824,
+      "readings": 3613,
+      "records": 3824,
       "pages": 3,
       "recordsByOrigin": {
-        "gemini": 1671,
+        "gemini": 1670,
         "manual": 1363,
         "verified": 791
       },
@@ -86,13 +86,13 @@
     {
       "id": "facility/religious/temple",
       "name": "寺院",
-      "pairs": 4006,
-      "readings": 2908,
-      "records": 4006,
+      "pairs": 4005,
+      "readings": 2907,
+      "records": 4005,
       "pages": 3,
       "recordsByOrigin": {
         "manual": 1586,
-        "gemini": 2107,
+        "gemini": 2106,
         "verified": 313
       },
       "definition": "仏教の礼拝・法要を行う寺院、仏堂、仏教寺院内の堂宇。名称に「病院」を含む施設は含めない。"
@@ -322,12 +322,12 @@
     {
       "id": "facility/cultural/memorial",
       "name": "記念館・文化会館",
-      "pairs": 1184,
-      "readings": 1164,
-      "records": 1184,
+      "pairs": 1183,
+      "readings": 1163,
+      "records": 1183,
       "pages": 1,
       "recordsByOrigin": {
-        "gemini": 810,
+        "gemini": 809,
         "manual": 363,
         "verified": 11
       },
@@ -469,14 +469,14 @@
     {
       "id": "facility/commercial/restaurant",
       "name": "飲食店",
-      "pairs": 474,
-      "readings": 470,
-      "records": 474,
+      "pairs": 542,
+      "readings": 538,
+      "records": 542,
       "pages": 1,
       "recordsByOrigin": {
         "manual": 184,
-        "gemini": 285,
-        "verified": 5
+        "gemini": 284,
+        "verified": 74
       },
       "definition": "レストラン、食堂、喫茶店、ラーメン店など、飲食物を提供する個別の店舗・店舖施設。"
     },
@@ -893,14 +893,14 @@
     {
       "id": "organization",
       "name": "組織",
-      "pairs": 47406,
-      "readings": 46635,
-      "records": 47485,
+      "pairs": 47430,
+      "readings": 46659,
+      "records": 47509,
       "pages": 35,
       "recordsByOrigin": {
-        "gemini": 24633,
+        "gemini": 24631,
         "manual": 21393,
-        "verified": 1459
+        "verified": 1485
       }
     },
     {

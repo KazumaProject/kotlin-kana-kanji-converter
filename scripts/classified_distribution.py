@@ -460,6 +460,27 @@ def apply_facility_classifications(root, decisions, force=False, reviewed_pairs=
     return output
 
 
+def facility_review_moves(review_entries, category_ids):
+    """Pairs explicitly reviewed out of the facility hierarchy."""
+    moved = set()
+    for pair, entry in review_entries.items():
+        baseline = entry.get('baseline')
+        if (not isinstance(baseline, list) or len(baseline) != 5
+                or baseline[4] != 'classified'
+                or entry.get('action') not in ('exclude', 'keep', 'reclassify')):
+            continue
+        baseline_categories = set(filter(None, baseline[2].split(',')))
+        if not any(category == 'facility' or category.startswith('facility/')
+                   for category in baseline_categories):
+            continue
+        final_categories = set(entry.get('categories', []))
+        if any(category == 'facility' or category in category_ids or category.startswith('facility/')
+               for category in final_categories):
+            continue
+        moved.add(pair)
+    return moved
+
+
 def apply_facility_classifications_snapshot(root):
     """Atomically expand or refresh facility leaves from their frozen classifications."""
     import shutil
@@ -506,6 +527,7 @@ def apply_facility_classifications_snapshot(root):
         and any(isinstance(category, str) and category.startswith('facility/')
                 for category in entry['categories'])
     }
+    reviewed_facility_moves = facility_review_moves(review_entries, data['categoryIds']) & set(data['results'])
 
     original_rows = []
     with gzip.open(directory / 'distribution-candidates.tsv.gz', 'rt', encoding='utf-8', newline='') as stream:
@@ -516,7 +538,8 @@ def apply_facility_classifications_snapshot(root):
             original_rows.append(tuple(fields))
     original_facility_rows = [row for row in original_rows
                               if row[0] == 'facility' or
-                              (row[0] in data['categoryIds'] and (row[1], row[5]) in data['results'])]
+                              ((row[0] in data['categoryIds'] or (row[1], row[5]) in reviewed_facility_moves)
+                               and (row[1], row[5]) in data['results'])]
     source_pairs = {(row[1], row[5]) for row in original_facility_rows}
     if source_pairs != set(data['results']):
         raise ValueError('Facility fixed classifications do not cover the exact frozen facility pairs')
@@ -565,7 +588,7 @@ def apply_facility_classifications_snapshot(root):
         pair for pair, row in decisions.items()
         if row[4] == 'classified' and any(value.startswith('facility/') for value in row[2].split(','))
     }
-    if classified_facility_pairs != set(data['results']) | facility_review_additions:
+    if classified_facility_pairs != (set(data['results']) - reviewed_facility_moves) | facility_review_additions:
         raise ValueError('Facility decision rewrite differs from the exact fixed pair snapshot')
 
     term_data = term_taxonomy(root)
@@ -2012,13 +2035,17 @@ def verify(root, allow_pending_reviews=False):
             if entry.get('baseline') is None and isinstance(entry.get('added_record'), dict)
             and 'facility' in entry.get('categories', [])
         }
+        reviewed_facility_moves = (facility_review_moves(review_entries, facility_data['categoryIds'])
+                                   & set(facility_data['results']))
         classified_facility_pairs = {
             pair for pair, row in decision_rows.items()
             if row[4] == 'classified' and any(category in facility_data['categoryIds']
                                                for category in row[2].split(','))
         }
-        if not set(facility_data['results']) <= classified_facility_pairs:
+        if not set(facility_data['results']) - reviewed_facility_moves <= classified_facility_pairs:
             raise ValueError('A fixed facility classification is absent from the admitted facility decisions')
+        if reviewed_facility_moves & classified_facility_pairs:
+            raise ValueError('A reviewed facility move remains in the facility hierarchy')
         source_record_rows = {
             tuple(row) for _, row in source_rows(root)
             if (row[0], row[4]) in facility_data['results']

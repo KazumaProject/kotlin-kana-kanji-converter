@@ -454,5 +454,32 @@ class DistributionTest(unittest.TestCase):
         self.assertEqual(d.person_reading('ジョージ・サン ピエール'), 'じょーじさんぴえーる')
         self.assertEqual(d.person_reading('キムラ“フィリップ”ミノル'), 'きむらふぃりっぷみのる')
 
+    def test_reviewed_facility_brand_can_move_to_organization(self):
+        pair = ('はかたいっぷうどう', '博多一風堂')
+        facility = 'facility/religious/shrine'
+        entries = {
+            pair: {
+                'action': 'reclassify',
+                'baseline': [*pair, facility + ',organization', 'gemini', 'classified'],
+                'categories': ['organization'],
+            },
+            ('しんぶんしゃ', '新聞社'): {
+                'action': 'reclassify',
+                'baseline': ['しんぶんしゃ', '新聞社', 'organization', 'gemini', 'classified'],
+                'categories': ['organization'],
+            },
+            ('べんりてん', '弁利店'): {
+                'action': 'reclassify',
+                'baseline': ['べんりてん', '弁利店', facility, 'gemini', 'classified'],
+                'categories': [facility],
+            },
+            ('はいかん', '廃館'): {
+                'action': 'exclude',
+                'baseline': ['はいかん', '廃館', facility, 'gemini', 'excluded'],
+                'categories': [],
+            },
+        }
+        self.assertEqual(d.facility_review_moves(entries, {facility}), {pair})
+
 
 if __name__ == '__main__':unittest.main()
