@@ -32,9 +32,299 @@
       "definition": "個別に特定できる旅客用駅・停留所。"
     },
     {
-      "id": "facility",
-      "name": "施設",
-      "definition": "建物、施設、固定された交通インフラ。"
+      "id": "facility/religious/shrine",
+      "name": "神社・神宮",
+      "definition": "神社、神宮、神社境内の社殿など、神道の祭祀を行う施設。"
+    },
+    {
+      "id": "facility/religious/temple",
+      "name": "寺院",
+      "definition": "仏教の礼拝・法要を行う寺院、仏堂、仏教寺院内の堂宇。名称に「病院」を含む施設は含めない。"
+    },
+    {
+      "id": "facility/religious/church",
+      "name": "教会・礼拝堂",
+      "definition": "キリスト教その他の宗教の教会、礼拝堂、宗教集会所。"
+    },
+    {
+      "id": "facility/religious/monastery",
+      "name": "修道院・宗教共同体施設",
+      "definition": "修道院、僧院、神学校など、宗教者の共同生活・養成を主目的とする施設。"
+    },
+    {
+      "id": "facility/education/school",
+      "name": "学校",
+      "definition": "小学校、中学校、高等学校、特別支援学校、高等専門学校、専門学校などの学校教育施設。"
+    },
+    {
+      "id": "facility/education/preschool",
+      "name": "保育・幼児教育施設",
+      "definition": "保育所、幼稚園、認定こども園、児童の就学前教育・保育施設。"
+    },
+    {
+      "id": "facility/education/university",
+      "name": "大学・高等教育施設",
+      "definition": "大学、短期大学、大学院などの高等教育施設。大学病院は含めない。"
+    },
+    {
+      "id": "facility/education/research",
+      "name": "研究施設",
+      "definition": "大学等の研究所、研究センター、試験研究施設。発電・製造・通信など産業設備が主機能の施設は産業を優先する。"
+    },
+    {
+      "id": "facility/healthcare/hospital",
+      "name": "病院",
+      "definition": "病院、大学病院、医療センターなど入院・総合診療を主とする医療施設。"
+    },
+    {
+      "id": "facility/healthcare/clinic",
+      "name": "診療所・専門医療施設",
+      "definition": "診療所、医院、クリニック、歯科医院、健診・専門医療施設。"
+    },
+    {
+      "id": "facility/healthcare/care",
+      "name": "介護・福祉施設",
+      "definition": "介護老人福祉施設、介護老人保健施設、老人ホーム、福祉作業所など介護・福祉を主目的とする施設。"
+    },
+    {
+      "id": "facility/public/government",
+      "name": "官公庁・行政窓口",
+      "definition": "庁舎、市区町村役場、行政機関の出先機関、公共サービス窓口。行政組織自体は含めない。"
+    },
+    {
+      "id": "facility/public/police_fire",
+      "name": "警察・消防・防災",
+      "definition": "警察署、交番、消防署、消防・防災拠点など治安・消防・防災施設。"
+    },
+    {
+      "id": "facility/public/judicial",
+      "name": "司法・矯正施設",
+      "definition": "裁判所、検察庁の庁舎、刑務所、拘置所など司法・矯正施設。"
+    },
+    {
+      "id": "facility/public/postal",
+      "name": "郵便施設",
+      "definition": "郵便局、郵便物の集配局など郵便サービスを提供する施設。郵便事業者という組織は含めない。"
+    },
+    {
+      "id": "facility/cultural/museum",
+      "name": "博物館・資料館",
+      "definition": "博物館、郷土資料館、科学館、展示資料を収集・保存・公開する施設。"
+    },
+    {
+      "id": "facility/cultural/art_museum",
+      "name": "美術館・ギャラリー",
+      "definition": "美術館、画廊、公立・私立の美術作品展示施設。"
+    },
+    {
+      "id": "facility/cultural/library",
+      "name": "図書館・文書館",
+      "definition": "図書館、文書館、公文書館など資料の閲覧・保存を主目的とする施設。"
+    },
+    {
+      "id": "facility/cultural/memorial",
+      "name": "記念館・文化会館",
+      "definition": "特定人物・出来事の資料展示を行う記念館、文化会館、文化交流施設。歴史的建造物自体を指す名称は歴史・文化遺産を優先する。"
+    },
+    {
+      "id": "facility/entertainment/theater",
+      "name": "劇場・演芸場",
+      "definition": "劇場、演芸場、寄席、コンサートホールなど舞台公演を主目的とする施設。"
+    },
+    {
+      "id": "facility/entertainment/cinema",
+      "name": "映画館",
+      "definition": "映画館、シネマコンプレックスなど映画上映施設。"
+    },
+    {
+      "id": "facility/entertainment/live_venue",
+      "name": "ライブ・興行会場",
+      "definition": "ライブハウス、音楽・演芸の興行会場、イベントホールなど観客向け興行施設。"
+    },
+    {
+      "id": "facility/entertainment/amusement",
+      "name": "遊園地・娯楽施設",
+      "definition": "遊園地、テーマパーク、ゲームセンターなど娯楽・遊戯を主目的とする施設。"
+    },
+    {
+      "id": "facility/sports/stadium",
+      "name": "球場・競技場",
+      "definition": "野球場、陸上競技場、サッカー場、競技アリーナなど競技・観戦施設。"
+    },
+    {
+      "id": "facility/sports/gymnasium",
+      "name": "体育館・運動施設",
+      "definition": "体育館、武道場、運動場、トレーニング施設など屋内外の運動施設。"
+    },
+    {
+      "id": "facility/sports/golf",
+      "name": "ゴルフ場",
+      "definition": "ゴルフコース、ゴルフ練習場などゴルフ施設。"
+    },
+    {
+      "id": "facility/sports/ski",
+      "name": "スキー場・雪上競技施設",
+      "definition": "スキー場、スノーボード場など雪上スポーツ施設。"
+    },
+    {
+      "id": "facility/sports/aquatic",
+      "name": "プール・水上スポーツ施設",
+      "definition": "競泳プール、屋内外プール、ボート・水上競技施設。温泉浴場は宿泊・温浴を優先する。"
+    },
+    {
+      "id": "facility/commercial/shopping",
+      "name": "商業施設・百貨店",
+      "definition": "ショッピングモール、百貨店、商店街、専門店ビルなど買物を主目的とする施設。"
+    },
+    {
+      "id": "facility/commercial/restaurant",
+      "name": "飲食店",
+      "definition": "レストラン、食堂、喫茶店、ラーメン店など、飲食物を提供する個別の店舗・店舖施設。"
+    },
+    {
+      "id": "facility/commercial/market",
+      "name": "市場・商店",
+      "definition": "卸売市場、青果市場、個別の小売店・商店など市場取引や物品販売を主目的とする施設。"
+    },
+    {
+      "id": "facility/hospitality/hotel",
+      "name": "ホテル・宿泊施設",
+      "definition": "ホテル、ビジネスホテル、宿泊型リゾートなど宿泊施設。"
+    },
+    {
+      "id": "facility/hospitality/inn",
+      "name": "旅館・民宿",
+      "definition": "旅館、温泉旅館、民宿など和式・小規模宿泊施設。"
+    },
+    {
+      "id": "facility/hospitality/hot_spring",
+      "name": "温泉・入浴施設",
+      "definition": "温泉施設、日帰り温浴施設、銭湯、スパなど入浴・温浴を主目的とする施設。"
+    },
+    {
+      "id": "facility/transport/airport",
+      "name": "空港・航空施設",
+      "definition": "空港、飛行場、航空機の運航・整備を支える施設。"
+    },
+    {
+      "id": "facility/transport/harbor",
+      "name": "港湾・船舶施設",
+      "definition": "港、埠頭、船舶ターミナル、港湾荷役施設など船舶交通を支える施設。"
+    },
+    {
+      "id": "facility/transport/railway_facility",
+      "name": "鉄道設備",
+      "definition": "信号場、車両基地、操車場、鉄道変電所など鉄道運行を支える設備。旅客駅は含めない。"
+    },
+    {
+      "id": "facility/transport/road_facility",
+      "name": "道路・自動車交通施設",
+      "definition": "サービスエリア、道の駅、料金所、道路管理設備など道路交通施設。道路そのものは交通路線を優先する。"
+    },
+    {
+      "id": "facility/transport/parking",
+      "name": "駐車・車庫施設",
+      "definition": "駐車場、立体駐車場、自動車車庫など車両の駐車・保管を主目的とする施設。"
+    },
+    {
+      "id": "facility/infrastructure/bridge",
+      "name": "橋梁",
+      "definition": "橋、歩道橋、跨線橋など河川・道路・鉄道等を渡す構造物。"
+    },
+    {
+      "id": "facility/infrastructure/tunnel",
+      "name": "トンネル",
+      "definition": "道路・鉄道・歩行者用トンネルなど地中を通す土木構造物。"
+    },
+    {
+      "id": "facility/infrastructure/dam",
+      "name": "ダム・堰",
+      "definition": "ダム、堰、砂防堰堤など貯水・治水・砂防構造物。発電所建屋は産業を優先する。"
+    },
+    {
+      "id": "facility/infrastructure/water_control",
+      "name": "水門・水路・治水設備",
+      "definition": "水門、閘門、用水路、排水機場、河川・港湾の水利構造物。"
+    },
+    {
+      "id": "facility/industrial/factory",
+      "name": "工場・製造施設",
+      "definition": "工場、製造所、製油所、鉱山施設など生産・加工を主目的とする施設。"
+    },
+    {
+      "id": "facility/industrial/power",
+      "name": "発電・エネルギー施設",
+      "definition": "火力・水力・原子力・風力発電所、変電所、ガス供給設備などエネルギー施設。"
+    },
+    {
+      "id": "facility/industrial/logistics",
+      "name": "物流・倉庫施設",
+      "definition": "物流センター、配送センター、倉庫、貨物集配施設など保管・物流施設。"
+    },
+    {
+      "id": "facility/industrial/communications",
+      "name": "通信設備",
+      "definition": "通信局舎、電波塔、放送送信所、通信センターなど固定通信・放送設備。"
+    },
+    {
+      "id": "facility/recreation/park_garden",
+      "name": "公園・庭園",
+      "definition": "公園、庭園、植物園、緑地、自然公園の整備施設。自然地形・地名自体は含めない。"
+    },
+    {
+      "id": "facility/recreation/zoo_aquarium",
+      "name": "動物園・水族館",
+      "definition": "動物園、水族館、動植物の飼育展示施設。"
+    },
+    {
+      "id": "facility/recreation/outdoor_nature",
+      "name": "自然体験・レジャー施設",
+      "definition": "キャンプ場、自然体験施設、ハイキング拠点など屋外体験を主目的とする施設。スポーツ競技施設は含めない。"
+    },
+    {
+      "id": "facility/heritage/castle",
+      "name": "城郭・宮殿",
+      "definition": "城、城跡の主要遺構、宮殿、歴史的な城郭建築。現在の行政庁舎やテーマパークは含めない。"
+    },
+    {
+      "id": "facility/heritage/archaeological_site",
+      "name": "古墳・遺跡",
+      "definition": "古墳、遺跡、古代遺構、史跡の発掘・保存区域。地名・自然地形としての呼称は含めない。"
+    },
+    {
+      "id": "facility/heritage/historic_residence",
+      "name": "歴史的住宅・邸宅",
+      "definition": "歴史上の人物・家系に関係する住宅、旧邸、武家屋敷など歴史的住宅建築。"
+    },
+    {
+      "id": "facility/residential/housing_complex",
+      "name": "団地・住宅群",
+      "definition": "団地、住宅団地、ニュータウン内の個別住宅群など複数住戸の集合。"
+    },
+    {
+      "id": "facility/residential/condominium",
+      "name": "マンション・集合住宅",
+      "definition": "個別に特定できるマンション、アパート、集合住宅。"
+    },
+    {
+      "id": "facility/residential/mixed_use_building",
+      "name": "複合建築物",
+      "definition": "住宅・商業・業務等の用途が混在し、単一用途が主目的と判断できない複合建築物。"
+    },
+    {
+      "id": "facility/military/base",
+      "name": "基地・駐屯地",
+      "definition": "基地、駐屯地、航空基地、海軍基地、軍事部隊の常設拠点。"
+    },
+    {
+      "id": "facility/military/garrison",
+      "name": "兵営・防衛拠点",
+      "definition": "兵営、弾薬庫、防衛施設など軍事・防衛の固定拠点。"
+    },
+    {
+      "id": "facility/military/training_ground",
+      "name": "演習・訓練施設",
+      "definition": "演習場、射撃場、軍事訓練区域など防衛組織の訓練施設。"
     },
     {
       "id": "transport_route",
@@ -224,7 +514,7 @@
     {
       "id": "media_demographic/audience/mixed",
       "name": "複数対象層",
-      "definition": "MyAnimeListのdemographicsタグまたは特定した複数の出典が、異なる対象層を明示する作品・キャラクター。"
+      "definition": "MyAnimeListのdemographicsタグまたは特定した複数の出典が異なる対象層を示すときの分類途中のラベル。配布前に作品・キャラクターごとに最も近い単一対象層へ整理し、配布カテゴリには残しません。"
     },
     {
       "id": "media_demographic/audience/unspecified",
@@ -278,6 +568,184 @@
     }
   ],
   "categoryGroups": [
+    {
+      "id": "facility",
+      "name": "施設辞書",
+      "definition": "個別に特定できる建物、敷地、設備などの物理的施設。読み・表記が同じ施設は一つの読み・表記組にまとめ、用途を示す葉カテゴリへ一つだけ配布する。地名、自然地形、旅客駅、路線、組織、ブランド、一般用語は対象外。",
+      "groups": [
+        {
+          "id": "facility/religious",
+          "name": "宗教施設",
+          "definition": "宗教儀礼、礼拝、宗教共同体の活動を主目的とする個別施設。歴史遺産としてのみ扱う建造物は歴史・文化遺産を優先する。",
+          "categories": [
+            "facility/religious/shrine",
+            "facility/religious/temple",
+            "facility/religious/church",
+            "facility/religious/monastery"
+          ]
+        },
+        {
+          "id": "facility/education",
+          "name": "教育・研究施設",
+          "definition": "学校教育、保育、職業教育、学術研究を主目的とする施設。病院が主機能の大学病院は医療施設を優先する。",
+          "categories": [
+            "facility/education/school",
+            "facility/education/preschool",
+            "facility/education/university",
+            "facility/education/research"
+          ]
+        },
+        {
+          "id": "facility/healthcare",
+          "name": "医療・福祉施設",
+          "definition": "診断、治療、保健、介護、福祉サービスを主目的とする施設。",
+          "categories": [
+            "facility/healthcare/hospital",
+            "facility/healthcare/clinic",
+            "facility/healthcare/care"
+          ]
+        },
+        {
+          "id": "facility/public",
+          "name": "行政・公共施設",
+          "definition": "行政サービス、治安・防災、司法、郵便などの公共サービスを提供する施設。運営組織そのものは含めない。",
+          "categories": [
+            "facility/public/government",
+            "facility/public/police_fire",
+            "facility/public/judicial",
+            "facility/public/postal"
+          ]
+        },
+        {
+          "id": "facility/cultural",
+          "name": "文化・学術施設",
+          "definition": "資料の収集・保存・展示、芸術作品の公開、図書の利用を主目的とする施設。歴史遺産そのものは歴史・文化遺産を優先する。",
+          "categories": [
+            "facility/cultural/museum",
+            "facility/cultural/art_museum",
+            "facility/cultural/library",
+            "facility/cultural/memorial"
+          ]
+        },
+        {
+          "id": "facility/entertainment",
+          "name": "娯楽・興行施設",
+          "definition": "観客向けの舞台・映像・音楽公演や遊戯・娯楽サービスを主目的とする施設。競技施設はスポーツを優先する。",
+          "categories": [
+            "facility/entertainment/theater",
+            "facility/entertainment/cinema",
+            "facility/entertainment/live_venue",
+            "facility/entertainment/amusement"
+          ]
+        },
+        {
+          "id": "facility/sports",
+          "name": "スポーツ施設",
+          "definition": "競技、運動、観戦、スポーツレジャーを主目的とする施設。",
+          "categories": [
+            "facility/sports/stadium",
+            "facility/sports/gymnasium",
+            "facility/sports/golf",
+            "facility/sports/ski",
+            "facility/sports/aquatic"
+          ]
+        },
+        {
+          "id": "facility/commercial",
+          "name": "商業・飲食施設",
+          "definition": "物品販売、飲食、商取引を主目的とする個別店舗・市場・商業施設。企業名・ブランド名だけの語は含めない。",
+          "categories": [
+            "facility/commercial/shopping",
+            "facility/commercial/restaurant",
+            "facility/commercial/market"
+          ]
+        },
+        {
+          "id": "facility/hospitality",
+          "name": "宿泊・温浴施設",
+          "definition": "宿泊または入浴・温浴サービスを主目的とする施設。スキーや競技が主目的の施設はスポーツを優先する。",
+          "categories": [
+            "facility/hospitality/hotel",
+            "facility/hospitality/inn",
+            "facility/hospitality/hot_spring"
+          ]
+        },
+        {
+          "id": "facility/transport",
+          "name": "交通施設",
+          "definition": "人や貨物の移動を支える空港、港、鉄道設備、道路設備等の物理的施設。旅客駅・停留所は駅カテゴリ、路線は交通路線カテゴリを優先する。",
+          "categories": [
+            "facility/transport/airport",
+            "facility/transport/harbor",
+            "facility/transport/railway_facility",
+            "facility/transport/road_facility",
+            "facility/transport/parking"
+          ]
+        },
+        {
+          "id": "facility/infrastructure",
+          "name": "土木・水利施設",
+          "definition": "橋、トンネル、ダム、水門、用水路など固定された土木・治水・水利構造物。交通サービス設備や自然地形は含めない。",
+          "categories": [
+            "facility/infrastructure/bridge",
+            "facility/infrastructure/tunnel",
+            "facility/infrastructure/dam",
+            "facility/infrastructure/water_control"
+          ]
+        },
+        {
+          "id": "facility/industrial",
+          "name": "産業・エネルギー施設",
+          "definition": "製造、電力・燃料の生産、貨物保管・流通、通信サービスを主目的とする物理的施設。運営企業・組織自体は含めない。",
+          "categories": [
+            "facility/industrial/factory",
+            "facility/industrial/power",
+            "facility/industrial/logistics",
+            "facility/industrial/communications"
+          ]
+        },
+        {
+          "id": "facility/recreation",
+          "name": "公園・自然体験施設",
+          "definition": "緑地、庭園、動植物の展示、自然体験を主目的とする施設。遊園地や競技施設はそれぞれ娯楽・スポーツを優先する。",
+          "categories": [
+            "facility/recreation/park_garden",
+            "facility/recreation/zoo_aquarium",
+            "facility/recreation/outdoor_nature"
+          ]
+        },
+        {
+          "id": "facility/heritage",
+          "name": "歴史・文化遺産",
+          "definition": "歴史的価値を持つ個別の遺構・建造物・遺跡。現在も宗教儀礼、行政、宿泊等を主機能として営業する施設は現用途の分類を優先する。",
+          "categories": [
+            "facility/heritage/castle",
+            "facility/heritage/archaeological_site",
+            "facility/heritage/historic_residence"
+          ]
+        },
+        {
+          "id": "facility/residential",
+          "name": "住宅・建築施設",
+          "definition": "住宅の集合、集合住宅、複合用途の建築物など居住・建物利用を主目的とする施設。商業機能が主の建物は商業施設を優先する。",
+          "categories": [
+            "facility/residential/housing_complex",
+            "facility/residential/condominium",
+            "facility/residential/mixed_use_building"
+          ]
+        },
+        {
+          "id": "facility/military",
+          "name": "軍事・防衛施設",
+          "definition": "軍隊・防衛組織の駐留、訓練、運用を主目的とする施設。軍事組織そのものは組織カテゴリを優先する。",
+          "categories": [
+            "facility/military/base",
+            "facility/military/garrison",
+            "facility/military/training_ground"
+          ]
+        }
+      ]
+    },
     {
       "id": "event",
       "name": "イベント・事件",
