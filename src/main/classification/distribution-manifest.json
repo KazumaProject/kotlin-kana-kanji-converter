@@ -2,7 +2,7 @@
   "admittedPairsByOrigin": {
     "manual": 378757,
     "gemini": 188636,
-    "verified": 180873
+    "verified": 180876
   },
   "categoryGroups": [
     {
@@ -342,7 +342,7 @@
     "transport_route": 4230,
     "organization": 47509,
     "lineage": 2019,
-    "product": 10125,
+    "product": 10128,
     "vehicle": 2580,
     "event/occasion/organized_event": 4059,
     "event/occasion/observance": 802,
@@ -393,13 +393,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 777462,
+  "dictionaryRows": 777465,
   "excludedCandidatePairs": 328692,
   "excludedClassifiedPairs": 322967,
   "files": {
     "categories.json": "6cdfb7f23de0e2d90283adc7139e52581e575d13f830e996c87948e43446ee60",
-    "distribution-candidates.tsv.gz": "6b21149f467ff7d3475d7c1b9cc46cacba2a1aba39da1807114859d29600a49b",
-    "distribution-decisions.tsv.gz": "3862090fe7264a70a54641baa4a7a1daab82b13d5a739dce7bfb29528c0c5408"
+    "distribution-candidates.tsv.gz": "bd03a5f3abd6662277a372ff1ade04c060aab2454db96826a36cce354a0e05f9",
+    "distribution-decisions.tsv.gz": "e07dd56064b4f488d7fa4de79b11f2f781338a2232d53f2b3de89ac7514eff74"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -434,6 +434,8 @@
     "src/main/classification/facility-taxonomy.json": "1e8446cdfea2470c992085bb17876496b67303cd93154fa05244f6489cd83fa7",
     "src/main/classification/facility-classifications.tsv.gz": "d4d22ea8375cdc45a53ae423d865b02e97ed28a60b3418a7f673e73860abc341",
     "src/main/classification/facility-classifications-manifest.json": "2cc62744ac63cb2cd465c907829348e26ca48a14552000dec1630ba57701a7d5",
+    "src/main/classification/person-additions/notable-people-2026-10-25.jsonl": "eb51aac49ed290987ba93a8e8b07a1bf2a827384514ad84d6b954011f7c6980c",
+    "src/main/classification/person-additions/board-sports-2026-10-25.jsonl": "33c9ba40a48c68c0de3bc7c65bbb930c1cc15cb760a4033f54e3fbd8cc24976e",
     "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl": "574794d0df19f8afd09d06b66897d7b7fce97dd3652bc005674a3ecae28bb30a",
     "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl": "5a373897bbade57c507d08e4813baa7d5975bc752a568cdaee8aaebd9d18f155",
     "src/main/classification/reviews/2026-10-16-pr128-luna-0000.jsonl": "3ab59c82e6e0645da8f513606038212b601c0c4c46273db4faf8122d6812cf1d",
@@ -491,9 +493,8 @@
     "src/main/classification/reviews/2026-10-24-ramen-brand-corrections.jsonl": "1ccfa60102dc84a525858dca55ccaf7cf227edf5f390f8446d6a98538d63e961",
     "src/main/classification/reviews/2026-10-24-regional-ramen-shop-additions.jsonl": "6b76d94e46c90b76745508a3f550dfc34e3eb0d9a2ea38d30a3fb01da3ee9242",
     "src/main/classification/reviews/2026-10-24-z-media-demographic-tank-chair.jsonl": "76a35fc03ba6457987b18544b07b7a0914408b78e1b88dd98d3a67e6b7e8fb25",
-    "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb",
-    "src/main/classification/person-additions/notable-people-2026-10-25.jsonl": "eb51aac49ed290987ba93a8e8b07a1bf2a827384514ad84d6b954011f7c6980c",
-    "src/main/classification/person-additions/board-sports-2026-10-25.jsonl": "33c9ba40a48c68c0de3bc7c65bbb930c1cc15cb760a4033f54e3fbd8cc24976e"
+    "src/main/classification/reviews/2026-10-25-issue-223-products.jsonl": "351057c59e86ff8491749b8550d40e22401a8e14f31afe6caf25fabca608478b",
+    "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
   },
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified.",
@@ -72582,6 +72583,7 @@
       "src/main/classification/reviews/2026-10-24-ramen-brand-corrections.jsonl",
       "src/main/classification/reviews/2026-10-24-regional-ramen-shop-additions.jsonl",
       "src/main/classification/reviews/2026-10-24-z-media-demographic-tank-chair.jsonl",
+      "src/main/classification/reviews/2026-10-25-issue-223-products.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
     "termAdditions": [
@@ -72839,5 +72841,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 748266
+  "uniqueAdmittedPairs": 748269
 }
