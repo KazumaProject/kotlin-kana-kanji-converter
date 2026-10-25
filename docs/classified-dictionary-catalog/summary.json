@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "55da17dbd50418b2aef63fda50cb2eacf485d90241aad2a2d1554ebfd37fef52",
-  "uniquePairs": 836305,
-  "records": 865411,
+  "inputSha256": "a8cc707ff16e041ee5319256aedb187fd94ba2f18ff6cb4deae95116a8374012",
+  "uniquePairs": 836302,
+  "records": 865408,
   "categories": [
     {
       "id": "character",
@@ -1553,8 +1553,8 @@
     {
       "id": "musician",
       "name": "歌手・音楽家",
-      "records": 1256,
-      "pairs": 1254,
+      "records": 1255,
+      "pairs": 1253,
       "pages": 1
     },
     {
@@ -1595,15 +1595,15 @@
     {
       "id": "competitive_games",
       "name": "棋士・競技ゲーム選手",
-      "records": 1185,
-      "pairs": 1185,
+      "records": 1184,
+      "pairs": 1184,
       "pages": 1
     },
     {
       "id": "writer",
       "name": "作家・文筆家",
-      "records": 1157,
-      "pairs": 1156,
+      "records": 1156,
+      "pairs": 1155,
       "pages": 1
     },
     {

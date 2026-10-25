@@ -2,7 +2,7 @@
 
 通常版GitHub Releaseの辞書ZIPに含まれる全143カテゴリを掲載します。通常配布カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **865,411**、読み・表記の組数の合計は **857,286**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **865,408**、読み・表記の組数の合計は **857,283**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換配布) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -154,14 +154,14 @@
 | [人名・姓名（由来未確認）](person/personal_name_origin_unconfirmed/index.md) | `personal_name_origin_unconfirmed` | 92,876 | 93,650 | [全件](person/personal_name_origin_unconfirmed/index.md) |
 | [俳優](person/actor/index.md) | `actor` | 6,536 | 6,591 | [全件](person/actor/index.md) |
 | [声優](person/voice_actor/index.md) | `voice_actor` | 656 | 663 | [全件](person/voice_actor/index.md) |
-| [歌手・音楽家](person/musician/index.md) | `musician` | 1,254 | 1,256 | [全件](person/musician/index.md) |
+| [歌手・音楽家](person/musician/index.md) | `musician` | 1,253 | 1,255 | [全件](person/musician/index.md) |
 | [アイドル](person/idol/index.md) | `idol` | 155 | 156 | [全件](person/idol/index.md) |
 | [お笑い芸人](person/comedian/index.md) | `comedian` | 1,747 | 1,749 | [全件](person/comedian/index.md) |
 | [タレント・モデル・放送・報道](person/broadcaster/index.md) | `broadcaster` | 1,516 | 1,519 | [全件](person/broadcaster/index.md) |
 | [配信者・動画投稿者](person/online_creator/index.md) | `online_creator` | 135 | 137 | [全件](person/online_creator/index.md) |
 | [スポーツ関係者](person/sports/index.md) | `sports` | 7,459 | 7,464 | [全件](person/sports/index.md) |
-| [棋士・競技ゲーム選手](person/competitive_games/index.md) | `competitive_games` | 1,185 | 1,185 | [全件](person/competitive_games/index.md) |
-| [作家・文筆家](person/writer/index.md) | `writer` | 1,156 | 1,157 | [全件](person/writer/index.md) |
+| [棋士・競技ゲーム選手](person/competitive_games/index.md) | `competitive_games` | 1,184 | 1,184 | [全件](person/competitive_games/index.md) |
+| [作家・文筆家](person/writer/index.md) | `writer` | 1,155 | 1,156 | [全件](person/writer/index.md) |
 | [漫画家・イラストレーター](person/manga_illustration/index.md) | `manga_illustration` | 214 | 215 | [全件](person/manga_illustration/index.md) |
 | [映画・映像・ゲーム制作者](person/film_game_creator/index.md) | `film_game_creator` | 230 | 231 | [全件](person/film_game_creator/index.md) |
 | [美術・写真・建築・デザイン](person/art_design/index.md) | `art_design` | 936 | 936 | [全件](person/art_design/index.md) |

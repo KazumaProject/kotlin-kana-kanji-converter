@@ -2,7 +2,7 @@
   "admittedPairsByOrigin": {
     "manual": 378757,
     "gemini": 188636,
-    "verified": 180631
+    "verified": 180628
   },
   "categoryGroups": [
     {
@@ -274,7 +274,7 @@
     }
   ],
   "categoryRows": {
-    "person": 274008,
+    "person": 274005,
     "character": 6848,
     "mythological_figure": 3436,
     "place": 45090,
@@ -393,17 +393,17 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 777220,
+  "dictionaryRows": 777217,
   "excludedCandidatePairs": 328692,
   "excludedClassifiedPairs": 322967,
   "files": {
     "categories.json": "6cdfb7f23de0e2d90283adc7139e52581e575d13f830e996c87948e43446ee60",
-    "distribution-candidates.tsv.gz": "55da17dbd50418b2aef63fda50cb2eacf485d90241aad2a2d1554ebfd37fef52",
-    "distribution-decisions.tsv.gz": "f545d0d4c9c819be289172b425a3b69dae979646ec5565df5e8434747098c701"
+    "distribution-candidates.tsv.gz": "a8cc707ff16e041ee5319256aedb187fd94ba2f18ff6cb4deae95116a8374012",
+    "distribution-decisions.tsv.gz": "d8ef0e55d21e9a37e40d0b9a81f2e2a5e52bfb64368e4f2219ad887e56854574"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
-    "src/main/bin/names.txt": "c24eccf5c08ef54ff66d99a1d6e11a1025add12fc075e139e9986bc7692093e7",
+    "src/main/bin/names.txt": "d051225a780b64f2b24bfa1f706b3106539545c39219b1d8c2e1b6703f506bd7",
     "src/main/bin/only_neologd.txt.zip": "64222fa806e424556b662619fb7cba9ac9683f89959afee909dadb112027458e",
     "src/main/bin/only_wiki.txt.zip": "2c3ca451484900edee55ae4ebe79284e1301b077572f64e9100889a5755bed10",
     "src/main/bin/place.txt.zip": "bae15eb6755a2e6aa30d1d9ece7970c7d97d761b6e430c59bc11222f8e2e6f01",
@@ -492,7 +492,7 @@
     "src/main/classification/reviews/2026-10-24-regional-ramen-shop-additions.jsonl": "6b76d94e46c90b76745508a3f550dfc34e3eb0d9a2ea38d30a3fb01da3ee9242",
     "src/main/classification/reviews/2026-10-24-z-media-demographic-tank-chair.jsonl": "76a35fc03ba6457987b18544b07b7a0914408b78e1b88dd98d3a67e6b7e8fb25",
     "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb",
-    "src/main/classification/person-additions/notable-people-2026-10-25.jsonl": "b2cd441dac8d10035bdb5012b38628165e79946bd19b32511681fbb555183fe3"
+    "src/main/classification/person-additions/notable-people-2026-10-25.jsonl": "eb51aac49ed290987ba93a8e8b07a1bf2a827384514ad84d6b954011f7c6980c"
   },
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified.",
@@ -28716,8 +28716,8 @@
       },
       {
         "path": "src/main/classification/person-additions/notable-people-2026-10-25.jsonl",
-        "sha256": "b2cd441dac8d10035bdb5012b38628165e79946bd19b32511681fbb555183fe3",
-        "reviewedPairs": 3054,
+        "sha256": "eb51aac49ed290987ba93a8e8b07a1bf2a827384514ad84d6b954011f7c6980c",
+        "reviewedPairs": 3051,
         "addedPairs": [
           [
             "あいかわもな",
@@ -32744,10 +32744,6 @@
             "ケリー・プライス"
           ],
           [
-            "けるゔぃん",
-            "ケルヴィン"
-          ],
-          [
             "けれんあん",
             "ケレン・アン"
           ],
@@ -33588,10 +33584,6 @@
             "佐藤直哉"
           ],
           [
-            "さとうはちろう",
-            "サトウハチロー"
-          ],
-          [
             "さとうひろみ",
             "佐藤宏美"
           ],
@@ -33714,10 +33706,6 @@
           [
             "さゔぇまつだ",
             "サヴェ松田"
-          ],
-          [
-            "ざむゔぉーろ",
-            "ザムヴォーロ"
           ],
           [
             "ざわかつま",
@@ -40936,8 +40924,8 @@
             "ヴィンス・ステイプルズ"
           ]
         ],
-        "addedRecords": 3054,
-        "addedSourceRows": 3054,
+        "addedRecords": 3051,
+        "addedSourceRows": 3051,
         "appendedPairs": [
           [
             "あいかわもな",
@@ -44964,10 +44952,6 @@
             "ケリー・プライス"
           ],
           [
-            "けるゔぃん",
-            "ケルヴィン"
-          ],
-          [
             "けれんあん",
             "ケレン・アン"
           ],
@@ -45808,10 +45792,6 @@
             "佐藤直哉"
           ],
           [
-            "さとうはちろう",
-            "サトウハチロー"
-          ],
-          [
             "さとうひろみ",
             "佐藤宏美"
           ],
@@ -45934,10 +45914,6 @@
           [
             "さゔぇまつだ",
             "サヴェ松田"
-          ],
-          [
-            "ざむゔぉーろ",
-            "ザムヴォーロ"
           ],
           [
             "ざわかつま",
@@ -58188,11 +58164,6 @@
             "ケリー・プライス"
           ],
           [
-            "competitive_games",
-            "けるゔぃん",
-            "ケルヴィン"
-          ],
-          [
             "musician",
             "けれんあん",
             "ケレン・アン"
@@ -59243,11 +59214,6 @@
             "佐藤直哉"
           ],
           [
-            "writer",
-            "さとうはちろう",
-            "サトウハチロー"
-          ],
-          [
             "sports",
             "さとうひろみ",
             "佐藤宏美"
@@ -59401,11 +59367,6 @@
             "competitive_games",
             "さゔぇまつだ",
             "サヴェ松田"
-          ],
-          [
-            "musician",
-            "ざむゔぉーろ",
-            "ザムヴォーロ"
           ],
           [
             "competitive_games",
@@ -68428,7 +68389,7 @@
             "ヴィンス・ステイプルズ"
           ]
         ],
-        "categoryRecords": 3054
+        "categoryRecords": 3051
       }
     ],
     "personDictionaryExclusions": {
@@ -69671,12 +69632,12 @@
   "schemaVersion": 4,
   "sourceRows": {
     "neologd": 404817,
-    "person": 77027,
+    "person": 77024,
     "place": 170145,
     "term_additions": 1,
     "web": 308185,
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 748024
+  "uniqueAdmittedPairs": 748021
 }
