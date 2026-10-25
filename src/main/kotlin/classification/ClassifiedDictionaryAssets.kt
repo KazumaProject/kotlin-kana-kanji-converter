@@ -32,6 +32,11 @@ class ClassifiedDictionaryData(
             categoryIds.all { it.matches(Regex("[a-z_]+(/[a-z_]+)*")) })
         val idCount = MozcIdDefParser.parse(idDef.toPath()).size
         val categories = categoryIds.associateWith { linkedSetOf<Dictionary>() }
+        val productionDirectory = File("src/main/classification").canonicalFile
+        val crimeOffenderExclusionKeys = CrimeOffenderCandidateKeys.load(
+            directory,
+            required = directory.canonicalFile == productionDirectory,
+        )
         GZIPInputStream(File(directory, "distribution-candidates.tsv.gz").inputStream().buffered()).bufferedReader().useLines { lines ->
             lines.forEachIndexed { index, line ->
                 val fields = line.split('\t')
@@ -39,6 +44,9 @@ class ClassifiedDictionaryData(
                 val (category, reading, left, right, cost) = fields
                 val surface = fields[5]
                 require(reading.isNotEmpty() && surface.isNotEmpty())
+                if (CrimeOffenderCandidateKeys.key(reading, surface) in crimeOffenderExclusionKeys) {
+                    return@forEachIndexed
+                }
                 val leftId = left.toInt()
                 val rightId = right.toInt()
                 val wordCost = cost.toInt()

@@ -76,6 +76,7 @@ class PersonDictionaryData(
         require(policy
             .getValue("adult_related_hold").jsonObject
             .getValue("distribution").jsonPrimitive.content == "metadata_only")
+        val crimeOffenderExclusionKeys = CrimeOffenderCandidateKeys.load(classificationDirectory)
         val file = File(classificationDirectory, "person-dictionary-candidates.tsv.gz")
         val parsed = mutableListOf<PersonDictionaryRow>()
         val seen = mutableSetOf<List<Any>>()
@@ -91,6 +92,10 @@ class PersonDictionaryData(
                 val costText = fields[4]
                 val surface = fields[5]
                 val tagText = fields[6]
+                val candidateKey = CrimeOffenderCandidateKeys.key(reading, surface)
+                require(candidateKey !in crimeOffenderExclusionKeys) {
+                    "Crime-offender candidate found in standard person dictionary source row ${index + 1}"
+                }
                 require(categoryId in categoryIds) {
                     if (categoryId in nonStandardCategoryIds) {
                         "Restricted person category found in standard dictionary source"
