@@ -2,7 +2,7 @@
   "admittedPairsByOrigin": {
     "manual": 378757,
     "gemini": 188636,
-    "verified": 177574
+    "verified": 177577
   },
   "categoryGroups": [
     {
@@ -358,12 +358,12 @@
     "term/general/internet_slang_culture": 574,
     "term/general/neologisms_trends_youth_language": 485,
     "term/general/other_general": 20502,
-    "term/specialist/information_communications": 6082,
+    "term/specialist/information_communications": 6083,
     "term/specialist/mathematics_physics": 4171,
-    "term/specialist/chemistry_life_sciences": 27566,
+    "term/specialist/chemistry_life_sciences": 27567,
     "term/specialist/engineering_technology": 3509,
     "term/specialist/earth_environment_resources": 2110,
-    "term/specialist/economics_management": 5779,
+    "term/specialist/economics_management": 5780,
     "term/specialist/law_politics": 5274,
     "term/specialist/humanities_social_sciences": 17877,
     "term/specialist/culture_arts_sports": 5360,
@@ -393,13 +393,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 774163,
+  "dictionaryRows": 774166,
   "excludedCandidatePairs": 328692,
   "excludedClassifiedPairs": 322967,
   "files": {
     "categories.json": "6cdfb7f23de0e2d90283adc7139e52581e575d13f830e996c87948e43446ee60",
-    "distribution-candidates.tsv.gz": "6571d005d37610b7acb7102a12eb343b86ff157dd47b39352eab1ca3d6e79c56",
-    "distribution-decisions.tsv.gz": "30bb4ca7fcafcf559951f677f250d150fa47460b29064c8b668a1b1a2497dd58"
+    "distribution-candidates.tsv.gz": "09a73960d6b38de364d0f508330157b094f335da5168d150c74d5142a5f699cf",
+    "distribution-decisions.tsv.gz": "1d945bb4dc5d9719ccf0bc7f92ca9445cf3dcd3adf9b15db11d5e9885ba0a525"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -485,6 +485,7 @@
     "src/main/classification/reviews/2026-10-23-ramen-shops.jsonl": "a3afa7c1066bc4e10d8c97af3e8011a905f4a90cc943aa7fa06fd21d71bde3fc",
     "src/main/classification/reviews/2026-10-23-source-correction.jsonl": "a7a4463f11a81a53ba314380864126cdcb2c1fc2bd08789a5b3a03bf57c63581",
     "src/main/classification/reviews/2026-10-23-tokyo-kansai-ramen-shop-additions.jsonl": "4a2693a248cb87e370cb42b6830ee2b4d40c86cceee799e15bd4932f7d7f13e8",
+    "src/main/classification/reviews/2026-10-24-issue-219-neologisms.jsonl": "67f71f6e6ce73ef3dc6a2dc32c9dab55a6b96cc9f76ebb698069de27e84668f5",
     "src/main/classification/reviews/2026-10-24-open-vocabulary-issues.jsonl": "921ef24efb34a74e16730ee68ad93477a231825ca603a54ac4a14cb9c5f52229",
     "src/main/classification/reviews/2026-10-24-ramen-brand-additions.jsonl": "3e85a42fee883022a422fca243ff5c24d89aa032d5b15f3ed8edd2375cdd3982",
     "src/main/classification/reviews/2026-10-24-ramen-brand-corrections.jsonl": "1ccfa60102dc84a525858dca55ccaf7cf227edf5f390f8446d6a98538d63e961",
@@ -29697,6 +29698,7 @@
       "src/main/classification/reviews/2026-10-23-ramen-shops.jsonl",
       "src/main/classification/reviews/2026-10-23-source-correction.jsonl",
       "src/main/classification/reviews/2026-10-23-tokyo-kansai-ramen-shop-additions.jsonl",
+      "src/main/classification/reviews/2026-10-24-issue-219-neologisms.jsonl",
       "src/main/classification/reviews/2026-10-24-open-vocabulary-issues.jsonl",
       "src/main/classification/reviews/2026-10-24-ramen-brand-additions.jsonl",
       "src/main/classification/reviews/2026-10-24-ramen-brand-corrections.jsonl",
@@ -29959,5 +29961,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 744967
+  "uniqueAdmittedPairs": 744970
 }
