@@ -2,7 +2,7 @@
 
 通常版GitHub Releaseの辞書ZIPに含まれる全143カテゴリを掲載します。通常配布カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **862,354**、読み・表記の組数の合計は **854,229**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **862,357**、読み・表記の組数の合計は **854,232**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換配布) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -118,12 +118,12 @@
 | [ネットスラング・ネット文化](term/general/internet_slang_culture/index.md) | `term/general/internet_slang_culture` | 572 | 574 | [全件](term/general/internet_slang_culture/index.md) |
 | [新語・流行語・若者言葉](term/general/neologisms_trends_youth_language/index.md) | `term/general/neologisms_trends_youth_language` | 485 | 485 | [全件](term/general/neologisms_trends_youth_language/index.md) |
 | [その他の一般語](term/general/other_general/index.md) | `term/general/other_general` | 20,491 | 20,502 | [全件](term/general/other_general/index.md) |
-| [情報・通信](term/specialist/information_communications/index.md) | `term/specialist/information_communications` | 6,081 | 6,082 | [全件](term/specialist/information_communications/index.md) |
+| [情報・通信](term/specialist/information_communications/index.md) | `term/specialist/information_communications` | 6,082 | 6,083 | [全件](term/specialist/information_communications/index.md) |
 | [数学・物理](term/specialist/mathematics_physics/index.md) | `term/specialist/mathematics_physics` | 4,171 | 4,171 | [全件](term/specialist/mathematics_physics/index.md) |
-| [化学・生命科学](term/specialist/chemistry_life_sciences/index.md) | `term/specialist/chemistry_life_sciences` | 27,563 | 27,566 | [全件](term/specialist/chemistry_life_sciences/index.md) |
+| [化学・生命科学](term/specialist/chemistry_life_sciences/index.md) | `term/specialist/chemistry_life_sciences` | 27,564 | 27,567 | [全件](term/specialist/chemistry_life_sciences/index.md) |
 | [工学・技術](term/specialist/engineering_technology/index.md) | `term/specialist/engineering_technology` | 3,508 | 3,509 | [全件](term/specialist/engineering_technology/index.md) |
 | [地球・環境・資源](term/specialist/earth_environment_resources/index.md) | `term/specialist/earth_environment_resources` | 2,110 | 2,110 | [全件](term/specialist/earth_environment_resources/index.md) |
-| [経済・経営](term/specialist/economics_management/index.md) | `term/specialist/economics_management` | 5,779 | 5,779 | [全件](term/specialist/economics_management/index.md) |
+| [経済・経営](term/specialist/economics_management/index.md) | `term/specialist/economics_management` | 5,780 | 5,780 | [全件](term/specialist/economics_management/index.md) |
 | [法律・政治](term/specialist/law_politics/index.md) | `term/specialist/law_politics` | 5,273 | 5,274 | [全件](term/specialist/law_politics/index.md) |
 | [人文・社会科学](term/specialist/humanities_social_sciences/index.md) | `term/specialist/humanities_social_sciences` | 17,872 | 17,877 | [全件](term/specialist/humanities_social_sciences/index.md) |
 | [文化・芸術・スポーツ](term/specialist/culture_arts_sports/index.md) | `term/specialist/culture_arts_sports` | 5,360 | 5,360 | [全件](term/specialist/culture_arts_sports/index.md) |
