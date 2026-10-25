@@ -3373,6 +3373,28 @@ object Constants {
             cost = 0,
             tango = "した"
         ),
+        // Prefer these complete lexical readings over unrelated or split results.
+        Dictionary(
+            yomi = "したせん",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 2500,
+            tango = "下線"
+        ),
+        Dictionary(
+            yomi = "ひとくふう",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 2500,
+            tango = "一工夫"
+        ),
+        Dictionary(
+            yomi = "ふたくふう",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 2500,
+            tango = "二工夫"
+        ),
         // Keep the standard spelling ahead of the literary alternative "眼の前".
         // The bundled Mozc row currently has cost 4115; 3500 clears the current
         // BOS/connection-cost disadvantage without changing the source dictionary.
