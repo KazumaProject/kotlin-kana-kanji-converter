@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "1701568ff0eed62f9231e5f467758e28d42abe7bc20f18c2ed42137dc091547e",
-  "uniquePairs": 836567,
-  "records": 865678,
+  "inputSha256": "a9168aa9badcf58f247140cfdd1da20c9d31bc5f3161436436ec2757e7fa963a",
+  "uniquePairs": 836569,
+  "records": 865681,
   "categories": [
     {
       "id": "character",
@@ -900,9 +900,9 @@
       "records": 47510,
       "pages": 35,
       "recordsByOrigin": {
-        "gemini": 24631,
+        "gemini": 24630,
         "manual": 21393,
-        "verified": 1486
+        "verified": 1487
       }
     },
     {
@@ -921,14 +921,14 @@
     {
       "id": "product",
       "name": "商品・サービス",
-      "pairs": 10130,
-      "readings": 9906,
-      "records": 10132,
+      "pairs": 10133,
+      "readings": 9909,
+      "records": 10135,
       "pages": 7,
       "recordsByOrigin": {
         "gemini": 5941,
         "manual": 3917,
-        "verified": 274
+        "verified": 277
       }
     },
     {

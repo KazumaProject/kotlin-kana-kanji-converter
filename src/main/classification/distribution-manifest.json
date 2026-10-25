@@ -1,8 +1,8 @@
 {
   "admittedPairsByOrigin": {
     "manual": 378756,
-    "gemini": 188636,
-    "verified": 180894
+    "gemini": 188635,
+    "verified": 180897
   },
   "categoryGroups": [
     {
@@ -342,7 +342,7 @@
     "transport_route": 4230,
     "organization": 47510,
     "lineage": 2019,
-    "product": 10132,
+    "product": 10135,
     "vehicle": 2580,
     "event/occasion/organized_event": 4059,
     "event/occasion/observance": 802,
@@ -393,13 +393,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 777487,
+  "dictionaryRows": 777490,
   "excludedCandidatePairs": 328694,
   "excludedClassifiedPairs": 322969,
   "files": {
     "categories.json": "6cdfb7f23de0e2d90283adc7139e52581e575d13f830e996c87948e43446ee60",
-    "distribution-candidates.tsv.gz": "1701568ff0eed62f9231e5f467758e28d42abe7bc20f18c2ed42137dc091547e",
-    "distribution-decisions.tsv.gz": "f988f5357d233a6abaf51cceda4d58edd8fe851502f3835e3273356957047a0f"
+    "distribution-candidates.tsv.gz": "a9168aa9badcf58f247140cfdd1da20c9d31bc5f3161436436ec2757e7fa963a",
+    "distribution-decisions.tsv.gz": "ebf92f4227d8855ab38b47b2128ad7eca1b18db98800416f063686186e57f017"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -496,6 +496,7 @@
     "src/main/classification/reviews/2026-10-25-issue-223-products.jsonl": "351057c59e86ff8491749b8550d40e22401a8e14f31afe6caf25fabca608478b",
     "src/main/classification/reviews/2026-10-25-issue-223-products_followup.jsonl": "36dd26cf3f395cf9d5838bfd05da6dceb3989b95081f6823cca3ba8fe0133a46",
     "src/main/classification/reviews/2026-10-25-issue-223-products_surface-correction.jsonl": "e37d1be14163faf9d40ce551b28cb0210f6868fea107c359fc9dbf2425a97238",
+    "src/main/classification/reviews/2026-10-25-issue-227-business-services.jsonl": "0c70b089e4c861321dd790a6729fa383a91395ad5249994e8a0ae6089ec9fe4f",
     "src/main/classification/reviews/2026-10-25-open-new-terms-issues.jsonl": "2a853f685e6d09bcda9f5aeb4a6daf52fd8e7c7de469e28e2063df9c6c71e019",
     "src/main/classification/reviews/2026-10-25-open-new-terms-issues_demographic.jsonl": "ed74359bee32753053d2370c1bddc99f343593459449436594cae4d67d511bd7",
     "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
@@ -72590,6 +72591,7 @@
       "src/main/classification/reviews/2026-10-25-issue-223-products.jsonl",
       "src/main/classification/reviews/2026-10-25-issue-223-products_followup.jsonl",
       "src/main/classification/reviews/2026-10-25-issue-223-products_surface-correction.jsonl",
+      "src/main/classification/reviews/2026-10-25-issue-227-business-services.jsonl",
       "src/main/classification/reviews/2026-10-25-open-new-terms-issues.jsonl",
       "src/main/classification/reviews/2026-10-25-open-new-terms-issues_demographic.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
@@ -72849,5 +72851,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 748286
+  "uniqueAdmittedPairs": 748288
 }
