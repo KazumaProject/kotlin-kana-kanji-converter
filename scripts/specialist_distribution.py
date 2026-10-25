@@ -18,18 +18,19 @@ import classified_distribution as distribution
 import collected_terms
 
 DIRECTORY = 'src/main/specialist'
+CRIME_EXCLUSION_KEYS = 'src/main/classification/crime-offender-exclusion-keys.sha256'
 NOUN = '名詞,一般,*,*,*,*,*'
 COST = 9000
 HIRA = set('あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんぁぃぅぇぉゃゅょゎっゔーがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽ')
 KATA = {chr(ord(c) + 0x60) if '\u3041' <= c <= '\u3094' else c for c in HIRA}
-RULES = dict(version=4, key='normalized_reading+NFC_surface', reading='trim,NFKC,katakana-to-hiragana',
+RULES = dict(version=5, key='normalized_reading+NFC_surface', reading='trim,NFKC,katakana-to-hiragana',
              surface='trim,NFC; internal spaces/case/width/variants preserved',
              readingPattern='[ぁ-ゖー]+', categoryPriority=['kampo', 'medical'], cost=COST, pos=NOUN,
              readingAccuracy='upstream automatic readings and optional Gemini inference are unverified; explicit source-backed corrections are recorded',
              supplement='manbyo missing readings only; source row and original surface must match',
              readingCorrections='source, row, original reading and surface must match; corrected readings carry evidence URLs',
              kanaSurface='must equal the current TokenArray sentinel reconstruction',
-             classificationExclusions='withhold pairs excluded by the classified dictionary review')
+             classificationExclusions='withhold pairs excluded by classified review or the persistent crime-offender hash list')
 
 
 def json_bytes(value):
@@ -184,6 +185,21 @@ def classification_exclusions(root):
     return excluded
 
 
+def crime_exclusion_hashes(root):
+    path = root / CRIME_EXCLUSION_KEYS
+    if not path.is_file():
+        return set(), None
+    hashes = path.read_text(encoding='ascii').splitlines()
+    if not hashes or len(hashes) != len(set(hashes)) or any(not re.fullmatch('[0-9a-f]{64}', value) for value in hashes):
+        raise ValueError('Malformed crime-offender exclusion key list')
+    return set(hashes), path
+
+
+def is_crime_excluded(pair, hashes):
+    material = pair[0] + '\0' + pair[1]
+    return hashlib.sha256(material.encode('utf-8')).hexdigest() in hashes
+
+
 def classification_exclusions_sha256(excluded):
     material = ''.join(reading + '\t' + surface + '\n' for reading, surface in sorted(excluded))
     return hashlib.sha256(material.encode('utf-8')).hexdigest()
@@ -203,6 +219,7 @@ def prepare(root, inventory):
     if len(matches) != 1 or not 0 <= matches[0] <= 32767: raise ValueError('Missing or invalid noun context')
     existing = load_inventory(inventory)
     excluded = classification_exclusions(root)
+    crime_hashes, crime_hash_path = crime_exclusion_hashes(root)
     adopted = {}; provenance = []; source_counts = {}; counts = collections.Counter()
     supplement_path = directory / 'gemini-readings.jsonl.gz'
     correction_path = directory / 'reading-corrections.json'
@@ -247,6 +264,8 @@ def prepare(root, inventory):
     inputs[str(correction_path.relative_to(root))] = distribution.sha(correction_path)
     for name in ('categories.json', 'sources.json'):
         inputs[str((directory / name).relative_to(root))] = distribution.sha(directory / name)
+    if crime_hash_path:
+        inputs[str(crime_hash_path.relative_to(root))] = distribution.sha(crime_hash_path)
     ordered = sorted(config['sources'], key=lambda s: (RULES['categoryPriority'].index(s['category']), s['id']))
     for path, number, entry in collected_terms.load(root):
         inputs[str(path.relative_to(root))] = distribution.sha(path)
@@ -255,7 +274,7 @@ def prepare(root, inventory):
         if reason:
             raise ValueError('Invalid collected specialist term: ' + reason)
         source_id = 'collected/' + str(path.relative_to(directory))
-        status = ('excluded_by_classification_review' if pair in excluded else
+        status = ('excluded_by_classification_review' if pair in excluded or is_crime_excluded(pair, crime_hashes) else
                   'existing_duplicate' if pair in existing else
                   'source_duplicate' if pair in adopted else 'adopted')
         if status == 'adopted':
@@ -301,7 +320,7 @@ def prepare(root, inventory):
                 record['readingCorrection'] = correction
             if reason:
                 status = reason
-            elif pair in excluded:
+            elif pair in excluded or is_crime_excluded(pair, crime_hashes):
                 status = 'excluded_by_classification_review'
             elif pair in existing:
                 status = 'existing_duplicate'; record['existingDictionaries'] = sorted(existing[pair])
