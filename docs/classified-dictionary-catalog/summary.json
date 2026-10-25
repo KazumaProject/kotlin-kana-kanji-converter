@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "6571d005d37610b7acb7102a12eb343b86ff157dd47b39352eab1ca3d6e79c56",
-  "uniquePairs": 833248,
-  "records": 862354,
+  "inputSha256": "09a73960d6b38de364d0f508330157b094f335da5168d150c74d5142a5f699cf",
+  "uniquePairs": 833251,
+  "records": 862357,
   "categories": [
     {
       "id": "character",
@@ -1125,14 +1125,14 @@
     {
       "id": "term/specialist/information_communications",
       "name": "情報・通信",
-      "pairs": 6081,
-      "readings": 6014,
-      "records": 6082,
+      "pairs": 6082,
+      "readings": 6015,
+      "records": 6083,
       "pages": 5,
       "recordsByOrigin": {
         "gemini": 3930,
         "manual": 1723,
-        "verified": 429
+        "verified": 430
       }
     },
     {
@@ -1151,13 +1151,13 @@
     {
       "id": "term/specialist/chemistry_life_sciences",
       "name": "化学・生命科学",
-      "pairs": 27563,
-      "readings": 26081,
-      "records": 27566,
+      "pairs": 27564,
+      "readings": 26082,
+      "records": 27567,
       "pages": 19,
       "recordsByOrigin": {
         "gemini": 18981,
-        "verified": 3483,
+        "verified": 3484,
         "manual": 5102
       }
     },
@@ -1190,14 +1190,14 @@
     {
       "id": "term/specialist/economics_management",
       "name": "経済・経営",
-      "pairs": 5779,
-      "readings": 5704,
-      "records": 5779,
+      "pairs": 5780,
+      "readings": 5705,
+      "records": 5780,
       "pages": 4,
       "recordsByOrigin": {
         "manual": 1305,
         "gemini": 3606,
-        "verified": 868
+        "verified": 869
       }
     },
     {
