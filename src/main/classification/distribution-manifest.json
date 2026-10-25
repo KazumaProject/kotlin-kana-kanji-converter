@@ -394,12 +394,12 @@
     "verified_over_manual": 8
   },
   "dictionaryRows": 777465,
-  "excludedCandidatePairs": 328692,
-  "excludedClassifiedPairs": 322967,
+  "excludedCandidatePairs": 328693,
+  "excludedClassifiedPairs": 322968,
   "files": {
     "categories.json": "6cdfb7f23de0e2d90283adc7139e52581e575d13f830e996c87948e43446ee60",
-    "distribution-candidates.tsv.gz": "bd03a5f3abd6662277a372ff1ade04c060aab2454db96826a36cce354a0e05f9",
-    "distribution-decisions.tsv.gz": "e07dd56064b4f488d7fa4de79b11f2f781338a2232d53f2b3de89ac7514eff74"
+    "distribution-candidates.tsv.gz": "d83f79d0dcfa16974926f392c46f3d1e6cdfe944ee8648810abbe438cd5ebd64",
+    "distribution-decisions.tsv.gz": "4001ea2e5e36662a60ab353ed36c6782df64d358ddd258af2bcb6c1e922c8813"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -494,6 +494,7 @@
     "src/main/classification/reviews/2026-10-24-regional-ramen-shop-additions.jsonl": "6b76d94e46c90b76745508a3f550dfc34e3eb0d9a2ea38d30a3fb01da3ee9242",
     "src/main/classification/reviews/2026-10-24-z-media-demographic-tank-chair.jsonl": "76a35fc03ba6457987b18544b07b7a0914408b78e1b88dd98d3a67e6b7e8fb25",
     "src/main/classification/reviews/2026-10-25-issue-223-products.jsonl": "351057c59e86ff8491749b8550d40e22401a8e14f31afe6caf25fabca608478b",
+    "src/main/classification/reviews/2026-10-25-issue-223-products_followup.jsonl": "36dd26cf3f395cf9d5838bfd05da6dceb3989b95081f6823cca3ba8fe0133a46",
     "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
   },
   "limitations": [
@@ -72584,6 +72585,7 @@
       "src/main/classification/reviews/2026-10-24-regional-ramen-shop-additions.jsonl",
       "src/main/classification/reviews/2026-10-24-z-media-demographic-tank-chair.jsonl",
       "src/main/classification/reviews/2026-10-25-issue-223-products.jsonl",
+      "src/main/classification/reviews/2026-10-25-issue-223-products_followup.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
     "termAdditions": [
