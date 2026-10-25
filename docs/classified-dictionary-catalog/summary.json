@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "d83f79d0dcfa16974926f392c46f3d1e6cdfe944ee8648810abbe438cd5ebd64",
-  "uniquePairs": 836550,
-  "records": 865656,
+  "inputSha256": "a9168aa9badcf58f247140cfdd1da20c9d31bc5f3161436436ec2757e7fa963a",
+  "uniquePairs": 836569,
+  "records": 865681,
   "categories": [
     {
       "id": "character",
@@ -294,12 +294,12 @@
     {
       "id": "facility/cultural/art_museum",
       "name": "美術館・ギャラリー",
-      "pairs": 377,
-      "readings": 375,
-      "records": 377,
+      "pairs": 378,
+      "readings": 376,
+      "records": 378,
       "pages": 1,
       "recordsByOrigin": {
-        "verified": 16,
+        "verified": 17,
         "gemini": 82,
         "manual": 279
       },
@@ -363,26 +363,28 @@
     {
       "id": "facility/entertainment/live_venue",
       "name": "ライブ・興行会場",
-      "pairs": 146,
-      "readings": 142,
-      "records": 146,
+      "pairs": 147,
+      "readings": 143,
+      "records": 147,
       "pages": 1,
       "recordsByOrigin": {
         "gemini": 97,
-        "manual": 49
+        "manual": 49,
+        "verified": 1
       },
       "definition": "ライブハウス、音楽・演芸の興行会場、イベントホールなど観客向け興行施設。"
     },
     {
       "id": "facility/entertainment/amusement",
       "name": "遊園地・娯楽施設",
-      "pairs": 140,
-      "readings": 138,
-      "records": 140,
+      "pairs": 141,
+      "readings": 139,
+      "records": 141,
       "pages": 1,
       "recordsByOrigin": {
         "manual": 53,
-        "gemini": 87
+        "gemini": 87,
+        "verified": 1
       },
       "definition": "遊園地、テーマパーク、ゲームセンターなど娯楽・遊戯を主目的とする施設。"
     },
@@ -826,14 +828,14 @@
     {
       "id": "facility/residential/mixed_use_building",
       "name": "複合建築物",
-      "pairs": 90,
-      "readings": 90,
-      "records": 90,
+      "pairs": 91,
+      "readings": 91,
+      "records": 91,
       "pages": 1,
       "recordsByOrigin": {
         "gemini": 53,
         "manual": 36,
-        "verified": 1
+        "verified": 2
       },
       "definition": "住宅・商業・業務等の用途が混在し、単一用途が主目的と判断できない複合建築物。"
     },
@@ -893,14 +895,14 @@
     {
       "id": "organization",
       "name": "組織",
-      "pairs": 47430,
-      "readings": 46659,
-      "records": 47509,
+      "pairs": 47431,
+      "readings": 46660,
+      "records": 47510,
       "pages": 35,
       "recordsByOrigin": {
-        "gemini": 24631,
+        "gemini": 24630,
         "manual": 21393,
-        "verified": 1485
+        "verified": 1487
       }
     },
     {
@@ -919,14 +921,14 @@
     {
       "id": "product",
       "name": "商品・サービス",
-      "pairs": 10126,
-      "readings": 9902,
-      "records": 10128,
+      "pairs": 10133,
+      "readings": 9909,
+      "records": 10135,
       "pages": 7,
       "recordsByOrigin": {
         "gemini": 5941,
         "manual": 3917,
-        "verified": 270
+        "verified": 277
       }
     },
     {
@@ -1255,39 +1257,40 @@
     {
       "id": "work_franchise",
       "name": "作品シリーズ",
-      "pairs": 849,
-      "readings": 837,
-      "records": 849,
+      "pairs": 850,
+      "readings": 838,
+      "records": 850,
       "pages": 1,
       "recordsByOrigin": {
         "manual": 709,
-        "gemini": 140
+        "gemini": 140,
+        "verified": 1
       }
     },
     {
       "id": "work_manga",
       "name": "漫画作品",
-      "pairs": 5081,
-      "readings": 5043,
-      "records": 5082,
+      "pairs": 5083,
+      "readings": 5045,
+      "records": 5084,
       "pages": 5,
       "recordsByOrigin": {
         "manual": 2608,
         "gemini": 2402,
-        "verified": 72
+        "verified": 74
       }
     },
     {
       "id": "work_anime",
       "name": "アニメ作品",
-      "pairs": 1088,
-      "readings": 1072,
-      "records": 1088,
+      "pairs": 1090,
+      "readings": 1074,
+      "records": 1090,
       "pages": 1,
       "recordsByOrigin": {
         "manual": 586,
         "gemini": 495,
-        "verified": 7
+        "verified": 9
       }
     },
     {
@@ -1306,14 +1309,14 @@
     {
       "id": "media_demographic/audience/seinen",
       "name": "青年向け",
-      "pairs": 1730,
-      "readings": 1718,
-      "records": 1731,
+      "pairs": 1731,
+      "readings": 1719,
+      "records": 1732,
       "pages": 2,
       "recordsByOrigin": {
         "gemini": 889,
         "manual": 813,
-        "verified": 29
+        "verified": 30
       }
     },
     {
@@ -1367,14 +1370,14 @@
     {
       "id": "media_demographic/audience/unspecified",
       "name": "対象層の指定なし・一般向け",
-      "pairs": 5051,
-      "readings": 5000,
-      "records": 5099,
+      "pairs": 5052,
+      "readings": 5001,
+      "records": 5100,
       "pages": 4,
       "recordsByOrigin": {
         "gemini": 3823,
         "manual": 1261,
-        "verified": 15
+        "verified": 16
       }
     },
     {
@@ -1420,35 +1423,35 @@
       "records": 7659,
       "pages": 6,
       "recordsByOrigin": {
-        "manual": 4937,
+        "manual": 4936,
         "gemini": 2635,
-        "verified": 87
+        "verified": 88
       }
     },
     {
       "id": "work_game",
       "name": "ゲーム作品",
-      "pairs": 3158,
-      "readings": 3068,
-      "records": 3158,
+      "pairs": 3159,
+      "readings": 3069,
+      "records": 3159,
       "pages": 3,
       "recordsByOrigin": {
         "manual": 2097,
         "gemini": 1012,
-        "verified": 49
+        "verified": 50
       }
     },
     {
       "id": "work_music",
       "name": "音楽作品",
-      "pairs": 10334,
-      "readings": 10201,
-      "records": 10337,
+      "pairs": 10339,
+      "readings": 10206,
+      "records": 10342,
       "pages": 8,
       "recordsByOrigin": {
         "manual": 8786,
         "gemini": 1394,
-        "verified": 157
+        "verified": 162
       }
     },
     {
@@ -1720,7 +1723,7 @@
     }
   ],
   "excluded": {
-    "pairs": 322968,
+    "pairs": 322969,
     "pages": 594
   },
   "specialistInputSha256": "8734dda7bd19c3a1401600a751289a3062c9a2f15c7ea64a409faf40c656e5ec"
