@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "inputSha256": "a9168aa9badcf58f247140cfdd1da20c9d31bc5f3161436436ec2757e7fa963a",
-  "uniquePairs": 836569,
-  "records": 865681,
+  "uniquePairs": 836556,
+  "records": 865668,
   "categories": [
     {
       "id": "character",
@@ -1668,8 +1668,8 @@
     {
       "id": "other_identified",
       "name": "その他の特定人物",
-      "records": 5020,
-      "pairs": 5013,
+      "records": 5011,
+      "pairs": 5004,
       "pages": 4
     },
     {
@@ -1682,8 +1682,8 @@
     {
       "id": "surname_origin_japanese",
       "name": "姓・名字（日本由来）",
-      "records": 25012,
-      "pairs": 24867,
+      "records": 25011,
+      "pairs": 24866,
       "pages": 17
     },
     {
@@ -1710,8 +1710,8 @@
     {
       "id": "personal_name_origin_japanese",
       "name": "人名・姓名（日本由来）",
-      "records": 75946,
-      "pairs": 75343,
+      "records": 75943,
+      "pairs": 75340,
       "pages": 51
     },
     {

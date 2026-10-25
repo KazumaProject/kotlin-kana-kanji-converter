@@ -341,6 +341,13 @@ def generate_person_taxonomy(root, output, final_pairs):
     names = {category['id']: category['label'] for category in categories}
     records = {category_id: [] for category_id in category_ids}
     source_file = source / 'person-dictionary-candidates.tsv.gz'
+    exclusion_file = source / 'crime-offender-exclusion-keys.sha256'
+    exclusion_keys = exclusion_file.read_text(encoding='ascii').splitlines()
+    if (not exclusion_keys or len(exclusion_keys) != len(set(exclusion_keys))
+            or any(len(key) != 64 or any(char not in '0123456789abcdef' for char in key)
+                   for key in exclusion_keys)):
+        raise ValueError(f'{exclusion_file}: malformed crime-offender exclusion keys')
+    exclusion_keys = set(exclusion_keys)
     source_hash = distribution.sha(source_file)
     with gzip.open(source_file, 'rt', encoding='utf-8') as stream:
         for number, line in enumerate(stream, 1):
@@ -352,6 +359,9 @@ def generate_person_taxonomy(root, output, final_pairs):
                 raise ValueError(f'{source_file}:{number}: non-standard person category: {category}')
             if not reading or not surface:
                 raise ValueError(f'{source_file}:{number}: empty reading or surface')
+            candidate_key = hashlib.sha256((reading + '\0' + surface).encode('utf-8')).hexdigest()
+            if candidate_key in exclusion_keys:
+                raise ValueError(f'{source_file}:{number}: excluded criminal candidate in standard catalog source')
             records[category].append((reading, surface, left, right, cost, sports))
             final_pairs.add((reading, surface))
 

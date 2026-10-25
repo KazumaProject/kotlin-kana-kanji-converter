@@ -847,6 +847,7 @@ val buildPersonDictionaryDistribution = tasks.register<JavaExec>("buildPersonDic
     inputs.files(
         classificationDirectory.file("person-taxonomy.json"),
         classificationDirectory.file("person-dictionary-candidates.tsv.gz"),
+        classificationDirectory.file("crime-offender-exclusion-keys.sha256"),
     )
     inputs.files(mozcIdDefFileProvider, mozcConnectionFileProvider)
     outputs.files(
@@ -889,6 +890,7 @@ val buildPersonDictionaryReplacementDistribution = tasks.register<JavaExec>("bui
         personDictionaryArchive,
         classificationDirectory.file("person-taxonomy.json"),
         classificationDirectory.file("person-dictionary-candidates.tsv.gz"),
+        classificationDirectory.file("crime-offender-exclusion-keys.sha256"),
         classificationDirectory.file("distribution-manifest.json"),
         specialistDirectory.file("categories.json"),
         specialistDirectory.file("distribution-manifest.json"),
