@@ -2,7 +2,7 @@
 
 [スポーツ関係者の全件一覧](../index.md) · [最終配布カテゴリ一覧](../../../index.md)
 
-競技タグ別に **59競技**、延べ **7,536レコード**、**7,531組**を掲載しています。複数競技に分類された語は各競技に重複して掲載するため、競技別合計には重複があります。競技タグが未設定または特定できない語は「競技未特定」に含めています。
+競技タグ別に **60競技**、延べ **7,781レコード**、**7,776組**を掲載しています。複数競技に分類された語は各競技に重複して掲載するため、競技別合計には重複があります。競技タグが未設定または特定できない語は「競技未特定」に含めています。
 
 | 競技 | 読み・表記の組 | レコード数 | 全件一覧 |
 |---|---:|---:|---|
@@ -59,9 +59,10 @@
 | [ボッチャ](boccia/index.md) | 1 | 1 | [全件](boccia/index.md) |
 | [重量挙げ](weightlifting/index.md) | 10 | 10 | [全件](weightlifting/index.md) |
 | [ローンボウルズ](lawn_bowls/index.md) | 1 | 1 | [全件](lawn_bowls/index.md) |
-| [スケートボード](skateboarding/index.md) | 15 | 15 | [全件](skateboarding/index.md) |
+| [スケートボード](skateboarding/index.md) | 130 | 130 | [全件](skateboarding/index.md) |
+| [スノーボード](snowboarding/index.md) | 82 | 82 | [全件](snowboarding/index.md) |
 | [近代五種](modern_pentathlon/index.md) | 4 | 4 | [全件](modern_pentathlon/index.md) |
 | [スポーツクライミング](sport_climbing/index.md) | 6 | 6 | [全件](sport_climbing/index.md) |
 | [サーフィン](surfing/index.md) | 7 | 7 | [全件](surfing/index.md) |
-| [ブレイキン](breaking/index.md) | 4 | 4 | [全件](breaking/index.md) |
+| [ブレイクダンス（ブレイキン）](breaking/index.md) | 52 | 52 | [全件](breaking/index.md) |
 | [競技未特定](sport_unspecified/index.md) | 172 | 172 | [全件](sport_unspecified/index.md) |

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "taxonomy_version": "2026-10-22.3",
+  "taxonomy_version": "2026-10-25.1",
   "policy": {
-    "version": "2026-10-22.3",
+    "version": "2026-10-25.1",
     "name_origin_definition": "日本由来／海外由来は人の国籍や文字種ではなく、姓・名・姓名の命名慣習上の由来を指す。読み・表記の文字種や印象だけで推測せず、由来に確信がない場合は対応する由来未確認カテゴリにする。複数の命名慣習が混在し判別できない場合も由来未確認にする。",
     "adult_scope": [
       "video",
@@ -429,10 +429,11 @@
     "weightlifting": "重量挙げ",
     "lawn_bowls": "ローンボウルズ",
     "skateboarding": "スケートボード",
+    "snowboarding": "スノーボード",
     "modern_pentathlon": "近代五種",
     "sport_climbing": "スポーツクライミング",
     "surfing": "サーフィン",
-    "breaking": "ブレイキン",
+    "breaking": "ブレイクダンス（ブレイキン）",
     "sport_unspecified": "競技未特定"
   },
   "sport_subcategory_policy": {

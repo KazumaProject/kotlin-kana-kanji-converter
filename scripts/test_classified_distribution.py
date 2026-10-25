@@ -375,6 +375,18 @@ class DistributionTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'classification_source_url'):
             d.person_entries(self.root, invalid)
 
+    def test_adult_related_person_categories_are_rejected_from_standard_dictionary(self):
+        self.freeze()
+        _, entry = self.person_file()
+        entry.pop('sport')
+        for category_id in ('adult_performer', 'adult_work_creator', 'adult_related_hold'):
+            with self.subTest(category_id=category_id):
+                path, _ = self.person_file([{**entry, 'category_id': category_id}])
+                before = self.snapshot()
+                with self.assertRaisesRegex(ValueError, 'adult-related people cannot be added'):
+                    self.add_people(path)
+                self.assertEqual(before, self.snapshot())
+
     def test_source_backed_event_addition_can_supply_a_distributable_leaf(self):
         pair = ('じむとふにせんにじゅうろく', 'JIMTOF2026')
         entry = {

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "a8cc707ff16e041ee5319256aedb187fd94ba2f18ff6cb4deae95116a8374012",
-  "uniquePairs": 836302,
-  "records": 865408,
+  "inputSha256": "6b21149f467ff7d3475d7c1b9cc46cacba2a1aba39da1807114859d29600a49b",
+  "uniquePairs": 836547,
+  "records": 865653,
   "categories": [
     {
       "id": "character",
@@ -1588,9 +1588,9 @@
     {
       "id": "sports",
       "name": "スポーツ関係者",
-      "records": 7464,
-      "pairs": 7459,
-      "pages": 5
+      "records": 7709,
+      "pairs": 7704,
+      "pages": 6
     },
     {
       "id": "competitive_games",

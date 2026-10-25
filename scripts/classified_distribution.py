@@ -57,6 +57,9 @@ TERM_CLASSIFICATION_PROMPT_VERSIONS = {
     'term-best-fit-15-categories-ordered-code-array-v3',
 }
 LEGACY_PERSON_SPORT_IDS = {'mma', 'kickboxing', 'boxing'}
+ADULT_RESTRICTED_PERSON_CATEGORY_IDS = {
+    'adult_performer', 'adult_work_creator', 'adult_related_hold',
+}
 
 
 def sha(path):
@@ -1452,6 +1455,8 @@ def person_entries(root, path):
         if 'sport' in entry and (not isinstance(entry['sport'], str) or not entry['sport']):
             raise ValueError(f'{path}:{number}: invalid sport')
         if 'category_id' in entry:
+            if entry['category_id'] in ADULT_RESTRICTED_PERSON_CATEGORY_IDS:
+                raise ValueError(f'{path}:{number}: adult-related people cannot be added to the standard dictionary')
             if (entry['category_id'] not in enabled_categories
                     or entry['category_id'] == 'sports' or 'sport' in entry):
                 raise ValueError(f'{path}:{number}: invalid category-specific person evidence')

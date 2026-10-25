@@ -92,6 +92,8 @@ CC BY 4.0の下で利用したことを示し、原作出版社による一次�
 第三者資料の権利は各提供元に帰属し、この記載によりそれらにMIT等のライセンスを付与するものではありません。
 国立国会図書館のデータは出典を表示して利用します。
 
+`src/main/classification/person-additions/board-sports-2026-10-25.jsonl` の氏名・読みは、[AJSA公認プロスケートボーダー](https://ajsa.jp/professional-skateboarder/)、[X Games Japan選手一覧](https://xgamesjapan.com/athletes/)、[JOC公式オリンピック・ユース五輪・アジア冬季大会名鑑と結果](https://www.joc.or.jp/)、[日本ダンススポーツ連盟（JDSF）公式資料](https://www.jdsf.or.jp/)で確認しています。各候補行に参照URL、原表記・原読み、確認箇所と取得ページのSHA-256を記録します。公式かな表記だけを採録し、英字から読みを推定しません。名簿・プロフィール・結果表の本文は転載せず、第三者資料の権利は各提供元に帰属します。
+
 ## 漢方・医療辞書
 
 `src/main/specialist` のKNApSAcK KAMPO由来データと `kampo` 辞書の加工部分は
