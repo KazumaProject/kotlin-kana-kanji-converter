@@ -1413,6 +1413,10 @@ def person_dictionary_exclusions(manifest):
 
 def person_reading(value):
     """Only mechanical kana normalization; never transliterate Latin names."""
+    # Preserve the original evidence while accepting roster readings in halfwidth kana.
+    # Limit compatibility normalization to kana; do not rewrite names or Latin text.
+    value = re.sub(r'[\uff65-\uff9f]+',
+                   lambda match: unicodedata.normalize('NFKC', match[0]), value)
     value = unicodedata.normalize('NFC', value)
     value = re.sub(r'([うウ])[\u3099\u309b]', lambda match: 'ゔ' if match[1] == 'う' else 'ヴ', value)
     return ''.join(chr(ord(c) - 0x60) if '\u30a1' <= c <= '\u30f6' else c
@@ -1517,7 +1521,9 @@ def add_person_names(root, path):
     sources_by_pair = collections.defaultdict(set)
     names_rows = set()
     for source, row in source_rows(root):
-        sources_by_pair[(row[0], row[4])].add(row)
+        pair = row[0], row[4]
+        if pair in entries:
+            sources_by_pair[pair].add(row)
         if source == 'person': names_rows.add(row)
     additions = []
     appended = []
@@ -1545,6 +1551,10 @@ def add_person_names(root, path):
             raise ValueError('Category additions require the existing person dictionary snapshot')
         with gzip.open(person_dictionary_path, 'rt', encoding='utf-8') as stream:
             categorized_rows = {tuple(line.rstrip('\n').split('\t')) for line in stream}
+        existing_by_pair = collections.defaultdict(set)
+        for row in categorized_rows:
+            if len(row) in (6, 7) and (row[1], row[5]) in category_additions:
+                existing_by_pair[(row[1], row[5])].add(row)
         for pair, entry in category_additions.items():
             variants = set(sources_by_pair[pair])
             if pair not in already_admitted_person_pairs:
@@ -1555,9 +1565,8 @@ def add_person_names(root, path):
             expected_rows = {(category_id, *variant, ','.join(sport_ids)) for variant in variants}
             if not expected_rows:
                 raise ValueError(f'No person dictionary source rows exist for category addition: {pair}')
-            existing = {row for row in categorized_rows
-                        if len(row) in (6, 7) and row[0] in (category_id, 'personal_name_origin_unconfirmed')
-                        and (row[1], row[5]) == pair}
+            existing = {row for row in existing_by_pair[pair]
+                        if row[0] in (category_id, 'personal_name_origin_unconfirmed')}
             legacy_rows = {row for row in existing if row[0] == category_id and len(row) == 6}
             categorized_rows.difference_update(legacy_rows)
             existing.difference_update(legacy_rows)

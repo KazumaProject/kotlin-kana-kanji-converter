@@ -2,11 +2,11 @@
 
 [スポーツ関係者の全件一覧](../index.md) · [最終配布カテゴリ一覧](../../../index.md)
 
-競技タグ別に **59競技**、延べ **6,643レコード**、**6,638組**を掲載しています。複数競技に分類された語は各競技に重複して掲載するため、競技別合計には重複があります。競技タグが未設定または特定できない語は「競技未特定」に含めています。
+競技タグ別に **59競技**、延べ **7,536レコード**、**7,531組**を掲載しています。複数競技に分類された語は各競技に重複して掲載するため、競技別合計には重複があります。競技タグが未設定または特定できない語は「競技未特定」に含めています。
 
 | 競技 | 読み・表記の組 | レコード数 | 全件一覧 |
 |---|---:|---:|---|
-| [野球](baseball/index.md) | 858 | 858 | [全件](baseball/index.md) |
+| [野球](baseball/index.md) | 1,029 | 1,029 | [全件](baseball/index.md) |
 | [ソフトボール](softball/index.md) | 1 | 1 | [全件](softball/index.md) |
 | [サッカー](soccer/index.md) | 741 | 741 | [全件](soccer/index.md) |
 | [フットサル](futsal/index.md) | 3 | 3 | [全件](futsal/index.md) |
@@ -23,7 +23,7 @@
 | [競艇](boat_racing/index.md) | 52 | 52 | [全件](boat_racing/index.md) |
 | [自転車競技](cycling/index.md) | 34 | 34 | [全件](cycling/index.md) |
 | [競馬](horse_racing/index.md) | 105 | 105 | [全件](horse_racing/index.md) |
-| [ゴルフ](golf/index.md) | 47 | 47 | [全件](golf/index.md) |
+| [ゴルフ](golf/index.md) | 769 | 769 | [全件](golf/index.md) |
 | [競泳](swimming/index.md) | 35 | 35 | [全件](swimming/index.md) |
 | [飛込競技](diving/index.md) | 20 | 20 | [全件](diving/index.md) |
 | [アーティスティックスイミング](artistic_swimming/index.md) | 15 | 15 | [全件](artistic_swimming/index.md) |
