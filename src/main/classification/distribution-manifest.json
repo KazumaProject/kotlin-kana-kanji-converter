@@ -1,8 +1,8 @@
 {
   "admittedPairsByOrigin": {
-    "manual": 378757,
+    "manual": 378756,
     "gemini": 188636,
-    "verified": 180876
+    "verified": 180894
   },
   "categoryGroups": [
     {
@@ -296,13 +296,13 @@
     "facility/public/judicial": 137,
     "facility/public/postal": 1626,
     "facility/cultural/museum": 1192,
-    "facility/cultural/art_museum": 377,
+    "facility/cultural/art_museum": 378,
     "facility/cultural/library": 750,
     "facility/cultural/memorial": 1183,
     "facility/entertainment/theater": 415,
     "facility/entertainment/cinema": 149,
-    "facility/entertainment/live_venue": 146,
-    "facility/entertainment/amusement": 140,
+    "facility/entertainment/live_venue": 147,
+    "facility/entertainment/amusement": 141,
     "facility/sports/stadium": 624,
     "facility/sports/gymnasium": 450,
     "facility/sports/golf": 47,
@@ -335,14 +335,14 @@
     "facility/heritage/historic_residence": 504,
     "facility/residential/housing_complex": 120,
     "facility/residential/condominium": 409,
-    "facility/residential/mixed_use_building": 90,
+    "facility/residential/mixed_use_building": 91,
     "facility/military/base": 348,
     "facility/military/garrison": 16,
     "facility/military/training_ground": 40,
     "transport_route": 4230,
-    "organization": 47509,
+    "organization": 47510,
     "lineage": 2019,
-    "product": 10128,
+    "product": 10132,
     "vehicle": 2580,
     "event/occasion/organized_event": 4059,
     "event/occasion/observance": 802,
@@ -368,22 +368,22 @@
     "term/specialist/humanities_social_sciences": 17877,
     "term/specialist/culture_arts_sports": 5360,
     "term/specialist/transport_safety_defense": 4037,
-    "work_franchise": 849,
-    "work_manga": 5082,
-    "work_anime": 1088,
+    "work_franchise": 850,
+    "work_manga": 5084,
+    "work_anime": 1090,
     "media_demographic/audience/shonen": 4119,
-    "media_demographic/audience/seinen": 1731,
+    "media_demographic/audience/seinen": 1732,
     "media_demographic/audience/shojo": 826,
     "media_demographic/audience/josei": 355,
     "media_demographic/audience/kids": 549,
     "media_demographic/audience/mixed": 0,
-    "media_demographic/audience/unspecified": 5099,
+    "media_demographic/audience/unspecified": 5100,
     "media_demographic/resolution/source_unverified": 0,
     "work_film": 6504,
     "work_program": 9309,
     "work_book": 7659,
-    "work_game": 3158,
-    "work_music": 10337,
+    "work_game": 3159,
+    "work_music": 10342,
     "work_stage": 571,
     "work_periodical": 1811,
     "work_other": 2683
@@ -393,13 +393,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 777465,
-  "excludedCandidatePairs": 328693,
-  "excludedClassifiedPairs": 322968,
+  "dictionaryRows": 777487,
+  "excludedCandidatePairs": 328694,
+  "excludedClassifiedPairs": 322969,
   "files": {
     "categories.json": "6cdfb7f23de0e2d90283adc7139e52581e575d13f830e996c87948e43446ee60",
-    "distribution-candidates.tsv.gz": "d83f79d0dcfa16974926f392c46f3d1e6cdfe944ee8648810abbe438cd5ebd64",
-    "distribution-decisions.tsv.gz": "4001ea2e5e36662a60ab353ed36c6782df64d358ddd258af2bcb6c1e922c8813"
+    "distribution-candidates.tsv.gz": "1701568ff0eed62f9231e5f467758e28d42abe7bc20f18c2ed42137dc091547e",
+    "distribution-decisions.tsv.gz": "f988f5357d233a6abaf51cceda4d58edd8fe851502f3835e3273356957047a0f"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -495,6 +495,9 @@
     "src/main/classification/reviews/2026-10-24-z-media-demographic-tank-chair.jsonl": "76a35fc03ba6457987b18544b07b7a0914408b78e1b88dd98d3a67e6b7e8fb25",
     "src/main/classification/reviews/2026-10-25-issue-223-products.jsonl": "351057c59e86ff8491749b8550d40e22401a8e14f31afe6caf25fabca608478b",
     "src/main/classification/reviews/2026-10-25-issue-223-products_followup.jsonl": "36dd26cf3f395cf9d5838bfd05da6dceb3989b95081f6823cca3ba8fe0133a46",
+    "src/main/classification/reviews/2026-10-25-issue-223-products_surface-correction.jsonl": "e37d1be14163faf9d40ce551b28cb0210f6868fea107c359fc9dbf2425a97238",
+    "src/main/classification/reviews/2026-10-25-open-new-terms-issues.jsonl": "2a853f685e6d09bcda9f5aeb4a6daf52fd8e7c7de469e28e2063df9c6c71e019",
+    "src/main/classification/reviews/2026-10-25-open-new-terms-issues_demographic.jsonl": "ed74359bee32753053d2370c1bddc99f343593459449436594cae4d67d511bd7",
     "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
   },
   "limitations": [
@@ -72586,6 +72589,9 @@
       "src/main/classification/reviews/2026-10-24-z-media-demographic-tank-chair.jsonl",
       "src/main/classification/reviews/2026-10-25-issue-223-products.jsonl",
       "src/main/classification/reviews/2026-10-25-issue-223-products_followup.jsonl",
+      "src/main/classification/reviews/2026-10-25-issue-223-products_surface-correction.jsonl",
+      "src/main/classification/reviews/2026-10-25-open-new-terms-issues.jsonl",
+      "src/main/classification/reviews/2026-10-25-open-new-terms-issues_demographic.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
     "termAdditions": [
@@ -72843,5 +72849,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 748269
+  "uniqueAdmittedPairs": 748286
 }

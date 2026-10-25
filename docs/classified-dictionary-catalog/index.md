@@ -2,7 +2,7 @@
 
 通常版GitHub Releaseの辞書ZIPに含まれる全143カテゴリを掲載します。通常配布カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **865,656**、読み・表記の組数の合計は **857,531**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **865,678**、読み・表記の組数の合計は **857,553**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換配布) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -15,11 +15,11 @@
 | 対象層 | 読み・表記の組 | レコード数 | 全収録語 |
 |---|---:|---:|---|
 | [少年向け](media_demographic/audience/shonen/index.md) | 4,108 | 4,119 | [全件](media_demographic/audience/shonen/index.md) |
-| [青年向け](media_demographic/audience/seinen/index.md) | 1,730 | 1,731 | [全件](media_demographic/audience/seinen/index.md) |
+| [青年向け](media_demographic/audience/seinen/index.md) | 1,731 | 1,732 | [全件](media_demographic/audience/seinen/index.md) |
 | [少女向け](media_demographic/audience/shojo/index.md) | 822 | 826 | [全件](media_demographic/audience/shojo/index.md) |
 | [女性向け（Josei）](media_demographic/audience/josei/index.md) | 349 | 355 | [全件](media_demographic/audience/josei/index.md) |
 | [子ども向け（Kids）](media_demographic/audience/kids/index.md) | 546 | 549 | [全件](media_demographic/audience/kids/index.md) |
-| [対象層の指定なし・一般向け](media_demographic/audience/unspecified/index.md) | 5,051 | 5,099 | [全件](media_demographic/audience/unspecified/index.md) |
+| [対象層の指定なし・一般向け](media_demographic/audience/unspecified/index.md) | 5,052 | 5,100 | [全件](media_demographic/audience/unspecified/index.md) |
 
 成人向けと判定した候補は配布カテゴリに含めず、[成人向け除外語と判断理由](excluded/media-demographics-2026-10-23.md)に掲載しています。複数対象層は 0組、出典未確認・対象層未確定は 0組で、どちらも配布カタログに残していません。
 
@@ -29,8 +29,8 @@
 
 | 作品種別 | 読み・表記の組 | レコード数 | 全収録語 |
 |---|---:|---:|---|
-| [アニメ作品](work_anime/index.md) | 1,088 | 1,088 | [全件](work_anime/index.md) |
-| [漫画作品](work_manga/index.md) | 5,081 | 5,082 | [全件](work_manga/index.md) |
+| [アニメ作品](work_anime/index.md) | 1,090 | 1,090 | [全件](work_anime/index.md) |
+| [漫画作品](work_manga/index.md) | 5,083 | 5,084 | [全件](work_manga/index.md) |
 | [架空キャラクター](character/index.md) | 6,776 | 6,848 | [全件](character/index.md) |
 
 | カテゴリ | ID | 読み・表記の組 | レコード数 | 全件一覧 |
@@ -56,13 +56,13 @@
 | [司法・矯正施設](facility/public/judicial/index.md) | `facility/public/judicial` | 137 | 137 | [全件](facility/public/judicial/index.md) |
 | [郵便施設](facility/public/postal/index.md) | `facility/public/postal` | 1,626 | 1,626 | [全件](facility/public/postal/index.md) |
 | [博物館・資料館](facility/cultural/museum/index.md) | `facility/cultural/museum` | 1,192 | 1,192 | [全件](facility/cultural/museum/index.md) |
-| [美術館・ギャラリー](facility/cultural/art_museum/index.md) | `facility/cultural/art_museum` | 377 | 377 | [全件](facility/cultural/art_museum/index.md) |
+| [美術館・ギャラリー](facility/cultural/art_museum/index.md) | `facility/cultural/art_museum` | 378 | 378 | [全件](facility/cultural/art_museum/index.md) |
 | [図書館・文書館](facility/cultural/library/index.md) | `facility/cultural/library` | 750 | 750 | [全件](facility/cultural/library/index.md) |
 | [記念館・文化会館](facility/cultural/memorial/index.md) | `facility/cultural/memorial` | 1,183 | 1,183 | [全件](facility/cultural/memorial/index.md) |
 | [劇場・演芸場](facility/entertainment/theater/index.md) | `facility/entertainment/theater` | 415 | 415 | [全件](facility/entertainment/theater/index.md) |
 | [映画館](facility/entertainment/cinema/index.md) | `facility/entertainment/cinema` | 149 | 149 | [全件](facility/entertainment/cinema/index.md) |
-| [ライブ・興行会場](facility/entertainment/live_venue/index.md) | `facility/entertainment/live_venue` | 146 | 146 | [全件](facility/entertainment/live_venue/index.md) |
-| [遊園地・娯楽施設](facility/entertainment/amusement/index.md) | `facility/entertainment/amusement` | 140 | 140 | [全件](facility/entertainment/amusement/index.md) |
+| [ライブ・興行会場](facility/entertainment/live_venue/index.md) | `facility/entertainment/live_venue` | 147 | 147 | [全件](facility/entertainment/live_venue/index.md) |
+| [遊園地・娯楽施設](facility/entertainment/amusement/index.md) | `facility/entertainment/amusement` | 141 | 141 | [全件](facility/entertainment/amusement/index.md) |
 | [球場・競技場](facility/sports/stadium/index.md) | `facility/sports/stadium` | 624 | 624 | [全件](facility/sports/stadium/index.md) |
 | [体育館・運動施設](facility/sports/gymnasium/index.md) | `facility/sports/gymnasium` | 450 | 450 | [全件](facility/sports/gymnasium/index.md) |
 | [ゴルフ場](facility/sports/golf/index.md) | `facility/sports/golf` | 47 | 47 | [全件](facility/sports/golf/index.md) |
@@ -95,14 +95,14 @@
 | [歴史的住宅・邸宅](facility/heritage/historic_residence/index.md) | `facility/heritage/historic_residence` | 504 | 504 | [全件](facility/heritage/historic_residence/index.md) |
 | [団地・住宅群](facility/residential/housing_complex/index.md) | `facility/residential/housing_complex` | 118 | 120 | [全件](facility/residential/housing_complex/index.md) |
 | [マンション・集合住宅](facility/residential/condominium/index.md) | `facility/residential/condominium` | 409 | 409 | [全件](facility/residential/condominium/index.md) |
-| [複合建築物](facility/residential/mixed_use_building/index.md) | `facility/residential/mixed_use_building` | 90 | 90 | [全件](facility/residential/mixed_use_building/index.md) |
+| [複合建築物](facility/residential/mixed_use_building/index.md) | `facility/residential/mixed_use_building` | 91 | 91 | [全件](facility/residential/mixed_use_building/index.md) |
 | [基地・駐屯地](facility/military/base/index.md) | `facility/military/base` | 348 | 348 | [全件](facility/military/base/index.md) |
 | [兵営・防衛拠点](facility/military/garrison/index.md) | `facility/military/garrison` | 16 | 16 | [全件](facility/military/garrison/index.md) |
 | [演習・訓練施設](facility/military/training_ground/index.md) | `facility/military/training_ground` | 40 | 40 | [全件](facility/military/training_ground/index.md) |
 | [交通路線](transport_route/index.md) | `transport_route` | 4,229 | 4,230 | [全件](transport_route/index.md) |
-| [組織](organization/index.md) | `organization` | 47,430 | 47,509 | [全件](organization/index.md) |
+| [組織](organization/index.md) | `organization` | 47,431 | 47,510 | [全件](organization/index.md) |
 | [家系・氏族](lineage/index.md) | `lineage` | 2,019 | 2,019 | [全件](lineage/index.md) |
-| [商品・サービス](product/index.md) | `product` | 10,126 | 10,128 | [全件](product/index.md) |
+| [商品・サービス](product/index.md) | `product` | 10,130 | 10,132 | [全件](product/index.md) |
 | [車両・船舶](vehicle/index.md) | `vehicle` | 2,580 | 2,580 | [全件](vehicle/index.md) |
 | [催し・行事](event/occasion/organized_event/index.md) | `event/occasion/organized_event` | 4,059 | 4,059 | [全件](event/occasion/organized_event/index.md) |
 | [記念日・啓発日](event/occasion/observance/index.md) | `event/occasion/observance` | 802 | 802 | [全件](event/occasion/observance/index.md) |
@@ -128,22 +128,22 @@
 | [人文・社会科学](term/specialist/humanities_social_sciences/index.md) | `term/specialist/humanities_social_sciences` | 17,872 | 17,877 | [全件](term/specialist/humanities_social_sciences/index.md) |
 | [文化・芸術・スポーツ](term/specialist/culture_arts_sports/index.md) | `term/specialist/culture_arts_sports` | 5,360 | 5,360 | [全件](term/specialist/culture_arts_sports/index.md) |
 | [交通・安全・防衛](term/specialist/transport_safety_defense/index.md) | `term/specialist/transport_safety_defense` | 4,035 | 4,037 | [全件](term/specialist/transport_safety_defense/index.md) |
-| [作品シリーズ](work_franchise/index.md) | `work_franchise` | 849 | 849 | [全件](work_franchise/index.md) |
-| [漫画作品](work_manga/index.md) | `work_manga` | 5,081 | 5,082 | [全件](work_manga/index.md) |
-| [アニメ作品](work_anime/index.md) | `work_anime` | 1,088 | 1,088 | [全件](work_anime/index.md) |
+| [作品シリーズ](work_franchise/index.md) | `work_franchise` | 850 | 850 | [全件](work_franchise/index.md) |
+| [漫画作品](work_manga/index.md) | `work_manga` | 5,083 | 5,084 | [全件](work_manga/index.md) |
+| [アニメ作品](work_anime/index.md) | `work_anime` | 1,090 | 1,090 | [全件](work_anime/index.md) |
 | [少年向け](media_demographic/audience/shonen/index.md) | `media_demographic/audience/shonen` | 4,108 | 4,119 | [全件](media_demographic/audience/shonen/index.md) |
-| [青年向け](media_demographic/audience/seinen/index.md) | `media_demographic/audience/seinen` | 1,730 | 1,731 | [全件](media_demographic/audience/seinen/index.md) |
+| [青年向け](media_demographic/audience/seinen/index.md) | `media_demographic/audience/seinen` | 1,731 | 1,732 | [全件](media_demographic/audience/seinen/index.md) |
 | [少女向け](media_demographic/audience/shojo/index.md) | `media_demographic/audience/shojo` | 822 | 826 | [全件](media_demographic/audience/shojo/index.md) |
 | [女性向け（Josei）](media_demographic/audience/josei/index.md) | `media_demographic/audience/josei` | 349 | 355 | [全件](media_demographic/audience/josei/index.md) |
 | [子ども向け（Kids）](media_demographic/audience/kids/index.md) | `media_demographic/audience/kids` | 546 | 549 | [全件](media_demographic/audience/kids/index.md) |
 | [複数対象層](media_demographic/audience/mixed/index.md) | `media_demographic/audience/mixed` | 0 | 0 | [全件](media_demographic/audience/mixed/index.md) |
-| [対象層の指定なし・一般向け](media_demographic/audience/unspecified/index.md) | `media_demographic/audience/unspecified` | 5,051 | 5,099 | [全件](media_demographic/audience/unspecified/index.md) |
+| [対象層の指定なし・一般向け](media_demographic/audience/unspecified/index.md) | `media_demographic/audience/unspecified` | 5,052 | 5,100 | [全件](media_demographic/audience/unspecified/index.md) |
 | [出典未確認・対象層未確定](media_demographic/resolution/source_unverified/index.md) | `media_demographic/resolution/source_unverified` | 0 | 0 | [全件](media_demographic/resolution/source_unverified/index.md) |
 | [映画作品](work_film/index.md) | `work_film` | 6,503 | 6,504 | [全件](work_film/index.md) |
 | [番組](work_program/index.md) | `work_program` | 9,308 | 9,309 | [全件](work_program/index.md) |
 | [書籍作品](work_book/index.md) | `work_book` | 7,658 | 7,659 | [全件](work_book/index.md) |
-| [ゲーム作品](work_game/index.md) | `work_game` | 3,158 | 3,158 | [全件](work_game/index.md) |
-| [音楽作品](work_music/index.md) | `work_music` | 10,334 | 10,337 | [全件](work_music/index.md) |
+| [ゲーム作品](work_game/index.md) | `work_game` | 3,159 | 3,159 | [全件](work_game/index.md) |
+| [音楽作品](work_music/index.md) | `work_music` | 10,339 | 10,342 | [全件](work_music/index.md) |
 | [舞台作品](work_stage/index.md) | `work_stage` | 571 | 571 | [全件](work_stage/index.md) |
 | [定期刊行物](work_periodical/index.md) | `work_periodical` | 1,810 | 1,811 | [全件](work_periodical/index.md) |
 | [媒体未特定の作品・美術作品](work_other/index.md) | `work_other` | 2,682 | 2,683 | [全件](work_other/index.md) |
