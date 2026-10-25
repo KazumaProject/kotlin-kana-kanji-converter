@@ -2,7 +2,7 @@
 
 通常版GitHub Releaseの辞書ZIPに含まれる全143カテゴリを掲載します。通常配布カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **865,653**、読み・表記の組数の合計は **857,528**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **865,656**、読み・表記の組数の合計は **857,531**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換配布) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -102,7 +102,7 @@
 | [交通路線](transport_route/index.md) | `transport_route` | 4,229 | 4,230 | [全件](transport_route/index.md) |
 | [組織](organization/index.md) | `organization` | 47,430 | 47,509 | [全件](organization/index.md) |
 | [家系・氏族](lineage/index.md) | `lineage` | 2,019 | 2,019 | [全件](lineage/index.md) |
-| [商品・サービス](product/index.md) | `product` | 10,123 | 10,125 | [全件](product/index.md) |
+| [商品・サービス](product/index.md) | `product` | 10,126 | 10,128 | [全件](product/index.md) |
 | [車両・船舶](vehicle/index.md) | `vehicle` | 2,580 | 2,580 | [全件](vehicle/index.md) |
 | [催し・行事](event/occasion/organized_event/index.md) | `event/occasion/organized_event` | 4,059 | 4,059 | [全件](event/occasion/organized_event/index.md) |
 | [記念日・啓発日](event/occasion/observance/index.md) | `event/occasion/observance` | 802 | 802 | [全件](event/occasion/observance/index.md) |
