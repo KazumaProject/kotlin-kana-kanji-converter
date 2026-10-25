@@ -116,10 +116,11 @@ SPORT_LABELS = {
     'weightlifting': '重量挙げ',
     'lawn_bowls': 'ローンボウルズ',
     'skateboarding': 'スケートボード',
+    'snowboarding': 'スノーボード',
     'modern_pentathlon': '近代五種',
     'sport_climbing': 'スポーツクライミング',
     'surfing': 'サーフィン',
-    'breaking': 'ブレイキン',
+    'breaking': 'ブレイクダンス（ブレイキン）',
     'sport_unspecified': '競技未特定',
 }
 
@@ -158,7 +159,7 @@ def labels_for_sport():
     add('figure_skating', 'フィギュアスケート', 'アイスダンス')
     add('speed_skating', 'スピードスケート', 'ショートトラックスピードスケート')
     add('winter_sports', 'スキージャンプ', 'アルペンスキー', 'クロスカントリースキー',
-        'スキー', 'ノルディック複合', 'フリースタイルスキー', 'スノーボード',
+        'スキー', 'ノルディック複合', 'フリースタイルスキー',
         'バイアスロン', 'リュージュ', 'スケルトン')
     add('ice_hockey', 'アイスホッケー')
     add('field_hockey', 'フィールドホッケー')
@@ -190,7 +191,8 @@ def labels_for_sport():
     add('modern_pentathlon', '近代五種')
     add('sport_climbing', 'スポーツクライミング')
     add('surfing', 'サーフィン')
-    add('breaking', 'ブレイキン')
+    add('snowboarding', 'スノーボード', 'スノーボード競技')
+    add('breaking', 'ブレイキン', 'ブレイクダンス', 'ブレイクダンス（ブレイキン）')
     add('combat_unspecified', '格闘技')
     return labels
 
@@ -217,7 +219,8 @@ OCCUPATION_SPORTS = [
     ('tennis', re.compile(r'テニス選手')),
     ('figure_skating', re.compile(r'フィギュアスケート選手|アイスダンス選手')),
     ('speed_skating', re.compile(r'スピードスケート選手|ショートトラックスピードスケーター')),
-    ('winter_sports', re.compile(r'スキージャンプ選手|アルペンスキー選手|クロスカントリースキー選手|スノーボード選手|ノルディック複合選手|フリースタイルスキー選手|スキー選手|リュージュ選手|バイアスロン選手')),
+    ('winter_sports', re.compile(r'スキージャンプ選手|アルペンスキー選手|クロスカントリースキー選手|ノルディック複合選手|フリースタイルスキー選手|スキー選手|リュージュ選手|バイアスロン選手')),
+    ('snowboarding', re.compile(r'スノーボード選手|スノーボーダー')),
     ('ice_hockey', re.compile(r'アイスホッケー選手')),
     ('field_hockey', re.compile(r'フィールドホッケー選手')),
     ('badminton', re.compile(r'バドミントン選手')),
@@ -241,7 +244,7 @@ OCCUPATION_SPORTS = [
     ('modern_pentathlon', re.compile(r'近代五種選手|近代五種')),
     ('sport_climbing', re.compile(r'スポーツクライミング選手|スポーツクライマー')),
     ('surfing', re.compile(r'サーファー|サーフィン選手')),
-    ('breaking', re.compile(r'ブレイキン選手|ブレイクダンサー')),
+    ('breaking', re.compile(r'ブレイキン選手|ブレイクダンス選手|ブレイクダンサー')),
     ('weightlifting', re.compile(r'重量挙げ選手')),
     ('lawn_bowls', re.compile(r'ローンボウルズ選手')),
     ('skateboarding', re.compile(r'スケートボーダー')),

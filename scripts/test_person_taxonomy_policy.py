@@ -38,6 +38,19 @@ class PersonTaxonomyPolicyTest(unittest.TestCase):
         self.assertFalse(any(row.get('target_category_id') == 'military'
                              for row in records))
 
+    def test_board_sport_labels_are_available_for_person_classification(self):
+        taxonomy, _, _ = reviews.taxonomy_maps(
+            ROOT / 'src/main/classification/person-taxonomy.json')
+        sports = taxonomy['sport_subcategories']
+        self.assertEqual(sports['skateboarding'], 'スケートボード')
+        self.assertEqual(sports['snowboarding'], 'スノーボード')
+        self.assertEqual(sports['breaking'], 'ブレイクダンス（ブレイキン）')
+        labels = reviews.labels_for_sport()
+        self.assertEqual(labels['スケートボード'], 'skateboarding')
+        self.assertEqual(labels['スノーボード'], 'snowboarding')
+        self.assertEqual(labels['ブレイクダンス'], 'breaking')
+        self.assertEqual(labels['ブレイキン'], 'breaking')
+
     def test_source_backed_addition_exports_to_thought(self):
         import json
         from pathlib import Path

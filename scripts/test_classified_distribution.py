@@ -375,6 +375,18 @@ class DistributionTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'classification_source_url'):
             d.person_entries(self.root, invalid)
 
+    def test_adult_related_person_categories_are_rejected_from_standard_dictionary(self):
+        self.freeze()
+        _, entry = self.person_file()
+        entry.pop('sport')
+        for category_id in ('adult_performer', 'adult_work_creator', 'adult_related_hold'):
+            with self.subTest(category_id=category_id):
+                path, _ = self.person_file([{**entry, 'category_id': category_id}])
+                before = self.snapshot()
+                with self.assertRaisesRegex(ValueError, 'adult-related people cannot be added'):
+                    self.add_people(path)
+                self.assertEqual(before, self.snapshot())
+
     def test_source_backed_event_addition_can_supply_a_distributable_leaf(self):
         pair = ('じむとふにせんにじゅうろく', 'JIMTOF2026')
         entry = {
@@ -453,6 +465,34 @@ class DistributionTest(unittest.TestCase):
     def test_person_kana_normalization_preserves_long_vowels(self):
         self.assertEqual(d.person_reading('ジョージ・サン ピエール'), 'じょーじさんぴえーる')
         self.assertEqual(d.person_reading('キムラ“フィリップ”ミノル'), 'きむらふぃりっぷみのる')
+
+    def test_halfwidth_person_reading_keeps_original_evidence_and_surface(self):
+        self.freeze()
+        _, entry = self.person_file()
+        entry.update(reading='あおきかなこ', surface='青木香奈子', source_surface='青木 香奈子',
+                     source_reading='ｱｵｷ ｶﾅｺ')
+        path, _ = self.person_file([entry])
+        self.add_people(path)
+        self.verify()
+        self.assertEqual(json.loads(path.read_text())['source_reading'], 'ｱｵｷ ｶﾅｺ')
+        with gzip.open(self.root / 'src/main/classification/distribution-candidates.tsv.gz',
+                       'rt', encoding='utf-8') as stream:
+            self.assertIn('person\tあおきかなこ\t1\t1\t8400\t青木香奈子\n', stream.readlines())
+
+    def test_halfwidth_person_kana_preserves_voicing_long_vowels_and_other_text(self):
+        self.assertEqual(d.person_reading('ｼﾞｮｰｼﾞ･ｻﾝ ﾋﾟｴｰﾙ'), 'じょーじさんぴえーる')
+        self.assertEqual(d.person_reading('ｳﾞｨｰﾅｽ'), 'ゔぃーなす')
+        self.assertEqual(d.person_reading('Ａ㌔①'), 'Ａ㌔①')
+
+    def test_halfwidth_person_evidence_still_rejects_guessed_reading(self):
+        self.freeze()
+        _, entry = self.person_file()
+        entry['source_reading'] = 'ｱｵｷ ｶﾅｺ'
+        path, _ = self.person_file([entry])
+        before = self.snapshot()
+        with self.assertRaisesRegex(ValueError, 'reading/surface differs'):
+            self.add_people(path)
+        self.assertEqual(before, self.snapshot())
 
     def test_reviewed_facility_brand_can_move_to_organization(self):
         pair = ('はかたいっぷうどう', '博多一風堂')
