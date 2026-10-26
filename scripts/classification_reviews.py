@@ -28,6 +28,10 @@ def resulting_origin(entry):
         return baseline[3] if baseline else 'manual'
     if entry.get('media_demographic'):
         return entry.get('classification_origin', baseline[3] if baseline else 'manual')
+    if entry.get('evidence', {}).get('kind') in ('business_glossary_source', 'business_dictionary_seed'):
+        return 'verified'
+    if entry.get('evidence', {}).get('kind') == 'business_gemini_classification':
+        return 'gemini'
     return 'verified' if entry.get('evidence', {}).get('kind') == 'independent_source' else 'manual'
 
 
@@ -53,11 +57,15 @@ def load(root, selected=None):
     if (root / d.FACILITY_TAXONOMY_PATH).is_file():
         # Historic facility review baselines use the former structural parent ID.
         allowed.add('facility')
+    if (root / d.BUSINESS_TAXONOMY_PATH).is_file():
+        business_data = d.business_taxonomy(root)
+        allowed.update(category['id'] for category in business_data[1])
     ids = {int(line.split(maxsplit=1)[0]) for line in (root / 'src/main/resources/id.def').read_text().splitlines()}
     gemini_manifest_path = root / MEDIA_DEMOGRAPHIC_GEMINI_MANIFEST
     gemini_manifest_hash = (hashlib.sha256(gemini_manifest_path.read_bytes()).hexdigest()
                             if gemini_manifest_path.is_file() else None)
     latest = {}
+    business_source_cache = {}
     for relative in paths(root) if selected is None else selected:
         path = Path(relative)
         if path.is_absolute() or '..' in path.parts or path.parent != DIRECTORY / 'reviews' or path.suffix != '.jsonl':
@@ -236,13 +244,74 @@ def load(root, selected=None):
                 if evidence.get('kind') not in (
                         'user_confirmation', 'independent_source', 'media_demographic_source',
                         'media_demographic_source_search', 'media_demographic_gemini',
-                        'media_demographic_resolution', 'model_review'):
+                        'media_demographic_resolution', 'model_review', 'business_glossary_source',
+                        'business_gemini_classification', 'business_dictionary_seed'):
                     raise ValueError('Review requires an identified evidence kind')
                 if (evidence.get('reading') != pair[0] or evidence.get('surface') != pair[1]
                         or evidence.get('categories') != cats or not evidence.get('reference')):
                     raise ValueError('Review evidence must identify the reading, surface and categories')
                 if action == 'add' and baseline is not None:
                     raise ValueError('Add requires a new pair')
+                business_categories = [category for category in cats if category.startswith('business/')]
+                if business_categories:
+                    if len(business_categories) != 1 or set(cats) != set(business_categories):
+                        raise ValueError('Business term reviews must assign exactly one business leaf')
+                    if evidence.get('kind') == 'business_glossary_source':
+                        if (evidence.get('sourceName') != 'MHLW Multilingual Glossary for Employment Management'
+                                or evidence.get('sourceLicense') != '公共データ利用規約（第1.0版） (PDL1.0)'
+                                or not re.fullmatch(r'[0-9a-f]{64}', evidence.get('sourceSha256', ''))
+                                or evidence.get('readingEvidence') not in (
+                                    'explicit Japanese kana in source term',
+                                    'existing Mozc-derived dictionary reading; exact surface matched uniquely')
+                                or not isinstance(evidence.get('reference'), str)
+                                or not evidence['reference'].startswith('https://www.mhlw.go.jp/')):
+                            raise ValueError('Business glossary review requires a licensed source and verified reading')
+                        if (evidence.get('readingEvidence') ==
+                                'existing Mozc-derived dictionary reading; exact surface matched uniquely'
+                                and (evidence.get('readingSourcePath') != 'src/main/classification/term-classifications.tsv.gz'
+                                     or not re.fullmatch(r'[0-9a-f]{64}',
+                                                         evidence.get('readingSourceSha256', '')))):
+                            raise ValueError('Business glossary review with dictionary readings needs its exact source hash')
+                    elif evidence.get('kind') == 'business_dictionary_seed':
+                        source_path = evidence.get('sourcePath', '')
+                        source_record = evidence.get('sourceRecord')
+                        if (action != 'add' or baseline is not None
+                                or evidence.get('sourceName') != 'Google Mozc-derived dictionary entry'
+                                or not re.fullmatch(r'src/main/resources/dictionary[0-9]{2}\.txt', source_path)
+                                or type(evidence.get('sourceLine')) is not int or evidence['sourceLine'] < 1
+                                or not re.fullmatch(r'[0-9a-f]{64}', evidence.get('sourceSha256', ''))
+                                or evidence.get('readingEvidence') != 'exact reading in the recorded Mozc-derived dictionary row'
+                                or not isinstance(source_record, list) or len(source_record) != 5
+                                or source_record != [pair[0], str(record['left_id']), str(record['right_id']),
+                                                     str(record['cost']), pair[1]]
+                                or evidence.get('sourceLicense') != 'Mixed upstream Mozc dictionary terms; retain the notices in src/main/resources/third-party/MOZC-LICENSE and LICENSE-DATA.md'
+                                or evidence.get('reference') != 'https://github.com/google/mozc/tree/c4b2aef7c65e61be394bacadaec200eb5b97f91c/src/data/dictionary_oss'):
+                            raise ValueError('Business dictionary seed must retain the exact Mozc-derived source row and license notices')
+                        recorded_source = root / source_path
+                        if recorded_source.is_file():
+                            if source_path not in business_source_cache:
+                                raw_source = recorded_source.read_bytes()
+                                business_source_cache[source_path] = (
+                                    hashlib.sha256(raw_source).hexdigest(),
+                                    raw_source.decode('utf-8').splitlines())
+                            actual_sha, source_lines = business_source_cache[source_path]
+                            if actual_sha != evidence['sourceSha256']:
+                                raise ValueError('Business dictionary seed source file hash differs')
+                            source_line = (source_lines[evidence['sourceLine'] - 1].split('\t')
+                                           if evidence['sourceLine'] <= len(source_lines) else None)
+                            if source_line != source_record:
+                                raise ValueError('Business dictionary seed source row differs')
+                    elif evidence.get('kind') == 'business_gemini_classification':
+                        if (action != 'reclassify' or baseline is None or baseline[4] != 'classified'
+                                or evidence.get('model') != 'gemini-3.5-flash-lite'
+                                or evidence.get('freeTierOnly') is not True
+                                or evidence.get('billingEnabled') is not False
+                                or not re.fullmatch(r'[0-9a-f]{64}', evidence.get('proofSha256', ''))
+                                or not re.fullmatch(r'[0-9a-f]{64}', evidence.get('responseSha256', ''))
+                                or not isinstance(evidence.get('batchId'), str) or not evidence['batchId']):
+                            raise ValueError('Business Gemini review requires verified Free-tier classification evidence')
+                    elif evidence.get('kind') != 'independent_source':
+                        raise ValueError('Business term review requires glossary or Gemini evidence')
             latest[pair] = entry
     return latest
 
@@ -310,7 +379,6 @@ def update_manifest(root, manifest, decisions, rows, selected):
         manifest['inputs'][str(MEDIA_DEMOGRAPHIC_GEMINI_MANIFEST)] = d.sha(
             root / MEDIA_DEMOGRAPHIC_GEMINI_MANIFEST)
     category_data = json.loads((root / DIRECTORY / 'categories.json').read_text(encoding='utf-8'))
-    category_ids = [category['id'] for category in category_data['categories']]
     demographic_taxonomy = root / d.MEDIA_DEMOGRAPHIC_TAXONOMY_PATH
     if demographic_taxonomy.is_file():
         manifest['inputs'][d.MEDIA_DEMOGRAPHIC_TAXONOMY_PATH] = d.sha(demographic_taxonomy)
@@ -324,6 +392,21 @@ def update_manifest(root, manifest, decisions, rows, selected):
         for relative in (d.FACILITY_TAXONOMY_PATH, d.FACILITY_CLASSIFICATIONS_PATH,
                          d.FACILITY_CLASSIFICATIONS_MANIFEST_PATH):
             manifest['inputs'][relative] = d.sha(root / relative)
+    business_data = d.business_classification_data(root) if (root / d.BUSINESS_TAXONOMY_PATH).is_file() else None
+    if business_data is not None:
+        category_data = d.merged_categories(
+            category_data, None,
+            business_data=(business_data['taxonomy'], business_data['categories']))
+        manifest['schemaVersion'] = 5
+        for relative in (d.BUSINESS_TAXONOMY_PATH, d.BUSINESS_CURATED_CLASSIFICATIONS_PATH,
+                         d.BUSINESS_CLASSIFICATIONS_PATH,
+                         d.BUSINESS_CLASSIFICATIONS_MANIFEST_PATH, d.BUSINESS_SPECIFICITY_REVIEW_PATH,
+                         d.BUSINESS_SPECIFICITY_REVIEW_MANIFEST_PATH):
+            manifest['inputs'][relative] = d.sha(root / relative)
+        manifest['provenance']['businessClassification'] = {
+            key: value for key, value in business_data['metadata'].items() if key != 'schemaVersion'
+        }
+    category_ids = [category['id'] for category in category_data['categories']]
     manifest['categoryGroups'] = category_data.get('categoryGroups', [])
     new_exclusions = sum(int(entry['action'] in ('hold', 'exclude')) -
                          int(entry['baseline'] is not None and entry['baseline'][4] == 'excluded')
@@ -336,6 +419,7 @@ def update_manifest(root, manifest, decisions, rows, selected):
                     excludedClassifiedPairs=sum(row[4] == 'excluded' for row in decisions.values()),
                     unclassifiedPairs=sum(row[4] == 'unclassified' for row in decisions.values()),
                     noResultPairs=sum(row[4] == 'no_result' for row in decisions.values()))
+    return category_data
 
 
 @contextlib.contextmanager
@@ -379,10 +463,12 @@ def _apply_saved(root, commit=False):
     reviewed = d.apply_term_classifications(root, reviewed, reviewed_pairs=entries)
     reviewed = d.apply_event_classifications(root, reviewed, reviewed_pairs=entries)
     reviewed = d.apply_facility_classifications(root, reviewed, reviewed_pairs=entries)
+    reviewed = d.apply_business_classifications(
+        root, reviewed, force=(root / d.BUSINESS_TAXONOMY_PATH).is_file(), reviewed_pairs=entries)
     rows = candidate_rows(root, reviewed, entries)
     before = manifest['dictionaryRows']
     old_counts = dict(manifest['categoryRows'])
-    update_manifest(root, manifest, reviewed, rows, selected)
+    category_data = update_manifest(root, manifest, reviewed, rows, selected)
     summary = dict(before=before, after=len(rows), reviewedPairs=len(entries),
                    categoryChanges={c: manifest['categoryRows'].get(c, 0) - old_counts.get(c, 0)
                                     for c in manifest['categoryRows']
@@ -406,6 +492,9 @@ def _apply_saved(root, commit=False):
         for relative in staged_paths:
             target = staging / relative; target.parent.mkdir(parents=True, exist_ok=True)
             target.symlink_to(root / relative)
+        categories_target = staging / str(DIRECTORY / 'categories.json')
+        categories_target.unlink()
+        d.write_json(categories_target, category_data)
         # The original snapshot and result ledger are also required by offline verification.
         if 'lunaReclassification' in manifest['provenance']:
             (staged / 'luna-reclassification').symlink_to(directory / 'luna-reclassification', target_is_directory=True)
@@ -415,7 +504,8 @@ def _apply_saved(root, commit=False):
             manifest['files'][name] = d.sha(staged / name)
         d.write_json(staged / 'distribution-manifest.json', manifest)
         d.verify(staging)
-        changed = ['distribution-decisions.tsv.gz', 'distribution-candidates.tsv.gz', 'distribution-manifest.json']
+        changed = ['categories.json', 'distribution-decisions.tsv.gz',
+                   'distribution-candidates.tsv.gz', 'distribution-manifest.json']
         if all((directory / name).read_bytes() == (staged / name).read_bytes() for name in changed):
             print(json.dumps(summary, ensure_ascii=False)); return summary
         snapshot = d.sha(directory / 'distribution-manifest.json')

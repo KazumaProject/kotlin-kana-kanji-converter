@@ -715,6 +715,24 @@ def generate(root, output):
             group_links = []
             parent_dir = output / parent_id
             parent_dir.mkdir(parents=True, exist_ok=True)
+            direct_category_ids = parent.get('categories')
+            if isinstance(direct_category_ids, list) and not parent.get('groups'):
+                direct_categories = [item for item in parent_totals if item['id'] in direct_category_ids]
+                if [item['id'] for item in direct_categories] != direct_category_ids:
+                    raise ValueError(f'Category hierarchy differs from catalog rows: {parent_id}')
+                leaf_links = '\n'.join(
+                    f'- [{item["name"]}]({item["id"].split("/")[-1]}/index.md) — '
+                    f'{item["pairs"]:,}組、{item["records"]:,}レコード'
+                    for item in direct_categories)
+                (parent_dir / 'index.md').write_text(
+                    f'# {parent["name"]}\n\n[全カテゴリ](../index.md)\n\n'
+                    + (parent.get('definition', '') + '\n\n' if parent.get('definition') else '')
+                    + f'読み・表記の組: **{parent_pairs:,}**、レコード: **{parent_records:,}**。\n\n'
+                    + leaf_links + '\n', encoding='utf-8')
+                sections.append(
+                    f'- [{parent["name"]}]({parent_id}/index.md) — '
+                    f'{parent_pairs:,}組、{parent_records:,}レコード')
+                continue
             for group in parent['groups']:
                 group_categories = [item for item in parent_totals if item['id'].startswith(group['id'] + '/')]
                 group_pairs = sum(item['pairs'] for item in group_categories)

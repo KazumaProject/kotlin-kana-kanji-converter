@@ -25,6 +25,12 @@ SOURCES = {
 }
 TERM_ADDITIONS_PATH = 'src/main/classification/term-additions.tsv'
 TERM_TAXONOMY_PATH = 'src/main/classification/term-taxonomy.json'
+BUSINESS_TAXONOMY_PATH = 'src/main/classification/business-taxonomy.json'
+BUSINESS_CLASSIFICATIONS_PATH = 'src/main/classification/business-classifications.tsv.gz'
+BUSINESS_CLASSIFICATIONS_MANIFEST_PATH = 'src/main/classification/business-classifications-manifest.json'
+BUSINESS_CURATED_CLASSIFICATIONS_PATH = 'src/main/classification/business-curated-classifications.tsv'
+BUSINESS_SPECIFICITY_REVIEW_PATH = 'src/main/classification/business-specificity-reviews.tsv.gz'
+BUSINESS_SPECIFICITY_REVIEW_MANIFEST_PATH = 'src/main/classification/business-specificity-review-manifest.json'
 TERM_CLASSIFICATIONS_PATH = 'src/main/classification/term-classifications.tsv.gz'
 TERM_CLASSIFICATIONS_MANIFEST_PATH = 'src/main/classification/term-classifications-manifest.json'
 EVENT_TAXONOMY_PATH = 'src/main/classification/event-taxonomy.json'
@@ -113,6 +119,278 @@ def term_taxonomy(root):
     if len(ids) != 15 or len(set(ids)) != 15:
         raise ValueError('Term taxonomy must contain 15 unique leaf categories')
     return {'id': 'term', 'name': data['name'], 'groups': group_metadata}, flattened
+
+
+BUSINESS_CATEGORY_IDS = (
+    'common', 'documents_email', 'accounting_finance', 'sales_crm', 'procurement', 'hr_labor',
+    'legal_contracts', 'project_management', 'it_security', 'manufacturing_quality',
+    'logistics_inventory', 'management_strategy', 'pr_marketing', 'government_procedures',
+)
+
+
+def business_taxonomy(root):
+    path = root / BUSINESS_TAXONOMY_PATH
+    if not path.is_file():
+        return None
+    data = json.loads(path.read_text(encoding='utf-8'))
+    entries = data.get('categories') if isinstance(data, dict) else None
+    if (data.get('schemaVersion') != 1 or data.get('id') != 'business'
+            or not isinstance(data.get('name'), str) or not data['name']
+            or not isinstance(data.get('definition'), str) or not data['definition']
+            or not isinstance(entries, list)
+            or [entry.get('id', '').removeprefix('business/') for entry in entries] != list(BUSINESS_CATEGORY_IDS)):
+        raise ValueError('Unsupported business taxonomy')
+    categories = []
+    for entry in entries:
+        if (not isinstance(entry.get('id'), str) or not isinstance(entry.get('name'), str)
+                or not entry['name'] or not isinstance(entry.get('definition'), str) or not entry['definition']):
+            raise ValueError('Invalid business leaf category')
+        categories.append({key: entry[key] for key in ('id', 'name', 'definition')})
+    structure = {'id': 'business', 'name': data['name'], 'definition': data['definition'],
+                 'categories': [entry['id'] for entry in categories]}
+    return structure, categories
+
+
+def business_curated_classifications(root):
+    """Load exact existing term pairs manually selected for the business taxonomy."""
+    taxonomy_data = business_taxonomy(root)
+    if taxonomy_data is None:
+        return None
+    allowed = {category['id'] for category in taxonomy_data[1]}
+    path = root / BUSINESS_CURATED_CLASSIFICATIONS_PATH
+    if not path.is_file():
+        raise ValueError('Curated business term pairs are required')
+    curated = {}
+    previous = None
+    with path.open(encoding='utf-8', newline='') as stream:
+        for number, line in enumerate(stream, 1):
+            fields = line.rstrip('\n').split('\t')
+            if (len(fields) != 3 or not fields[0] or not fields[1] or fields[2] not in allowed
+                    or any(char in value for value in fields for char in '\r\0')):
+                raise ValueError(f'{BUSINESS_CURATED_CLASSIFICATIONS_PATH}:{number}: invalid curated business row')
+            pair = fields[0], fields[1]
+            if pair in curated or previous is not None and pair <= previous:
+                raise ValueError(f'{BUSINESS_CURATED_CLASSIFICATIONS_PATH}:{number}: duplicate or unsorted pair')
+            curated[pair] = fields[2]
+            previous = pair
+    return curated
+
+
+def business_classification_data(root, allowed=None):
+    """Load the complete Gemini business/non-business decision map for existing term pairs."""
+    taxonomy_data = business_taxonomy(root)
+    if taxonomy_data is None:
+        return None
+    taxonomy, categories = taxonomy_data
+    category_ids = {category['id'] for category in categories}
+    if allowed is not None and not category_ids <= allowed:
+        raise ValueError('Business taxonomy leaves are absent from categories.json')
+    path = root / BUSINESS_CLASSIFICATIONS_PATH
+    metadata_path = root / BUSINESS_CLASSIFICATIONS_MANIFEST_PATH
+    if not path.is_file() or not metadata_path.is_file():
+        raise ValueError('Frozen business classifications and their manifest are required')
+    metadata = json.loads(metadata_path.read_text(encoding='utf-8'))
+    curated_metadata = metadata.get('curatedClassifications')
+    if (metadata.get('schemaVersion') != 1
+            or metadata.get('taxonomySha256') != sha(root / BUSINESS_TAXONOMY_PATH)
+            or metadata.get('sourcePath') != TERM_CLASSIFICATIONS_PATH
+            or metadata.get('sourceSha256') != sha(root / TERM_CLASSIFICATIONS_PATH)
+            or metadata.get('resultSha256') != sha(path)
+            or metadata.get('model') != 'gemini-3.5-flash-lite'
+            or metadata.get('apiEndpoint') != 'generateContent'
+            or metadata.get('projectId') != 'gen-lang-client-0548563154'
+            or metadata.get('freeTierOnly') is not True or metadata.get('billingEnabled') is not False
+            or metadata.get('promptVersion') != 'business-leaf-best-fit-conservative-v1'
+            or metadata.get('itSecurityOverlapPolicy') != (
+                'Every pair already assigned to term/specialist/information_communications stays in that existing specialist leaf, '
+                'regardless of the Gemini business prediction; all are emitted as business/outside in the business classification map.')
+            or type(metadata.get('existingItSpecialistPairsForcedOutsideBusiness')) is not int
+            or metadata['existingItSpecialistPairsForcedOutsideBusiness'] < 0
+            or not isinstance(metadata.get('sourcePairSha256'), str)
+            or not re.fullmatch(r'[0-9a-f]{64}', metadata['sourcePairSha256'])
+            or not isinstance(metadata.get('specificityReview'), dict)
+            or not isinstance(curated_metadata, dict)
+            or curated_metadata.get('path') != BUSINESS_CURATED_CLASSIFICATIONS_PATH
+            or not re.fullmatch(r'[0-9a-f]{64}', curated_metadata.get('sha256', ''))
+            or type(curated_metadata.get('pairCount')) is not int
+            or curated_metadata['pairCount'] < 0):
+        raise ValueError('Business classification manifest does not match its taxonomy or inputs')
+    curated_path = root / BUSINESS_CURATED_CLASSIFICATIONS_PATH
+    curated = business_curated_classifications(root)
+    if (not curated_path.is_file() or sha(curated_path) != curated_metadata['sha256']
+            or len(curated) != curated_metadata['pairCount']):
+        raise ValueError('Curated business terms differ from their frozen manifest')
+    specificity = metadata['specificityReview']
+    if (specificity.get('path') != BUSINESS_SPECIFICITY_REVIEW_PATH
+            or specificity.get('manifestPath') != BUSINESS_SPECIFICITY_REVIEW_MANIFEST_PATH
+            or not re.fullmatch(r'[0-9a-f]{64}', specificity.get('sha256', ''))
+            or not re.fullmatch(r'[0-9a-f]{64}', specificity.get('manifestSha256', ''))
+            or not re.fullmatch(r'[0-9a-f]{64}', specificity.get('sourceMapSha256', ''))
+            or type(specificity.get('candidatePairs')) is not int
+            or type(specificity.get('keepPairs')) is not int
+            or type(specificity.get('outsidePairs')) is not int
+            or specificity['candidatePairs'] != specificity['keepPairs'] + specificity['outsidePairs']
+            or specificity.get('model') != 'gemini-3.5-flash-lite'
+            or specificity.get('promptVersion') != 'business-specificity-practical-high-precision-v2'
+            or specificity.get('freeTierOnly') is not True
+            or specificity.get('billingEnabled') is not False):
+        raise ValueError('Business specificity review metadata is incomplete')
+    specificity_path = root / BUSINESS_SPECIFICITY_REVIEW_PATH
+    specificity_manifest_path = root / BUSINESS_SPECIFICITY_REVIEW_MANIFEST_PATH
+    if (not specificity_path.is_file() or not specificity_manifest_path.is_file()
+            or sha(specificity_path) != specificity['sha256']
+            or sha(specificity_manifest_path) != specificity['manifestSha256']):
+        raise ValueError('Business specificity review files do not match their frozen hashes')
+    specificity_manifest = json.loads(specificity_manifest_path.read_text(encoding='utf-8'))
+    if (specificity_manifest.get('schemaVersion') != 1
+            or specificity_manifest.get('sourcePath') != BUSINESS_CLASSIFICATIONS_PATH
+            or specificity_manifest.get('sourceSha256') != specificity['sourceMapSha256']
+            or specificity_manifest.get('model') != 'gemini-3.5-flash-lite'
+            or specificity_manifest.get('apiEndpoint') != 'generateContent'
+            or specificity_manifest.get('projectId') != 'gen-lang-client-0548563154'
+            or specificity_manifest.get('promptVersion') != specificity['promptVersion']
+            or specificity_manifest.get('freeTierOnly') is not True
+            or specificity_manifest.get('billingEnabled') is not False
+            or specificity_manifest.get('resultSha256') != sha(specificity_path)
+            or specificity_manifest.get('candidatePairs') != specificity['candidatePairs']
+            or specificity_manifest.get('keepPairs') != specificity['keepPairs']
+            or specificity_manifest.get('outsidePairs') != specificity['outsidePairs']):
+        raise ValueError('Business specificity review manifest does not match the frozen decisions')
+    specificity_proofs = specificity_manifest.get('freeTierProofs')
+    if (not isinstance(specificity_proofs, list) or not specificity_proofs
+            or any(any(type(proof.get(name)) is not int or proof[name] <= 0
+                       for name in ('rpm', 'tpm', 'rpd'))
+                   or not re.fullmatch(r'[0-9a-f]{64}', proof.get('sha256', ''))
+                   or not isinstance(proof.get('verifiedAt'), str)
+                   or datetime.fromisoformat(proof['verifiedAt']).tzinfo is None
+                   for proof in specificity_proofs)):
+        raise ValueError('Business specificity review is missing verified Free-tier evidence')
+    proofs = metadata.get('freeTierProofs')
+    if (not isinstance(proofs, list) or not proofs
+            or any(any(type(proof.get(name)) is not int or proof[name] <= 0
+                       for name in ('rpm', 'tpm', 'rpd'))
+                   or not re.fullmatch(r'[0-9a-f]{64}', proof.get('sha256', ''))
+                   or not isinstance(proof.get('verifiedAt'), str)
+                   or datetime.fromisoformat(proof['verifiedAt']).tzinfo is None
+                   for proof in proofs)):
+        raise ValueError('Business classification manifest is missing a verified Free-tier proof')
+    source_pairs = set()
+    source_categories = {}
+    existing_it_specialists = set()
+    with gzip.open(root / TERM_CLASSIFICATIONS_PATH, 'rt', encoding='utf-8', newline='') as stream:
+        for number, line in enumerate(stream, 1):
+            fields = line.rstrip('\n').split('\t')
+            if len(fields) != 3 or not fields[0] or not fields[1]:
+                raise ValueError(f'{TERM_CLASSIFICATIONS_PATH}:{number}: invalid term classification row')
+            pair = fields[0], fields[1]
+            if pair in source_categories:
+                raise ValueError(f'{TERM_CLASSIFICATIONS_PATH}:{number}: duplicate term classification pair')
+            source_pairs.add(pair)
+            source_categories[pair] = fields[2]
+            if fields[2] == 'term/specialist/information_communications':
+                existing_it_specialists.add(pair)
+    source_pair_hash = hashlib.sha256(''.join(
+        reading + '\t' + surface + '\n' for reading, surface in sorted(source_pairs)
+    ).encode('utf-8')).hexdigest()
+    results = {}
+    counts = collections.Counter()
+    prior_pair = None
+    with gzip.open(path, 'rt', encoding='utf-8', newline='') as stream:
+        for number, line in enumerate(stream, 1):
+            fields = line.rstrip('\n').split('\t')
+            if len(fields) != 3:
+                raise ValueError(f'{BUSINESS_CLASSIFICATIONS_PATH}:{number}: expected three fields')
+            reading, surface, category = fields
+            pair = reading, surface
+            if (not reading or not surface or category not in category_ids | {'business/outside'}
+                    or pair in results or pair not in source_pairs or prior_pair is not None and pair <= prior_pair):
+                raise ValueError(f'{BUSINESS_CLASSIFICATIONS_PATH}:{number}: invalid or duplicate result')
+            results[pair] = category
+            counts[category] += 1
+            prior_pair = pair
+    expected_counts = {category: counts[category] for category in category_ids}
+    if (set(results) != source_pairs
+            or len(results) != metadata.get('uniquePairs')
+            or source_pair_hash != metadata['sourcePairSha256']
+            or expected_counts != metadata.get('categoryCounts')
+            or counts['business/outside'] != metadata.get('outsideBusinessPairs')):
+        raise ValueError('Business classifications do not cover the exact source pairs and counts')
+    if ({pair: results[pair] for pair in results if results[pair] in category_ids} != curated
+            or not set(curated) <= source_pairs):
+        raise ValueError('Business classifications differ from the manually curated term pairs')
+    if any(source_categories[pair] == 'term/specialist/information_communications' for pair in curated):
+        raise ValueError('Curated business terms may not overlap the existing IT specialist leaf')
+    if any(results[pair] != 'business/outside' for pair in existing_it_specialists):
+        raise ValueError('Existing IT specialist terms overlap a business leaf')
+    if metadata['existingItSpecialistPairsForcedOutsideBusiness'] != len(existing_it_specialists):
+        raise ValueError('Business IT overlap policy did not cover every existing IT specialist pair')
+    specificity_results = {}
+    specificity_counts = collections.Counter()
+    prior_pair = None
+    with gzip.open(specificity_path, 'rt', encoding='utf-8', newline='') as stream:
+        for number, line in enumerate(stream, 1):
+            fields = line.rstrip('\n').split('\t')
+            if len(fields) != 4:
+                raise ValueError(f'{BUSINESS_SPECIFICITY_REVIEW_PATH}:{number}: expected four fields')
+            reading, surface, proposed_category, result = fields
+            pair = reading, surface
+            if (not reading or not surface or pair not in source_pairs or pair in existing_it_specialists
+                    or proposed_category not in category_ids or result not in ('business/keep', 'business/outside')
+                    or pair in specificity_results or prior_pair is not None and pair <= prior_pair):
+                raise ValueError(f'{BUSINESS_SPECIFICITY_REVIEW_PATH}:{number}: invalid specificity decision')
+            specificity_results[pair] = (proposed_category, result)
+            specificity_counts[result] += 1
+            prior_pair = pair
+    if (len(specificity_results) != specificity.get('candidatePairs')
+            or specificity_counts['business/keep'] != specificity.get('keepPairs')
+            or specificity_counts['business/outside'] != specificity.get('outsidePairs')):
+        raise ValueError('Business specificity review does not match its frozen result counts')
+    with tempfile.TemporaryDirectory(prefix='verify-business-provisional-map-') as temporary:
+        provisional = Path(temporary) / 'business-classifications.tsv.gz'
+        write_gzip(provisional, (
+            (*pair, specificity_results[pair][0] if pair in specificity_results else 'business/outside')
+            for pair in sorted(source_pairs)
+        ))
+        if sha(provisional) != specificity['sourceMapSha256']:
+            raise ValueError('Business specificity review does not cover the complete provisional business map')
+    restrictions = metadata.get('sourceRestrictions')
+    if not isinstance(restrictions, list) or not any('No JMdict' in item for item in restrictions):
+        raise ValueError('Business classification must explicitly record the JMdict exclusion')
+    return {'taxonomy': taxonomy, 'categories': categories, 'results': results,
+            'sourceCategories': source_categories,
+            'metadata': metadata, 'categoryIds': category_ids, 'outsideId': 'business/outside',
+            'curated': curated}
+
+
+def apply_business_classifications(root, decisions, force=False, reviewed_pairs=()):
+    """Move clearly business-specific terms to one business leaf; retain the prior leaf otherwise."""
+    if not force:
+        current = root / 'src/main/classification/categories.json'
+        if current.is_file():
+            current_ids = {category.get('id') for category in
+                           json.loads(current.read_text(encoding='utf-8')).get('categories', [])}
+            if not any(isinstance(category, str) and category.startswith('business/')
+                       for category in current_ids):
+                return {pair: list(row) for pair, row in decisions.items()}
+    data = business_classification_data(root)
+    if data is None:
+        return {pair: list(row) for pair, row in decisions.items()}
+    reviewed = set(reviewed_pairs)
+    output = {}
+    for pair, original in decisions.items():
+        row = list(original)
+        category = data['results'].get(pair)
+        if row[4] == 'classified' and category in data['categoryIds'] and pair not in reviewed:
+            categories = set(filter(None, row[2].split(',')))
+            source_category = data['sourceCategories'].get(pair)
+            if source_category and source_category.startswith('term/'):
+                categories.discard(source_category)
+            categories.difference_update(data['categoryIds'])
+            categories.add(category)
+            row[2] = ','.join(sorted(categories))
+            row[3] = 'manual'
+        output[pair] = row
+    return output
 
 
 def event_taxonomy(root):
@@ -272,8 +550,10 @@ def media_demographic_taxonomy(root, allowed=None):
     return taxonomy, flattened
 
 
-def merged_categories(base, term_data, event_data=None, media_demographic_data=None, facility_data=None):
-    if term_data is None and event_data is None and media_demographic_data is None and facility_data is None:
+def merged_categories(base, term_data, event_data=None, media_demographic_data=None, facility_data=None,
+                      business_data=None):
+    if (term_data is None and event_data is None and media_demographic_data is None
+            and facility_data is None and business_data is None):
         return base
     categories = list(base.get('categories', []))
     ids = [category.get('id') for category in categories]
@@ -292,6 +572,9 @@ def merged_categories(base, term_data, event_data=None, media_demographic_data=N
     if facility_data is not None:
         structure, facility_categories = facility_data
         structures.append(('facility', structure, facility_categories))
+    if business_data is not None:
+        structure, business_categories = business_data
+        structures.append(('business', structure, business_categories))
     inserted_at = {}
     for parent_id, structure, leaf_categories in structures:
         leaf_ids = {category['id'] for category in leaf_categories}
@@ -317,6 +600,10 @@ def merged_categories(base, term_data, event_data=None, media_demographic_data=N
             categories[insertion:insertion] = leaf_categories
             ids = [category.get('id') for category in categories]
             inserted_at[parent_id] = insertion
+        elif parent_id == 'business' and not leaf_ids & set(ids):
+            inserted_at[parent_id] = len(categories)
+            categories.extend(leaf_categories)
+            ids = [category.get('id') for category in categories]
         else:
             raise ValueError(f'Source taxonomy must contain {parent_id} or all expanded {parent_id} categories')
     result = dict(base)
@@ -325,8 +612,8 @@ def merged_categories(base, term_data, event_data=None, media_demographic_data=N
                       if isinstance(structure, dict) and isinstance(structure.get('id'), str)}
     all_structures.update({structure['id']: structure for _, structure, _ in structures})
     def structure_position(structure):
-        descendant_ids = {category_id for group in structure.get('groups', [])
-                          for category_id in group.get('categories', [])}
+        descendant_ids = set(structure.get('categories', [])) | {
+            category_id for group in structure.get('groups', []) for category_id in group.get('categories', [])}
         positions = [ids.index(category_id) for category_id in descendant_ids if category_id in ids]
         return min(positions) if positions else len(ids)
     result['categoryGroups'] = sorted(all_structures.values(), key=structure_position)
@@ -597,8 +884,10 @@ def apply_facility_classifications_snapshot(root):
     term_data = term_taxonomy(root)
     event_data = event_taxonomy(root)
     media_data = media_demographic_taxonomy(root)
+    business_data = business_taxonomy(root)
     merged = (taxonomy if expanded else
-              merged_categories(taxonomy, term_data, event_data, media_data, (data['taxonomy'], data['categories'])))
+              merged_categories(taxonomy, term_data, event_data, media_data, (data['taxonomy'], data['categories']),
+                               business_data))
     allowed_ids = {category['id'] for category in merged['categories']}
     if not {result['category'] for result in data['results'].values()} <= allowed_ids:
         raise ValueError('Facility fixed result contains a category absent from the expanded taxonomy')
@@ -1013,8 +1302,9 @@ def apply_event_classifications_snapshot(root, classification_map, run_metadata)
         media_data = media_demographic_taxonomy(root)
         term_data = term_taxonomy(root)
         facility_data = facility_classification_data(root)
+        business_data = business_taxonomy(root)
         base_taxonomy = json.loads((directory / 'categories.json').read_text(encoding='utf-8'))
-        categories = merged_categories(base_taxonomy, term_data, event_data, media_data, facility_data)
+        categories = merged_categories(base_taxonomy, term_data, event_data, media_data, facility_data, business_data)
         write_json(staged_directory / 'categories.json', categories)
         write_gzip(staged_directory / EVENT_CLASSIFICATIONS_PATH.split('/')[-1],
                    ((*pair, classification_map[pair]) for pair in sorted(classification_map)
@@ -1247,7 +1537,7 @@ def apply_term_classifications_snapshot(root):
     facility_data = facility_classification_data(root)
     expanded = merged_categories(base, term_taxonomy(root),
                                  media_demographic_data=media_demographic_taxonomy(root),
-                                 facility_data=facility_data)
+                                 facility_data=facility_data, business_data=business_taxonomy(root))
     category_ids = {category['id'] for category in expanded['categories']}
     data = term_classification_data(root, category_ids)
     if data is None:
@@ -1674,12 +1964,14 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
     event_tax = event_taxonomy(root)
     media_demographic_tax = media_demographic_taxonomy(root)
     facility_tax = facility_taxonomy(root)
+    business_tax = business_taxonomy(root)
     term_data = term_classification_data(root)
     event_data = event_classification_data(root)
     facility_data = facility_classification_data(root)
+    business_data = business_classification_data(root)
     categories = merged_categories(json.loads(taxonomy.read_text()), term_tax,
                                    event_tax if event_data is not None else None,
-                                   media_demographic_tax, facility_data)
+                                   media_demographic_tax, facility_data, business_tax)
     allowed = {c['id'] for c in categories['categories']}
     term_data = term_classification_data(root, allowed)
     event_data = event_classification_data(root, allowed)
@@ -1799,6 +2091,8 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
                                            reviewed_pairs=review_entries)
     reviewed = apply_facility_classifications(root, reviewed, force=facility_data is not None,
                                               reviewed_pairs=review_entries)
+    reviewed = apply_business_classifications(root, reviewed, force=business_data is not None,
+                                              reviewed_pairs=review_entries)
     for pair in list(reviewed):
         if key(*pair) in person_exclusions:
             row = reviewed[pair]
@@ -1816,6 +2110,10 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
     inputs = {path: sha(root / path) for path, _ in SOURCES.values()}
     if media_demographic_tax is not None:
         inputs[MEDIA_DEMOGRAPHIC_TAXONOMY_PATH] = sha(root / MEDIA_DEMOGRAPHIC_TAXONOMY_PATH)
+    if business_tax is not None:
+        inputs[BUSINESS_TAXONOMY_PATH] = sha(root / BUSINESS_TAXONOMY_PATH)
+        for path in (BUSINESS_CLASSIFICATIONS_PATH, BUSINESS_CLASSIFICATIONS_MANIFEST_PATH):
+            inputs[path] = sha(root / path)
     term_classification_provenance = None
     if term_data is not None:
         for path in (TERM_TAXONOMY_PATH, TERM_CLASSIFICATIONS_PATH, TERM_CLASSIFICATIONS_MANIFEST_PATH):
@@ -1844,6 +2142,12 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
             key: value for key, value in facility_data['metadata'].items()
             if key not in ('schemaVersion', 'classificationSha256', 'taxonomySha256')
         }
+    business_classification_provenance = None
+    if business_data is not None:
+        business_classification_provenance = {
+            key: value for key, value in business_data['metadata'].items()
+            if key != 'schemaVersion'
+        }
     term_addition_provenance = []
     if (root / TERM_ADDITIONS_PATH).is_file():
         inputs[TERM_ADDITIONS_PATH] = sha(root / TERM_ADDITIONS_PATH)
@@ -1854,8 +2158,8 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
                 'pairs': [list(pair) for pair in sorted({(row[0], row[4]) for row in term_additions})],
             })
     manifest = {
-        'schemaVersion': (4 if facility_data is not None else 3 if event_data is not None
-                          else 2 if term_data is not None else 1),
+        'schemaVersion': (5 if business_data is not None else 4 if facility_data is not None
+                          else 3 if event_data is not None else 2 if term_data is not None else 1),
         'precedence': ['verified', 'manual', 'gemini'],
         'provenance': {
             'acceptedSha256': sha(accepted), 'dispositionsSha256': sha(dispositions),
@@ -1887,6 +2191,8 @@ def freeze(root, accepted, dispositions, database, manual, taxonomy):
         manifest['provenance']['eventClassification'] = event_classification_provenance
     if facility_classification_provenance is not None:
         manifest['provenance']['facilityClassification'] = facility_classification_provenance
+    if business_classification_provenance is not None:
+        manifest['provenance']['businessClassification'] = business_classification_provenance
     if person_exclusions:
         manifest['provenance']['personDictionaryExclusions'] = {
             'categoryIds': ['military', 'thought'],
@@ -1934,10 +2240,14 @@ def verify(root, allow_pending_reviews=False):
     media_demographic_data = media_demographic_taxonomy(root, set(categories)) if expanded_demographics else None
     expanded_facilities = any(category.startswith('facility/') for category in categories)
     facility_data = facility_classification_data(root, set(categories)) if expanded_facilities else None
+    expanded_business = any(category.startswith('business/') for category in categories)
+    business_data = business_classification_data(root, set(categories)) if expanded_business else None
     if expanded_demographics and media_demographic_data is None:
         raise ValueError('Expanded media demographic categories require their taxonomy')
     if expanded_facilities and facility_data is None:
         raise ValueError('Expanded facility categories require their fixed classification data')
+    if expanded_business and business_data is None:
+        raise ValueError('Expanded business categories require their fixed Gemini classifications')
     if media_demographic_data is not None and not allow_pending_reviews:
         if manifest['inputs'].get(MEDIA_DEMOGRAPHIC_TAXONOMY_PATH) != sha(root / MEDIA_DEMOGRAPHIC_TAXONOMY_PATH):
             raise ValueError('Media demographic taxonomy is absent from distribution inputs')
@@ -1945,15 +2255,21 @@ def verify(root, allow_pending_reviews=False):
             raise ValueError('Media demographic review coverage limitation is absent from the manifest')
     saved_taxonomy = json.loads((directory / 'categories.json').read_text(encoding='utf-8'))
     if term_data is not None:
-        if manifest.get('schemaVersion') not in (2, 3, 4):
-            raise ValueError('Expanded term categories require distribution manifest schema 2, 3 or 4')
+        if manifest.get('schemaVersion') not in (2, 3, 4, 5):
+            raise ValueError('Expanded term categories require distribution manifest schema 2, 3, 4 or 5')
     if expanded_events and event_data is None:
         raise ValueError('Expanded event categories require complete Gemini classifications')
-    if event_data is not None and manifest.get('schemaVersion') not in (3, 4):
-        raise ValueError('Expanded event categories require distribution manifest schema 3 or 4')
-    if facility_data is not None and manifest.get('schemaVersion') != 4:
-        raise ValueError('Expanded facility categories require distribution manifest schema 4')
-    if term_data is not None or event_data is not None or media_demographic_data is not None or facility_data is not None:
+    if event_data is not None and manifest.get('schemaVersion') not in (3, 4, 5):
+        raise ValueError('Expanded event categories require distribution manifest schema 3, 4 or 5')
+    if facility_data is not None and manifest.get('schemaVersion') not in (4, 5):
+        raise ValueError('Expanded facility categories require distribution manifest schema 4 or 5')
+    if business_data is not None and not allow_pending_reviews:
+        for path in (BUSINESS_TAXONOMY_PATH, BUSINESS_CLASSIFICATIONS_PATH,
+                     BUSINESS_CLASSIFICATIONS_MANIFEST_PATH):
+            if manifest['inputs'].get(path) != sha(root / path):
+                raise ValueError(f'Business classification input is absent or stale: {path}')
+    if (term_data is not None or event_data is not None or media_demographic_data is not None
+            or facility_data is not None or business_data is not None):
         expected_groups = []
         groups = []
         if event_data is not None:
@@ -1968,6 +2284,9 @@ def verify(root, allow_pending_reviews=False):
         if facility_data is not None:
             groups.append((min(categories.index(category['id']) for category in facility_data['categories']),
                            facility_data['taxonomy']))
+        if business_data is not None:
+            groups.append((min(categories.index(category['id']) for category in business_data['categories']),
+                           business_data['taxonomy']))
         expected_groups = [group for _, group in sorted(groups, key=lambda item: item[0])]
         if (not allow_pending_reviews and (saved_taxonomy.get('categoryGroups') != expected_groups
                 or manifest.get('categoryGroups') != expected_groups)):
@@ -2023,6 +2342,8 @@ def verify(root, allow_pending_reviews=False):
     replayed_decisions = apply_event_classifications(root, replayed_decisions, force=event_data is not None,
                                                      reviewed_pairs=review_entries)
     replayed_decisions = apply_facility_classifications(root, replayed_decisions, force=facility_data is not None,
+                                                        reviewed_pairs=review_entries)
+    replayed_decisions = apply_business_classifications(root, replayed_decisions, force=business_data is not None,
                                                         reviewed_pairs=review_entries)
     for pair in list(replayed_decisions):
         if key(*pair) in person_exclusions:

@@ -1156,6 +1156,8 @@ val verifyDistributionCandidates = tasks.register<Exec>("verifyDistributionCandi
     commandLine("python3", "scripts/classified_distribution.py", "verify")
     inputs.files(fileTree(classificationDirectory) {
         include("distribution-*", "categories.json", "term-taxonomy.json", "term-classifications*",
+            "business-taxonomy.json", "business-curated-classifications.tsv", "business-classifications*",
+            "business-specificity-review*",
             "event-taxonomy.json", "event-classifications*", "media-demographic-taxonomy.json",
             "person-additions/*.jsonl", "reviews/*.jsonl", "luna-reclassification/**")
     })

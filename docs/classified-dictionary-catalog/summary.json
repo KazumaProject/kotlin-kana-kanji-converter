@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "a9168aa9badcf58f247140cfdd1da20c9d31bc5f3161436436ec2757e7fa963a",
-  "uniquePairs": 836556,
-  "records": 865668,
+  "inputSha256": "60605862ad041828b672e054807d639b48f09e42a0d4944afd9f3a5798f7320a",
+  "uniquePairs": 837105,
+  "records": 866217,
   "categories": [
     {
       "id": "character",
@@ -1062,13 +1062,13 @@
     {
       "id": "term/general/products_daily_goods",
       "name": "商品・日用品（一般名称）",
-      "pairs": 1159,
-      "readings": 1122,
-      "records": 1159,
+      "pairs": 1157,
+      "readings": 1120,
+      "records": 1157,
       "pages": 1,
       "recordsByOrigin": {
-        "verified": 185,
-        "gemini": 586,
+        "verified": 184,
+        "gemini": 585,
         "manual": 388
       }
     },
@@ -1114,14 +1114,14 @@
     {
       "id": "term/general/other_general",
       "name": "その他の一般語",
-      "pairs": 20491,
-      "readings": 19770,
-      "records": 20502,
+      "pairs": 20483,
+      "readings": 19762,
+      "records": 20494,
       "pages": 14,
       "recordsByOrigin": {
-        "gemini": 11702,
-        "verified": 2617,
-        "manual": 6183
+        "gemini": 11699,
+        "verified": 2615,
+        "manual": 6180
       }
     },
     {
@@ -1153,79 +1153,79 @@
     {
       "id": "term/specialist/chemistry_life_sciences",
       "name": "化学・生命科学",
-      "pairs": 27564,
-      "readings": 26082,
-      "records": 27567,
+      "pairs": 27558,
+      "readings": 26076,
+      "records": 27561,
       "pages": 19,
       "recordsByOrigin": {
-        "gemini": 18981,
-        "verified": 3484,
+        "gemini": 18977,
+        "verified": 3482,
         "manual": 5102
       }
     },
     {
       "id": "term/specialist/engineering_technology",
       "name": "工学・技術",
-      "pairs": 3508,
-      "readings": 3449,
-      "records": 3509,
+      "pairs": 3507,
+      "readings": 3448,
+      "records": 3508,
       "pages": 3,
       "recordsByOrigin": {
         "gemini": 2188,
         "manual": 815,
-        "verified": 506
+        "verified": 505
       }
     },
     {
       "id": "term/specialist/earth_environment_resources",
       "name": "地球・環境・資源",
-      "pairs": 2110,
-      "readings": 2075,
-      "records": 2110,
+      "pairs": 2109,
+      "readings": 2074,
+      "records": 2109,
       "pages": 2,
       "recordsByOrigin": {
         "manual": 493,
-        "gemini": 1256,
+        "gemini": 1255,
         "verified": 361
       }
     },
     {
       "id": "term/specialist/economics_management",
       "name": "経済・経営",
-      "pairs": 5780,
-      "readings": 5705,
-      "records": 5780,
+      "pairs": 5750,
+      "readings": 5675,
+      "records": 5750,
       "pages": 4,
       "recordsByOrigin": {
-        "manual": 1305,
-        "gemini": 3606,
-        "verified": 869
+        "manual": 1303,
+        "gemini": 3583,
+        "verified": 864
       }
     },
     {
       "id": "term/specialist/law_politics",
       "name": "法律・政治",
-      "pairs": 5273,
-      "readings": 5202,
-      "records": 5274,
+      "pairs": 5261,
+      "readings": 5190,
+      "records": 5262,
       "pages": 4,
       "recordsByOrigin": {
-        "manual": 1393,
-        "gemini": 3011,
-        "verified": 870
+        "manual": 1391,
+        "gemini": 3006,
+        "verified": 865
       }
     },
     {
       "id": "term/specialist/humanities_social_sciences",
       "name": "人文・社会科学",
-      "pairs": 17872,
-      "readings": 17497,
-      "records": 17877,
+      "pairs": 17866,
+      "readings": 17491,
+      "records": 17871,
       "pages": 12,
       "recordsByOrigin": {
-        "gemini": 10882,
+        "gemini": 10879,
         "manual": 4302,
-        "verified": 2693
+        "verified": 2690
       }
     },
     {
@@ -1244,14 +1244,14 @@
     {
       "id": "term/specialist/transport_safety_defense",
       "name": "交通・安全・防衛",
-      "pairs": 4035,
-      "readings": 3987,
-      "records": 4037,
+      "pairs": 4033,
+      "readings": 3985,
+      "records": 4035,
       "pages": 3,
       "recordsByOrigin": {
         "manual": 1215,
         "gemini": 2222,
-        "verified": 600
+        "verified": 598
       }
     },
     {
@@ -1491,6 +1491,169 @@
         "manual": 2239,
         "gemini": 402,
         "verified": 42
+      }
+    },
+    {
+      "id": "business/common",
+      "name": "ビジネス共通語",
+      "pairs": 14,
+      "readings": 14,
+      "records": 14,
+      "pages": 1,
+      "recordsByOrigin": {
+        "verified": 12,
+        "manual": 2
+      }
+    },
+    {
+      "id": "business/documents_email",
+      "name": "ビジネス文書・メール",
+      "pairs": 12,
+      "readings": 12,
+      "records": 12,
+      "pages": 1,
+      "recordsByOrigin": {
+        "verified": 12
+      }
+    },
+    {
+      "id": "business/accounting_finance",
+      "name": "経理・会計・財務",
+      "pairs": 33,
+      "readings": 33,
+      "records": 33,
+      "pages": 1,
+      "recordsByOrigin": {
+        "verified": 24,
+        "manual": 9
+      }
+    },
+    {
+      "id": "business/sales_crm",
+      "name": "営業・顧客管理",
+      "pairs": 16,
+      "readings": 16,
+      "records": 16,
+      "pages": 1,
+      "recordsByOrigin": {
+        "verified": 13,
+        "manual": 3
+      }
+    },
+    {
+      "id": "business/procurement",
+      "name": "調達・購買",
+      "pairs": 13,
+      "readings": 13,
+      "records": 13,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 7,
+        "verified": 6
+      }
+    },
+    {
+      "id": "business/hr_labor",
+      "name": "人事・労務",
+      "pairs": 423,
+      "readings": 420,
+      "records": 423,
+      "pages": 1,
+      "recordsByOrigin": {
+        "verified": 423
+      }
+    },
+    {
+      "id": "business/legal_contracts",
+      "name": "法務・契約",
+      "pairs": 22,
+      "readings": 22,
+      "records": 22,
+      "pages": 1,
+      "recordsByOrigin": {
+        "verified": 16,
+        "manual": 6
+      }
+    },
+    {
+      "id": "business/project_management",
+      "name": "プロジェクト管理",
+      "pairs": 8,
+      "readings": 8,
+      "records": 8,
+      "pages": 1,
+      "recordsByOrigin": {
+        "verified": 8
+      }
+    },
+    {
+      "id": "business/it_security",
+      "name": "IT・情報セキュリティ",
+      "pairs": 5,
+      "readings": 5,
+      "records": 5,
+      "pages": 1,
+      "recordsByOrigin": {
+        "verified": 4,
+        "manual": 1
+      }
+    },
+    {
+      "id": "business/manufacturing_quality",
+      "name": "製造・品質管理",
+      "pairs": 15,
+      "readings": 15,
+      "records": 15,
+      "pages": 1,
+      "recordsByOrigin": {
+        "verified": 15
+      }
+    },
+    {
+      "id": "business/logistics_inventory",
+      "name": "物流・在庫管理",
+      "pairs": 14,
+      "readings": 14,
+      "records": 14,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 3,
+        "verified": 11
+      }
+    },
+    {
+      "id": "business/management_strategy",
+      "name": "経営企画・戦略",
+      "pairs": 15,
+      "readings": 15,
+      "records": 15,
+      "pages": 1,
+      "recordsByOrigin": {
+        "manual": 2,
+        "verified": 13
+      }
+    },
+    {
+      "id": "business/pr_marketing",
+      "name": "広報・マーケティング",
+      "pairs": 17,
+      "readings": 17,
+      "records": 17,
+      "pages": 1,
+      "recordsByOrigin": {
+        "verified": 16,
+        "manual": 1
+      }
+    },
+    {
+      "id": "business/government_procedures",
+      "name": "官公庁・行政手続き",
+      "pairs": 10,
+      "readings": 10,
+      "records": 10,
+      "pages": 1,
+      "recordsByOrigin": {
+        "verified": 10
       }
     },
     {

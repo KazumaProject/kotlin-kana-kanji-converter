@@ -1,8 +1,8 @@
 {
   "admittedPairsByOrigin": {
-    "manual": 378756,
-    "gemini": 188635,
-    "verified": 180897
+    "manual": 378783,
+    "gemini": 188595,
+    "verified": 181459
   },
   "categoryGroups": [
     {
@@ -271,6 +271,27 @@
           ]
         }
       ]
+    },
+    {
+      "id": "business",
+      "name": "ビジネス",
+      "definition": "企業・組織の業務、実務文書、商取引、職場の手続きで使う一般語・専門語。",
+      "categories": [
+        "business/common",
+        "business/documents_email",
+        "business/accounting_finance",
+        "business/sales_crm",
+        "business/procurement",
+        "business/hr_labor",
+        "business/legal_contracts",
+        "business/project_management",
+        "business/it_security",
+        "business/manufacturing_quality",
+        "business/logistics_inventory",
+        "business/management_strategy",
+        "business/pr_marketing",
+        "business/government_procedures"
+      ]
     }
   ],
   "categoryRows": {
@@ -353,21 +374,21 @@
     "award": 1163,
     "agreement": 424,
     "initiative": 1061,
-    "term/general/products_daily_goods": 1159,
+    "term/general/products_daily_goods": 1157,
     "term/general/food_drink_cooking": 4077,
     "term/general/internet_slang_culture": 574,
     "term/general/neologisms_trends_youth_language": 485,
-    "term/general/other_general": 20502,
+    "term/general/other_general": 20494,
     "term/specialist/information_communications": 6083,
     "term/specialist/mathematics_physics": 4171,
-    "term/specialist/chemistry_life_sciences": 27567,
-    "term/specialist/engineering_technology": 3509,
-    "term/specialist/earth_environment_resources": 2110,
-    "term/specialist/economics_management": 5780,
-    "term/specialist/law_politics": 5274,
-    "term/specialist/humanities_social_sciences": 17877,
+    "term/specialist/chemistry_life_sciences": 27561,
+    "term/specialist/engineering_technology": 3508,
+    "term/specialist/earth_environment_resources": 2109,
+    "term/specialist/economics_management": 5750,
+    "term/specialist/law_politics": 5262,
+    "term/specialist/humanities_social_sciences": 17871,
     "term/specialist/culture_arts_sports": 5360,
-    "term/specialist/transport_safety_defense": 4037,
+    "term/specialist/transport_safety_defense": 4035,
     "work_franchise": 850,
     "work_manga": 5084,
     "work_anime": 1090,
@@ -386,20 +407,34 @@
     "work_music": 10342,
     "work_stage": 571,
     "work_periodical": 1811,
-    "work_other": 2683
+    "work_other": 2683,
+    "business/common": 14,
+    "business/documents_email": 12,
+    "business/accounting_finance": 33,
+    "business/sales_crm": 16,
+    "business/procurement": 13,
+    "business/hr_labor": 423,
+    "business/legal_contracts": 22,
+    "business/project_management": 8,
+    "business/it_security": 5,
+    "business/manufacturing_quality": 15,
+    "business/logistics_inventory": 14,
+    "business/management_strategy": 15,
+    "business/pr_marketing": 17,
+    "business/government_procedures": 10
   },
   "conflicts": {
     "manual_over_gemini": 4321,
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 777490,
+  "dictionaryRows": 778039,
   "excludedCandidatePairs": 328694,
   "excludedClassifiedPairs": 322969,
   "files": {
-    "categories.json": "6cdfb7f23de0e2d90283adc7139e52581e575d13f830e996c87948e43446ee60",
-    "distribution-candidates.tsv.gz": "a9168aa9badcf58f247140cfdd1da20c9d31bc5f3161436436ec2757e7fa963a",
-    "distribution-decisions.tsv.gz": "ebf92f4227d8855ab38b47b2128ad7eca1b18db98800416f063686186e57f017"
+    "categories.json": "b90530f246afc9900a462d176f299022c2c87216b305d7c05f5547a50d7ea7b2",
+    "distribution-candidates.tsv.gz": "60605862ad041828b672e054807d639b48f09e42a0d4944afd9f3a5798f7320a",
+    "distribution-decisions.tsv.gz": "bec870c7c76889b58d16a75aa0204cda6cc1a476d45c474aec64240ef2ad1676"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -499,7 +534,16 @@
     "src/main/classification/reviews/2026-10-25-issue-227-business-services.jsonl": "0c70b089e4c861321dd790a6729fa383a91395ad5249994e8a0ae6089ec9fe4f",
     "src/main/classification/reviews/2026-10-25-open-new-terms-issues.jsonl": "2a853f685e6d09bcda9f5aeb4a6daf52fd8e7c7de469e28e2063df9c6c71e019",
     "src/main/classification/reviews/2026-10-25-open-new-terms-issues_demographic.jsonl": "ed74359bee32753053d2370c1bddc99f343593459449436594cae4d67d511bd7",
-    "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
+    "src/main/classification/reviews/2026-10-26-business-mhlw.jsonl": "909ecf70c108aa087aa3cc17cc5a27f63c3abde3961d6f50fb7b3fd8b238b4dd",
+    "src/main/classification/reviews/2026-10-26-business-mozc-curated.jsonl": "15309fa975a4fde4058276dc838a26025d7bc0c17f038ff05dd6d663142c742e",
+    "src/main/classification/reviews/2026-10-26-business-mozc-seeds.jsonl": "2dd0fb82e48c315abc78681e4f7124fb388c53f04408bd96de66c802b971f356",
+    "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb",
+    "src/main/classification/business-taxonomy.json": "3741c1b45b1d98744fd51bfd2d2231c26b53d8a534a79046070d2b3faffbb3e8",
+    "src/main/classification/business-curated-classifications.tsv": "5297f7becefc3ddb02a4018a6a3aac655eff65c1b7ea7d0d626cab419ec93927",
+    "src/main/classification/business-classifications.tsv.gz": "e461ea4a0c30b19e4cb1effe51fb2153f4e83f700e810fcc7145bca2fbef9d82",
+    "src/main/classification/business-classifications-manifest.json": "4e2d51dbeca35977d3cb6aff575eadae199e01628016ace0205dfda75e699c9d",
+    "src/main/classification/business-specificity-reviews.tsv.gz": "4658a67ef04a32b3aae6cbbc096a948025d10990566e5e0b52f46484f9c623b3",
+    "src/main/classification/business-specificity-review-manifest.json": "d4a40bc1ce2cf5011596a98b7711d946bbb4aabedc1dc23890bdf71faa384544"
   },
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified.",
@@ -72594,6 +72638,9 @@
       "src/main/classification/reviews/2026-10-25-issue-227-business-services.jsonl",
       "src/main/classification/reviews/2026-10-25-open-new-terms-issues.jsonl",
       "src/main/classification/reviews/2026-10-25-open-new-terms-issues_demographic.jsonl",
+      "src/main/classification/reviews/2026-10-26-business-mhlw.jsonl",
+      "src/main/classification/reviews/2026-10-26-business-mozc-curated.jsonl",
+      "src/main/classification/reviews/2026-10-26-business-mozc-seeds.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
     "termAdditions": [
@@ -72839,9 +72886,83 @@
           "rpd": 500
         }
       ]
+    },
+    "businessClassification": {
+      "apiEndpoint": "generateContent",
+      "billingEnabled": false,
+      "categoryCounts": {
+        "business/accounting_finance": 10,
+        "business/common": 2,
+        "business/documents_email": 0,
+        "business/government_procedures": 0,
+        "business/hr_labor": 0,
+        "business/it_security": 1,
+        "business/legal_contracts": 6,
+        "business/logistics_inventory": 3,
+        "business/management_strategy": 2,
+        "business/manufacturing_quality": 0,
+        "business/pr_marketing": 1,
+        "business/procurement": 7,
+        "business/project_management": 0,
+        "business/sales_crm": 3
+      },
+      "classificationStatus": "Gemini labels are candidate research only; final existing-term assignments use the committed manual curation list.",
+      "curatedClassifications": {
+        "pairCount": 35,
+        "path": "src/main/classification/business-curated-classifications.tsv",
+        "sha256": "5297f7becefc3ddb02a4018a6a3aac655eff65c1b7ea7d0d626cab419ec93927"
+      },
+      "existingItSpecialistPairsForcedOutsideBusiness": 6063,
+      "freeTierOnly": true,
+      "freeTierProofs": [
+        {
+          "rpd": 500,
+          "rpm": 15,
+          "sha256": "60821858e239238efb944391dcf4e1806b69d32218ad5360a13a65865037c5bd",
+          "tpm": 250000,
+          "verifiedAt": "2026-10-26T12:03:41.743154+00:00"
+        },
+        {
+          "rpd": 500,
+          "rpm": 15,
+          "sha256": "60821858e239238efb944391dcf4e1806b69d32218ad5360a13a65865037c5bd",
+          "tpm": 250000,
+          "verifiedAt": "2026-10-26T12:03:41.743154+00:00"
+        }
+      ],
+      "itSecurityOverlapPolicy": "Every pair already assigned to term/specialist/information_communications stays in that existing specialist leaf, regardless of the Gemini business prediction; all are emitted as business/outside in the business classification map.",
+      "licenseNote": "Final labels are manually curated selections of existing licensed dictionary pairs; original data licenses remain unchanged.",
+      "model": "gemini-3.5-flash-lite",
+      "outsideBusinessPairs": 108556,
+      "projectId": "gen-lang-client-0548563154",
+      "promptVersion": "business-leaf-best-fit-conservative-v1",
+      "resultSha256": "e461ea4a0c30b19e4cb1effe51fb2153f4e83f700e810fcc7145bca2fbef9d82",
+      "sourcePairSha256": "02bc7fb9a987819cff49257a0a6f390bedf38149a33ddeac98cd26cb722c7316",
+      "sourcePath": "src/main/classification/term-classifications.tsv.gz",
+      "sourceRestrictions": [
+        "No JMdict or JMnedict input; only existing Mozc-derived term classifications."
+      ],
+      "sourceSha256": "2a1414eff371092bf5cadfd8ab9b183e750cbf8f6534fdb0e72710ee3612f45a",
+      "specificityReview": {
+        "billingEnabled": false,
+        "candidatePairs": 6765,
+        "freeTierOnly": true,
+        "keepPairs": 2065,
+        "manifestPath": "src/main/classification/business-specificity-review-manifest.json",
+        "manifestSha256": "d4a40bc1ce2cf5011596a98b7711d946bbb4aabedc1dc23890bdf71faa384544",
+        "model": "gemini-3.5-flash-lite",
+        "outsidePairs": 4700,
+        "path": "src/main/classification/business-specificity-reviews.tsv.gz",
+        "promptVersion": "business-specificity-practical-high-precision-v2",
+        "sha256": "4658a67ef04a32b3aae6cbbc096a948025d10990566e5e0b52f46484f9c623b3",
+        "sourceMapSha256": "a310a26b0996e602f4c78d79d5f9457f69a40d4f389935583878e20efb217c14"
+      },
+      "taxonomyPath": "src/main/classification/business-taxonomy.json",
+      "taxonomySha256": "3741c1b45b1d98744fd51bfd2d2231c26b53d8a534a79046070d2b3faffbb3e8",
+      "uniquePairs": 108591
     }
   },
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "sourceRows": {
     "neologd": 404817,
     "person": 77269,
@@ -72851,5 +72972,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 748288
+  "uniqueAdmittedPairs": 748837
 }

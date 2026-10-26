@@ -109,6 +109,12 @@ jobs:
       - name: Test person-name imports and evidence normalization
         run: python3 -m unittest discover -s scripts -p test_classified_distribution.py
 
+      - name: Test business category and Free-tier classifier inputs
+        run: python3 -m unittest discover -s scripts -p test_run_business_classification.py
+
+      - name: Test business specificity review and source coverage
+        run: python3 -m unittest discover -s scripts -p test_run_business_specificity_review.py
+
       - name: Build and verify the dictionary archive
         run: |
           ./gradlew \

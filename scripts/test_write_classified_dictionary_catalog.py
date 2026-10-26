@@ -82,6 +82,36 @@ class CatalogTest(unittest.TestCase):
         self.assertIn('[一般語](general/index.md)', (output / 'term/index.md').read_text())
         self.assertIn('[商品・日用品（一般名称）]', (output / 'term/general/index.md').read_text())
 
+    def test_business_parent_index_exposes_leaf_categories_and_included_words(self):
+        source = self.root / 'src/main/classification'
+        base = json.loads((source / 'categories.json').read_text(encoding='utf-8'))
+        business_data = distribution.business_taxonomy(Path.cwd())
+        categories = distribution.merged_categories(base, None, business_data=business_data)
+        (source / 'categories.json').write_text(json.dumps(categories, ensure_ascii=False), encoding='utf-8')
+        rows = [*self.rows, ('business/common', 'りんぎ', '1', '1', '5936', '稟議')]
+        distribution.write_gzip(source / 'distribution-candidates.tsv.gz', rows)
+        decisions = [
+            ('あ', '甲<&|>', 'person,place', 'verified', 'classified'),
+            ('あ', '乙', 'person', 'gemini', 'classified'),
+            ('りんぎ', '稟議', 'business/common', 'verified', 'classified'),
+        ]
+        distribution.write_gzip(source / 'distribution-decisions.tsv.gz', decisions)
+        counts = {category['id']: sum(row[0] == category['id'] for row in rows)
+                  for category in categories['categories']}
+        (source / 'distribution-manifest.json').write_text(json.dumps({
+            'categoryRows': counts, 'uniqueAdmittedPairs': 3, 'dictionaryRows': 4,
+            'files': {'distribution-candidates.tsv.gz': distribution.sha(source / 'distribution-candidates.tsv.gz')},
+        }))
+
+        output = self.root / 'catalog'
+        catalog.generate(self.root, output)
+
+        business_index = (output / 'business/index.md').read_text(encoding='utf-8')
+        self.assertIn('[ビジネス共通語](common/index.md)', business_index)
+        self.assertIn('[官公庁・行政手続き](government_procedures/index.md)', business_index)
+        self.assertIn('りんぎ', (output / 'business/common/page-0001.md').read_text(encoding='utf-8'))
+        self.assertIn('稟議', (output / 'business/common/page-0001.md').read_text(encoding='utf-8'))
+
     def test_catalog_marks_source_backed_specialist_reading_corrections(self):
         directory = self.root/'src/main/specialist'
         directory.mkdir(parents=True)

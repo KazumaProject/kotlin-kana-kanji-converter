@@ -49,6 +49,43 @@ JapaneseCorpus由来データの原本表記は
 その他の辞書入力も、それぞれの出典・ライセンス条件に従います。この文書は、未確認の
 入力データに一律のライセンスを与えるものではありません。
 
+## ビジネス辞書
+
+`src/main/classification/business-taxonomy.json` と分類・検証スクリプトには、リポジトリの
+[MIT License](LICENSE) を適用します。ビジネス辞書に含まれる読み・表記の権利条件は、
+元の辞書データの出典別条件を引き継ぎます。ビジネス分類用のGemini入力は既存の
+Mozc由来 `term-classifications.tsv.gz` にある読み・表記の組だけです。JMdict・JMnedictは
+入力・追加候補の出典として使用しません。
+
+人事・労務カテゴリには、厚生労働省の
+[雇用管理に役立つ多言語用語集](https://www.mhlw.go.jp/yougosyu/index.html)から用語の表記と、
+資料中に明示された読みを採録します。`src/main/classification/reviews/2026-10-26-business-mhlw.jsonl`
+には各語の取得元行、読みの根拠、確認した配布辞書のハッシュ、加工判断を記録します。
+明示された読みがない用語は、既存のMozc由来辞書に同じ表記が一意にあり、その読みを
+対応づけられた場合だけ採録します。定義・翻訳・例文・資料本文は複製しません。
+同省の[利用規約](https://www.mhlw.go.jp/chosakuken/)に基づき、同用語集由来の採録データには
+公共データ利用規約（第1.0版）（PDL1.0）の条件を適用し、出典と同条件をこの文書で表示します。
+
+初期業務語彙には、厚生労働省資料の語、依頼で示された業務用語例、および手選定した
+企業実務語を採録します。Mozc由来の追加行はCIが使う
+[google/mozc commit c4b2aef](https://github.com/google/mozc/tree/c4b2aef7c65e61be394bacadaec200eb5b97f91c/src/data/dictionary_oss)
+に照合しています。各追加行には元の辞書レコード、
+品詞・コスト、入力ファイルのSHA-256と行番号を記録します。読みを生成モデルから推測せず、
+元の読み・品詞・コストを保持します。Mozc由来の追加語も単一の新しいライセンスへ
+再ライセンスせず、上記「既存の日本語辞書とその他のデータ」に記したMozcおよび
+同梱辞書データの出典別条件を維持します。
+
+Gemini 3.5 Flash-Lite Free tierは公開済み語彙から候補を調べる用途にだけ使います。
+最終配布語は `business-curated-classifications.tsv` の手選定済み既存語と、出典付きレビューに
+記録したMozc・厚生労働省の語から決めます。Geminiの候補ラベルはそのまま配布語に採用せず、
+入力データの権利条件も変更しません。モデル、プロンプト版、入力と結果のハッシュ、無料枠の確認情報は
+`business-classifications-manifest.json` と `business-specificity-review-manifest.json` に記録し、
+生のAPI応答やAPIキーは配布しません。実行は無料枠の範囲に制限し、課金を有効にしていない
+Google Cloudプロジェクトを使います。Googleの[Gemini API料金・利用条件](https://ai.google.dev/gemini-api/docs/pricing)
+と[Gemini API追加利用規約](https://ai.google.dev/gemini-api/terms)では、無料枠へ送信した内容と生成結果が
+Google製品・機械学習技術の開発に使われ、人による確認・処理の対象になることが説明されています。
+本処理では公開済みの辞書語だけを送信し、個人情報・秘密情報は送信しません。
+
 ## アニメ・漫画・架空キャラクターの対象層レビュー
 
 `src/main/classification/reviews/2026-10-23-media-demographics-complete.jsonl` の完了レビューは、

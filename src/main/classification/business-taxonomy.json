@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "business",
+  "name": "ビジネス",
+  "definition": "企業・組織の業務、実務文書、商取引、職場の手続きで使う一般語・専門語。",
+  "categories": [
+    {"id":"business/common","name":"ビジネス共通語","definition":"複数の業務分野に共通する社内手続き、承認、調整、報告の語。"},
+    {"id":"business/documents_email","name":"ビジネス文書・メール","definition":"業務文書、帳票、会議記録、メールの送受信や記載方法に関する語。"},
+    {"id":"business/accounting_finance","name":"経理・会計・財務","definition":"企業会計、決算、税務、資金管理、債権債務に関する語。"},
+    {"id":"business/sales_crm","name":"営業・顧客管理","definition":"営業活動、顧客関係、商談、受注、販売実績に関する語。"},
+    {"id":"business/procurement","name":"調達・購買","definition":"仕入先選定、見積依頼、発注、検収、購買管理に関する語。"},
+    {"id":"business/hr_labor","name":"人事・労務","definition":"採用、人事管理、給与、勤怠、社会保険、労働条件に関する語。"},
+    {"id":"business/legal_contracts","name":"法務・契約","definition":"企業活動における契約、社内法務、コンプライアンス、紛争対応の語。"},
+    {"id":"business/project_management","name":"プロジェクト管理","definition":"業務プロジェクトの計画、要件、進捗、課題、工数、成果物の管理語。"},
+    {"id":"business/it_security","name":"IT・情報セキュリティ","definition":"組織内IT運用、アクセス管理、情報保護、監査、脆弱性対応の語。"},
+    {"id":"business/manufacturing_quality","name":"製造・品質管理","definition":"生産工程、工程管理、品質保証、検査、不適合、設備保全の語。"},
+    {"id":"business/logistics_inventory","name":"物流・在庫管理","definition":"保管、棚卸、在庫引当、出荷、配送、納期調整に関する語。"},
+    {"id":"business/management_strategy","name":"経営企画・戦略","definition":"事業計画、経営管理、業績評価、投資判断、事業戦略の語。"},
+    {"id":"business/pr_marketing","name":"広報・マーケティング","definition":"広報、広告、販促、顧客調査、ブランド、マーケティング活動の語。"},
+    {"id":"business/government_procedures","name":"官公庁・行政手続き","definition":"企業が行う行政申請、許認可、入札、税・社会保険等の届出に関する語。"}
+  ]
+}
