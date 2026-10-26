@@ -39,7 +39,7 @@
   },
   "classificationExclusionsSha256": "50fb918b0a0ffb823cdae3c57eff156287bcc8b0580c12001905d158fd4262a2",
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
-  "existingInventorySha256": "2b8afa1ac7b17b421999700e442432b647771660e35bd7a838bb90e81c0c89b5",
+  "existingInventorySha256": "b6bd3ccd684c8cdfd8da746a6a86e5de80cae14b391926322857d5e4b80a8bd1",
   "existingDictionaryIds": [
     "categories/address",
     "categories/agreement",
@@ -161,7 +161,7 @@
     "symbol",
     "system"
   ],
-  "existingUniquePairs": 1864530,
+  "existingUniquePairs": 1864662,
   "sourceRows": {
     "collected/collected-terms/cf7e87c20f1b1c28.jsonl": {
       "rows": 2,
@@ -232,7 +232,7 @@
   },
   "files": {
     "distribution-candidates.tsv.gz": "8734dda7bd19c3a1401600a751289a3062c9a2f15c7ea64a409faf40c656e5ec",
-    "provenance.jsonl.gz": "d8c3411ae205cff7a4d9b3da244d8956d8ef37b1e0fa2a9a10ed40da496448f2"
+    "provenance.jsonl.gz": "c6f6bbcda1239546d0eabf79bc51d3bc1434c0a14bb857f612fca6627719548e"
   },
   "limitations": [
     "Upstream readings include automatic readings; Gemini supplements are inferred. Neither is independently verified.",
