@@ -1,8 +1,8 @@
 {
   "admittedPairsByOrigin": {
-    "manual": 378756,
-    "gemini": 188635,
-    "verified": 180897
+    "manual": 378757,
+    "gemini": 188631,
+    "verified": 181449
   },
   "categoryGroups": [
     {
@@ -353,21 +353,21 @@
     "award": 1163,
     "agreement": 424,
     "initiative": 1061,
-    "term/general/products_daily_goods": 1159,
+    "term/general/products_daily_goods": 1157,
     "term/general/food_drink_cooking": 4077,
     "term/general/internet_slang_culture": 574,
     "term/general/neologisms_trends_youth_language": 485,
-    "term/general/other_general": 20502,
-    "term/specialist/information_communications": 6083,
+    "term/general/other_general": 20494,
+    "term/specialist/information_communications": 6087,
     "term/specialist/mathematics_physics": 4171,
     "term/specialist/chemistry_life_sciences": 27567,
-    "term/specialist/engineering_technology": 3509,
+    "term/specialist/engineering_technology": 3524,
     "term/specialist/earth_environment_resources": 2110,
-    "term/specialist/economics_management": 5780,
-    "term/specialist/law_politics": 5274,
+    "term/specialist/economics_management": 5888,
+    "term/specialist/law_politics": 5695,
     "term/specialist/humanities_social_sciences": 17877,
     "term/specialist/culture_arts_sports": 5360,
-    "term/specialist/transport_safety_defense": 4037,
+    "term/specialist/transport_safety_defense": 4048,
     "work_franchise": 850,
     "work_manga": 5084,
     "work_anime": 1090,
@@ -393,13 +393,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 777490,
+  "dictionaryRows": 778039,
   "excludedCandidatePairs": 328694,
   "excludedClassifiedPairs": 322969,
   "files": {
     "categories.json": "6cdfb7f23de0e2d90283adc7139e52581e575d13f830e996c87948e43446ee60",
-    "distribution-candidates.tsv.gz": "a9168aa9badcf58f247140cfdd1da20c9d31bc5f3161436436ec2757e7fa963a",
-    "distribution-decisions.tsv.gz": "ebf92f4227d8855ab38b47b2128ad7eca1b18db98800416f063686186e57f017"
+    "distribution-candidates.tsv.gz": "09f3dead689a1169f05bcb3aea7ea24d60a5b007f8f3b60da201441e3494e744",
+    "distribution-decisions.tsv.gz": "38a7ad9155f5f2d871a38d5fc68d73a2cb1b5d137be61e42b3af03e7f82df9aa"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -499,6 +499,10 @@
     "src/main/classification/reviews/2026-10-25-issue-227-business-services.jsonl": "0c70b089e4c861321dd790a6729fa383a91395ad5249994e8a0ae6089ec9fe4f",
     "src/main/classification/reviews/2026-10-25-open-new-terms-issues.jsonl": "2a853f685e6d09bcda9f5aeb4a6daf52fd8e7c7de469e28e2063df9c6c71e019",
     "src/main/classification/reviews/2026-10-25-open-new-terms-issues_demographic.jsonl": "ed74359bee32753053d2370c1bddc99f343593459449436594cae4d67d511bd7",
+    "src/main/classification/reviews/2026-10-26-business-mhlw.jsonl": "ee4d8507e016d18703275221922634a36d0a68b072a56faa70da4715161e48e0",
+    "src/main/classification/reviews/2026-10-26-business-mozc-curated.jsonl": "e856090d80a053af3c5faffb866907bcfc06ecbaa43b1c5a63062f56547ba9ed",
+    "src/main/classification/reviews/2026-10-26-business-mozc-seeds.jsonl": "50019986e5e1a5a1715d496619645dbf163ce5076be79788c619a5a9712b01dd",
+    "src/main/classification/reviews/2026-10-26-business-specialist-reclassifications.jsonl": "bf143524193d0f016b3fcb7196a3b76b43739c423ea65c39f996b12f3ac3e251",
     "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
   },
   "limitations": [
@@ -72594,6 +72598,10 @@
       "src/main/classification/reviews/2026-10-25-issue-227-business-services.jsonl",
       "src/main/classification/reviews/2026-10-25-open-new-terms-issues.jsonl",
       "src/main/classification/reviews/2026-10-25-open-new-terms-issues_demographic.jsonl",
+      "src/main/classification/reviews/2026-10-26-business-mhlw.jsonl",
+      "src/main/classification/reviews/2026-10-26-business-mozc-curated.jsonl",
+      "src/main/classification/reviews/2026-10-26-business-mozc-seeds.jsonl",
+      "src/main/classification/reviews/2026-10-26-business-specialist-reclassifications.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
     "termAdditions": [
@@ -72851,5 +72859,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 748288
+  "uniqueAdmittedPairs": 748837
 }
