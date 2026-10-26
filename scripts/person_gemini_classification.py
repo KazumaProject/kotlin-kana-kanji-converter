@@ -383,8 +383,8 @@ def keychain_credential():
     return key
 
 
-def verify_free_project(proof, now=None):
-    required = (proof.get('project_id') == PROJECT and proof.get('model') == MODEL and
+def verify_free_project(proof, now=None, model=MODEL):
+    required = (proof.get('project_id') == PROJECT and proof.get('model') == model and
                 proof.get('free_tier') is True and proof.get('billing_enabled') is False and
                 proof.get('api_project_verified') is True and
                 proof.get('api_quota_verified') is True)
@@ -486,7 +486,7 @@ def validate_codes(value, item_count):
     return results
 
 
-def request_body(items, input_text=None):
+def request_body(items, input_text=None, model=MODEL):
     schema = {
         'type': 'object',
         'properties': {
@@ -496,7 +496,7 @@ def request_body(items, input_text=None):
         'additionalProperties': False,
     }
     return {
-        'model': MODEL,
+        'model': model,
         'store': False,
         'input': prompt(items) if input_text is None else input_text,
         'generation_config': {
@@ -521,8 +521,8 @@ class RequestPacer:
             self.last_start = time.monotonic()
 
 
-def api_request(items, key, pacer, timeout, input_text=None):
-    body = json_bytes(request_body(items, input_text))
+def api_request(items, key, pacer, timeout, input_text=None, model=MODEL):
+    body = json_bytes(request_body(items, input_text, model))
     pacer.wait()
     request = urllib.request.Request(
         'https://generativelanguage.googleapis.com/v1beta/interactions',
@@ -694,10 +694,11 @@ def saved_partial_codes(workspace, name, items):
     return codes, missing
 
 
-def request_codes(workspace, name, items, key, pacer, timeout, input_text_builder=None):
+def request_codes(workspace, name, items, key, pacer, timeout, input_text_builder=None,
+                  model=MODEL):
     for attempt in range(5):
         input_text = input_text_builder(items) if input_text_builder else None
-        body, status, raw, decoded = api_request(items, key, pacer, timeout, input_text)
+        body, status, raw, decoded = api_request(items, key, pacer, timeout, input_text, model)
         error_text = None
         codes = missing = None
         if status == 200:
@@ -727,11 +728,12 @@ def request_codes(workspace, name, items, key, pacer, timeout, input_text_builde
                             'evidence': str(evidence.relative_to(workspace))}, evidence
 
 
-def classify_batch(workspace, name, items, key, pacer, timeout, input_text_builder=None):
+def classify_batch(workspace, name, items, key, pacer, timeout, input_text_builder=None,
+                   model=MODEL):
     saved = saved_partial_codes(workspace, name, items)
     if saved is None:
         codes, missing, failure, evidence = request_codes(
-            workspace, name, items, key, pacer, timeout, input_text_builder)
+            workspace, name, items, key, pacer, timeout, input_text_builder, model)
         if failure:
             return None, dict(batch_id=name, **failure)
     else:
@@ -743,7 +745,7 @@ def classify_batch(workspace, name, items, key, pacer, timeout, input_text_build
             return codes, None
         repair_items = [items[index] for index in positions]
         repaired, repair_missing, failure, evidence = request_codes(
-            workspace, name, repair_items, key, pacer, timeout, input_text_builder)
+            workspace, name, repair_items, key, pacer, timeout, input_text_builder, model)
         if failure:
             return None, dict(batch_id=name, **failure)
         for local_index, code in enumerate(repaired):
