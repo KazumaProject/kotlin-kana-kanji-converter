@@ -2,7 +2,7 @@
 
 通常版GitHub Releaseの辞書ZIPに含まれる全143カテゴリを掲載します。通常配布カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **865,668**、読み・表記の組数の合計は **857,543**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **866,217**、読み・表記の組数の合計は **858,092**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換配布) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -113,21 +113,21 @@
 | [賞](award/index.md) | `award` | 1,163 | 1,163 | [全件](award/index.md) |
 | [条約・協定](agreement/index.md) | `agreement` | 424 | 424 | [全件](agreement/index.md) |
 | [事業・キャンペーン](initiative/index.md) | `initiative` | 1,061 | 1,061 | [全件](initiative/index.md) |
-| [商品・日用品（一般名称）](term/general/products_daily_goods/index.md) | `term/general/products_daily_goods` | 1,159 | 1,159 | [全件](term/general/products_daily_goods/index.md) |
+| [商品・日用品（一般名称）](term/general/products_daily_goods/index.md) | `term/general/products_daily_goods` | 1,157 | 1,157 | [全件](term/general/products_daily_goods/index.md) |
 | [食品・飲料・料理](term/general/food_drink_cooking/index.md) | `term/general/food_drink_cooking` | 4,076 | 4,077 | [全件](term/general/food_drink_cooking/index.md) |
 | [ネットスラング・ネット文化](term/general/internet_slang_culture/index.md) | `term/general/internet_slang_culture` | 572 | 574 | [全件](term/general/internet_slang_culture/index.md) |
 | [新語・流行語・若者言葉](term/general/neologisms_trends_youth_language/index.md) | `term/general/neologisms_trends_youth_language` | 485 | 485 | [全件](term/general/neologisms_trends_youth_language/index.md) |
-| [その他の一般語](term/general/other_general/index.md) | `term/general/other_general` | 20,491 | 20,502 | [全件](term/general/other_general/index.md) |
-| [情報・通信](term/specialist/information_communications/index.md) | `term/specialist/information_communications` | 6,082 | 6,083 | [全件](term/specialist/information_communications/index.md) |
+| [その他の一般語](term/general/other_general/index.md) | `term/general/other_general` | 20,483 | 20,494 | [全件](term/general/other_general/index.md) |
+| [情報・通信](term/specialist/information_communications/index.md) | `term/specialist/information_communications` | 6,086 | 6,087 | [全件](term/specialist/information_communications/index.md) |
 | [数学・物理](term/specialist/mathematics_physics/index.md) | `term/specialist/mathematics_physics` | 4,171 | 4,171 | [全件](term/specialist/mathematics_physics/index.md) |
 | [化学・生命科学](term/specialist/chemistry_life_sciences/index.md) | `term/specialist/chemistry_life_sciences` | 27,564 | 27,567 | [全件](term/specialist/chemistry_life_sciences/index.md) |
-| [工学・技術](term/specialist/engineering_technology/index.md) | `term/specialist/engineering_technology` | 3,508 | 3,509 | [全件](term/specialist/engineering_technology/index.md) |
+| [工学・技術](term/specialist/engineering_technology/index.md) | `term/specialist/engineering_technology` | 3,523 | 3,524 | [全件](term/specialist/engineering_technology/index.md) |
 | [地球・環境・資源](term/specialist/earth_environment_resources/index.md) | `term/specialist/earth_environment_resources` | 2,110 | 2,110 | [全件](term/specialist/earth_environment_resources/index.md) |
-| [経済・経営](term/specialist/economics_management/index.md) | `term/specialist/economics_management` | 5,780 | 5,780 | [全件](term/specialist/economics_management/index.md) |
-| [法律・政治](term/specialist/law_politics/index.md) | `term/specialist/law_politics` | 5,273 | 5,274 | [全件](term/specialist/law_politics/index.md) |
+| [経済・経営](term/specialist/economics_management/index.md) | `term/specialist/economics_management` | 5,888 | 5,888 | [全件](term/specialist/economics_management/index.md) |
+| [法律・政治](term/specialist/law_politics/index.md) | `term/specialist/law_politics` | 5,694 | 5,695 | [全件](term/specialist/law_politics/index.md) |
 | [人文・社会科学](term/specialist/humanities_social_sciences/index.md) | `term/specialist/humanities_social_sciences` | 17,872 | 17,877 | [全件](term/specialist/humanities_social_sciences/index.md) |
 | [文化・芸術・スポーツ](term/specialist/culture_arts_sports/index.md) | `term/specialist/culture_arts_sports` | 5,360 | 5,360 | [全件](term/specialist/culture_arts_sports/index.md) |
-| [交通・安全・防衛](term/specialist/transport_safety_defense/index.md) | `term/specialist/transport_safety_defense` | 4,035 | 4,037 | [全件](term/specialist/transport_safety_defense/index.md) |
+| [交通・安全・防衛](term/specialist/transport_safety_defense/index.md) | `term/specialist/transport_safety_defense` | 4,046 | 4,048 | [全件](term/specialist/transport_safety_defense/index.md) |
 | [作品シリーズ](work_franchise/index.md) | `work_franchise` | 850 | 850 | [全件](work_franchise/index.md) |
 | [漫画作品](work_manga/index.md) | `work_manga` | 5,083 | 5,084 | [全件](work_manga/index.md) |
 | [アニメ作品](work_anime/index.md) | `work_anime` | 1,090 | 1,090 | [全件](work_anime/index.md) |

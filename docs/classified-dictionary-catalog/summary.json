@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "a9168aa9badcf58f247140cfdd1da20c9d31bc5f3161436436ec2757e7fa963a",
-  "uniquePairs": 836556,
-  "records": 865668,
+  "inputSha256": "09f3dead689a1169f05bcb3aea7ea24d60a5b007f8f3b60da201441e3494e744",
+  "uniquePairs": 837105,
+  "records": 866217,
   "categories": [
     {
       "id": "character",
@@ -1062,13 +1062,13 @@
     {
       "id": "term/general/products_daily_goods",
       "name": "商品・日用品（一般名称）",
-      "pairs": 1159,
-      "readings": 1122,
-      "records": 1159,
+      "pairs": 1157,
+      "readings": 1120,
+      "records": 1157,
       "pages": 1,
       "recordsByOrigin": {
-        "verified": 185,
-        "gemini": 586,
+        "verified": 184,
+        "gemini": 585,
         "manual": 388
       }
     },
@@ -1114,27 +1114,27 @@
     {
       "id": "term/general/other_general",
       "name": "その他の一般語",
-      "pairs": 20491,
-      "readings": 19770,
-      "records": 20502,
+      "pairs": 20483,
+      "readings": 19762,
+      "records": 20494,
       "pages": 14,
       "recordsByOrigin": {
-        "gemini": 11702,
-        "verified": 2617,
-        "manual": 6183
+        "gemini": 11699,
+        "verified": 2615,
+        "manual": 6180
       }
     },
     {
       "id": "term/specialist/information_communications",
       "name": "情報・通信",
-      "pairs": 6082,
-      "readings": 6015,
-      "records": 6083,
+      "pairs": 6086,
+      "readings": 6019,
+      "records": 6087,
       "pages": 5,
       "recordsByOrigin": {
         "gemini": 3930,
         "manual": 1723,
-        "verified": 430
+        "verified": 434
       }
     },
     {
@@ -1166,14 +1166,14 @@
     {
       "id": "term/specialist/engineering_technology",
       "name": "工学・技術",
-      "pairs": 3508,
-      "readings": 3449,
-      "records": 3509,
+      "pairs": 3523,
+      "readings": 3464,
+      "records": 3524,
       "pages": 3,
       "recordsByOrigin": {
         "gemini": 2188,
         "manual": 815,
-        "verified": 506
+        "verified": 521
       }
     },
     {
@@ -1192,27 +1192,27 @@
     {
       "id": "term/specialist/economics_management",
       "name": "経済・経営",
-      "pairs": 5780,
-      "readings": 5705,
-      "records": 5780,
+      "pairs": 5888,
+      "readings": 5812,
+      "records": 5888,
       "pages": 4,
       "recordsByOrigin": {
-        "manual": 1305,
+        "manual": 1309,
         "gemini": 3606,
-        "verified": 869
+        "verified": 973
       }
     },
     {
       "id": "term/specialist/law_politics",
       "name": "法律・政治",
-      "pairs": 5273,
-      "readings": 5202,
-      "records": 5274,
+      "pairs": 5694,
+      "readings": 5617,
+      "records": 5695,
       "pages": 4,
       "recordsByOrigin": {
         "manual": 1393,
         "gemini": 3011,
-        "verified": 870
+        "verified": 1291
       }
     },
     {
@@ -1244,14 +1244,14 @@
     {
       "id": "term/specialist/transport_safety_defense",
       "name": "交通・安全・防衛",
-      "pairs": 4035,
-      "readings": 3987,
-      "records": 4037,
+      "pairs": 4046,
+      "readings": 3998,
+      "records": 4048,
       "pages": 3,
       "recordsByOrigin": {
         "manual": 1215,
         "gemini": 2222,
-        "verified": 600
+        "verified": 611
       }
     },
     {
