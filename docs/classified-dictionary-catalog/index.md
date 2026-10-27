@@ -2,7 +2,7 @@
 
 通常版GitHub Releaseの辞書ZIPに含まれる全143カテゴリを掲載します。通常配布カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **866,217**、読み・表記の組数の合計は **858,092**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **866,221**、読み・表記の組数の合計は **858,096**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換配布) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -14,7 +14,7 @@
 
 | 対象層 | 読み・表記の組 | レコード数 | 全収録語 |
 |---|---:|---:|---|
-| [少年向け](media_demographic/audience/shonen/index.md) | 4,108 | 4,119 | [全件](media_demographic/audience/shonen/index.md) |
+| [少年向け](media_demographic/audience/shonen/index.md) | 4,109 | 4,120 | [全件](media_demographic/audience/shonen/index.md) |
 | [青年向け](media_demographic/audience/seinen/index.md) | 1,731 | 1,732 | [全件](media_demographic/audience/seinen/index.md) |
 | [少女向け](media_demographic/audience/shojo/index.md) | 822 | 826 | [全件](media_demographic/audience/shojo/index.md) |
 | [女性向け（Josei）](media_demographic/audience/josei/index.md) | 349 | 355 | [全件](media_demographic/audience/josei/index.md) |
@@ -29,8 +29,8 @@
 
 | 作品種別 | 読み・表記の組 | レコード数 | 全収録語 |
 |---|---:|---:|---|
-| [アニメ作品](work_anime/index.md) | 1,090 | 1,090 | [全件](work_anime/index.md) |
-| [漫画作品](work_manga/index.md) | 5,083 | 5,084 | [全件](work_manga/index.md) |
+| [アニメ作品](work_anime/index.md) | 1,091 | 1,091 | [全件](work_anime/index.md) |
+| [漫画作品](work_manga/index.md) | 5,084 | 5,085 | [全件](work_manga/index.md) |
 | [架空キャラクター](character/index.md) | 6,776 | 6,848 | [全件](character/index.md) |
 
 | カテゴリ | ID | 読み・表記の組 | レコード数 | 全件一覧 |
@@ -129,9 +129,9 @@
 | [文化・芸術・スポーツ](term/specialist/culture_arts_sports/index.md) | `term/specialist/culture_arts_sports` | 5,360 | 5,360 | [全件](term/specialist/culture_arts_sports/index.md) |
 | [交通・安全・防衛](term/specialist/transport_safety_defense/index.md) | `term/specialist/transport_safety_defense` | 4,046 | 4,048 | [全件](term/specialist/transport_safety_defense/index.md) |
 | [作品シリーズ](work_franchise/index.md) | `work_franchise` | 850 | 850 | [全件](work_franchise/index.md) |
-| [漫画作品](work_manga/index.md) | `work_manga` | 5,083 | 5,084 | [全件](work_manga/index.md) |
-| [アニメ作品](work_anime/index.md) | `work_anime` | 1,090 | 1,090 | [全件](work_anime/index.md) |
-| [少年向け](media_demographic/audience/shonen/index.md) | `media_demographic/audience/shonen` | 4,108 | 4,119 | [全件](media_demographic/audience/shonen/index.md) |
+| [漫画作品](work_manga/index.md) | `work_manga` | 5,084 | 5,085 | [全件](work_manga/index.md) |
+| [アニメ作品](work_anime/index.md) | `work_anime` | 1,091 | 1,091 | [全件](work_anime/index.md) |
+| [少年向け](media_demographic/audience/shonen/index.md) | `media_demographic/audience/shonen` | 4,109 | 4,120 | [全件](media_demographic/audience/shonen/index.md) |
 | [青年向け](media_demographic/audience/seinen/index.md) | `media_demographic/audience/seinen` | 1,731 | 1,732 | [全件](media_demographic/audience/seinen/index.md) |
 | [少女向け](media_demographic/audience/shojo/index.md) | `media_demographic/audience/shojo` | 822 | 826 | [全件](media_demographic/audience/shojo/index.md) |
 | [女性向け（Josei）](media_demographic/audience/josei/index.md) | `media_demographic/audience/josei` | 349 | 355 | [全件](media_demographic/audience/josei/index.md) |
@@ -140,7 +140,7 @@
 | [対象層の指定なし・一般向け](media_demographic/audience/unspecified/index.md) | `media_demographic/audience/unspecified` | 5,052 | 5,100 | [全件](media_demographic/audience/unspecified/index.md) |
 | [出典未確認・対象層未確定](media_demographic/resolution/source_unverified/index.md) | `media_demographic/resolution/source_unverified` | 0 | 0 | [全件](media_demographic/resolution/source_unverified/index.md) |
 | [映画作品](work_film/index.md) | `work_film` | 6,503 | 6,504 | [全件](work_film/index.md) |
-| [番組](work_program/index.md) | `work_program` | 9,308 | 9,309 | [全件](work_program/index.md) |
+| [番組](work_program/index.md) | `work_program` | 9,309 | 9,310 | [全件](work_program/index.md) |
 | [書籍作品](work_book/index.md) | `work_book` | 7,658 | 7,659 | [全件](work_book/index.md) |
 | [ゲーム作品](work_game/index.md) | `work_game` | 3,159 | 3,159 | [全件](work_game/index.md) |
 | [音楽作品](work_music/index.md) | `work_music` | 10,339 | 10,342 | [全件](work_music/index.md) |
