@@ -237,6 +237,23 @@ class DistributionTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'valid provenance'):
                 d.apply_term_classifications(self.root, decisions, force=True)
 
+    def test_source_backed_term_reclassification_does_not_need_a_gemini_result(self):
+        pair = ('ねんげんろく', '年限禄')
+        category = 'term/specialist/humanities_social_sciences'
+        entry = {
+            'action': 'reclassify', 'categories': [category],
+            'evidence': {'kind': 'independent_source'},
+        }
+        decisions = {pair: [*pair, category, 'verified', 'classified']}
+        data = {'results': {}, 'categoryIds': {category}}
+        with patch.object(d, 'term_classification_data', return_value=data):
+            result = d.apply_term_classifications(
+                self.root, decisions, force=True, reviewed_pairs={pair: entry})
+        self.assertEqual(result[pair][2], category)
+        with patch.object(d, 'term_classification_data', return_value=data):
+            with self.assertRaisesRegex(ValueError, 'valid provenance'):
+                d.apply_term_classifications(self.root, decisions, force=True)
+
     def person_file(self, entries=None):
         entry = dict(reading='かくとうか', surface='格闘家', sport='mma', left_id=1, right_id=1, cost=8400,
                      source_url='https://example.org/fighters/test', source_surface='格闘家',

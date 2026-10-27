@@ -7,6 +7,7 @@ import unittest
 import person_gemini_classification as gemini
 import person_name_origin_classification as origins
 import review_person_classifications as reviews
+import sync_person_name_origin_type_review as type_review_sync
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -136,6 +137,95 @@ class PersonNameOriginClassificationTest(unittest.TestCase):
                 stream.write('person\tかな\t2\t1\t8000\t表記\n')
             with self.assertRaisesRegex(ValueError, 'Mapped name-origin source rows'):
                 origins.load_fixed_mapping(root)
+
+    def test_audit_corrects_name_type_without_inventing_origin(self):
+        full_names = [
+            ('いわもとやすひで','岩本泰英'),('おさだまさよし','長田雅喜'),('かわばたていじ','河端貞次'),
+            ('かんき','韓軌'),('これかわぎんぞう','是川銀蔵'),('こんどうせいや','近藤誠也'),
+            ('こんのかつこ','今野華都子'),('さいさいこう','蔡再鴻'),('とみたただすけ','冨田ただすけ'),
+            ('とーますせうぇる','トーマスセウェル'),('なかとみさぶろう','中冨三郎'),
+            ('なかにしすすむ','中西進'),('なかのみゆき','中野みゆき'),('ひろせさとし','廣瀬智央'),
+            ('びんおんたく','閔恩沢'),('ふぁんびょんそ','黄炳瑞'),('ふうじょ','馮如'),('もろさわまさお','諸澤昌男'),
+        ]
+        mapping, manifest = origins.load_fixed_mapping(ROOT)
+        for reading, surface in full_names:
+            with self.subTest(surface=surface):
+                self.assertEqual(
+                    mapping[origins.candidate_key(reading, surface)],
+                    ('surname_origin_unconfirmed', 'personal_name_origin_unconfirmed'))
+        expected = {
+            ('ねんげんろく','年限禄'): 'excluded_non_person',
+            ('のーばでぃ','NOBODY'): 'excluded_non_person',
+            ('とみすらふ','トミスラフ'): 'given_name_origin_foreign',
+        }
+        for (reading, surface), target in expected.items():
+            with self.subTest(surface=surface):
+                self.assertEqual(mapping[origins.candidate_key(reading, surface)],
+                                 ('surname_origin_unconfirmed', target))
+
+        review_manifest = manifest['manual_type_review']
+        self.assertEqual(review_manifest['reviewed_pairs'], 21)
+        self.assertEqual(review_manifest['review_target_pair_counts'], {
+            'excluded_non_person': 2,
+            'given_name_origin_foreign': 1,
+            'personal_name_origin_unconfirmed': 18,
+        })
+        stale_counts = dict(review_manifest, reviewed_pairs=22)
+        with self.assertRaisesRegex(ValueError, 'counts differ'):
+            origins.validate_manual_type_review(ROOT, mapping, stale_counts)
+
+    def test_type_review_sync_changes_only_category_and_drops_non_people(self):
+        full_key = origins.candidate_key('いわもとやすひで', '岩本泰英')
+        given_key = origins.candidate_key('とみすらふ', 'トミスラフ')
+        excluded_key = origins.candidate_key('ねんげんろく', '年限禄')
+        mapping = {
+            full_key: ('surname_origin_unconfirmed', 'personal_name_origin_unconfirmed'),
+            given_key: ('surname_origin_unconfirmed', 'given_name_origin_foreign'),
+            excluded_key: ('surname_origin_unconfirmed', 'excluded_non_person'),
+        }
+        reviews = [
+            {'candidate_key': full_key, 'reading': 'いわもとやすひで', 'surface': '岩本泰英',
+             'source_category_id': 'surname_origin_unconfirmed',
+             'target_category_id': 'personal_name_origin_unconfirmed',
+             'previous_dictionary_category_id': 'surname_origin_foreign'},
+            {'candidate_key': given_key, 'reading': 'とみすらふ', 'surface': 'トミスラフ',
+             'source_category_id': 'surname_origin_unconfirmed',
+             'target_category_id': 'given_name_origin_foreign',
+             'previous_dictionary_category_id': 'surname_origin_foreign'},
+            {'candidate_key': excluded_key, 'reading': 'ねんげんろく', 'surface': '年限禄',
+             'source_category_id': 'surname_origin_unconfirmed',
+             'target_category_id': 'excluded_non_person',
+             'previous_dictionary_category_id': 'surname_origin_foreign'},
+        ]
+        source = [
+            ['surname_origin_foreign', 'いわもとやすひで', '1851', '1851', '8400', '岩本泰英', ''],
+            ['surname_origin_foreign', 'とみすらふ', '1851', '1851', '7890', 'トミスラフ', ''],
+            ['surname_origin_foreign', 'ねんげんろく', '1851', '1851', '9441', '年限禄', ''],
+            ['writer', 'やまだ', '1', '2', '8000', '山田', ''],
+        ]
+        result, counts = type_review_sync.apply_type_review(
+            source, mapping, reviews,
+            {'writer': 1, 'surname_origin_foreign': 2,
+             'given_name_origin_foreign': 3, 'personal_name_origin_unconfirmed': 4},
+            first_sync=True,
+        )
+        self.assertIn(['personal_name_origin_unconfirmed', 'いわもとやすひで', '1851',
+                       '1851', '8400', '岩本泰英', ''], result)
+        self.assertIn(['given_name_origin_foreign', 'とみすらふ', '1851', '1851',
+                       '7890', 'トミスラフ', ''], result)
+        self.assertIn(['writer', 'やまだ', '1', '2', '8000', '山田', ''], result)
+        self.assertFalse(any(row[1] == 'ねんげんろく' for row in result))
+        self.assertEqual(counts, {
+            'reviewed_pairs': 3, 'changed_records': 2, 'excluded_records': 1,
+            'records_before': 4, 'records_after': 3,
+        })
+
+        with self.assertRaisesRegex(ValueError, 'unexpected category'):
+            type_review_sync.apply_type_review(
+                [['surname_origin_japanese', *source[0][1:]]], mapping, reviews[:1],
+                {'surname_origin_foreign': 1, 'surname_origin_japanese': 2,
+                 'personal_name_origin_unconfirmed': 3}, first_sync=True,
+            )
 
 
 if __name__ == '__main__':

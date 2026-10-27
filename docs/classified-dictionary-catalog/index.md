@@ -2,7 +2,7 @@
 
 通常版GitHub Releaseの辞書ZIPに含まれる全143カテゴリを掲載します。通常配布カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えています。未分類候補と成人関連など配布対象外の候補は含めていません。
 
-カテゴリ別レコード数の合計は **866,221**、読み・表記の組数の合計は **858,096**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
+カテゴリ別レコード数の合計は **866,219**、読み・表記の組数の合計は **858,094**です。同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。
 
 [生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換配布) · [人物分類定義](../../src/main/classification/person-taxonomy.json)
 
@@ -120,14 +120,14 @@
 | [その他の一般語](term/general/other_general/index.md) | `term/general/other_general` | 20,483 | 20,494 | [全件](term/general/other_general/index.md) |
 | [情報・通信](term/specialist/information_communications/index.md) | `term/specialist/information_communications` | 6,086 | 6,087 | [全件](term/specialist/information_communications/index.md) |
 | [数学・物理](term/specialist/mathematics_physics/index.md) | `term/specialist/mathematics_physics` | 4,171 | 4,171 | [全件](term/specialist/mathematics_physics/index.md) |
-| [化学・生命科学](term/specialist/chemistry_life_sciences/index.md) | `term/specialist/chemistry_life_sciences` | 27,564 | 27,567 | [全件](term/specialist/chemistry_life_sciences/index.md) |
+| [化学・生命科学](term/specialist/chemistry_life_sciences/index.md) | `term/specialist/chemistry_life_sciences` | 27,559 | 27,562 | [全件](term/specialist/chemistry_life_sciences/index.md) |
 | [工学・技術](term/specialist/engineering_technology/index.md) | `term/specialist/engineering_technology` | 3,523 | 3,524 | [全件](term/specialist/engineering_technology/index.md) |
-| [地球・環境・資源](term/specialist/earth_environment_resources/index.md) | `term/specialist/earth_environment_resources` | 2,110 | 2,110 | [全件](term/specialist/earth_environment_resources/index.md) |
-| [経済・経営](term/specialist/economics_management/index.md) | `term/specialist/economics_management` | 5,888 | 5,888 | [全件](term/specialist/economics_management/index.md) |
-| [法律・政治](term/specialist/law_politics/index.md) | `term/specialist/law_politics` | 5,694 | 5,695 | [全件](term/specialist/law_politics/index.md) |
-| [人文・社会科学](term/specialist/humanities_social_sciences/index.md) | `term/specialist/humanities_social_sciences` | 17,872 | 17,877 | [全件](term/specialist/humanities_social_sciences/index.md) |
+| [地球・環境・資源](term/specialist/earth_environment_resources/index.md) | `term/specialist/earth_environment_resources` | 2,109 | 2,109 | [全件](term/specialist/earth_environment_resources/index.md) |
+| [経済・経営](term/specialist/economics_management/index.md) | `term/specialist/economics_management` | 5,897 | 5,897 | [全件](term/specialist/economics_management/index.md) |
+| [法律・政治](term/specialist/law_politics/index.md) | `term/specialist/law_politics` | 5,692 | 5,693 | [全件](term/specialist/law_politics/index.md) |
+| [人文・社会科学](term/specialist/humanities_social_sciences/index.md) | `term/specialist/humanities_social_sciences` | 17,869 | 17,874 | [全件](term/specialist/humanities_social_sciences/index.md) |
 | [文化・芸術・スポーツ](term/specialist/culture_arts_sports/index.md) | `term/specialist/culture_arts_sports` | 5,360 | 5,360 | [全件](term/specialist/culture_arts_sports/index.md) |
-| [交通・安全・防衛](term/specialist/transport_safety_defense/index.md) | `term/specialist/transport_safety_defense` | 4,046 | 4,048 | [全件](term/specialist/transport_safety_defense/index.md) |
+| [交通・安全・防衛](term/specialist/transport_safety_defense/index.md) | `term/specialist/transport_safety_defense` | 4,048 | 4,050 | [全件](term/specialist/transport_safety_defense/index.md) |
 | [作品シリーズ](work_franchise/index.md) | `work_franchise` | 850 | 850 | [全件](work_franchise/index.md) |
 | [漫画作品](work_manga/index.md) | `work_manga` | 5,084 | 5,085 | [全件](work_manga/index.md) |
 | [アニメ作品](work_anime/index.md) | `work_anime` | 1,091 | 1,091 | [全件](work_anime/index.md) |
@@ -151,7 +151,7 @@
 | [医療](medical/index.md) | `medical` | 92,683 | 92,683 | [全件](medical/index.md) |
 | [姓・名字（由来未確認）](person/surname_origin_unconfirmed/index.md) | `surname_origin_unconfirmed` | 24,039 | 24,182 | [全件](person/surname_origin_unconfirmed/index.md) |
 | [名・下の名前（由来未確認）](person/given_name_origin_unconfirmed/index.md) | `given_name_origin_unconfirmed` | 4,290 | 4,332 | [全件](person/given_name_origin_unconfirmed/index.md) |
-| [人名・姓名（由来未確認）](person/personal_name_origin_unconfirmed/index.md) | `personal_name_origin_unconfirmed` | 92,876 | 93,650 | [全件](person/personal_name_origin_unconfirmed/index.md) |
+| [人名・姓名（由来未確認）](person/personal_name_origin_unconfirmed/index.md) | `personal_name_origin_unconfirmed` | 92,894 | 93,668 | [全件](person/personal_name_origin_unconfirmed/index.md) |
 | [俳優](person/actor/index.md) | `actor` | 6,536 | 6,591 | [全件](person/actor/index.md) |
 | [声優](person/voice_actor/index.md) | `voice_actor` | 656 | 663 | [全件](person/voice_actor/index.md) |
 | [歌手・音楽家](person/musician/index.md) | `musician` | 1,253 | 1,255 | [全件](person/musician/index.md) |
@@ -173,8 +173,8 @@
 | [その他の特定人物](person/other_identified/index.md) | `other_identified` | 5,004 | 5,011 | [全件](person/other_identified/index.md) |
 | [哲学者・思想家](person/thought/index.md) | `thought` | 267 | 267 | [全件](person/thought/index.md) |
 | [姓・名字（日本由来）](person/surname_origin_japanese/index.md) | `surname_origin_japanese` | 24,835 | 24,980 | [全件](person/surname_origin_japanese/index.md) |
-| [姓・名字（海外由来）](person/surname_origin_foreign/index.md) | `surname_origin_foreign` | 88 | 88 | [全件](person/surname_origin_foreign/index.md) |
+| [姓・名字（海外由来）](person/surname_origin_foreign/index.md) | `surname_origin_foreign` | 67 | 67 | [全件](person/surname_origin_foreign/index.md) |
 | [名・下の名前（日本由来）](person/given_name_origin_japanese/index.md) | `given_name_origin_japanese` | 2,259 | 2,286 | [全件](person/given_name_origin_japanese/index.md) |
-| [名・下の名前（海外由来）](person/given_name_origin_foreign/index.md) | `given_name_origin_foreign` | 47 | 47 | [全件](person/given_name_origin_foreign/index.md) |
+| [名・下の名前（海外由来）](person/given_name_origin_foreign/index.md) | `given_name_origin_foreign` | 48 | 48 | [全件](person/given_name_origin_foreign/index.md) |
 | [人名・姓名（日本由来）](person/personal_name_origin_japanese/index.md) | `personal_name_origin_japanese` | 74,002 | 74,601 | [全件](person/personal_name_origin_japanese/index.md) |
 | [人名・姓名（海外由来）](person/personal_name_origin_foreign/index.md) | `personal_name_origin_foreign` | 2,383 | 2,388 | [全件](person/personal_name_origin_foreign/index.md) |

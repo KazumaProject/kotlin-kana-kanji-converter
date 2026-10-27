@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -65,7 +66,8 @@ def name_origin_taxonomy_projection(taxonomy):
     }
 
 
-def mapped_distribution_source_projection(root, candidate_keys):
+def mapped_distribution_source_projection(root, candidate_keys, excluded_keys=()):
+    candidate_keys = set(candidate_keys) - set(excluded_keys)
     rows = []
     matched = set()
     with gzip.open(root / DISTRIBUTION_SOURCE_PATH, 'rt', encoding='utf-8', newline='') as stream:
@@ -88,6 +90,64 @@ def mapped_distribution_source_projection(root, candidate_keys):
         'records': len(rows),
         'rows_sha256': hashlib.sha256(canonical_rows.encode('utf-8')).hexdigest(),
     }
+
+
+def validate_manual_type_review(root, mapping, review_manifest):
+    """Bind a cross-type overlay to its append-only manual review record."""
+    path_text = review_manifest.get('review_path')
+    expected_sha = review_manifest.get('review_sha256')
+    if (not isinstance(path_text, str) or not path_text
+            or not isinstance(expected_sha, str)
+            or not re.fullmatch('[0-9a-f]{64}', expected_sha)):
+        raise ValueError('Manual name-type review manifest is malformed')
+    path = Path(path_text)
+    if (path.is_absolute() or '..' in path.parts
+            or path.parent != Path('src/main/classification/person-name-origin-type-reviews')
+            or path.suffix != '.jsonl'):
+        raise ValueError('Manual name-type review must be JSONL in its review directory')
+    review_path = root / path
+    if not review_path.is_file() or hashlib.sha256(review_path.read_bytes()).hexdigest() != expected_sha:
+        raise ValueError('Manual name-type review hash differs from its manifest')
+
+    rows = []
+    seen = set()
+    target_counts = {}
+    for number, line in enumerate(review_path.read_text(encoding='utf-8').splitlines(), 1):
+        row = json.loads(line)
+        reading, surface = row.get('reading'), row.get('surface')
+        key = row.get('candidate_key')
+        source_id, target_id = row.get('source_category_id'), row.get('target_category_id')
+        previous_dictionary_category = row.get('previous_dictionary_category_id')
+        if (not isinstance(reading, str) or not reading
+                or not isinstance(surface, str) or not surface
+                or key != candidate_key(reading, surface)
+                or key in seen
+                or source_id not in SOURCE_CATEGORIES
+                or target_id not in {*NAME_ORIGIN_CATEGORY_IDS, 'excluded_non_person'}
+                or previous_dictionary_category not in NAME_ORIGIN_CATEGORY_IDS
+                or mapping.get(key) != (source_id, target_id)
+                or not isinstance(row.get('reason'), str) or not row['reason'].strip()
+                or not isinstance(row.get('evidence'), dict)):
+            raise ValueError(f'{path}:{number}: manual type review differs from the fixed mapping')
+        seen.add(key)
+        target_counts[target_id] = target_counts.get(target_id, 0) + 1
+        rows.append(key)
+
+    expected_keys_hash = hashlib.sha256('\n'.join(sorted(rows)).encode('ascii')).hexdigest()
+    if (type(review_manifest.get('reviewed_pairs')) is not int
+            or review_manifest['reviewed_pairs'] != len(rows)
+            or review_manifest.get('review_candidate_keys_sha256') != expected_keys_hash
+            or review_manifest.get('review_target_pair_counts') != dict(sorted(target_counts.items()))):
+        raise ValueError('Manual name-type review counts differ from its manifest')
+    artifact = review_manifest.get('dictionary_artifact')
+    if artifact is not None:
+        if (not isinstance(artifact, dict)
+                or artifact.get('path') != SOURCE_PATH
+                or not isinstance(artifact.get('sha256'), str)
+                or not re.fullmatch('[0-9a-f]{64}', artifact['sha256'])
+                or type(artifact.get('records')) is not int
+                or artifact['records'] < 0):
+            raise ValueError('Manual name-type dictionary artifact record is malformed')
 
 
 def write_json(path, value):
@@ -594,7 +654,8 @@ def load_fixed_mapping(root, mapping_path=None, manifest_path=None):
                 raise ValueError('Name-origin taxonomy compatibility projection differs from its manifest')
         if not distribution_hash_matches:
             expected_source = compatibility.get('mapped_distribution_source')
-            actual_source = mapped_distribution_source_projection(root, set(mapping))
+            actual_source = mapped_distribution_source_projection(
+                root, set(mapping), excluded_keys=set(excluded_non_person_keys))
             if expected_source != actual_source:
                 raise ValueError('Mapped name-origin source rows differ from their compatibility manifest')
     excluded_record = manifest.get('non_person_exclusions')
@@ -632,6 +693,11 @@ def load_fixed_mapping(root, mapping_path=None, manifest_path=None):
                     targeted.get('cross_type_candidate_keys_sha256') != expected_hash or
                     any(mapping[key][1] != target_id for key in cross_type_keys)):
                 raise ValueError('Cross-type mappings do not match the targeted manual review record')
+    manual_type_review = manifest.get('manual_type_review')
+    if manual_type_review is not None:
+        if not isinstance(manual_type_review, dict):
+            raise ValueError('Manual name-type review manifest is malformed')
+        validate_manual_type_review(root, mapping, manual_type_review)
     if len(mapping) != manifest.get('unique_pairs'):
         raise ValueError('Name-origin mapping count differs from the fixed manifest')
     target_counts = {}

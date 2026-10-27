@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "e00dfb3613e0ef628f9af9b6cd2917bd11e093d0e9c4f4ff70d7561b78731598",
-  "uniquePairs": 837107,
-  "records": 866221,
+  "inputSha256": "4e704dfd7cfa5a887abd7cb758557788b867cda1c520278b44d5e21289e5fd69",
+  "uniquePairs": 837106,
+  "records": 866219,
   "categories": [
     {
       "id": "character",
@@ -900,9 +900,9 @@
       "records": 47510,
       "pages": 35,
       "recordsByOrigin": {
-        "gemini": 24630,
+        "gemini": 24629,
         "manual": 21393,
-        "verified": 1487
+        "verified": 1488
       }
     },
     {
@@ -1153,13 +1153,13 @@
     {
       "id": "term/specialist/chemistry_life_sciences",
       "name": "化学・生命科学",
-      "pairs": 27564,
-      "readings": 26082,
-      "records": 27567,
+      "pairs": 27559,
+      "readings": 26077,
+      "records": 27562,
       "pages": 19,
       "recordsByOrigin": {
-        "gemini": 18981,
-        "verified": 3484,
+        "gemini": 18977,
+        "verified": 3483,
         "manual": 5102
       }
     },
@@ -1172,58 +1172,58 @@
       "pages": 3,
       "recordsByOrigin": {
         "gemini": 2188,
-        "manual": 815,
-        "verified": 521
+        "manual": 816,
+        "verified": 520
       }
     },
     {
       "id": "term/specialist/earth_environment_resources",
       "name": "地球・環境・資源",
-      "pairs": 2110,
-      "readings": 2075,
-      "records": 2110,
+      "pairs": 2109,
+      "readings": 2074,
+      "records": 2109,
       "pages": 2,
       "recordsByOrigin": {
         "manual": 493,
-        "gemini": 1256,
+        "gemini": 1255,
         "verified": 361
       }
     },
     {
       "id": "term/specialist/economics_management",
       "name": "経済・経営",
-      "pairs": 5888,
-      "readings": 5812,
-      "records": 5888,
+      "pairs": 5897,
+      "readings": 5821,
+      "records": 5897,
       "pages": 4,
       "recordsByOrigin": {
-        "manual": 1309,
+        "manual": 1319,
         "gemini": 3606,
-        "verified": 973
+        "verified": 972
       }
     },
     {
       "id": "term/specialist/law_politics",
       "name": "法律・政治",
-      "pairs": 5694,
+      "pairs": 5692,
       "readings": 5617,
-      "records": 5695,
+      "records": 5693,
       "pages": 4,
       "recordsByOrigin": {
-        "manual": 1393,
+        "manual": 1399,
         "gemini": 3011,
-        "verified": 1291
+        "verified": 1283
       }
     },
     {
       "id": "term/specialist/humanities_social_sciences",
       "name": "人文・社会科学",
-      "pairs": 17872,
-      "readings": 17497,
-      "records": 17877,
+      "pairs": 17869,
+      "readings": 17494,
+      "records": 17874,
       "pages": 12,
       "recordsByOrigin": {
-        "gemini": 10882,
+        "gemini": 10879,
         "manual": 4302,
         "verified": 2693
       }
@@ -1244,14 +1244,14 @@
     {
       "id": "term/specialist/transport_safety_defense",
       "name": "交通・安全・防衛",
-      "pairs": 4046,
-      "readings": 3998,
-      "records": 4048,
+      "pairs": 4048,
+      "readings": 4000,
+      "records": 4050,
       "pages": 3,
       "recordsByOrigin": {
-        "manual": 1215,
+        "manual": 1218,
         "gemini": 2222,
-        "verified": 611
+        "verified": 610
       }
     },
     {
@@ -1535,8 +1535,8 @@
     {
       "id": "personal_name_origin_unconfirmed",
       "name": "人名・姓名（由来未確認）",
-      "records": 93650,
-      "pairs": 92876,
+      "records": 93668,
+      "pairs": 92894,
       "pages": 62
     },
     {
@@ -1689,8 +1689,8 @@
     {
       "id": "surname_origin_foreign",
       "name": "姓・名字（海外由来）",
-      "records": 88,
-      "pairs": 88,
+      "records": 67,
+      "pairs": 67,
       "pages": 1
     },
     {
@@ -1703,8 +1703,8 @@
     {
       "id": "given_name_origin_foreign",
       "name": "名・下の名前（海外由来）",
-      "records": 47,
-      "pairs": 47,
+      "records": 48,
+      "pairs": 48,
       "pages": 1
     },
     {
@@ -1723,7 +1723,7 @@
     }
   ],
   "excluded": {
-    "pairs": 322969,
+    "pairs": 322979,
     "pages": 594
   },
   "specialistInputSha256": "8734dda7bd19c3a1401600a751289a3062c9a2f15c7ea64a409faf40c656e5ec"

@@ -1,8 +1,8 @@
 {
   "admittedPairsByOrigin": {
-    "manual": 378759,
-    "gemini": 188631,
-    "verified": 181449
+    "manual": 378778,
+    "gemini": 188622,
+    "verified": 181438
   },
   "categoryGroups": [
     {
@@ -274,7 +274,7 @@
     }
   ],
   "categoryRows": {
-    "person": 274250,
+    "person": 274248,
     "character": 6848,
     "mythological_figure": 3436,
     "place": 45090,
@@ -360,14 +360,14 @@
     "term/general/other_general": 20494,
     "term/specialist/information_communications": 6087,
     "term/specialist/mathematics_physics": 4171,
-    "term/specialist/chemistry_life_sciences": 27567,
+    "term/specialist/chemistry_life_sciences": 27562,
     "term/specialist/engineering_technology": 3524,
-    "term/specialist/earth_environment_resources": 2110,
-    "term/specialist/economics_management": 5888,
-    "term/specialist/law_politics": 5695,
-    "term/specialist/humanities_social_sciences": 17877,
+    "term/specialist/earth_environment_resources": 2109,
+    "term/specialist/economics_management": 5897,
+    "term/specialist/law_politics": 5693,
+    "term/specialist/humanities_social_sciences": 17874,
     "term/specialist/culture_arts_sports": 5360,
-    "term/specialist/transport_safety_defense": 4048,
+    "term/specialist/transport_safety_defense": 4050,
     "work_franchise": 850,
     "work_manga": 5085,
     "work_anime": 1091,
@@ -393,13 +393,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 778043,
-  "excludedCandidatePairs": 328694,
-  "excludedClassifiedPairs": 322969,
+  "dictionaryRows": 778041,
+  "excludedCandidatePairs": 328704,
+  "excludedClassifiedPairs": 322979,
   "files": {
     "categories.json": "6cdfb7f23de0e2d90283adc7139e52581e575d13f830e996c87948e43446ee60",
-    "distribution-candidates.tsv.gz": "e00dfb3613e0ef628f9af9b6cd2917bd11e093d0e9c4f4ff70d7561b78731598",
-    "distribution-decisions.tsv.gz": "a30f847c3b1d999b711a0c3fb9e1b7cc4562498c5df2d82b2a32f868f0d80587"
+    "distribution-candidates.tsv.gz": "4e704dfd7cfa5a887abd7cb758557788b867cda1c520278b44d5e21289e5fd69",
+    "distribution-decisions.tsv.gz": "2a55e969f87ab5adae24160d5d1d6be9b2298fd9854d92c3f65eeb1975373c64"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -503,6 +503,8 @@
     "src/main/classification/reviews/2026-10-26-business-mozc-curated.jsonl": "e856090d80a053af3c5faffb866907bcfc06ecbaa43b1c5a63062f56547ba9ed",
     "src/main/classification/reviews/2026-10-26-business-mozc-seeds.jsonl": "50019986e5e1a5a1715d496619645dbf163ce5076be79788c619a5a9712b01dd",
     "src/main/classification/reviews/2026-10-26-business-specialist-reclassifications.jsonl": "bf143524193d0f016b3fcb7196a3b76b43739c423ea65c39f996b12f3ac3e251",
+    "src/main/classification/reviews/2026-10-27-business-mhlw-reading-corrections.jsonl": "6fb1379c41eef24a1bbe014ae5431b0ac5ed8e8216fc7a2b58247eca38604f3c",
+    "src/main/classification/reviews/2026-10-27-business-term-classification-corrections.jsonl": "3e0f946dbb8f0d0704260499dfe4258ae3b40eff0c8272880ac3e4a3669b86ab",
     "src/main/classification/reviews/2026-10-27-yomi-tsugai-vivant.jsonl": "e41291bc335fbe89f893bcb707ec5b348703e7da0c12d6d898e77eed508ee913",
     "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
   },
@@ -72603,6 +72605,8 @@
       "src/main/classification/reviews/2026-10-26-business-mozc-curated.jsonl",
       "src/main/classification/reviews/2026-10-26-business-mozc-seeds.jsonl",
       "src/main/classification/reviews/2026-10-26-business-specialist-reclassifications.jsonl",
+      "src/main/classification/reviews/2026-10-27-business-mhlw-reading-corrections.jsonl",
+      "src/main/classification/reviews/2026-10-27-business-term-classification-corrections.jsonl",
       "src/main/classification/reviews/2026-10-27-yomi-tsugai-vivant.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
@@ -72861,5 +72865,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 748839
+  "uniqueAdmittedPairs": 748838
 }

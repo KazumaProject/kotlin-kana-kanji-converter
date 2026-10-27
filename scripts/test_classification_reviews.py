@@ -140,3 +140,35 @@ class ReviewTest(unittest.TestCase):
         self.write_model_entry(entry)
         with self.assertRaisesRegex(ValueError, 'Model reviews only'):
             reviews.load(self.root)
+
+    def test_mixed_script_source_ruby_requires_explicit_full_reading_components(self):
+        entry = {
+            'action': 'add', 'reading': 'しふとひょう', 'surface': 'シフト表',
+            'evidence': {
+                'sourceName': 'MHLW Multilingual Glossary for Employment Management',
+                'sourceTermMarkup': 'シフト表（ひょう）',
+                'readingComponents': [
+                    {'kind': 'kana', 'surface': 'シフト', 'reading': 'しふと'},
+                    {'kind': 'furigana', 'surface': '表', 'reading': 'ひょう'},
+                ],
+            },
+        }
+        reviews.validate_reading_components(entry, 'review.jsonl', 1)
+
+        entry['evidence'].pop('readingComponents')
+        with self.assertRaisesRegex(ValueError, 'explicit reading components or a hold'):
+            reviews.validate_reading_components(entry, 'review.jsonl', 1)
+
+        entry['action'] = 'hold'
+        reviews.validate_reading_components(entry, 'review.jsonl', 1)
+
+    def test_reading_components_must_compose_exact_pair(self):
+        entry = {
+            'action': 'add', 'reading': 'しふとひょう', 'surface': 'シフト表',
+            'evidence': {'readingComponents': [
+                {'kind': 'kana', 'surface': 'シフト', 'reading': 'しふと'},
+                {'kind': 'furigana', 'surface': '表', 'reading': 'ひょうじ'},
+            ]},
+        }
+        with self.assertRaisesRegex(ValueError, 'do not compose'):
+            reviews.validate_reading_components(entry, 'review.jsonl', 1)
