@@ -37,7 +37,7 @@
     "src/main/specialist/sources/hyakuyaku.jsonl.gz": "bbdefe7bec466e25d333adf2971bfd32e12ebf8eccf9e5c1dbe8132eba49027b",
     "src/main/specialist/sources/manbyo.jsonl.gz": "acf4105c8bfff7d7278fb9d2298481b3dae2d6b58eda824f31b3345e6aea9492"
   },
-  "classificationExclusionsSha256": "50fb918b0a0ffb823cdae3c57eff156287bcc8b0580c12001905d158fd4262a2",
+  "classificationExclusionsSha256": "22843ba80f83adb803703c9598e55612bc77ba055e6fc87754efd4004148f7a2",
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "existingInventorySha256": "c8edcadd80d654558ea7816a5fbea6d58e54d0f28d43e38bd9947b72b5672a84",
   "existingDictionaryIds": [

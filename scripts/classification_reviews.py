@@ -31,6 +31,49 @@ def resulting_origin(entry):
     return 'verified' if entry.get('evidence', {}).get('kind') == 'independent_source' else 'manual'
 
 
+def validate_reading_components(entry, path, number):
+    """Validate explicit reading/surface segmentation for mixed-script source ruby."""
+    evidence = entry.get('evidence', {})
+    components = evidence.get('readingComponents')
+    pair = (entry['reading'], entry['surface'])
+    if components is not None:
+        kana_re = re.compile(r'^[ぁ-ゖァ-ヺー]+$')
+        kanji_re = re.compile(r'[一-龯々〆ヵヶ]')
+        if not isinstance(components, list) or not components:
+            raise ValueError(f'{path}:{number}: readingComponents must be a non-empty list')
+        component_surfaces = []
+        component_readings = []
+        for component in components:
+            if (not isinstance(component, dict)
+                    or component.get('kind') not in ('kana', 'furigana')
+                    or not isinstance(component.get('surface'), str)
+                    or not component['surface']
+                    or not isinstance(component.get('reading'), str)
+                    or not component['reading']
+                    or not kana_re.fullmatch(component['reading'])):
+                raise ValueError(f'{path}:{number}: malformed reading component')
+            if (component['kind'] == 'kana' and not kana_re.fullmatch(component['surface'])
+                    or component['kind'] == 'furigana' and not kanji_re.search(component['surface'])):
+                raise ValueError(f'{path}:{number}: reading component kind does not match its surface')
+            component_surfaces.append(component['surface'])
+            component_readings.append(component['reading'])
+        if ''.join(component_surfaces) != pair[1] or ''.join(component_readings) != pair[0]:
+            raise ValueError(f'{path}:{number}: reading components do not compose the reviewed pair')
+
+    markup = evidence.get('sourceTermMarkup')
+    if (evidence.get('sourceName') == 'MHLW Multilingual Glossary for Employment Management'
+            and isinstance(markup, str)
+            and re.fullmatch(re.escape(pair[1]) + r'[（(]([ぁ-ゖァ-ヺー]+)[）)]', markup)
+            and re.search(r'[ぁ-ゖァ-ヺー]', pair[1])
+            and re.search(r'[一-龯々〆ヵヶ]', pair[1])
+            and entry['action'] in ('add', 'keep', 'reclassify')):
+        ruby = re.fullmatch(re.escape(pair[1]) + r'[（(]([ぁ-ゖァ-ヺー]+)[）)]', markup).group(1)
+        if (not components or components[-1].get('kind') != 'furigana'
+                or components[-1].get('reading') != ruby):
+            raise ValueError(
+                f'{path}:{number}: mixed-script source ruby requires explicit reading components or a hold')
+
+
 def ensure_no_mixed_demographics(entries):
     unresolved = sum(entry.get('media_demographic') == 'mixed' for entry in entries.values())
     if unresolved:
@@ -98,6 +141,7 @@ def load(root, selected=None):
                         or not -32768 <= record['cost'] <= 32767):
                     raise ValueError('Invalid review POS/cost')
             evidence = entry.get('evidence', {})
+            validate_reading_components(entry, path, number)
             demographic = entry.get('media_demographic')
             demographic_categories = set(d.MEDIA_DEMOGRAPHIC_LABEL_CATEGORIES.values())
             review_categories = entry.get('categories', [])

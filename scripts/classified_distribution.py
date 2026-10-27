@@ -856,12 +856,11 @@ def apply_term_classifications(root, decisions, force=False, reviewed_pairs=()):
         elif any(category.startswith('term/') for category in categories):
             leaf_categories = categories & data['categoryIds']
             review = review_entries.get(pair)
-            source_backed_addition = (
-                isinstance(review, dict) and review.get('action') == 'add'
-                and isinstance(review.get('added_record'), dict)
-                and review.get('evidence', {}).get('kind') == 'independent_source'
+            source_backed_review = (
+                isinstance(review, dict) and review.get('action') in ('add', 'reclassify')
+                and review.get('evidence', {}).get('kind') in ('independent_source', 'user_confirmation')
             )
-            if len(leaf_categories) != 1 or (pair not in results and not source_backed_addition):
+            if len(leaf_categories) != 1 or (pair not in results and not source_backed_review):
                 raise ValueError(f'Each admitted term pair must have one leaf category and valid provenance: {pair}')
             for category in leaf_categories:
                 if pair not in reviewed_pairs and results.get(pair) != category:
