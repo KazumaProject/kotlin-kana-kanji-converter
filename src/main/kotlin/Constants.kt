@@ -3354,6 +3354,21 @@ object Constants {
     )
 
     val RESCORE_WORDS = listOf(
+        // Preserve the literal kana and prefer 品詞 over the homophone 瀕死.
+        Dictionary(
+            yomi = "ぺ",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 5500,
+            tango = "ぺ"
+        ),
+        Dictionary(
+            yomi = "ひんし",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 5500,
+            tango = "品詞"
+        ),
         // Keep the literal hiragana ahead of the dictionary spelling "言う"
         // in compounds such as "いうこと" without removing "言う".
         Dictionary(

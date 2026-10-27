@@ -120,6 +120,12 @@ class KanaKanjiEngineBasicConversionTest {
     }
 
     @Test
+    fun peAndHinshiPreferRequestedSpellingsWhileRetainingAlternatives() {
+        assertEquals(listOf("ぺ", "ペ"), engine.nBestPath("ぺ", 2))
+        assertEquals(listOf("品詞", "瀕死"), engine.nBestPath("ひんし", 2))
+    }
+
+    @Test
     fun hiraganaPreferencesPreserveCompoundConversions() {
         mapOf(
             "しろい" to "白い",
