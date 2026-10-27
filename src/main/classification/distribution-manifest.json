@@ -1,6 +1,6 @@
 {
   "admittedPairsByOrigin": {
-    "manual": 378757,
+    "manual": 378759,
     "gemini": 188631,
     "verified": 181449
   },
@@ -369,9 +369,9 @@
     "term/specialist/culture_arts_sports": 5360,
     "term/specialist/transport_safety_defense": 4048,
     "work_franchise": 850,
-    "work_manga": 5084,
-    "work_anime": 1090,
-    "media_demographic/audience/shonen": 4119,
+    "work_manga": 5085,
+    "work_anime": 1091,
+    "media_demographic/audience/shonen": 4120,
     "media_demographic/audience/seinen": 1732,
     "media_demographic/audience/shojo": 826,
     "media_demographic/audience/josei": 355,
@@ -380,7 +380,7 @@
     "media_demographic/audience/unspecified": 5100,
     "media_demographic/resolution/source_unverified": 0,
     "work_film": 6504,
-    "work_program": 9309,
+    "work_program": 9310,
     "work_book": 7659,
     "work_game": 3159,
     "work_music": 10342,
@@ -393,13 +393,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 778039,
+  "dictionaryRows": 778043,
   "excludedCandidatePairs": 328694,
   "excludedClassifiedPairs": 322969,
   "files": {
     "categories.json": "6cdfb7f23de0e2d90283adc7139e52581e575d13f830e996c87948e43446ee60",
-    "distribution-candidates.tsv.gz": "09f3dead689a1169f05bcb3aea7ea24d60a5b007f8f3b60da201441e3494e744",
-    "distribution-decisions.tsv.gz": "38a7ad9155f5f2d871a38d5fc68d73a2cb1b5d137be61e42b3af03e7f82df9aa"
+    "distribution-candidates.tsv.gz": "e00dfb3613e0ef628f9af9b6cd2917bd11e093d0e9c4f4ff70d7561b78731598",
+    "distribution-decisions.tsv.gz": "a30f847c3b1d999b711a0c3fb9e1b7cc4562498c5df2d82b2a32f868f0d80587"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -503,6 +503,7 @@
     "src/main/classification/reviews/2026-10-26-business-mozc-curated.jsonl": "e856090d80a053af3c5faffb866907bcfc06ecbaa43b1c5a63062f56547ba9ed",
     "src/main/classification/reviews/2026-10-26-business-mozc-seeds.jsonl": "50019986e5e1a5a1715d496619645dbf163ce5076be79788c619a5a9712b01dd",
     "src/main/classification/reviews/2026-10-26-business-specialist-reclassifications.jsonl": "bf143524193d0f016b3fcb7196a3b76b43739c423ea65c39f996b12f3ac3e251",
+    "src/main/classification/reviews/2026-10-27-yomi-tsugai-vivant.jsonl": "e41291bc335fbe89f893bcb707ec5b348703e7da0c12d6d898e77eed508ee913",
     "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
   },
   "limitations": [
@@ -72602,6 +72603,7 @@
       "src/main/classification/reviews/2026-10-26-business-mozc-curated.jsonl",
       "src/main/classification/reviews/2026-10-26-business-mozc-seeds.jsonl",
       "src/main/classification/reviews/2026-10-26-business-specialist-reclassifications.jsonl",
+      "src/main/classification/reviews/2026-10-27-yomi-tsugai-vivant.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
     "termAdditions": [
@@ -72859,5 +72861,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 748837
+  "uniqueAdmittedPairs": 748839
 }
