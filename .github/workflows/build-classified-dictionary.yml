@@ -63,17 +63,25 @@ jobs:
             test -s "./src/main/resources/dictionary${i}.txt"
           done
 
-      - name: Download the pinned JapaneseCorpus English dictionary
+      - name: Download and verify the latest JapaneseCorpus English dictionary
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           repository='KazumaProject/JapaneseCorpus'
-          version='v2026.1019.20'
           asset='mozc-english-reading-unigram-00000.txt.zst'
           manifest='english-dictionary-manifest.json'
           checksums='ENGLISH-DICTIONARY-SHA256SUMS'
+
+          # Resolve once: old releases can be removed by upstream retention.
+          # Download all files from this exact release even if latest changes.
+          version="$(gh api "repos/${repository}/releases/latest" --jq '.tag_name')"
+          if [[ -z "${version}" || "${version}" == "null" ]]; then
+            echo 'Failed to resolve the latest JapaneseCorpus release tag.' >&2
+            exit 1
+          fi
+          echo "JapaneseCorpus source release: ${version}"
 
           download_dir="${RUNNER_TEMP}/japanese-corpus"
           mkdir -p "${download_dir}"
