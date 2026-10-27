@@ -14,7 +14,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class StandaloneUnigramTest {
-    private val words = listOf("しろ", "ごと", "したい", "はいる", "みた", "なにか", "なら")
+    private val words = listOf("しろ", "ごと", "したい", "はいる", "みた", "なにか", "なら", "なのか")
     private val rules = NgramSourceParser.parseUnigramDirectory(File("src/main/ngram-standalone-unigram"))
 
     private fun binary(version: Int = NgramEncoding.STANDALONE_UNIGRAM_VERSION): ByteArray {
@@ -29,13 +29,13 @@ class StandaloneUnigramTest {
     }
 
     @Test
-    fun separateAssetContainsExactlyTheSevenRequestedWordsAndBuildsDeterministically() {
+    fun separateAssetContainsExactlyTheEightRequestedWordsAndBuildsDeterministically() {
         assertEquals(words.toSet(), rules.map { (it.features.single() as NgramFeature.Word).value }.toSet())
         val bytes = binary()
         assertContentEquals(bytes, binary())
         SystemNgramBinaryReader(bytes).verify()
         val dictionary = PackedStandaloneUnigramDictionary.read(bytes)
-        assertEquals(7, dictionary.ruleCount)
+        assertEquals(8, dictionary.ruleCount)
         words.forEach {
             assertTrue(dictionary.mayMatchInput(it), it)
             assertTrue(dictionary.matches(it, listOf(node(it))), it)
@@ -60,6 +60,9 @@ class StandaloneUnigramTest {
         assertFalse(dictionary.matches("しろい", listOf(node("しろ"), node("医", start = 2, reading = "い"))))
         assertFalse(dictionary.matches("しろくろ", listOf(node("しろ"), node("黒", start = 2, reading = "くろ"))))
         assertFalse(dictionary.matches("しろあり", listOf(node("しろ"), node("蟻", start = 2, reading = "あり"))))
+        assertFalse(dictionary.matches("ばかなのかな", listOf(
+            node("馬鹿", reading = "ばか"), node("なのか", start = 2), node("名", start = 5, reading = "な"),
+        )))
     }
 
     @Test
@@ -102,7 +105,7 @@ class StandaloneUnigramTest {
                 assertEquals(1, candidates.count { it == input }, input)
             }
         }
-        listOf("しろい", "しろくろ", "しろあり", "しろのなか", "しごと", "ものごと",
+        listOf("しろい", "しろくろ", "しろあり", "しろのなか", "しごと", "ものごと", "ばかなのかな",
             "したいです", "べんきょうしたい", "はいると", "みたい", "こと",
             "なにかある", "なにかを").forEach { input ->
             listOf(1, 4, 10).forEach { count ->

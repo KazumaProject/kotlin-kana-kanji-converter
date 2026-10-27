@@ -2,5 +2,6 @@
 # These rules can promote compound candidates as well as standalone candidates.
 # "しろ" was removed because it also promoted "しろ" + "医" etc.
 # "したい", "なら", and "ごと" were also withdrawn.
-# Do not add "なのか" here: it promoted "馬鹿なのか名" for "ばかなのかな".
+# Keep "なのか" in the standalone-input dictionary, not this node-matching asset.
+# Its v4 rule promoted "馬鹿なのか名" for "ばかなのかな".
 # An omission-search candidate can match a word rule despite a different input reading.
