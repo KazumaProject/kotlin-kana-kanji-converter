@@ -70,7 +70,9 @@ candidates whose node path matches a loaded scoreless rule. Unigram rules match
 any node in the path, including nodes inside compounds; they are not a
 standalone-input preference format. The `しろ` preference was removed after
 it promoted malformed compounds such as `しろ医`; the `したい` and `なら` preferences
-were also withdrawn. The CLI does not add an
+were also withdrawn. The `なのか` preference was removed from v4 because it promoted
+`馬鹿なのか名` for the input `ばかなのかな`; it is now in the separate v5
+whole-input dictionary. The CLI does not add an
 input-length filter that would hide this consumer behavior:
 
 

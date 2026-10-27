@@ -204,9 +204,9 @@ class SystemNgramBinaryTest {
     fun checkedInUnigramSourceIsAvailable() {
         val root = File(System.getProperty("user.dir"))
         val rules = NgramSourceParser.parseUnigramDirectory(root.resolve("src/main/ngram-unigram"))
-        assertEquals(472, rules.size)
+        assertEquals(471, rules.size)
         assertFalse(rules.any { it.features == listOf(NgramFeature.Word("ごと")) })
-        assertTrue(rules.any { it.features == listOf(NgramFeature.Word("なのか")) })
+        assertFalse(rules.any { it.features == listOf(NgramFeature.Word("なのか")) })
         assertFalse(rules.any { it.features == listOf(NgramFeature.Word("しろ")) })
         assertFalse(rules.any { it.features == listOf(NgramFeature.Word("したい")) })
         assertFalse(rules.any { it.features == listOf(NgramFeature.Word("なら")) })

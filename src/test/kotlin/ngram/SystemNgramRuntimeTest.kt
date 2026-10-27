@@ -94,10 +94,12 @@ class SystemNgramRuntimeTest {
         )
         val dictionary = PackedSystemUnigramDictionary.fromFile(output)
 
-        assertEquals(472, dictionary.ruleCount)
+        assertEquals(471, dictionary.ruleCount)
+        assertFalse(dictionary.matches(node("なのか")))
         assertTrue(dictionary.matches(node("カワボ")))
         assertFalse(dictionary.matches(node("存在しない候補")))
         val engine = KanaKanjiEngine(systemUnigramDictionary = dictionary).apply { buildEngine() }
+        assertEquals("馬鹿なのかな", engine.nBestPath("ばかなのかな", 1).single())
         assertEquals("カワボ", engine.nBestPath("かわぼ", 1).single())
         mapOf("なのか" to "七日").forEach { (input, alternative) ->
             assertEquals(input, engine.nBestPath(input, 1).single(), input)
