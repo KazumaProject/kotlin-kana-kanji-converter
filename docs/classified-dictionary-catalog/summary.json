@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "09f3dead689a1169f05bcb3aea7ea24d60a5b007f8f3b60da201441e3494e744",
-  "uniquePairs": 837105,
-  "records": 866217,
+  "inputSha256": "e00dfb3613e0ef628f9af9b6cd2917bd11e093d0e9c4f4ff70d7561b78731598",
+  "uniquePairs": 837107,
+  "records": 866221,
   "categories": [
     {
       "id": "character",
@@ -1270,12 +1270,12 @@
     {
       "id": "work_manga",
       "name": "漫画作品",
-      "pairs": 5083,
-      "readings": 5045,
-      "records": 5084,
+      "pairs": 5084,
+      "readings": 5046,
+      "records": 5085,
       "pages": 5,
       "recordsByOrigin": {
-        "manual": 2608,
+        "manual": 2609,
         "gemini": 2402,
         "verified": 74
       }
@@ -1283,12 +1283,12 @@
     {
       "id": "work_anime",
       "name": "アニメ作品",
-      "pairs": 1090,
-      "readings": 1074,
-      "records": 1090,
+      "pairs": 1091,
+      "readings": 1075,
+      "records": 1091,
       "pages": 1,
       "recordsByOrigin": {
-        "manual": 586,
+        "manual": 587,
         "gemini": 495,
         "verified": 9
       }
@@ -1296,13 +1296,13 @@
     {
       "id": "media_demographic/audience/shonen",
       "name": "少年向け",
-      "pairs": 4108,
-      "readings": 4079,
-      "records": 4119,
+      "pairs": 4109,
+      "readings": 4080,
+      "records": 4120,
       "pages": 3,
       "recordsByOrigin": {
         "gemini": 3362,
-        "manual": 737,
+        "manual": 738,
         "verified": 20
       }
     },
@@ -1405,12 +1405,12 @@
     {
       "id": "work_program",
       "name": "番組",
-      "pairs": 9308,
-      "readings": 9234,
-      "records": 9309,
+      "pairs": 9309,
+      "readings": 9235,
+      "records": 9310,
       "pages": 8,
       "recordsByOrigin": {
-        "manual": 7955,
+        "manual": 7956,
         "gemini": 1201,
         "verified": 153
       }
