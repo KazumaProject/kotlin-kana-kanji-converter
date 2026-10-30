@@ -39,6 +39,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Checkout private dictionary filters
+        uses: actions/checkout@v4
+        with:
+          repository: KazumaProject/dictionary_filter_list
+          ref: main
+          path: .dictionary-filter-list
+          ssh-key: ${{ secrets.DICTIONARY_FILTER_READ_KEY }}
+          persist-credentials: false
+
+      - name: Use one filter revision for this build
+        run: echo "DICTIONARY_FILTER_SOURCE=$GITHUB_WORKSPACE/.dictionary-filter-list" >> "$GITHUB_ENV"
+
       # Checkout Mozc once so id.def, dictionary, suffix, connection,
       # zero-query, emoji, emoticon, symbol, and single-kanji resources all
       # come from the same Mozc revision.
@@ -363,7 +375,7 @@ jobs:
 
       - name: Build the person-category replacement bundle
         if: startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/tags/person-dictionaries-v') || github.event_name == 'workflow_dispatch'
-        run: ./gradlew buildPersonDictionaryReplacementDistribution
+        run: ./gradlew verifyReplacementDictionaryFilters
 
       - name: Exercise replacement category dictionaries with KanaKanjiEngine
         if: startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/tags/person-dictionaries-v') || github.event_name == 'workflow_dispatch'

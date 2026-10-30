@@ -14,6 +14,7 @@ import threading
 import time
 import urllib.error
 import urllib.request
+import dictionary_filters
 
 
 MODEL = 'gemini-3.1-flash-lite'
@@ -168,48 +169,12 @@ def candidate_keys_from_file(path, restricted_category_ids=None):
     return keys
 
 
-def known_adult_exclusion_keys():
-    """Load known adult-related candidate hashes without exposing names to Gemini."""
-    decisions_path = WORK_PATH / 'recovery-sources/reclassification/source-decisions.jsonl'
-    creators_path = WORK_PATH / 'reviewed-for-prerelease-2026-10-21/adult-creator-manual-categories.jsonl'
-    if not decisions_path.is_file() or not creators_path.is_file():
-        raise ValueError('External adult-review hash ledgers are required before Gemini preparation')
-    required = set()
-    with decisions_path.open(encoding='utf-8') as stream:
-        for line_number, line in enumerate(stream, 1):
-            if not line.strip():
-                continue
-            row = json.loads(line)
-            if (row.get('category_id') == 'adult_performer' and
-                    row.get('status') == 'adult_performer_source_confirmed'):
-                key = row.get('candidate_key')
-                pair_key = hashlib.sha256(
-                    (row.get('reading', '') + '\0' + row.get('surface', '')).encode('utf-8')
-                ).hexdigest()
-                if key != pair_key:
-                    raise ValueError(f'{decisions_path}:{line_number}: adult performer hash does not match its pair')
-                required.add(key)
-            elif str(row.get('status', '')).startswith('adult_related_'):
-                key = row.get('candidate_key')
-                pair_key = hashlib.sha256(
-                    (row.get('reading', '') + '\0' + row.get('surface', '')).encode('utf-8')
-                ).hexdigest()
-                if key != pair_key:
-                    raise ValueError(f'{decisions_path}:{line_number}: adult-related hash does not match its pair')
-                required.add(key)
-    with creators_path.open(encoding='utf-8') as stream:
-        for line_number, line in enumerate(stream, 1):
-            if not line.strip():
-                continue
-            row = json.loads(line)
-            key = row.get('candidate_key')
-            if (row.get('category_id') != 'adult_work_creator' or
-                    not isinstance(key, str) or not re.fullmatch(r'[0-9a-f]{64}', key)):
-                raise ValueError(f'{creators_path}:{line_number}: expected an adult creator hash assignment')
-            required.add(key)
-    if not required:
-        raise ValueError('External adult-review hash ledgers contain no confirmed candidates')
-    return required
+def shared_restricted_exclusion_keys():
+    """Return every private filter key, including non-adult categories."""
+    revision, pairs = dictionary_filters.current_snapshot()
+    keys = {hashlib.sha256((reading + '\0' + surface).encode('utf-8')).hexdigest()
+            for reading, surface in pairs}
+    return revision, keys
 
 
 def batch_id(index):
@@ -243,10 +208,6 @@ def manifest_for(root, batch_size, include_candidate_keys_path=None,
     all_keys = {item['candidate_key'] for item in items}
     include_keys = candidate_keys_from_file(input_paths[0])
     exclude_keys = candidate_keys_from_file(input_paths[1], excluded_categories)
-    missing_adult_exclusions = known_adult_exclusion_keys() - exclude_keys
-    if missing_adult_exclusions:
-        raise ValueError(
-            f'External exclusions omit {len(missing_adult_exclusions)} known adult-review candidate keys')
     unknown_keys = (include_keys | exclude_keys) - all_keys
     if unknown_keys:
         raise ValueError(f'Candidate-key file contains {len(unknown_keys)} keys absent from {SOURCE_PATH}')
@@ -254,9 +215,10 @@ def manifest_for(root, batch_size, include_candidate_keys_path=None,
         raise ValueError('Candidate-key include file is empty')
     if not exclude_keys:
         raise ValueError('Restricted-category hash exclusion file is empty')
+    filter_revision, shared_keys = shared_restricted_exclusion_keys()
     selected = [item for item in items
                 if (include_candidate_keys_path is None or item['candidate_key'] in include_keys)
-                and item['candidate_key'] not in exclude_keys]
+                and item['candidate_key'] not in exclude_keys and item['candidate_key'] not in shared_keys]
     if not selected:
         raise ValueError('Candidate-key filters leave no Gemini candidates')
     selected_keys = {item['candidate_key'] for item in selected}
@@ -277,6 +239,7 @@ def manifest_for(root, batch_size, include_candidate_keys_path=None,
         'taxonomy_path': TAXONOMY_PATH,
         'taxonomy_sha256': sha(taxonomy_path),
         'implementation_sha256': sha(Path(__file__)),
+        'filter_revision': filter_revision,
         'batch_size': batch_size,
         'candidate_records': record_count,
         'unique_pairs': len(selected),
@@ -310,7 +273,7 @@ def prepare(root, workspace, batch_size, include_candidate_keys_path=None,
         for name in ('model', 'project', 'prompt_version', 'source_sha256', 'taxonomy_sha256',
                      'implementation_sha256', 'batch_size', 'candidate_records', 'unique_pairs',
                      'batch_count', 'include_candidate_keys_path', 'include_candidate_keys_sha256',
-                     'exclude_candidate_keys_path', 'exclude_candidate_keys_sha256'):
+                     'exclude_candidate_keys_path', 'exclude_candidate_keys_sha256', 'filter_revision'):
             if prior.get(name) != target[name]:
                 raise ValueError(f'Existing workspace differs at {name}; choose a new workspace')
         print(json.dumps({'workspace': str(workspace), 'unique_pairs': prior['unique_pairs'],
@@ -356,7 +319,7 @@ def load_workspace(root, workspace):
     for name in ('source_sha256', 'taxonomy_sha256', 'implementation_sha256', 'unique_pairs',
                  'candidate_records', 'batch_count', 'include_candidate_keys_path',
                  'include_candidate_keys_sha256', 'exclude_candidate_keys_path',
-                 'exclude_candidate_keys_sha256'):
+                 'exclude_candidate_keys_sha256', 'filter_revision'):
         if manifest.get(name) != expected[name]:
             raise ValueError(f'Workspace no longer matches current input: {name}')
     if sha(workspace / 'items.jsonl') != manifest['items_sha256']:

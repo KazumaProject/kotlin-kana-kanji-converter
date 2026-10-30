@@ -43,7 +43,7 @@ private fun assetPaths(source: String): List<String> = when {
     else -> error("Unknown baseline dictionary $source")
 }
 
-private fun readDictionary(zip: ZipFile, source: String): List<Dictionary> {
+internal fun readDictionary(zip: ZipFile, source: String): List<Dictionary> {
     val (yp, tp, tokensPath) = assetPaths(source)
     val yomi = readAsset(zip, yp).use { LOUDSWithTermId().readExternalNotCompress(it) }
     val tango = readAsset(zip, tp).use { LOUDS().readExternalNotCompress(it) }
@@ -66,8 +66,9 @@ private fun readDictionary(zip: ZipFile, source: String): List<Dictionary> {
 }
 
 fun main(args: Array<String>) {
-    require(args.size == 4 && args[0] == "--archive" && args[2] == "--existing-index")
+    require(args.size == 6 && args[0] == "--archive" && args[2] == "--existing-index" && args[4] == "--filtered-index")
     val expectedInventory = File(args[3])
+    val filteredInventory = File(args[5])
     val sources = GZIPInputStream(expectedInventory.inputStream()).bufferedReader().useLines { lines ->
         lines.map { Json.parseToJsonElement(it).jsonObject.getValue("dictionary").jsonPrimitive.content }.toSet()
     }
@@ -79,15 +80,16 @@ fun main(args: Array<String>) {
             val baseline = sources.sorted().associateWith { readDictionary(zip, it) }
             val inventory = File(temporary, "existing-pairs.jsonl.gz")
             writeInventory(baseline, inventory)
-            if (!expectedInventory.readBytes().contentEquals(inventory.readBytes())) {
+            if (!filteredInventory.readBytes().contentEquals(inventory.readBytes())) {
                 val diagnostic = File("build/reports/specialist/packaged-existing-pairs.jsonl.gz")
                 diagnostic.parentFile.mkdirs()
                 inventory.copyTo(diagnostic, overwrite = true)
-                println("Inventory mismatch; packaged inventory saved at ${diagnostic.path}")
+                error("Filtered inventory differs from packaged dictionaries; diagnostic saved at ${diagnostic.path}")
             }
-            // Recompute selection against the actual packaged dictionaries, not only their input text.
+            // Verify the frozen source selection against its original inventory; packaged
+            // dictionaries are independently compared with the filtered inventory above.
             val process = ProcessBuilder("python3", "scripts/specialist_distribution.py", "verify",
-                "--existing-index", inventory.path).inheritIO().start()
+                "--existing-index", expectedInventory.path).inheritIO().start()
             check(process.waitFor() == 0) { "Specialist selection verification failed against packaged inventory; see Python diagnostic" }
             val occupied = baseline.values.asSequence().flatten().map { pairKey(it.yomi, it.tango) }.toMutableSet()
             for (category in specialists.categoryIds) {

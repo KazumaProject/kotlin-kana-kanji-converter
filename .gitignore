@@ -56,3 +56,4 @@ __pycache__/
 !/src/main/resources/third-party/CMUDICT-LICENSE
 .gradle-user-home
 release_zips
+/.dictionary-filter-list/

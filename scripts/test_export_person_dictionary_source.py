@@ -1,7 +1,11 @@
+import gzip
 import json
+import shutil
 from pathlib import Path
 import tempfile
 import unittest
+from types import SimpleNamespace
+from unittest import mock
 
 import export_person_dictionary_source as exporter
 
@@ -71,6 +75,57 @@ class PersonNameOriginExportTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'source category'):
             exporter.apply_name_origin_mapping(
                 final, {key: ('given_name_origin_unconfirmed', 'surname_origin_japanese')}, {key})
+
+
+class PersonFilterExportTest(unittest.TestCase):
+    def test_shared_exclusions_take_precedence_over_person_additions(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            classification = root / 'src/main/classification'
+            classification.mkdir(parents=True)
+            (classification / 'crime-offender-exclusion-keys.sha256').write_text('0' * 64 + '\n')
+            restricted = ('かな', '仮名')
+            allowed = ('かな', '佳奈')
+            with gzip.open(classification / 'distribution-candidates.tsv.gz', 'wt', encoding='utf-8') as stream:
+                for reading, surface in (restricted, allowed):
+                    stream.write(f'person\t{reading}\t1\t1\t100\t{surface}\n')
+            initial = root / 'initial'
+            recovery = root / 'recovery'
+            initial.mkdir()
+            recovery.mkdir()
+            initial_rows = [dict(reading=r, surface=s, candidate_key=exporter.candidate_key(r, s),
+                                 category_id='actor', category_code=4) for r, s in (restricted, allowed)]
+            (initial / 'batch.jsonl').write_text(''.join(json.dumps(row, ensure_ascii=False) + '\n' for row in initial_rows))
+            (recovery / 'batch.jsonl').write_text('')
+            decisions = root / 'decisions.jsonl'
+            decisions.write_text('')
+            categories = [dict(id='actor', number=4, standard_enabled=True)] + [
+                dict(id=f'category_{i}', number=100 + i, standard_enabled=True) for i in range(28)
+            ]
+            args = SimpleNamespace(root=root, excluded_candidates=None, source_decisions=decisions,
+                                   wikidata_sports=root / 'sports.jsonl', gemini_results=initial,
+                                   recovery_gemini_results=recovery, output=root / 'output.tsv.gz')
+
+            def reviewed_results(input_dir, output_dir, *_args, **_kwargs):
+                output_dir.mkdir(parents=True)
+                shutil.copyfile(input_dir / 'batch.jsonl', output_dir / 'batch.jsonl')
+
+            def add_restricted_again(_root, final, _enabled):
+                final[exporter.candidate_key(*restricted)] = (*restricted, 'actor', set())
+
+            with mock.patch.object(exporter.dictionary_filters, 'current_snapshot', return_value=('a' * 40, {restricted})), \
+                    mock.patch.object(exporter.reviews, 'taxonomy_maps', return_value=({'categories': categories}, {4: {'id': 'actor'}}, {})), \
+                    mock.patch.object(exporter.reviews, 'load_overrides', return_value={}), \
+                    mock.patch.object(exporter.reviews, 'review_gemini_results', side_effect=reviewed_results), \
+                    mock.patch.object(exporter.reviews, 'wikidata_sports_by_qid', return_value={}), \
+                    mock.patch.object(exporter.reviews, 'source_review', return_value=([], {}, {}, {}, {}, {})), \
+                    mock.patch.object(exporter.reviews, 'apply_source_overrides'), \
+                    mock.patch.object(exporter, 'apply_person_additions', side_effect=add_restricted_again), \
+                    mock.patch.object(exporter.name_origins, 'load_fixed_mapping', return_value=({}, {})):
+                exporter.export(args)
+            with gzip.open(args.output, 'rt', encoding='utf-8') as stream:
+                rows = [line.rstrip('\n').split('\t') for line in stream]
+            self.assertEqual([(row[1], row[5]) for row in rows], [allowed])
 
 
 if __name__ == '__main__':

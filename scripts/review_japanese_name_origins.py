@@ -135,7 +135,7 @@ def prepare(root, workspace, batch_size):
         raise ValueError(f'Batch size must be between {MIN_BATCH_SIZE} and {MAX_BATCH_SIZE}')
     origins.taxonomy_maps(root)
     candidates, record_count = collect_candidates(root)
-    restricted = gemini.known_adult_exclusion_keys()
+    _, restricted = gemini.shared_restricted_exclusion_keys()
     withheld = {item['candidate_key'] for item in candidates} & restricted
     eligible = [item for item in candidates if item['candidate_key'] not in withheld]
     if not eligible:
@@ -185,7 +185,7 @@ def load_manifest(root, workspace, allow_application_change=False):
     if manifest.get('schema_version') != 1 or manifest.get('model') != MODEL:
         raise ValueError('Unsupported Japanese-origin review workspace')
     candidates, record_count = collect_candidates(root)
-    restricted = gemini.known_adult_exclusion_keys()
+    _, restricted = gemini.shared_restricted_exclusion_keys()
     eligible = [item for item in candidates if item['candidate_key'] not in restricted]
     expected = {
         'source_sha256': sha(root / SOURCE_PATH),

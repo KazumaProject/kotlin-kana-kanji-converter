@@ -17,6 +17,35 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Checkout private dictionary filters
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/checkout@v4
+        with:
+          repository: KazumaProject/dictionary_filter_list
+          ref: main
+          path: .dictionary-filter-list
+          ssh-key: ${{ secrets.DICTIONARY_FILTER_READ_KEY }}
+          persist-credentials: false
+
+      - name: Use one private filter revision for this build
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        run: echo "DICTIONARY_FILTER_SOURCE=$GITHUB_WORKSPACE/.dictionary-filter-list" >> "$GITHUB_ENV"
+
+      - name: Create synthetic filters for an external fork
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          filter_dir="$RUNNER_TEMP/dictionary-filter-fixture"
+          mkdir -p "$filter_dir/categories/test"
+          printf '%s\n' '{"schemaVersion":1}' > "$filter_dir/manifest.json"
+          printf '%s\n' '{"reading":"てすと","surface":"架空フィルター","status":"hold","evidence":[{"kind":"test"}]}' > "$filter_dir/categories/test/fixture.jsonl"
+          git -C "$filter_dir" init -q
+          git -C "$filter_dir" add manifest.json categories
+          git -C "$filter_dir" -c user.name=CI -c user.email=ci@example.invalid commit -qm 'Synthetic filter fixture'
+          echo "DICTIONARY_FILTER_SOURCE=$filter_dir" >> "$GITHUB_ENV"
+          echo "DICTIONARY_FILTER_ALLOW_FIXTURE=1" >> "$GITHUB_ENV"
+
       - name: Checkout google/mozc
         uses: actions/checkout@v4
         with:
@@ -124,9 +153,11 @@ jobs:
             verifyJapaneseKeyboardDictionaryAssets \
             buildDictionaryDistributionManifest \
             verifyPersonDictionaryArchive \
+            verifyReplacementDictionaryFilters \
             test check
 
       - name: Upload the classified dictionary
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/upload-artifact@v4
         with:
           name: classified-dictionary-${{ github.event.pull_request.number || github.run_number }}

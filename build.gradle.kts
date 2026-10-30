@@ -17,6 +17,16 @@ plugins {
     id("application")
 }
 
+val dictionaryFilterSnapshot = layout.buildDirectory.dir("dictionary-filter-snapshot")
+val prepareDictionaryFilter = tasks.register<Exec>("prepareDictionaryFilter") {
+    group = "distribution"
+    description = "Resolves and validates one private dictionary-filter revision."
+    commandLine("python3", "scripts/prepare_dictionary_filter.py", "--output", dictionaryFilterSnapshot.get().asFile.path)
+    inputs.files("scripts/prepare_dictionary_filter.py", "scripts/dictionary_filters.py")
+    outputs.dir(dictionaryFilterSnapshot)
+    outputs.upToDateWhen { false }
+}
+
 data class BuildIdDefEntry(val id: Int, val name: String, val lineNumber: Int)
 
 data class JapaneseKeyboardAssetSpec(
@@ -1083,10 +1093,20 @@ val verifyEnglishDictionaryBinary = tasks.register<JavaExec>("verifyEnglishDicti
     inputs.files(englishDictionaryFile, englishSupplementFile, englishCandidateReviewFile, mozcIdDefFileProvider, japaneseKeyboardAssetsReleaseZip)
 }
 
+val verifyBaseDictionaryFilters = tasks.register<JavaExec>("verifyBaseDictionaryFilters") {
+    group = "verification"
+    description = "Reads every base dictionary binary and checks the private filter snapshot."
+    dependsOn(packageJapaneseKeyboardDictionaryAssets)
+    mainClass.set("com.kazumaproject.classification.VerifyDictionaryFilterAssetsKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    maxHeapSize = "4g"
+    args("--archive", japaneseKeyboardAssetsReleaseZip.asFile.path, "--kind", "base")
+}
+
 tasks.register("verifyJapaneseKeyboardDictionaryAssets") {
     group = "verification"
     description = "Verifies the JapaneseKeyboard dictionary assets zip layout and nested .dat.zip files."
-    dependsOn(packageJapaneseKeyboardDictionaryAssets, verifyEnglishDictionaryBinary)
+    dependsOn(packageJapaneseKeyboardDictionaryAssets, verifyEnglishDictionaryBinary, verifyBaseDictionaryFilters)
     inputs.file(japaneseKeyboardAssetsReleaseZip)
 
     doLast {
@@ -1205,6 +1225,17 @@ val exportExistingDictionaryInventory = tasks.register<JavaExec>("exportExisting
     }
     // Always recompute: constants, selectors, and all auxiliary sources are inputs too.
 }
+val exportFilteredDictionaryInventory = tasks.register<JavaExec>("exportFilteredDictionaryInventory") {
+    group = "verification"
+    description = "Exports the filtered baseline dictionary inputs used for packaged assets."
+    dependsOn("classes", verifyDistributionCandidates, validateDictionaryIds, prepareDictionaryFilter)
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.specialist.ExistingDictionaryInventoryKt")
+    maxHeapSize = "4g"
+    args("--output", layout.buildDirectory.file("specialist/filtered-existing-pairs.jsonl.gz").get().asFile.path, "--filtered")
+    environment("DICTIONARY_FILTER_SNAPSHOT", dictionaryFilterSnapshot.get().asFile.path)
+    inputs.dir(dictionaryFilterSnapshot)
+}
 val verifySpecialistDistribution = tasks.register<Exec>("verifySpecialistDistribution") {
     group = "verification"
     dependsOn(exportExistingDictionaryInventory)
@@ -1212,15 +1243,49 @@ val verifySpecialistDistribution = tasks.register<Exec>("verifySpecialistDistrib
 }
 val verifySpecialistDictionaryAssets = tasks.register<JavaExec>("verifySpecialistDictionaryAssets") {
     group = "verification"
-    dependsOn("verifyJapaneseKeyboardDictionaryAssets", verifySpecialistDistribution)
+    dependsOn("verifyJapaneseKeyboardDictionaryAssets", verifySpecialistDistribution, exportFilteredDictionaryInventory)
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("com.kazumaproject.specialist.VerifySpecialistDictionaryAssetsKt")
     maxHeapSize = "4g"
     args("--archive", japaneseKeyboardAssetsReleaseZip.asFile.path,
-        "--existing-index", layout.buildDirectory.file("specialist/existing-pairs.jsonl.gz").get().asFile.path)
+        "--existing-index", layout.buildDirectory.file("specialist/existing-pairs.jsonl.gz").get().asFile.path,
+        "--filtered-index", layout.buildDirectory.file("specialist/filtered-existing-pairs.jsonl.gz").get().asFile.path)
 }
 tasks.named("run") { dependsOn(verifySpecialistDistribution) }
 tasks.named("check") { dependsOn(verifySpecialistDistribution) }
+
+val dictionaryFilterConsumers = setOf(
+    "run", "buildPersonDictionaryDistribution", "buildPersonDictionaryReplacementDistribution",
+    "verifyPersonDictionaryArchive", "convertPersonCandidates", "verifyEnglishDictionaryBinary",
+    "verifyClassifiedDictionaryAssets", "verifySpecialistDictionaryAssets", "verifyBaseDictionaryFilters", "verifyReplacementDictionaryFilters",
+)
+tasks.withType<JavaExec>().configureEach {
+    if (name in dictionaryFilterConsumers) {
+        dependsOn(prepareDictionaryFilter)
+        environment("DICTIONARY_FILTER_SNAPSHOT", dictionaryFilterSnapshot.get().asFile.path)
+        inputs.dir(dictionaryFilterSnapshot)
+    }
+}
+tasks.withType<Test>().configureEach {
+    dependsOn(prepareDictionaryFilter)
+    environment("DICTIONARY_FILTER_SNAPSHOT", dictionaryFilterSnapshot.get().asFile.path)
+    inputs.dir(dictionaryFilterSnapshot)
+}
+tasks.named<Exec>("buildDictionaryDistributionManifest") {
+    dependsOn(prepareDictionaryFilter)
+    environment("DICTIONARY_FILTER_SNAPSHOT", dictionaryFilterSnapshot.get().asFile.path)
+    inputs.dir(dictionaryFilterSnapshot)
+}
+
+val verifyReplacementDictionaryFilters = tasks.register<JavaExec>("verifyReplacementDictionaryFilters") {
+    group = "verification"
+    description = "Reads every replacement dictionary binary and checks the private filter snapshot."
+    dependsOn(buildPersonDictionaryReplacementDistribution)
+    mainClass.set("com.kazumaproject.classification.VerifyDictionaryFilterAssetsKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    maxHeapSize = "4g"
+    args("--archive", personReplacementArchive.get().asFile.path, "--kind", "replacement")
+}
 
 val testLunaReclassification = tasks.register<Exec>("testLunaReclassification") {
     group = "verification"

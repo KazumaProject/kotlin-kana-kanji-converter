@@ -15,9 +15,11 @@ private val DICTIONARY_ASSET_NAMES = listOf("yomi.dat.zip", "tango.dat.zip", "to
 class PersonDictionaryReplacementDistribution(
     private val root: File = File("."),
 ) {
+    private val dictionaryFilter = DictionaryFilter.fromEnvironment()
     private val personData = PersonDictionaryData(
         File(root, "src/main/classification"),
         File(root, "src/main/resources/id.def"),
+        dictionaryFilter,
     )
     private val classificationDirectory = File(root, "src/main/classification")
     private val taxonomy = Json.parseToJsonElement(
@@ -33,9 +35,11 @@ class PersonDictionaryReplacementDistribution(
     private val specialistCategories = readNamedCategories(File(specialistDirectory, "categories.json"))
     private val baseCategoryIds = mainCategories.keys + specialistCategories.keys
     private val standardPersonCategoryIds = personData.categoryIds
-    private val baseCounts = readCategoryCounts(
-        File(classificationDirectory, "distribution-manifest.json"),
-    ) + readCategoryCounts(File(specialistDirectory, "distribution-manifest.json"))
+    private val baseCounts = ClassifiedDictionaryData(
+        classificationDirectory, File(root, "src/main/resources/id.def"), dictionaryFilter = dictionaryFilter,
+    ).records.mapValues { it.value.size } + ClassifiedDictionaryData(
+        specialistDirectory, File(root, "src/main/resources/id.def"), expectedCategoryCount = 2, dictionaryFilter = dictionaryFilter,
+    ).records.mapValues { it.value.size }
     private val expectedCategoryCount = baseCategoryIds.size - 1 + standardPersonCategoryIds.size
 
     init {
@@ -232,6 +236,7 @@ class PersonDictionaryReplacementDistribution(
             put("personCategoryCount", standardPersonCategoryIds.size)
             put("personTaxonomyVersion", taxonomy.getValue("taxonomy_version").jsonPrimitive.content)
             put("personSourceSha256", sha256(File(classificationDirectory, "person-dictionary-candidates.tsv.gz")))
+            put("filterRevision", dictionaryFilter.revision)
             put("restrictedPersonRecordsIncluded", false)
             put("unclassifiedPersonRecordsIncluded", false)
             put("personCategoryFamily", personFamily)
@@ -257,11 +262,6 @@ class PersonDictionaryReplacementDistribution(
             row.getValue("id").jsonPrimitive.content to row.getValue("name").jsonPrimitive.content
         }
     }
-
-    private fun readCategoryCounts(path: File): Map<String, Int> =
-        Json.parseToJsonElement(path.readText()).jsonObject.getValue("categoryRows").jsonObject.mapValues {
-            it.value.jsonPrimitive.int
-        }
 
     private fun ZipFile.fileEntryNames(): Set<String> = entries().asSequence()
         .filterNot { it.isDirectory }

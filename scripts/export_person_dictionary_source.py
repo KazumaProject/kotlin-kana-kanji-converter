@@ -21,6 +21,7 @@ CRIME_OFFENDER_EXCLUSION_PATH = "src/main/classification/crime-offender-exclusio
 CRIMINAL_CATEGORY_IDS = {"crime_offender", "organized_crime", "terrorism"}
 sys.path.insert(0, str(ROOT / "scripts"))
 import review_person_classifications as reviews  # noqa: E402
+import dictionary_filters  # noqa: E402
 import person_name_origin_classification as name_origins  # noqa: E402
 import classified_distribution as distribution  # noqa: E402
 
@@ -186,7 +187,9 @@ def apply_name_origin_mapping(final, mapping, source_keys=None):
 
 
 def export(args):
-    exclusions = load_exclusions(args.excluded_candidates, args.root)
+    exclusions = load_exclusions(args.excluded_candidates, args.root) if args.excluded_candidates else {}
+    filter_revision, filter_pairs = dictionary_filters.current_snapshot()
+    shared_exclusion_keys = {candidate_key(reading, surface) for reading, surface in filter_pairs}
     prior_criminal_exclusion_keys = load_crime_offender_exclusion_keys(args.root)
     taxonomy, category_by_code, category_by_id = reviews.taxonomy_maps(args.root / "src/main/classification/person-taxonomy.json")
     enabled = {row["id"] for row in taxonomy["categories"] if row.get("standard_enabled") is True}
@@ -219,13 +222,9 @@ def export(args):
             if row.get("category_id") == "adult_performer"
             and row.get("status") == "adult_performer_source_confirmed"
         }
-        excluded_performers = {
-            key for key, category in exclusions.items()
-            if category == "adult_performer"
-        }
-        if not confirmed_performers or excluded_performers != confirmed_performers:
+        if not confirmed_performers <= set(exclusions) | shared_exclusion_keys:
             raise ValueError(
-                "Adult performer exclusion hashes must exactly match source-confirmed adult performer decisions")
+                "Adult performer source decisions must be present in the private filter or external exclusions")
         for row in decisions:
             if row.get("candidate_key") in confirmed_performers and row["candidate_key"] != candidate_key(
                     row.get("reading", ""), row.get("surface", "")):
@@ -282,7 +281,7 @@ def export(args):
             key for key, category in exclusions.items()
             if category == "adult_related_hold"
         }
-        if not adult_related_source_keys <= excluded_adult_hold_keys:
+        if not adult_related_source_keys <= excluded_adult_hold_keys | shared_exclusion_keys:
             raise ValueError("External exclusions omit adult-related source-review candidates")
         restricted_source_keys.update(adult_related_source_keys)
         restricted_gemini_keys = restricted_proposal_keys(
@@ -327,10 +326,10 @@ def export(args):
         raise ValueError(f"Restricted candidate exclusion file contains {len(unknown_exclusions)} keys absent from the person source")
     # Restricted, criminal, and adult-related hash exclusions take precedence
     # over name-origin classifications before dictionary rows are written.
-    for key in exclusions:
+    for key in set(exclusions) | shared_exclusion_keys:
         final.pop(key, None)
 
-    unresolved_keys = (source_keys - set(final) - set(exclusions)
+    unresolved_keys = (source_keys - set(final) - set(exclusions) - shared_exclusion_keys
                        - crime_offender_exclusion_keys
                        - restricted_source_keys - restricted_gemini_keys)
     ime_filtered_keys = set()
@@ -395,6 +394,8 @@ def export(args):
         "unclassifiedExcludedPairs": len(unresolved_keys),
         "imeFormatExcludedPairs": len(ime_filtered_keys),
         "adultRelatedSourceExcludedPairs": len(adult_related_source_keys),
+        "filterRevision": filter_revision,
+        "sharedFilterExcludedPairs": len(shared_exclusion_keys & source_keys),
         "crimeOffenderExcludedPairs": len(crime_offender_exclusion_keys & source_keys),
         "excludedCandidateCounts": dict(sorted(collections.Counter(exclusions.values()).items())),
         "sourceSha256": hashlib.sha256(args.output.read_bytes()).hexdigest(),
@@ -408,8 +409,8 @@ def main():
     parser.add_argument("--wikidata-sports", type=Path, required=True)
     parser.add_argument("--gemini-results", type=Path, required=True)
     parser.add_argument("--recovery-gemini-results", type=Path, required=True)
-    parser.add_argument("--excluded-candidates", type=Path, required=True,
-                        help="External JSONL of candidate_key/category_id rows; restricted candidates never enter the dictionary")
+    parser.add_argument("--excluded-candidates", type=Path,
+                        help="Optional additional external candidate_key/category_id exclusions")
     parser.add_argument("--output", type=Path, required=True)
     export(parser.parse_args())
 

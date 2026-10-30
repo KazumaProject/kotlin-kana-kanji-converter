@@ -33,6 +33,7 @@ private data class PersonDictionaryRow(
 class PersonDictionaryData(
     private val classificationDirectory: File = File("src/main/classification"),
     private val idDef: File = File("src/main/resources/id.def"),
+    private val dictionaryFilter: DictionaryFilter = DictionaryFilter.fromEnvironment(),
 ) {
     private val taxonomy = Json.parseToJsonElement(
         File(classificationDirectory, "person-taxonomy.json").readText(),
@@ -80,7 +81,6 @@ class PersonDictionaryData(
         val file = File(classificationDirectory, "person-dictionary-candidates.tsv.gz")
         val parsed = mutableListOf<PersonDictionaryRow>()
         val seen = mutableSetOf<List<Any>>()
-        val tagsByPair = mutableMapOf<Pair<String, String>, Set<String>>()
         GZIPInputStream(file.inputStream().buffered()).bufferedReader().useLines { lines ->
             lines.forEachIndexed { index, line ->
                 val fields = line.split('\t')
@@ -93,7 +93,7 @@ class PersonDictionaryData(
                 val surface = fields[5]
                 val tagText = fields[6]
                 val candidateKey = CrimeOffenderCandidateKeys.key(reading, surface)
-                require(candidateKey !in crimeOffenderExclusionKeys) {
+                require(candidateKey !in crimeOffenderExclusionKeys || dictionaryFilter.contains(reading, surface)) {
                     "Crime-offender candidate found in standard person dictionary source row ${index + 1}"
                 }
                 require(categoryId in categoryIds) {
@@ -118,16 +118,22 @@ class PersonDictionaryData(
                     dictionary.rightId, dictionary.cost, dictionary.tango)
                 require(seen.add(identity)) { "Duplicate person dictionary record at row ${index + 1}" }
                 parsed += PersonDictionaryRow(categoryId, dictionary, tags)
-                if (tags.isNotEmpty()) {
-                    val pair = reading to surface
-                    tagsByPair[pair] = (tagsByPair[pair] ?: emptySet()) + tags
-                }
             }
         }
         require(parsed.isNotEmpty()) { "Person dictionary source is empty" }
-        rows = parsed
+        val retained = categoryIds.associateWith { category ->
+            dictionaryFilter.filterRecords(parsed.filter { it.categoryId == category }.map { it.dictionary }).toSet()
+        }
+        rows = parsed.filter { it.dictionary in retained.getValue(it.categoryId) }
         records = categoryIds.associateWith { category ->
             rows.asSequence().filter { it.categoryId == category }.map { it.dictionary }.toList()
+        }
+        val tagsByPair = mutableMapOf<Pair<String, String>, Set<String>>()
+        rows.forEach { row ->
+            if (row.sportSubcategories.isNotEmpty()) {
+                val pair = row.dictionary.yomi to row.dictionary.tango
+                tagsByPair[pair] = (tagsByPair[pair] ?: emptySet()) + row.sportSubcategories
+            }
         }
         sportTagsByPair = tagsByPair
     }
@@ -192,13 +198,14 @@ class PersonDictionaryData(
             }
             check(manifest.keys == setOf(
                 "schemaVersion", "taxonomyVersion", "sourceSha256", "categoryCount",
-                "uniquePairs", "recordCount", "categories", "sportSubcategories", "files",
+                "uniquePairs", "recordCount", "categories", "sportSubcategories", "files", "filterRevision",
             )) { "Manifest contains missing or unexpected fields" }
             check(manifest.getValue("schemaVersion").jsonPrimitive.int == 1)
             check(manifest.getValue("taxonomyVersion").jsonPrimitive.content ==
                 taxonomy.getValue("taxonomy_version").jsonPrimitive.content)
             check(manifest.getValue("sourceSha256").jsonPrimitive.content ==
                 sha256(File(classificationDirectory, "person-dictionary-candidates.tsv.gz").readBytes()))
+            check(manifest.getValue("filterRevision").jsonPrimitive.content == dictionaryFilter.revision)
             val manifestCategories = manifest.getValue("categories").jsonArray.map {
                 it.jsonObject.getValue("id").jsonPrimitive.content
             }
@@ -304,6 +311,7 @@ class PersonDictionaryData(
   "schemaVersion": 1,
   "taxonomyVersion": ${jsonString(taxonomy.getValue("taxonomy_version").jsonPrimitive.content)},
   "sourceSha256": "${sha256(File(classificationDirectory, "person-dictionary-candidates.tsv.gz").readBytes())}",
+  "filterRevision": "${dictionaryFilter.revision}",
   "categoryCount": ${categoryIds.size},
   "uniquePairs": $uniquePairs,
   "recordCount": ${rows.size},

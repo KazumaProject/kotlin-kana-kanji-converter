@@ -1,6 +1,7 @@
 package com.kazumaproject.specialist
 
 import com.kazumaproject.BaselineDictionaryInputs
+import com.kazumaproject.classification.DictionaryFilter
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.hiraToKata
 import com.kazumaproject.isHiraganaOnlyPure
@@ -39,10 +40,17 @@ internal fun writeInventory(inputs: Map<String, List<Dictionary>>, output: File)
 }
 
 fun main(args: Array<String>) {
-    require(args.size in listOf(2, 4) && args[0] == "--output" &&
-        (args.size == 2 || args[2] == "--classified-directory")) {
-        "Usage: --output <existing-pairs.jsonl.gz> [--classified-directory <directory>]"
+    require(args.size >= 2 && args[0] == "--output") {
+        "Usage: --output <existing-pairs.jsonl.gz> [--classified-directory <directory>] [--filtered]"
     }
-    val directory = if (args.size == 4) File(args[3]) else File("src/main/classification")
-    writeInventory(BaselineDictionaryInputs.load(directory), File(args[1]))
+    val options = args.drop(2)
+    val filtered = options.lastOrNull() == "--filtered"
+    val directoryOption = if (filtered) options.dropLast(1) else options
+    require(directoryOption.isEmpty() || directoryOption.size == 2 && directoryOption[0] == "--classified-directory") {
+        "Unknown inventory option"
+    }
+    val directory = if (directoryOption.isEmpty()) File("src/main/classification") else File(directoryOption[1])
+    val inputs = if (filtered) BaselineDictionaryInputs.filtered(DictionaryFilter.fromEnvironment(), directory)
+        else BaselineDictionaryInputs.load(directory)
+    writeInventory(inputs, File(args[1]))
 }

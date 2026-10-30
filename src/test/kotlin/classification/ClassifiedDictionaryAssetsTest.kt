@@ -1,6 +1,7 @@
 package classification
 
 import com.kazumaproject.classification.ClassifiedDictionaryData
+import com.kazumaproject.classification.DictionaryFilter
 import com.kazumaproject.dictionary.TokenArray
 import java.io.File
 import java.io.ObjectOutputStream
@@ -33,7 +34,7 @@ class ClassifiedDictionaryAssetsTest {
                 it.write("person\tあい\t1\t1\t300\tアイ\n")
                 it.write("place\tあ\t1\t1\t100\t甲\n")
             }
-            val data = ClassifiedDictionaryData(root, id)
+            val data = ClassifiedDictionaryData(root, id, dictionaryFilter = DictionaryFilter.empty())
             val posInput = data.records.values.flatten().groupBy { it.yomi }.toSortedMap()
             TokenArray().buildPOSTable(posInput, 1, File(root, "pos_table.dat").path)
             TokenArray().buildPOSTableWithIndex(posInput, 1, File(root, "pos_build.dat").path)
@@ -103,6 +104,6 @@ class ClassifiedDictionaryAssetsTest {
         GZIPOutputStream(File(root, "distribution-candidates.tsv.gz").outputStream()).bufferedWriter().use {
             it.write("person\tあ\t2\t1\t100\t甲\n")
         }
-        assertFailsWith<IllegalArgumentException> { ClassifiedDictionaryData(root, id) }
+        assertFailsWith<IllegalArgumentException> { ClassifiedDictionaryData(root, id, dictionaryFilter = DictionaryFilter.empty()) }
     }
 }

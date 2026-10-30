@@ -2208,15 +2208,24 @@ def verify(root, allow_pending_reviews=False):
 
 
 def release_manifest(root, archive, revision):
+    import dictionary_filters
     source = json.loads((root / 'src/main/classification/distribution-manifest.json').read_text())
     with zipfile.ZipFile(archive) as z:
         assets = {name: hashlib.sha256(z.read(name)).hexdigest() for name in sorted(z.namelist()) if not name.endswith('/')}
     import specialist_distribution as specialist
     specialist_manifest = specialist.verify_files(root)
+    filter_revision, _ = dictionary_filters.current_snapshot()
+    filtered = json.loads((root / 'build/reports/dictionary-filter/category-counts.json').read_text())
+    expected_categories = set(source['categoryRows']) | set(specialist_manifest['categoryRows'])
+    if (filtered.get('filterRevision') != filter_revision
+            or set(filtered.get('categoryRows', {})) != expected_categories
+            or any(type(count) is not int or count < 0 for count in filtered['categoryRows'].values())):
+        raise ValueError('Filtered category counts do not match the dictionary build snapshot')
     license_file = archive.parent / 'DICTIONARY-LICENSES.txt'
     license_file.write_text(specialist.licenses(root), encoding='utf-8')
     result = {'schemaVersion': 2, 'revision': revision, 'classification': source,
               'specialist': specialist_manifest, 'categoryCount': len(source['categoryRows']) + len(specialist_manifest['categoryRows']),
+              'filterRevision': filter_revision, 'distributedCategoryRows': filtered['categoryRows'],
               'licensesSha256': sha(license_file),
               'archiveSha256': sha(archive), 'assets': assets}
     output = archive.parent / 'dictionary-distribution-manifest.json'

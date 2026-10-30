@@ -21,6 +21,7 @@ class ClassifiedDictionaryData(
     directory: File = File("src/main/classification"),
     private val idDef: File = File("src/main/resources/id.def"),
     expectedCategoryCount: Int? = null,
+    private val dictionaryFilter: DictionaryFilter = DictionaryFilter.fromEnvironment(),
 ) {
     val categoryIds = Json.parseToJsonElement(File(directory, "categories.json").readText())
         .jsonObject.getValue("categories").jsonArray.map { it.jsonObject.getValue("id").jsonPrimitive.content }
@@ -57,7 +58,7 @@ class ClassifiedDictionaryData(
                 }
             }
         }
-        records = categories
+        records = categories.mapValues { (_, entries) -> dictionaryFilter.filterRecords(entries).toSet() }
     }
 
     fun build(output: File = File("src/main/resources/dictionary_categories"), posTableForBuildPath: String? = null) {
