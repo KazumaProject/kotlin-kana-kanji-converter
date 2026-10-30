@@ -328,6 +328,7 @@ class DistributionTest(unittest.TestCase):
                        'rt', encoding='utf-8') as stream:
             category_rows = {tuple(line.rstrip('\n').split('\t')) for line in stream}
         self.assertIn(('comedian', 'おわらい', '1', '1', '8400', 'お笑い', ''), category_rows)
+        self.assertIn(('comedian', 'あ', '1', '1', '100', '甲', ''), category_rows)
 
     def test_already_admitted_person_is_not_changed(self):
         self.freeze()

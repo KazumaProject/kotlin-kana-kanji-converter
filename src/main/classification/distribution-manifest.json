@@ -1,8 +1,8 @@
 {
   "admittedPairsByOrigin": {
     "manual": 378778,
-    "gemini": 188634,
-    "verified": 182270
+    "gemini": 188636,
+    "verified": 182683
   },
   "categoryGroups": [
     {
@@ -275,7 +275,7 @@
   ],
   "categoryRows": {
     "person": 274377,
-    "character": 6853,
+    "character": 6854,
     "mythological_figure": 3436,
     "place": 45091,
     "address": 152874,
@@ -340,66 +340,66 @@
     "facility/military/garrison": 16,
     "facility/military/training_ground": 40,
     "transport_route": 4230,
-    "organization": 47512,
+    "organization": 47516,
     "lineage": 2019,
-    "product": 10137,
+    "product": 10138,
     "vehicle": 2580,
-    "event/occasion/organized_event": 4302,
-    "event/occasion/observance": 835,
-    "event/occasion/exam_qualification": 178,
-    "event/incident/natural_disaster": 477,
-    "event/incident/social_issue_litigation": 737,
-    "event/history/conflict": 1723,
+    "event/occasion/organized_event": 4440,
+    "event/occasion/observance": 903,
+    "event/occasion/exam_qualification": 183,
+    "event/incident/natural_disaster": 487,
+    "event/incident/social_issue_litigation": 788,
+    "event/history/conflict": 1769,
     "award": 1163,
     "agreement": 426,
     "initiative": 1063,
     "term/general/products_daily_goods": 1157,
     "term/general/food_drink_cooking": 4077,
-    "term/general/internet_slang_culture": 574,
+    "term/general/internet_slang_culture": 579,
     "term/general/neologisms_trends_youth_language": 485,
-    "term/general/other_general": 20495,
-    "term/specialist/information_communications": 6087,
-    "term/specialist/mathematics_physics": 4173,
-    "term/specialist/chemistry_life_sciences": 27562,
+    "term/general/other_general": 20499,
+    "term/specialist/information_communications": 6088,
+    "term/specialist/mathematics_physics": 4174,
+    "term/specialist/chemistry_life_sciences": 27565,
     "term/specialist/engineering_technology": 3525,
-    "term/specialist/earth_environment_resources": 2111,
-    "term/specialist/economics_management": 5901,
-    "term/specialist/law_politics": 5701,
-    "term/specialist/humanities_social_sciences": 17906,
-    "term/specialist/culture_arts_sports": 5387,
-    "term/specialist/transport_safety_defense": 4055,
+    "term/specialist/earth_environment_resources": 2113,
+    "term/specialist/economics_management": 5905,
+    "term/specialist/law_politics": 5717,
+    "term/specialist/humanities_social_sciences": 17913,
+    "term/specialist/culture_arts_sports": 5416,
+    "term/specialist/transport_safety_defense": 4063,
     "work_franchise": 851,
-    "work_manga": 5092,
+    "work_manga": 5093,
     "work_anime": 1092,
-    "media_demographic/audience/shonen": 4124,
+    "media_demographic/audience/shonen": 4126,
     "media_demographic/audience/seinen": 1735,
     "media_demographic/audience/shojo": 826,
     "media_demographic/audience/josei": 356,
     "media_demographic/audience/kids": 549,
     "media_demographic/audience/mixed": 0,
-    "media_demographic/audience/unspecified": 5104,
+    "media_demographic/audience/unspecified": 5105,
     "media_demographic/resolution/source_unverified": 0,
     "work_film": 6506,
-    "work_program": 9318,
-    "work_book": 7663,
+    "work_program": 9320,
+    "work_book": 7664,
     "work_game": 3160,
-    "work_music": 10345,
+    "work_music": 10347,
     "work_stage": 571,
     "work_periodical": 1811,
-    "work_other": 2684
+    "work_other": 2689
   },
   "conflicts": {
     "manual_over_gemini": 4321,
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 778897,
-  "excludedCandidatePairs": 328689,
-  "excludedClassifiedPairs": 322964,
+  "dictionaryRows": 779315,
+  "excludedCandidatePairs": 328694,
+  "excludedClassifiedPairs": 322969,
   "files": {
     "categories.json": "92001c9850b589869528ccb97994ef4ec907f312a5b17f6710d4655b576c466c",
-    "distribution-candidates.tsv.gz": "5408b2f37501da2bfd9dfd6af05873e44ab176b63910e40484aeb363199f504d",
-    "distribution-decisions.tsv.gz": "3701b5834bc5ea381a4d89eb433d8deb584d3fc93a15c5c289f29021e066f937"
+    "distribution-candidates.tsv.gz": "fc75a653b5d113657433f7ce8a46a23ef8c598f5f590b2ea0e6d55571f052bd1",
+    "distribution-decisions.tsv.gz": "d4bcfeaf92e1bee7ea0507d33eb80e444af36d8506e35cb0af1037c6093f56e7"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -445,6 +445,16 @@
     "src/main/classification/person-additions/2026-10-30-reviewed-more-athlete-names.jsonl": "4ac919d5eebceb59b481e3914423d3af00730c465bfcb122e1977b096780079d",
     "src/main/classification/person-additions/2026-10-30-reviewed-athlete-collisions.jsonl": "7f273aee74b8d71d8845f9d0fd4677e7bb2f1c3a10451b19f1a9e9c85b2212bb",
     "src/main/classification/person-additions/2026-10-30-reviewed-wrestler-restoration.jsonl": "29fbdf555db1a07bb1be7681774c28a2139ce4968e9b39e7d4c887c56ee6ad8a",
+    "src/main/classification/person-additions/2026-10-30-reviewed-latin-athlete-names.jsonl": "0d828977e73d12804c58ee1deeaf6087eafc89ddc93086ab9b75b95dbc0d22a5",
+    "src/main/classification/person-additions/2026-10-30-reviewed-badminton-collision.jsonl": "0a6780a488722753377baee40bac0d0d092f12b94a785b653963a29068ce1819",
+    "src/main/classification/person-additions/2026-10-30-reviewed-three-athlete-collisions.jsonl": "23274ad448362548a6fd498f96cacddde35dfc9462c491fd42e320305a87db51",
+    "src/main/classification/person-additions/2026-10-30-reviewed-rugby-collision.jsonl": "68a37039a38883fce9c7eaa2c3d7a772c9e0c2247685be76bc1a0b048ff3256f",
+    "src/main/classification/person-additions/2026-10-30-reviewed-nickname-collisions.jsonl": "8521293b801d8cab405042755aaad5235d4e7cd72a239525162f83b8d6f62a70",
+    "src/main/classification/person-additions/2026-10-30-reviewed-competition-collisions.jsonl": "d14026fb675503c163f955ff81ca5f98c36e0483e2ad42ff043e3ec9abf5829a",
+    "src/main/classification/person-additions/2026-10-30-reviewed-charity-golf-collision.jsonl": "d5c2b9eda9f305f5faccedf29d1869ab85780e5a8163d7c5016ce066b98b212a",
+    "src/main/classification/person-additions/2026-10-30-reviewed-actor-restoration.jsonl": "bef641c1704429a098dda7e7a1606271a30224d55900b9676ff64fac4b99e59d",
+    "src/main/classification/person-additions/2026-10-30-reviewed-broadcaster-restoration.jsonl": "f184dedbed55f2ddf03806d9fb9d4160708f1ae931cbc9731d003eeea23cb11e",
+    "src/main/classification/person-additions/2026-10-30-reviewed-protected-name-restorations.jsonl": "6b4cdec098ec4f67a510fd843b1bcb6713818e0f8c08e761643e7995d34a74f1",
     "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl": "574794d0df19f8afd09d06b66897d7b7fce97dd3652bc005674a3ecae28bb30a",
     "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl": "5a373897bbade57c507d08e4813baa7d5975bc752a568cdaee8aaebd9d18f155",
     "src/main/classification/reviews/2026-10-16-pr128-luna-0000.jsonl": "3ab59c82e6e0645da8f513606038212b601c0c4c46273db4faf8122d6812cf1d",
@@ -515,19 +525,32 @@
     "src/main/classification/reviews/2026-10-27-business-mhlw-reading-corrections.jsonl": "6fb1379c41eef24a1bbe014ae5431b0ac5ed8e8216fc7a2b58247eca38604f3c",
     "src/main/classification/reviews/2026-10-27-business-term-classification-corrections.jsonl": "3e0f946dbb8f0d0704260499dfe4258ae3b40eff0c8272880ac3e4a3669b86ab",
     "src/main/classification/reviews/2026-10-27-yomi-tsugai-vivant.jsonl": "e41291bc335fbe89f893bcb707ec5b348703e7da0c12d6d898e77eed508ee913",
+    "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-eighth-followup.jsonl": "5746f96f3c2ad4bbc9cd36bcf5d6a3d24c417de2197390d2490308281e36d5e1",
+    "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-eleventh-followup.jsonl": "80cf0557ed4b653460462f93055918c9362574ed1cfc666726ee06b65437034e",
+    "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-fifteenth-followup.jsonl": "14193a2f46cdbf67a37c8204297ea9b4270161b0b043583874048d12445b57b5",
     "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-fifth-followup.jsonl": "156bba940e147be32db88f6aedaa056e2890d45c167f472962631ec848573399",
     "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-followup.jsonl": "ed8633c04c9ccd60bdd13aab01e20bc0200cbd2093a09e0cb1df74d944c2b981",
+    "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-fourteenth-followup.jsonl": "fe2fd6c3cc89791b17a607c917b0f09b87a29d0c96276f56b129b6199443446d",
     "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-fourth-followup.jsonl": "3a60e78580a2410513c644702eade48aeb8f1fc3051f1fe707b600325acd9cde",
+    "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-ninth-followup.jsonl": "1b6dcfbcb92174bc7b04d3285d6c9838d088880a471ad7c83d9a4405ac1cf988",
     "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-second-followup.jsonl": "829c5ad1df88221fb05a4de6182ec506e75d69baacec556805b1f0a35d6ae3d1",
+    "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-seventh-followup.jsonl": "bc9dfe1c75d301adccfaae3d1676761b0e0ad82d86d6e71f7b922e8d55f80e75",
+    "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-sixth-followup.jsonl": "8f6f713cc321573e4b8e924aaba90819ad35dd1e3223127e34ebeb6490aac749",
+    "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-tenth-followup.jsonl": "283756e309cf3347519360f78ef64e66db29c4a608b8428ba13a1e5e6ba427ce",
     "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-third-followup.jsonl": "4d3bc5e7ce36f5225b9e53a1cb5018e05fd2249413e57cb7db63d8e0288a197a",
+    "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-thirteenth-followup.jsonl": "f9587d736beb30cf6b6b1792a6bc4473980fc4a9866f4c38ab0c8920263de8a0",
+    "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-twelfth-followup.jsonl": "1941b01c1d78394ff49d6a01781b01b489f441c95f0c49a684a8b14726670e7f",
     "src/main/classification/reviews/2026-10-30-reviewed-event-restorations.jsonl": "6a1f2d3bfccb13445b6b785da8a051b88b55cd2ac8cf32165dfb5976b6dc5df7",
     "src/main/classification/reviews/2026-10-30-reviewed-media-restorations-followup.jsonl": "877f885c231ca66301868473c1a9bd309fc1c86d2a631adb0676e148d64051d2",
     "src/main/classification/reviews/2026-10-30-reviewed-media-restorations-second-followup.jsonl": "cee7fcdc8b97beffa816e26ad0ad2226099aa99f7df587da93c82f6776175522",
     "src/main/classification/reviews/2026-10-30-reviewed-media-restorations-third-followup.jsonl": "647cbe0b6abec187e79b80e750c5c41fecf53a47853846b29827a3459bb32d13",
     "src/main/classification/reviews/2026-10-30-reviewed-media-restorations.jsonl": "e89920cdca4f23f1c51739952cd5093bfd8c0f84f74cd4373614a99ac7fe6752",
+    "src/main/classification/reviews/2026-10-30-reviewed-media-source-corrections.jsonl": "2290a224e47b3a2d8049cf92e5d12236b9867daa64384a8e1c42a562ac814469",
+    "src/main/classification/reviews/2026-10-30-reviewed-zz-event-quality-corrections.jsonl": "4a64cf53875c0c0c4193bd15b03f120c2003a13cbab83a7529c119726135a2d2",
+    "src/main/classification/reviews/2026-10-30-reviewed-zzz-media-audience-correction.jsonl": "e7dc87ef3c118e3da81a9535ac7ced5f004546095c84b4fc18fccfec81a0bd03",
     "src/main/classification/reviews/2026-10-30-wikidata-event-restorations.jsonl": "2be30b1359e762b19f7d77f29b3a156d8b5b98b380c9750f8a944bd00950fc36",
     "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb",
-    "src/main/classification/person-additions/2026-10-30-reviewed-latin-athlete-names.jsonl": "0d828977e73d12804c58ee1deeaf6087eafc89ddc93086ab9b75b95dbc0d22a5"
+    "src/main/classification/person-additions/2026-10-30-reviewed-public-careers.jsonl": "74370827be1d04449ac1a0c2e049c887baaa670bd9defc0c5e69671668ec8a9b"
   },
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified.",
@@ -73737,6 +73760,276 @@
           ]
         ],
         "categoryRecords": 6
+      },
+      {
+        "path": "src/main/classification/person-additions/2026-10-30-reviewed-badminton-collision.jsonl",
+        "sha256": "0a6780a488722753377baee40bac0d0d092f12b94a785b653963a29068ce1819",
+        "reviewedPairs": 1,
+        "addedPairs": [],
+        "addedRecords": 0,
+        "addedSourceRows": 0,
+        "appendedPairs": [],
+        "categoryPairs": [
+          [
+            "sports",
+            "たにぐちこうへい",
+            "谷口恒平"
+          ]
+        ],
+        "categoryRecords": 1
+      },
+      {
+        "path": "src/main/classification/person-additions/2026-10-30-reviewed-three-athlete-collisions.jsonl",
+        "sha256": "23274ad448362548a6fd498f96cacddde35dfc9462c491fd42e320305a87db51",
+        "reviewedPairs": 3,
+        "addedPairs": [],
+        "addedRecords": 0,
+        "addedSourceRows": 0,
+        "appendedPairs": [],
+        "categoryPairs": [
+          [
+            "sports",
+            "いすんよん",
+            "イスンヨン"
+          ],
+          [
+            "sports",
+            "すぎたかおる",
+            "杉田かおる"
+          ],
+          [
+            "sports",
+            "すぎもとゆき",
+            "杉本有紀"
+          ]
+        ],
+        "categoryRecords": 3
+      },
+      {
+        "path": "src/main/classification/person-additions/2026-10-30-reviewed-rugby-collision.jsonl",
+        "sha256": "68a37039a38883fce9c7eaa2c3d7a772c9e0c2247685be76bc1a0b048ff3256f",
+        "reviewedPairs": 1,
+        "addedPairs": [],
+        "addedRecords": 0,
+        "addedSourceRows": 0,
+        "appendedPairs": [],
+        "categoryPairs": [
+          [
+            "sports",
+            "だびで",
+            "David"
+          ]
+        ],
+        "categoryRecords": 1
+      },
+      {
+        "path": "src/main/classification/person-additions/2026-10-30-reviewed-nickname-collisions.jsonl",
+        "sha256": "8521293b801d8cab405042755aaad5235d4e7cd72a239525162f83b8d6f62a70",
+        "reviewedPairs": 3,
+        "addedPairs": [],
+        "addedRecords": 0,
+        "addedSourceRows": 0,
+        "appendedPairs": [],
+        "categoryPairs": [
+          [
+            "sports",
+            "じぇぃびー",
+            "JB"
+          ],
+          [
+            "sports",
+            "べいびーふぇいす",
+            "Babyface"
+          ],
+          [
+            "sports",
+            "みくろ",
+            "Micro"
+          ]
+        ],
+        "categoryRecords": 3
+      },
+      {
+        "path": "src/main/classification/person-additions/2026-10-30-reviewed-competition-collisions.jsonl",
+        "sha256": "d14026fb675503c163f955ff81ca5f98c36e0483e2ad42ff043e3ec9abf5829a",
+        "reviewedPairs": 3,
+        "addedPairs": [],
+        "addedRecords": 0,
+        "addedSourceRows": 0,
+        "appendedPairs": [],
+        "categoryPairs": [
+          [
+            "sports",
+            "かじわらあき",
+            "梶原亜紀"
+          ],
+          [
+            "sports",
+            "かのうみか",
+            "叶美香"
+          ],
+          [
+            "sports",
+            "たんかり",
+            "湯加麗"
+          ]
+        ],
+        "categoryRecords": 4
+      },
+      {
+        "path": "src/main/classification/person-additions/2026-10-30-reviewed-charity-golf-collision.jsonl",
+        "sha256": "d5c2b9eda9f305f5faccedf29d1869ab85780e5a8163d7c5016ce066b98b212a",
+        "reviewedPairs": 1,
+        "addedPairs": [],
+        "addedRecords": 0,
+        "addedSourceRows": 0,
+        "appendedPairs": [],
+        "categoryPairs": [
+          [
+            "sports",
+            "かのうきょうこ",
+            "叶恭子"
+          ]
+        ],
+        "categoryRecords": 2
+      },
+      {
+        "path": "src/main/classification/person-additions/2026-10-30-reviewed-actor-restoration.jsonl",
+        "sha256": "bef641c1704429a098dda7e7a1606271a30224d55900b9676ff64fac4b99e59d",
+        "reviewedPairs": 1,
+        "addedPairs": [],
+        "addedRecords": 0,
+        "addedSourceRows": 0,
+        "appendedPairs": [],
+        "categoryPairs": [
+          [
+            "actor",
+            "まぶちはるこ",
+            "馬淵晴子"
+          ]
+        ],
+        "categoryRecords": 1
+      },
+      {
+        "path": "src/main/classification/person-additions/2026-10-30-reviewed-broadcaster-restoration.jsonl",
+        "sha256": "f184dedbed55f2ddf03806d9fb9d4160708f1ae931cbc9731d003eeea23cb11e",
+        "reviewedPairs": 1,
+        "addedPairs": [],
+        "addedRecords": 0,
+        "addedSourceRows": 0,
+        "appendedPairs": [],
+        "categoryPairs": [
+          [
+            "broadcaster",
+            "ちばひふみ",
+            "千葉一二三"
+          ]
+        ],
+        "categoryRecords": 1
+      },
+      {
+        "path": "src/main/classification/person-additions/2026-10-30-reviewed-protected-name-restorations.jsonl",
+        "sha256": "6b4cdec098ec4f67a510fd843b1bcb6713818e0f8c08e761643e7995d34a74f1",
+        "reviewedPairs": 9,
+        "addedPairs": [],
+        "addedRecords": 0,
+        "addedSourceRows": 0,
+        "appendedPairs": [],
+        "categoryPairs": [
+          [
+            "science_education",
+            "いしぐろけい",
+            "石黒圭"
+          ],
+          [
+            "actor",
+            "いしのようこ",
+            "いしのようこ"
+          ],
+          [
+            "sports",
+            "かのうふじこ",
+            "叶不二子"
+          ],
+          [
+            "sports",
+            "かるろすもられす",
+            "カルロス・モラレス"
+          ],
+          [
+            "sports",
+            "すずきあかね",
+            "鈴木茜"
+          ],
+          [
+            "sports",
+            "すずきありさ",
+            "鈴木ありさ"
+          ],
+          [
+            "sports",
+            "すずきあんな",
+            "鈴木杏奈"
+          ],
+          [
+            "sports",
+            "ちゃんよた",
+            "ちゃんよた"
+          ],
+          [
+            "sports",
+            "まつのゆきひで",
+            "松野行秀"
+          ]
+        ],
+        "categoryRecords": 10
+      },
+      {
+        "path": "src/main/classification/person-additions/2026-10-30-reviewed-public-careers.jsonl",
+        "sha256": "74370827be1d04449ac1a0c2e049c887baaa670bd9defc0c5e69671668ec8a9b",
+        "reviewedPairs": 7,
+        "addedPairs": [],
+        "addedRecords": 0,
+        "addedSourceRows": 0,
+        "appendedPairs": [],
+        "categoryPairs": [
+          [
+            "actor",
+            "かつらぎあや",
+            "桂木文"
+          ],
+          [
+            "actor",
+            "かとうきょうこ",
+            "加藤香子"
+          ],
+          [
+            "actor",
+            "すがはらりこ",
+            "菅原りこ"
+          ],
+          [
+            "musician",
+            "へんみまり",
+            "辺見マリ"
+          ],
+          [
+            "musician",
+            "ほりかわまゆみ",
+            "堀川まゆみ"
+          ],
+          [
+            "other_identified",
+            "まえじまかおり",
+            "前島かおり"
+          ],
+          [
+            "actor",
+            "みうらりえこ",
+            "三浦理恵子"
+          ]
+        ],
+        "categoryRecords": 7
       }
     ],
     "personDictionaryExclusions": {
@@ -74613,16 +74906,29 @@
       "src/main/classification/reviews/2026-10-27-business-mhlw-reading-corrections.jsonl",
       "src/main/classification/reviews/2026-10-27-business-term-classification-corrections.jsonl",
       "src/main/classification/reviews/2026-10-27-yomi-tsugai-vivant.jsonl",
+      "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-eighth-followup.jsonl",
+      "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-eleventh-followup.jsonl",
+      "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-fifteenth-followup.jsonl",
       "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-fifth-followup.jsonl",
       "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-followup.jsonl",
+      "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-fourteenth-followup.jsonl",
       "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-fourth-followup.jsonl",
+      "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-ninth-followup.jsonl",
       "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-second-followup.jsonl",
+      "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-seventh-followup.jsonl",
+      "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-sixth-followup.jsonl",
+      "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-tenth-followup.jsonl",
       "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-third-followup.jsonl",
+      "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-thirteenth-followup.jsonl",
+      "src/main/classification/reviews/2026-10-30-reviewed-event-restorations-twelfth-followup.jsonl",
       "src/main/classification/reviews/2026-10-30-reviewed-event-restorations.jsonl",
       "src/main/classification/reviews/2026-10-30-reviewed-media-restorations-followup.jsonl",
       "src/main/classification/reviews/2026-10-30-reviewed-media-restorations-second-followup.jsonl",
       "src/main/classification/reviews/2026-10-30-reviewed-media-restorations-third-followup.jsonl",
       "src/main/classification/reviews/2026-10-30-reviewed-media-restorations.jsonl",
+      "src/main/classification/reviews/2026-10-30-reviewed-media-source-corrections.jsonl",
+      "src/main/classification/reviews/2026-10-30-reviewed-zz-event-quality-corrections.jsonl",
+      "src/main/classification/reviews/2026-10-30-reviewed-zzz-media-audience-correction.jsonl",
       "src/main/classification/reviews/2026-10-30-wikidata-event-restorations.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
@@ -74881,5 +75187,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 749682
+  "uniqueAdmittedPairs": 750097
 }

@@ -2,7 +2,7 @@
 
 [全カテゴリ](../index.md) · [品詞名](../pos.md)
 
-読み・表記の組: **5,084**、読み: **5,046**、レコード: **5,085**。
+読み・表記の組: **5,092**、読み: **5,054**、レコード: **5,093**。
 
 ## 対象層別の収録語
 
@@ -10,10 +10,10 @@
 
 | 対象層 | 読み・表記の組 | レコード数 | 分類別の単語一覧 |
 |---|---:|---:|---|
-| [少年向け](audience/shonen/index.md) | 1,665 | 1,666 | [単語一覧](audience/shonen/index.md) |
-| [青年向け](audience/seinen/index.md) | 1,367 | 1,367 | [単語一覧](audience/seinen/index.md) |
+| [少年向け](audience/shonen/index.md) | 1,669 | 1,670 | [単語一覧](audience/shonen/index.md) |
+| [青年向け](audience/seinen/index.md) | 1,370 | 1,370 | [単語一覧](audience/seinen/index.md) |
 | [少女向け](audience/shojo/index.md) | 624 | 624 | [単語一覧](audience/shojo/index.md) |
-| [女性向け（Josei）](audience/josei/index.md) | 260 | 260 | [単語一覧](audience/josei/index.md) |
+| [女性向け（Josei）](audience/josei/index.md) | 261 | 261 | [単語一覧](audience/josei/index.md) |
 | [子ども向け（Kids）](audience/kids/index.md) | 60 | 60 | [単語一覧](audience/kids/index.md) |
 | [対象層の指定なし・一般向け](audience/unspecified/index.md) | 1,108 | 1,108 | [単語一覧](audience/unspecified/index.md) |
 
