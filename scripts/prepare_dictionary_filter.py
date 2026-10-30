@@ -16,6 +16,7 @@ import dictionary_filters
 
 URL = 'https://github.com/KazumaProject/dictionary_filter_list.git'
 CACHE = Path.home() / '.cache/kotlin-kana-kanji-converter/dictionary-filter-list.git'
+SPORTS_ALLOW = 'decisions/person/protected_sports_collisions.jsonl'
 
 
 def git(*arguments, cwd=None, binary=False):
@@ -68,7 +69,7 @@ def prepare(output):
                 name = entry.name
                 if entry.isdir():
                     continue
-                if name != 'manifest.json' and not name.startswith('categories/'):
+                if name not in ('manifest.json', SPORTS_ALLOW) and not name.startswith('categories/'):
                     continue
                 path = Path(name)
                 if (not entry.isfile() or path.is_absolute() or '..' in path.parts

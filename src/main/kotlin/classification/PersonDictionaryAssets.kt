@@ -93,7 +93,8 @@ class PersonDictionaryData(
                 val surface = fields[5]
                 val tagText = fields[6]
                 val candidateKey = CrimeOffenderCandidateKeys.key(reading, surface)
-                require(candidateKey !in crimeOffenderExclusionKeys || dictionaryFilter.contains(reading, surface)) {
+                require(candidateKey !in crimeOffenderExclusionKeys || dictionaryFilter.contains(reading, surface) ||
+                    dictionaryFilter.isProtected(reading, surface)) {
                     "Crime-offender candidate found in standard person dictionary source row ${index + 1}"
                 }
                 require(categoryId in categoryIds) {

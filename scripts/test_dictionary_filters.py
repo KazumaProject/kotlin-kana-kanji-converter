@@ -6,6 +6,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from unittest import mock
 
 import dictionary_filters
 import prepare_dictionary_filter
@@ -18,7 +19,7 @@ class DictionaryFilterTest(unittest.TestCase):
         (root / 'categories/person').mkdir(parents=True)
         (root / 'manifest.json').write_text('{"schemaVersion":1}\n', encoding='utf-8')
         (root / 'categories/person/example.jsonl').write_text(json.dumps({
-            'reading': 'かな', 'surface': '仮名', 'status': 'hold', 'evidence': [{'kind': 'test'}],
+            'reading': 'かな', 'surface': '仮名', 'status': 'source_reviewed', 'evidence': [{'kind': 'test'}],
         }, ensure_ascii=False) + '\n', encoding='utf-8')
         subprocess.run(['git', 'init', '-q', str(root)], check=True)
         subprocess.run(['git', '-C', str(root), 'add', 'manifest.json', 'categories'], check=True)
@@ -59,11 +60,44 @@ class DictionaryFilterTest(unittest.TestCase):
             category.write_text('{"reading":"かな"}\n', encoding='utf-8')
             with self.assertRaisesRegex(ValueError, 'Invalid'):
                 dictionary_filters.load_snapshot(source)
+            for status in ('hold', 'model_provisional'):
+                unresolved = json.loads(row)
+                unresolved['status'] = status
+                category.write_text(json.dumps(unresolved, ensure_ascii=False) + '\n', encoding='utf-8')
+                with self.assertRaisesRegex(ValueError, 'Invalid'):
+                    dictionary_filters.load_snapshot(source)
 
     def test_missing_snapshot_fails_closed(self):
         with tempfile.TemporaryDirectory() as temp:
             with self.assertRaises((FileNotFoundError, ValueError)):
                 dictionary_filters.load_snapshot(Path(temp) / 'missing')
+
+    def test_protected_sports_pair_overrides_an_exclusion_in_the_same_snapshot(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source = self.make_source(Path(temp) / 'repo')
+            category = source / 'categories/person/example.jsonl'
+            category.write_text(category.read_text(encoding='utf-8') + json.dumps({
+                'reading': 'かな', 'surface': '佳奈', 'status': 'source_reviewed', 'evidence': [{'kind': 'test'}],
+            }, ensure_ascii=False) + '\n', encoding='utf-8')
+            protected = source / prepare_dictionary_filter.SPORTS_ALLOW
+            protected.parent.mkdir(parents=True)
+            decision = {'reading': 'かな', 'surface': '佳奈', 'status': 'source_reviewed',
+                        'action': 'allow', 'classification': 'person/sports', 'sport': 'athletics',
+                        'evidence': [{'kind': 'test'}]}
+            protected.write_text(json.dumps(decision, ensure_ascii=False) + '\n', encoding='utf-8')
+            subprocess.run(['git', '-C', str(source), 'add', 'categories', 'decisions'], check=True)
+            subprocess.run(['git', '-C', str(source), '-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                            'commit', '-qm', 'protect sports name'], check=True)
+            with mock.patch.dict(os.environ, {'DICTIONARY_FILTER_SOURCE': str(source),
+                                              'DICTIONARY_FILTER_ALLOW_FIXTURE': '1'}):
+                snapshot = Path(temp) / 'snapshot'
+                prepare_dictionary_filter.prepare(snapshot)
+                self.assertEqual(dictionary_filters.load_snapshot(snapshot)[1], {('かな', '仮名')})
+                decision['status'] = 'hold'
+                (snapshot / prepare_dictionary_filter.SPORTS_ALLOW).write_text(
+                    json.dumps(decision, ensure_ascii=False) + '\n', encoding='utf-8')
+                with self.assertRaisesRegex(ValueError, 'Invalid protected sports decision'):
+                    dictionary_filters.load_snapshot(snapshot)
 
     def test_person_classification_withholds_all_shared_filter_categories(self):
         with tempfile.TemporaryDirectory() as temp:
