@@ -1,5 +1,6 @@
 package com.kazumaproject.english
 
+import com.kazumaproject.classification.DictionaryFilter
 import java.nio.file.Files
 import java.nio.file.Path
 import java.security.MessageDigest
@@ -7,7 +8,8 @@ import java.security.MessageDigest
 fun main(args: Array<String>) {
     val source = loadEnglishDictionarySource(args)
     val zip = Path.of(englishOption(args, "--release-zip") ?: error("Missing required option: --release-zip"))
-    val result = EnglishDictionaryBinaryValidator.validateReleaseZip(source.runtimeEntries, zip)
+    val entries = DictionaryFilter.fromEnvironment().filterRecords(source.runtimeEntries, skipKanaOnlyTango = true)
+    val result = EnglishDictionaryBinaryValidator.validateReleaseZip(entries, zip)
     val digest = MessageDigest.getInstance("SHA-256")
     Files.newInputStream(zip).use { input ->
         val buffer = ByteArray(65536)

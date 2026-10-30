@@ -233,7 +233,7 @@ def manifest_for(root, batch_size):
         raise ValueError('Batch size must be between 1 and 5000')
     taxonomy, _ = taxonomy_maps(root)
     candidates, record_count = collect_candidates(root)
-    restricted_keys = gemini.known_adult_exclusion_keys()
+    filter_revision, restricted_keys = gemini.shared_restricted_exclusion_keys()
     restricted_present = {row['candidate_key'] for row in candidates} & restricted_keys
     for row in candidates:
         row['withheld_from_gemini'] = row['candidate_key'] in restricted_present
@@ -257,6 +257,7 @@ def manifest_for(root, batch_size):
         'taxonomy_sha256': gemini.sha(taxonomy_path),
         'implementation_sha256': gemini.sha(Path(__file__)),
         'gemini_helper_sha256': gemini.sha(Path(gemini.__file__)),
+        'filter_revision': filter_revision,
         'batch_size': batch_size,
         'candidate_records': record_count,
         'unique_pairs': len(candidates),
@@ -321,7 +322,7 @@ def load_workspace(root, workspace):
     expected = manifest_for(root, manifest['batch_size'])
     for key in ('source_sha256', 'distribution_source_sha256', 'taxonomy_sha256',
                 'implementation_sha256', 'gemini_helper_sha256', 'unique_pairs', 'submitted_pairs',
-                'withheld_restricted_pairs', 'batch_count', 'restricted_key_set_sha256'):
+                'withheld_restricted_pairs', 'batch_count', 'restricted_key_set_sha256', 'filter_revision'):
         if manifest.get(key) != expected[key]:
             raise ValueError(f'Workspace no longer matches current input: {key}')
     if gemini.sha(workspace / 'items.jsonl') != manifest.get('items_sha256'):

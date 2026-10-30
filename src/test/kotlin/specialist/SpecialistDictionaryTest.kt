@@ -3,6 +3,7 @@ package specialist
 import com.kazumaproject.Louds.Converter
 import com.kazumaproject.Louds.LOUDS
 import com.kazumaproject.classification.ClassifiedDictionaryData
+import com.kazumaproject.classification.DictionaryFilter
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.prefix.PrefixTree
@@ -67,7 +68,7 @@ class SpecialistDictionaryTest {
             GZIPOutputStream(File(root, "distribution-candidates.tsv.gz").outputStream()).bufferedWriter().use {
                 it.write("kampo\tかっこんとう\t1\t1\t9000\t葛根湯\nmedical\tがん\t1\t1\t9000\t癌\n")
             }
-            val data = ClassifiedDictionaryData(root, id, expectedCategoryCount = 2)
+            val data = ClassifiedDictionaryData(root, id, expectedCategoryCount = 2, dictionaryFilter = DictionaryFilter.empty())
             val posInput = data.records.values.flatten().groupBy { it.yomi }.toSortedMap()
             val pos = File(root, "pos.dat")
             TokenArray().buildPOSTableWithIndex(posInput, 1, pos.path)

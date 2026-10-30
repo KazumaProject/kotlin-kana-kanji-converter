@@ -516,7 +516,7 @@ def generate_person_replacement_index(output, base_summary, person_summary):
         '# 分類辞書 — 全配布カテゴリ\n\n'
         f'通常版GitHub Releaseの辞書ZIPに含まれる全{replacement_category_count}カテゴリを掲載します。'
         '通常配布カテゴリから汎用 `person` を除き、標準配布対象の人物細分類29カテゴリに置き換えています。'
-        '未分類候補と成人関連など配布対象外の候補は含めていません。\n\n'
+        'この一覧と件数はフィルター適用前の分類元データです。実際の配布では非公開フィルターに一致する項目を除外します。\n\n'
         f'カテゴリ別レコード数の合計は **{record_count:,}**、読み・表記の組数の合計は **{pair_count:,}**です。'
         '同じ組が別カテゴリにもある場合、合計では重複して数えます。各リンクからカテゴリの全収録語を確認できます。\n\n'
         '[生成・配布手順](../classified-dictionary-distribution.md#人物細分類への置換配布) · '

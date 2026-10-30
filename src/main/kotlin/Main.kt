@@ -3,22 +3,25 @@ package com.kazumaproject
 import com.kazumaproject.dictionary.TokenArray
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.classification.ClassifiedDictionaryData
+import com.kazumaproject.classification.DictionaryFilter
 import com.kazumaproject.english.EnglishDictionaryBinaryValidator
 import com.kazumaproject.mozc.buildConnectionIdsFromResource
 import com.kazumaproject.mozc.validateBundledMozcDictionaryResources
+import kotlinx.serialization.json.*
 import java.io.*
 import java.util.*
 
 fun main() {
     validateBundledMozcDictionaryResources()
-    val baseline = BaselineDictionaryInputs.load()
+    val dictionaryFilter = DictionaryFilter.fromEnvironment()
+    val baseline = BaselineDictionaryInputs.filtered(dictionaryFilter)
     val finalList = baseline.getValue("system").groupBy { it.yomi }
         .toSortedMap(compareBy({ it.length }, { it }))
     val englishDictionaryList = baseline.getValue("english_reading")
 
     buildConnectionIds()
-    val classified = ClassifiedDictionaryData()
-    val specialists = ClassifiedDictionaryData(File("src/main/specialist"), expectedCategoryCount = 2)
+    val classified = ClassifiedDictionaryData(dictionaryFilter = dictionaryFilter)
+    val specialists = ClassifiedDictionaryData(File("src/main/specialist"), expectedCategoryCount = 2, dictionaryFilter = dictionaryFilter)
     val sharedPosInputs = (finalList.values.flatten() + englishDictionaryList + classified.records.values.flatten() + specialists.records.values.flatten())
         .groupBy { it.yomi }.toSortedMap(compareBy({ it.length }, { it }))
     buildPOSTable(sharedPosInputs)
@@ -39,6 +42,14 @@ fun main() {
     buildDictionaryForKotowaza(baseline.getValue("kotowaza"))
     classified.build()
     specialists.build()
+    val categoryCounts = (classified.records + specialists.records).mapValues { it.value.size }
+    File("build/reports/dictionary-filter/category-counts.json").apply {
+        parentFile.mkdirs()
+        writeText(buildJsonObject {
+            put("filterRevision", dictionaryFilter.revision)
+            put("categoryRows", buildJsonObject { categoryCounts.toSortedMap().forEach { (id, count) -> put(id, count) } })
+        }.toString() + "\n")
+    }
 }
 
 private fun buildPOSTable(finalList: SortedMap<String, List<Dictionary>>) {

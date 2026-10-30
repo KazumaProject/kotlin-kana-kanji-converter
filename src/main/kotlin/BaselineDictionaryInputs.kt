@@ -23,6 +23,7 @@ import com.kazumaproject.Constants.ZENKANKU_LIST
 import com.kazumaproject.dictionary.DicUtils
 import com.kazumaproject.dictionary.models.Dictionary
 import com.kazumaproject.classification.ClassifiedDictionaryData
+import com.kazumaproject.classification.DictionaryFilter
 import com.kazumaproject.emoji.EmojiDictionaryBuilder
 import com.kazumaproject.emoticon.EmoticonDictionaryBuilder
 import com.kazumaproject.english.EnglishDictionarySource
@@ -87,6 +88,11 @@ internal object BaselineDictionaryInputs {
         put("symbol", SymbolDictionaryBuilder().convertSymbolDataToDictionaryList("src/main/bin/symbol.tsv"))
         put("reading_correction", ReadingCorrectionBuilder().parseReadingCorrectionTSV("src/main/bin/reading_correction.tsv"))
         put("kotowaza", ReadingCorrectionBuilder().parseKotowazaTSV("src/main/bin/kotowaza.tsv"))
-        ClassifiedDictionaryData(classifiedDirectory).records.forEach { (id, entries) -> put("categories/$id", entries.toList()) }
+        ClassifiedDictionaryData(classifiedDirectory, dictionaryFilter = DictionaryFilter.empty()).records.forEach { (id, entries) -> put("categories/$id", entries.toList()) }
     }
+
+    fun filtered(filter: DictionaryFilter, classifiedDirectory: File = File("src/main/classification")): Map<String, List<Dictionary>> =
+        load(classifiedDirectory).mapValues { (source, entries) ->
+            filter.filterRecords(entries, skipKanaOnlyTango = source == "system" || source == "english_reading")
+        }
 }
