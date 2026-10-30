@@ -463,17 +463,17 @@ jobs:
 
             - `term` 辞書を一般語・専門用語の階層カテゴリに再編しました。
             - `event` 辞書を「催し・行事」「事件・事故・災害」「歴史的出来事」の3群に整理し、6つの配布カテゴリを追加しました。
-            - 犯罪・テロ・事故に該当する読み・表記ペアは分類専用とし、辞書配布データから除外しました。
-            - 汎用 `person` 辞書を人物細分類29カテゴリに置き換え、軍事関係者を除外しました。姓・名・姓名は由来別に分類し、哲学者・思想家は出典を確認した候補だけを含めます。
-            - アニメ・漫画作品と架空キャラクターを対象層に分類し、成人向け103組を辞書から除外しました。
+            - 非公開の共通フィルター台帳に登録された読み・表記ペアを配布辞書から除外し、使用した台帳のリビジョンをマニフェストに記録します。
+            - 汎用 `person` 辞書を人物細分類29カテゴリに置き換え、軍事に分類されたレコードを除外しました。姓・名・姓名は由来別に分類し、哲学者・思想家は出典を確認した候補だけを含めます。
+            - アニメ・漫画作品と架空キャラクターを対象層に分類しました。
 
             ## English
 
             - Reorganized the `term` dictionary into hierarchical general and specialist categories.
             - Organized the `event` dictionary into three groups and added six distributable categories.
-            - Kept crime, terrorism, and accident pairs for classification only and excluded them from dictionary distribution data.
-            - Replaced the generic `person` dictionary with 29 categorized dictionaries, including surname and given-name origin categories, excluding military records, and admitting philosophers and thinkers only from source-verified entries.
-            - Classified anime and manga works and fictional characters by target audience, and excluded 103 adult-labeled pairs from the dictionary.
+            - Excluded reading/surface pairs registered in the shared private filter and recorded the filter revision in the distribution manifest.
+            - Replaced the generic `person` dictionary with 29 categorized dictionaries, including surname and given-name origin categories, excluding records classified as military, and admitting philosophers and thinkers only from source-verified entries.
+            - Classified anime and manga works and fictional characters by target audience.
           prerelease: false
           makeLatest: true
           artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./release_zips/dictionary-distribution-manifest.json,./release_zips/DICTIONARY-SHA256SUMS,./release_zips/DICTIONARY-LICENSES.txt
