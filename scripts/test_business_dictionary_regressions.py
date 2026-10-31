@@ -184,20 +184,25 @@ class BusinessDictionaryRegressionTest(unittest.TestCase):
 
         manifest = json.loads((ROOT / 'src/main/classification/person-name-origin-classification-manifest.json')
                               .read_text(encoding='utf-8'))
-        artifact = manifest['manual_type_review']['dictionary_artifact']
-        self.assertEqual(artifact['records'], len(self.person_candidates))
-        self.assertEqual(artifact['records_before'], len(self.person_candidates) + 2)
+        review = manifest['manual_type_review']
+        artifact = review['dictionary_artifact']
+        # This artifact describes the result at the time of that review. Later
+        # source-backed additions can legitimately change the current file.
+        self.assertEqual(artifact['records_before'], manifest['source_dictionary_records_after_japanese_origin_review'])
+        self.assertEqual(artifact['previous_sha256'], manifest['source_dictionary_sha256_after_japanese_origin_review'])
+        self.assertEqual(artifact['records'], artifact['records_before'] - artifact['excluded_records'])
         self.assertEqual(artifact['changed_records'], 19)
         self.assertEqual(artifact['excluded_records'], 2)
-        person_path = ROOT / 'src/main/classification/person-dictionary-candidates.tsv.gz'
-        self.assertEqual(artifact['sha256'], hashlib.sha256(person_path.read_bytes()).hexdigest())
+        self.assertRegex(artifact['sha256'], r'^[0-9a-f]{64}$')
+        review_path = ROOT / review['review_path']
+        self.assertEqual(review['review_sha256'], hashlib.sha256(review_path.read_bytes()).hexdigest())
 
     def test_manifest_counts_match_generated_rows(self):
         manifest = json.loads((ROOT / 'src/main/classification/distribution-manifest.json')
                               .read_text(encoding='utf-8'))
         self.assertEqual(manifest['dictionaryRows'], len(self.candidates))
-        self.assertEqual(manifest['dictionaryRows'], 778041)
-        self.assertEqual(manifest['uniqueAdmittedPairs'], 748838)
+        self.assertEqual(manifest['uniqueAdmittedPairs'],
+                         len({(row[1], row[5]) for row in self.candidates}))
 
 
 if __name__ == '__main__':
