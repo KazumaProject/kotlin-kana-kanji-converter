@@ -6,6 +6,7 @@ import com.kazumaproject.classification.PersonDictionaryData
 import com.kazumaproject.dictionary.models.Dictionary
 import java.io.File
 import java.nio.file.Files
+import java.security.MessageDigest
 import java.util.zip.GZIPOutputStream
 import kotlin.test.*
 
@@ -20,8 +21,8 @@ class DictionaryFilterTest {
             val category = File(root, "categories/person/test.jsonl")
             category.parentFile.mkdirs()
             category.writeText(
-                """{"reading":"かな","surface":"仮名","status":"hold","evidence":[{"kind":"test"}]}""" + "\n" +
-                    """{"reading":"よみ","surface":"よみ","status":"hold","evidence":[{"kind":"test"}]}""" + "\n",
+                """{"reading":"かな","surface":"仮名","status":"source_reviewed","evidence":[{"kind":"test"}]}""" + "\n" +
+                    """{"reading":"よみ","surface":"よみ","status":"source_reviewed","evidence":[{"kind":"test"}]}""" + "\n",
             )
             test(root, DictionaryFilter.load(root))
         } finally {
@@ -74,10 +75,51 @@ class DictionaryFilterTest {
     }
 
     @Test
+    fun verifiedSportsDecisionProtectsTheExactPairAcrossCategories() = fixture { root, _ ->
+        val protected = File(root, "decisions/person/protected_sports_collisions.jsonl")
+        protected.parentFile.mkdirs()
+        protected.writeText(
+            """{"reading":"かな","surface":"仮名","status":"source_reviewed","action":"allow","classification":"person/sports","sport":"athletics","evidence":[{"kind":"test"}]}""" + "\n",
+        )
+        val filter = DictionaryFilter.load(root)
+        assertFalse(filter.contains("かな", "仮名"))
+        assertTrue(filter.isProtected("かな", "仮名"))
+        assertFalse(filter.isProtected("かな", "佳奈"))
+        assertEquals(listOf(word("かな", "仮名")), filter.filterRecords(listOf(word("かな", "仮名"), word("よみ", "かな"))))
+
+        val key = MessageDigest.getInstance("SHA-256")
+            .digest("かな\u0000仮名".toByteArray(Charsets.UTF_8))
+            .joinToString("") { "%02x".format(it) }
+        val id = File(root, "id.def").apply { writeText("0 BOS/EOS,*,*,*,*,*,*\n1 名詞,一般,*,*,*,*,*\n") }
+        val classified = File(root, "classified-protected").apply { mkdirs() }
+        File(classified, "categories.json").writeText("""{"categories":[{"id":"person"}]}""")
+        File(classified, "crime-offender-exclusion-keys.sha256").writeText(key + "\n")
+        GZIPOutputStream(File(classified, "distribution-candidates.tsv.gz").outputStream()).bufferedWriter().use {
+            it.write("person\tかな\t1\t1\t100\t仮名\n")
+        }
+        assertEquals(setOf(word("かな", "仮名")), ClassifiedDictionaryData(classified, id, dictionaryFilter = filter)
+            .records.getValue("person"))
+
+        val person = File(root, "person-protected").apply { mkdirs() }
+        File("src/main/classification/person-taxonomy.json").copyTo(File(person, "person-taxonomy.json"))
+        File(person, "crime-offender-exclusion-keys.sha256").writeText(key + "\n")
+        GZIPOutputStream(File(person, "person-dictionary-candidates.tsv.gz").outputStream()).bufferedWriter().use {
+            it.write("sports\tかな\t1\t1\t100\t仮名\tathletics\n")
+        }
+        assertEquals(listOf(word("かな", "仮名")), PersonDictionaryData(person, id, filter).records.getValue("sports"))
+        protected.writeText(protected.readText().replace("source_reviewed", "hold"))
+        assertFailsWith<IllegalArgumentException> { DictionaryFilter.load(root) }
+    }
+
+    @Test
     fun invalidOrDuplicateRecordsFailClosed() = fixture { root, _ ->
         val category = File(root, "categories/person/test.jsonl")
         category.appendText(category.readLines().first() + "\n")
         assertFailsWith<IllegalArgumentException> { DictionaryFilter.load(root) }
+        listOf("hold", "model_provisional").forEach { status ->
+            category.writeText("""{"reading":"かな","surface":"仮名","status":"$status","evidence":[{"kind":"test"}]}""" + "\n")
+            assertFailsWith<IllegalArgumentException> { DictionaryFilter.load(root) }
+        }
         File(root, "snapshot.json").delete()
         assertFails { DictionaryFilter.load(root) }
     }

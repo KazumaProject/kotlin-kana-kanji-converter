@@ -37,9 +37,9 @@
     "src/main/specialist/sources/hyakuyaku.jsonl.gz": "bbdefe7bec466e25d333adf2971bfd32e12ebf8eccf9e5c1dbe8132eba49027b",
     "src/main/specialist/sources/manbyo.jsonl.gz": "acf4105c8bfff7d7278fb9d2298481b3dae2d6b58eda824f31b3345e6aea9492"
   },
-  "classificationExclusionsSha256": "22843ba80f83adb803703c9598e55612bc77ba055e6fc87754efd4004148f7a2",
+  "classificationExclusionsSha256": "f08a651dc2e8a999e3e0336d74b47ede8584dacf5b3bed4625471773d809bd18",
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
-  "existingInventorySha256": "defb645a1a07b40403998ff15b9533825fc74deee5803b56bb8c15c4e608a9d7",
+  "existingInventorySha256": "1be6f1950296eab7eec00d5734f285824c6757afa1b6e9f92e261f4ee5862b5c",
   "existingDictionaryIds": [
     "categories/address",
     "categories/agreement",
@@ -161,7 +161,7 @@
     "symbol",
     "system"
   ],
-  "existingUniquePairs": 1864659,
+  "existingUniquePairs": 1865918,
   "sourceRows": {
     "collected/collected-terms/cf7e87c20f1b1c28.jsonl": {
       "rows": 2,

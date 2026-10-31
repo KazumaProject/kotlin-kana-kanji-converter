@@ -39,7 +39,7 @@ jobs:
           filter_dir="$RUNNER_TEMP/dictionary-filter-fixture"
           mkdir -p "$filter_dir/categories/test"
           printf '%s\n' '{"schemaVersion":1}' > "$filter_dir/manifest.json"
-          printf '%s\n' '{"reading":"てすと","surface":"架空フィルター","status":"hold","evidence":[{"kind":"test"}]}' > "$filter_dir/categories/test/fixture.jsonl"
+          printf '%s\n' '{"reading":"てすと","surface":"架空フィルター","status":"source_reviewed","evidence":[{"kind":"test"}]}' > "$filter_dir/categories/test/fixture.jsonl"
           git -C "$filter_dir" init -q
           git -C "$filter_dir" add manifest.json categories
           git -C "$filter_dir" -c user.name=CI -c user.email=ci@example.invalid commit -qm 'Synthetic filter fixture'

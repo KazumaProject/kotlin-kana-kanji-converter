@@ -188,7 +188,9 @@ def apply_name_origin_mapping(final, mapping, source_keys=None):
 
 def export(args):
     exclusions = load_exclusions(args.excluded_candidates, args.root) if args.excluded_candidates else {}
-    filter_revision, filter_pairs = dictionary_filters.current_snapshot()
+    filter_revision, filter_pairs, protected_pairs = dictionary_filters.current_snapshot_details()
+    protected_keys = {candidate_key(reading, surface) for reading, surface in protected_pairs}
+    exclusions = {key: category for key, category in exclusions.items() if key not in protected_keys}
     shared_exclusion_keys = {candidate_key(reading, surface) for reading, surface in filter_pairs}
     prior_criminal_exclusion_keys = load_crime_offender_exclusion_keys(args.root)
     taxonomy, category_by_code, category_by_id = reviews.taxonomy_maps(args.root / "src/main/classification/person-taxonomy.json")
@@ -222,7 +224,7 @@ def export(args):
             if row.get("category_id") == "adult_performer"
             and row.get("status") == "adult_performer_source_confirmed"
         }
-        if not confirmed_performers <= set(exclusions) | shared_exclusion_keys:
+        if not confirmed_performers <= set(exclusions) | shared_exclusion_keys | protected_keys:
             raise ValueError(
                 "Adult performer source decisions must be present in the private filter or external exclusions")
         for row in decisions:
@@ -281,7 +283,7 @@ def export(args):
             key for key, category in exclusions.items()
             if category == "adult_related_hold"
         }
-        if not adult_related_source_keys <= excluded_adult_hold_keys | shared_exclusion_keys:
+        if not adult_related_source_keys <= excluded_adult_hold_keys | shared_exclusion_keys | protected_keys:
             raise ValueError("External exclusions omit adult-related source-review candidates")
         restricted_source_keys.update(adult_related_source_keys)
         restricted_gemini_keys = restricted_proposal_keys(
@@ -301,6 +303,9 @@ def export(args):
         crime_offender_exclusion_keys = (
             prior_criminal_exclusion_keys | criminal_source_keys | criminal_gemini_keys
         )
+        effective_criminal_exclusions = crime_offender_exclusion_keys - protected_keys
+        restricted_source_keys.difference_update(protected_keys)
+        restricted_gemini_keys.difference_update(protected_keys)
         for key in restricted_gemini_keys - source_approved_keys:
             final.pop(key, None)
 
@@ -330,7 +335,7 @@ def export(args):
         final.pop(key, None)
 
     unresolved_keys = (source_keys - set(final) - set(exclusions) - shared_exclusion_keys
-                       - crime_offender_exclusion_keys
+                       - effective_criminal_exclusions
                        - restricted_source_keys - restricted_gemini_keys)
     ime_filtered_keys = set()
     for key, (reading, surface, _, _) in list(final.items()):
@@ -341,7 +346,7 @@ def export(args):
 
     origin_mapping, _origin_manifest = name_origins.load_fixed_mapping(args.root)
     apply_name_origin_mapping(final, origin_mapping, source_keys)
-    for key in crime_offender_exclusion_keys:
+    for key in effective_criminal_exclusions:
         final.pop(key, None)
 
     output_rows = []
@@ -393,10 +398,10 @@ def export(args):
         "dictionaryRecords": len(output_rows),
         "unclassifiedExcludedPairs": len(unresolved_keys),
         "imeFormatExcludedPairs": len(ime_filtered_keys),
-        "adultRelatedSourceExcludedPairs": len(adult_related_source_keys),
+        "adultRelatedSourceExcludedPairs": len(adult_related_source_keys - protected_keys),
         "filterRevision": filter_revision,
         "sharedFilterExcludedPairs": len(shared_exclusion_keys & source_keys),
-        "crimeOffenderExcludedPairs": len(crime_offender_exclusion_keys & source_keys),
+        "crimeOffenderExcludedPairs": len(effective_criminal_exclusions & source_keys),
         "excludedCandidateCounts": dict(sorted(collections.Counter(exclusions.values()).items())),
         "sourceSha256": hashlib.sha256(args.output.read_bytes()).hexdigest(),
     }, ensure_ascii=False, sort_keys=True))

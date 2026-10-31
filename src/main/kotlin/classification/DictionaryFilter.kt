@@ -11,10 +11,13 @@ import java.nio.file.Files
 class DictionaryFilter private constructor(
     val revision: String,
     private val pairs: Set<Pair<String, String>>,
+    private val protectedPairs: Set<Pair<String, String>>,
 ) {
     private val readings = pairs.mapTo(HashSet()) { it.first }
 
     fun contains(reading: String, surface: String): Boolean = (reading to surface) in pairs
+
+    fun isProtected(reading: String, surface: String): Boolean = (reading to surface) in protectedPairs
 
     /** Also exclude the surface that the current dictionary encoding reconstructs. */
     fun filterRecords(entries: Collection<Dictionary>, skipKanaOnlyTango: Boolean = false): List<Dictionary> {
@@ -36,9 +39,9 @@ class DictionaryFilter private constructor(
     companion object {
         private val revisionPattern = Regex("[0-9a-f]{40}")
         private val categoryPattern = Regex("[a-z][a-z0-9_]*(/[a-z][a-z0-9_]*)*\\.jsonl")
-        private val statuses = setOf("hold", "source_reviewed", "model_provisional")
+        private val statuses = setOf("source_reviewed")
 
-        fun empty(): DictionaryFilter = DictionaryFilter("0".repeat(40), emptySet())
+        fun empty(): DictionaryFilter = DictionaryFilter("0".repeat(40), emptySet(), emptySet())
 
         fun fromEnvironment(): DictionaryFilter {
             val path = System.getenv("DICTIONARY_FILTER_SNAPSHOT")
@@ -94,8 +97,38 @@ class DictionaryFilter private constructor(
                     }
                 }
             }
+            val protectedFile = File(directory, "decisions/person/protected_sports_collisions.jsonl")
+            require(!Files.isSymbolicLink(protectedFile.toPath())) { "Invalid protected sports decisions file" }
+            val protected = mutableSetOf<Pair<String, String>>()
+            if (protectedFile.isFile) {
+                protectedFile.bufferedReader().useLines { lines ->
+                    lines.forEachIndexed { index, line ->
+                        val row = Json.parseToJsonElement(line).jsonObject
+                        require(row.keys == setOf("reading", "surface", "status", "action", "classification", "sport", "evidence") &&
+                            listOf("reading", "surface", "status", "action", "classification", "sport").all {
+                                row.getValue(it).jsonPrimitive.isString
+                            }) { "Invalid protected sports decision at line ${index + 1}" }
+                        val reading = row.getValue("reading").jsonPrimitive.content
+                        val surface = row.getValue("surface").jsonPrimitive.content
+                        val sport = row.getValue("sport").jsonPrimitive.content
+                        val evidence = row.getValue("evidence").jsonArray
+                        require(reading.isNotEmpty() && surface.isNotEmpty() && sport.isNotEmpty() &&
+                            (reading + surface + sport).none { it in "\u0000\r\n\t" } &&
+                            row.getValue("status").jsonPrimitive.content == "source_reviewed" &&
+                            row.getValue("action").jsonPrimitive.content == "allow" &&
+                            row.getValue("classification").jsonPrimitive.content == "person/sports" &&
+                            evidence.isNotEmpty() && evidence.all { it is JsonObject }) {
+                            "Invalid protected sports decision at line ${index + 1}"
+                        }
+                        require(protected.add(reading to surface)) {
+                            "Duplicate protected sports decision at line ${index + 1}"
+                        }
+                    }
+                }
+            }
+            pairs.removeAll(protected)
             require(pairs.isNotEmpty()) { "Dictionary filter has no active records" }
-            return DictionaryFilter(revision, pairs)
+            return DictionaryFilter(revision, pairs, protected)
         }
     }
 }

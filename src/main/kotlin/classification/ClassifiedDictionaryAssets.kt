@@ -45,7 +45,8 @@ class ClassifiedDictionaryData(
                 val (category, reading, left, right, cost) = fields
                 val surface = fields[5]
                 require(reading.isNotEmpty() && surface.isNotEmpty())
-                if (CrimeOffenderCandidateKeys.key(reading, surface) in crimeOffenderExclusionKeys) {
+                if (CrimeOffenderCandidateKeys.key(reading, surface) in crimeOffenderExclusionKeys &&
+                    !dictionaryFilter.isProtected(reading, surface)) {
                     return@forEachIndexed
                 }
                 val leftId = left.toInt()

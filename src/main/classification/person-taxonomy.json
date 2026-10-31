@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
-  "taxonomy_version": "2026-10-25.1",
+  "taxonomy_version": "2026-10-30.1",
   "policy": {
-    "version": "2026-10-25.1",
+    "version": "2026-10-30.1",
     "name_origin_definition": "日本由来／海外由来は人の国籍や文字種ではなく、姓・名・姓名の命名慣習上の由来を指す。読み・表記の文字種や印象だけで推測せず、由来に確信がない場合は対応する由来未確認カテゴリにする。複数の命名慣習が混在し判別できない場合も由来未確認にする。",
     "adult_scope": [
       "video",
       "game",
       "audio"
     ],
-    "adult_definition": "性的表現を主目的とする成人向け映像・ゲーム・音声作品への出演。一般映画の性描写・グラビア・制作のみでは自動確定しない。",
+    "adult_definition": "成人向けとして公開された映像・ゲーム・音声作品、または提供元や審査機関が18歳以上向けと明記した作品への出演。性描写やグラビア、制作のみからは推定しない。",
     "public_aliases_only": true,
     "independent_review_required": true,
     "unreviewed_distribution": "excluded",
@@ -39,8 +39,8 @@
     ],
     "restricted_category_records": "aggregate_counts_only",
     "adult_related_hold": {
-      "label": "成人関連保留（別枠）",
-      "definition": "成人関連の可能性があるが作品の性質または候補との対応を確認できない項目を保留する。個別候補名は保存・配布せず、件数のみ集計する。確認済みの制作者はadult_work_creator、出演者はadult_performerに分ける。",
+      "label": "旧形式の成人関連保留（互換性のみ）",
+      "definition": "旧データの互換性のために残す区分。新規の保留を作らず、旧保留は根拠を調べて出演者、制作者、配布対象などに再分類する。個別候補名は公開しない。",
       "distribution": "metadata_only"
     },
     "standard_dictionary_withheld_categories": [
@@ -139,7 +139,7 @@
       "label": "タレント・モデル・放送・報道",
       "standard_enabled": true,
       "definition": "タレント、モデル、司会者、アナウンサー、記者等。",
-      "boundary": "独立モデル区分は設けない。グラビアのみで成人向け出演確定としない。"
+      "boundary": "独立モデル区分は設けない。グラビアというジャンルだけで成人向け出演と確定せず、個別作品の年齢指定と出演を照合する。"
     },
     {
       "number": 10,
@@ -154,8 +154,8 @@
       "id": "adult_performer",
       "label": "成人向け作品出演者（分離）",
       "standard_enabled": false,
-      "definition": "性的表現を主目的とする成人向け映像・ゲーム・音声作品への出演を公開資料で確認した個人。",
-      "boundary": "同名一致・噂・制作のみ・一般映画の性描写・性的でない年齢制限だけで確定しない。一般側へ重複配布しない。"
+      "definition": "成人向けまたは18歳以上向けと明記された映像・ゲーム・音声作品への出演を公開資料で確認した個人。",
+      "boundary": "同名一致・噂・制作のみから確定しない。作品の年齢指定と出演名義を資料で照合する。同じ読み・表記の競技選手を確認した組は除外しない。"
     },
     {
       "number": 12,
