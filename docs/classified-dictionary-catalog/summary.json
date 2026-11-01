@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "fc75a653b5d113657433f7ce8a46a23ef8c598f5f590b2ea0e6d55571f052bd1",
-  "uniquePairs": 838454,
-  "records": 867595,
+  "inputSha256": "e7d0da5e97974cc2a5a7901ddfc1ab49d5ba08945de7de8ae300103fd2b21078",
+  "uniquePairs": 838472,
+  "records": 867613,
   "categories": [
     {
       "id": "character",
@@ -1103,14 +1103,14 @@
     {
       "id": "term/general/neologisms_trends_youth_language",
       "name": "新語・流行語・若者言葉",
-      "pairs": 485,
-      "readings": 474,
-      "records": 485,
+      "pairs": 487,
+      "readings": 476,
+      "records": 487,
       "pages": 1,
       "recordsByOrigin": {
         "gemini": 266,
         "manual": 168,
-        "verified": 51
+        "verified": 53
       }
     },
     {
@@ -1129,14 +1129,14 @@
     {
       "id": "term/specialist/information_communications",
       "name": "情報・通信",
-      "pairs": 6087,
-      "readings": 6020,
-      "records": 6088,
+      "pairs": 6091,
+      "readings": 6024,
+      "records": 6092,
       "pages": 5,
       "recordsByOrigin": {
         "gemini": 3930,
         "manual": 1723,
-        "verified": 435
+        "verified": 439
       }
     },
     {
@@ -1155,13 +1155,13 @@
     {
       "id": "term/specialist/chemistry_life_sciences",
       "name": "化学・生命科学",
-      "pairs": 27562,
-      "readings": 26080,
-      "records": 27565,
+      "pairs": 27567,
+      "readings": 26085,
+      "records": 27570,
       "pages": 19,
       "recordsByOrigin": {
         "gemini": 18977,
-        "verified": 3486,
+        "verified": 3491,
         "manual": 5102
       }
     },
@@ -1181,40 +1181,40 @@
     {
       "id": "term/specialist/earth_environment_resources",
       "name": "地球・環境・資源",
-      "pairs": 2113,
-      "readings": 2078,
-      "records": 2113,
+      "pairs": 2114,
+      "readings": 2079,
+      "records": 2114,
       "pages": 2,
       "recordsByOrigin": {
         "manual": 493,
         "gemini": 1255,
-        "verified": 365
+        "verified": 366
       }
     },
     {
       "id": "term/specialist/economics_management",
       "name": "経済・経営",
-      "pairs": 5905,
-      "readings": 5829,
-      "records": 5905,
+      "pairs": 5909,
+      "readings": 5833,
+      "records": 5909,
       "pages": 4,
       "recordsByOrigin": {
         "manual": 1319,
         "gemini": 3606,
-        "verified": 980
+        "verified": 984
       }
     },
     {
       "id": "term/specialist/law_politics",
       "name": "法律・政治",
-      "pairs": 5716,
-      "readings": 5641,
-      "records": 5717,
+      "pairs": 5718,
+      "readings": 5643,
+      "records": 5719,
       "pages": 4,
       "recordsByOrigin": {
         "manual": 1399,
         "gemini": 3011,
-        "verified": 1307
+        "verified": 1309
       }
     },
     {
