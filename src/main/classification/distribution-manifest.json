@@ -2,7 +2,7 @@
   "admittedPairsByOrigin": {
     "manual": 378778,
     "gemini": 188636,
-    "verified": 182683
+    "verified": 182701
   },
   "categoryGroups": [
     {
@@ -356,15 +356,15 @@
     "term/general/products_daily_goods": 1157,
     "term/general/food_drink_cooking": 4077,
     "term/general/internet_slang_culture": 579,
-    "term/general/neologisms_trends_youth_language": 485,
+    "term/general/neologisms_trends_youth_language": 487,
     "term/general/other_general": 20499,
-    "term/specialist/information_communications": 6088,
+    "term/specialist/information_communications": 6092,
     "term/specialist/mathematics_physics": 4174,
-    "term/specialist/chemistry_life_sciences": 27565,
+    "term/specialist/chemistry_life_sciences": 27570,
     "term/specialist/engineering_technology": 3525,
-    "term/specialist/earth_environment_resources": 2113,
-    "term/specialist/economics_management": 5905,
-    "term/specialist/law_politics": 5717,
+    "term/specialist/earth_environment_resources": 2114,
+    "term/specialist/economics_management": 5909,
+    "term/specialist/law_politics": 5719,
     "term/specialist/humanities_social_sciences": 17913,
     "term/specialist/culture_arts_sports": 5416,
     "term/specialist/transport_safety_defense": 4063,
@@ -393,13 +393,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 779315,
+  "dictionaryRows": 779333,
   "excludedCandidatePairs": 328694,
   "excludedClassifiedPairs": 322969,
   "files": {
     "categories.json": "92001c9850b589869528ccb97994ef4ec907f312a5b17f6710d4655b576c466c",
-    "distribution-candidates.tsv.gz": "fc75a653b5d113657433f7ce8a46a23ef8c598f5f590b2ea0e6d55571f052bd1",
-    "distribution-decisions.tsv.gz": "d4bcfeaf92e1bee7ea0507d33eb80e444af36d8506e35cb0af1037c6093f56e7"
+    "distribution-candidates.tsv.gz": "e7d0da5e97974cc2a5a7901ddfc1ab49d5ba08945de7de8ae300103fd2b21078",
+    "distribution-decisions.tsv.gz": "8a699191c74639b8c613b4ee8a433d6dad808768abca58ff82496b7a6abdd246"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -455,6 +455,7 @@
     "src/main/classification/person-additions/2026-10-30-reviewed-actor-restoration.jsonl": "bef641c1704429a098dda7e7a1606271a30224d55900b9676ff64fac4b99e59d",
     "src/main/classification/person-additions/2026-10-30-reviewed-broadcaster-restoration.jsonl": "f184dedbed55f2ddf03806d9fb9d4160708f1ae931cbc9731d003eeea23cb11e",
     "src/main/classification/person-additions/2026-10-30-reviewed-protected-name-restorations.jsonl": "6b4cdec098ec4f67a510fd843b1bcb6713818e0f8c08e761643e7995d34a74f1",
+    "src/main/classification/person-additions/2026-10-30-reviewed-public-careers.jsonl": "74370827be1d04449ac1a0c2e049c887baaa670bd9defc0c5e69671668ec8a9b",
     "src/main/classification/reviews/2026-10-14-001-uzumaki.jsonl": "574794d0df19f8afd09d06b66897d7b7fce97dd3652bc005674a3ecae28bb30a",
     "src/main/classification/reviews/2026-10-14-003-uzumaki-exclusions.jsonl": "5a373897bbade57c507d08e4813baa7d5975bc752a568cdaee8aaebd9d18f155",
     "src/main/classification/reviews/2026-10-16-pr128-luna-0000.jsonl": "3ab59c82e6e0645da8f513606038212b601c0c4c46273db4faf8122d6812cf1d",
@@ -549,8 +550,8 @@
     "src/main/classification/reviews/2026-10-30-reviewed-zz-event-quality-corrections.jsonl": "4a64cf53875c0c0c4193bd15b03f120c2003a13cbab83a7529c119726135a2d2",
     "src/main/classification/reviews/2026-10-30-reviewed-zzz-media-audience-correction.jsonl": "e7dc87ef3c118e3da81a9535ac7ced5f004546095c84b4fc18fccfec81a0bd03",
     "src/main/classification/reviews/2026-10-30-wikidata-event-restorations.jsonl": "2be30b1359e762b19f7d77f29b3a156d8b5b98b380c9750f8a944bd00950fc36",
-    "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb",
-    "src/main/classification/person-additions/2026-10-30-reviewed-public-careers.jsonl": "74370827be1d04449ac1a0c2e049c887baaa670bd9defc0c5e69671668ec8a9b"
+    "src/main/classification/reviews/2026-11-01-neologism-issues.jsonl": "9451d6fd7da668c867932eb5fcf3e7dc5ef5bf7a3a931b8f9a0511e400b68a13",
+    "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
   },
   "limitations": [
     "Gemini and manual classifications include provisional categories and unverified readings. IME runtime behavior is not verified.",
@@ -74930,6 +74931,7 @@
       "src/main/classification/reviews/2026-10-30-reviewed-zz-event-quality-corrections.jsonl",
       "src/main/classification/reviews/2026-10-30-reviewed-zzz-media-audience-correction.jsonl",
       "src/main/classification/reviews/2026-10-30-wikidata-event-restorations.jsonl",
+      "src/main/classification/reviews/2026-11-01-neologism-issues.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
     "termAdditions": [
@@ -75187,5 +75189,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 750097
+  "uniqueAdmittedPairs": 750115
 }
