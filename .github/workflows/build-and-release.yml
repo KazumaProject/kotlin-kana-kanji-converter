@@ -461,15 +461,15 @@ jobs:
           body: |
             ## 日本語
 
-            - 新語候補 Issue #231、#240、#251、#256、#261、#268、#273 をレビューし、出典・読みを確認した18語を用語辞書へ追加しました。
-            - 追加語：ワークスロップ、GEO、能動的サイバー防御、オンチェーン金融、SaMD、DTx、eKYC、JPKI、SLM、VLM、DeFi、AIスロップ、PQC、レアアース泥、GX-ETS、ctDNA、MRD、POCUS。
-            - 既存収録を確認したADC、DEX、AX、MASHは重複追加していません。AI TRiSM、RWA、JESTA、DePINは今回の採用を見送りました。
+            - 2026-11-01時点の未処理候補 Issue 26件（#229–#275）をすべて精査し、出典と読みを確認した57語を辞書へ追加しました。
+            - 商品、作品、サービス、組織、施設、駅、地名の各カテゴリへ収録しました。候補履歴の重複は見つかりませんでした。
+            - Echo Time（#257）は公式の読みを確認できなかったため保留しました。
 
             ## English
 
-            - Reviewed new-word candidate Issues #231, #240, #251, #256, #261, #268, and #273; added 18 source-backed terms with verified readings to the term dictionaries.
-            - Added: ワークスロップ, GEO, 能動的サイバー防御, オンチェーン金融, SaMD, DTx, eKYC, JPKI, SLM, VLM, DeFi, AIスロップ, PQC, レアアース泥, GX-ETS, ctDNA, MRD, and POCUS.
-            - Did not duplicate ADC, DEX, AX, or MASH, which were already present. Deferred AI TRiSM, RWA, JESTA, and DePIN.
+            - Reviewed all 26 open candidate issues (#229–#275) as of 2026-11-01; added 57 source-backed terms with verified readings.
+            - Added terms to the product, work, service, organization, facility, station, and place dictionaries. No duplicate candidates were found in the checked issue history.
+            - Deferred Echo Time from Issue #257 because an official Japanese reading was not confirmed.
           prerelease: false
           makeLatest: true
           artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./release_zips/dictionary-distribution-manifest.json,./release_zips/DICTIONARY-SHA256SUMS,./release_zips/DICTIONARY-LICENSES.txt
