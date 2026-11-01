@@ -2,7 +2,7 @@
   "admittedPairsByOrigin": {
     "manual": 378778,
     "gemini": 188636,
-    "verified": 182701
+    "verified": 182758
   },
   "categoryGroups": [
     {
@@ -277,9 +277,9 @@
     "person": 274377,
     "character": 6854,
     "mythological_figure": 3436,
-    "place": 45091,
+    "place": 45092,
     "address": 152874,
-    "station": 12759,
+    "station": 12760,
     "facility/religious/shrine": 3824,
     "facility/religious/temple": 4005,
     "facility/religious/church": 368,
@@ -295,20 +295,20 @@
     "facility/public/police_fire": 1299,
     "facility/public/judicial": 137,
     "facility/public/postal": 1626,
-    "facility/cultural/museum": 1192,
+    "facility/cultural/museum": 1193,
     "facility/cultural/art_museum": 378,
     "facility/cultural/library": 750,
     "facility/cultural/memorial": 1183,
     "facility/entertainment/theater": 415,
     "facility/entertainment/cinema": 149,
-    "facility/entertainment/live_venue": 147,
+    "facility/entertainment/live_venue": 148,
     "facility/entertainment/amusement": 141,
     "facility/sports/stadium": 624,
     "facility/sports/gymnasium": 450,
     "facility/sports/golf": 47,
     "facility/sports/ski": 192,
     "facility/sports/aquatic": 11,
-    "facility/commercial/shopping": 1291,
+    "facility/commercial/shopping": 1300,
     "facility/commercial/restaurant": 542,
     "facility/commercial/market": 158,
     "facility/hospitality/hotel": 803,
@@ -335,14 +335,14 @@
     "facility/heritage/historic_residence": 504,
     "facility/residential/housing_complex": 120,
     "facility/residential/condominium": 409,
-    "facility/residential/mixed_use_building": 91,
+    "facility/residential/mixed_use_building": 94,
     "facility/military/base": 348,
     "facility/military/garrison": 16,
     "facility/military/training_ground": 40,
     "transport_route": 4230,
-    "organization": 47516,
+    "organization": 47518,
     "lineage": 2019,
-    "product": 10138,
+    "product": 10163,
     "vehicle": 2580,
     "event/occasion/organized_event": 4440,
     "event/occasion/observance": 903,
@@ -382,8 +382,8 @@
     "work_film": 6506,
     "work_program": 9320,
     "work_book": 7664,
-    "work_game": 3160,
-    "work_music": 10347,
+    "work_game": 3167,
+    "work_music": 10354,
     "work_stage": 571,
     "work_periodical": 1811,
     "work_other": 2689
@@ -393,13 +393,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 779333,
-  "excludedCandidatePairs": 328694,
-  "excludedClassifiedPairs": 322969,
+  "dictionaryRows": 779390,
+  "excludedCandidatePairs": 328695,
+  "excludedClassifiedPairs": 322970,
   "files": {
     "categories.json": "92001c9850b589869528ccb97994ef4ec907f312a5b17f6710d4655b576c466c",
-    "distribution-candidates.tsv.gz": "e7d0da5e97974cc2a5a7901ddfc1ab49d5ba08945de7de8ae300103fd2b21078",
-    "distribution-decisions.tsv.gz": "8a699191c74639b8c613b4ee8a433d6dad808768abca58ff82496b7a6abdd246"
+    "distribution-candidates.tsv.gz": "98c86d7acf26f9c48bbcd8aebd6c938ad69c628f281e139edb0606da21699862",
+    "distribution-decisions.tsv.gz": "baffaa01d3a5f78275fce031f59136c7f5c262986485740780888b4db0e89163"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -551,6 +551,7 @@
     "src/main/classification/reviews/2026-10-30-reviewed-zzz-media-audience-correction.jsonl": "e7dc87ef3c118e3da81a9535ac7ced5f004546095c84b4fc18fccfec81a0bd03",
     "src/main/classification/reviews/2026-10-30-wikidata-event-restorations.jsonl": "2be30b1359e762b19f7d77f29b3a156d8b5b98b380c9750f8a944bd00950fc36",
     "src/main/classification/reviews/2026-11-01-neologism-issues.jsonl": "9451d6fd7da668c867932eb5fcf3e7dc5ef5bf7a3a931b8f9a0511e400b68a13",
+    "src/main/classification/reviews/2026-11-01-open-candidate-issues.jsonl": "7028c4c04fa8b1553c1842505e5b03bb6ea6073d1b3f9800e9c34f78c39bc660",
     "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
   },
   "limitations": [
@@ -74932,6 +74933,7 @@
       "src/main/classification/reviews/2026-10-30-reviewed-zzz-media-audience-correction.jsonl",
       "src/main/classification/reviews/2026-10-30-wikidata-event-restorations.jsonl",
       "src/main/classification/reviews/2026-11-01-neologism-issues.jsonl",
+      "src/main/classification/reviews/2026-11-01-open-candidate-issues.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
     "termAdditions": [
@@ -75189,5 +75191,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 750115
+  "uniqueAdmittedPairs": 750172
 }
