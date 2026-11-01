@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "e7d0da5e97974cc2a5a7901ddfc1ab49d5ba08945de7de8ae300103fd2b21078",
-  "uniquePairs": 838472,
-  "records": 867613,
+  "inputSha256": "98c86d7acf26f9c48bbcd8aebd6c938ad69c628f281e139edb0606da21699862",
+  "uniquePairs": 838529,
+  "records": 867670,
   "categories": [
     {
       "id": "character",
@@ -33,14 +33,14 @@
     {
       "id": "place",
       "name": "地名",
-      "pairs": 43379,
-      "readings": 41367,
-      "records": 45091,
+      "pairs": 43380,
+      "readings": 41368,
+      "records": 45092,
       "pages": 31,
       "recordsByOrigin": {
         "gemini": 15895,
         "manual": 13088,
-        "verified": 16108
+        "verified": 16109
       }
     },
     {
@@ -59,13 +59,13 @@
     {
       "id": "station",
       "name": "駅・停留所",
-      "pairs": 12757,
-      "readings": 12397,
-      "records": 12759,
+      "pairs": 12758,
+      "readings": 12398,
+      "records": 12760,
       "pages": 9,
       "recordsByOrigin": {
         "manual": 6742,
-        "verified": 4901,
+        "verified": 4902,
         "gemini": 1116
       }
     },
@@ -280,14 +280,14 @@
     {
       "id": "facility/cultural/museum",
       "name": "博物館・資料館",
-      "pairs": 1192,
-      "readings": 1192,
-      "records": 1192,
+      "pairs": 1193,
+      "readings": 1193,
+      "records": 1193,
       "pages": 1,
       "recordsByOrigin": {
         "gemini": 701,
         "manual": 470,
-        "verified": 21
+        "verified": 22
       },
       "definition": "博物館、郷土資料館、科学館、展示資料を収集・保存・公開する施設。"
     },
@@ -363,14 +363,14 @@
     {
       "id": "facility/entertainment/live_venue",
       "name": "ライブ・興行会場",
-      "pairs": 147,
-      "readings": 143,
-      "records": 147,
+      "pairs": 148,
+      "readings": 144,
+      "records": 148,
       "pages": 1,
       "recordsByOrigin": {
         "gemini": 97,
         "manual": 49,
-        "verified": 1
+        "verified": 2
       },
       "definition": "ライブハウス、音楽・演芸の興行会場、イベントホールなど観客向け興行施設。"
     },
@@ -457,14 +457,14 @@
     {
       "id": "facility/commercial/shopping",
       "name": "商業施設・百貨店",
-      "pairs": 1291,
-      "readings": 1279,
-      "records": 1291,
+      "pairs": 1300,
+      "readings": 1288,
+      "records": 1300,
       "pages": 1,
       "recordsByOrigin": {
         "gemini": 911,
-        "manual": 365,
-        "verified": 15
+        "verified": 24,
+        "manual": 365
       },
       "definition": "ショッピングモール、百貨店、商店街、専門店ビルなど買物を主目的とする施設。"
     },
@@ -828,14 +828,14 @@
     {
       "id": "facility/residential/mixed_use_building",
       "name": "複合建築物",
-      "pairs": 91,
-      "readings": 91,
-      "records": 91,
+      "pairs": 94,
+      "readings": 94,
+      "records": 94,
       "pages": 1,
       "recordsByOrigin": {
         "gemini": 53,
         "manual": 36,
-        "verified": 2
+        "verified": 5
       },
       "definition": "住宅・商業・業務等の用途が混在し、単一用途が主目的と判断できない複合建築物。"
     },
@@ -895,14 +895,14 @@
     {
       "id": "organization",
       "name": "組織",
-      "pairs": 47437,
-      "readings": 46666,
-      "records": 47516,
+      "pairs": 47439,
+      "readings": 46668,
+      "records": 47518,
       "pages": 35,
       "recordsByOrigin": {
         "gemini": 24629,
         "manual": 21393,
-        "verified": 1494
+        "verified": 1496
       }
     },
     {
@@ -921,14 +921,14 @@
     {
       "id": "product",
       "name": "商品・サービス",
-      "pairs": 10136,
-      "readings": 9912,
-      "records": 10138,
+      "pairs": 10161,
+      "readings": 9936,
+      "records": 10163,
       "pages": 7,
       "recordsByOrigin": {
         "gemini": 5941,
         "manual": 3917,
-        "verified": 280
+        "verified": 305
       }
     },
     {
@@ -1433,27 +1433,27 @@
     {
       "id": "work_game",
       "name": "ゲーム作品",
-      "pairs": 3160,
-      "readings": 3070,
-      "records": 3160,
+      "pairs": 3167,
+      "readings": 3077,
+      "records": 3167,
       "pages": 3,
       "recordsByOrigin": {
         "manual": 2097,
         "gemini": 1012,
-        "verified": 51
+        "verified": 58
       }
     },
     {
       "id": "work_music",
       "name": "音楽作品",
-      "pairs": 10344,
-      "readings": 10211,
-      "records": 10347,
+      "pairs": 10351,
+      "readings": 10218,
+      "records": 10354,
       "pages": 8,
       "recordsByOrigin": {
         "manual": 8786,
         "gemini": 1394,
-        "verified": 167
+        "verified": 174
       }
     },
     {
@@ -1725,7 +1725,7 @@
     }
   ],
   "excluded": {
-    "pairs": 322969,
+    "pairs": 322970,
     "pages": 594
   },
   "specialistInputSha256": "8734dda7bd19c3a1401600a751289a3062c9a2f15c7ea64a409faf40c656e5ec"
