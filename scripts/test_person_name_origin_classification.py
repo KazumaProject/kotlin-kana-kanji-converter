@@ -1,4 +1,5 @@
 import gzip
+import hashlib
 import json
 from pathlib import Path
 import tempfile
@@ -7,6 +8,8 @@ import unittest
 import person_gemini_classification as gemini
 import person_name_origin_classification as origins
 import review_person_classifications as reviews
+import export_person_dictionary_source as exporter
+import sync_person_name_origin_source_review as source_review_sync
 import sync_person_name_origin_type_review as type_review_sync
 
 
@@ -226,6 +229,159 @@ class PersonNameOriginClassificationTest(unittest.TestCase):
                 {'surname_origin_foreign': 1, 'surname_origin_japanese': 2,
                  'personal_name_origin_unconfirmed': 3}, first_sync=True,
             )
+
+    def test_source_origin_review_records_and_hold_release_history_match_mapping(self):
+        mapping, manifest = origins.load_fixed_mapping(ROOT)
+        review_manifest = manifest['source_origin_review']
+        review_path = ROOT / review_manifest['review_path']
+        rows = [json.loads(line) for line in review_path.read_text(encoding='utf-8').splitlines()]
+        self.assertEqual(review_manifest['reviewed_pairs'], 26)
+        self.assertEqual(review_manifest['review_status_counts'], {'applied': 24, 'held': 2})
+        self.assertEqual(review_manifest['hold_releases'], 5)
+        self.assertEqual(len(rows), 26)
+        for row in rows:
+            with self.subTest(surface=row['surface']):
+                if row['status'] == 'applied':
+                    self.assertEqual(mapping[row['candidate_key']],
+                                     (row['source_category_id'], row['target_category_id']))
+                    self.assertTrue(row['evidence'])
+                else:
+                    self.assertIsNone(row['target_category_id'])
+                    self.assertEqual(mapping[row['candidate_key']],
+                                     (row['source_category_id'],
+                                      row['previous_target_category_id']))
+        released = [row for row in rows if any(
+            event.get('event') == 'hold_release' for event in row['decision_history'])]
+        self.assertEqual({row['surface'] for row in released},
+                         {'タティアヌス', '金根哲', '金珍圭', '裴勇俊', '배용준'})
+        self.assertEqual({row['surface'] for row in rows if row['status'] == 'held'},
+                         {'金勇帥', 'ヘームー'})
+
+    def test_hold_release_requires_new_source_and_reason(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            review_path = (root / 'src/main/classification/'
+                           'person-name-origin-source-reviews/review.jsonl')
+            review_path.parent.mkdir(parents=True)
+            reading, surface = 'てすと', 'テスト名'
+            key = origins.candidate_key(reading, surface)
+            source = {'url': 'https://example.org/evidence', 'title': 'Evidence',
+                      'claim': 'Supports this exact name form.', 'source_kind': 'reference'}
+            row = {
+                'candidate_key': key, 'reading': reading, 'surface': surface,
+                'source_category_id': 'personal_name_origin_unconfirmed',
+                'previous_target_category_id': 'personal_name_origin_japanese',
+                'previous_dictionary_category_id': 'personal_name_origin_japanese',
+                'target_category_id': 'personal_name_origin_foreign', 'status': 'applied',
+                'reason': 'New source resolves the earlier hold.',
+                'evidence': [source],
+                'review_basis': 'independent_source_review; AI output is discovery-only',
+                'decision_history': [
+                    {'date': '2026-11-01', 'event': 'hold', 'status': 'held',
+                     'reason': 'Earlier evidence was insufficient.', 'sources': [source]},
+                    {'date': '2026-11-02', 'event': 'hold_release', 'status': 'applied',
+                     'target_category_id': 'personal_name_origin_foreign',
+                     'reason': 'New source resolves the earlier hold.', 'sources': [source]},
+                ],
+            }
+            review_path.write_bytes(origins.json_bytes(row))
+            review_manifest = {
+                'review_path': str(review_path.relative_to(root)),
+                'review_sha256': hashlib.sha256(review_path.read_bytes()).hexdigest(),
+                'reviewed_pairs': 1,
+                'review_candidate_keys_sha256': hashlib.sha256(key.encode('ascii')).hexdigest(),
+                'review_status_counts': {'applied': 1},
+                'review_target_pair_counts': {'personal_name_origin_foreign': 1},
+                'hold_releases': 1,
+            }
+            mapping = {key: ('personal_name_origin_unconfirmed',
+                             'personal_name_origin_foreign')}
+            with self.assertRaisesRegex(ValueError, 'new cited evidence'):
+                origins.validate_manual_source_origin_review(root, mapping, review_manifest)
+
+    def test_name_origin_mapping_changes_only_the_origin_category(self):
+        reading, surface = 'かな', '表記'
+        key = origins.candidate_key(reading, surface)
+        unrelated_key = origins.candidate_key('やまだ', '山田')
+        tags = {'actor'}
+        final = {
+            key: (reading, surface, 'personal_name_origin_unconfirmed', tags),
+            unrelated_key: ('やまだ', '山田', 'writer', {'historian'}),
+        }
+        mapping = {key: ('personal_name_origin_unconfirmed',
+                         'personal_name_origin_foreign')}
+        changed = exporter.apply_name_origin_mapping(final, mapping)
+        self.assertEqual(changed, 1)
+        self.assertEqual(final[key], (reading, surface, 'personal_name_origin_foreign', tags))
+        self.assertEqual(final[key][3], {'actor'})
+        self.assertEqual(final[unrelated_key],
+                         ('やまだ', '山田', 'writer', {'historian'}))
+
+    def test_source_origin_sync_preserves_unrelated_membership_and_all_row_fields(self):
+        reading, surface = 'かな', '表記'
+        key = origins.candidate_key(reading, surface)
+        mapping = {key: ('personal_name_origin_unconfirmed',
+                         'personal_name_origin_foreign')}
+        review = {
+            'candidate_key': key,
+            'reading': reading,
+            'surface': surface,
+            'source_category_id': 'personal_name_origin_unconfirmed',
+            'previous_dictionary_category_id': 'personal_name_origin_japanese',
+            'target_category_id': 'personal_name_origin_foreign',
+            'status': 'applied',
+        }
+        rows = [
+            ['personal_name_origin_japanese', reading, '1851', '1851', '8400', surface, '野球'],
+            ['actor', reading, '1851', '1851', '8400', surface, '俳優'],
+            ['writer', 'やまだ', '1', '2', '8000', '山田', ''],
+        ]
+        result, counts = source_review_sync.apply_source_origin_review(
+            rows, mapping, [review], {'actor': 1, 'writer': 2,
+                                      'personal_name_origin_japanese': 3,
+                                      'personal_name_origin_foreign': 4})
+        self.assertIn(['personal_name_origin_foreign', reading, '1851', '1851',
+                       '8400', surface, '野球'], result)
+        self.assertIn(['actor', reading, '1851', '1851', '8400', surface, '俳優'], result)
+        self.assertIn(['writer', 'やまだ', '1', '2', '8000', '山田', ''], result)
+        self.assertEqual(counts['changed_pairs'], 1)
+        self.assertEqual(counts['changed_rows'], 1)
+        self.assertEqual(counts['records_before'], counts['records_after'])
+
+    def test_review_queues_keep_item_counts_reanalysis_and_row_fingerprints(self):
+        queue_dir = ROOT / 'src/main/classification/person-name-origin-review-queues'
+        manifest = json.loads((queue_dir / 'manifest.json').read_text(encoding='utf-8'))
+        expected = {
+            'japanese_to_foreign_ai': 6641,
+            'unconfirmed_to_foreign_ai': 8908,
+            'dual_placement_227': 227,
+            'unresolved_238': 238,
+            'non_person_51': 51,
+        }
+        self.assertEqual(manifest['queue_counts'], expected)
+        self.assertEqual(manifest['reanalysis_present'], {
+            'japanese_to_foreign_ai': 0,
+            'unconfirmed_to_foreign_ai': 0,
+            'dual_placement_227': 227,
+            'unresolved_238': 238,
+            'non_person_51': 51,
+        })
+        for name, count in expected.items():
+            path = queue_dir / f'{name}.jsonl.gz'
+            self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(),
+                             manifest['queue_sha256'][name])
+            keys = set()
+            with gzip.open(path, 'rt', encoding='utf-8') as stream:
+                for line in stream:
+                    row = json.loads(line)
+                    keys.add(row['candidate_key'])
+                    self.assertTrue(row['investigation_required'])
+                    self.assertTrue(row['acceptance_criteria'])
+                    self.assertEqual(row['review_status'], 'pending_item_level_source_review')
+                    self.assertTrue(row['source_row_fingerprints'])
+                    if name in {'japanese_to_foreign_ai', 'unconfirmed_to_foreign_ai'}:
+                        self.assertFalse(row['reanalysis']['present'])
+            self.assertEqual(len(keys), count)
 
 
 if __name__ == '__main__':
