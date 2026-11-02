@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "98c86d7acf26f9c48bbcd8aebd6c938ad69c628f281e139edb0606da21699862",
+  "inputSha256": "763463bdebcfa7dfa44ce244081ef307063f8ce4188bdec81344f64ec892aef8",
   "uniquePairs": 838529,
-  "records": 867670,
+  "records": 867669,
   "categories": [
     {
       "id": "character",
@@ -895,14 +895,14 @@
     {
       "id": "organization",
       "name": "組織",
-      "pairs": 47439,
-      "readings": 46668,
-      "records": 47518,
+      "pairs": 47440,
+      "readings": 46669,
+      "records": 47519,
       "pages": 35,
       "recordsByOrigin": {
         "gemini": 24629,
-        "manual": 21393,
-        "verified": 1496
+        "manual": 21392,
+        "verified": 1498
       }
     },
     {
@@ -1523,8 +1523,8 @@
     {
       "id": "surname_origin_unconfirmed",
       "name": "姓・名字（由来未確認）",
-      "records": 24178,
-      "pairs": 24035,
+      "records": 24176,
+      "pairs": 24033,
       "pages": 17
     },
     {
@@ -1537,8 +1537,8 @@
     {
       "id": "personal_name_origin_unconfirmed",
       "name": "人名・姓名（由来未確認）",
-      "records": 93663,
-      "pairs": 92889,
+      "records": 93661,
+      "pairs": 92887,
       "pages": 62
     },
     {
@@ -1684,8 +1684,8 @@
     {
       "id": "surname_origin_japanese",
       "name": "姓・名字（日本由来）",
-      "records": 24973,
-      "pairs": 24828,
+      "records": 24969,
+      "pairs": 24824,
       "pages": 17
     },
     {
@@ -1712,15 +1712,15 @@
     {
       "id": "personal_name_origin_japanese",
       "name": "人名・姓名（日本由来）",
-      "records": 74590,
-      "pairs": 73991,
+      "records": 74593,
+      "pairs": 73994,
       "pages": 50
     },
     {
       "id": "personal_name_origin_foreign",
       "name": "人名・姓名（海外由来）",
-      "records": 2413,
-      "pairs": 2408,
+      "records": 2416,
+      "pairs": 2411,
       "pages": 2
     }
   ],

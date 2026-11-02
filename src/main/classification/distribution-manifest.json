@@ -1,8 +1,8 @@
 {
   "admittedPairsByOrigin": {
-    "manual": 378778,
+    "manual": 378776,
     "gemini": 188636,
-    "verified": 182758
+    "verified": 182760
   },
   "categoryGroups": [
     {
@@ -274,7 +274,7 @@
     }
   ],
   "categoryRows": {
-    "person": 274377,
+    "person": 274375,
     "character": 6854,
     "mythological_figure": 3436,
     "place": 45092,
@@ -340,7 +340,7 @@
     "facility/military/garrison": 16,
     "facility/military/training_ground": 40,
     "transport_route": 4230,
-    "organization": 47518,
+    "organization": 47519,
     "lineage": 2019,
     "product": 10163,
     "vehicle": 2580,
@@ -393,13 +393,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 779390,
+  "dictionaryRows": 779389,
   "excludedCandidatePairs": 328695,
   "excludedClassifiedPairs": 322970,
   "files": {
     "categories.json": "92001c9850b589869528ccb97994ef4ec907f312a5b17f6710d4655b576c466c",
-    "distribution-candidates.tsv.gz": "98c86d7acf26f9c48bbcd8aebd6c938ad69c628f281e139edb0606da21699862",
-    "distribution-decisions.tsv.gz": "baffaa01d3a5f78275fce031f59136c7f5c262986485740780888b4db0e89163"
+    "distribution-candidates.tsv.gz": "763463bdebcfa7dfa44ce244081ef307063f8ce4188bdec81344f64ec892aef8",
+    "distribution-decisions.tsv.gz": "5959ff70ba82bb24bef310202bf15ef088dba6cfb7d69be284e7fc250f60ff2c"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -552,6 +552,7 @@
     "src/main/classification/reviews/2026-10-30-wikidata-event-restorations.jsonl": "2be30b1359e762b19f7d77f29b3a156d8b5b98b380c9750f8a944bd00950fc36",
     "src/main/classification/reviews/2026-11-01-neologism-issues.jsonl": "9451d6fd7da668c867932eb5fcf3e7dc5ef5bf7a3a931b8f9a0511e400b68a13",
     "src/main/classification/reviews/2026-11-01-open-candidate-issues.jsonl": "7028c4c04fa8b1553c1842505e5b03bb6ea6073d1b3f9800e9c34f78c39bc660",
+    "src/main/classification/reviews/2026-11-02-person-unit-type-corrections.jsonl": "1dd402f6d208d861da34affa77cd8b4f584b3b69f15061fb2c12aa5bbaff3ef4",
     "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
   },
   "limitations": [
@@ -74934,6 +74935,7 @@
       "src/main/classification/reviews/2026-10-30-wikidata-event-restorations.jsonl",
       "src/main/classification/reviews/2026-11-01-neologism-issues.jsonl",
       "src/main/classification/reviews/2026-11-01-open-candidate-issues.jsonl",
+      "src/main/classification/reviews/2026-11-02-person-unit-type-corrections.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
     "termAdditions": [
