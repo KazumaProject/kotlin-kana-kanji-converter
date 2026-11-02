@@ -1,0 +1,99 @@
+name: Temporary issue dictionary specialist snapshot repair
+on:
+  push:
+    branches:
+      - codex/bootstrap-issue-specialist-refreeze-2026-11-02
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout repair coordinator
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Checkout pinned Mozc
+        uses: actions/checkout@v4
+        with:
+          repository: google/mozc
+          ref: c4b2aef7c65e61be394bacadaec200eb5b97f91c
+          path: mozc-src
+          persist-credentials: false
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Refresh specialist inventory using the production Kotlin exporter
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          exists=0
+          for attempt in $(seq 1 180); do
+            if git ls-remote --exit-code --heads origin 'refs/heads/codex/review-issue-terms-2026-11-02' >/dev/null; then
+              exists=1
+              break
+            fi
+            echo "Issue review branch is not available yet (check $attempt/180)"
+            sleep 15
+          done
+          if [[ "$exists" != 1 ]]; then
+            echo 'Issue review branch was not created; specialist repair will not run' >&2
+            exit 1
+          fi
+          git fetch origin 'codex/review-issue-terms-2026-11-02'
+          worktree="$RUNNER_TEMP/pr285-specialist-worktree"
+          git worktree add --detach "$worktree" "origin/codex/review-issue-terms-2026-11-02"
+          cd "$worktree"
+          git switch -c 'codex/runner-specialist-refresh'
+          mkdir -p src/main/resources
+          for file in id.def connection_single_column.txt suffix.txt; do
+            cp "$GITHUB_WORKSPACE/mozc-src/src/data/dictionary_oss/$file" "src/main/resources/$file"
+          done
+          for i in $(seq -w 00 09); do
+            cp "$GITHUB_WORKSPACE/mozc-src/src/data/dictionary_oss/dictionary$i.txt" "src/main/resources/dictionary$i.txt"
+          done
+          cp "$GITHUB_WORKSPACE/mozc-src/src/data/single_kanji/single_kanji.tsv" src/main/resources/single_kanji.tsv
+          cp "$GITHUB_WORKSPACE/mozc-src/src/data/zero_query/zero_query.def" src/main/resources/zero_query.def
+          cp "$GITHUB_WORKSPACE/mozc-src/src/data/zero_query/zero_query_number.def" src/main/resources/zero_query_number.def
+          cp "$GITHUB_WORKSPACE/mozc-src/src/data/emoji/emoji_data.tsv" src/main/resources/mozc_emoji_data.tsv
+          cp "$GITHUB_WORKSPACE/mozc-src/src/data/emoticon/categorized.tsv" src/main/resources/mozc_emoticon_categorized.tsv
+          cp "$GITHUB_WORKSPACE/mozc-src/src/data/symbol/symbol.tsv" src/main/resources/mozc_symbol.tsv
+          corpus='KazumaProject/JapaneseCorpus'
+          version="$(gh api "repos/$corpus/releases/latest" --jq '.tag_name')"
+          downloads="$RUNNER_TEMP/japanese-corpus"
+          mkdir -p "$downloads"
+          gh release download "$version" --repo "$corpus" --pattern mozc-english-reading-unigram-00000.txt.zst --pattern english-dictionary-manifest.json --pattern ENGLISH-DICTIONARY-SHA256SUMS --dir "$downloads"
+          asset="$downloads/mozc-english-reading-unigram-00000.txt.zst"
+          expected="$(awk '$2=="mozc-english-reading-unigram-00000.txt.zst" || $2=="*mozc-english-reading-unigram-00000.txt.zst"{print $1;exit}' "$downloads/ENGLISH-DICTIONARY-SHA256SUMS")"
+          actual="$(sha256sum "$asset" | awk '{print $1}')"
+          test "$actual" = "$expected"
+          jq -e --arg sha "$expected" --arg asset mozc-english-reading-unigram-00000.txt.zst '.parameters.dictionary_kind == "direct-loanword" and (.assets[] | select(.name == $asset) | .sha256) == $sha' "$downloads/english-dictionary-manifest.json" >/dev/null
+          zstd -d --stdout "$asset" > src/main/resources/english-dictionary.txt
+          test -s src/main/resources/english-dictionary.txt
+          echo 'Export updated dictionary inventory and regenerate frozen specialist selection'
+          ./gradlew exportExistingDictionaryInventory
+          python3 scripts/specialist_distribution.py freeze
+          python3 scripts/specialist_distribution.py verify
+          python3 scripts/write_classified_dictionary_catalog.py --preserve-excluded-pages
+          python3 scripts/write_classified_dictionary_catalog.py --check
+          python3 -m unittest discover -s scripts -p 'test_specialist_distribution.py'
+          git diff --check
+          git add -- src/main/specialist/distribution-candidates.tsv.gz \
+            src/main/specialist/provenance.jsonl.gz \
+            src/main/specialist/distribution-manifest.json \
+            docs/classified-dictionary-catalog
+          git diff --cached --stat
+          git diff --cached --quiet && { echo 'Specialist snapshot did not change' >&2; exit 1; }
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m '修正済み分類に合わせ専門辞書の在庫と固定スナップショットを同期'
+          git push origin 'HEAD:refs/heads/codex/review-issue-terms-2026-11-02'
+          echo 'Specialist snapshot pushed; a GitHub App commit will trigger full PR CI'
+          cd "$GITHUB_WORKSPACE"
+          git worktree remove --force "$worktree"
+          git push origin --delete 'codex/bootstrap-issue-specialist-refreeze-2026-11-02' || echo 'Could not delete temporary coordinator branch'
