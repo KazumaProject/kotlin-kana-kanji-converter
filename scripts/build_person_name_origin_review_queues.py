@@ -61,6 +61,18 @@ def stable_json(value):
                        separators=(',', ':')) + '\n').encode('utf-8')
 
 
+def word_list_bytes(rows):
+    """Render a small, GitHub-readable reading/surface view of a review queue."""
+    lines = ['reading (読み)\tsurface (表記)\n']
+    for row in sorted(rows, key=lambda item: (item['reading'], item['surface'])):
+        reading = row['reading']
+        surface = row['surface']
+        if any(char in reading or char in surface for char in ('\t', '\r', '\n')):
+            raise ValueError('Reading and surface must not contain TSV delimiters')
+        lines.append(f'{reading}\t{surface}\n')
+    return ''.join(lines).encode('utf-8')
+
+
 def sha256(path):
     digest = hashlib.sha256()
     with Path(path).open('rb') as stream:
@@ -156,6 +168,7 @@ def build(ledger_path, output_dir, baseline_sha256):
         'source_ledger_sha256': sha256(ledger_path),
         'queue_counts': {},
         'queue_sha256': {},
+        'word_list_sha256': {},
         'reanalysis_present': {},
     }
     for queue_name, rows in queues.items():
@@ -168,8 +181,11 @@ def build(ledger_path, output_dir, baseline_sha256):
             with gzip.GzipFile(filename='', mode='wb', fileobj=raw, mtime=0) as stream:
                 for row in rows:
                     stream.write(stable_json(row))
+        word_list = output_dir / f'{queue_name}.words.tsv'
+        word_list.write_bytes(word_list_bytes(rows))
         manifest['queue_counts'][queue_name] = len(rows)
         manifest['queue_sha256'][queue_name] = sha256(destination)
+        manifest['word_list_sha256'][queue_name] = sha256(word_list)
         manifest['reanalysis_present'][queue_name] = sum(
             row['reanalysis']['present'] for row in rows)
     (output_dir / 'manifest.json').write_bytes(stable_json(manifest))

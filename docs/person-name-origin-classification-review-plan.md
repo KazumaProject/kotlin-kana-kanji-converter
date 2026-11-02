@@ -18,7 +18,7 @@
 | 未解決候補 | 238 | 238 | 項目ごとに人名かどうか、型、由来根拠を調べる |
 | 非人名候補 | 51 | 51 | 項目ごとに対象の実体と人名辞書からの除外根拠を調べる |
 
-海外由来へ移す2つのAIキューには、この引き継ぎで再解析結果がありません。各JSONL.GZ行には読み・表記・候補キー・現在の固定分類・元行フィンガープリント・AI提案・再解析の有無・調査要件・採用条件があります。状態はすべて `pending_item_level_source_review` です。AI候補やキュー全体を誤分類数として数えず、各項目に独立した根拠が得られるまで分類を変更しません。
+海外由来へ移す2つのAIキューには、この引き継ぎで再解析結果がありません。各JSONL.GZ行には読み・表記・候補キー・現在の固定分類・元行フィンガープリント・AI提案・再解析の有無・調査要件・採用条件があります。各キューにはGitHub上で直接読める `*.words.tsv` も生成します。これは読みと表記のみを収めた一覧で、詳細はJSONL.GZを参照します。状態はすべて `pending_item_level_source_review` です。AI候補やキュー全体を誤分類数として数えず、各項目に独立した根拠が得られるまで分類を変更しません。
 
 ### 判定と変更のルール
 
@@ -30,7 +30,7 @@
 
 ### 再生成と検証
 
-ワークキューのビルダーは、展開済みの引き継ぎ台帳を受け取ります。ZIP、全件のdry-run、展開JSONLはリポジトリに含めません。出力するのは項目単位で圧縮した作業一覧、少数の出典レビュー、マニフェストです。
+ワークキューのビルダーは、展開済みの引き継ぎ台帳を受け取ります。ZIP、全件のdry-run、展開JSONLはリポジトリに含めません。出力するのは項目単位で圧縮した詳細作業一覧、読みと表記だけの軽量TSV表示、少数の出典レビュー、マニフェストです。TSV表示は詳細キューから決定的に再生成され、ハッシュをマニフェストで確認できます。
 
 根拠付きの分類訂正を辞書候補へ同期するには `python3 scripts/sync_person_name_origin_source_review.py` を実行します。この処理はレビュー済み行のカテゴリだけを変更し、無関係な同一表記のカテゴリ所属と他の全列を維持します。辞書アーティファクトのハッシュ、行数、変更組数、変更行数、保留数を分類マニフェストに記録します。
 
@@ -52,7 +52,7 @@ The remaining improvement work stays in these item-level queues:
 | Unresolved candidates | 238 | 238 | Research personhood, name type, and origin evidence per item |
 | Non-person candidates | 51 | 51 | Research the exact entity and evidence for removing its person-name assignment per item |
 
-The handoff has no reanalysis results for either AI queue that proposes foreign origin. Each JSONL.GZ row records the reading, surface, candidate key, current fixed classification, source-row fingerprints, AI proposal, reanalysis presence, required investigation, and acceptance criteria. Every row remains `pending_item_level_source_review`. Do not count model proposals or a queue as confirmed errors, and do not change a classification without independent evidence for that exact form and naming convention.
+The handoff has no reanalysis results for either AI queue that proposes foreign origin. Each JSONL.GZ row records the reading, surface, candidate key, current fixed classification, source-row fingerprints, AI proposal, reanalysis presence, required investigation, and acceptance criteria. Each queue also has a GitHub-readable `*.words.tsv` view with only readings and surfaces; use the JSONL.GZ for the detailed review fields. Every row remains `pending_item_level_source_review`. Do not count model proposals or a queue as confirmed errors, and do not change a classification without independent evidence for that exact form and naming convention.
 
 ### Decision and change rules
 
@@ -64,6 +64,6 @@ The handoff has no reanalysis results for either AI queue that proposes foreign 
 
 ### Regeneration and validation
 
-The worklist builder reads the expanded handoff ledger. The ZIPs, full dry-run ledger, and expanded JSONL files stay outside Git. The repository contains compact item-level queues, the small source-review ledger, and their manifests.
+The worklist builder reads the expanded handoff ledger. The ZIPs, full dry-run ledger, and expanded JSONL files stay outside Git. The repository contains compact item-level queues, deterministic TSV views containing only readings and surfaces, the small source-review ledger, and their manifests. The manifest records hashes for both the detailed queues and their word-list views.
 
 Run `python3 scripts/sync_person_name_origin_source_review.py` to apply cited category corrections to the dictionary candidates. It changes only the category column for reviewed rows, preserving unrelated category assignments for the same form and every other field. The classification manifest records the dictionary artifact hash, row counts, changed pairs, changed rows, and held pairs.
