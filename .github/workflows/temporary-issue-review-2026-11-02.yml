@@ -1,0 +1,145 @@
+name: Temporary main-based worktree dictionary issue review
+on:
+  push:
+    branches:
+      - codex/bootstrap-issue-terms-2026-11-02
+permissions:
+  contents: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Checkout coordinator
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Checkout pinned Mozc for verified dictionary POS
+        uses: actions/checkout@v4
+        with:
+          repository: google/mozc
+          ref: c4b2aef7c65e61be394bacadaec200eb5b97f91c
+          path: mozc-src
+          persist-credentials: false
+      - name: Review issue candidates and build frozen distribution in main worktree
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          echo 'Checking the prerequisite PR merges before starting the main-based worktree'
+          ready=0
+          for attempt in $(seq 1 90); do
+            if [[ "$(gh api repos/KazumaProject/kotlin-kana-kanji-converter/pulls/285 --jq .merged)" == "true" ]]; then
+              ready=1
+              break
+            fi
+            echo "PR #285 not merged yet (check $attempt/90)"
+            sleep 20
+          done
+          if [[ "$ready" != 1 ]]; then
+            echo 'PR #285 did not merge; no dictionary changes were made' >&2
+            exit 1
+          fi
+          git fetch origin main
+          worktree="$RUNNER_TEMP/dictionary-review-worktree"
+          git worktree add -b codex/review-issue-terms-2026-11-02 "$worktree" origin/main
+          cd "$worktree"
+          cp "$GITHUB_WORKSPACE/mozc-src/src/data/dictionary_oss/id.def" src/main/resources/id.def
+          python3 - <<'PY'
+          from pathlib import Path
+          import gzip
+          import json
+          import sys
+          sys.path.insert(0, 'scripts')
+          import classified_distribution as d
+          
+          data=json.loads(r'''[{"issue":277,"reading":"くらいむらいと","surface":"CRYMELIGHT","category":"work_game","source":"https://www.cs.furyu.jp/crymelight/","note":"発売元の公式製品情報が「クライムライト／CRYMELIGHT」を併記。"},{"issue":278,"reading":"そのぼ","surface":"SonoVo","category":"organization","source":"https://ntt-sonority.com/blogs/news/260602","note":"運営元が「SonoVo（ソノボ）」と公式ブランド表記・読みを明示。"},{"issue":279,"reading":"れいりあかすがばる","surface":"レイリア春日原","category":"facility/commercial/shopping","source":"https://rairia-kasugabaru.com/","note":"施設公式の和文名とRAIRIA Kasugabaru表記で地名の読みを照合。全体ひらがなは直接掲載されていない。"},{"issue":280,"reading":"しーばむ","surface":"CBAM","category":"term/specialist/law_politics","source":"https://www.qualikeep.com/blog/cbam-tanso-kokkyo-chosei","note":"「CBAM（シーバム）」という読みを専門記事で照合。EU公式資料で制度名称を別途確認。"},{"issue":280,"reading":"さふ","surface":"SAF","category":"term/specialist/transport_safety_defense","source":"https://www.ntt-f.co.jp/column/0232.html","note":"事業者の解説が「SAF（サフ）」を明示。航空燃料の専門略語で短い読みの競合に注意。"},{"issue":280,"reading":"しーしーえす","surface":"CCS","category":"term/specialist/earth_environment_resources","source":"https://www.nri.com/jp/knowledge/glossary/ccs_ccus.html","note":"NRI用語集がCCS（シーシーエス）を明示。CCUSとの区別を維持。"},{"issue":280,"reading":"くらいおせいけん","surface":"クライオ生検","category":"term/specialist/chemistry_life_sciences","source":"https://www.haigan.gr.jp/public/guidebook/2024/2024/Q6.html","note":"日本肺癌学会の説明にクライオ生検の標準表記と生検の読みを確認。"},{"issue":281,"reading":"みらいぶろーどらいばー","surface":"MIRAI BlowDry BAR","category":"product","source":"https://prtimes.jp/main/html/rd/p/000000027.000089743.html","note":"メーカー公式発表の商品名欄で英字綴りとカタカナ読みを直接対応。"},{"issue":284,"reading":"ふぁいあーえむぶれむばんしせんこう","surface":"ファイアーエムブレム 万紫千紅","category":"work_game","source":"https://www.nintendo.com/jp/topics/article/e3898bff-83d3-422a-a97d-be5ce56b6fac","note":"任天堂公式で万紫千紅（ばんしせんこう）の読みと作品タイトルを明示。"},{"issue":284,"reading":"まふつしん","surface":"真経津晨","category":"character","source":"https://junketbank-anime.com/news/72/","note":"制作委員会公式の「真経津 晨（Shin Mafutsu）」から姓名順の読みを対応。原文の続け書きも照合。"},{"issue":284,"reading":"みたらいあきら","surface":"御手洗暉","category":"character","source":"https://junketbank-anime.com/news/72/","note":"制作委員会公式の「御手洗 暉（Akira Mitarai）」から姓名順の読みを対応。原文の続け書きも照合。"},{"issue":286,"reading":"にゅーと","surface":"NEWT","category":"product","source":"https://www.reiwatravel.co.jp/product","note":"運営元が旅行予約サービスNEWT（ニュート）の表記と読みを直接対応。"},{"issue":286,"reading":"ねすかふぇ","surface":"NESCAFÉ","category":"product","source":"https://www.nestle.co.jp/media/pressreleases/20261001_nescafe_1","note":"ネスレ公式が新アプリNESCAFÉ（ネスカフェ）の表記と読みを明示。アクセント付きÉを保持。"},{"issue":286,"reading":"ぽっぷまーと","surface":"POP MART","category":"organization","source":"https://prtimes.jp/main/html/rd/p/000000043.000062707.html","note":"運営企業の公式発表が「POP MART（ポップマート）」と表記。店舗名や法人名は含めない。"},{"issue":287,"reading":"じーえむおーありーなさいたま","surface":"GMOアリーナさいたま","category":"facility/sports/gymnasium","source":"https://www.saitama-arena.co.jp/news/wp-content/uploads/sites/3/2026/05/04_salessheet.pdf","note":"施設運営者の公式資料が施設愛称および読みを明記。旧法的施設名と区別。"},{"issue":287,"reading":"やんまーはなさかすたじあむ","surface":"YANMAR HANASAKA STADIUM","category":"facility/sports/stadium","source":"https://www.cerezo.jp/news/2026-0306-1100/","note":"ホームクラブ公式が新愛称とカタカナ読みを併記。半角スペースを保持。"}]''')
+          root=Path('.')
+          existing={}
+          with gzip.open(root/'src/main/classification/distribution-decisions.tsv.gz','rt',encoding='utf-8') as f:
+              for line in f:
+                  fields=line.rstrip('\n').split('\t')
+                  existing[(fields[0],fields[1])]='classification:'+fields[4]
+          with gzip.open(root/'src/main/specialist/distribution-candidates.tsv.gz','rt',encoding='utf-8') as f:
+              for line in f:
+                  fields=line.rstrip('\n').split('\t')
+                  if len(fields)>=6:
+                      existing.setdefault((fields[1],fields[5]),'specialist dictionary')
+          entries=[]
+          skipped=[]
+          for word in data:
+              pair=(word['reading'],word['surface'])
+              if pair in existing:
+                  skipped.append((word,existing[pair]))
+                  continue
+              cats=[word['category']]
+              entries.append({
+                  'action':'add',
+                  'reading':word['reading'],
+                  'surface':word['surface'],
+                  'candidate_key':d.key(*pair),
+                  'baseline':None,
+                  'categories':cats,
+                  'reason':f"Issue #{word['issue']} の候補を分類済み辞書・専門辞書と再照合。標準表記・読み・長期使用価値を確認し採用。候補順位はIME実機で別途検証。",
+                  'added_record':{'left_id':1851,'right_id':1851,'cost':9400 if word['reading'] in ('さふ','にゅーと','そのぼ','ねすかふぇ','ぽっぷまーと') else 8400},
+                  'evidence':{
+                      'kind':'independent_source',
+                      'reading':word['reading'],
+                      'surface':word['surface'],
+                      'categories':cats,
+                      'reference':word['source'],
+                      'issue_url':f"https://github.com/KazumaProject/kotlin-kana-kanji-converter/issues/{word['issue']}",
+                      'source_section':word['note'],
+                  }
+              })
+          if not entries:
+              raise SystemExit('No genuinely new reviewed pairs remain; refusing an empty change')
+          reviews=root/'src/main/classification/reviews/2026-11-02-candidate-issues.jsonl'
+          reviews.write_text(''.join(json.dumps(e,ensure_ascii=False,sort_keys=True)+'\n' for e in entries),encoding='utf-8')
+          docs=['# 2026-11-02 辞書追加候補レビュー','',
+                '2026-11-01〜02の新規候補Issue #277, #278, #279, #280, #281, #284, #286, #287 の16組を対象に、既存の分類辞書と専門辞書の読み・表記を完全一致照合。過去の候補は2026-11-01以前のレビュー台帳に記録済み。','',
+                f'- 追加: **{len(entries)}組**',
+                f'- 既存辞書と重複（追加しない）: **{len(skipped)}組**',
+                '- 追加語は既存の品詞ID 1851を使用。短い読みの候補はコストを高めに設定。','- 除外・既存・登録不能の語を推測で上書きしない。',
+                '- 本レビューは実際のJapaneseKeyboardの変換順位・学習挙動を保証しない。','','## 採用候補','',
+                '| Issue | 読み | 正式表記 | 辞書カテゴリ | 根拠 |',
+                '|---|---|---|---|---|']
+          for e in entries:
+              w=next(w for w in data if (w['reading'],w['surface'])==(e['reading'],e['surface']))
+              docs.append(f"| [#{w['issue']}](https://github.com/KazumaProject/kotlin-kana-kanji-converter/issues/{w['issue']}) | `{w['reading']}` | `{w['surface']}` | `{w['category']}` | [一次資料]({w['source']}) |")
+          if skipped:
+              docs.extend(['','## 既収録（追加見送り）',''])
+              for w,why in skipped:
+                  docs.append(f"- [#{w['issue']}](https://github.com/KazumaProject/kotlin-kana-kanji-converter/issues/{w['issue']}): `{w['reading']}` → `{w['surface']}` ({why})")
+          docs.extend(['','## 検証範囲','',
+                       '固定辞書への反映と出典台帳、カテゴリ別カタログ、Pythonの分類回帰テスト、Pull Request CIにより検証する。未確認の同義語・ブランド派生語・略語の別読みは登録しない。',
+                       ''])
+          (root/'docs/dictionary-candidate-issue-review-2026-11-02.md').write_text('\n'.join(docs),encoding='utf-8')
+          print(f'Candidate issue audit: {len(data)} inspected, {len(entries)} additions, {len(skipped)} exact duplicates')
+          PY
+          python3 scripts/classified_distribution.py apply-reviews
+          python3 scripts/classified_distribution.py apply-reviews --commit
+          python3 scripts/classified_distribution.py verify
+          python3 scripts/write_classified_dictionary_catalog.py --preserve-excluded-pages
+          python3 scripts/write_classified_dictionary_catalog.py --check
+          python3 -m unittest discover -s scripts -p 'test_classification_reviews.py'
+          python3 -m unittest discover -s scripts -p 'test_classified_distribution.py'
+          git diff --check
+          git add -- src/main/classification/reviews/2026-11-02-candidate-issues.jsonl \
+            src/main/classification/distribution-decisions.tsv.gz \
+            src/main/classification/distribution-candidates.tsv.gz \
+            src/main/classification/distribution-manifest.json \
+            docs/dictionary-candidate-issue-review-2026-11-02.md \
+            docs/classified-dictionary-catalog
+          git diff --cached --stat
+          git diff --cached --quiet && { echo 'No checked changes to commit' >&2; exit 1; }
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m '辞書追加候補16組を審査し分類辞書に反映'
+          git push origin "HEAD:refs/heads/codex/review-issue-terms-2026-11-02"
+          echo 'Clean up temporary runner worktree'
+          cd "$GITHUB_WORKSPACE"
+          git worktree remove "$worktree"
+          git push origin --delete "codex/bootstrap-issue-terms-2026-11-02" || echo 'Bootstrap branch cleanup was not permitted; remove it after PR validation'
+          echo 'The main-based review branch is ready for PR'
