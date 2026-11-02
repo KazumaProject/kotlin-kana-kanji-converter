@@ -235,10 +235,10 @@ class PersonNameOriginClassificationTest(unittest.TestCase):
         review_manifest = manifest['source_origin_review']
         review_path = ROOT / review_manifest['review_path']
         rows = [json.loads(line) for line in review_path.read_text(encoding='utf-8').splitlines()]
-        self.assertEqual(review_manifest['reviewed_pairs'], 26)
-        self.assertEqual(review_manifest['review_status_counts'], {'applied': 24, 'held': 2})
-        self.assertEqual(review_manifest['hold_releases'], 5)
-        self.assertEqual(len(rows), 26)
+        self.assertEqual(review_manifest['reviewed_pairs'], 48)
+        self.assertEqual(review_manifest['review_status_counts'], {'applied': 48})
+        self.assertEqual(review_manifest['hold_releases'], 7)
+        self.assertEqual(len(rows), 48)
         for row in rows:
             with self.subTest(surface=row['surface']):
                 if row['status'] == 'applied':
@@ -253,9 +253,9 @@ class PersonNameOriginClassificationTest(unittest.TestCase):
         released = [row for row in rows if any(
             event.get('event') == 'hold_release' for event in row['decision_history'])]
         self.assertEqual({row['surface'] for row in released},
-                         {'タティアヌス', '金根哲', '金珍圭', '裴勇俊', '배용준'})
+                         {'タティアヌス', '金根哲', '金珍圭', '裴勇俊', '배용준', '金勇帥', 'ヘームー'})
         self.assertEqual({row['surface'] for row in rows if row['status'] == 'held'},
-                         {'金勇帥', 'ヘームー'})
+                         set())
 
     def test_hold_release_requires_new_source_and_reason(self):
         with tempfile.TemporaryDirectory() as directory:
