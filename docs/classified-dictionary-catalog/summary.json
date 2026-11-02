@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "763463bdebcfa7dfa44ce244081ef307063f8ce4188bdec81344f64ec892aef8",
-  "uniquePairs": 838529,
-  "records": 867669,
+  "inputSha256": "891225642ce52cf23ad588bc40f81edceb89238f4597338a821b78e0a8d363d0",
+  "uniquePairs": 838543,
+  "records": 867685,
   "categories": [
     {
       "id": "character",
       "name": "架空キャラクター",
-      "pairs": 6782,
-      "readings": 6711,
-      "records": 6854,
+      "pairs": 6784,
+      "readings": 6713,
+      "records": 6856,
       "pages": 6,
       "recordsByOrigin": {
         "gemini": 6269,
         "manual": 583,
-        "verified": 2
+        "verified": 4
       }
     },
     {
@@ -391,13 +391,14 @@
     {
       "id": "facility/sports/stadium",
       "name": "球場・競技場",
-      "pairs": 624,
-      "readings": 619,
-      "records": 624,
+      "pairs": 626,
+      "readings": 621,
+      "records": 626,
       "pages": 1,
       "recordsByOrigin": {
         "gemini": 509,
-        "manual": 115
+        "manual": 115,
+        "verified": 2
       },
       "definition": "野球場、陸上競技場、サッカー場、競技アリーナなど競技・観戦施設。"
     },
@@ -921,14 +922,14 @@
     {
       "id": "product",
       "name": "商品・サービス",
-      "pairs": 10161,
-      "readings": 9936,
-      "records": 10163,
+      "pairs": 10166,
+      "readings": 9941,
+      "records": 10168,
       "pages": 7,
       "recordsByOrigin": {
         "gemini": 5941,
         "manual": 3917,
-        "verified": 305
+        "verified": 310
       }
     },
     {
@@ -1181,14 +1182,14 @@
     {
       "id": "term/specialist/earth_environment_resources",
       "name": "地球・環境・資源",
-      "pairs": 2114,
-      "readings": 2079,
-      "records": 2114,
+      "pairs": 2115,
+      "readings": 2080,
+      "records": 2115,
       "pages": 2,
       "recordsByOrigin": {
         "manual": 493,
         "gemini": 1255,
-        "verified": 366
+        "verified": 367
       }
     },
     {
@@ -1207,14 +1208,14 @@
     {
       "id": "term/specialist/law_politics",
       "name": "法律・政治",
-      "pairs": 5718,
-      "readings": 5643,
-      "records": 5719,
+      "pairs": 5719,
+      "readings": 5644,
+      "records": 5720,
       "pages": 4,
       "recordsByOrigin": {
         "manual": 1399,
         "gemini": 3011,
-        "verified": 1309
+        "verified": 1310
       }
     },
     {
@@ -1246,14 +1247,14 @@
     {
       "id": "term/specialist/transport_safety_defense",
       "name": "交通・安全・防衛",
-      "pairs": 4061,
-      "readings": 4013,
-      "records": 4063,
+      "pairs": 4062,
+      "readings": 4014,
+      "records": 4064,
       "pages": 3,
       "recordsByOrigin": {
         "manual": 1218,
         "gemini": 2222,
-        "verified": 623
+        "verified": 624
       }
     },
     {
@@ -1311,14 +1312,14 @@
     {
       "id": "media_demographic/audience/seinen",
       "name": "青年向け",
-      "pairs": 1734,
-      "readings": 1722,
-      "records": 1735,
+      "pairs": 1736,
+      "readings": 1724,
+      "records": 1737,
       "pages": 2,
       "recordsByOrigin": {
         "gemini": 892,
         "manual": 813,
-        "verified": 30
+        "verified": 32
       }
     },
     {
@@ -1433,14 +1434,14 @@
     {
       "id": "work_game",
       "name": "ゲーム作品",
-      "pairs": 3167,
-      "readings": 3077,
-      "records": 3167,
+      "pairs": 3169,
+      "readings": 3079,
+      "records": 3169,
       "pages": 3,
       "recordsByOrigin": {
         "manual": 2097,
         "gemini": 1012,
-        "verified": 58
+        "verified": 60
       }
     },
     {
@@ -1725,7 +1726,7 @@
     }
   ],
   "excluded": {
-    "pairs": 322970,
+    "pairs": 322972,
     "pages": 594
   },
   "specialistInputSha256": "8734dda7bd19c3a1401600a751289a3062c9a2f15c7ea64a409faf40c656e5ec"

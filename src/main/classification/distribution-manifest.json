@@ -2,7 +2,7 @@
   "admittedPairsByOrigin": {
     "manual": 378776,
     "gemini": 188636,
-    "verified": 182760
+    "verified": 182774
   },
   "categoryGroups": [
     {
@@ -275,7 +275,7 @@
   ],
   "categoryRows": {
     "person": 274375,
-    "character": 6854,
+    "character": 6856,
     "mythological_figure": 3436,
     "place": 45092,
     "address": 152874,
@@ -303,7 +303,7 @@
     "facility/entertainment/cinema": 149,
     "facility/entertainment/live_venue": 148,
     "facility/entertainment/amusement": 141,
-    "facility/sports/stadium": 624,
+    "facility/sports/stadium": 626,
     "facility/sports/gymnasium": 450,
     "facility/sports/golf": 47,
     "facility/sports/ski": 192,
@@ -342,7 +342,7 @@
     "transport_route": 4230,
     "organization": 47519,
     "lineage": 2019,
-    "product": 10163,
+    "product": 10168,
     "vehicle": 2580,
     "event/occasion/organized_event": 4440,
     "event/occasion/observance": 903,
@@ -362,17 +362,17 @@
     "term/specialist/mathematics_physics": 4174,
     "term/specialist/chemistry_life_sciences": 27570,
     "term/specialist/engineering_technology": 3525,
-    "term/specialist/earth_environment_resources": 2114,
+    "term/specialist/earth_environment_resources": 2115,
     "term/specialist/economics_management": 5909,
-    "term/specialist/law_politics": 5719,
+    "term/specialist/law_politics": 5720,
     "term/specialist/humanities_social_sciences": 17913,
     "term/specialist/culture_arts_sports": 5416,
-    "term/specialist/transport_safety_defense": 4063,
+    "term/specialist/transport_safety_defense": 4064,
     "work_franchise": 851,
     "work_manga": 5093,
     "work_anime": 1092,
     "media_demographic/audience/shonen": 4126,
-    "media_demographic/audience/seinen": 1735,
+    "media_demographic/audience/seinen": 1737,
     "media_demographic/audience/shojo": 826,
     "media_demographic/audience/josei": 356,
     "media_demographic/audience/kids": 549,
@@ -382,7 +382,7 @@
     "work_film": 6506,
     "work_program": 9320,
     "work_book": 7664,
-    "work_game": 3167,
+    "work_game": 3169,
     "work_music": 10354,
     "work_stage": 571,
     "work_periodical": 1811,
@@ -393,13 +393,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 779389,
-  "excludedCandidatePairs": 328695,
-  "excludedClassifiedPairs": 322970,
+  "dictionaryRows": 779405,
+  "excludedCandidatePairs": 328697,
+  "excludedClassifiedPairs": 322972,
   "files": {
     "categories.json": "92001c9850b589869528ccb97994ef4ec907f312a5b17f6710d4655b576c466c",
-    "distribution-candidates.tsv.gz": "763463bdebcfa7dfa44ce244081ef307063f8ce4188bdec81344f64ec892aef8",
-    "distribution-decisions.tsv.gz": "5959ff70ba82bb24bef310202bf15ef088dba6cfb7d69be284e7fc250f60ff2c"
+    "distribution-candidates.tsv.gz": "891225642ce52cf23ad588bc40f81edceb89238f4597338a821b78e0a8d363d0",
+    "distribution-decisions.tsv.gz": "3ccaa62172ab0c6787ed288a013e72c7221d3e3beb86ee3789188069dfc28003"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -552,6 +552,8 @@
     "src/main/classification/reviews/2026-10-30-wikidata-event-restorations.jsonl": "2be30b1359e762b19f7d77f29b3a156d8b5b98b380c9750f8a944bd00950fc36",
     "src/main/classification/reviews/2026-11-01-neologism-issues.jsonl": "9451d6fd7da668c867932eb5fcf3e7dc5ef5bf7a3a931b8f9a0511e400b68a13",
     "src/main/classification/reviews/2026-11-01-open-candidate-issues.jsonl": "7028c4c04fa8b1553c1842505e5b03bb6ea6073d1b3f9800e9c34f78c39bc660",
+    "src/main/classification/reviews/2026-11-02-open-candidate-issues.jsonl": "d65b00bde2e70dcc5572d111c043ad9cb6f9c348309e0970184b539aa39939a3",
+    "src/main/classification/reviews/2026-11-02-open-candidate-issues_demographics.jsonl": "e15072bc3a06b419b53ad678a83ccfb00f54811cbf77ea7095fdd5f4893d5dfe",
     "src/main/classification/reviews/2026-11-02-person-unit-type-corrections.jsonl": "1dd402f6d208d861da34affa77cd8b4f584b3b69f15061fb2c12aa5bbaff3ef4",
     "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
   },
@@ -74935,6 +74937,8 @@
       "src/main/classification/reviews/2026-10-30-wikidata-event-restorations.jsonl",
       "src/main/classification/reviews/2026-11-01-neologism-issues.jsonl",
       "src/main/classification/reviews/2026-11-01-open-candidate-issues.jsonl",
+      "src/main/classification/reviews/2026-11-02-open-candidate-issues.jsonl",
+      "src/main/classification/reviews/2026-11-02-open-candidate-issues_demographics.jsonl",
       "src/main/classification/reviews/2026-11-02-person-unit-type-corrections.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
@@ -75193,5 +75197,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 750172
+  "uniqueAdmittedPairs": 750186
 }
