@@ -167,13 +167,13 @@ class PersonNameOriginClassificationTest(unittest.TestCase):
                                  ('surname_origin_unconfirmed', target))
 
         review_manifest = manifest['manual_type_review']
-        self.assertEqual(review_manifest['reviewed_pairs'], 21)
+        self.assertEqual(review_manifest['reviewed_pairs'], 23)
         self.assertEqual(review_manifest['review_target_pair_counts'], {
-            'excluded_non_person': 2,
+            'excluded_non_person': 4,
             'given_name_origin_foreign': 1,
             'personal_name_origin_unconfirmed': 18,
         })
-        stale_counts = dict(review_manifest, reviewed_pairs=22)
+        stale_counts = dict(review_manifest, reviewed_pairs=24)
         with self.assertRaisesRegex(ValueError, 'counts differ'):
             origins.validate_manual_type_review(ROOT, mapping, stale_counts)
 
@@ -235,10 +235,10 @@ class PersonNameOriginClassificationTest(unittest.TestCase):
         review_manifest = manifest['source_origin_review']
         review_path = ROOT / review_manifest['review_path']
         rows = [json.loads(line) for line in review_path.read_text(encoding='utf-8').splitlines()]
-        self.assertEqual(review_manifest['reviewed_pairs'], 48)
-        self.assertEqual(review_manifest['review_status_counts'], {'applied': 48})
+        self.assertEqual(review_manifest['reviewed_pairs'], 56)
+        self.assertEqual(review_manifest['review_status_counts'], {'applied': 56})
         self.assertEqual(review_manifest['hold_releases'], 7)
-        self.assertEqual(len(rows), 48)
+        self.assertEqual(len(rows), 56)
         for row in rows:
             with self.subTest(surface=row['surface']):
                 if row['status'] == 'applied':

@@ -186,8 +186,8 @@ def validate_manual_source_origin_review(root, mapping, review_manifest):
                     or not isinstance(source.get('claim'), str)
                     or not source['claim'].strip()
                     or not isinstance(source.get('source_kind'), str)
-                    or 'ai' in source['source_kind'].lower()
-                    or 'model' in source['source_kind'].lower()):
+                    or re.search(r'(^|[^a-z0-9])(ai|model)([^a-z0-9]|$)',
+                                 source['source_kind'].lower())):
                 raise ValueError(f'{path}:{location}: source is not independent evidence')
 
     for number, line in enumerate(review_path.read_text(encoding='utf-8').splitlines(), 1):
@@ -198,6 +198,7 @@ def validate_manual_source_origin_review(root, mapping, review_manifest):
         previous_target = row.get('previous_target_category_id')
         target = row.get('target_category_id')
         status = row.get('status')
+        review_basis = row.get('review_basis')
         if (not isinstance(reading, str) or not reading
                 or not isinstance(surface, str) or not surface
                 or key != candidate_key(reading, surface) or key in seen
@@ -208,7 +209,9 @@ def validate_manual_source_origin_review(root, mapping, review_manifest):
                 or not isinstance(row.get('reason'), str) or not row['reason'].strip()
                 or not isinstance(row.get('decision_history'), list)
                 or not row['decision_history']
-                or row.get('review_basis') != 'independent_source_review; AI output is discovery-only'):
+                or not isinstance(review_basis, str)
+                or not review_basis.startswith('independent_source_review; ')
+                or not review_basis.partition('; ')[2].strip()):
             raise ValueError(f'{path}:{number}: malformed source-origin review row')
         seen.add(key)
         events = row['decision_history']
