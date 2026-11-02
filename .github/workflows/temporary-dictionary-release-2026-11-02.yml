@@ -1,0 +1,116 @@
+name: Temporary verified dictionary release coordinator
+on:
+  push:
+    branches:
+      - codex/bootstrap-dictionary-release-2026-11-02
+permissions:
+  contents: write
+  actions: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 85
+    steps:
+      - name: Checkout temporary release coordinator
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Publish a verified main-based dictionary release and prune merged task branches
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          repo='KazumaProject/kotlin-kana-kanji-converter'
+          review_branch='codex/review-issue-terms-2026-11-02'
+          tag='v1.7.284'
+          echo 'Awaiting the dictionary review PR to finish CI and merge into main'
+          merged=0
+          for attempt in $(seq 1 175); do
+            merged_at="$(gh api "repos/$repo/pulls?head=KazumaProject:$review_branch&state=all" --jq '.[0].merged_at // empty' || true)"
+            if [[ -n "$merged_at" ]]; then
+              merged=1
+              break
+            fi
+            echo "Reviewed dictionary PR has not merged yet (check $attempt/175)"
+            sleep 20
+          done
+          if [[ "$merged" != 1 ]]; then
+            echo 'Dictionary PR never merged; no release tag was created' >&2
+            exit 1
+          fi
+          git fetch origin main --tags
+          main_sha="$(git rev-parse origin/main)"
+          review_document="$(mktemp)"
+          git show "origin/main:docs/dictionary-candidate-issue-review-2026-11-02.md" > "$review_document"
+          count="$(sed -n 's/^- 追加: \*\*\([0-9][0-9]*\)組\*\*.*/\1/p' "$review_document" | head -n 1)"
+          if [[ ! "$count" =~ ^[0-9]+$ || "$count" -lt 1 ]]; then
+            echo 'Could not verify new dictionary entries from main review ledger' >&2
+            exit 1
+          fi
+          current_latest="$(gh api "repos/$repo/releases/latest" --jq .tag_name)"
+          if [[ "$current_latest" != 'v1.7.283' ]]; then
+            echo "Release base changed unexpectedly: $current_latest; refusing an automatic version collision" >&2
+            exit 1
+          fi
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null; then
+            echo "Tag $tag already exists; refusing to overwrite" >&2
+            exit 1
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git tag -a "$tag" -m 'Reviewed dictionary update 2026-11-02' "$main_sha"
+          git push origin "refs/tags/$tag"
+          echo "Tagged $main_sha as $tag; dispatching the pinned dictionary build-and-release workflow"
+          gh workflow run build-and-release.yml --ref "$tag" -f mozc_ref=c4b2aef7c65e61be394bacadaec200eb5b97f91c
+          run_id=''
+          for attempt in $(seq 1 30); do
+            run_id="$(gh api "repos/$repo/actions/workflows/build-and-release.yml/runs?event=workflow_dispatch&per_page=40" --jq ".workflow_runs[] | select(.head_sha == \"$main_sha\") | .id" | head -n 1 || true)"
+            if [[ "$run_id" =~ ^[0-9]+$ ]]; then
+              break
+            fi
+            echo "Waiting for dispatched dictionary release run ($attempt/30)"
+            sleep 10
+          done
+          if [[ ! "$run_id" =~ ^[0-9]+$ ]]; then
+            echo 'Workflow dispatch did not produce an observable run' >&2
+            exit 1
+          fi
+          echo "Verifying GitHub Actions release run $run_id"
+          gh run watch "$run_id" --exit-status
+          asset_count="$(gh release view "$tag" --json assets --jq '.assets | length')"
+          if [[ "$asset_count" -lt 4 ]]; then
+            echo "Release is missing expected dictionary assets: $asset_count" >&2
+            exit 1
+          fi
+          notes="$RUNNER_TEMP/reviewed-dictionary-release-notes.md"
+          cat > "$notes" <<EOF
+          ## 日本語
+          
+          - 2026-11-01時点の辞書追加候補26件を精査し、既存の57組を維持。
+          - 2026-11-01〜02の新規8件（#277、#278、#279、#280、#281、#284、#286、#287）から、既存辞書との照合後に採用した **$count組** を追加。
+          - 人名由来の分類改善PR #282・#283・#285を取り込み。
+          - 固定分類の照合、カタログ、辞書ZIPの生成・読み戻し、GradleテストをGitHub Actionsで検証。
+          - 辞書ZIP、配布マニフェスト、SHA-256チェックサム、ライセンスを添付。
+          
+          ## English
+          
+          - Retains the previously reviewed 57 dictionary additions as of 2026-11-01.
+          - Adds **$count** verified new reading/surface pairs from eight recent candidate issues.
+          - Includes person-name origin review corrections from PRs #282, #283 and #285.
+          - The release action verifies dictionary assets, manifests, checksums and tests.
+          EOF
+          gh release edit "$tag" --notes-file "$notes"
+          echo "Verified release $tag with $asset_count assets and corrected notes"
+          echo 'Deleting only merged working branches from this task'
+          for stale in \
+            'codex/person-name-origin-handoff-review' \
+            'codex/pr282-name-origin-review-stack' \
+            'codex/pr283-216-single-placement-stack' \
+            'codex/review-issue-terms-2026-11-02'; do
+            if git ls-remote --exit-code --heads origin "refs/heads/$stale" >/dev/null; then
+              git push origin --delete "$stale"
+            fi
+          done
+          git push origin --delete 'codex/bootstrap-dictionary-release-2026-11-02' || echo 'Release bootstrap cleanup not permitted'
+          echo 'Stable release and merged-branch cleanup complete'
