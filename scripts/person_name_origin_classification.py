@@ -150,6 +150,145 @@ def validate_manual_type_review(root, mapping, review_manifest):
             raise ValueError('Manual name-type dictionary artifact record is malformed')
 
 
+def validate_manual_source_origin_review(root, mapping, review_manifest):
+    """Bind source-backed origin decisions and hold releases to an append-only audit."""
+    path_text = review_manifest.get('review_path')
+    expected_sha = review_manifest.get('review_sha256')
+    if (not isinstance(path_text, str) or not path_text
+            or not isinstance(expected_sha, str)
+            or not re.fullmatch('[0-9a-f]{64}', expected_sha)):
+        raise ValueError('Manual source-origin review manifest is malformed')
+    path = Path(path_text)
+    if (path.is_absolute() or '..' in path.parts
+            or path.parent != Path('src/main/classification/person-name-origin-source-reviews')
+            or path.suffix != '.jsonl'):
+        raise ValueError('Manual source-origin review must be JSONL in its review directory')
+    review_path = root / path
+    if (not review_path.is_file()
+            or hashlib.sha256(review_path.read_bytes()).hexdigest() != expected_sha):
+        raise ValueError('Manual source-origin review hash differs from its manifest')
+
+    rows = []
+    seen = set()
+    status_counts = {}
+    target_counts = {}
+    hold_releases = 0
+
+    def validate_sources(sources, location):
+        if not isinstance(sources, list):
+            raise ValueError(f'{path}:{location}: source list is malformed')
+        for source in sources:
+            if (not isinstance(source, dict)
+                    or not isinstance(source.get('url'), str)
+                    or not source['url'].startswith(('https://', 'http://'))
+                    or not isinstance(source.get('title'), str)
+                    or not source['title'].strip()
+                    or not isinstance(source.get('claim'), str)
+                    or not source['claim'].strip()
+                    or not isinstance(source.get('source_kind'), str)
+                    or 'ai' in source['source_kind'].lower()
+                    or 'model' in source['source_kind'].lower()):
+                raise ValueError(f'{path}:{location}: source is not independent evidence')
+
+    for number, line in enumerate(review_path.read_text(encoding='utf-8').splitlines(), 1):
+        row = json.loads(line)
+        reading, surface, key = (row.get('reading'), row.get('surface'),
+                                 row.get('candidate_key'))
+        source_id = row.get('source_category_id')
+        previous_target = row.get('previous_target_category_id')
+        target = row.get('target_category_id')
+        status = row.get('status')
+        if (not isinstance(reading, str) or not reading
+                or not isinstance(surface, str) or not surface
+                or key != candidate_key(reading, surface) or key in seen
+                or source_id not in SOURCE_CATEGORIES
+                or previous_target not in NAME_ORIGIN_CATEGORY_IDS
+                or row.get('previous_dictionary_category_id') not in NAME_ORIGIN_CATEGORY_IDS
+                or status not in {'applied', 'held'}
+                or not isinstance(row.get('reason'), str) or not row['reason'].strip()
+                or not isinstance(row.get('decision_history'), list)
+                or not row['decision_history']
+                or row.get('review_basis') != 'independent_source_review; AI output is discovery-only'):
+            raise ValueError(f'{path}:{number}: malformed source-origin review row')
+        seen.add(key)
+        events = row['decision_history']
+        for event_number, event in enumerate(events, 1):
+            if (not isinstance(event, dict)
+                    or event.get('status') not in {'applied', 'held'}
+                    or not isinstance(event.get('event'), str)
+                    or not isinstance(event.get('reason'), str)
+                    or not event['reason'].strip()):
+                raise ValueError(f'{path}:{number}: malformed decision-history event {event_number}')
+            validate_sources(event.get('sources'), f'{number}:{event_number}')
+        initial_status = events[0].get('status') if isinstance(events[0], dict) else None
+        final_event = events[-1] if isinstance(events[-1], dict) else {}
+        if final_event.get('status') != status:
+            raise ValueError(f'{path}:{number}: final decision differs from review history')
+        if final_event.get('reason') != row['reason']:
+            raise ValueError(f'{path}:{number}: final rationale differs from review history')
+        if initial_status == 'held' and status == 'applied':
+            before_urls = {
+                source.get('url') for event in events[:-1]
+                if isinstance(event, dict) and isinstance(event.get('sources'), list)
+                for source in event['sources'] if isinstance(source, dict)
+            }
+            released_urls = {
+                source.get('url') for source in final_event.get('sources', [])
+                if isinstance(source, dict)
+            }
+            if (final_event.get('event') != 'hold_release'
+                    or not released_urls - before_urls
+                    or not str(final_event.get('reason', '')).strip()):
+                raise ValueError(
+                    f'{path}:{number}: a hold needs new cited evidence and a release reason')
+            hold_releases += 1
+        if status == 'applied':
+            if (target not in NAME_ORIGIN_CATEGORY_IDS
+                    or mapping.get(key) != (source_id, target)
+                    or not isinstance(row.get('evidence'), list)
+                    or not row['evidence']
+                    or final_event.get('target_category_id') != target):
+                raise ValueError(f'{path}:{number}: applied source-origin review differs from mapping')
+            validate_sources(row['evidence'], f'{number}:evidence')
+            if initial_status == 'held' and final_event.get('event') != 'hold_release':
+                raise ValueError(f'{path}:{number}: a held item needs an explicit release event')
+            if initial_status != 'held' and final_event.get('event') != 'source_review':
+                raise ValueError(f'{path}:{number}: an applied item needs a source-review event')
+            target_counts[target] = target_counts.get(target, 0) + 1
+        else:
+            if target is not None or mapping.get(key) != (source_id, previous_target):
+                raise ValueError(f'{path}:{number}: held source-origin review changed its mapping')
+            if final_event.get('event') != 'hold':
+                raise ValueError(f'{path}:{number}: held item needs an explicit hold event')
+        status_counts[status] = status_counts.get(status, 0) + 1
+        rows.append(key)
+
+    expected_keys_hash = hashlib.sha256('\n'.join(sorted(rows)).encode('ascii')).hexdigest()
+    if (type(review_manifest.get('reviewed_pairs')) is not int
+            or review_manifest['reviewed_pairs'] != len(rows)
+            or review_manifest.get('review_candidate_keys_sha256') != expected_keys_hash
+            or review_manifest.get('review_status_counts') != dict(sorted(status_counts.items()))
+            or review_manifest.get('review_target_pair_counts') != dict(sorted(target_counts.items()))
+            or review_manifest.get('hold_releases') != hold_releases):
+        raise ValueError('Manual source-origin review counts differ from its manifest')
+    artifact = review_manifest.get('dictionary_artifact')
+    if artifact is not None:
+        if (not isinstance(artifact, dict)
+                or artifact.get('path') != SOURCE_PATH
+                or not isinstance(artifact.get('previous_sha256'), str)
+                or not re.fullmatch('[0-9a-f]{64}', artifact['previous_sha256'])
+                or not isinstance(artifact.get('sha256'), str)
+                or not re.fullmatch('[0-9a-f]{64}', artifact['sha256'])
+                or artifact['sha256'] != gemini.sha(root / SOURCE_PATH)
+                or type(artifact.get('records_before')) is not int
+                or type(artifact.get('records')) is not int
+                or type(artifact.get('reviewed_pairs')) is not int
+                or type(artifact.get('changed_rows')) is not int
+                or type(artifact.get('changed_pairs')) is not int
+                or type(artifact.get('held_pairs')) is not int):
+            raise ValueError('Manual source-origin dictionary artifact differs from its manifest')
+
+
 def write_json(path, value):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -699,6 +838,11 @@ def load_fixed_mapping(root, mapping_path=None, manifest_path=None):
         if not isinstance(manual_type_review, dict):
             raise ValueError('Manual name-type review manifest is malformed')
         validate_manual_type_review(root, mapping, manual_type_review)
+    source_origin_review = manifest.get('source_origin_review')
+    if source_origin_review is not None:
+        if not isinstance(source_origin_review, dict):
+            raise ValueError('Manual source-origin review manifest is malformed')
+        validate_manual_source_origin_review(root, mapping, source_origin_review)
     if len(mapping) != manifest.get('unique_pairs'):
         raise ValueError('Name-origin mapping count differs from the fixed manifest')
     target_counts = {}
