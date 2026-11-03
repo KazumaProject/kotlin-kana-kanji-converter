@@ -399,7 +399,7 @@ jobs:
 
           ARCHIVE=release_zips/japanese_keyboard_dictionary_assets.zip
 
-          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category system --count 30 --expect-conversion しろ=白 --expect-conversion しろい=白い --expect-conversion しろくろ=白黒 --expect-conversion しろあり=シロアリ --expect-conversion ぴーふぁす=PFAS しろ しろい しろくろ しろあり ぴーふぁす"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category system --count 50 --expect-conversion しろ=白 --expect-conversion しろい=白い --expect-conversion しろくろ=白黒 --expect-conversion しろあり=シロアリ --expect-conversion ぴーふぁす=PFAS --expect-conversion れいりあかすがばる=レイリア春日原 --expect-conversion くらいおせいけん=クライオ生検 しろ しろい しろくろ しろあり ぴーふぁす れいりあかすがばる くらいおせいけん"
           ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category system --count 1 --expect-conversion したせん=下線 --expect-conversion ひとくふう=一工夫 --expect-conversion ふたくふう=二工夫 したせん ひとくふう ふたくふう"
           ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category system --count 1 --expect-conversion したせんせい=した先生 --expect-conversion ひとくふうする=一工夫する --expect-conversion ふたくふうする=二工夫する したせんせい ひとくふうする ふたくふうする"
           ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/general/internet_slang_culture --count 30 --expect-conversion ほびあか=ホビ垢 --expect-conversion うまかく=うま確 --expect-conversion ふれねみー=フレネミー ほびあか うまかく ふれねみー"
@@ -429,6 +429,22 @@ jobs:
           ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category person/personal_name_origin_unconfirmed --count 30 --expect-conversion おおぞらこうき=大空幸星 --expect-conversion しおがいけんと=塩貝健人 --expect-conversion まちのしゅうと=町野修斗 おおぞらこうき しおがいけんと まちのしゅうと"
           ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category person/actor --count 30 --expect-conversion さのかいしゅう=佐野海舟 さのかいしゅう"
           ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category person/sports --count 30 --expect-conversion ごとうけいすけ=後藤啓介 ごとうけいすけ"
+
+      - name: Verify 2026-11-02 issue additions in the packaged categories
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ARCHIVE=release_zips/japanese_keyboard_dictionary_assets.zip
+
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category work_game --count 50 --expect-conversion くらいむらいと=CRYMELIGHT --expect-conversion 'ふぁいあーえむぶれむばんしせんこう=ファイアーエムブレム 万紫千紅' くらいむらいと ふぁいあーえむぶれむばんしせんこう"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category product --count 50 --expect-conversion そのぼ=SonoVo --expect-conversion 'みらいぶろーどらいばー=MIRAI BlowDry BAR' --expect-conversion にゅーと=NEWT --expect-conversion ねすかふぇ=NESCAFÉ --expect-conversion 'ぽっぷまーと=POP MART' そのぼ みらいぶろーどらいばー にゅーと ねすかふぇ ぽっぷまーと"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category character --count 50 --expect-conversion まふつしん=真経津晨 --expect-conversion みたらいあきら=御手洗暉 まふつしん みたらいあきら"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/specialist/law_politics --count 50 --expect-conversion しーばむ=CBAM しーばむ"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/specialist/transport_safety_defense --count 50 --expect-conversion さふ=SAF さふ"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/specialist/earth_environment_resources --count 50 --expect-conversion しーしーえす=CCS しーしーえす"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category facility/sports/stadium --count 50 --expect-conversion じーえむおーありーなさいたま=GMOアリーナさいたま --expect-conversion 'やんまーはなさかすたじあむ=YANMAR HANASAKA STADIUM' じーえむおーありーなさいたま やんまーはなさかすたじあむ"
 
       - name: Upload verified dictionary distribution
         if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
@@ -461,15 +477,15 @@ jobs:
           body: |
             ## 日本語
 
-            - 2026-11-01時点の未処理候補 Issue 26件（#229–#275）をすべて精査し、出典と読みを確認した57語を辞書へ追加しました。
-            - 商品、作品、サービス、組織、施設、駅、地名の各カテゴリへ収録しました。候補履歴の重複は見つかりませんでした。
-            - Echo Time（#257）は公式の読みを確認できなかったため保留しました。
+            - 新語候補 Issue #277、#278、#279、#280、#281、#284、#286、#287 の16語を精査し、出典を確認した14語を既存カテゴリへ追加しました。
+            - 「レイリア春日原」と「クライオ生検」はv1.7.283の簡易CLIで正確な表記が候補に出るため追加を保留しました。CLI順位は実アプリ順位や一ノード経路を示すものではありません。
+            - Echo Time（#257）はAmazon公式資料で商品名を確認しましたが、公式の日本語読みを再確認できず保留を継続します。
 
             ## English
 
-            - Reviewed all 26 open candidate issues (#229–#275) as of 2026-11-01; added 57 source-backed terms with verified readings.
-            - Added terms to the product, work, service, organization, facility, station, and place dictionaries. No duplicate candidates were found in the checked issue history.
-            - Deferred Echo Time from Issue #257 because an official Japanese reading was not confirmed.
+            - Reviewed 16 candidates in Issues #277, #278, #279, #280, #281, #284, #286, and #287; added 14 source-backed terms to existing categories.
+            - Deferred レイリア春日原 and クライオ生検 because the exact surfaces already appeared in the v1.7.283 CLI results. CLI rank does not establish app rank or a one-node path.
+            - Kept Echo Time from Issue #257 on hold because its official Japanese reading could not be reconfirmed.
           prerelease: false
           makeLatest: true
           artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./release_zips/dictionary-distribution-manifest.json,./release_zips/DICTIONARY-SHA256SUMS,./release_zips/DICTIONARY-LICENSES.txt

@@ -156,6 +156,22 @@ jobs:
             verifyReplacementDictionaryFilters \
             test check
 
+      - name: Verify reviewed issue terms in the packaged dictionary archive
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ARCHIVE=release_zips/japanese_keyboard_dictionary_assets.zip
+
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category system --count 50 --expect-conversion しろ=白 --expect-conversion しろい=白い --expect-conversion しろくろ=白黒 --expect-conversion しろあり=シロアリ --expect-conversion ぴーふぁす=PFAS --expect-conversion れいりあかすがばる=レイリア春日原 --expect-conversion くらいおせいけん=クライオ生検 しろ しろい しろくろ しろあり ぴーふぁす れいりあかすがばる くらいおせいけん"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category work_game --count 50 --expect-conversion くらいむらいと=CRYMELIGHT --expect-conversion 'ふぁいあーえむぶれむばんしせんこう=ファイアーエムブレム 万紫千紅' くらいむらいと ふぁいあーえむぶれむばんしせんこう"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category product --count 50 --expect-conversion そのぼ=SonoVo --expect-conversion 'みらいぶろーどらいばー=MIRAI BlowDry BAR' --expect-conversion にゅーと=NEWT --expect-conversion ねすかふぇ=NESCAFÉ --expect-conversion 'ぽっぷまーと=POP MART' そのぼ みらいぶろーどらいばー にゅーと ねすかふぇ ぽっぷまーと"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category character --count 50 --expect-conversion まふつしん=真経津晨 --expect-conversion みたらいあきら=御手洗暉 まふつしん みたらいあきら"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/specialist/law_politics --count 50 --expect-conversion しーばむ=CBAM しーばむ"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/specialist/transport_safety_defense --count 50 --expect-conversion さふ=SAF さふ"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/specialist/earth_environment_resources --count 50 --expect-conversion しーしーえす=CCS しーしーえす"
+          ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category facility/sports/stadium --count 50 --expect-conversion じーえむおーありーなさいたま=GMOアリーナさいたま --expect-conversion 'やんまーはなさかすたじあむ=YANMAR HANASAKA STADIUM' じーえむおーありーなさいたま やんまーはなさかすたじあむ"
+
       - name: Upload the classified dictionary
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/upload-artifact@v4
