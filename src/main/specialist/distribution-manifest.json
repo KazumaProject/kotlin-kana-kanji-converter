@@ -39,7 +39,7 @@
   },
   "classificationExclusionsSha256": "6b48d6b67a7caf2fdfca86d46af5d531f56df5c9dd492935529d302808162f67",
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
-  "existingInventorySha256": "a069db47110662bcf2372a4658dc44620f60d5fd0291e038dd18330b34a2c3df",
+  "existingInventorySha256": "c25b4b4b36ff6420afdd93e41fb3d49171c579aaca84410270ca60e38a852e88",
   "existingDictionaryIds": [
     "categories/address",
     "categories/agreement",
