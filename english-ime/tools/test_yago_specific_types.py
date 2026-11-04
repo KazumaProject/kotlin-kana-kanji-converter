@@ -1,5 +1,6 @@
 import unittest
 import yago_specific_types as y
+import yago_name_variants as variants
 
 
 class SpecificTypeTests(unittest.TestCase):
@@ -32,7 +33,34 @@ class SpecificTypeTests(unittest.TestCase):
 
     def test_legacy_preparations_keep_their_original_root_matrix(self):
         self.assertTrue(y.LEGACY_ROOTS.keys() < y.ROOTS.keys())
+        self.assertTrue(y.PREVIOUS_ROOTS.keys() < y.ROOTS.keys())
         self.assertNotIn('yago:Film',y.LEGACY_ROOTS)
+
+    def test_genres_games_ships_and_services_require_specific_descriptions(self):
+        examples=[('yago:Comedy_film','2001 American comedy film directed by a filmmaker'),
+            ('yago:Film_Based_On_A_Novel','1992 film directed by a filmmaker'),
+            ('yago:Tabletop_role-playing_game','tabletop fantasy role-playing game'),
+            ('yago:Ship_of_the_line','74-gun ship of the line of the French Navy'),
+            ('yago:News_Aggregation_Website','American online news aggregator and blog'),
+            ('yago:Pokémon_Region','Pokémon region')]
+        for root,text in examples:
+            self.assertTrue(y.supported(root,[dict(label=text,language='en')]),root)
+            self.assertFalse(y.supported(root,[dict(label=text,language='fr')]),root)
+            self.assertFalse(y.supported(root,[dict(label='generic concept or unrelated entity',language='en')]),root)
+        self.assertFalse(y.supported('yago:Comedy_film',[dict(label='film genre',language='en')]))
+
+    def test_fictional_species_class_needs_both_specific_path_and_description(self):
+        entity=dict(paths={},classPaths={'yago:Fictional_Bird':{'yago:Fictional_Bird':[]}},
+            descriptions=[dict(label='fictional bird species',language='en')])
+        self.assertEqual({'noun','noun_proper','name_fictional'},variants.categories(entity,y.ROOTS))
+        entity['descriptions']=[dict(label='real bird species',language='en')]
+        self.assertFalse(variants.categories(entity,y.ROOTS))
+        entity['descriptions']=[dict(label='fictional bird species',language='en')]
+        entity['classPaths']={'schema:Person':{'schema:Person':[]}}
+        self.assertFalse(variants.categories(entity,y.ROOTS))
+        entity['classPaths']={'yago:Fictional_Bird':{'yago:Fictional_Bird':[]}}
+        entity['descriptions'][0]['language']='fr'
+        self.assertFalse(variants.categories(entity,y.ROOTS))
 
 
 if __name__=='__main__':unittest.main()

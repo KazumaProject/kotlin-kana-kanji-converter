@@ -11,6 +11,7 @@ from pathlib import Path
 import extend_lexicon as extension
 import lexicon_pipeline as pipeline
 import resolve_pending,yago_names as yago
+import named_case_variants
 from wiktionary_index import Index
 
 ROOTS=dict(yago.ROOTS,**{'yago:Video_Game_Character':{'name_fictional'},'yago:Fictional_Character':{'name_fictional'}})
@@ -97,10 +98,11 @@ def categories(entity,roots_matrix=ROOTS):
     roots=set().union(*(set(value) for value in entity['paths'].values())) & roots_matrix.keys()
     # YAGO also models individual fictional species/characters as classes.
     # A class edge alone would otherwise turn generic class labels into names.
-    fictional=any(re.search(r'^(?:Pokémon species|fictional character\b|character (?:in|from)\b)',d['label'],re.I)
+    fictional=any(re.search(r'^(?:Pokémon species|fictional character\b|character (?:in|from)\b|fictional (?:extraterrestrial )?species\b|fictional bird species\b|fictional device from the Pokémon universe\b)',d['label'],re.I)
         for d in entity['descriptions'] if yago.english(d['language']))
     if fictional:
-        roots |= set().union(*(set(v) for v in entity.get('classPaths',{}).values())) & {'yago:Video_Game_Character','yago:Fictional_Character'}
+        fictional_roots={root for root,values in roots_matrix.items() if values=={'name_fictional'}}
+        roots |= set().union(*(set(v) for v in entity.get('classPaths',{}).values())) & fictional_roots
     result=set().union(*(roots_matrix[root] for root in roots))
     if any(value.startswith('name_') for value in result):result|={'noun','noun_proper'}
     return result
@@ -108,6 +110,10 @@ def categories(entity,roots_matrix=ROOTS):
 
 def attach(model,rows,entities,roots_matrix=ROOTS):
     extension.ensure_categories(model,set().union(*roots_matrix.values()))
+    if any('name_fictional' in values for values in roots_matrix.values()):
+        definition,examples=extension.EXTRA_CATEGORIES['name_fictional']
+        for category in model.definitions:
+            if category['category']=='name_fictional':category.update(definition=definition,examples=examples)
     inputs=defaultdict(list)
     for row in rows:inputs[row['surface'].casefold()].append(row)
     counts=Counter()
@@ -155,10 +161,14 @@ def extend(args,roots_matrix=ROOTS,source_key='yagoNameVariants'):
     try:exact=list(index.lookup({r['surface'] for r in selected}))
     finally:index.close()
     additions=resolve_pending.cases(model,selected,{e['word'] for _,e in exact},resolve_pending.ineligible_exact_words(exact))
+    if getattr(args,'source_case_candidates',False):
+        present={record['id'] for record in additions}
+        additions += [record for record in named_case_variants.source_name_candidates(model,selected) if record['id'] not in present]
     prior=args.base/'surface-corrections.tsv';corrections=pipeline.read_table(prior,'corrections') if prior.is_file() else []
     present={r['id'] for r in corrections};corrections += [r for r in additions if r['id'] not in present]
     sources[source_key]={'preparedManifestSha256':pipeline.digest(args.prepared/'manifest.json'),'snapshots':yago.PINS,
-        'policy':'attested English/shared international labels from both facts/taxonomy with Wikidata and English-Wikipedia identity; separate instance-type proof or explicitly described fictional-character class proof; existing Latin-diacritic keyboard aliases only, not preferred ASCII spellings'}
+        'sourceCaseCandidates':bool(getattr(args,'source_case_candidates',False)),
+        'policy':'attested English/shared international labels from both facts/taxonomy with Wikidata and English-Wikipedia identity; separate instance-type proof or explicitly described fictional-character class proof; existing Latin-diacritic keyboard aliases only, not preferred ASCII spellings; optional independent named case alternatives preserve unresolved original readings without approving them'}
     notices['YAGO-NAME-VARIANTS-NOTICE.txt']=('YAGO 4.6, Télécom Paris YAGO team and Wikidata contributors.\nhttps://yago-knowledge.org/downloads/yago-4-6\nCC BY 4.0, full license retained separately.\nChanges: extracted matching attested labels and type/description proofs from facts and taxonomy; explicitly derived existing ASCII input aliases by removing decomposable Latin diacritics. No arbitrary transliteration, resource-title reconstruction, artwork or inferred inflections.\n').encode()
     with tempfile.TemporaryDirectory(prefix='.name-variant-review-',dir=args.out.parent) as temp:
         reviewed=Path(temp)/'reviews.tsv';pipeline.table(reviewed,'decisions',reviews)
@@ -172,4 +182,5 @@ if __name__=='__main__':
     for name in ['prepare','extend']:
         command=commands.add_parser(name)
         for arg in (['base','sources','out'] if name=='prepare' else ['base','seed','prepared','index','out']):command.add_argument('--'+arg,type=Path,required=True)
+        if name=='extend':command.add_argument('--source-case-candidates',action='store_true')
     args=parser.parse_args();prepare(args) if args.command=='prepare' else extend(args)

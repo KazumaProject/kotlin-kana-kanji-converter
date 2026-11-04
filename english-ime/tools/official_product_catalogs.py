@@ -20,7 +20,7 @@ PINS={'google.html':'76a04ca2c7acc4abba30c78cde9364af50a5a1c5616fff942ea731bb075
 APPLE={'Mac','MacBook Neo','MacBook Air','MacBook Pro','iMac','Mac mini','Mac Studio','Studio Display','Studio Display XDR',
  'Apple Creator Studio','Final Cut Pro','Pixelmator Pro','Logic Pro','Apple Books','Apple News','Apple Remote Desktop','Safari','QuickTime','Apple Podcasts','macOS','Apple Arcade','Find My',
  'iPad Pro','iPad Air','iPad','iPad mini','Apple Pencil','HomeKit','iPadOS','iCloud','Apple Pay','Apple Health','iOS','MagSafe','Apple Card','Apple CarPlay',
- 'watchOS','Apple Music','Apple Fitness+','Apple One','Apple Vision Pro','visionOS','AirPods','AirPods 5','AirPods Pro 3','AirPods Max 2',
+ 'watchOS','Apple Music','Apple Fitness+','Apple One','AppleCare','Apple Vision Pro','visionOS','AirPods','AirPods 5','AirPods Pro 3','AirPods Max 2',
  'Apple HomeView','Apple TV 4K','Apple TV app','Apple TV','HomePod (2nd generation)','HomePod mini 2','Home app','AirPlay','Apple News+','App Store','Apple Cash','iTunes'}
 MICROSOFT={'Windows','Windows 365','Microsoft 365','Copilot for Microsoft 365','Microsoft Forms','Word','Excel','PowerPoint','Outlook','Access','Exchange','OneDrive for Business','Project','SharePoint','Microsoft Teams','Visio','Microsoft Designer','Copilot','Outlook.com','OneDrive','OneNote','Bing','Azure Maps','MSN','Linkedin','Microsoft Edge','Microsoft Surface','Surface Pro','Surface Laptop','XBOX','XBOX Series X','XBOX Series S','XBOX Game Pass','PC Game Pass','XBOX Cloud Gaming','Minecraft','Microsoft Dynamics 365','Power Platform','Microsoft Fabric','Microsoft Power BI','System Center','Microsoft SQL Server'}
 

@@ -99,6 +99,30 @@ class UsageReviewTests(unittest.TestCase):
         second.update(contextAfter=' Group', inKnownFullName=['fixture group'])
         self.assertNotEqual(usage.identity(first), usage.identity(second))
 
+    def test_reviewed_symbol_and_programming_tokens_do_not_gain_ordinary_pos(self):
+        for kind,required in usage.USAGE_KINDS.items():
+            review=named()
+            review.update(decision=kind,categories=sorted(required[0]))
+            model=pipeline.Lexicon(fixtures.SEED)
+            usage.attach(model,self.rows,[review],[],[],[])
+            key=next(iter(model.approved['Fixture']))
+            self.assertEqual(required[0],model.members[key,'Fixture'])
+            self.assertNotIn('noun_proper',model.members[key,'Fixture'])
+            model.validate()
+            review['categories'].append('verb_base')
+            with self.assertRaises(ValueError):
+                usage.attach(model,self.rows,[review],[],[],[])
+
+    def test_symbol_review_still_rejects_identifier_embedding_or_unattested_case(self):
+        for change in ['embedding','case','role']:
+            review=named()
+            review.update(decision='include_symbol',categories=['symbol'])
+            if change=='embedding': review['witnesses'][0]['embeddedInIdentifier']=True
+            elif change=='case': review['target']='FIXTURE'
+            else: review['categories'].append('noun')
+            with self.assertRaises(ValueError):
+                usage.attach(self.model,self.rows,[review],[],[],[])
+
     def test_reviewed_admission_survives_materialization_without_promoting_context(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

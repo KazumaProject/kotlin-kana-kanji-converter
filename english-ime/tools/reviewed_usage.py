@@ -20,6 +20,11 @@ USAGE_SHA = '5af885ef27fdea1f0d1d56b49420aa6295e6c21d44c9c04d6cd996a6665a5f3b'
 USAGE_SNAPSHOTS = {USAGE_SHA, '2417f721ba74f10ad0b75572e81e6374047afa65b9b601c99c689fb8d855c9b0'}
 NAME_CATEGORIES = {'noun', 'noun_proper', 'name_person', 'name_place', 'name_organization',
     'name_product', 'name_work', 'name_fictional', 'domain_technology', 'domain_entertainment'}
+USAGE_KINDS = {
+    'include_symbol': ({'symbol'}, {'symbol','domain_science','domain_medical','domain_technology'}),
+    'include_abbreviation': ({'abbreviation'}, {'abbreviation','domain_science','domain_medical','domain_technology','domain_business'}),
+    'include_programming_keyword': ({'identifier_programming_keyword','domain_technology'}, {'identifier_programming_keyword','domain_technology'}),
+    'include_markup_attribute': ({'identifier_markup_attribute','domain_technology'}, {'identifier_markup_attribute','domain_technology'})}
 
 
 def identity(row):
@@ -63,7 +68,7 @@ def evidence(review):
         humanReviewClaimed=False, rationale=review['rationale'],
         url='https://en.wiktionary.org/wiki/' + quote(review['witnesses'][0]['headword'].replace(' ', '_'), safe='') + '#English',
         witnesses=[{key: row[key] for key in ['entryId', 'headword', 'senseIndex', 'exampleIndex', 'observed', 'possessive', 'quoteSha256', 'reference']} for row in review['witnesses']],
-        scope='reviewed independent English usage of this literal name or positive malformed-fragment evidence; no automatic POS from the containing entry, corpus intent, preferred spelling or inherited morphology')
+        scope='reviewed independent usage of this literal name, symbol, abbreviation or specifically identified programming/markup token, or positive malformed-fragment evidence; no automatic POS from the containing entry, corpus intent, preferred spelling or inherited morphology')
 
 
 def attach(model, rows, reviews, corrections, exclusions, audit):
@@ -76,15 +81,16 @@ def attach(model, rows, reviews, corrections, exclusions, audit):
         if not selected:
             continue
         proof = evidence(review)
-        if review['decision'] == 'include_name':
+        if review['decision'] == 'include_name' or review['decision'] in USAGE_KINDS:
             target = review['target']
             members = set(review['categories'])
-            if not {'noun', 'noun_proper'} <= members or not members <= NAME_CATEGORIES:
-                raise ValueError('Usage name review cannot infer lexical inflections or ordinary POS')
+            required, allowed = ({'noun','noun_proper'}, NAME_CATEGORIES) if review['decision']=='include_name' else USAGE_KINDS[review['decision']]
+            if not required <= members or not members <= allowed:
+                raise ValueError('Usage review cannot infer unrelated POS or lexical inflections')
             if target.casefold() != review['form'].casefold() or not any(bare_observation(w) == target and not w['inKnownFullName'] and not w['embeddedInIdentifier'] for w in review['witnesses']):
-                raise ValueError('Name review lacks the exact independent spelling witness')
+                raise ValueError('Usage review lacks the exact independent spelling witness')
             extension.ensure_categories(model, members)
-            key = 'usage-name-' + hashlib.sha256(json.dumps([target, sorted(members)]).encode()).hexdigest()[:24]
+            key = ('usage-name-' if review['decision']=='include_name' else 'usage-token-') + hashlib.sha256(json.dumps([target, sorted(members)]).encode()).hexdigest()[:24]
             model.add(key, target, target, members, proof, approved=True)
             for row in selected:
                 surface = row['surface']
@@ -105,7 +111,7 @@ def attach(model, rows, reviews, corrections, exclusions, audit):
                         corrections.append(dict(item, relation=relation))
                 else:
                     raise ValueError('Usage review cannot change input spelling or reading')
-            counts['reviewedNameSurfaces'] += 1
+            counts['reviewedNameSurfaces' if review['decision']=='include_name' else 'reviewedTypedTokenSurfaces'] += 1
         elif review['decision'] == 'exclude_fragment':
             if any(model.approved.get(surface) for surface in model.approved if surface.casefold() == review['form'].casefold()):
                 raise ValueError('Fragment exclusion conflicts with an independently approved reading')
@@ -145,11 +151,11 @@ def extend(args):
     counts = attach(model, selected, reviews, corrections, decisions, pending)
     sources['reviewedEnglishUsage'] = dict(snapshotSha256=SNAPSHOT_SHA256, usageSha256=pipeline.digest(args.usage),
         reviewsSha256=pipeline.digest(args.reviews), reviewer='implementation_agent', humanReviewClaimed=False,
-        policy='explicit individually reviewed standalone usages; complete-name embeddings and identifiers rejected; positive fragment evidence plus conflict checks for exclusions; original input rows and unresolved alternative-sense evidence preserved; no quotation prose redistributed')
+        policy='explicit individually reviewed standalone names, symbols, abbreviations and specifically identified programming/markup tokens; embeddings in longer names or identifiers rejected; no lexical POS or inflection from containing entry; positive fragment evidence plus conflict checks for exclusions; original input rows and unresolved alternative-sense evidence preserved; no quotation prose redistributed')
     notices['REVIEWED-ENGLISH-USAGE-NOTICE.txt'] = (
         'English Wiktionary contributors; Wiktextract snapshot ' + SNAPSHOT_SHA256 + '.\n'
-        'Existing Wiktionary/Wiktextract attribution and license notices apply. Only name facts, source references and quotation hashes are retained; quoted source prose is not redistributed.\n'
-        'Changes: individual implementation-agent review of standalone named uses and positive word-fragment evidence. This is not a claim of human review, source endorsement, universal preferred casing, or exhaustive corpus-sense disambiguation.\n').encode()
+        'Existing Wiktionary/Wiktextract attribution and license notices apply. Only name/token facts, source references and quotation hashes are retained; quoted source prose is not redistributed.\n'
+        'Changes: individual implementation-agent review of standalone named uses, typed symbols/abbreviations/programming/markup tokens and positive word-fragment evidence. No role is copied from the containing entry. This is not a claim of human review, source endorsement, universal preferred casing, or exhaustive corpus-sense disambiguation.\n').encode()
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='.usage-review-', dir=args.out.parent) as temp:
         path = Path(temp) / 'reviews.tsv'

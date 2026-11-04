@@ -13,6 +13,8 @@ import lexicon_pipeline as pipeline
 from prepare_esdb import REVISION, URL
 
 EXTRA_CATEGORIES = {
+    "identifier_programming_keyword": ("Explicitly identified programming-language keyword; no ordinary English POS or inflection implied", "foreach"),
+    "identifier_markup_attribute": ("Explicitly identified markup-language attribute name; no ordinary English POS or inflection implied", "href"),
     "contraction": ("Contracted written form; expansions are separate spelling relations", "can't, don't, I'm"),
     "noun_possessive_singular": ("Singular noun genitive explicitly recorded in a source", "dog's, child's"),
     "noun_possessive_plural": ("Plural noun genitive explicitly recorded in a source", "dogs', children's"),
@@ -36,7 +38,7 @@ EXTRA_CATEGORIES = {
     "orthography_expressive_lengthening": ("Derived informal repeated-letter spelling of an independently verified English form; no claim of individual attestation or inherited inflection flags", "soooo, loooong"),
     "identifier_named_component": ("Whole attested word within a verified English proper name; requires named context, with no standalone name, English POS or inflection claim", "Phnom in Phnom Penh, Moines in Des Moines"),
     "identifier_software_catalog": ("Published software catalog slug or explicit alternate identifier; no lexical POS or preferred vendor spelling claim", "jupyterlab, junit"),
-    "name_fictional": ("Attested name of a fictional character or fictional species; no real-person or biological-species claim", "Bulbasaur, Charizard"),
+    "name_fictional": ("Attested name of a fictional character, species, place, object or material; no real-person, biological-species or real-world existence claim", "Bulbasaur, Charizard, Alola, Vibranium"),
 }
 
 
