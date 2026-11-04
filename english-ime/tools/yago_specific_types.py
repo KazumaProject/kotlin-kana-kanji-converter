@@ -11,7 +11,7 @@ import lexicon_pipeline as pipeline
 import yago_names as yago
 import yago_name_variants as variants
 
-ROOTS={
+LEGACY_ROOTS={
  'yago:Computing_platform':{'name_product','domain_technology'},
  'yago:Proprietary_software':{'name_product','domain_technology'},
  'yago:Server_software':{'name_product','domain_technology'},
@@ -23,7 +23,19 @@ ROOTS={
  'schema:MusicRecording':{'name_work'},'schema:TVEpisode':{'name_work'},
  'schema:TVSeason':{'name_work'},'schema:VideoGame':{'name_work'},
  'yago:Book_series':{'name_work'}}
-SOFTWARE=set(ROOTS)-{'yago:Electronic_Product','yago:Character_arts'}-{k for k,v in ROOTS.items() if v=={'name_work'}}
+DESCRIPTION_ROOTS={
+ 'yago:Digital_audio_workstation':({'name_product','domain_technology'},r'\bdigital audio workstations?\b'),
+ 'yago:Computer_Network_Protocol':({'noun','noun_proper','domain_technology'},r'\b(?:computer network protocol|protocol suite)\b'),
+ 'yago:Python_Package':({'noun','noun_proper','domain_technology'},r'\bpython (?:library|package|compiler)\b'),
+ 'yago:Music_festival':({'noun','noun_proper','domain_entertainment'},r'\bmusic festival\b'),
+ 'yago:Convention_meeting':({'noun','noun_proper'},r'\b(?:convention|conference)\b'),
+ 'yago:Trade_show':({'noun','noun_proper'},r'\b(?:trade fair|trade show)\b'),
+ 'yago:Sports_league':({'noun','noun_proper','domain_sports'},r'\b(?:sports league|ice hockey league|basketball competition)\b'),
+ 'yago:Motorcycle_Racing_Series':({'noun','noun_proper','domain_sports'},r'\bmotorcycling world championship\b'),
+ 'yago:Typeface_Family':({'noun','noun_proper'},r'\btypeface family\b'),
+ 'yago:Film':({'name_work'},r'^\d{4}\b.*\bfilm\b')}
+ROOTS=dict(LEGACY_ROOTS,**{root:values for root,(values,_) in DESCRIPTION_ROOTS.items()})
+SOFTWARE=set(LEGACY_ROOTS)-{'yago:Electronic_Product','yago:Character_arts'}-{k for k,v in LEGACY_ROOTS.items() if v=={'name_work'}}
 
 
 def supported(root,descriptions):
@@ -32,6 +44,7 @@ def supported(root,descriptions):
         if not yago.english(record['language']):continue
         text=record['label'].casefold()
         head=re.split(r'\b(?:by|for|from|with|which|that|in|on)\b',text,maxsplit=1)[0]
+        if root in DESCRIPTION_ROOTS and re.search(DESCRIPTION_ROOTS[root][1],text):return True
         if root=='yago:Character_arts' and re.search(r'\b(?:fictional character|character|superhero|supervillain)\b',head):return True
         if root in SOFTWARE and re.search(r'\b(?:software|application|app|platform|framework|engine|runtime|service|website|web browser|chatbot|tool|network|repository host|content delivery network)\b',head):return True
         if root=='yago:Electronic_Product' and re.search(r'\b(?:device|receiver|computer|console|chipset|speakers?|smartphones?|laptops?|tablets?|smartwatch|figurines|peripheral|accessory)\b',head):return True
@@ -68,8 +81,9 @@ def extend(args):
     # Reuse identical inventory, exclusion, case and provenance handling while
     # requiring this extraction's independent root matrix on load and attach.
     meta=json.loads((args.prepared/'manifest.json').read_text())
-    if meta['roots']!={k:sorted(v) for k,v in ROOTS.items()}:raise ValueError('Wrong specific roots')
-    variants.extend(args,ROOTS,'yagoSpecificNamedTypes')
+    profiles=[roots for roots in [LEGACY_ROOTS,ROOTS] if meta['roots']=={k:sorted(v) for k,v in roots.items()}]
+    if len(profiles)!=1:raise ValueError('Wrong specific roots')
+    variants.extend(args,profiles[0],'yagoSpecificNamedTypes')
 
 
 if __name__=='__main__':
