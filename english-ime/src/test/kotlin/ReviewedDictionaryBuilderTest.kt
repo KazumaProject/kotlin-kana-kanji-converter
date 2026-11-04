@@ -16,6 +16,22 @@ import kotlin.test.assertTrue
 
 class ReviewedDictionaryBuilderTest {
     @Test
+    fun spacedInputAliasRequiresTheUnchangedOriginalManualMapping() {
+        val temporary = Files.createTempDirectory("literal-phrase-alias").toFile()
+        try {
+            val relations = temporary.resolve("relations.tsv").apply {
+                writeText("relation\tsource\ttarget\tevidence\ninput_alias\texample three sixty five\tExample 365\thttps://example.org/manual\n")
+            }
+            val row = SourceRow("manual:1", "example three sixty five", "Example 365", 9000)
+            assertFailsWith<IllegalArgumentException> { validateRelations(relations, setOf("Example 365")) }
+            validateRelations(relations, setOf("Example 365"), listOf(row))
+            assertFailsWith<IllegalArgumentException> { validateRelations(relations, setOf("Example 365"), listOf(row.copy(id = "tsv:1"))) }
+            assertFailsWith<IllegalArgumentException> { validateRelations(relations, setOf("Example 365"), listOf(row.copy(reading = "different input"))) }
+            assertFailsWith<IllegalArgumentException> { validateRelations(relations, setOf("Example 365"), listOf(row.copy(surface = "Different product"))) }
+        } finally { temporary.deleteRecursively() }
+    }
+
+    @Test
     fun retainsVerifiedLiteralAndNamedReadingsAtTheOriginalCost() {
         val temporary = Files.createTempDirectory("literal-and-name").toFile()
         try {

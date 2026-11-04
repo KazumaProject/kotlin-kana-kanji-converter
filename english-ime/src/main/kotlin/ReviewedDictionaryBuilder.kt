@@ -67,8 +67,9 @@ internal fun buildReviewedDictionary(
     val lexicon = Lexicon.load(lexiconDirectory)
     val forms = lexicon.forms.associateBy { it.key }
     val knownSurfaces = forms.keys.map { it.surface }.toSet()
-    validateRelations(relations, knownSurfaces)
-    val accepted = selectReviewedRows(englishInventory(source), decisions, forms.keys, corrections)
+    val originalRows = englishInventory(source)
+    validateRelations(relations, knownSurfaces, originalRows)
+    val accepted = selectReviewedRows(originalRows, decisions, forms.keys, corrections)
     val noticeDirectory = requireNotNull(notices) { "Reviewed builds require --notices DIR" }
     require(noticeDirectory.isDirectory) { "Reviewed builds require --notices DIR" }
     val destination = output.absoluteFile
@@ -148,13 +149,15 @@ internal fun selectReviewedRows(rows: List<SourceRow>, decisions: File, forms: S
     return accepted
 }
 
-internal fun validateRelations(relations: File, surfaces: Set<String>) {
+internal fun validateRelations(relations: File, surfaces: Set<String>, originalRows: List<SourceRow> = emptyList()) {
     val rows = relations.readTsv("relation", "source", "target", "evidence")
+    val literalManualAliases = originalRows.filter { it.id.startsWith("manual:") }.map { it.reading to it.surface }.toSet()
     require(rows.map { it.take(3) }.toSet().size == rows.size) { "Duplicate spelling relation" }
     for ((type, source, target, evidence) in rows) {
         val validSource = when (type) {
             "input_spelling" -> source == keyboardReading(target)
-            "input_alias" -> source.matches(Regex("[a-z][a-z0-9_-]*"))
+            "input_alias" -> source.matches(Regex("[a-z][a-z0-9_-]*")) ||
+                (source.matches(Regex("[a-z][a-z0-9_-]*( [a-z0-9_-]+)+")) && (source to target) in literalManualAliases)
             "capitalization" -> source.lowercase() == target.lowercase()
             "contraction" -> true
             else -> source in surfaces
