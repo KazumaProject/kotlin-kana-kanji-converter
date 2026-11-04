@@ -16,7 +16,7 @@ WIKTIONARY_ROLES = {
     "prep": "preposition", "conj": "conjunction", "intj": "interjection", "num": "numeral",
     "particle": "particle", "abbrev": "abbreviation",
 }
-RESTRICTED = {"archaic", "obsolete", "offensive", "derogatory", "vulgar", "slur", "proscribed"}
+RESTRICTED = {"archaic", "obsolete", "offensive", "derogatory", "vulgar", "slur"}
 
 
 def digest(path):

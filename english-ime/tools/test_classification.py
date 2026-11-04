@@ -58,7 +58,7 @@ class EvidenceTests(unittest.TestCase):
             {"word": "saw", "lang_code": "en", "pos": "verb", "etymology_number": 2,
              "senses": [{"tags": ["past", "form-of"], "form_of": [{"word": "see"}]}]},
             {"word": "saw", "lang_code": "en", "pos": "noun", "etymology_number": 1,
-             "senses": [{"tags": ["archaic"]}, {"topics": ["carpentry"]}]},
+             "senses": [{"tags": ["archaic"]}, {"topics": ["carpentry"], "tags": ["proscribed"]}]},
             {"word": "saw", "lang_code": "pl", "pos": "noun", "senses": [{}]},
         ]
         with tempfile.TemporaryDirectory() as directory:
