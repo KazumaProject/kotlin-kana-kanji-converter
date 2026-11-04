@@ -3,3 +3,5 @@ plugins {
 }
 rootProject.name = "kana-kanji-converter"
 
+
+include("english-ime")
