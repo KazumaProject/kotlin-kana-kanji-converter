@@ -1,0 +1,99 @@
+category	definition	examples
+noun_count_singular	Singular count noun; singular agreement	book, child, sheep
+noun_count_plural	Plural count noun; plural agreement	books, children, sheep
+noun_uncountable	Mass sense; mass determiners	information, water, advice
+noun_plural_only	Lexically plural; plural agreement	scissors, trousers
+noun_collective	Group noun; agreement may vary	team, family, committee
+noun_proper	Proper noun; agreement depends on reference	Canada, Tokyo, NASA
+verb_base	Infinitive or bare verb; modal and do complements	take, work, cut
+verb_present_non3sg	Non-third-singular present; finite agreement	take, work, cut
+verb_present_3sg	Third-person singular present; finite agreement	takes, works, cuts
+verb_past	Past finite form	took, worked, cut
+verb_past_participle	Past participle; perfect and passive complements	taken, worked, cut
+verb_ing	Present participle or gerund; progressive complement	taking, working, cutting
+aux_be_present_1sg	First-person singular be	am
+aux_be_present_3sg	Third-person singular be	is
+aux_be_present_other	Present be with you or a plural-form subject	are
+aux_be_past_1sg_3sg	Indicative singular past be except you	was
+aux_be_past_other	Indicative past be with you or a plural-form subject	were
+aux_be_base	Bare be	be
+aux_be_participle	Past participle of be	been
+aux_be_ing	Present participle of be	being
+aux_have_base	Bare have; auxiliary or lexical interpretation	have
+aux_have_3sg	Third-person singular have	has
+aux_have_past	Past have; perfect auxiliary when finite	had
+aux_do_base	Bare do; auxiliary or lexical interpretation	do
+aux_do_3sg	Third-person singular do	does
+aux_do_past	Past do	did
+aux_modal	Modal auxiliary followed by bare verb	can, could, may
+pronoun_subject_1sg	First-person singular subject	I
+pronoun_subject_2nd	Second-person subject	you
+pronoun_subject_3sg	Third-person singular subject	he, she, it
+pronoun_subject_plural	Plural-form agreement including singular they	we, they
+pronoun_object	Object case or function	me, you, him
+det_possessive	Possessive determiner before a noun phrase	my, your, his
+pronoun_possessive	Independent possessive pronoun	mine, yours, his
+pronoun_reflexive	Reflexive or intensive pronoun	myself, yourself, herself
+pronoun_demonstrative	Independent demonstrative	this, that, these
+pronoun_interrogative	Interrogative pronoun	who, whom, what
+pronoun_relative	Relative pronoun or relativizer	who, whom, which
+pronoun_indefinite_singular	Indefinite pronoun with singular agreement	everyone, someone, each
+pronoun_indefinite_plural	Indefinite pronoun with plural agreement	many, several, both
+pronoun_indefinite_variable	Indefinite pronoun whose agreement depends on reference	some, all, none
+det_article	Definite or indefinite article	a, an, the
+det_demonstrative_singular	Demonstrative before a singular noun	this, that
+det_demonstrative_plural	Demonstrative before a plural noun	these, those
+det_count_singular	Determiner selecting singular count noun	a, an, each
+det_count_plural	Determiner selecting plural count noun	many, several, these
+det_uncountable	Determiner selecting mass noun	much, little
+det_flexible	Determiner compatible with more than one nominal class	some, any, the
+det_interrogative	Interrogative determiner	which, what, whose
+adjective_base	Positive adjective	small, happy, good
+adjective_comparative	Comparative adjective	smaller, happier, better
+adjective_superlative	Superlative adjective	smallest, happiest, best
+adjective_attributive	Attested before a noun	small, happy, fast
+adjective_predicative	Attested as predicate complement	small, happy, fast
+adverb_frequency	Adverb of frequency; can intervene before verb	always, often, sometimes
+adverb_manner	Adverb of manner	quickly, carefully, fast
+adverb_degree	Degree modifier	very, quite, too
+adverb_time	Temporal adverb	today, already, soon
+adverb_place	Locative adverb	here, there, outside
+adverb_sentence	Adverb modifying the clause	perhaps, fortunately
+adverb_comparative	Comparative adverb	faster
+adverb_superlative	Superlative adverb	fastest
+preposition	Heads a prepositional phrase	in, on, at
+conjunction_coordinating	Coordinates parallel constituents	and, but, or
+conjunction_subordinating	Introduces subordinate clause	because, although, if
+infinitive_marker	Introduces bare infinitive	to
+verb_particle	Particle in a phrasal verb	up, off, out
+negation	Negative operator or adverb	not, never
+interrogative_adverb	Question adverb	where, when, why
+interjection	Independent interjection	oh, wow, ouch
+numeral_cardinal	Cardinal number	one, two, three
+numeral_ordinal	Ordinal number	first, second, third
+abbreviation	Attested abbreviated form; candidate selection	API, etc., Dr.
+domain_daily	Everyday vocabulary; domain selection	book, water
+domain_technology	Computing and software; domain selection	API, compiler
+domain_medical	Medicine and healthcare; domain selection	diagnosis, stethoscope
+domain_business	Business and commerce; domain selection	invoice, shareholder
+domain_travel	Transport and travel; domain selection	passport, boarding
+domain_food	Food and drink; domain selection	coffee, bread
+domain_science	Scientific terminology; domain selection	molecule, isotope
+domain_education	Teaching and education; domain selection	curriculum, classroom
+domain_sports	Sports terminology; domain selection	goalkeeper, referee
+domain_entertainment	Entertainment and performing arts; domain selection	cinema, screenplay
+name_person	Personal name; entity selection	Alice
+name_place	Place name; entity selection	Canada, Tokyo
+name_organization	Organization name; entity selection	NASA
+name_product	Product name; entity selection	iPhone
+register_informal	Informal use; register selection	gonna
+register_formal	Formal use; register selection	hereby
+noun	Attested noun; general nominal role when countability is unavailable	saw, compiler, diagnosis
+adjective	Attested adjective; general role when use is unavailable	small, happy
+adverb	Attested adverb; general role when subtype is unavailable	quickly, often
+verb	Attested verb; general role when the inflection is unavailable	take, work
+determiner	Attested determiner; general role when constraints are unavailable	the, my
+pronoun	Attested pronoun; general role when agreement is unavailable	you, it
+conjunction	Attested conjunction; general role when subtype is unavailable	and, because
+particle	Attested particle; general role when subtype is unavailable	up, off
+numeral	Attested numeral; general role when subtype is unavailable	one, two

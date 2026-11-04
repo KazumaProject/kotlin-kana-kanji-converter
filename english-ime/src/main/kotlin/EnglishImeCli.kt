@@ -1,3 +1,6 @@
+import grammar.ContextEvaluator
+import grammar.Lexicon
+import kotlinx.serialization.json.*
 import java.io.File
 
 fun main(args: Array<String>) {
@@ -10,7 +13,37 @@ fun main(args: Array<String>) {
                 File(options.required("--out")),
             )
         }
-        else -> error("Usage: build-legacy [--source ZIP] --out DIR")
+        "evaluate" -> {
+            options.allow("--text", "--candidate", "--format", "--lexicon")
+            val lexicon = Lexicon.load(File(options.optional("--lexicon") ?: "data/grammar"))
+            val results = ContextEvaluator(lexicon).evaluate(options.required("--text"), options.all("--candidate"))
+            when (options.optional("--format") ?: "text") {
+                "text" -> results.forEach {
+                    println("${it.candidate}\t${it.score}\t${it.reasons.joinToString(",")}\t" +
+                        it.interpretations.joinToString(",") { form -> "${form.key.lexemeId}=${form.lemma}" })
+                }
+                "json" -> println(buildJsonObject {
+                    put("schemaVersion", 1)
+                    putJsonArray("candidates") {
+                        for (result in results) addJsonObject {
+                            put("candidate", result.candidate)
+                            put("score", result.score)
+                            putJsonArray("reasons") { result.reasons.forEach { add(it) } }
+                            putJsonArray("interpretations") {
+                                for (form in result.interpretations) addJsonObject {
+                                    put("lexemeId", form.key.lexemeId)
+                                    put("lemma", form.lemma)
+                                    put("surface", form.key.surface)
+                                    putJsonArray("dictionaries") { form.dictionaries.sorted().forEach { add(it) } }
+                                }
+                            }
+                        }
+                    }
+                })
+                else -> error("--format must be text or json")
+            }
+        }
+        else -> error("Usage: build-legacy [--source ZIP] --out DIR | evaluate --text TEXT --candidate WORD [--format text|json]")
     }
 }
 
