@@ -27,6 +27,20 @@ class UsagePreparationTests(unittest.TestCase):
         self.assertEqual(24, len(records['fixture']))
         self.assertEqual('fixture', heads[0]['word'])
 
+    def test_quote_limit_is_applied_after_filtering_components_and_identifiers(self):
+        records, heads, counts = defaultdict(list), [], Counter()
+        entry = dict(lang_code='en', word='unrelated', senses=[dict(examples=[
+            dict(text='Fixture Group followed example.test.', type='quotation', ref='2000, Fixture'),
+            dict(text='The band Fixture performed', type='quotation', ref='2001, Fixture'),
+            dict(text='The band Fixture toured', type='example'),
+            dict(text='The band Fixture won', type='quotation', ref='2002, Fixture')])])
+        usage.witnesses(1, entry, {'fixture', 'example'}, defaultdict(set, fixture={'fixture group'}), records, heads, counts,
+            max_per_form=1, identified_standalone_only=True)
+        self.assertEqual(1, len(records['fixture']))
+        self.assertEqual('The band ', records['fixture'][0]['contextBefore'])
+        self.assertFalse(records['example'])
+        self.assertEqual(3, counts['englishQuotations'])
+
 
 if __name__ == '__main__':
     unittest.main()

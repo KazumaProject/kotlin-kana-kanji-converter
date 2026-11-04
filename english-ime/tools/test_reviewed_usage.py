@@ -58,6 +58,16 @@ class UsageReviewTests(unittest.TestCase):
         self.assertTrue(self.model.approved['FIXTURE'])
         self.assertTrue(self.model.approved['Fixture'])
 
+    def test_named_and_punctuation_alternatives_preserve_both_candidates_and_citations(self):
+        proof = dict(source='curated_seed', url='https://example.org/original-word')
+        self.model.add('punctuated-word', 'fix-ture', 'fix-ture', {'noun'}, proof, approved=True)
+        corrections = [dict(id='tsv:1', source='fixture', target='fix-ture', relation='input_spelling_correction', evidence=proof['url'])]
+        usage.attach(self.model, self.rows, [named()], corrections, [], [])
+        self.assertEqual({'Fixture', 'fix-ture'}, {row['target'] for row in corrections})
+        self.assertTrue(all(row['relation']=='input_spelling_candidates' for row in corrections))
+        self.assertEqual(proof['url'], next(row['evidence'] for row in corrections if row['target']=='fix-ture'))
+        self.assertEqual(('Fixture', 'fix-ture'), pipeline.correction_targets(corrections, self.rows, self.model)['tsv:1'])
+
     def test_fragment_needs_positive_boundaries_two_quotes_and_no_valid_counterevidence(self):
         row = dict(id='tsv:1', surface='doesn', reading='doesn', cost=700)
         first = witness(); first.update(form='doesn', observed='doesn', contextAfter='′t work')

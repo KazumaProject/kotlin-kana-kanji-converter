@@ -40,5 +40,44 @@ class ReferenceRepairTests(unittest.TestCase):
         w.import_records(m,rows,{'singlehandedly'},[]);r.attach_direct(m,rows,{'singlehandedly'},[])
         self.assertTrue(m.approved['singlehandedly']);self.assertTrue(all(m.members[key,'singlehandedly']=={'adverb'} for key in m.approved['singlehandedly']));m.validate()
 
+    def test_abbreviation_keeps_own_declared_role_without_expansion_head(self):
+        m=p.Lexicon(f.SEED)
+        row=entry('FIX','noun',{'tags':['abbreviation','alt-of','initialism'],'alt_of':[{'word':'fixture phrase'}],'glosses':['Initialism of fixture phrase.']})
+        row['head_templates']=[{'name':'en-noun','args':{}}]
+        r.attach_direct(m,[(1,row)],{'FIX'},[])
+        key=next(iter(m.approved['FIX']))
+        self.assertEqual({'noun','abbreviation'},m.members[key,'FIX'])
+        self.assertEqual('FIX',m.forms[key,'FIX']['lemma'])
+        self.assertFalse(m.approved.get('fixture phrase'));m.validate()
+
+    def test_missing_or_conflicting_head_template_cannot_supply_abbreviation_pos(self):
+        for head in [[],[{'name':'en-adj','args':{}}]]:
+            m=p.Lexicon(f.SEED)
+            row=entry('FIX','noun',{'tags':['abbreviation','alt-of'],'alt_of':[{'word':'fixture'}],'glosses':['Abbreviation of fixture.']});row['head_templates']=head
+            r.attach_direct(m,[(1,row)],{'FIX'},[])
+            self.assertFalse(m.approved.get('FIX'))
+
+    def test_symbol_expansion_does_not_turn_symbol_into_noun_or_name(self):
+        m=p.Lexicon(f.SEED)
+        row=entry('fsym','symbol',{'tags':['alt-of','symbol'],'alt_of':[{'word':'fixture units ago'}],'glosses':['Symbol for fixture units ago.']});row['head_templates']=[{'name':'head','args':{'1':'en','2':'symbol'}}]
+        r.attach_direct(m,[(1,row)],{'fsym'},[]);key=next(iter(m.approved['fsym']))
+        self.assertEqual({'symbol'},m.members[key,'fsym']);m.validate()
+
+    def test_plain_link_needs_independently_approved_english_verb_for_agent_noun(self):
+        row=entry('unifier','noun',{'tags':['agent','form-of'],'form_of':[{'word':'unify'}],'links':[['unify','unify']],'glosses':['Agent noun of unify; one who unifies.']})
+        m=p.Lexicon(f.SEED);r.attach_direct(m,[(1,row)],{'unifier'},[]);self.assertFalse(m.approved.get('unifier'))
+        m.add('fixture-unify','unify','unify',{'verb','verb_base'},{'source':'curated_seed','url':'https://example.org/unify'},approved=True)
+        r.attach_direct(m,[(1,row)],{'unifier'},[]);key=next(iter(m.approved['unifier']))
+        self.assertEqual({'noun'},m.members[key,'unifier']);m.validate()
+
+    def test_alternative_table_cannot_override_explicit_misspelling_label(self):
+        m=p.Lexicon(f.SEED);pending=[]
+        records=[(1,entry('fixture','noun',{'glosses':['A fixture.']},[{'form':'fixturre','tags':['alternative']}])) ,
+            (2,entry('fixturre','noun',{'tags':['alt-of','misspelling'],'alt_of':[{'word':'fixture'}],'glosses':['Misspelling of fixture.']}))]
+        w.import_records(m,records,{'fixture','fixturre'},pending)
+        r.attach_direct(m,records,{'fixturre'},pending)
+        self.assertFalse(m.approved.get('fixturre'))
+        self.assertTrue(any(x.get('reason')=='canonical_alternative_table_conflicts_with_explicit_restriction' for x in pending))
+
 
 if __name__=='__main__':unittest.main()

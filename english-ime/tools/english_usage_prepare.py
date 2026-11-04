@@ -33,7 +33,7 @@ class HashedReader:
         return False
 
 
-def witnesses(number, entry, wanted, parents, records, heads, counts):
+def witnesses(number, entry, wanted, parents, records, heads, counts, max_per_form=24, identified_standalone_only=False):
     if entry.get('lang_code') != 'en':
         return
     counts['englishEntries'] += 1
@@ -46,7 +46,9 @@ def witnesses(number, entry, wanted, parents, records, heads, counts):
             text = example.get('text')
             if not isinstance(text, str):
                 continue
-            counts['englishExamples'] += 1
+            if identified_standalone_only and (example.get('type') != 'quotation' or not isinstance(example.get('ref'), str) or not example['ref'].strip()):
+                continue
+            counts['englishQuotations' if identified_standalone_only else 'englishExamples'] += 1
             lower = text.casefold()
             for match in WORD_PATTERN.finditer(text):
                 observed = match[0]
@@ -55,7 +57,7 @@ def witnesses(number, entry, wanted, parents, records, heads, counts):
                 if word not in wanted and word.endswith(("'s", '’s')) and word[:-2] in wanted:
                     word = word[:-2]
                     possessive = True
-                if word not in wanted or len(records[word]) >= 24:
+                if word not in wanted or len(records[word]) >= max_per_form:
                     continue
                 embedded = ((match.start() > 0 and text[match.start() - 1] in './@_') or
                     (match.end() < len(text) and text[match.end()] in './@_'))
@@ -64,6 +66,8 @@ def witnesses(number, entry, wanted, parents, records, heads, counts):
                     offset = lower.find(parent)
                     if offset >= 0 and offset <= match.start() < offset + len(parent):
                         full.append(parent)
+                if identified_standalone_only and (full or embedded):
+                    continue
                 records[word].append(dict(entryId=number, headword=head, pos=entry.get('pos'),
                     senseIndex=sense_number, exampleIndex=example_number, form=word, observed=observed,
                     possessive=possessive, inKnownFullName=sorted(full), embeddedInIdentifier=embedded,
@@ -77,6 +81,8 @@ def witnesses(number, entry, wanted, parents, records, heads, counts):
 def prepare(args):
     if args.out.exists():
         raise ValueError('Output exists')
+    if not 1 <= args.max_per_form <= 128:
+        raise ValueError('Per-form quotation limit must be in 1..128')
     pipeline.verify(args.base)
     rows = pipeline.inventory(args.base / 'inventory.jsonl')
     states = list(map(json.loads, (args.base / 'status.jsonl').open()))
@@ -99,7 +105,8 @@ def prepare(args):
                 if number % 1000000 == 0:
                     print(json.dumps(dict(rawEntries=number, englishEntries=counts['englishEntries'], matchedForms=len(records), seconds=round(time.monotonic() - started, 1))), flush=True)
                 if b'"lang_code": "en"' in line or b'"lang_code":"en"' in line:
-                    witnesses(number, json.loads(line), wanted, parents, records, heads, counts)
+                    witnesses(number, json.loads(line), wanted, parents, records, heads, counts,
+                        max_per_form=args.max_per_form, identified_standalone_only=args.identified_standalone_only)
         observed_sha = raw.hash.hexdigest()
     after = args.snapshot.stat()
     if observed_sha != SNAPSHOT_SHA256 or (before.st_size, before.st_mtime_ns) != (after.st_size, after.st_mtime_ns):
@@ -111,7 +118,8 @@ def prepare(args):
         baseManifestSha256=pipeline.digest(args.base / 'manifest.json'), namedComponentsSha256=COMPONENTS_SHA,
         inputRows=len(selected), wantedForms=len(wanted), matchedForms=len(records), records=sum(map(len, records.values())),
         counts=dict(counts), files={name:pipeline.digest(args.out / name) for name in ['usage.jsonl', 'heads.jsonl']},
-        scope='local English quotation/example leads only, at most 24 per form; no automatic standalone/name/POS admission or external transmission')
+        maxPerForm=args.max_per_form, identifiedStandaloneOnly=args.identified_standalone_only,
+        scope='local English quotation/example leads only; no automatic standalone/name/POS admission or external transmission')
     (args.out / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
     print(json.dumps(manifest), flush=True)
 
@@ -120,4 +128,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     for field in ['base', 'snapshot', 'named-components', 'out']:
         parser.add_argument('--' + field, type=Path, required=True)
+    parser.add_argument('--max-per-form', type=int, default=24)
+    parser.add_argument('--identified-standalone-only', action='store_true')
     prepare(parser.parse_args())

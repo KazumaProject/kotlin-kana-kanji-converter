@@ -18,6 +18,62 @@ WHEEL='botocore-1.43.123-py3-none-any.whl'
 WHEEL_SHA='e30580f9c1282c321529238ff8ff75066096a2adbd0a293c8ae592c21d1733a3'
 DEVICON_URL='https://github.com/devicons/devicon/blob/'+DEVICON_REVISION+'/devicon.json'
 BOTOCORE_URL='https://pypi.org/project/botocore/1.43.123/'
+HOMEBREW_PINS={
+ 'formula.json':'5a9c3d3d942627a3bddcebcff43a383089080322aff34b0b0b1663d0db5664a9',
+ 'cask.json':'22be06451040c225cce6c5bebfcf058c683c196471e32e54abbcfd46e37d72c4',
+ 'CORE-LICENSE.txt':'f80329e58613ad669c0e73cb132d8060b9b2c55e339c73848068e4d1567f4627',
+ 'CASK-LICENSE.txt':'abd8be86c5738400f30c426bc88d90495b2dcfca9fe20b8d9b925599a55528b0'}
+
+
+def homebrew_records(formulas,casks):
+    records=[]
+    for filename,entries in [('formula.json',formulas),('cask.json',casks)]:
+        for entry in entries:
+            formula=filename=='formula.json'
+            identity=entry['full_name' if formula else 'full_token']
+            labels=([entry['name']]+entry.get('aliases',[])+entry.get('oldnames',[])) if formula else [entry['token']]+entry.get('old_tokens',[])
+            fields=[('catalog_identifier',labels),('executable',entry.get('executables') or [])]
+            if not formula:fields.append(('display_name',entry.get('name',[])))
+            for kind,values in fields:
+                for label in values:
+                    if not isinstance(label,str) or not label or any(c in label for c in '\t\r\n'):
+                        raise ValueError('Invalid literal Homebrew metadata label')
+                    records.append(dict(sourceFile=filename,identity=identity,kind=kind,label=label,
+                        sourceRevision=entry.get('tap_git_head'),sourcePath=entry.get('ruby_source_path'),
+                        homepage=entry.get('homepage'),disabled=entry.get('disabled'),deprecated=entry.get('deprecated')))
+    return records
+
+
+def load_homebrew(directory):
+    for name,expected in HOMEBREW_PINS.items():
+        if pipeline.digest(directory/name)!=expected:raise ValueError('Changed Homebrew source or license: '+name)
+    formulas=json.loads((directory/'formula.json').read_text());casks=json.loads((directory/'cask.json').read_text())
+    if len(formulas)!=8703 or len(casks)!=7807:raise ValueError('Incomplete Homebrew catalog')
+    return homebrew_records(formulas,casks)
+
+
+def attach_homebrew(model,rows,records):
+    extension.ensure_categories(model,{'identifier_software_catalog','identifier_command_line'})
+    by_fold=defaultdict(list);counts=Counter()
+    for row in rows:by_fold[row['surface'].casefold()].append(row)
+    for record in records:
+        label=record['label'];selected=list(by_fold[label.casefold()])
+        if record['kind']=='display_name' and ' ' in label:
+            selected += [row for row in by_fold[label.replace(' ','').casefold()] if row['id'].startswith('manual:')]
+        if not selected:continue
+        members=({'noun','noun_proper','name_product','domain_technology'} if record['kind']=='display_name' else
+            {'identifier_command_line' if record['kind']=='executable' else 'identifier_software_catalog','domain_technology'})
+        key='homebrew-fact-'+hashlib.sha256(json.dumps([record['identity'],record['kind'],label]).encode()).hexdigest()[:24]
+        proof=dict(source='public_technology_catalog',url='https://formulae.brew.sh/api/'+record['sourceFile'],
+            sourceSha256=HOMEBREW_PINS[record['sourceFile']],metadataFact=record,approved=True,
+            preferredVendorCaseClaimed=False,softwareExecuted=False,
+            scope='literal catalog slug/alias, explicitly enumerated executable, or application display name; kinds remain separate; existing manual case/space-free name variants only; no inferred executable from a package slug, English POS for identifiers, corpus intent, installation, current availability, software license or artwork claim')
+        model.add(key,label,label,members,proof,approved=True)
+        for row in selected:
+            if row['surface']!=label and not row['id'].startswith('manual:'):continue
+            model.add(key,label,row['surface'],members,dict(proof,legacySourceId=row['id'],originalSurface=row['surface']),approved=True)
+            counts['homebrew_'+record['kind']+'_input_senses']+=1
+    return counts
 
 
 def load(devicon,botocore):
@@ -82,6 +138,12 @@ def attach(model,rows,entries,services):
 def extend(args):
     entries,services,new_notices=load(args.devicon,args.botocore)
     model,rows,sources,notices,pending=extension.load_base(args.base,args.seed);counts=attach(model,rows,entries,services)
+    if getattr(args,'homebrew',None):
+        counts.update(attach_homebrew(model,rows,load_homebrew(args.homebrew)))
+        sources['homebrewCatalogFacts']={'files':HOMEBREW_PINS,'formulaRows':8703,'caskRows':7807,
+            'policy':'read pinned public JSON only; slugs/explicit aliases, explicit executable lists and display names are separate facts; do not execute formulas, artifacts, installation hooks or scripts; no preferred vendor spelling, installation, current availability, application licensing or corpus-sense inference'}
+        for name in ['CORE-LICENSE.txt','CASK-LICENSE.txt']:notices['HOMEBREW-'+name]=(args.homebrew/name).read_bytes()
+        notices['HOMEBREW-CATALOG-NOTICE.txt']=('Homebrew contributors, homebrew-core and homebrew-cask, BSD-2-Clause; complete notices retained separately.\nhttps://formulae.brew.sh/docs/api/\nhttps://formulae.brew.sh/api/formula.json\nhttps://formulae.brew.sh/api/cask.json\nChanges: extract selected factual package identifiers, published executable names and display names, preserving source hashes and source references. No descriptions, logos, installation recipes or software are redistributed or executed. Catalog metadata does not grant application software licenses or imply availability, preferred vendor spelling, installed commands or original corpus intent.\n').encode()
     prior=args.base/'reviewed-overrides.tsv';reviews=pipeline.read_table(prior,'decisions') if prior.is_file() else []
     reviews,reopened=resolve_pending.revalidate_machine_reviews(model,reviews,pending)
     states=list(map(json.loads,(args.base/'status.jsonl').open()));selected=[r for r,s in zip(rows,states) if s['decision']=='pending' or r['id'] in reopened]
@@ -104,4 +166,5 @@ def extend(args):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     for name in ['base','seed','devicon','botocore','index','out']:parser.add_argument('--'+name,type=Path,required=True)
+    parser.add_argument('--homebrew',type=Path)
     extend(parser.parse_args())

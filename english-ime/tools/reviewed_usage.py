@@ -17,6 +17,7 @@ import lexicon_pipeline as pipeline
 from wiktionary_index import SNAPSHOT_SHA256
 
 USAGE_SHA = '5af885ef27fdea1f0d1d56b49420aa6295e6c21d44c9c04d6cd996a6665a5f3b'
+USAGE_SNAPSHOTS = {USAGE_SHA, '2417f721ba74f10ad0b75572e81e6374047afa65b9b601c99c689fb8d855c9b0'}
 NAME_CATEGORIES = {'noun', 'noun_proper', 'name_person', 'name_place', 'name_organization',
     'name_product', 'name_work', 'name_fictional', 'domain_technology', 'domain_entertainment'}
 
@@ -29,7 +30,8 @@ def identity(row):
 
 
 def load_reviews(usage, reviews):
-    if pipeline.digest(usage) != USAGE_SHA:
+    observed_sha = pipeline.digest(usage)
+    if observed_sha not in USAGE_SNAPSHOTS:
         raise ValueError('Changed English usage extraction')
     witnesses = {identity(row): row for row in map(json.loads, usage.open())}
     values = list(map(json.loads, reviews.open()))
@@ -38,6 +40,7 @@ def load_reviews(usage, reviews):
         if row['form'] in seen or row['reviewer'] != 'implementation_agent' or not row['rationale'].strip():
             raise ValueError('Duplicate or missing explicit usage review')
         seen.add(row['form'])
+        row['usageSha256'] = observed_sha
         row['witnesses'] = [witnesses[tuple(item)] for item in row['witnessIds']]
         if not row['witnesses'] or any(w['form'] != row['form'] or w['exampleType'] != 'quotation' or not w['reference'] for w in row['witnesses']):
             raise ValueError('Review requires identified quotations, not automatic examples')
@@ -56,7 +59,7 @@ def bare_observation(witness):
 def evidence(review):
     # Retain factual identifiers and quotation hashes, not third-party prose.
     return dict(source='reviewed_english_usage', approved=True, snapshotSha256=SNAPSHOT_SHA256,
-        usageExtractionSha256=USAGE_SHA, reviewKind='explicit_implementation_agent_review',
+        usageExtractionSha256=review.get('usageSha256', USAGE_SHA), reviewKind='explicit_implementation_agent_review',
         humanReviewClaimed=False, rationale=review['rationale'],
         url='https://en.wiktionary.org/wiki/' + quote(review['witnesses'][0]['headword'].replace(' ', '_'), safe='') + '#English',
         witnesses=[{key: row[key] for key in ['entryId', 'headword', 'senseIndex', 'exampleIndex', 'observed', 'possessive', 'quoteSha256', 'reference']} for row in review['witnesses']],
@@ -93,12 +96,13 @@ def attach(model, rows, reviews, corrections, exclusions, audit):
                 elif surface == surface.lower() and pipeline.keyboard_reading(target) == row['reading']:
                     # This explicit review establishes a valid named reading;
                     # it does not resolve every other sense or corpus intent.
-                    existing = {c['target'] for c in corrections if c['id'] == row['id']}
-                    existing.add(target)
+                    existing = {c['target']:dict(c) for c in corrections if c['id'] == row['id']}
+                    existing.setdefault(target, dict(id=row['id'], source=surface, target=target, evidence=proof['url']))
                     corrections[:] = [c for c in corrections if c['id'] != row['id']]
-                    for value in sorted(existing):
-                        corrections.append(dict(id=row['id'], source=surface, target=value,
-                            relation='case_correction' if len(existing) == 1 else 'case_candidates', evidence=proof['url']))
+                    spelling = any(value.casefold()!=surface.casefold() for value in existing)
+                    relation = ('input_spelling_correction' if len(existing)==1 else 'input_spelling_candidates') if spelling else ('case_correction' if len(existing)==1 else 'case_candidates')
+                    for value, item in sorted(existing.items()):
+                        corrections.append(dict(item, relation=relation))
                 else:
                     raise ValueError('Usage review cannot change input spelling or reading')
             counts['reviewedNameSurfaces'] += 1
@@ -139,7 +143,7 @@ def extend(args):
     prior = args.base / 'reviewed-overrides.tsv'
     decisions = pipeline.read_table(prior, 'decisions') if prior.is_file() else []
     counts = attach(model, selected, reviews, corrections, decisions, pending)
-    sources['reviewedEnglishUsage'] = dict(snapshotSha256=SNAPSHOT_SHA256, usageSha256=USAGE_SHA,
+    sources['reviewedEnglishUsage'] = dict(snapshotSha256=SNAPSHOT_SHA256, usageSha256=pipeline.digest(args.usage),
         reviewsSha256=pipeline.digest(args.reviews), reviewer='implementation_agent', humanReviewClaimed=False,
         policy='explicit individually reviewed standalone usages; complete-name embeddings and identifiers rejected; positive fragment evidence plus conflict checks for exclusions; original input rows and unresolved alternative-sense evidence preserved; no quotation prose redistributed')
     notices['REVIEWED-ENGLISH-USAGE-NOTICE.txt'] = (
