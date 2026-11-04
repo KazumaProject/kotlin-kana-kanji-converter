@@ -15,6 +15,7 @@ adv-fast	fast	fast	https://en.wiktionary.org/wiki/fast#English
 adv-fast	fast	faster	https://en.wiktionary.org/wiki/fast#English
 adv-fast	fast	fastest	https://en.wiktionary.org/wiki/fast#English
 aux-can	can	can	https://en.wiktionary.org/wiki/can#English
+aux-cannot	cannot	cannot	https://en.wiktionary.org/wiki/cannot#English
 aux-could	could	could	https://en.wiktionary.org/wiki/could#English
 aux-may	may	may	https://en.wiktionary.org/wiki/may#English
 aux-might	might	might	https://en.wiktionary.org/wiki/might#English
@@ -31,7 +32,11 @@ n-car	car	cars	https://en.wiktionary.org/wiki/car#English
 n-child	child	child	https://en.wiktionary.org/wiki/child#English
 n-child	child	children	https://en.wiktionary.org/wiki/child#English
 n-coffee	coffee	coffee	https://en.wiktionary.org/wiki/coffee#English
+n-color	color	color	https://en.wiktionary.org/wiki/color#English
+n-colour	colour	colour	https://en.wiktionary.org/wiki/colour#English
 n-committee	committee	committee	https://en.wiktionary.org/wiki/committee#English
+n-e-mail	e-mail	e-mail	https://en.wiktionary.org/wiki/e-mail#English
+n-email	email	email	https://en.wiktionary.org/wiki/email#English
 n-family	family	family	https://en.wiktionary.org/wiki/family#English
 n-information	information	information	https://en.wiktionary.org/wiki/information#English
 n-item	item	item	https://en.wiktionary.org/wiki/item#English
@@ -41,6 +46,7 @@ n-list	list	lists	https://en.wiktionary.org/wiki/list#English
 n-saw	saw	saw	https://en.wiktionary.org/wiki/saw#English
 n-scissors	scissors	scissors	https://en.wiktionary.org/wiki/scissors#English
 n-sheep	sheep	sheep	https://en.wiktionary.org/wiki/sheep#English
+n-teacher	teacher	teacher	https://en.wiktionary.org/wiki/teacher#English
 n-team	team	team	https://en.wiktionary.org/wiki/team#English
 n-trousers	trousers	trousers	https://en.wiktionary.org/wiki/trousers#English
 n-water	water	water	https://en.wiktionary.org/wiki/water#English
@@ -92,6 +98,7 @@ v-take	take	taken	https://en.wiktionary.org/wiki/take#English
 v-take	take	takes	https://en.wiktionary.org/wiki/take#English
 v-take	take	taking	https://en.wiktionary.org/wiki/take#English
 v-take	take	took	https://en.wiktionary.org/wiki/take#English
+v-teach	teach	teach	https://en.wiktionary.org/wiki/teach#English
 v-work	work	work	https://en.wiktionary.org/wiki/work#English
 v-work	work	worked	https://en.wiktionary.org/wiki/work#English
 v-work	work	working	https://en.wiktionary.org/wiki/work#English
