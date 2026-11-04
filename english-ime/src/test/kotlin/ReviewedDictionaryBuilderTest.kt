@@ -16,6 +16,160 @@ import kotlin.test.assertTrue
 
 class ReviewedDictionaryBuilderTest {
     @Test
+    fun spellingCorrectionsRetainVerifiedAlternativesWithoutChangingRawRowsOrCosts() {
+        val temporary = Files.createTempDirectory("punctuation-correction").toFile()
+        try {
+            val rows = listOf(SourceRow("raw:1", "callin", "callin", 700))
+            val decisions = temporary.resolve("decisions.tsv").apply {
+                writeText("id\treading\tsurface\tcost\tdecision\tlexeme_ids\treason\tevidence\n" +
+                    "raw:1\tcallin\tcallin\t700\tinclude\tn-call,v-call\tverified\thttps://example.org/fixture\n")
+            }
+            val corrections = temporary.resolve("corrections.tsv")
+            val header = "id\tsource\ttarget\trelation\tevidence\n"
+            corrections.writeText(header + "raw:1\tcallin\tcall-in\tinput_spelling_candidates\thttps://example.org/fixture\n" +
+                "raw:1\tcallin\tcallin'\tinput_spelling_candidates\thttps://example.org/fixture\n")
+            val forms = setOf(FormKey("n-call", "call-in"), FormKey("v-call", "callin'"))
+            val selected = selectReviewedRows(rows, decisions, forms, corrections)
+            assertEquals(setOf("call-in", "callin'"), selected.map { it.word }.toSet())
+            assertTrue(selected.all { it.reading == "callin" && it.cost.toInt() == 700 })
+            assertEquals("callin", rows.single().surface)
+            corrections.writeText(header + "raw:1\tcallin\tcalling\tinput_spelling_correction\thttps://example.org/fixture\n")
+            assertFailsWith<IllegalArgumentException> { selectReviewedRows(rows, decisions, forms + FormKey("wrong", "calling"), corrections) }
+        } finally { temporary.deleteRecursively() }
+    }
+
+    @Test
+    fun retainsMappedSpacesAcrossAllSurfaceRendererOverloads() {
+        val temporary = Files.createTempDirectory("mapped-spaces").toFile()
+        try {
+            val decisions = temporary.resolve("decisions.tsv")
+            decisions.writeText("id\treading\tsurface\tcost\tdecision\tlexeme_ids\treason\tevidence\n" +
+                "manual:1\tgoogledocs\tGoogle Docs\t700\tinclude\tgoogle-docs\tverified\thttps://en.wiktionary.org/wiki/Google_Docs\n")
+            val accepted = selectReviewedRows(listOf(SourceRow("manual:1", "googledocs", "Google Docs", 700)),
+                decisions, setOf(FormKey("google-docs", "Google Docs")))
+            writeReviewedPayloads(accepted, temporary)
+            val words = ObjectInputStream(temporary.resolve("word.dat").inputStream()).use { LOUDS().readExternalNotCompress(it) }
+            val node = words.getNodeIndex("Google Docs")
+            val bits = SuccinctBitVector(words.LBS)
+            assertEquals("Google Docs", words.getLetter(node, bits))
+            assertEquals("Google Docs", words.getLetter(node, words.LBS.rank0GetIntArray(), words.LBS.rank1GetIntArray()))
+            assertEquals("Google Docs", words.getLetterShortArray(node, bits))
+            assertEquals("Google Docs", words.getLetterShortArray(node, words.LBS.rank0GetShortArray(), words.LBS.rank1GetShortArray()))
+        } finally {
+            temporary.deleteRecursively()
+        }
+    }
+    @Test
+    fun emitsAllVerifiedCaseCandidatesWithoutChoosingAnIntendedName() {
+        val temporary = Files.createTempDirectory("case-candidates").toFile()
+        try {
+            val decisions = temporary.resolve("decisions.tsv")
+            decisions.writeText("id\treading\tsurface\tcost\tdecision\tlexeme_ids\treason\tevidence\n" +
+                "tsv:2\ttim\ttim\t700\tinclude\tname-tim,abbr-tim\tverified\thttps://en.wiktionary.org/wiki/Tim\n")
+            val corrections = temporary.resolve("corrections.tsv")
+            val header = "id\tsource\ttarget\trelation\tevidence\n"
+            corrections.writeText(header + "tsv:2\ttim\tTim\tcase_candidates\thttps://en.wiktionary.org/wiki/Tim\n" +
+                "tsv:2\ttim\tTIM\tcase_candidates\thttps://en.wiktionary.org/wiki/TIM\n")
+            val rows = listOf(SourceRow("tsv:2", "tim", "tim", 700))
+            val forms = setOf(FormKey("name-tim", "Tim"), FormKey("abbr-tim", "TIM"))
+            assertEquals(listOf(Dictionary("tim", 700, "TIM", true), Dictionary("tim", 700, "Tim", true)),
+                selectReviewedRows(rows, decisions, forms, corrections))
+            assertFailsWith<IllegalArgumentException> { selectReviewedRows(rows, decisions, forms - FormKey("abbr-tim", "TIM"), corrections) }
+            corrections.writeText(header + "tsv:2\ttim\tTim\tcase_candidates\thttps://en.wiktionary.org/wiki/Tim\n")
+            assertFailsWith<IllegalArgumentException> { selectReviewedRows(rows, decisions, forms, corrections) }
+        } finally {
+            temporary.deleteRecursively()
+        }
+    }
+    @Test
+    fun appliesOnlyExplicitCaseCorrectionsAndPreservesSourceLedger() {
+        val temporary = Files.createTempDirectory("case-correction").toFile()
+        try {
+            val decisions = temporary.resolve("decisions.tsv")
+            decisions.writeText("id\treading\tsurface\tcost\tdecision\tlexeme_ids\treason\tevidence\n" +
+                "tsv:2\tlondon\tlondon\t700\tinclude\tplace-london\tverified\thttps://en.wiktionary.org/wiki/London\n")
+            val corrections = temporary.resolve("corrections.tsv")
+            val header = "id\tsource\ttarget\trelation\tevidence\n"
+            corrections.writeText(header + "tsv:2\tlondon\tLondon\tcase_correction\thttps://en.wiktionary.org/wiki/London\n")
+            val rows = listOf(SourceRow("tsv:2", "london", "london", 700))
+            val forms = setOf(FormKey("place-london", "London"))
+            assertEquals(listOf(Dictionary("london", 700, "London", true)),
+                selectReviewedRows(rows, decisions, forms, corrections))
+            assertFailsWith<IllegalArgumentException> { selectReviewedRows(rows, decisions, forms) }
+            corrections.writeText(header + "tsv:2\tlondon\tParis\tcase_correction\thttps://example.org/\n")
+            assertFailsWith<IllegalArgumentException> { selectReviewedRows(rows, decisions, forms, corrections) }
+            corrections.writeText(header + "tsv:2\tlondon\tLondon\tcase_correction\thttps://example.org/\n" +
+                "tsv:2\tlondon\tLondon\tcase_correction\thttps://example.org/\n")
+            assertFailsWith<IllegalArgumentException> { selectReviewedRows(rows, decisions, forms, corrections) }
+        } finally {
+            temporary.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun validatesInputSpellingsWithoutTreatingArbitraryAliasesAsNormalization() {
+        val temporary = Files.createTempDirectory("input-spelling").toFile()
+        try {
+            val relations = temporary.resolve("relations.tsv")
+            val header = "relation\tsource\ttarget\tevidence\n"
+            relations.writeText(header + "input_spelling\twifi\tWi-Fi\thttps://en.wiktionary.org/wiki/Wi-Fi\n")
+            validateRelations(relations, setOf("Wi-Fi"))
+            relations.writeText(header + "input_spelling\tcicd\tCI/CD\thttps://en.wiktionary.org/wiki/CI/CD\n")
+            validateRelations(relations, setOf("CI/CD"))
+            relations.writeText(header + "input_alias\tcsharp\tC#\thttps://github.com/github-linguist/linguist\n")
+            validateRelations(relations, setOf("C#"))
+            relations.writeText(header + "input_alias\tcake script\tC#\thttps://github.com/github-linguist/linguist\n")
+            assertFailsWith<IllegalArgumentException> { validateRelations(relations, setOf("C#")) }
+            relations.writeText(header + "input_spelling\thttpie\thttp\thttps://example.org/\n")
+            assertFailsWith<IllegalArgumentException> { validateRelations(relations, setOf("httpie", "http")) }
+            relations.writeText(header + "capitalization\tdog\tCAT\thttps://example.org/\n")
+            assertFailsWith<IllegalArgumentException> { validateRelations(relations, setOf("dog", "CAT")) }
+        } finally {
+            temporary.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun preservesHyphensAndDotsInCanonicalMappedSurfaces() {
+        val temporary = Files.createTempDirectory("canonical-surfaces").toFile()
+        try {
+            writeReviewedPayloads(listOf(Dictionary("wifi", 800, "Wi-Fi", true),
+                Dictionary("usa", 900, "U.S.A.", true), Dictionary("cicd", 1000, "CI/CD", true),
+                Dictionary("pokémon", 1100, "Pokémon", true), Dictionary("csharp", 1200, "C#", true)), temporary)
+            fun read(name: String) = ObjectInputStream(temporary.resolve(name).inputStream())
+            val reading = read("reading.dat").use { LOUDSWithTermId().readExternalNotCompress(it) }
+            val words = read("word.dat").use { LOUDS().readExternalNotCompress(it) }
+            val tokens = TokenArray().also { array -> read("token.dat").use { array.readExternal(it) } }
+            val consumer = engine.EnglishEngine(reading, words, tokens, SuccinctBitVector(reading.LBS),
+                SuccinctBitVector(words.LBS), SuccinctBitVector(reading.isLeaf), SuccinctBitVector(tokens.bitvector))
+            assertEquals("Wi-Fi", consumer.getPrediction("wifi").single().word)
+            assertEquals("U.S.A.", consumer.getPrediction("usa").single().word)
+            assertEquals("CI/CD", consumer.getPrediction("cicd").single().word)
+            assertEquals("Pokémon", consumer.getPrediction("pokémon").single().word)
+            assertEquals("C#", consumer.getPrediction("csharp").single().word)
+        } finally {
+            temporary.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun rejectsLexicallyClassifiedRowsStillPendingDistributionReview() {
+        val temporary = Files.createTempDirectory("pending-review").toFile()
+        try {
+            val decisions = temporary.resolve("decisions.tsv")
+            decisions.writeText("id\treading\tsurface\tcost\tdecision\tlexeme_ids\treason\tevidence\n" +
+                "tsv:2\tmake\tmake\t700\tpending\tword-make\tsense_review_required\thttps://wordnet.princeton.edu/\n")
+            val failure = assertFailsWith<IllegalArgumentException> {
+                selectReviewedRows(listOf(SourceRow("tsv:2", "make", "make", 700)), decisions,
+                    setOf(FormKey("word-make", "make")))
+            }
+            assertTrue(failure.message.orEmpty().contains("1 pending decisions"))
+        } finally {
+            temporary.deleteRecursively()
+        }
+    }
+
+    @Test
     fun readsAllSourceRowsAndRequiresOneDecisionPerRow() {
         val inventory = englishInventory(File("data/1-grams_score_cost_pos_combined_with_ner.zip"))
         assertEquals(102051, inventory.size)

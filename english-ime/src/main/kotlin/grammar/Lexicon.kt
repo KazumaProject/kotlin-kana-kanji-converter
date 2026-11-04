@@ -12,7 +12,9 @@ class Lexicon private constructor(val categories: List<Category>, val forms: Lis
     fun lookup(surface: String): List<Form> {
         val matches = index[lookupKey(surface)].orEmpty()
         val exact = matches.filter { it.key.surface == surface }
-        return exact.ifEmpty { matches.filter { it.key.surface == it.key.surface.lowercase() } }
+        // A newly attested name such as `He` must not hide the sentence-initial
+        // pronoun `he`. Keep identities separate and exact interpretations first.
+        return exact + matches.filter { it.key.surface != surface && it.key.surface == it.key.surface.lowercase() }
     }
 
     companion object {

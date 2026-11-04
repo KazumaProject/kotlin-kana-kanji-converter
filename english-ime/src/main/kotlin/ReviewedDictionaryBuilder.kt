@@ -61,12 +61,16 @@ internal fun buildReviewedDictionary(
     lexiconDirectory: File,
     relations: File,
     output: File,
+    corrections: File? = null,
+    notices: File? = null,
 ) {
     val lexicon = Lexicon.load(lexiconDirectory)
     val forms = lexicon.forms.associateBy { it.key }
     val knownSurfaces = forms.keys.map { it.surface }.toSet()
     validateRelations(relations, knownSurfaces)
-    val accepted = selectReviewedRows(englishInventory(source), decisions, forms.keys)
+    val accepted = selectReviewedRows(englishInventory(source), decisions, forms.keys, corrections)
+    val noticeDirectory = requireNotNull(notices) { "Reviewed builds require --notices DIR" }
+    require(noticeDirectory.isDirectory) { "Reviewed builds require --notices DIR" }
     val destination = output.absoluteFile
     require(!destination.exists()) { "Output path already exists: $destination" }
     val parent = destination.parentFile
@@ -74,21 +78,41 @@ internal fun buildReviewedDictionary(
     val staging = Files.createTempDirectory(parent.toPath(), ".english-reviewed-").toFile()
     try {
         writeReviewedPayloads(accepted, staging)
-        val grammar = staging.resolve("grammar").apply { mkdir() }
-        for (filename in listOf("categories.tsv", "forms.tsv", "memberships.tsv")) {
-            lexiconDirectory.resolve(filename).copyTo(grammar.resolve(filename))
-        }
-        relations.copyTo(grammar.resolve("relations.tsv"))
+        writeReviewedCategoryBundle(lexiconDirectory, relations, decisions, noticeDirectory, staging)
+        corrections?.copyTo(staging.resolve("surface-corrections.tsv"))
         Files.move(staging.toPath(), destination.toPath(), StandardCopyOption.ATOMIC_MOVE)
     } finally {
         staging.deleteRecursively()
     }
 }
 
-internal fun selectReviewedRows(rows: List<SourceRow>, decisions: File, forms: Set<FormKey>): List<Dictionary> {
+internal fun selectReviewedRows(rows: List<SourceRow>, decisions: File, forms: Set<FormKey>, corrections: File? = null): List<Dictionary> {
     val expected = rows.associateBy { it.id }.toMutableMap()
+    val targets = mutableMapOf<String, MutableList<String>>()
+    val correctionTypes = mutableMapOf<String, MutableSet<String>>()
+    val seenCorrections = mutableSetOf<Pair<String, String>>()
+    val surfaces = forms.map { it.surface }.toSet()
+    for (record in corrections?.readTsv("id", "source", "target", "relation", "evidence").orEmpty()) {
+        val (id, source, target, relation, evidence) = record
+        require(seenCorrections.add(id to target) && expected[id]?.surface == source && source != target &&
+            relation in setOf("case_correction", "case_candidates", "input_spelling_correction", "input_spelling_candidates") && source == source.lowercase() &&
+            (if (relation.startsWith("input_spelling_")) keyboardReading(source) == expected[id]?.reading else source.lowercase() == target.lowercase()) && target in surfaces &&
+            keyboardReading(target) == expected[id]?.reading && evidence.startsWith("https://")) {
+            "Invalid source surface correction for $id"
+        }
+        targets.getOrPut(id) { mutableListOf() }.add(target)
+        correctionTypes.getOrPut(id) { mutableSetOf() }.add(relation)
+    }
+    for ((id, values) in targets) {
+        val types = correctionTypes.getValue(id)
+        require(types.size == 1 && (types.single() in setOf("case_correction", "input_spelling_correction")) == (values.size == 1)) {
+            "Invalid or duplicate source surface correction for $id"
+        }
+    }
     val accepted = mutableListOf<Dictionary>()
     val ledger = decisions.readTsv("id", "reading", "surface", "cost", "decision", "lexeme_ids", "reason", "evidence")
+    val pending = ledger.count { it[4] == "pending" }
+    require(pending == 0) { "Incomplete review: $pending pending decisions; no assets generated" }
     for ((index, record) in ledger.withIndex()) {
         val (id, reading, surface, cost, decision) = record
         val lexemes = record[5]
@@ -100,17 +124,19 @@ internal fun selectReviewedRows(rows: List<SourceRow>, decisions: File, forms: S
         require(evidence.startsWith("https://")) { "Missing evidence URL for $id" }
         when (decision) {
             "include" -> {
+                val effectiveSurfaces = targets[id] ?: listOf(surface)
                 val ids = lexemes.split(',')
-                require(ids.size == ids.toSet().size && ids.all { FormKey(it, surface) in forms }) {
+                require(ids.size == ids.toSet().size &&
+                    ids.all { key -> effectiveSurfaces.any { FormKey(key, it) in forms } } &&
+                    effectiveSurfaces.all { target -> ids.any { FormKey(it, target) in forms } }) {
                     "Included row $id lacks verified lexical membership"
                 }
-                require(reason == "verified" && reading.isNotBlank() && surface.isNotBlank() &&
-                    (reading == surface || ' ' !in surface)) {
-                    "Invalid candidate for $id; the legacy surface trie cannot preserve mapped spaces"
+                require(reason == "verified" && reading.isNotBlank() && effectiveSurfaces.all { it.isNotBlank() }) {
+                    "Invalid candidate for $id"
                 }
-                accepted.add(Dictionary(reading, cost.toShort(), surface, reading != surface))
+                effectiveSurfaces.sorted().forEach { accepted.add(Dictionary(reading, cost.toShort(), it, reading != it)) }
             }
-            "exclude" -> require(lexemes == "-" && reason in exclusionReasons) {
+            "exclude" -> require(id !in targets && lexemes == "-" && reason in exclusionReasons) {
                 "Excluded row $id lacks a supported reason"
             }
             else -> error("Unresolved decision for $id")
@@ -125,14 +151,26 @@ internal fun validateRelations(relations: File, surfaces: Set<String>) {
     val rows = relations.readTsv("relation", "source", "target", "evidence")
     require(rows.map { it.take(3) }.toSet().size == rows.size) { "Duplicate spelling relation" }
     for ((type, source, target, evidence) in rows) {
+        val validSource = when (type) {
+            "input_spelling" -> source == keyboardReading(target)
+            "input_alias" -> source.matches(Regex("[a-z][a-z0-9_-]*"))
+            "capitalization" -> source.lowercase() == target.lowercase()
+            "contraction" -> true
+            else -> source in surfaces
+        }
         require(type in relationTypes && source != target &&
-            (source in surfaces || type == "contraction" ||
-                type == "capitalization" && source.lowercase() == target.lowercase()) &&
+            validSource &&
             (target in surfaces || type == "contraction" && target.split(' ').all { it in surfaces }) &&
             evidence.startsWith("https://")) {
             "Invalid spelling relation $type between $source and $target"
         }
     }
+}
+
+private fun keyboardReading(surface: String): String? {
+    val value = surface.replace('’', '\'').lowercase()
+    if (value.any { it !in 'a'..'z' && it !in '0'..'9' && it !in "'-./" }) return null
+    return value.filter { it !in "'-./" }.takeIf { it.isNotEmpty() }
 }
 
 internal fun writeReviewedPayloads(input: List<Dictionary>, output: File) {
@@ -194,5 +232,5 @@ internal fun writeReviewedPayloads(input: List<Dictionary>, output: File) {
     println("acceptedRows=${input.size} distinctPairs=${candidates.size} readings=${groups.size} glide=${glide.size}")
 }
 
-private val exclusionReasons = setOf("malformed", "wrong_mapping", "unattested", "restricted", "unsupported_mapping")
-private val relationTypes = setOf("contraction", "regional_spelling", "hyphen_variant", "capitalization", "derivation")
+private val exclusionReasons = setOf("malformed", "wrong_mapping", "unattested", "restricted", "ineligible_senses", "ineligible_reference", "unsupported_mapping")
+private val relationTypes = setOf("contraction", "regional_spelling", "hyphen_variant", "capitalization", "derivation", "input_spelling", "spelling_variant", "input_alias")
