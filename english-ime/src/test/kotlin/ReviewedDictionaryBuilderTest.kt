@@ -16,6 +16,29 @@ import kotlin.test.assertTrue
 
 class ReviewedDictionaryBuilderTest {
     @Test
+    fun retainsVerifiedLiteralAndNamedReadingsAtTheOriginalCost() {
+        val temporary = Files.createTempDirectory("literal-and-name").toFile()
+        try {
+            val rows = listOf(SourceRow("raw:1", "may", "may", 700))
+            val forms = setOf(FormKey("modal", "may"), FormKey("name", "May"))
+            val decisions = temporary.resolve("decisions.tsv").apply {
+                writeText("id\treading\tsurface\tcost\tdecision\tlexeme_ids\treason\tevidence\n" +
+                    "raw:1\tmay\tmay\t700\tinclude\tmodal,name\tverified\thttps://example.org/fixture\n")
+            }
+            val header = "id\tsource\ttarget\trelation\tevidence\n"
+            val literal = "raw:1\tmay\tmay\tcase_candidates\thttps://example.org/word\n"
+            val corrections = temporary.resolve("corrections.tsv")
+            corrections.writeText(header + literal + "raw:1\tmay\tMay\tcase_candidates\thttps://example.org/name\n")
+            assertEquals(listOf(Dictionary("may", 700, "May", true), Dictionary("may", 700, "may", false)),
+                selectReviewedRows(rows, decisions, forms, corrections))
+            corrections.writeText(header + literal)
+            assertFailsWith<IllegalArgumentException> { selectReviewedRows(rows, decisions, forms, corrections) }
+            corrections.writeText(header + literal.replace("case_candidates", "case_correction"))
+            assertFailsWith<IllegalArgumentException> { selectReviewedRows(rows, decisions, forms, corrections) }
+        } finally { temporary.deleteRecursively() }
+    }
+
+    @Test
     fun spellingCorrectionsRetainVerifiedAlternativesWithoutChangingRawRowsOrCosts() {
         val temporary = Files.createTempDirectory("punctuation-correction").toFile()
         try {

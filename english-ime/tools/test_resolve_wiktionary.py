@@ -201,6 +201,20 @@ class ResolutionTests(unittest.TestCase):
         self.assertEqual(["1", "2"], [row["id"] for row in kept])
         self.assertEqual(["OST"], events[-1]["eligibleSurfaces"])
 
+    def test_machine_typo_exclusion_reopens_only_for_valid_independently_approved_spelling(self):
+        proof={'source':'curated_seed','url':'https://example.org/abbreviation'}
+        self.model.add('fixture-abbreviation','FIX.','FIX.',{'abbreviation'},proof,approved=True)
+        row=dict(id='fixture:1',surface='fix',reading='fix',cost='700',decision='exclude',lexeme_ids='-',reason='malformed',evidence='https://example.org/typos')
+        event=dict(reason='source_label_exclusion',sourceId=row['id'],surface='fix',decisionReason='malformed',evidence={'url':row['evidence']})
+        correction=dict(id=row['id'],source='fix',target='FIX.',relation='input_spelling_correction',evidence=proof['url'])
+        kept,reopened=pending_resolver.revalidate_machine_reviews(self.model,[row],[event])
+        self.assertEqual([row],kept);self.assertFalse(reopened)
+        kept,reopened=pending_resolver.revalidate_machine_reviews(self.model,[row],[event],[correction])
+        self.assertEqual([],kept);self.assertEqual({row['id']},reopened)
+        kept,reopened=pending_resolver.revalidate_machine_reviews(self.model,[dict(row,evidence='https://example.org/human')],[event],[correction])
+        self.assertEqual(1,len(kept));self.assertFalse(reopened)
+        with self.assertRaises(ValueError):pending_resolver.revalidate_machine_reviews(self.model,[row],[event],[dict(correction,target='DIFFERENT')])
+
     def test_explicitly_disqualified_readings_do_not_remove_verified_names(self):
         records = [(1, entry('taylor', 'noun', [{'tags': ['obsolete']}])),
                    (2, entry('Taylor', 'name', [{}])),

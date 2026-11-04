@@ -46,6 +46,8 @@ def provenance(number, row, sense, ordinal):
             "topics": sorted(set(sense.get("topics", []))), "approved": True}
     if sense.get("_referenceRepair"):
         result["referenceRepair"] = sense["_referenceRepair"]
+    if row.get('_headRoleRepair'):
+        result['headRoleRepair']=row['_headRoleRepair']
     return result
 
 
@@ -226,7 +228,7 @@ def import_records(model, records, wanted, pending, bootstrap_approved=False):
                 is_head = target_form["lemma"] == target
                 lemma = row["word"] if is_head else target_form["lemma"]
                 values = categories(row, sense, pos, base=False)
-                if not sense.get("_referenceRepair"):
+                if not sense.get("_referenceRepair") and not row.get('_headRoleRepair'):
                     values |= model.members[target_id, target] & MORPHOLOGY
                 if not is_head:
                     values -= {"verb_base", "adjective_base"}

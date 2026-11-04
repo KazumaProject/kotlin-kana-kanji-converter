@@ -12,7 +12,7 @@ import lexicon_pipeline as pipeline
 import resolve_wiktionary as resolver,resolve_pending,restricted_references
 from wiktionary_index import Index,SNAPSHOT_SHA256
 
-NOTES=('representing ','used as ','variant of ','shortening of ','mimicking ','to indicate ','particularly')
+NOTES=('representing ','used as ','used especially ','variant of ','shortening of ','mimicking ','to indicate ','particularly')
 
 
 def english_links(sense):
@@ -34,9 +34,31 @@ def declared_roles(row):
 def normalized(records):
     result=copy.deepcopy(records);count=0
     for number,row in result:
+        declared=declared_roles(row)
+        labels=set(row.get('categories',[])) | set().union(*(set(s.get('categories',[])) for s in row.get('senses',[])))
+        role_labels={'noun':'English nouns','adjective':'English adjectives','adverb':'English adverbs','noun_proper':'English proper nouns'}
+        supported={role for role,label in role_labels.items() if label in labels}
+        current=resolver.ROLES.get(row.get('pos'))
+        if len(declared)==1 and declared==supported and current in role_labels and current not in declared:
+            role=next(iter(declared))
+            row['_headRoleRepair']={'originalPos':row['pos'],'correctedRole':role,
+                'headTemplates':copy.deepcopy(row['head_templates']),'englishPosCategories':sorted(labels & set(role_labels.values())),
+                'rule':'one explicit English head role and its unique English POS category agree against the extracted POS; retain original metadata and never infer inflections'}
+            row['pos']={'noun':'noun','adjective':'adj','adverb':'adv','noun_proper':'name'}[role];count+=1
+    heads=defaultdict(list)
+    for number,row in result:
+        if any(resolver.eligible(row,sense) and not sense.get('alt_of') and not sense.get('form_of') for sense in row.get('senses',[])):
+            heads[row['word'],resolver.ROLES.get(row.get('pos'))].append(number)
+    for number,row in result:
         for sense in row.get('senses',[]):
             if not resolver.eligible(row,sense):continue
-            links=english_links(sense);linked={target for _,target in links}
+            links=english_links(sense)
+            # A bare Wiktionary link has no language anchor. Accept it here
+            # only when the pinned English index independently contains an
+            # eligible terminal head of the same role; retain those entry IDs.
+            bare=[(display,target) for display,target in sense.get('links',[])
+                if (target,resolver.ROLES.get(row.get('pos'))) in heads]
+            links=sorted(set(links+bare));linked={target for _,target in links}
             for kind in ['alt_of','form_of']:
                 refs=sense.get(kind,[])
                 if not refs:continue
@@ -48,7 +70,8 @@ def normalized(records):
                     candidates=[t for t in linked if t.startswith(first) and refs[0].get('extra','').startswith(t[len(first):]) and t!=first and any('of '+t+' ' in g for g in sense.get('glosses',[]))]
                     if len(candidates)==1:target=candidates[0];reason='explicit English link and literal gloss restore a target split into the extra field'
                 if reason:
-                    sense['_referenceRepair']={'relation':kind,'originalReferences':copy.deepcopy(refs),'validatedEnglishLinks':links,'target':target,'rule':reason,'targetMorphologyInherited':False}
+                    sense['_referenceRepair']={'relation':kind,'originalReferences':copy.deepcopy(refs),'validatedEnglishLinks':links,'target':target,'rule':reason,'targetMorphologyInherited':False,
+                        'bareLinkEnglishHeadEntries':{t:heads[t,resolver.ROLES.get(row.get('pos'))] for _,t in bare}}
                     sense[kind]=[{'word':target}];count+=1
     return result,count
 
@@ -73,6 +96,14 @@ def attach_direct(model,records,wanted,pending):
                 rule='explicit English abbreviation head supplies its own role; expansion need not be a lexical headword and supplies no inherited POS or morphology'
             elif pos=='symbol' and pos in declared_roles(row) and 'symbol' in tags and any(g.startswith('Symbol for ') for g in sense.get('glosses',[])):
                 values={'symbol'};rule='explicit English symbol head and expansion; no noun, name or inflection inference'
+            elif pos in {'noun','adjective','adverb'} and pos in declared_roles(row) and 'pronunciation-spelling' in tags and len(sense.get('alt_of',[]))==1:
+                expansion=sense['alt_of'][0].get('word','');parts=expansion.split(' ')
+                if (len(parts)>1 and all(part in links and any(not model.members[key,part]&{'noun_proper'} and
+                        not any(c.startswith(('name_','identifier_')) for c in model.members[key,part]) for key in model.approved.get(part,[])) for part in parts) and
+                        any(g=='Pronunciation spelling of '+expansion+'.' for g in sense.get('glosses',[]))):
+                    values=resolver.categories(row,sense,pos)-resolver.MORPHOLOGY
+                    rule='explicit English pronunciation-spelling head supplies its own role; multiword expansion components have independent English links and approved lexical readings, without inherited phrase POS or inflections'
+                    proof=dict(proof,expansionEvidence={'originalReferences':copy.deepcopy(sense['alt_of']),'englishLinks':english_links(sense)})
             elif pos=='noun' and 'agent' in tags and len(set(refs))==1 and any(t in {refs[0],refs[0]+'#English'} for _,t in sense.get('links',[])) and any(g.startswith('Agent noun of '+refs[0]) for g in sense.get('glosses',[])) and any('verb' in model.members[key,refs[0]] for key in model.approved.get(refs[0],[])):
                 values={'noun'};rule='explicit agent-noun derivation, not a noun inflection or inherited verb role'
             elif len(set(refs))==1 and refs[0] in links and terminal.get(refs[0]) and pos in {'verb','noun','adjective','adverb'}:
@@ -110,9 +141,31 @@ def attach_direct(model,records,wanted,pending):
     return counts
 
 
+def retain_original_readings(model,rows,corrections):
+    """Keep a separately proved literal reading alongside corrected spellings.
+
+    The raw candidate is not a stand-alone correction. It is permitted only
+    in a multi-candidate group whose other candidates retain their citations.
+    """
+    retained=0
+    for row in rows:
+        word=row['surface'];prior=[c for c in corrections if c['id']==row['id']]
+        if not prior or any(c['target']==word for c in prior) or word!=word.lower() or pipeline.keyboard_reading(word)!=row['reading']:
+            continue
+        proofs=[e for key in model.approved.get(word,[]) for e in model.evidence[key,word]
+            if e.get('approved',True) and not e.get('requiresFullNamedContext',False)]
+        if not proofs:continue
+        relation='input_spelling_candidates' if any(c['relation'].startswith('input_spelling_') for c in prior) else 'case_candidates'
+        for c in prior:c['relation']=relation
+        corrections.append(dict(id=row['id'],source=word,target=word,relation=relation,evidence=min(e['url'] for e in proofs)))
+        retained+=1
+    return retained
+
+
 def extend(args):
     model,rows,sources,notices,pending=extension.load_base(args.base,args.seed)
-    states=list(map(json.loads,(args.base/'status.jsonl').open()));selected=[r for r,s in zip(rows,states) if s['decision']=='pending'];wanted={r['surface'] for r in selected}
+    states=list(map(json.loads,(args.base/'status.jsonl').open()));audit=set(getattr(args,'audit_surface',None) or [])
+    selected=[r for r,s in zip(rows,states) if s['decision']=='pending' or s['decision']=='include' and r['surface'] in audit];wanted={r['surface'] for r in selected}
     index=Index(args.index)
     try:
         first=list(index.lookup(wanted,folded=True));records=resolver.load_closure(index,{r['word'] for _,r in first}|wanted)
@@ -125,8 +178,10 @@ def extend(args):
     counts.update(resolver.import_records(model,repaired,canonical_wanted,pending,bootstrap_approved=True))
     disqualified,_=restricted_references.disqualified_roles(records);additions=resolve_pending.cases(model,selected,{r['word'] for _,r in records},disqualified)
     prior=args.base/'surface-corrections.tsv';corrections=pipeline.read_table(prior,'corrections') if prior.is_file() else [];existing={r['id'] for r in corrections};corrections += [r for r in additions if r['id'] not in existing]
+    retained=retain_original_readings(model,selected,corrections)
     sources['auditedEnglishReferenceRepairs']={'snapshotSha256':SNAPSHOT_SHA256,'repairedSenses':repair_count,
-        'policy':'explicit English anchors distinguish target from usage commentary and restore literal split targets; originals/links retained; no inherited morphology on repaired spelling variants; separately declared abbreviation/symbol heads supply their own roles without requiring lexical expansion heads; canonical spellings selected by exact casefold; contraction heads, agent nouns, explicit alternative-form tables and scoped phonetic-code uses remain separate; no inferred infinitive or pooled lemma senses'}
+        'retainedIndependentOriginalReadings':retained,
+        'policy':'explicit English anchors separate references from commentary; one English head role plus unique matching English POS category can repair inconsistent extracted POS, retaining original metadata; own pronunciation-spelling role may use a multiword expansion only with independently proved English components; original readings and other spelling/name candidates are retained when independently approved; no inherited morphology on repaired variants, inferred infinitive or pooled lemma senses'}
     prior=args.base/'reviewed-overrides.tsv';summary=pipeline.publish(model,rows,args.base/'inventory.jsonl',args.out,sources,notices,pending,reviewed_decisions=prior if prior.is_file() else None,allow_input_spellings=True,corrections=corrections)
     print(json.dumps(dict(counts,repairedReferenceSenses=repair_count,**{k:summary[k] for k in ['includedRows','excludedRows','pendingRows']}),sort_keys=True))
 
@@ -134,4 +189,5 @@ def extend(args):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     for name in ['base','seed','index','out']:parser.add_argument('--'+name,type=Path,required=True)
+    parser.add_argument('--audit-surface',action='append',help='Also audit independent readings of an already included literal input surface')
     extend(parser.parse_args())

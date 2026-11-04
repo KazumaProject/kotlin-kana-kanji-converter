@@ -94,7 +94,8 @@ internal fun selectReviewedRows(rows: List<SourceRow>, decisions: File, forms: S
     val surfaces = forms.map { it.surface }.toSet()
     for (record in corrections?.readTsv("id", "source", "target", "relation", "evidence").orEmpty()) {
         val (id, source, target, relation, evidence) = record
-        require(seenCorrections.add(id to target) && expected[id]?.surface == source && source != target &&
+        require(seenCorrections.add(id to target) && expected[id]?.surface == source &&
+            (source != target || relation in setOf("case_candidates", "input_spelling_candidates")) &&
             relation in setOf("case_correction", "case_candidates", "input_spelling_correction", "input_spelling_candidates") && source == source.lowercase() &&
             (if (relation.startsWith("input_spelling_")) keyboardReading(source) == expected[id]?.reading else source.lowercase() == target.lowercase()) && target in surfaces &&
             keyboardReading(target) == expected[id]?.reading && evidence.startsWith("https://")) {

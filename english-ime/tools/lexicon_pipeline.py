@@ -478,7 +478,8 @@ def correction_targets(corrections, rows, model):
         key = item["id"], item["target"]
         spelling = item['relation'] in {'input_spelling_correction', 'input_spelling_candidates'}
         if (key in seen or original is None or item["source"] != original["surface"] or
-                item["relation"] not in {"case_correction", "case_candidates", 'input_spelling_correction', 'input_spelling_candidates'} or item["source"] == item["target"] or
+                item["relation"] not in {"case_correction", "case_candidates", 'input_spelling_correction', 'input_spelling_candidates'} or
+                item["source"] == item["target"] and item['relation'] not in {'case_candidates','input_spelling_candidates'} or
                 item["source"] != item["source"].lower() or
                 (keyboard_reading(item['source']) != original['reading'] if spelling else item["source"].lower() != item["target"].lower()) or
                 keyboard_reading(item["target"]) != original["reading"] or

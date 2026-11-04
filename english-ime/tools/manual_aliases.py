@@ -12,7 +12,8 @@ REVISION = '49403f28e24ba57e695b0559fe4e50efd86f4bb9'
 EXPECTED = {'manual:890': ('cplusplus', 'C++', 10000),
             'manual:359': ('cloudflarworkers', 'CloudflareWorkers', 12000),
             'manual:1536': ('httpie', 'http', 8000),
-            'manual:1537': ('bottom', 'btm', 8000)}
+            'manual:1537': ('bottom', 'btm', 8000),
+            'manual:709': ('microsoft three sixty five', 'Microsoft 365', 9000)}
 
 
 def attach(model, rows, source, pending):
@@ -20,7 +21,8 @@ def attach(model, rows, source, pending):
         raise ValueError('Legacy manual input source changed')
     text = source.read_text()
     literals = {}
-    pattern = r'Dictionary\(reading = "([^"\n]+)", cost = (\d+)\.toShort\(\), word = "([^"\n]+)", withUpperCase = (true|false)\)'
+    pattern = (r'Dictionary\(\s*reading\s*=\s*"([^"\n]+)",\s*cost\s*=\s*(\d+)\.toShort\(\),'
+               r'\s*word\s*=\s*"([^"\n]+)",\s*withUpperCase\s*=\s*(true|false)\s*\)')
     for match in re.finditer(pattern, text):
         reading, cost, surface, _ = match.groups()
         literals[reading, surface, int(cost)] = text.count('\n', 0, match.start()) + 1

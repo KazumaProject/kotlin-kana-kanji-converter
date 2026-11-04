@@ -117,7 +117,7 @@ def exclusions(model, rows, records, mapped_ids, pending):
     return result
 
 
-def revalidate_machine_reviews(model, reviews, pending):
+def revalidate_machine_reviews(model, reviews, pending, corrections=()):
     """Reopen generated exclusions when later sources contradict their policy.
 
     A human override is not silently removed. Only rows with a matching audit
@@ -129,11 +129,16 @@ def revalidate_machine_reviews(model, reviews, pending):
     for surface, identifiers in model.approved.items():
         if identifiers:
             canonical[surface.lower()].add(surface)
+    reviewed_ids = {row['id'] for row in reviews}
+    explicit = pipeline.correction_targets([row for row in corrections if row['id'] in reviewed_ids], reviews, model)
     kept, reopened = [], []
     for review in reviews:
         key = review["id"], review["surface"], review["reason"], review["evidence"]
         alternatives = sorted(surface for surface in canonical[review["surface"].lower()]
                               if surface == review["surface"] or pipeline.keyboard_reading(surface) == review["reading"])
+        mapped = explicit.get(review['id'], ())
+        if mapped and all(model.approved.get(surface) for surface in mapped):
+            alternatives = sorted(set(alternatives) | set(mapped))
         if review["decision"] == "exclude" and key in generated and alternatives:
             reopened.append(review["id"])
             pending.append({"sourceId": review["id"], "surface": review["surface"],

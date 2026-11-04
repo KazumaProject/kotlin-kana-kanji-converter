@@ -8,6 +8,51 @@ def entry(word,pos,sense,forms=()):return {'word':word,'pos':pos,'senses':[sense
 
 
 class ReferenceRepairTests(unittest.TestCase):
+    def test_bare_link_needs_an_independent_same_role_english_head_before_comment_repair(self):
+        variant=entry('seabass','noun',{'alt_of':[{'word':'sea bass'},{'word':'used especially in compound terms'}],
+            'links':[['sea bass','sea bass']],'glosses':['Alternative form of sea bass, used especially in compound terms.']})
+        self.assertEqual(0,r.normalized([(1,variant)])[1])
+        fixed,count=r.normalized([(1,variant),(2,entry('sea bass','noun',{'glosses':['A fish.']}))])
+        self.assertEqual(1,count)
+        self.assertEqual([{'word':'sea bass'}],fixed[0][1]['senses'][0]['alt_of'])
+        self.assertEqual({'sea bass':[2]},fixed[0][1]['senses'][0]['_referenceRepair']['bareLinkEnglishHeadEntries'])
+        self.assertEqual(0,r.normalized([(1,variant),(2,entry('sea bass','adj',{'glosses':['A fixture.']}))])[1])
+
+    def test_inconsistent_extracted_pos_needs_agreeing_english_head_and_unique_category(self):
+        source=entry('variant','noun',{'tags':['alt-of'],'alt_of':[{'word':'good'}],'categories':['English adjectives'],'links':[['good','good#English']]})
+        source['head_templates']=[{'name':'en-adj','args':{}}]
+        fixed,count=r.normalized([(42,source)])
+        self.assertEqual('adj',fixed[0][1]['pos']);self.assertEqual(1,count)
+        self.assertEqual('noun',source['pos'])
+        proof=w.provenance(42,fixed[0][1],fixed[0][1]['senses'][0],1)
+        self.assertEqual('noun',proof['headRoleRepair']['originalPos'])
+        source['senses'][0]['categories'].append('English nouns')
+        self.assertEqual('noun',r.normalized([(42,source)])[0][0][1]['pos'])
+        source['senses'][0]['categories']=['English adjectives'];source['head_templates']=[]
+        self.assertEqual('noun',r.normalized([(42,source)])[0][0][1]['pos'])
+
+    def test_pronunciation_spelling_uses_own_head_and_verified_phrase_components(self):
+        source=entry('alotta','adj',{'tags':['alt-of','pronunciation-spelling'],'alt_of':[{'word':'a lot'}],
+            'glosses':['Pronunciation spelling of a lot.'],'links':[['a','a#English'],['lot','lot#English']]})
+        source['head_templates']=[{'name':'en-adj','args':{}}]
+        m=p.Lexicon(f.SEED)
+        r.attach_direct(m,[(42,source)],{'alotta'},[]);self.assertFalse(m.approved.get('alotta'))
+        m.add('fixture-lot','lot','lot',{'noun'},{'source':'curated_seed','url':'https://example.org/lot'},approved=True)
+        r.attach_direct(m,[(42,source)],{'alotta'},[])
+        key=next(iter(m.approved['alotta']));self.assertEqual({'adjective'},m.members[key,'alotta'])
+        self.assertFalse(m.approved.get('a lot'));m.validate()
+
+    def test_new_independent_literal_reading_retains_all_old_name_candidates(self):
+        m=p.Lexicon(f.SEED);proof={'source':'curated_seed','url':'https://example.org/fixture'}
+        m.add('fixture-word','fixture','fixture',{'adjective'},proof,approved=True)
+        m.add('fixture-name','Fixture','Fixture',{'noun','noun_proper'},proof,approved=True)
+        rows=[dict(id='tsv:1',reading='fixture',surface='fixture',cost=700)]
+        corrections=[dict(id='tsv:1',source='fixture',target='Fixture',relation='case_correction',evidence=proof['url'])]
+        self.assertEqual(1,r.retain_original_readings(m,rows,corrections))
+        self.assertEqual(('Fixture','fixture'),p.correction_targets(corrections,rows,m)['tsv:1'])
+        self.assertEqual(0,r.retain_original_readings(m,rows,corrections))
+        with self.assertRaises(ValueError):p.correction_targets([corrections[-1]],rows,m)
+
     def test_usage_commentary_is_not_a_second_lemma_and_never_supplies_inflection(self):
         rows=[(1,entry('luh','verb',{'tags':['alt-of','pronunciation-spelling'],'alt_of':[{'word':'love'},{'word':'representing African-American Vernacular English'}],'links':[['love','love#English']],'glosses':['Pronunciation spelling of love, representing African-American Vernacular English']}))]
         fixed,count=r.normalized(rows);self.assertEqual(1,count);self.assertEqual([{'word':'love'}],fixed[0][1]['senses'][0]['alt_of'])
