@@ -1,4 +1,5 @@
 from argparse import Namespace
+import gzip
 import json
 from pathlib import Path
 import tempfile
@@ -49,3 +50,28 @@ class BatchTests(unittest.TestCase):
             ])
             classification.verify(args)
             self.assertEqual(["tsv:2", "manual:1"], [row["id"] for row in classification.read_jsonl(output)])
+
+
+class EvidenceTests(unittest.TestCase):
+    def test_keeps_separate_english_senses_and_their_restrictions(self):
+        entries = [
+            {"word": "saw", "lang_code": "en", "pos": "verb", "etymology_number": 2,
+             "senses": [{"tags": ["past", "form-of"], "form_of": [{"word": "see"}]}]},
+            {"word": "saw", "lang_code": "en", "pos": "noun", "etymology_number": 1,
+             "senses": [{"tags": ["archaic"]}, {"topics": ["carpentry"]}]},
+            {"word": "saw", "lang_code": "pl", "pos": "noun", "senses": [{}]},
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "snapshot.jsonl.gz"
+            with gzip.open(path, "wt", encoding="utf-8") as stream:
+                for entry in entries:
+                    stream.write(json.dumps(entry) + "\n")
+            evidence = classification.wiktionary(path, classification.digest(path), {"saw", "Saw"})
+            self.assertEqual(set(evidence), {"saw"})
+            past, archaic, current = evidence["saw"]
+            self.assertEqual((past["category"], past["formOf"]), ("verb", ["see"]))
+            self.assertTrue(archaic["restricted"])
+            self.assertFalse(current["restricted"])
+            self.assertEqual(current["topics"], ["carpentry"])
+            with self.assertRaises(ValueError):
+                classification.wiktionary(path, "invalid", {"saw"})

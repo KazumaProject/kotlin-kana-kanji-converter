@@ -78,6 +78,7 @@ def wiktionary(path, expected, surfaces):
                     "sense": sense.get("id") or index,
                     "restricted": bool(RESTRICTED.intersection(tags)),
                     "tags": tags,
+                    "topics": sorted(set(sense.get("topics", []))),
                     "formOf": [value["word"] for value in sense.get("form_of", [])],
                     "altOf": [value["word"] for value in sense.get("alt_of", [])],
                 })
