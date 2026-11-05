@@ -7,7 +7,7 @@ data class CandidateEvaluation(
     val interpretations: List<Form>,
 )
 
-private enum class Agreement { FIRST_SINGULAR, THIRD_SINGULAR, OTHER }
+internal enum class Agreement { FIRST_SINGULAR, THIRD_SINGULAR, OTHER }
 private data class Expectation(val reason: String, val allowed: Set<String>, val competing: Set<String>)
 
 class ContextEvaluator(private val lexicon: Lexicon) {
@@ -106,19 +106,8 @@ class ContextEvaluator(private val lexicon: Lexicon) {
         }
     }
 
-    private fun finite(subject: Agreement): Expectation {
-        val present = when (subject) {
-            Agreement.FIRST_SINGULAR -> setOf("aux_be_present_1sg", "verb_present_non3sg", "aux_have_base", "aux_do_base")
-            Agreement.THIRD_SINGULAR -> setOf("aux_be_present_3sg", "verb_present_3sg", "aux_have_3sg", "aux_do_3sg")
-            Agreement.OTHER -> setOf("aux_be_present_other", "verb_present_non3sg", "aux_have_base", "aux_do_base")
-        }
-        val pastBe = if (subject == Agreement.OTHER) "aux_be_past_other" else "aux_be_past_1sg_3sg"
-        return Expectation(
-            "FINITE_$subject",
-            present + setOf(pastBe, "verb_past", "aux_have_past", "aux_do_past", "aux_modal"),
-            verbForms,
-        )
-    }
+    private fun finite(subject: Agreement) =
+        Expectation("FINITE_$subject", finiteCategories(subject), verbForms)
 
     private fun dictionaries(token: String): Set<String> =
         lexicon.lookup(token).flatMap { it.dictionaries }.toSet()
@@ -143,4 +132,14 @@ class ContextEvaluator(private val lexicon: Lexicon) {
             "verb_ing", "verb_past_participle", "aux_be_ing", "aux_be_participle", "adjective_predicative",
         ) + pluralNouns + setOf("noun_uncountable", "noun_proper")
     }
+}
+
+internal fun finiteCategories(subject: Agreement): Set<String> {
+    val present = when (subject) {
+        Agreement.FIRST_SINGULAR -> setOf("aux_be_present_1sg", "verb_present_non3sg", "aux_have_base", "aux_do_base")
+        Agreement.THIRD_SINGULAR -> setOf("aux_be_present_3sg", "verb_present_3sg", "aux_have_3sg", "aux_do_3sg")
+        Agreement.OTHER -> setOf("aux_be_present_other", "verb_present_non3sg", "aux_have_base", "aux_do_base")
+    }
+    val pastBe = if (subject == Agreement.OTHER) "aux_be_past_other" else "aux_be_past_1sg_3sg"
+    return present + setOf(pastBe, "verb_past", "aux_have_past", "aux_do_past", "aux_modal")
 }

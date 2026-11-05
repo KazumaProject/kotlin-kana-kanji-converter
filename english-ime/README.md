@@ -56,6 +56,38 @@ About/Sources interface. The host checks identify Sumire consumer
 `2a42c4b3c978a51243a9baeb7fc6777573e31712`; physical Android memory, IME UI and
 production ranking remain unverified.
 
+## Convert English text
+
+Build the reviewed dictionary with the replay command above, then pass the
+generated directory to `convert`. The command reads the reviewed binary
+dictionary and uses the full grammar tables to rank the candidates it finds.
+
+```sh
+./gradlew :english-ime:run --quiet --args='convert --assets /absolute/path/reviewed-english --text hecantake'
+./gradlew :english-ime:run --quiet --args='convert --assets /absolute/path/reviewed-english --text "its working" --format json'
+./gradlew :english-ime:run --quiet --args='convert --assets /absolute/path/reviewed-english --text "he tak" --mode prefix'
+```
+
+The first example ranks `he can take` first. The second can rank `it's working`
+above `its working` using the following word, while `the dog chased its tail`
+favors the possessive. The third uses the typed prefix to find forms such as
+`takes`. The default mode is `exact`. Both modes can infer boundaries in
+joined input. In text that already has word boundaries, a registered word is
+kept intact. Sentence punctuation and unrecognized spans are copied from the input.
+
+By default the CLI returns up to 10 candidates. `--limit` accepts 1–50, and
+input is limited to 256 UTF-16 code units. Text output lists rank, candidate,
+dictionary cost and grammar reasons, with tabs and line breaks escaped inside
+the result field. JSON adds the grammar score and segments
+with zero-based, end-exclusive UTF-16 offsets into the original input.
+A segment records whether it is an exact dictionary match, a completion, or
+literal text. `inferredSpace` marks a space inserted before a segment.
+
+The rules cover selected local English constructions, and the search is bounded.
+Grammar ranks candidates available for the typed reading. Exact input such as
+`he take` keeps the typed verb rather than replacing it with a different
+inflection.
+
 ## Legacy compatibility
 
 ```sh
