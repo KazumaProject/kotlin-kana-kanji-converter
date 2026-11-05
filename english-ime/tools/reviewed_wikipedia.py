@@ -232,8 +232,8 @@ def validate_review(review, article, predicates=None, modifiers=None, name_roles
         if (review['decision'] not in {'include_lexical_noun','include_name'} or
                 review['decision']=='include_name' and review.get('completeNominalReferenceConfirmed') is not True or
                 start and article['text'][start-1].isalnum() or
-                not re.match(r'(?:[Aa]n?|[Tt]he|[Tt]hese|[Tt]hose|[Hh]is|[Hh]er|[Tt]heir|[Ii]ts) '+token+
-                    r'(?=[,.;:)]|\s+(?:who|which|that|is|was|are|were|can|could|would|will)\b)',passage)):
+                not re.match(r'(?:[Aa]n?|[Aa]nother|[Tt]he|[Tt]hese|[Tt]hose|[Hh]is|[Hh]er|[Tt]heir|[Ii]ts) '+token+
+                    r'(?=[,.;:)]|["”][,.;:)]|\s+(?:who|which|that|is|was|are|were|can|could|would|will)\b)',passage)):
             raise ValueError('A determined head needs its whole noun and an explicit English lexical-role or independent-name review')
     elif context=='article_title_initialism':
         initials=''.join(word[0] for word in re.findall(r'[A-Za-z]+',article['title'])).upper()

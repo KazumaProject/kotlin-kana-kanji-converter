@@ -75,12 +75,12 @@ class WikipediaReviewTests(unittest.TestCase):
             with self.assertRaises(ValueError):wiki.validate_review(r,value)
 
     def test_reviewed_determined_noun_requires_explicit_english_role_and_complete_head(self):
-        for text,target in [('a fixture, which is described.','fixture'),('the fixture who works.','fixture'),('his fixture, which was changed.','fixture'),('These fixtures can be used.','fixtures')]:
+        for text,target in [('a fixture, which is described.','fixture'),('the fixture who works.','fixture'),('his fixture, which was changed.','fixture'),('These fixtures can be used.','fixtures'),('another fixture"; the reviewer continues.','fixture'),('Another fixture”, according to the reviewer.','fixture')]:
             value=article('Other',text);r=review(value)
             r.update(target=target,decision='include_lexical_noun',categories=['noun'],contextKind='complete_determined_noun_head',englishLexicalRoleConfirmed=True)
             wiki.validate_review(r,value)
             with self.assertRaises(ValueError):wiki.validate_review(dict(r,englishLexicalRoleConfirmed=False),value)
-        for text in ['a fixture Junior,','a fixture-like,','a long fixture,']:
+        for text in ['a fixture Junior,','a fixture-like,','a long fixture,','another fixture Junior";','another fixture-like";','another long fixture";','another fixture" Junior,','another fixture\'s,']:
             value=article('Other',text);r['witness']=dict(start=0,end=len(text),sha256=value['textSha256'])
             with self.assertRaises(ValueError):wiki.validate_review(r,value)
 
