@@ -129,6 +129,22 @@ def verified_person_name_roles(index, words):
     return result
 
 
+def verified_census_family_roles(directory, words):
+    """Use actual pinned aggregate surname rows, never a given-name guess."""
+    import census_surnames
+    values,csv_sha=census_surnames.load(directory);by_name={r['name']:r for r in values};result={}
+    for surface in words:
+        row=by_name.get(surface.upper())
+        if not row:continue
+        proof=dict(surface=surface,role='family',entryId=row['rank'],senseIndex=0,
+            source='census_surname',snapshotSha256=csv_sha,archiveSha256=census_surnames.ARCHIVE_SHA,
+            sourceSurname=row['name'],count=row['count'],url=census_surnames.URL+'#Names_2010Census.csv',
+            casingSource='literal spelling in the separately pinned English article; Census surname identity is uppercase',
+            demographicsOrSpecificPersonClaimed=False)
+        result[surface,'family',row['rank'],0]=proof
+    return result
+
+
 def validate_review(review, article, predicates=None, modifiers=None, name_roles=None):
     if (review['reviewer'] != 'implementation_agent' or not review['rationale'].strip() or
             not review['interpretation'].strip() or review['decision'] not in KINDS):
@@ -175,6 +191,22 @@ def validate_review(review, article, predicates=None, modifiers=None, name_roles
                 not re.match(r'(?:by|of|from|to|as|for|with|about|under|in)\s+(?:(?:the|The|just)\s+)?'+token+
                     r'(?=[,.;:)]|\s+(?:(?:in|since|until) [1-9][0-9]{3}\b|(?:is|was|are|were|has|had|have|came)\b))',passage)):
             raise ValueError('A nominal reference needs its complete prepositional name and explicit English-context review')
+    elif context=='complete_name_genitive_reference':
+        if (review['decision']!='include_name' or review.get('nameGenitiveConfirmed') is not True or
+                start and article['text'][start-1].isalnum() or
+                not re.match(r'(?:by|of|from|to|for|with|about|under|in)\s+(?:(?:the|The)\s+)?'+
+                    re.escape(target)+r"['’]s\s+[a-z]+\b",passage)):
+            raise ValueError('A named genitive needs its complete prepositional name and explicit independent-name review')
+    elif context=='comma_prefaced_name_subject':
+        before=article['text'][:start];match=re.match(token+r'\s+([a-z]+)\b',passage)
+        if (review['decision']!='include_name' or review.get('prefacedNameSubjectConfirmed') is not True or
+                not re.search(r',\s+$',before) or not match):
+            raise ValueError('A prefaced name subject needs a complete finite name clause after the comma')
+        if match[1] not in SUBJECT_PREDICATES:
+            proof=review.get('predicateProof') or {}
+            if (not isinstance(proof,dict) or predicates is None or proof.get('surface')!=match[1] or
+                    proof.get('lexemeId') not in predicates.get(match[1],())):
+                raise ValueError('A prefaced name predicate needs independently approved English lexical evidence')
     elif context=='complete_english_noun_phrase':
         match=re.match(r'(?:a|an|the|A|An|The) ([a-z]+) '+token+r'(?=[,.;:)])',passage)
         proof=review.get('modifierProof') or {}
@@ -211,19 +243,44 @@ def validate_review(review, article, predicates=None, modifiers=None, name_roles
                 type(proof.get('entryId')) is not int or type(proof.get('senseIndex')) is not int):
             raise ValueError('A personal name unit needs an explicit full-name structure and independent counterpart role')
         identity=proof.get('surface'),proof.get('role'),proof.get('entryId'),proof.get('senseIndex')
+        order=review.get('personalNameOrder','given_family')
         if (proof!=name_roles.get(identity) or proof.get('role')==role or
-                not re.fullmatch(r'[A-Z][a-zA-Z]+',target) or
+                order not in {'given_family','family_given'} or
+                order=='family_given' and review.get('familyFirstNameStructureConfirmed') is not True or
+                not re.fullmatch(r'[A-Z][a-zA-Z]+(?:-[a-zA-Z]+)*',target) or
                 not re.fullmatch(r'[A-Z][a-zA-Z]+',proof.get('surface',''))):
             raise ValueError('A name counterpart must have the actual opposite English name role')
         # Exactly two whole name units, optionally with explicit middle initials.
-        # No particles, hyphen pieces, extra family words or stage-name prefixes.
-        first,last=(re.escape(target),re.escape(proof['surface'])) if role=='given' else (re.escape(proof['surface']),re.escape(target))
-        if not re.match(first+r' (?:[A-Z]\. )*'+last+r"(?![\w'’/-])(?:\s*(?=[(,])|\s+(?=(?:is|was)\b))",passage):
+        # A whole hyphenated unit is retained. Never admit one of its pieces.
+        first_role='given' if order=='given_family' else 'family'
+        first,last=(re.escape(target),re.escape(proof['surface'])) if role==first_role else (re.escape(proof['surface']),re.escape(target))
+        middle=r'(?:[A-Z]\. )*' if order=='given_family' else ''
+        if not re.match(first+' '+middle+last+r"(?![\w'’/-])(?:\s*(?=[(,])|\s+(?=(?:is|was)\b))",passage):
             raise ValueError('A reviewed personal name cannot clip a larger or hyphenated full name')
     elif context=='explicit_complete_alias':
         if (start and article['text'][start-1].isalnum() or
                 not re.match(r'(?:known(?: simply)? as|called|named|nicknamed)\s+["“]?'+token+r'["”]?(?:[.,;:)]|\s+(?:is|are|was|were)\b)',passage)):
             raise ValueError('An explicit alias needs a complete lower-case prose cue, not a compound or longer work title')
+    elif context=='explicit_brand_name':
+        if (review['decision']!='include_name' or 'name_brand' not in members or
+                review.get('brandNameConfirmed') is not True or
+                start and article['text'][start-1].isalnum() or
+                not re.match(r'brand name '+token+r'(?=[,.;:)]| among others[,.;:)])',passage)):
+            raise ValueError('A brand name needs an explicit complete brand-label cue and reviewed identity')
+    elif context=='explicit_personal_nickname_list':
+        match=re.match(r'known by (?:his|her|their) nicknames? ((?:["“][^"“”\n]+["”](?:, | or | and ))*["“][^"“”\n]+["”])(?=[,.;:]|\s*\()',passage)
+        labels=re.findall(r'["“]([^"“”\n]+)["”]',match[1]) if match else []
+        if (review['decision']!='include_name' or 'name_person' not in members or
+                review.get('personalNicknameConfirmed') is not True or
+                start and article['text'][start-1].isalnum() or target not in labels):
+            raise ValueError('A personal nickname needs its whole quoted label and explicit personal-name cue')
+    elif context=='titled_person_reference':
+        before=article['text'][:start]
+        if (review['decision']!='include_name' or not members&{'name_person','name_fictional'} or
+                review.get('titledNameConfirmed') is not True or
+                start and not re.search(r'[,;:.!?]\s+$|\n\s*$',before) or
+                not re.match(r'(?:Ser|Sir|Dame|Lord|Lady) '+token+r'\s+(?:is|was|has|had)\b',passage)):
+            raise ValueError('A titled person reference needs a complete label and independent finite clause')
     elif context=='quoted_personal_nickname':
         name_word=r"[A-Z][\w’'.-]*"
         pattern=(r'(?:'+name_word+r' ){1,6}["“]'+re.escape(target)+r'["”] '
@@ -289,14 +346,20 @@ def attach(model, rows, articles, reviews, corrections, name_roles=None):
             rationale=review['rationale'], preferredCaseClaimed=False,
             englishLexicalRoleConfirmed=review.get('englishLexicalRoleConfirmed',False),
             personalNicknameConfirmed=review.get('personalNicknameConfirmed',False),
+            brandNameConfirmed=review.get('brandNameConfirmed',False),
+            titledNameConfirmed=review.get('titledNameConfirmed',False),
             fictionalNameConfirmed=review.get('fictionalNameConfirmed',False),
             englishQuotationConfirmed=review.get('englishQuotationConfirmed',False),
             completeNominalReferenceConfirmed=review.get('completeNominalReferenceConfirmed',False),
+            nameGenitiveConfirmed=review.get('nameGenitiveConfirmed',False),
+            prefacedNameSubjectConfirmed=review.get('prefacedNameSubjectConfirmed',False),
             modifierProof=review.get('modifierProof'),
             namedClassifierConfirmed=review.get('namedClassifierConfirmed',False),
             counterpartNameProof=review.get('counterpartNameProof'),
             personalNameUnitRole=review.get('personalNameUnitRole'),
             personalNameStructureConfirmed=review.get('personalNameStructureConfirmed',False),
+            personalNameOrder=review.get('personalNameOrder','given_family'),
+            familyFirstNameStructureConfirmed=review.get('familyFirstNameStructureConfirmed',False),
             pseudonymConfirmed=review.get('pseudonymConfirmed',False),
             normalizedInputConfirmed=review.get('normalizedInputConfirmed',False),
             scope='explicitly reviewed English-context name, ordinary English noun/adjective, abbreviation, symbol, phrase, numeral or taxonomic identifier; no title-only POS inference, inherited morphology, source endorsement, corpus intent or current availability claim; article prose is not redistributed')
@@ -344,6 +407,11 @@ def extend(args):
         index=Index(args.index)
         try:name_roles=verified_person_name_roles(index,{r['counterpartNameProof']['surface'] for r in reviews if r.get('contextKind')=='verified_personal_name_unit'})
         finally:index.close()
+        if any(r.get('counterpartNameProof',{}).get('source')=='census_surname' for r in reviews):
+            if not getattr(args,'census',None):raise ValueError('Census counterpart role requires the pinned surname source')
+            extra=verified_census_family_roles(args.census,{r['counterpartNameProof']['surface'] for r in reviews if r.get('counterpartNameProof',{}).get('source')=='census_surname'})
+            if set(extra)&set(name_roles):raise ValueError('Ambiguous counterpart source identity')
+            name_roles.update(extra)
     model,rows,sources,notices,pending = extension.load_base(args.base,args.seed)
     if pipeline.digest(args.base/'inventory.jsonl') != meta['inventorySha256']:
         raise ValueError('Wikipedia preparation belongs to another source inventory')
@@ -357,6 +425,13 @@ def extend(args):
         researchArticles=meta['articles'],explicitInterpretationReviews=len(reviews),
         humanReviewClaimed=False,sourceWholeFileSha256IndependentlyVerified=False,
         policy='individual exact-passage reviews only; complete-title matches never automatically assign name/POS, interpretation boundaries remain separate, no source prose exported')
+    census_proofs=[r['counterpartNameProof'] for r in reviews if r.get('counterpartNameProof',{}).get('source')=='census_surname']
+    if census_proofs:
+        import census_surnames
+        batch['additionalCounterpartRoleSource']=dict(source='census_surname',archiveSha256=census_surnames.ARCHIVE_SHA,
+            csvSha256=census_proofs[0]['snapshotSha256'],scope='aggregate surname-role identity only, original whole-name article spelling retained')
+        notices['CC0-1.0.txt']=(args.census/'CC0-1.0.txt').read_bytes()
+        notices['WIKIPEDIA-NAME-COUNTERPART-NOTICE.txt']=('U.S. Census Bureau, 2010 aggregate surname table, CC0-1.0. '+census_surnames.URL+'\nSelect surname spelling/rank/count to verify the opposite family-name role in explicitly reviewed complete English personal names. No demographics, individual Census identity, preferred case or gender inference.\n').encode()
     batches=list(prior_batch.get('batches',[prior_batch])) if prior_batch else []
     if batch not in batches:batches.append(batch)
     sources['reviewedEnglishWikipedia']=dict(batch,batches=batches)
@@ -379,4 +454,5 @@ if __name__ == '__main__':
     for key in ['base','seed','prepared','reviews','license','out']:
         parser.add_argument('--'+key,type=Path,required=True)
     parser.add_argument('--index',type=Path,help='Pinned local English name-role evidence for explicit personal-name unit reviews')
+    parser.add_argument('--census',type=Path,help='Optional pinned aggregate Census family-name counterpart evidence')
     extend(parser.parse_args())

@@ -5,6 +5,32 @@ import test_lexicon_pipeline as fixtures
 
 
 class OfficialCatalogTests(unittest.TestCase):
+    def reference_fixture(self):
+        return {'microsoft-docs.html':'<a href="/en-us/outside/">Outside</a><section id="listings-section"><h2>Product directory</h2>'
+            '<a href="/en-us/complete-product/">Complete <b>Product</b></a><a href="https://other.example/">Untrusted</a></section>'
+            '<a href="/en-us/footer/">Footer</a>',
+            'nikon-compact.html':'<h1 class="c-heading-a">Compact Digital Cameras (FIXTURE Series)</h1><h3>FIXTURE P999</h3>',
+            'rockwell-trademarks-web.txt':'https://www.rockwellautomation.com/en-us/company/about-us/legal-notices/trademarks.html\n'
+            'This list is a subset of trademarks owned and used by Rockwell Automation\nL1: CompleteMark^{®}\nL2: OtherMark™\n'
+            'L3: ModelMark™ Micro\nL4: WrappedMark^{®\nL1: CompleteMark^{®}\n'}
+
+    def test_reference_catalog_uses_scoped_complete_directory_series_and_trademark_rows(self):
+        records=p.reference_records(self.reference_fixture())
+        self.assertEqual({'Complete Product','FIXTURE','CompleteMark','OtherMark','WrappedMark'},{r['label'] for r in records})
+        self.assertEqual(1,len([r for r in records if r['label']=='CompleteMark']))
+        self.assertFalse(any(r['label']=='ModelMark' for r in records))
+        for change in [('microsoft-docs.html','<a href="/en-us/tool/">Invented</a>'),
+                       ('nikon-compact.html','<h1 class="c-heading-a">Compact Digital Cameras (FIXTURE P999 Series)</h1>')]:
+            texts=self.reference_fixture();texts[change[0]]=change[1]
+            with self.assertRaises(ValueError):p.reference_records(texts)
+
+    def test_trademark_is_not_automatically_a_product_and_has_no_morphology(self):
+        records=p.reference_records(self.reference_fixture());model=pipeline.Lexicon(fixtures.SEED)
+        p.attach(model,[dict(id='manual:1',surface='CompleteMark'),dict(id='manual:2',surface='CompleteProduct')],records)
+        key=next(iter(model.approved['CompleteMark']))
+        self.assertEqual({'noun','noun_proper','name_brand','domain_technology'},model.members[key,'CompleteMark'])
+        self.assertNotIn('name_product',model.members[key,'CompleteMark']);self.assertTrue(model.approved['CompleteProduct']);model.validate()
+
     def manufacturer_fixture(self):
         return '<div class="ds-brand-card" id="SOLIDWORKS" data-href="/products/solidworks"><div><img class="ds-list-of-brands-brand-logo" alt="SOLIDWORKS Logo"></div></div>'
 

@@ -23,6 +23,9 @@ FIREBASE_PRODUCT_PINS={'firebase-products.html':'629f43ccb7f67ea910fd6de96f06882
  'firebase-products-run.html':'d27a5253bbe0f51809753e5f5867e7f123428aedd9471a7eeeae686fab7fcf57'}
 MANUFACTURER_PINS={'dassault-products.html':'742fdb58141ac717d9647ec5259dbcdfd63214a1d4a06b8c3ee7342e2d1d13b6',
  'asus-phones.html':'7da37bc8c206a82c54219012d7bf7fc5a6b4933a6967ebe9d72d1f2f005f538c'}
+REFERENCE_PINS={'microsoft-docs.html':'0f3f5062f7076093b3cc03c93507b22ca0001d93f3f3855cb9188b1281f263cd',
+ 'nikon-compact.html':'6d5b0fce5c4c2d5aa866128027e4f4da24b8cf476c6617c99bb3deb91732e331',
+ 'rockwell-trademarks-web.txt':'6b5af7ce47550f6904a7daf6ae33b800199688edbc0fabeee0c2711d2f09061d'}
 APPLE={'Mac','MacBook Neo','MacBook Air','MacBook Pro','iMac','Mac mini','Mac Studio','Studio Display','Studio Display XDR',
  'Apple Creator Studio','Final Cut Pro','Pixelmator Pro','Logic Pro','Apple Books','Apple News','Apple Remote Desktop','Safari','QuickTime','Apple Podcasts','macOS','Apple Arcade','Find My',
  'iPad Pro','iPad Air','iPad','iPad mini','Apple Pencil','HomeKit','iPadOS','iCloud','Apple Pay','Apple Health','iOS','MagSafe','Apple Card','Apple CarPlay',
@@ -40,13 +43,14 @@ class Labels(HTMLParser):
         if self.kind=='google_cloud' and tag=='div' and 'owa4Ee' in attrs.get('class','').split():self.active=tag;self.content=[]
         if self.kind=='firebase' and tag=='div' and 'content__title' in attrs.get('class','').split():self.active=tag;self.content=[]
         if self.kind=='asus' and tag=='h2' and 'seriesName' in attrs.get('class','').split():self.active=tag;self.content=[]
+        if self.kind=='nikon' and tag=='h1' and 'c-heading-a' in attrs.get('class','').split():self.active=tag;self.content=[]
     def handle_data(self,data):
         if self.active:self.content.append(data)
     def handle_endtag(self,tag):
         if tag!=self.active:return
         label=' '.join(''.join(self.content).split())
         if self.kind=='jetbrains' and label=='Filters':self.stopped=True
-        elif label:self.records.append({'label':label,'selector':{'google':'p.product-filter__card-description','google_cloud':'div.owa4Ee','firebase':'div.content__title','jetbrains':'h3 before Filters','asus':'h2.seriesName'}[self.kind]})
+        elif label:self.records.append({'label':label,'selector':{'google':'p.product-filter__card-description','google_cloud':'div.owa4Ee','firebase':'div.content__title','jetbrains':'h3 before Filters','asus':'h2.seriesName','nikon':'h1.c-heading-a'}[self.kind]})
         self.active=None
 
 
@@ -157,6 +161,67 @@ def load_firebase_products(directory):
     return records
 
 
+class MicrosoftDirectory(HTMLParser):
+    def __init__(self):
+        super().__init__();self.depth=0;self.heading=None;self.confirmed=False;self.active=None;self.records=[]
+    def handle_starttag(self,tag,attrs):
+        attrs=dict(attrs)
+        if tag=='section':
+            if self.depth:self.depth+=1
+            elif attrs.get('id')=='listings-section':self.depth=1
+        if not self.depth:return
+        if tag=='h2':self.heading=[]
+        if tag=='a' and self.confirmed:self.active=(attrs.get('href',''),[])
+    def handle_data(self,data):
+        if self.heading is not None:self.heading.append(data)
+        if self.active:self.active[1].append(data)
+    def handle_endtag(self,tag):
+        if tag=='h2' and self.heading is not None:
+            self.confirmed=' '.join(''.join(self.heading).split())=='Product directory';self.heading=None
+        if tag=='a' and self.active:
+            path,text=self.active;self.active=None;label=' '.join(''.join(text).split())
+            if label and re.fullmatch(r'/en-us/[a-z0-9/-]+/',path):
+                self.records.append(dict(label=label,url='https://learn.microsoft.com'+path,
+                    selector='section#listings-section: Product directory / a complete text',catalogKind='documented_product_directory_label'))
+        if tag=='section' and self.depth:
+            self.depth-=1
+            if not self.depth:self.confirmed=False;self.active=None
+
+
+def reference_records(texts):
+    directory=MicrosoftDirectory();directory.feed(texts['microsoft-docs.html'])
+    records=[dict(r,sourceFile='microsoft-docs.html',snapshotKind='raw_html') for r in directory.records]
+    if not directory.records:raise ValueError('Missing explicit Microsoft product directory')
+    nikon=Labels('nikon');nikon.feed(texts['nikon-compact.html'])
+    for heading in nikon.records:
+        match=re.fullmatch(r'Compact Digital Cameras \(([A-Z][A-Z0-9-]+) Series\)',heading['label'])
+        if match:
+            records.append(dict(label=match[1],sourceFile='nikon-compact.html',url='https://imaging.nikon.com/imaging/lineup/coolpix/',
+                selector='h1.c-heading-a: explicitly parenthesized complete series name',sourceHeading=heading['label'],
+                catalogKind='vendor_product_family_label',snapshotKind='raw_html'))
+    if not any(r['sourceFile']=='nikon-compact.html' for r in records):raise ValueError('Missing complete Nikon series heading')
+    text=texts['rockwell-trademarks-web.txt'];url='https://www.rockwellautomation.com/en-us/company/about-us/legal-notices/trademarks.html'
+    if url not in text or 'This list is a subset of trademarks owned and used by Rockwell Automation' not in text:
+        raise ValueError('Missing explicitly identified vendor trademark list')
+    seen=set()
+    for number,line in re.findall(r'^L([0-9]+): (.*)$',text,re.M):
+        # The renderer can wrap a superscript closing brace onto the next line.
+        # Only a whole mark row is accepted; no model suffix or letters are cut.
+        match=re.fullmatch(r"([A-Za-z0-9][A-Za-z0-9 +'.&/()-]*?)(?:\^\{[®™℠]\}?|[®™℠])",line)
+        if not match or (number,line) in seen:continue
+        seen.add((number,line));records.append(dict(label=match[1].strip(),sourceFile='rockwell-trademarks-web.txt',url=url,
+            selector='complete numbered trademark-list row before trailing mark glyph',sourceLine=int(number),
+            renderedRowSha256=hashlib.sha256(line.encode()).hexdigest(),catalogKind='vendor_trademark_label',snapshotKind='public_web_extraction'))
+    if not any(r.get('catalogKind')=='vendor_trademark_label' for r in records):raise ValueError('Missing complete trademark rows')
+    return [dict(r,snapshotSha256=REFERENCE_PINS[r['sourceFile']]) for r in records]
+
+
+def load_references(directory):
+    for name,pin in REFERENCE_PINS.items():
+        if pipeline.digest(directory/name)!=pin:raise ValueError('Changed official reference catalog: '+name)
+    return reference_records({name:(directory/name).read_text() for name in REFERENCE_PINS})
+
+
 def attach(model,rows,records):
     by_name=defaultdict(list);counts=Counter()
     for row in rows:by_name[row['surface'].casefold()].append(row)
@@ -168,7 +233,7 @@ def attach(model,rows,records):
         proof={'source':'official_product_label','url':record['url'],'snapshotSha256':record.get('snapshotSha256') or PINS[record['sourceFile']],
             'labelEvidence':record,'approved':True,'preferredVendorCaseClaimed':False,
             'scope':'factual product display label in vendor catalog; exact labels and existing manual case/space-free variants only; no artwork, marketing prose, current availability, corpus-intent or inflection claim'}
-        members={'noun','noun_proper','name_product','domain_technology'}
+        members={'noun','noun_proper','domain_technology'}|({'name_brand'} if record.get('catalogKind')=='vendor_trademark_label' else {'name_product'})
         if record.get('catalogKind')=='vendor_product_brand_label':members.add('name_brand')
         extension.ensure_categories(model,members)
         model.add(key,label,label,members,proof,approved=True)
@@ -180,10 +245,12 @@ def attach(model,rows,records):
 
 def extend(args):
     manufacturers=getattr(args,'manufacturers',None)
+    references=getattr(args,'references',None)
     records=load(args.sources)
     if args.technologies:records+=load_technologies(args.technologies)
     if args.firebase_products:records+=load_firebase_products(args.firebase_products)
     if manufacturers:records+=load_manufacturers(manufacturers)
+    if references:records+=load_references(references)
     model,rows,sources,notices,pending=extension.load_base(args.base,args.seed);counts=attach(model,rows,records)
     if args.technologies:
         sources['officialTechnologyDisplayLabels']={'files':TECHNOLOGY_PINS,
@@ -200,6 +267,11 @@ def extend(args):
             'policy':'complete Dassault product-brand card identities corroborated by explicit logo alternative text; complete ASUS phone-series headings; no product inferred from URL slugs, model suffix removal or marketing descriptions'}
         notices['MANUFACTURER-PRODUCT-LABELS-ATTRIBUTION.txt']=('Factual product/brand labels: Dassault Systemes, https://www.3ds.com/products ; ASUS, https://www.asus.com/mobile-handhelds/phones/all-series/ .\n'
             'Only complete card labels corroborated by explicit logo alternative text and complete product-family headings are selected, retaining source hashes and selector identities. No page prose, descriptions, artwork, logos or code are redistributed; no content license, trademark permission, current availability, preferred case or inflection is asserted.\n').encode()
+    if references:
+        sources['additionalOfficialReferenceLabels']=dict(files=REFERENCE_PINS,
+            policy='complete Microsoft product-directory links, explicitly declared Nikon series names and whole Rockwell trademark rows; raw HTML and separately identified public web extraction remain distinct; no model clipping, product inference from a trademark, URL-derived names, preferred case or current availability claim')
+        notices['ADDITIONAL-OFFICIAL-REFERENCE-LABELS-ATTRIBUTION.txt']=('Factual names: Microsoft Learn https://learn.microsoft.com/en-us/docs/ ; Nikon https://imaging.nikon.com/imaging/lineup/coolpix/ ; Rockwell Automation https://www.rockwellautomation.com/en-us/company/about-us/legal-notices/trademarks.html .\n'
+            'Select complete printed directory, series and trademark name facts with source hashes and selector/row identities. No website prose, logos, artwork or code is redistributed, no affiliation or endorsement is claimed, and no general content or trademark permission is asserted. A trademark label is classified as a named brand without assuming a particular product type, global registration status or current availability. Rockwell evidence is a separately recorded public web extraction after a raw HTTP-403 response, not fabricated HTML.\n').encode()
     prior=args.base/'reviewed-overrides.tsv';reviews=pipeline.read_table(prior,'decisions') if prior.is_file() else []
     reviews,reopened=resolve_pending.revalidate_machine_reviews(model,reviews,pending)
     states=list(map(json.loads,(args.base/'status.jsonl').open()));selected=[r for r,s in zip(rows,states) if s['decision']=='pending' or r['id'] in reopened]
@@ -223,4 +295,5 @@ if __name__=='__main__':
     parser.add_argument('--technologies',type=Path,help='Optional pinned complete official product/framework indexes')
     parser.add_argument('--firebase-products',type=Path,help='Optional pinned Firebase Build/Run product card indexes')
     parser.add_argument('--manufacturers',type=Path,help='Optional pinned Dassault/ASUS complete manufacturer catalog labels')
+    parser.add_argument('--references',type=Path,help='Optional pinned complete official directory, series and trademark reference lists')
     extend(parser.parse_args())

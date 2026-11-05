@@ -25,6 +25,71 @@ def review(value):
 
 
 class WikipediaReviewTests(unittest.TestCase):
+    def test_family_first_name_preserves_whole_hyphenated_given_unit_and_opposite_role(self):
+        proof=dict(surface='Kim',role='family',entryId=123,senseIndex=0,snapshotSha256=wiki.WIKTIONARY_SNAPSHOT)
+        roles={('Kim','family',123,0):proof};value=article('Other','Kim Nam-joon (born 1994) is a musician.');r=review(value)
+        r.update(target='Nam-joon',categories=['noun','noun_proper','name_person'],contextKind='verified_personal_name_unit',
+                 personalNameUnitRole='given',personalNameOrder='family_given',familyFirstNameStructureConfirmed=True,
+                 counterpartNameProof=proof,personalNameStructureConfirmed=True)
+        wiki.validate_review(r,value,name_roles=roles)
+        for change in [dict(target='Nam'),dict(target='joon'),dict(personalNameOrder='given_family'),
+                       dict(familyFirstNameStructureConfirmed=False),dict(counterpartNameProof=dict(proof,role='given'))]:
+            with self.assertRaises(ValueError):wiki.validate_review(dict(r,**change),value,name_roles=roles)
+        value=article('Other','Kim Nam-joon Extra (born 1994) is a person.');r['witness']=dict(start=0,end=len(value['text']),sha256=value['textSha256'])
+        with self.assertRaises(ValueError):wiki.validate_review(r,value,name_roles=roles)
+
+    def test_genitive_reference_does_not_clip_a_longer_name_or_inherit_grammar(self):
+        value=article('Other',"according to Fixture's website, a statement.");r=review(value);start=value['text'].index('to ')
+        r.update(target='Fixture',contextKind='complete_name_genitive_reference',nameGenitiveConfirmed=True,witness=dict(start=start,end=len(value['text']),sha256=hashlib.sha256(value['text'][start:].encode()).hexdigest()))
+        model=pipeline.Lexicon(fixtures.SEED);rows=[dict(id='raw:1',surface='fixture',reading='fixture',cost=700)];corrections=[]
+        wiki.attach(model,rows,{value['id']:value},[r],corrections)
+        self.assertEqual({'noun','noun_proper','name_product','domain_technology'},next(model.members[k] for k in model.forms if k[1]=='Fixture'))
+        self.assertFalse(model.approved.get("Fixture's"));model.validate()
+        with self.assertRaises(ValueError):wiki.validate_review(dict(r,nameGenitiveConfirmed=False),value)
+        for text in ["to Long Fixture's website,", "to Fixture Junior's website,", "to Fixture-Smith's website,"]:
+            value=article('Other',text);r['witness']=dict(start=0,end=len(text),sha256=value['textSha256'])
+            with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
+    def test_comma_prefaced_subject_keeps_complete_name_and_verified_predicate(self):
+        text='After recovering, Fixture discovers a secret.';value=article('Other',text);r=review(value);start=text.index('Fixture')
+        r.update(target='Fixture',contextKind='comma_prefaced_name_subject',prefacedNameSubjectConfirmed=True,predicateProof=dict(surface='discovers',lexemeId='actual'),witness=dict(start=start,end=len(text),sha256=hashlib.sha256(text[start:].encode()).hexdigest()))
+        wiki.validate_review(r,value,predicates={'discovers':{'actual'}})
+        for change in [dict(prefacedNameSubjectConfirmed=False),dict(predicateProof=None),dict(predicateProof=dict(surface='discovers',lexemeId='invented'))]:
+            with self.assertRaises(ValueError):wiki.validate_review(dict(r,**change),value,predicates={'discovers':{'actual'}})
+        for text in ['After recovering, Long Fixture discovers a secret.','After recovering, Fixture Junior discovers a secret.','After recovering, Fixture-Smith discovers a secret.']:
+            value=article('Other',text);start=text.index('Fixture');r['witness']=dict(start=start,end=len(text),sha256=hashlib.sha256(text[start:].encode()).hexdigest())
+            with self.assertRaises(ValueError):wiki.validate_review(r,value,predicates={'discovers':{'actual'}})
+
+    def test_explicit_brand_label_cannot_clip_a_longer_product_name(self):
+        for text in ['brand name Fixture among others, is a product.', 'brand name Fixture, is a product.']:
+            value=article('Other',text);r=review(value)
+            r.update(target='Fixture',categories=['noun','noun_proper','name_brand'],contextKind='explicit_brand_name',brandNameConfirmed=True)
+            wiki.validate_review(r,value)
+            with self.assertRaises(ValueError):wiki.validate_review(dict(r,brandNameConfirmed=False),value)
+        for text in ['brand name Fixture XR among others,','brand name Fixture-Plus,','brand name Fixture Holdings,']:
+            value=article('Other',text);r['witness']=dict(start=0,end=len(text),sha256=value['textSha256'])
+            with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
+    def test_personal_nickname_list_requires_a_whole_quoted_personal_alias(self):
+        text='known by his nickname "First" or "Fixture" (meaning friend), used publicly.'
+        value=article('Other',text);r=review(value)
+        r.update(target='Fixture',categories=['noun','noun_proper','name_person'],contextKind='explicit_personal_nickname_list',personalNicknameConfirmed=True)
+        wiki.validate_review(r,value)
+        for change in [dict(target='Fixt'),dict(personalNicknameConfirmed=False),dict(categories=['noun','noun_proper','name_work'])]:
+            with self.assertRaises(ValueError):wiki.validate_review(dict(r,**change),value)
+        for text in ['known by his nickname "Fixture Junior" (meaning friend),', 'film named "Fixture" (released recently),', 'known by his nickname "Fixture" Jones (a person),']:
+            value=article('Other',text);r['witness']=dict(start=0,end=len(text),sha256=value['textSha256'])
+            with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
+    def test_titled_name_requires_complete_person_reference_and_finite_clause(self):
+        text='After the succession, Ser Fixture is retired.';value=article('Other',text);r=review(value);start=text.index('Ser')
+        r.update(target='Fixture',categories=['noun','noun_proper','name_fictional'],contextKind='titled_person_reference',titledNameConfirmed=True,witness=dict(start=start,end=len(text),sha256=hashlib.sha256(text[start:].encode()).hexdigest()))
+        wiki.validate_review(r,value)
+        with self.assertRaises(ValueError):wiki.validate_review(dict(r,titledNameConfirmed=False),value)
+        for text in ['Long Ser Fixture is retired.','Ser Fixture Junior is retired.','Ser Fixture-Smith is retired.']:
+            value=article('Other',text);start=text.index('Ser');r['witness']=dict(start=start,end=len(text),sha256=hashlib.sha256(text[start:].encode()).hexdigest())
+            with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
     def test_pseudonym_preserves_terminal_punctuation_and_never_clips_larger_names(self):
         text='Other references:\n Fixture!, pseudonym for American artist Sample Person'
         value=article('Other',text);start=text.index('Fixture!');r=review(value)
