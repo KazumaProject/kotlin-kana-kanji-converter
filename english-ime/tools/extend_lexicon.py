@@ -13,7 +13,7 @@ import lexicon_pipeline as pipeline
 from prepare_esdb import REVISION, URL
 
 EXTRA_CATEGORIES = {
-    "orthography_existing_manual_alias": ("Reviewed existing manual case/space alias of an independently approved ordinary English head; no externally attested raw spelling, preferred name or inferred word-boundary claim", "existing compact display aliases"),
+    "orthography_existing_manual_alias": ("Reviewed existing manual case/space or explicitly reviewed space/hyphen alias of an independently approved ordinary English head; no externally attested raw spelling, preferred name or inferred word-boundary claim", "existing compact display aliases"),
     "identifier_taxonomic_name": ("Explicitly reviewed scientific taxon label; no ordinary English POS or inherited inflection claim", "documented genus and taxon names"),
     "identifier_programming_keyword": ("Explicitly identified programming-language keyword; no ordinary English POS or inflection implied", "foreach"),
     "identifier_markup_attribute": ("Explicitly identified markup-language attribute name; no ordinary English POS or inflection implied", "href"),

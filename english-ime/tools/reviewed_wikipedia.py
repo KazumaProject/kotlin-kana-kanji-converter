@@ -79,6 +79,11 @@ def matches_title(target,title):
     return target.casefold()==title.casefold() or bool(left_reading and right_reading and left_reading==right_reading)
 
 
+SUBJECT_PREDICATES=('is','are','was','were','refers','means','became','announced','launched','introduced','joined',
+    'won','plays','played','signed','performed','made','released','wrote','designed','developed','produced',
+    'supports','offers','provides','had','began','did','received','moved','would')
+
+
 def validate_review(review, article):
     if (review['reviewer'] != 'implementation_agent' or not review['rationale'].strip() or
             not review['interpretation'].strip() or review['decision'] not in KINDS):
@@ -101,8 +106,8 @@ def validate_review(review, article):
     if context=='standalone_sentence_subject':
         before=article['text'][:start]
         if (start and not re.search(r'[.!?]\s+$|\n\s*$',before) or
-                re.search(r'\b(?:[A-Za-z]|subsp|ssp|var|sp)\.\s*$',before) or
-                not re.match(r'(?:(?:The|the|A|a|An|an) |(?:The|the) name )?["“]?'+token+r'["”]?\s+(?:is|are|was|were|refers|means|became|announced|launched|introduced|joined|won|plays|played|signed|performed|made|released|wrote|designed|developed|produced|supports|offers|provides)\b',passage)):
+                re.search(r'\b(?:[A-Za-z]|subsp|ssp|var|sp|St|Dr|Mr|Mrs|Ms|Prof|Rev|Sr|Jr|Mt)\.\s*$',before) or
+                not re.match(r'(?:(?:The|the|A|a|An|an) |(?:The|the) name )?["“]?'+token+r'["”]?\s+(?:'+'|'.join(SUBJECT_PREDICATES)+r')\b',passage)):
             raise ValueError('A standalone subject needs its real sentence boundary and complete literal label')
     elif context=='explicit_complete_alias':
         if (start and article['text'][start-1].isalnum() or

@@ -28,9 +28,12 @@ def attach(model,rows,reviews,literals):
             raise ValueError('Missing or duplicate explicit manual lexical review')
         seen.add(review['id']);row=originals[review['id']];canonical=review['canonical']
         literal=row['reading'],row['surface'],row['cost']
-        if (not row['id'].startswith('manual:') or any(review[key]!=row[key] for key in ['id','reading','surface','cost']) or
+        relation=review.get('separatorRelation','case_space')
+        normalize=lambda value:value.replace(' ','').casefold() if relation=='case_space' else value.replace('-',' ').casefold()
+        if (relation not in {'case_space','reviewed_space_hyphen'} or
+                not row['id'].startswith('manual:') or any(review[key]!=row[key] for key in ['id','reading','surface','cost']) or
                 literal not in literals or canonical==row['surface'] or
-                canonical.replace(' ','').casefold()!=row['surface'].replace(' ','').casefold()):
+                normalize(canonical)!=normalize(row['surface'])):
             raise ValueError('A lexical alias must retain its exact original literal mapping and letters')
         approved=[]
         for identifier in sorted(model.approved.get(canonical,[])):
@@ -46,8 +49,9 @@ def attach(model,rows,reviews,literals):
             proof=dict(source='reviewed_manual_lexical_alias',url=url,approved=True,reviewer='implementation_agent',humanReviewClaimed=False,
                 legacySourceId=row['id'],originalReading=row['reading'],originalSurface=row['surface'],originalCost=row['cost'],
                 manualSourceSha256=manual_aliases.MANUAL_SHA256,canonicalSurface=canonical,underlyingLexemeId=key[0],
+                separatorRelation=relation,
                 underlyingEvidence=evidence,rationale=review['rationale'],externallyAttestedAliasSpellingClaimed=False,
-                scope='explicit reviewed original literal case/space alias of an independently approved ordinary English head; canonical identity retained, no invented segmentation, name/API interpretation, preferred case, corpus intent or inherited base-form flags')
+                scope='explicit reviewed original literal case/space or separately reviewed space/hyphen alias of an independently approved ordinary English head; canonical identity retained, no invented segmentation, name/API interpretation, preferred case, corpus intent or inherited base-form flags')
             model.add(key[0],model.forms[key]['lemma'],row['surface'],values,proof,approved=True)
             counts['reviewedManualLexicalAliases']+=1
     return counts
@@ -68,7 +72,7 @@ def extend(args):
     counts.update(attach(model,rows,reviews,literals));counts.update(initial_capitals.attach(model,rows,ids))
     sources['reviewedManualLexicalHeads']=dict(snapshotSha256=SNAPSHOT_SHA256,manualSourceSha256=manual_aliases.MANUAL_SHA256,
         reviewsSha256=pipeline.digest(args.reviews),humanReviewClaimed=False,
-        policy='complete indexed English manual heads and explicit literal case/space aliases only; raw mapping/cost and canonical identity retained, no inferred word segmentation, product/API classification or preferred case')
+        policy='complete indexed English manual heads and explicit literal case/space or separately reviewed space/hyphen aliases only; raw mapping/cost and canonical identity retained, no inferred word segmentation, product/API classification or preferred case')
     prior=args.base/'surface-corrections.tsv';corrections=pipeline.read_table(prior,'corrections') if prior.is_file() else []
     prior=args.base/'reviewed-overrides.tsv'
     summary=pipeline.publish(model,rows,args.base/'inventory.jsonl',args.out,sources,notices,pending,

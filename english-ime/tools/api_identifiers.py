@@ -22,6 +22,9 @@ ANDROID_PINS = {'classes.html':'e20ffcab086651bc3b6f8043cb9c3693a51f86288c02f445
 PYTHON_PINS = {'objects.inv':'84e65e567815e09d47444aca1d160f6ac771fa28096874f3ec5996226f81ce3a',
     'license.html':'a5f26a87a04be9134f7d3971c3fe6790f4df225a137b860aab8f546590b90125',
     'copyright.html':'53047c6f36d2bd285a5c290b1b51fda510e50c235b56fc3af3d1709e7c170b3d'}
+KOTLIN_PINS = {'androidx-kotlin-classes.html':'788cee0d34a2f2ede4135db93352de156d9b86094853cb82b3062e9801160842',
+    'kotlinx-coroutines-pages.json':'3c8ffab3f81c28df192450582a9d11fdeaa410e1281465ec079702026a33b76b',
+    'kotlinx-coroutines-LICENSE.txt':'b1febe6399dffb10d19d35e7663ab16300c93cb0476a94115df1cc0097a8ffd8'}
 
 
 class AndroidTypes(HTMLParser):
@@ -31,9 +34,25 @@ class AndroidTypes(HTMLParser):
     def handle_starttag(self,tag,attrs):
         if tag!='a':return
         target=urlsplit(dict(attrs).get('href',''))
-        if target.netloc and target.netloc!='developer.android.com' or target.fragment:return
-        match=re.fullmatch(r'/reference/((?:android|androidx|java|javax)/(?:[a-z][A-Za-z0-9_]*/)*([A-Z][A-Za-z0-9_]*(?:\.[A-Z][A-Za-z0-9_]*)*))',target.path)
+        if target.scheme not in {'','https'} or target.netloc and target.netloc!='developer.android.com' or target.fragment or target.query:return
+        match=re.fullmatch(r'/reference/(?:kotlin/)?((?:android|androidx|java|javax)/(?:[a-z][A-Za-z0-9_]*/)*([A-Z][A-Za-z0-9_]*(?:\.[A-Z][A-Za-z0-9_]*)*))',target.path)
         if match:self.types.add((match[2],match[1].replace('/','.'),'https://developer.android.com'+target.path))
+
+
+def coroutine_types(raw):
+    """Read complete Dokka type declarations, never functions or search fragments."""
+    pages=json.loads(raw)
+    if not isinstance(pages,list):raise ValueError('Unexpected Kotlin API search index')
+    for page in pages:
+        declaration=re.match(r'^(?:(?:data|sealed|enum|annotation|value|expect|actual) )*(?:class|interface|object) ([A-Z][A-Za-z0-9_]*)\b',page['name'])
+        if not declaration:continue
+        name=declaration[1];qualified=page['description'];location=page['location']
+        if (not re.fullmatch(r'kotlinx\.coroutines(?:\.[A-Za-z_][A-Za-z0-9_]*)+',qualified) or
+                qualified.rsplit('.',1)[-1]!=name or name not in page['searchKeys'] or
+                not re.fullmatch(r'[a-z0-9.-]+/(?:[a-z0-9.-]+/)*-[a-z0-9-]+/index\.html',location) or
+                '..' in location.split('/')):
+            raise ValueError('Incomplete or inconsistent Kotlin type identity')
+        yield name,qualified,'https://kotlinlang.org/api/kotlinx.coroutines/'+location
 
 
 def python_types(raw):
@@ -90,12 +109,27 @@ def extend(args):
         index=AndroidTypes();index.feed((args.android/name).read_text())
         records += [(*record,'android_public_types') for record in index.types]
     records += [(*record,'python_3.14_public_types') for record in python_types((args.python/'objects.inv').read_bytes())]
+    if args.kotlin:
+        load(args.kotlin,KOTLIN_PINS)
+        index=AndroidTypes();index.feed((args.kotlin/'androidx-kotlin-classes.html').read_text())
+        records += [(*record,'androidx_kotlin_public_types') for record in index.types]
+        records += [(*record,'kotlinx_coroutines_public_types') for record in coroutine_types((args.kotlin/'kotlinx-coroutines-pages.json').read_text())]
     model,rows,sources,notices,pending=extension.load_base(args.base,args.seed)
     states=list(map(json.loads,(args.base/'status.jsonl').open()));ids={r['id'] for r in states if r['decision']=='pending'}
     prior=args.base/'surface-corrections.tsv';corrections=pipeline.read_table(prior,'corrections') if prior.is_file() else []
     adopted=attach(model,rows,records,ids,corrections)
+    prior_kotlin=sources.get('publicApiIdentifiers',{}).get('kotlin')
     sources['publicApiIdentifiers']={'android':ANDROID_PINS,'python314':PYTHON_PINS,
         'policy':'complete type names from official indexes, qualified identities retained; exact manual spellings or verified pending ASCII TSV input spellings with explicit canonical-case candidates; no arbitrary case edits, title/name-component extraction, English POS/inflection or dependency-availability inference'}
+    if args.kotlin:
+        sources['publicApiIdentifiers']['kotlin']=KOTLIN_PINS
+        notices['KOTLIN-PUBLIC-API-NOTICE.txt']=('Public API type identifier facts from AndroidX contributors and JetBrains/Kotlin contributors.\n'
+            'https://developer.android.com/reference/kotlin/androidx/classes\nhttps://developer.android.com/license\n'
+            'https://kotlinlang.org/api/kotlinx.coroutines/scripts/pages.json\n'
+            'Changes: extracted complete Kotlin type declarations and qualified identities; no functions, search fragments, prose or implementation code copied. Android documentation content is CC BY 4.0 and code samples Apache 2.0; the Kotlin project Apache 2.0 notice is retained separately. No installed dependency, English POS or runtime capability inferred.\n').encode()
+        notices['KOTLINX-COROUTINES-LICENSE.txt']=(args.kotlin/'kotlinx-coroutines-LICENSE.txt').read_bytes()
+    elif prior_kotlin:
+        sources['publicApiIdentifiers']['kotlin']=prior_kotlin
     notices['PUBLIC-API-IDENTIFIERS-NOTICE.txt']=('Public API identifier facts from the Android Open Source Project/AndroidX contributors and Python Software Foundation/contributors.\n'
         'https://developer.android.com/reference/classes\nhttps://developer.android.com/reference/androidx/classes\nhttps://developer.android.com/license\n'
         'https://docs.python.org/3.14/objects.inv\nhttps://docs.python.org/3.14/license.html\n'
@@ -112,4 +146,5 @@ def extend(args):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     for name in ['base','seed','android','python','out']:parser.add_argument('--'+name,type=Path,required=True)
+    parser.add_argument('--kotlin',type=Path,help='Optional pinned Kotlin public type indexes and notice')
     extend(parser.parse_args())

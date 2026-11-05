@@ -1,3 +1,4 @@
+import json
 import unittest
 import zlib
 import api_identifiers as api
@@ -23,6 +24,7 @@ class PublicApiIdentifierTests(unittest.TestCase):
     def test_android_index_accepts_qualified_types_and_rejects_other_links(self):
         index=api.AndroidTypes();index.feed('<a href="/reference/android/widget/FixtureView">FixtureView</a>'
             '<a href="/reference/android/widget/FixtureView#method">method</a>'
+            '<a href="javascript:/reference/android/widget/Invented">Invented</a>'
             '<a href="/reference/android/widget/package-summary">package</a>'
             '<a href="https://example.org/reference/android/widget/Other">Other</a>')
         self.assertEqual({('FixtureView','android.widget.FixtureView','https://developer.android.com/reference/android/widget/FixtureView')},index.types)
@@ -31,6 +33,22 @@ class PublicApiIdentifierTests(unittest.TestCase):
         header=b'# Sphinx inventory version 2\n# Project: Python\n# Version: 3.14\n# compressed\n'
         data=b'fixture.Coroutine py:class 1 library/fixture.html#$ -\nfixture.run py:function 1 library/fixture.html#$ -\n'
         self.assertEqual([('Coroutine','fixture.Coroutine','https://docs.python.org/3.14/library/fixture.html#fixture.Coroutine')],list(api.python_types(header+zlib.compress(data))))
+
+    def test_kotlin_index_retains_language_url_and_rejects_members_and_queries(self):
+        index=api.AndroidTypes();index.feed('<a href="/reference/kotlin/androidx/compose/ui/text/input/ImeOptions">ImeOptions</a>'
+            '<a href="/reference/kotlin/androidx/compose/ui/text/input/ImeOptions#copy">copy</a>'
+            '<a href="/reference/kotlin/androidx/compose/ui/text/input/ImeOptions?query=other">other</a>')
+        self.assertEqual({('ImeOptions','androidx.compose.ui.text.input.ImeOptions',
+            'https://developer.android.com/reference/kotlin/androidx/compose/ui/text/input/ImeOptions')},index.types)
+
+    def test_dokka_index_requires_whole_type_declaration_and_qualified_identity(self):
+        entry=dict(name='interface SharedFlow<out T> : Flow<T> ',description='kotlinx.coroutines.flow.SharedFlow',
+            location='kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/index.html',searchKeys=['SharedFlow'])
+        function=dict(entry,name='fun SharedFlow.asFlow()',location='kotlinx-coroutines-core/kotlinx.coroutines.flow/as-flow.html')
+        self.assertEqual([('SharedFlow','kotlinx.coroutines.flow.SharedFlow',
+            'https://kotlinlang.org/api/kotlinx.coroutines/'+entry['location'])],list(api.coroutine_types(json.dumps([entry,function]))))
+        for changed in [dict(description='kotlinx.coroutines.flow.Other'),dict(location='../other/index.html'),dict(searchKeys=['Flow'])]:
+            with self.assertRaises(ValueError):list(api.coroutine_types(json.dumps([dict(entry,**changed)])))
 
     def test_exact_manual_type_keeps_multiple_contexts_and_no_ordinary_lexical_pos(self):
         model=pipeline.Lexicon(fixtures.SEED)

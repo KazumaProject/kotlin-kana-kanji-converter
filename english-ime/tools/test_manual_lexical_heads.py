@@ -47,5 +47,16 @@ class ManualLexicalHeadTests(unittest.TestCase):
             self.assertEqual(1,result['includedRows']);self.assertTrue(loaded.approved['DryIce'])
             self.assertEqual('dry ice',loaded.forms['fixture-ice','DryIce']['lemma'])
 
+    def test_hyphen_space_mapping_requires_its_own_explicit_relation(self):
+        model,row,review,literals=self.fixture()
+        model.add('fixture-stop','e-stop','e-stop',{'noun'},dict(source='wiktionary',url='https://example.org/stop'),approved=True)
+        row=dict(id='manual:2',reading='e stop',surface='e stop',cost=700)
+        literals={('e stop','e stop',700):50}
+        review=dict(row,canonical='e-stop',reviewer='implementation_agent',rationale='Individually checked original spaced spelling of the complete indexed emergency-stop noun.')
+        with self.assertRaises(ValueError):heads.attach(model,[row],[review],literals)
+        heads.attach(model,[row],[dict(review,separatorRelation='reviewed_space_hyphen')],literals)
+        self.assertEqual('e-stop',model.forms['fixture-stop','e stop']['lemma'])
+        self.assertNotIn('verb_base',model.members['fixture-stop','e stop'])
+
 
 if __name__=='__main__':unittest.main()

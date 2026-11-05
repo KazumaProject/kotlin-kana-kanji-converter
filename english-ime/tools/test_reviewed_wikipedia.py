@@ -34,6 +34,16 @@ class WikipediaReviewTests(unittest.TestCase):
             test['witness']=dict(start=start,end=len(text),sha256=hashlib.sha256(text[start:].encode()).hexdigest())
             with self.assertRaises(ValueError):wiki.validate_review(test,value)
 
+    def test_reviewed_finite_predicates_keep_sentence_and_whole_label_guards(self):
+        for predicate in ['had recently won','began instruction','did lease land','received royalties','moved home','would return']:
+            value=article('Another heading','Fixture '+predicate+'.');r=review(value)
+            r.update(target='Fixture',contextKind='standalone_sentence_subject')
+            wiki.validate_review(r,value)
+            for text in ['Fixture Holdings '+predicate+'.','P. h. Fixture '+predicate+'.','St. Fixture '+predicate+'.','Mrs. Fixture '+predicate+'.']:
+                value=article('Another heading',text);start=text.index('Fixture')
+                r['witness']=dict(start=start,end=len(text),sha256=hashlib.sha256(text[start:].encode()).hexdigest())
+                with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
     def test_explicit_alias_is_complete_prose_and_never_a_longer_creative_work_title(self):
         for text,valid in [('known simply as Fixture, a company.',True),('named Fixture, a software package.',True),('named Fixture Tools, a company.',False),('called Fixture-based, a technique.',False),('Called Fixture, the album A Girl Called Fixture.',False)]:
             value=article('An unrelated heading',text);r=review(value);r.update(target='Fixture',contextKind='explicit_complete_alias')
