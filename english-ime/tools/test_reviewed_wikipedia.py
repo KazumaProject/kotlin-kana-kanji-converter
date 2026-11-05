@@ -25,6 +25,55 @@ def review(value):
 
 
 class WikipediaReviewTests(unittest.TestCase):
+    def test_named_object_needs_whole_independent_label_and_explicit_review(self):
+        value=article('Other','names it Fixture, combining it with another machine.');r=review(value)
+        r.update(target='Fixture',contextKind='explicit_named_object_reference',explicitNamingConfirmed=True,categories=['noun','noun_proper','name_fictional'])
+        wiki.validate_review(r,value)
+        with self.assertRaises(ValueError):wiki.validate_review(dict(r,explicitNamingConfirmed=False),value)
+        for text in ['names it Fixture Junior,','names it Fixture-like,','renames it Fixture,']:
+            value=article('Other',text);r['witness']=dict(start=0,end=len(text),sha256=value['textSha256'])
+            with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
+    def test_title_initialism_requires_printed_full_subject_and_all_title_initials(self):
+        text='It closed the same month TCR was released.';value=article('The Complete Reference',text);r=review(value);start=text.index('TCR')
+        r.update(target='TCR',categories=['noun','noun_proper','name_work','abbreviation'],contextKind='article_title_initialism',titleInitialismConfirmed=True,witness=dict(start=start,end=len(text),sha256=hashlib.sha256(text[start:].encode()).hexdigest()))
+        wiki.validate_review(r,value)
+        with self.assertRaises(ValueError):wiki.validate_review(dict(r,titleInitialismConfirmed=False),value)
+        for title,text in [('Another Full Title','TCR was released.'),('The Complete Reference','Long TCR was released.'),('The Complete Reference','TCR Junior was released.')]:
+            value=article(title,text);start=text.index('TCR');r['witness']=dict(start=start,end=len(text),sha256=hashlib.sha256(text[start:].encode()).hexdigest())
+            with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
+    def test_recorded_work_requires_whole_list_item_not_parenthesized_title_fragment(self):
+        text='Details.\n\nRecordings \nOther Work; Fixture; Last Work, Ensemble, 2002.';value=article('Fixture (subtitle)',text);start=text.index('Fixture;');r=review(value)
+        r.update(target='Fixture',categories=['noun','noun_proper','name_work'],contextKind='recorded_work_list_item',recordedWorkItemConfirmed=True,witness=dict(start=start,end=len(text),sha256=hashlib.sha256(text[start:].encode()).hexdigest()))
+        wiki.validate_review(r,value)
+        for text in ['Details.\n\nRecordings\nOther Work; Fixture (subtitle); Last Work.', 'Details.\nOther Work; Fixture; Last Work.','Details.\n\nRecordings\nOther Work; Fixture Junior; Last Work.']:
+            value=article('Fixture (subtitle)',text);start=text.index('Fixture');r['witness']=dict(start=start,end=len(text),sha256=hashlib.sha256(text[start:].encode()).hexdigest())
+            with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
+    def test_prefaced_lexical_noun_requires_its_own_explicit_english_role_confirmation(self):
+        text='In this field, fixture refers to a technical concept.';value=article('Other',text);r=review(value);start=text.index('fixture')
+        r.update(target='fixture',decision='include_lexical_noun',categories=['noun'],contextKind='comma_prefaced_name_subject',englishLexicalRoleConfirmed=True,prefacedLexicalSubjectConfirmed=True,witness=dict(start=start,end=len(text),sha256=hashlib.sha256(text[start:].encode()).hexdigest()))
+        wiki.validate_review(r,value)
+        for change in [dict(englishLexicalRoleConfirmed=False),dict(prefacedLexicalSubjectConfirmed=False,prefacedNameSubjectConfirmed=True)]:
+            with self.assertRaises(ValueError):wiki.validate_review(dict(r,**change),value)
+
+    def test_future_station_name_does_not_need_a_current_existence_claim(self):
+        value=article('Other','Fixture will be an underground station.');r=review(value)
+        r.update(target='Fixture',contextKind='standalone_sentence_subject',categories=['noun','noun_proper','name_place'])
+        wiki.validate_review(r,value)
+        value=article('Other','Long Fixture will be a station.');start=value['text'].index('Fixture');r['witness']=dict(start=start,end=len(value['text']),sha256=hashlib.sha256(value['text'][start:].encode()).hexdigest())
+        with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
+    def test_determined_name_needs_separate_name_review_and_keeps_complete_boundaries(self):
+        value=article('Other','the Fixture, an insurance company.');r=review(value)
+        r.update(target='Fixture',categories=['noun','noun_proper','name_organization'],contextKind='complete_determined_noun_head',completeNominalReferenceConfirmed=True)
+        wiki.validate_review(r,value)
+        with self.assertRaises(ValueError):wiki.validate_review(dict(r,completeNominalReferenceConfirmed=False,englishLexicalRoleConfirmed=True),value)
+        for text in ['the Long Fixture,','the Fixture Holdings,','the Fixture-like company,']:
+            value=article('Other',text);r['witness']=dict(start=0,end=len(text),sha256=value['textSha256'])
+            with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
     def test_reviewed_determined_noun_requires_explicit_english_role_and_complete_head(self):
         for text,target in [('a fixture, which is described.','fixture'),('the fixture who works.','fixture'),('his fixture, which was changed.','fixture'),('These fixtures can be used.','fixtures')]:
             value=article('Other',text);r=review(value)

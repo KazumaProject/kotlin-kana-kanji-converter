@@ -86,7 +86,7 @@ def matches_title(target,title):
 
 SUBJECT_PREDICATES=('is','are','was','were','refers','means','became','announced','launched','introduced','joined',
     'won','plays','played','signed','performed','made','released','wrote','designed','developed','produced',
-    'supports','offers','provides','had','has','have','began','did','received','moved','would')
+    'supports','offers','provides','had','has','have','began','did','received','moved','would','will')
 
 
 def approved_finite_predicates(model):
@@ -212,7 +212,8 @@ def validate_review(review, article, predicates=None, modifiers=None, name_roles
             raise ValueError('A named genitive needs its complete prepositional name and explicit independent-name review')
     elif context=='comma_prefaced_name_subject':
         before=article['text'][:start];match=re.match(token+r'\s+([a-z]+)\b',passage)
-        if (review['decision']!='include_name' or review.get('prefacedNameSubjectConfirmed') is not True or
+        confirmation='prefacedNameSubjectConfirmed' if review['decision']=='include_name' else 'prefacedLexicalSubjectConfirmed'
+        if (review['decision'] not in {'include_name','include_lexical_noun'} or review.get(confirmation) is not True or
                 not re.search(r',\s+$',before) or not match):
             raise ValueError('A prefaced name subject needs a complete finite name clause after the comma')
         if match[1] not in SUBJECT_PREDICATES:
@@ -228,10 +229,28 @@ def validate_review(review, article, predicates=None, modifiers=None, name_roles
                 proof.get('lexemeId') not in modifiers.get(match[1],())):
             raise ValueError('A complete English noun phrase needs an independently verified modifier and whole noun head')
     elif context=='complete_determined_noun_head':
-        if (review['decision']!='include_lexical_noun' or start and article['text'][start-1].isalnum() or
+        if (review['decision'] not in {'include_lexical_noun','include_name'} or
+                review['decision']=='include_name' and review.get('completeNominalReferenceConfirmed') is not True or
+                start and article['text'][start-1].isalnum() or
                 not re.match(r'(?:[Aa]n?|[Tt]he|[Tt]hese|[Tt]hose|[Hh]is|[Hh]er|[Tt]heir|[Ii]ts) '+token+
                     r'(?=[,.;:)]|\s+(?:who|which|that|is|was|are|were|can|could|would|will)\b)',passage)):
-            raise ValueError('A determined English noun needs its whole head and an explicit English lexical-role review')
+            raise ValueError('A determined head needs its whole noun and an explicit English lexical-role or independent-name review')
+    elif context=='article_title_initialism':
+        initials=''.join(word[0] for word in re.findall(r'[A-Za-z]+',article['title'])).upper()
+        before=article['text'][:start]
+        boundary=not start or re.search(r'[.!?]\s+$|\n\s*$|\b(?:the same|that|this) (?:day|month|year|time)\s+$',before)
+        if (review['decision'] not in {'include_name','include_abbreviation'} or
+                review.get('titleInitialismConfirmed') is not True or not re.fullmatch('[A-Z]{2,12}',target) or
+                target!=initials or not boundary or
+                not re.match(token+r'\s+(?:is|was|are|were|has|had|will|would)\b',passage)):
+            raise ValueError('A title initialism needs exact title initials and a reviewed complete finite subject')
+    elif context=='recorded_work_list_item':
+        before=article['text'][:start]
+        if (review['decision']!='include_name' or 'name_work' not in members or
+                review.get('recordedWorkItemConfirmed') is not True or
+                not re.search(r'\nRecordings[ \t]*\n',before) or not re.search(r';[ \t]+$',before) or
+                not re.match(token+r';(?=\s)',passage)):
+            raise ValueError('A recorded work needs its full independently printed semicolon-delimited list item')
     elif context=='reviewed_english_noun_modifier':
         match=re.match(token+r" ([a-z]+)(?![\w'’/-])(?=[,.;:)]|\s+(?:of|in|with|from|for|to)\b)",passage)
         proof=review.get('nounHeadProof') or {}
@@ -286,6 +305,11 @@ def validate_review(review, article, predicates=None, modifiers=None, name_roles
         if (start and article['text'][start-1].isalnum() or
                 not re.match(r'(?:known(?: simply)? as|called|named|nicknamed)\s+["“]?'+token+r'["”]?(?:[.,;:)]|\s+(?:is|are|was|were)\b)',passage)):
             raise ValueError('An explicit alias needs a complete lower-case prose cue, not a compound or longer work title')
+    elif context=='explicit_named_object_reference':
+        if (review['decision']!='include_name' or review.get('explicitNamingConfirmed') is not True or
+                start and article['text'][start-1].isalnum() or
+                not re.match(r'names it '+token+r'(?=[,.;:)])',passage)):
+            raise ValueError('A named object needs an explicit complete English naming clause')
     elif context=='explicit_brand_name':
         if (review['decision']!='include_name' or 'name_brand' not in members or
                 review.get('brandNameConfirmed') is not True or
@@ -373,12 +397,16 @@ def attach(model, rows, articles, reviews, corrections, name_roles=None):
             englishLexicalRoleConfirmed=review.get('englishLexicalRoleConfirmed',False),
             personalNicknameConfirmed=review.get('personalNicknameConfirmed',False),
             brandNameConfirmed=review.get('brandNameConfirmed',False),
+            explicitNamingConfirmed=review.get('explicitNamingConfirmed',False),
             titledNameConfirmed=review.get('titledNameConfirmed',False),
             fictionalNameConfirmed=review.get('fictionalNameConfirmed',False),
             englishQuotationConfirmed=review.get('englishQuotationConfirmed',False),
             completeNominalReferenceConfirmed=review.get('completeNominalReferenceConfirmed',False),
+            titleInitialismConfirmed=review.get('titleInitialismConfirmed',False),
+            recordedWorkItemConfirmed=review.get('recordedWorkItemConfirmed',False),
             nameGenitiveConfirmed=review.get('nameGenitiveConfirmed',False),
             prefacedNameSubjectConfirmed=review.get('prefacedNameSubjectConfirmed',False),
+            prefacedLexicalSubjectConfirmed=review.get('prefacedLexicalSubjectConfirmed',False),
             modifierProof=review.get('modifierProof'),
             nounHeadProof=review.get('nounHeadProof'),
             namedClassifierConfirmed=review.get('namedClassifierConfirmed',False),

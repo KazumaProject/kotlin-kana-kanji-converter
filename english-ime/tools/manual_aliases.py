@@ -10,6 +10,7 @@ import lexicon_pipeline as pipeline
 MANUAL_SHA256 = '60dcfc1e3b7874fed45c1641c59c82d8b40a4999d8abab200cd97fd4204f246b'
 REVISION = '49403f28e24ba57e695b0559fe4e50efd86f4bb9'
 EXPECTED = {'manual:890': ('cplusplus', 'C++', 10000),
+            'manual:107': ('aucoder', 'AtCoder', 20000),
             'manual:359': ('cloudflarworkers', 'CloudflareWorkers', 12000),
             'manual:1536': ('httpie', 'http', 8000),
             'manual:1537': ('bottom', 'btm', 8000),
