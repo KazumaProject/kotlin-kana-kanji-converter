@@ -16,6 +16,32 @@ SEED = fixtures.SEED
 
 
 class ExtensionTests(unittest.TestCase):
+    def test_reviewed_command_and_function_approvals_survive_reload_without_trusting_unknown_sources(self):
+        kinds=['reviewed_official_command_example','reviewed_formal_command_prefix','reviewed_public_api_function']
+        cases=[(kind,{},True) for kind in kinds]+[(kind,{'approved':False},False) for kind in kinds]+[(kind,{'requiresFullNamedContext':True},False) for kind in kinds]+[('unreviewed_unknown_source',{},False)]
+        added=[]
+        for number,(kind,flags,expected) in enumerate(cases):
+            row=dict(id='manual:'+str(3+number),reading='fixture'+str(number),surface='fixture'+str(number),cost=500+number)
+            self.fixture.rows.append(row);added.append((row,kind,flags,expected))
+        pipeline.jsonl(self.fixture.inventory,self.fixture.rows);self.fixture.inventory_sha256=pipeline.digest(self.fixture.inventory);self.fixture.build()
+        model,rows,sources,notices,pending=extension.load_base(self.fixture.args.out,SEED)
+        extension.ensure_categories(model,{'identifier_command_prefix','identifier_programming_api'})
+        for row,kind,flags,expected in added:
+            category='identifier_programming_api' if kind=='reviewed_public_api_function' else 'identifier_command_prefix'
+            proof=dict(source=kind,url='https://example.org/explicit-review',approved=True,**{k:v for k,v in flags.items() if k!='approved'})
+            if 'approved' in flags:proof['approved']=flags['approved']
+            model.add('fixture-'+row['id'],row['surface'],row['surface'],{category},proof,approved=expected or kind=='unreviewed_unknown_source')
+        output=self.root/'reviewed-proofs'
+        with contextlib.redirect_stdout(io.StringIO()):pipeline.publish(model,rows,self.fixture.inventory,output,sources,notices,pending,allow_input_spellings=True)
+        restored,restored_rows,restored_sources,restored_notices,restored_pending=extension.load_base(output,SEED)
+        for row,kind,flags,expected in added:self.assertEqual(expected,bool(restored.approved.get(row['surface'])),(kind,flags))
+        final=self.root/'reviewed-proofs-reloaded'
+        with contextlib.redirect_stdout(io.StringIO()):pipeline.publish(restored,restored_rows,self.fixture.inventory,final,restored_sources,restored_notices,restored_pending,allow_input_spellings=True)
+        with (final/'status.jsonl').open() as stream:states={r['id']:r for r in map(json.loads,stream)}
+        for row,kind,flags,expected in added:
+            self.assertEqual('include' if expected else 'pending',states[row['id']]['decision'])
+            self.assertEqual(row,{k:states[row['id']][k] for k in row})
+
     def setUp(self):
         self.fixture = fixtures.PipelineTests()
         self.fixture.setUp()

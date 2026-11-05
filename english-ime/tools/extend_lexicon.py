@@ -31,7 +31,7 @@ EXTRA_CATEGORIES = {
     "name_brand": ("Documented brand or explicit brand alias; company/product type and lexical inflections remain separate", "SpaceX, Next.js, Google Sheets"),
     "name_work": ("Attested title or alias of a specific creative work, including documented software; no inflection inference", "documented book, film or software titles"),
     "identifier_data_format": ("Documented data/file-format identifier or alias; no lexical POS or inflection inference", "documented file-format labels"),
-    "identifier_programming_api": ("Case-sensitive public programming API type identifier; qualified context retained without English POS or inflection inference", "InputConnection, Coroutine, ViewModel"),
+    "identifier_programming_api": ("Case-sensitive public programming API type or explicitly reviewed exported function identifier; qualified module context retained without English POS or inflection inference", "InputConnection, Coroutine, ViewModel, NextAuth"),
     "identifier_command_template": ("Existing manual syntactic instantiation of a documented command template; argument values do not prove installed packages or existing project scripts", "npm run dev, black ."),
     "identifier_phonetic_code": ("Explicit NATO/ICAO phonetic-codeword reading; no month or personal-name sense inference", "november, zulu"),
     "orthography_informal_ing": ("Derived informal final-written-g omission from a verified English -ing verb form, with the original lemma and participle use", "drinkin, huntin"),
@@ -80,6 +80,7 @@ def load_base(directory, seed):
                 raise ValueError("Changed or duplicate lexical evidence")
             model.evidence[key] = record["evidence"]
             if any(item["source"] in {"curated_seed", "wiktionary", "esdb", "ngsl_list", "software_registry", "geonames", "tldr_command", "english_namenet", "census_surname", "dbpedia14_title", "verified_manual_name_case", "documented_command_prefix", "brand_metadata", "verified_contraction_case", "yago_english_name", "public_api_identifier", "documented_command_template", "standard_roman_numeral", "yago_name_variant", "public_technology_catalog", "yago_named_component", "expressive_orthography", "verified_initial_capital", "official_product_label", "official_reference_label", "compositional_manual_noun_phrase", "research_attested_abbreviation", "derived_informal_ing", "historical_ssa_given_name", "reviewed_english_usage", "reviewed_wikipedia", "reviewed_manual_lexical_alias", "published_reference_label", "reviewed_lexical_entry"} and item.get("approved", True) and not item.get("requiresFullNamedContext", False)
+                   or item["source"] in {"reviewed_official_command_example", "reviewed_formal_command_prefix", "reviewed_public_api_function"} and item.get("approved", True) and not item.get("requiresFullNamedContext", False)
                    for item in record["evidence"]):
                 model.approved[key[1]].add(key[0])
             if number % 100000 == 0: progress('evidence',number)
