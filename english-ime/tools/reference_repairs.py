@@ -94,6 +94,13 @@ def attach_direct(model,records,wanted,pending):
             elif 'abbreviation' in tags and pos in declared_roles(row) and any(g.startswith(('Initialism of ','Abbreviation of ','Acronym of ')) for g in sense.get('glosses',[])):
                 values=(resolver.categories(row,sense,pos)-resolver.MORPHOLOGY)|{'abbreviation'}
                 rule='explicit English abbreviation head supplies its own role; expansion need not be a lexical headword and supplies no inherited POS or morphology'
+            elif (pos=='noun_proper' and declared_roles(row)=={'noun_proper'} and
+                    (set(row.get('categories',[]))|set(sense.get('categories',[]))) &
+                        {'English proper nouns','English nouns','English adjectives','English adverbs','English verbs'}=={'English proper nouns'} and
+                    not sense.get('form_of') and len(sense.get('alt_of',[]))==1 and
+                    any(g=='Alternative spelling of '+sense['alt_of'][0].get('word','')+'.' for g in sense.get('glosses',[]))):
+                values={'noun','noun_proper'}
+                rule='unrestricted explicit English proper-noun head and agreeing English POS category supply their own role; alternative spelling supplies no inherited target sense, name subtype or morphology'
             elif pos=='symbol' and pos in declared_roles(row) and 'symbol' in tags and any(g.startswith('Symbol for ') for g in sense.get('glosses',[])):
                 values={'symbol'};rule='explicit English symbol head and expansion; no noun, name or inflection inference'
             elif pos in {'noun','adjective','adverb'} and pos in declared_roles(row) and 'pronunciation-spelling' in tags and len(sense.get('alt_of',[]))==1:

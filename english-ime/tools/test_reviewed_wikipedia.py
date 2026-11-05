@@ -25,6 +25,76 @@ def review(value):
 
 
 class WikipediaReviewTests(unittest.TestCase):
+    def test_pseudonym_preserves_terminal_punctuation_and_never_clips_larger_names(self):
+        text='Other references:\n Fixture!, pseudonym for American artist Sample Person'
+        value=article('Other',text);start=text.index('Fixture!');r=review(value)
+        r.update(target='Fixture!',interpretation='artist-pseudonym',categories=['noun','noun_proper','name_person'],
+                 contextKind='explicit_pseudonym_item',pseudonymConfirmed=True,normalizedInputConfirmed=True,
+                 witness=dict(start=start,end=len(text),sha256=hashlib.sha256(text[start:].encode()).hexdigest()))
+        model=pipeline.Lexicon(fixtures.SEED);rows=[dict(id='raw:1',surface='fixture',reading='fixture',cost=700)];corrections=[]
+        wiki.attach(model,rows,{value['id']:value},[r],corrections)
+        self.assertEqual(('Fixture!',),pipeline.correction_targets(corrections,rows,model)['raw:1'])
+        self.assertFalse(model.approved.get('fixture'));model.validate()
+        with self.assertRaises(ValueError):wiki.validate_review(dict(r,pseudonymConfirmed=False),value)
+        for text in ['Prefix Fixture!, pseudonym for American artist Sample Person',
+                     'Fixture! Junior, pseudonym for American artist Sample Person']:
+            value=article('Other',text);start=text.index('Fixture!');r['witness']=dict(start=start,end=len(text),sha256=hashlib.sha256(text[start:].encode()).hexdigest())
+            with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
+    def test_article_free_classifier_requires_a_real_sentence_boundary(self):
+        value=article('Other','Fixture Series are published games.');r=review(value)
+        r.update(target='Fixture',contextKind='named_classifier_phrase',namedClassifierConfirmed=True)
+        wiki.validate_review(r,value)
+        text='Long Fixture Series are published games.';value=article('Other',text);start=text.index('Fixture')
+        r['witness']=dict(start=start,end=len(text),sha256=hashlib.sha256(text[start:].encode()).hexdigest())
+        with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
+    def test_person_name_unit_needs_independent_opposite_name_role_and_complete_lead(self):
+        proof=dict(surface='Wilson',role='family',entryId=123,senseIndex=0,snapshotSha256=wiki.WIKTIONARY_SNAPSHOT)
+        roles={('Wilson','family',123,0):proof};value=article('Frae Wilson','Frae Wilson (born 1989) is a rugby player.');r=review(value)
+        r.update(target='Frae',categories=['noun','noun_proper','name_person'],contextKind='verified_personal_name_unit',
+                 personalNameUnitRole='given',counterpartNameProof=proof,personalNameStructureConfirmed=True)
+        wiki.validate_review(r,value,name_roles=roles)
+        for change in [dict(personalNameUnitRole='family'),dict(personalNameStructureConfirmed=False),
+                       dict(counterpartNameProof=dict(proof,entryId=999)),dict(counterpartNameProof=dict(proof,role='given'))]:
+            with self.assertRaises(ValueError):wiki.validate_review(dict(r,**change),value,name_roles=roles)
+        for text in ['Frae Wilson Smith (born 1989) is a person.','Frae-Wilson (born 1989) is a person.','Long Frae Wilson (born 1989) is a person.']:
+            value=article('Other',text);r['witness']=dict(start=0,end=len(text),sha256=value['textSha256'])
+            with self.assertRaises(ValueError):wiki.validate_review(r,value,name_roles=roles)
+
+    def test_name_role_comes_from_actual_unrestricted_english_sense_not_generic_person_label(self):
+        class Names:
+            def lookup(self,words):
+                return [(1,dict(word='Known',senses=[dict(categories=['English given names']),
+                    dict(categories=['English surnames'],tags=['obsolete']),dict(categories=['English people'])]))]
+        roles=wiki.verified_person_name_roles(Names(),{'Known'})
+        self.assertEqual({('Known','given',1,0)},set(roles))
+
+    def test_noun_phrase_needs_verified_english_modifier_and_complete_ordinary_head(self):
+        model=pipeline.Lexicon(fixtures.SEED)
+        model.add('recognized','recognize','recognized',{'verb','verb_past_participle'},
+                  {'source':'curated_seed','url':'https://example.org/recognize'},approved=True)
+        value=article('Other','a recognized fixture, with a separate function.');r=review(value)
+        r.update(target='fixture',decision='include_lexical_noun',categories=['noun'],contextKind='complete_english_noun_phrase',
+                 englishLexicalRoleConfirmed=True,modifierProof=dict(surface='recognized',lexemeId='recognized'))
+        modifiers=wiki.approved_nominal_modifiers(model);wiki.validate_review(r,value,modifiers=modifiers)
+        for proof in [None,dict(surface='other',lexemeId='recognized'),dict(surface='recognized',lexemeId='unverified')]:
+            with self.assertRaises(ValueError):wiki.validate_review(dict(r,modifierProof=proof),value,modifiers=modifiers)
+        for text in ['a recognized fixture family,','a recognized fixture-like,']:
+            value=article('Other',text);r['witness']=dict(start=0,end=len(text),sha256=value['textSha256'])
+            with self.assertRaises(ValueError):wiki.validate_review(r,value,modifiers=modifiers)
+
+    def test_named_classifier_requires_complete_name_and_reviewed_entity_type(self):
+        value=article('Other','the Fixture controller, which was released.');r=review(value)
+        r.update(target='Fixture',contextKind='named_classifier_phrase',namedClassifierConfirmed=True)
+        wiki.validate_review(r,value)
+        with self.assertRaises(ValueError):wiki.validate_review(dict(r,namedClassifierConfirmed=False),value)
+        for text in ['the Long Fixture controller,','the Fixture Junior controller,','the Fixture-Plus controller,','the Fixture rose,']:
+            value=article('Other',text);r['witness']=dict(start=0,end=len(text),sha256=value['textSha256'])
+            with self.assertRaises(ValueError):wiki.validate_review(r,value)
+        value=article('Other','the Fixture controller,');r['witness']=dict(start=0,end=len(value['text']),sha256=value['textSha256'])
+        with self.assertRaises(ValueError):wiki.validate_review(dict(r,categories=['noun','noun_proper','name_person']),value)
+
     def test_date_preface_keeps_the_real_subject_boundary_and_finite_evidence(self):
         for prefix in ['In 1896, ','In September 2021, ']:
             value=article('Another heading',prefix+'Fixture released a recording.');r=review(value)

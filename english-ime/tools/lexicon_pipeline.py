@@ -12,6 +12,7 @@ import hashlib
 import io
 import json
 from pathlib import Path
+import re
 import shutil
 import tarfile
 import tempfile
@@ -461,6 +462,10 @@ def build(args):
 def keyboard_reading(surface):
     """The declared ASCII input spelling; never a guessed lexical correction."""
     value = surface.replace('’', "'").lower()
+    # A single terminal bang is part of some complete proper names. It is
+    # input punctuation, never permission to edit letters or internal marks.
+    if re.fullmatch(r'[a-z]+!',value):
+        value=value[:-1]
     if not value or any(not ('a' <= c <= 'z' or '0' <= c <= '9' or c in "'-./" ) for c in value):
         return None
     result = ''.join(c for c in value if c not in "'-./")
@@ -500,7 +505,7 @@ def publish(model, rows, inventory_path, output, sources, notice_contents, pendi
             reviewed_decisions=None, allow_input_spellings=False, corrections=()):
     wanted = {row["surface"] for row in rows}
     if allow_input_spellings:
-        sources["inputSpellingPolicy"] = "exact Unicode lowercasing preserving spaces; or ASCII alphanumeric input with apostrophes, hyphens, dots and slashes removed; declared aliases separate; no accent stripping or guessed word boundaries"
+        sources["inputSpellingPolicy"] = "exact Unicode lowercasing preserving spaces; or ASCII alphanumeric input with apostrophes, hyphens, dots and slashes removed, or one terminal bang after ASCII letters; declared aliases separate; no accent stripping or guessed word boundaries"
         sources["surfaceDecoderRequirement"] = "English LOUDS renderer skips sentinel node IDs 0 and 1, preserves other spaces; verified Sumire source 427baa8ef19a5917ea931d6731ec9d1fd95289d7"
     by_surface = defaultdict(set)
     for identifier, surface in model.forms:

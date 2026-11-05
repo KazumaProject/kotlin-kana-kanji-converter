@@ -7,6 +7,31 @@ import test_lexicon_pipeline as fixtures
 
 
 class PublicApiIdentifierTests(unittest.TestCase):
+    def test_typescript_types_are_complete_global_declarations_not_comments_strings_or_nested_members(self):
+        text='''/*\ninterface CommentFake {}\n*/
+interface RegExp { source: string; }
+declare var RegExp: RegExpConstructor;
+declare namespace Other {
+interface NestedFake {}
+}
+type Example = `
+interface StringFake {}
+`;
+interface RegExpExecArray extends Array<string> {}
+'''
+        records=list(api.typescript_types(text,'lib.es5.d.ts'))
+        self.assertEqual({'RegExp','RegExpExecArray'},{r[0] for r in records})
+        self.assertTrue(all(r[0]==r[1] and r[3]=='typescript_global_interface' for r in records))
+        self.assertIn('#L4',next(r[2] for r in records if r[0]=='RegExp'))
+        model=pipeline.Lexicon(fixtures.SEED)
+        api.attach(model,[dict(id='manual:1',surface='RegExp')],records)
+        key=next(iter(model.approved['RegExp']))
+        self.assertEqual({'identifier_programming_api','domain_technology'},model.members[key,'RegExp'])
+
+    def test_typescript_malformed_scope_or_unterminated_comment_is_not_a_valid_index(self):
+        for text in ['/* interface Fake {}','declare namespace X {\ninterface Fake {}','}\ninterface Fake {}']:
+            with self.assertRaises(ValueError):list(api.typescript_types(text,'lib.es5.d.ts'))
+
     def test_firebase_keeps_android_namespaces_and_explicit_swift_module_labels(self):
         index=api.FirebaseTypes();index.feed('<div class="devsite-nav-title-no-path"><span>FirebaseFeature</span></div>'
             '<a href="/docs/reference/android/com/google/firebase/auth/FirebaseAuth">FirebaseAuth</a>'

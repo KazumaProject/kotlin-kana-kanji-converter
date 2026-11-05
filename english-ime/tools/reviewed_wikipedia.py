@@ -17,6 +17,7 @@ import extend_lexicon as extension
 import lexicon_pipeline as pipeline
 import resolve_pending
 import yago_name_variants
+from wiktionary_index import Index, SNAPSHOT_SHA256 as WIKTIONARY_SNAPSHOT
 
 REVISION = 'b04c8d1ceb2f5cd4588862100d08de323dccfbaa'
 SNAPSHOT = 'a15bc222bef47345c3d0c9feb494f9ac5b6a4285a69b9b9fbef1d0d74188950b'
@@ -74,6 +75,9 @@ def matches_title(target,title):
     # Retain a complete spelling actually present in the passage. Only case,
     # punctuation and decomposable Latin diacritics may distinguish it from
     # the complete article heading; never edit letters or take a title part.
+    # A terminal bang can have semantic force in a pseudonym. Its keyboard
+    # transcription needs an explicit reviewed input mapping, not title repair.
+    if target.casefold()!=title.casefold() and ('!' in target or '!' in title):return False
     left=yago_name_variants.ascii_name(target);right=yago_name_variants.ascii_name(title)
     left_reading=pipeline.keyboard_reading(left) if left else None
     right_reading=pipeline.keyboard_reading(right) if right else None
@@ -98,7 +102,34 @@ def approved_finite_predicates(model):
     return result
 
 
-def validate_review(review, article, predicates=None):
+def approved_nominal_modifiers(model):
+    """Independently verified English adjective/participle modifiers only."""
+    result=defaultdict(set)
+    for key,form in model.forms.items():
+        members=model.members[key];surface=form['surface']
+        if (not re.fullmatch('[a-z]+',surface) or not members&{'adjective','verb_past_participle'} or
+                'noun_proper' in members or any(c.startswith(('name_','identifier_','orthography_')) for c in members) or
+                key[0] not in model.approved.get(surface,())):continue
+        if any(e['source'] in {'curated_seed','wiktionary','esdb','ngsl_list'} and e.get('approved',True)
+                for e in model.evidence[key]):result[surface].add(key[0])
+    return result
+
+
+def verified_person_name_roles(index, words):
+    """Read actual unrestricted English given-name/surname sense categories."""
+    import resolve_wiktionary
+    result={}
+    for number,entry in index.lookup(words):
+        for ordinal,sense in enumerate(entry.get('senses',[])):
+            if not resolve_wiktionary.eligible(entry,sense):continue
+            for role,category in [('given','English given names'),('family','English surnames')]:
+                if category in sense.get('categories',[]):
+                    proof=dict(surface=entry['word'],role=role,entryId=number,senseIndex=ordinal,snapshotSha256=WIKTIONARY_SNAPSHOT)
+                    result[entry['word'],role,number,ordinal]=proof
+    return result
+
+
+def validate_review(review, article, predicates=None, modifiers=None, name_roles=None):
     if (review['reviewer'] != 'implementation_agent' or not review['rationale'].strip() or
             not review['interpretation'].strip() or review['decision'] not in KINDS):
         raise ValueError('Missing explicit Wikipedia interpretation review')
@@ -144,6 +175,51 @@ def validate_review(review, article, predicates=None):
                 not re.match(r'(?:by|of|from|to|as|for|with|about|under|in)\s+(?:(?:the|The|just)\s+)?'+token+
                     r'(?=[,.;:)]|\s+(?:(?:in|since|until) [1-9][0-9]{3}\b|(?:is|was|are|were|has|had|have|came)\b))',passage)):
             raise ValueError('A nominal reference needs its complete prepositional name and explicit English-context review')
+    elif context=='complete_english_noun_phrase':
+        match=re.match(r'(?:a|an|the|A|An|The) ([a-z]+) '+token+r'(?=[,.;:)])',passage)
+        proof=review.get('modifierProof') or {}
+        if (review['decision']!='include_lexical_noun' or start and article['text'][start-1].isalnum() or
+                not match or not isinstance(proof,dict) or modifiers is None or proof.get('surface')!=match[1] or
+                proof.get('lexemeId') not in modifiers.get(match[1],())):
+            raise ValueError('A complete English noun phrase needs an independently verified modifier and whole noun head')
+    elif context=='named_classifier_phrase':
+        classes={'controller':{'name_product'},'series':{'name_product','name_work','name_brand'},
+                 'company':{'name_organization'},'band':{'name_organization'},'newspaper':{'name_work'},
+                 'family':{'name_person','name_fictional'}}
+        match=re.match(r'(?:(the|The) )?'+token+r' ([a-z]+|Series)(?=[,.;:)]|\s+(?:is|are|was|were|has|have|had)\b)',passage)
+        before=article['text'][:start]
+        if (review['decision']!='include_name' or review.get('namedClassifierConfirmed') is not True or
+                start and article['text'][start-1].isalnum() or not match or
+                not match[1] and start and not re.search(r'[.!?]\s+$|\n\s*$',before) or
+                not match[1] and re.search(r'\b(?:[A-Za-z]|St|Dr|Mr|Mrs|Ms|Prof|Rev|Sr|Jr)\.\s*$',before) or
+                not members&classes.get(match[2].lower(),set())):
+            raise ValueError('A named classifier phrase needs a complete unqualified name and explicit entity-class review')
+    elif context=='explicit_pseudonym_item':
+        before=article['text'][:start]
+        if (review['decision']!='include_name' or members-({'noun','noun_proper','name_person'}|DOMAINS) or
+                'name_person' not in members or review.get('pseudonymConfirmed') is not True or
+                start and not re.search(r'\n[ \t]*$',before) or
+                not re.match(token+r', pseudonym for (?:an? |the )?(?:[A-Z][\w-]* )*(?:artist|writer|musician|actor|performer)\b',passage)):
+            raise ValueError('A pseudonym needs a complete literal list item and explicit personal-name review')
+    elif context=='verified_personal_name_unit':
+        proof=review.get('counterpartNameProof') or {};role=review.get('personalNameUnitRole')
+        if (start!=0 or review['decision']!='include_name' or 'name_person' not in members or
+                review.get('personalNameStructureConfirmed') is not True or not isinstance(proof,dict) or
+                role not in {'given','family'} or name_roles is None or
+                not members <= {'noun','noun_proper','name_person'}|DOMAINS or
+                not isinstance(proof.get('surface'),str) or not isinstance(proof.get('role'),str) or
+                type(proof.get('entryId')) is not int or type(proof.get('senseIndex')) is not int):
+            raise ValueError('A personal name unit needs an explicit full-name structure and independent counterpart role')
+        identity=proof.get('surface'),proof.get('role'),proof.get('entryId'),proof.get('senseIndex')
+        if (proof!=name_roles.get(identity) or proof.get('role')==role or
+                not re.fullmatch(r'[A-Z][a-zA-Z]+',target) or
+                not re.fullmatch(r'[A-Z][a-zA-Z]+',proof.get('surface',''))):
+            raise ValueError('A name counterpart must have the actual opposite English name role')
+        # Exactly two whole name units, optionally with explicit middle initials.
+        # No particles, hyphen pieces, extra family words or stage-name prefixes.
+        first,last=(re.escape(target),re.escape(proof['surface'])) if role=='given' else (re.escape(proof['surface']),re.escape(target))
+        if not re.match(first+r' (?:[A-Z]\. )*'+last+r"(?![\w'’/-])(?:\s*(?=[(,])|\s+(?=(?:is|was)\b))",passage):
+            raise ValueError('A reviewed personal name cannot clip a larger or hyphenated full name')
     elif context=='explicit_complete_alias':
         if (start and article['text'][start-1].isalnum() or
                 not re.match(r'(?:known(?: simply)? as|called|named|nicknamed)\s+["“]?'+token+r'["”]?(?:[.,;:)]|\s+(?:is|are|was|were)\b)',passage)):
@@ -171,15 +247,16 @@ def validate_review(review, article, predicates=None):
     return members
 
 
-def attach(model, rows, articles, reviews, corrections):
+def attach(model, rows, articles, reviews, corrections, name_roles=None):
     predicates=approved_finite_predicates(model) if any(r.get('predicateProof') for r in reviews) else None
+    modifiers=approved_nominal_modifiers(model) if any(r.get('contextKind')=='complete_english_noun_phrase' for r in reviews) else None
     by_form = defaultdict(list)
     for row in rows:
         by_form[row['surface'].casefold()].append(row)
     seen = set();counts = Counter()
     for review in reviews:
         article = articles[review['articleId']]
-        members = validate_review(review, article,predicates)
+        members = validate_review(review, article,predicates,modifiers,name_roles)
         token = review['articleId'],review['target'],review['interpretation']
         if token in seen:
             raise ValueError('Duplicate Wikipedia interpretation review')
@@ -191,6 +268,10 @@ def attach(model, rows, articles, reviews, corrections):
             selected += by_form[title.casefold()]
         if alias and alias != target:
             selected += by_form[alias.casefold()]
+        if review.get('normalizedInputConfirmed') is True:
+            reading=pipeline.keyboard_reading(target)
+            if not reading:raise ValueError('Normalized input needs a declared punctuation transcription')
+            selected += [row for row in by_form[reading] if row['surface']==reading and row['reading']==reading]
         if ' ' in target:
             selected += [row for row in by_form[target.replace(' ','').casefold()] if row['id'].startswith('manual:')]
         if not selected:
@@ -211,6 +292,13 @@ def attach(model, rows, articles, reviews, corrections):
             fictionalNameConfirmed=review.get('fictionalNameConfirmed',False),
             englishQuotationConfirmed=review.get('englishQuotationConfirmed',False),
             completeNominalReferenceConfirmed=review.get('completeNominalReferenceConfirmed',False),
+            modifierProof=review.get('modifierProof'),
+            namedClassifierConfirmed=review.get('namedClassifierConfirmed',False),
+            counterpartNameProof=review.get('counterpartNameProof'),
+            personalNameUnitRole=review.get('personalNameUnitRole'),
+            personalNameStructureConfirmed=review.get('personalNameStructureConfirmed',False),
+            pseudonymConfirmed=review.get('pseudonymConfirmed',False),
+            normalizedInputConfirmed=review.get('normalizedInputConfirmed',False),
             scope='explicitly reviewed English-context name, ordinary English noun/adjective, abbreviation, symbol, phrase, numeral or taxonomic identifier; no title-only POS inference, inherited morphology, source endorsement, corpus intent or current availability claim; article prose is not redistributed')
         lemma=review.get('lemma',target)
         model.add(key,lemma,target,members,proof,approved=True)
@@ -250,11 +338,17 @@ def attach(model, rows, articles, reviews, corrections):
 def extend(args):
     articles,meta = load_articles(args.prepared,args.license)
     reviews = list(map(json.loads,args.reviews.open()))
+    name_roles=None
+    if any(r.get('contextKind')=='verified_personal_name_unit' for r in reviews):
+        if not getattr(args,'index',None):raise ValueError('Personal-name unit review requires the pinned local English index')
+        index=Index(args.index)
+        try:name_roles=verified_person_name_roles(index,{r['counterpartNameProof']['surface'] for r in reviews if r.get('contextKind')=='verified_personal_name_unit'})
+        finally:index.close()
     model,rows,sources,notices,pending = extension.load_base(args.base,args.seed)
     if pipeline.digest(args.base/'inventory.jsonl') != meta['inventorySha256']:
         raise ValueError('Wikipedia preparation belongs to another source inventory')
     prior = args.base/'surface-corrections.tsv';corrections = pipeline.read_table(prior,'corrections') if prior.is_file() else []
-    counts = attach(model,rows,articles,reviews,corrections)
+    counts = attach(model,rows,articles,reviews,corrections,name_roles)
     prior = args.base/'reviewed-overrides.tsv';decisions = pipeline.read_table(prior,'decisions') if prior.is_file() else []
     decisions,reopened = resolve_pending.revalidate_machine_reviews(model,decisions,pending,corrections)
     prior_batch=sources.get('reviewedEnglishWikipedia')
@@ -284,4 +378,5 @@ if __name__ == '__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     for key in ['base','seed','prepared','reviews','license','out']:
         parser.add_argument('--'+key,type=Path,required=True)
+    parser.add_argument('--index',type=Path,help='Pinned local English name-role evidence for explicit personal-name unit reviews')
     extend(parser.parse_args())

@@ -188,6 +188,23 @@ class ResolutionTests(unittest.TestCase):
         self.assertIn("senseTags", self.pending[0]["evidence"]["entries"][0])
         self.assertEqual("restricted_surface_has_eligible_case_alternative", self.pending[-1]["reason"])
 
+    def test_folded_restriction_retains_source_case_and_protects_punctuated_names(self):
+        rows=[dict(id=word,reading=word,surface=word,cost=700) for word in ['vulg','named','mixed','conditional','missing']]
+        records=[(1,entry('VULG','noun',[{'tags':['vulgar']}])),
+                 (2,entry('NAMED','noun',[{'tags':['vulgar']}])),
+                 (3,entry('MIXED','noun',[{'tags':['vulgar']},{}])),
+                 (4,entry('CONDITIONAL','noun',[{'tags':['derogatory','sometimes']}]))]
+        self.model.add('fixture-name','Named!','Named!',{'noun','noun_proper','name_person'},
+                       {'source':'curated_seed','url':'https://example.org/name'},approved=True)
+        audit=[];self.assertEqual([],pending_resolver.exclusions(self.model,rows,records,set(),audit))
+        result=pending_resolver.exclusions(self.model,rows,records,set(),audit,folded_sources=True)
+        self.assertEqual(['vulg'],[r['surface'] for r in result])
+        self.assertIn('/VULG#English',result[0]['evidence'])
+        proof=next(r for r in audit if r['reason']=='source_label_exclusion')['evidence']
+        self.assertEqual('VULG',proof['entries'][0]['surface']);self.assertFalse(proof['absenceOnlyRejection'])
+        self.assertFalse(proof['inputCaseAttestationClaimed'])
+        self.assertEqual(set(),pending_resolver.ineligible_exact_words([records[-1]]))
+
     def test_machine_exclusions_reopen_after_new_evidence_without_removing_changed_or_human_reviews(self):
         self.model.add("fixture-ost", "OST", "OST", {"abbreviation"},
                        {"source": "wiktionary", "url": "https://en.wiktionary.org/wiki/OST", "approved": True}, approved=True)

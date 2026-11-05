@@ -16,6 +16,8 @@ import extend_lexicon as extension
 import lexicon_pipeline as pipeline
 from wiktionary_index import Index
 
+CONDITIONAL_LABELS={'sometimes','often','usually'}
+
 
 def esdb_case_words(directory, words):
     # import_esdb validates the manifest/database/notice hashes before use.
@@ -41,7 +43,7 @@ def ineligible_exact_words(records):
         labels = [set(row.get('tags', [])) | set(sense.get('tags', []))
                   for row in values for sense in row['senses']]
         if (all(tags & (pipeline.RESTRICTED | {'misspelling'}) for tags in labels) and
-                not any(tags & {'no-gloss', 'error-unknown-tag', 'error-unrecognized-form'} for tags in labels)):
+                not any(tags & ({'no-gloss', 'error-unknown-tag', 'error-unrecognized-form'}|CONDITIONAL_LABELS) for tags in labels)):
             result.add(word)
     return result
 
@@ -71,32 +73,34 @@ def cases(model, rows, exact_english, explicitly_ineligible=()):
     return result
 
 
-def exclusions(model, rows, records, mapped_ids, pending):
+def exclusions(model, rows, records, mapped_ids, pending, folded_sources=False):
     by_word = defaultdict(list)
     for number, row in records:
-        by_word[row["word"]].append((number, row))
+        by_word[row["word"].casefold() if folded_sources else row['word']].append((number, row))
     result = []
     canonical = defaultdict(set)
     for surface, identifiers in model.approved.items():
-        if identifiers and surface != surface.lower():
-            canonical[surface.lower()].add(surface)
+        if identifiers:
+            reading=pipeline.keyboard_reading(surface)
+            if reading:canonical[reading].add(surface)
     for original in rows:
         word = original["surface"]
         if original["id"] in mapped_ids or model.approved.get(word):
             continue
-        entries = by_word[word]
+        if folded_sources and word!=word.lower():continue
+        entries = by_word[word.casefold() if folded_sources else word]
         if not entries or any(not entry.get("senses") for _, entry in entries):
             continue
         labels = [set(entry.get("tags", [])) | set(sense.get("tags", []))
                   for _, entry in entries for sense in entry["senses"]]
-        if any(tags & {"no-gloss", "error-unknown-tag", "error-unrecognized-form"} for tags in labels):
+        if any(tags & ({"no-gloss", "error-unknown-tag", "error-unrecognized-form"}|CONDITIONAL_LABELS) for tags in labels):
             continue
         reason = ("restricted" if all(tags & pipeline.RESTRICTED for tags in labels) else
                   "malformed" if all("misspelling" in tags for tags in labels) else
                   "ineligible_senses" if all(tags & (pipeline.RESTRICTED | {'misspelling'}) for tags in labels) else None)
         if not reason:
             continue
-        alternatives = sorted(surface for surface in canonical[word]
+        alternatives = sorted(surface for surface in canonical[original['reading']]
                               if pipeline.keyboard_reading(surface) == original["reading"])
         if alternatives:
             # Lowercase `taylor` has an obsolete lexical reading while `Taylor`
@@ -107,11 +111,15 @@ def exclusions(model, rows, records, mapped_ids, pending):
                             "reason": "restricted_surface_has_eligible_case_alternative",
                             "candidateSurfaces": alternatives, "sourceLabelReason": reason})
             continue
-        url = "https://en.wiktionary.org/wiki/" + quote(word.replace(' ', '_'), safe='') + "#English"
+        source_word=min(entry['word'] for _,entry in entries)
+        url = "https://en.wiktionary.org/wiki/" + quote(source_word.replace(' ', '_'), safe='') + "#English"
         result.append(dict(original, decision="exclude", lexeme_ids="-", reason=reason, evidence=url))
         pending.append({"sourceId": original["id"], "surface": word, "reason": "source_label_exclusion",
                         "decisionReason": reason, "evidence": {"source": "wiktionary", "url": url,
-                        "entries": [{"entryId": number, "pos": entry.get("pos"),
+                        "caseFoldedSourceLookup":folded_sources,
+                        "inputCaseAttestationClaimed":False if folded_sources else None,
+                        "absenceOnlyRejection":False,
+                        "entries": [{"entryId": number, "surface":entry['word'], "pos": entry.get("pos"),
                                      "senseTags": [sorted(set(entry.get("tags", [])) | set(s.get("tags", [])))
                                                    for s in entry["senses"]]} for number, entry in entries]}})
     return result
@@ -167,7 +175,7 @@ def resolve(args):
     sources["esdbCaseLookup"] = {key: manifest[key] for key in ("revision", "databaseSha256", "recipe")}
     index = Index(args.index)
     try:
-        records = list(index.lookup(wanted))
+        records = list(index.lookup(wanted,folded=True)) if getattr(args,'folded_source_labels',False) else list(index.lookup(wanted))
         sources["pendingReviewSnapshot"] = index.manifest["snapshotSha256"]
     finally:
         index.close()
@@ -182,13 +190,16 @@ def resolve(args):
                 'reason': 'eligible_case_interpretations_with_disqualified_exact_readings',
                 'candidateSurfaces': alternatives, 'corpusSenseDisambiguated': False})
     corrections += additions
-    reviews = exclusions(model, unresolved, records, {row["id"] for row in corrections}, pending)
+    reviews = exclusions(model, unresolved, records, {row["id"] for row in corrections}, pending,
+                         folded_sources=getattr(args,'folded_source_labels',False))
     reviews = previous_reviews + reviews
     sources["pendingResolutionPolicy"] = {
         "case": "all verified canonical alternatives; absent exact entry or every exact sense explicitly restricted/misspelled; no eligible exact reading; retain ambiguity, original rows and costs",
         "exclude": "every English sense explicitly restricted or misspelled, including mixed labels; no eligible exact or case-alternative interpretation",
         "absence": "never an exclusion reason"}
     sources["pendingResolutionPolicy"]["reviewRefresh"] = "reopen only audited machine exclusions contradicted by current eligible exact/case evidence; preserve human overrides"
+    if getattr(args,'folded_source_labels',False):
+        sources['pendingResolutionPolicy']['foldedSourceLabels']='all English case-folded source heads, their literal spellings and IDs retained; lower-case input rows only; no eligible literal, declared punctuation or case alternative; conditional restriction labels cannot justify exclusion; absent evidence never establishes an invalid word'
     for name in manifest["notices"]:
         notices[name] = (args.esdb / name).read_bytes()
     args.out.parent.mkdir(parents=True, exist_ok=True)
@@ -208,4 +219,5 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("base", "seed", "esdb", "index", "out"):
         parser.add_argument("--" + name, type=Path, required=True)
+    parser.add_argument('--folded-source-labels',action='store_true',help='Review all case-folded English heads while retaining original entry spellings and protecting eligible punctuation/name alternatives')
     resolve(parser.parse_args())

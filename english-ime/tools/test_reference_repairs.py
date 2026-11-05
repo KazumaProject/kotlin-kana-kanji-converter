@@ -8,6 +8,20 @@ def entry(word,pos,sense,forms=()):return {'word':word,'pos':pos,'senses':[sense
 
 
 class ReferenceRepairTests(unittest.TestCase):
+    def test_proper_variant_retains_own_unrestricted_head_without_inheriting_target_sense(self):
+        source=entry('Fixtureworld','name',{'tags':['alt-of'],'alt_of':[{'word':'Fixture World'}],
+            'glosses':['Alternative spelling of Fixture World.'],'categories':['English proper nouns']})
+        source['head_templates']=[{'name':'en-proper noun','args':{}}]
+        target=entry('Fixture World','noun',{'tags':['derogatory'],'glosses':['A metaphorical place.']})
+        m=p.Lexicon(f.SEED);r.attach_direct(m,[(1,source),(2,target)],{'Fixtureworld'},[])
+        key=next(iter(m.approved['Fixtureworld']));self.assertEqual({'noun','noun_proper'},m.members[key,'Fixtureworld'])
+        self.assertFalse(m.approved.get('Fixture World'));m.validate()
+        for change in [dict(head_templates=[]),dict(senses=[dict(source['senses'][0],tags=['alt-of','obsolete'])]),
+                       dict(senses=[dict(source['senses'][0],categories=['English nouns'])]),
+                       dict(senses=[dict(source['senses'][0],categories=['English proper nouns','English nouns'])])]:
+            model=p.Lexicon(f.SEED);r.attach_direct(model,[(1,dict(source,**change))],{'Fixtureworld'},[])
+            self.assertFalse(model.approved.get('Fixtureworld'))
+
     def test_bare_link_needs_an_independent_same_role_english_head_before_comment_repair(self):
         variant=entry('seabass','noun',{'alt_of':[{'word':'sea bass'},{'word':'used especially in compound terms'}],
             'links':[['sea bass','sea bass']],'glosses':['Alternative form of sea bass, used especially in compound terms.']})

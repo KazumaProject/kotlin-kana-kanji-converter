@@ -16,6 +16,33 @@ import kotlin.test.assertTrue
 
 class ReviewedDictionaryBuilderTest {
     @Test
+    fun terminalBangNameRetainsCanonicalPunctuationAndOriginalCost() {
+        val temporary = Files.createTempDirectory("terminal-bang-name").toFile()
+        try {
+            val rows = listOf(SourceRow("raw:1", "fixture", "fixture", 700))
+            val decisions = temporary.resolve("decisions.tsv").apply {
+                writeText("id\treading\tsurface\tcost\tdecision\tlexeme_ids\treason\tevidence\n" +
+                    "raw:1\tfixture\tfixture\t700\tinclude\tname\tverified\thttps://example.org/fixture\n")
+            }
+            val corrections = temporary.resolve("corrections.tsv")
+            val header = "id\tsource\ttarget\trelation\tevidence\n"
+            for (spelling in listOf("Fixture!", "Fix!ture", "Fixture!!", "Fixture1!", "Fixture+")) {
+                corrections.writeText(header + "raw:1\tfixture\t$spelling\tinput_spelling_correction\thttps://example.org/fixture\n")
+                val forms = setOf(FormKey("name", spelling))
+                if (spelling == "Fixture!") {
+                    val selected = selectReviewedRows(rows, decisions, forms, corrections)
+                    assertEquals("Fixture!", selected.single().word)
+                    assertEquals("fixture", selected.single().reading)
+                    assertEquals(700, selected.single().cost.toInt())
+                    assertEquals("fixture", rows.single().surface)
+                } else {
+                    assertFailsWith<IllegalArgumentException> { selectReviewedRows(rows, decisions, forms, corrections) }
+                }
+            }
+        } finally { temporary.deleteRecursively() }
+    }
+
+    @Test
     fun spacedInputAliasRequiresTheUnchangedOriginalManualMapping() {
         val temporary = Files.createTempDirectory("literal-phrase-alias").toFile()
         try {

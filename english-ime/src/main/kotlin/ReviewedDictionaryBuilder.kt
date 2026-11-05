@@ -172,7 +172,8 @@ internal fun validateRelations(relations: File, surfaces: Set<String>, originalR
 }
 
 private fun keyboardReading(surface: String): String? {
-    val value = surface.replace('’', '\'').lowercase()
+    val normalized = surface.replace('’', '\'').lowercase()
+    val value = if (Regex("[a-z]+!").matches(normalized)) normalized.dropLast(1) else normalized
     if (value.any { it !in 'a'..'z' && it !in '0'..'9' && it !in "'-./" }) return null
     return value.filter { it !in "'-./" }.takeIf { it.isNotEmpty() }
 }

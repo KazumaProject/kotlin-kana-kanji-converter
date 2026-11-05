@@ -26,6 +26,52 @@ KOTLIN_PINS = {'androidx-kotlin-classes.html':'788cee0d34a2f2ede4135db93352de156
     'kotlinx-coroutines-pages.json':'3c8ffab3f81c28df192450582a9d11fdeaa410e1281465ec079702026a33b76b',
     'kotlinx-coroutines-LICENSE.txt':'b1febe6399dffb10d19d35e7663ab16300c93cb0476a94115df1cc0097a8ffd8'}
 FIREBASE_PINS={'firebase-android-packages.html':'5c92b63c1cd83b93515d76a0f9501ba24f2001ee4463384f37d50ed0d6fe5669'}
+TYPESCRIPT_REVISION='c46bcd6089ea2e5e84e7fcc60845ac884a5b0ac1'
+TYPESCRIPT_PINS={'lib.es5.d.ts':'f95aebdfd972e9fc77febbc7dda452a36037510e315c52d43cd72d36ef572603',
+ 'lib.es2015.promise.d.ts':'bfc056732cbafefa9ac012b3540cd210fc9f7526f49bfd13d64f6e239d985e77',
+ 'lib.es2015.collection.d.ts':'8f2909237f2e47f247cacecb54d4096a2ee5d10d3c10e9256be9351ddf307117',
+ 'LICENSE.txt':'a5e9f9b1575301c7a7a03508fdaa2e05a918cc17fd21c6e898096a96d6a34f61',
+ 'NOTICE.txt':'7550906c9fa208c0d6065cf510ef5d22f10ab3550184f60716c2b66b59e62966',
+ 'CopyrightNotice.txt':'f0dc63a96c37a7f08e97780a36bd84ae705b2e1786df4c1f2ae45dec3874f0f2'}
+
+
+def typescript_types(text,filename):
+    """Read complete root-scope type declarations, masking comments/strings."""
+    masked=list(text);i=0
+    while i<len(text):
+        end=None
+        if text.startswith('//',i):
+            end=text.find('\n',i)
+            if end<0:end=len(text)
+        elif text.startswith('/*',i):
+            end=text.find('*/',i+2)
+            if end<0:raise ValueError('Unterminated declaration comment')
+            end+=2
+        elif text[i] in "\"'`":
+            quote=text[i];end=i+1
+            while end<len(text):
+                if text[end]=='\\':end+=2;continue
+                if text[end]==quote:break
+                end+=1
+            if end>=len(text):raise ValueError('Unterminated declaration string')
+            end+=1
+        if end is not None:
+            for pos in range(i,end):
+                if masked[pos]!='\n':masked[pos]=' '
+            i=end
+        else:i+=1
+    code=''.join(masked);depth=0;positions={m.start():m for m in re.finditer(r'^(?:declare )?(interface|class) ([A-Za-z_$][A-Za-z0-9_$]*)\b',code,re.M)}
+    for pos,char in enumerate(code):
+        match=positions.get(pos)
+        if match and depth==0:
+            name=match[2];line=text.count('\n',0,pos)+1
+            url='https://github.com/microsoft/TypeScript/blob/'+TYPESCRIPT_REVISION+'/tsc/internal/bundled/libs/'+filename+'#L'+str(line)
+            yield name,name,url,'typescript_global_'+match[1]
+        if char=='{':depth+=1
+        elif char=='}':
+            depth-=1
+            if depth<0:raise ValueError('Unbalanced declaration scope')
+    if depth:raise ValueError('Unbalanced declaration scope')
 
 
 class AndroidTypes(HTMLParser):
@@ -136,6 +182,7 @@ def attach(model,rows,records,pending_ids=(),corrections=None):
 
 
 def extend(args):
+    typescript=getattr(args,'typescript',None)
     load(args.android,ANDROID_PINS);load(args.python,PYTHON_PINS)
     records=[]
     for name in ['classes.html','androidx-classes.html']:
@@ -150,6 +197,10 @@ def extend(args):
     if args.firebase:
         load(args.firebase,FIREBASE_PINS)
         index=FirebaseTypes();index.feed((args.firebase/'firebase-android-packages.html').read_text());records+=list(index.records())
+    if typescript:
+        load(typescript,TYPESCRIPT_PINS)
+        for name in TYPESCRIPT_PINS:
+            if name.endswith('.d.ts'):records+=list(typescript_types((typescript/name).read_text(),name))
     model,rows,sources,notices,pending=extension.load_base(args.base,args.seed)
     states=list(map(json.loads,(args.base/'status.jsonl').open()));ids={r['id'] for r in states if r['decision']=='pending'}
     prior=args.base/'surface-corrections.tsv';corrections=pipeline.read_table(prior,'corrections') if prior.is_file() else []
@@ -172,6 +223,12 @@ def extend(args):
         notices['FIREBASE-PUBLIC-API-NOTICE.txt']=('Firebase SDK contributors, Google. https://firebase.google.com/docs/reference/android/com/google/firebase/package-summary\n'
             'https://developers.google.com/terms/site-policies\n'
             'Identifier facts only from the Android and Swift type navigation: preserve complete type/class paths, explicitly printed Swift modules, qualified identities and documentation URLs. No prose, implementation or code samples redistributed. Reference content is CC BY 4.0 and code samples Apache 2.0 unless otherwise noted; existing full notices retained. No installed dependency, English POS, current availability or runtime feature implied.\n').encode()
+    if typescript:
+        sources['typescriptPublicApiTypes']={'revision':TYPESCRIPT_REVISION,'files':TYPESCRIPT_PINS,
+            'policy':'complete root-scope interface/class type declarations from pinned upstream standard-library files; comments, strings and nested namespaces masked, global context and declaration line retained; no declaration implementation, prose, constructibility, installed compiler or released-runtime capability claim'}
+        notices['TYPESCRIPT-API-ATTRIBUTION.txt']=('Microsoft Corporation and TypeScript contributors. https://github.com/microsoft/TypeScript/tree/'+TYPESCRIPT_REVISION+'\n'
+            'Factual public type names from tsc/internal/bundled/libs/lib.es5.d.ts, lib.es2015.promise.d.ts and lib.es2015.collection.d.ts. Complete global interface/class declarations only; source locations and revision retained. No library implementation, declaration bodies or comments redistributed. An interface is a type identity, not a promise of constructibility, installed dependencies or released runtime support. Apache-2.0 license, copyright and notices retained separately.\n').encode()
+        for name in ['LICENSE.txt','NOTICE.txt','CopyrightNotice.txt']:notices['TYPESCRIPT-'+name]=(typescript/name).read_bytes()
     notices['PUBLIC-API-IDENTIFIERS-NOTICE.txt']=('Public API identifier facts from the Android Open Source Project/AndroidX contributors and Python Software Foundation/contributors.\n'
         'https://developer.android.com/reference/classes\nhttps://developer.android.com/reference/androidx/classes\nhttps://developer.android.com/license\n'
         'https://docs.python.org/3.14/objects.inv\nhttps://docs.python.org/3.14/license.html\n'
@@ -190,4 +247,5 @@ if __name__=='__main__':
     for name in ['base','seed','android','python','out']:parser.add_argument('--'+name,type=Path,required=True)
     parser.add_argument('--kotlin',type=Path,help='Optional pinned Kotlin public type indexes and notice')
     parser.add_argument('--firebase',type=Path,help='Optional pinned Firebase Android/Swift type navigation')
+    parser.add_argument('--typescript',type=Path,help='Optional pinned complete upstream TypeScript standard-library declarations and notices')
     extend(parser.parse_args())

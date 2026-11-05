@@ -17,6 +17,12 @@ SEED = Path(__file__).resolve().parents[1] / "data" / "grammar"
 
 
 class PipelineTests(unittest.TestCase):
+    def test_terminal_bang_transcription_keeps_letters_and_rejects_other_new_marks(self):
+        self.assertEqual('fixture',pipeline.keyboard_reading('Fixture!'))
+        self.assertEqual('callin',pipeline.keyboard_reading("call-in'"))
+        for spelling in ['Fix!ture','Fixture!!','C++','Fixture1!','Fixture !','!Fixture']:
+            self.assertIsNone(pipeline.keyboard_reading(spelling))
+
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
