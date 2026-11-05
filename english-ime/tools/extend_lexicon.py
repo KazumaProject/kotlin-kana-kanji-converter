@@ -13,6 +13,7 @@ import lexicon_pipeline as pipeline
 from prepare_esdb import REVISION, URL
 
 EXTRA_CATEGORIES = {
+    "orthography_existing_manual_alias": ("Reviewed existing manual case/space alias of an independently approved ordinary English head; no externally attested raw spelling, preferred name or inferred word-boundary claim", "existing compact display aliases"),
     "identifier_taxonomic_name": ("Explicitly reviewed scientific taxon label; no ordinary English POS or inherited inflection claim", "documented genus and taxon names"),
     "identifier_programming_keyword": ("Explicitly identified programming-language keyword; no ordinary English POS or inflection implied", "foreach"),
     "identifier_markup_attribute": ("Explicitly identified markup-language attribute name; no ordinary English POS or inflection implied", "href"),
@@ -78,7 +79,7 @@ def load_base(directory, seed):
             if key not in model.forms or key in model.evidence:
                 raise ValueError("Changed or duplicate lexical evidence")
             model.evidence[key] = record["evidence"]
-            if any(item["source"] in {"curated_seed", "wiktionary", "esdb", "ngsl_list", "software_registry", "geonames", "tldr_command", "english_namenet", "census_surname", "dbpedia14_title", "verified_manual_name_case", "documented_command_prefix", "brand_metadata", "verified_contraction_case", "yago_english_name", "public_api_identifier", "documented_command_template", "standard_roman_numeral", "yago_name_variant", "public_technology_catalog", "yago_named_component", "expressive_orthography", "verified_initial_capital", "official_product_label", "compositional_manual_noun_phrase", "research_attested_abbreviation", "derived_informal_ing", "historical_ssa_given_name", "reviewed_english_usage", "reviewed_wikipedia"} and item.get("approved", True) and not item.get("requiresFullNamedContext", False)
+            if any(item["source"] in {"curated_seed", "wiktionary", "esdb", "ngsl_list", "software_registry", "geonames", "tldr_command", "english_namenet", "census_surname", "dbpedia14_title", "verified_manual_name_case", "documented_command_prefix", "brand_metadata", "verified_contraction_case", "yago_english_name", "public_api_identifier", "documented_command_template", "standard_roman_numeral", "yago_name_variant", "public_technology_catalog", "yago_named_component", "expressive_orthography", "verified_initial_capital", "official_product_label", "compositional_manual_noun_phrase", "research_attested_abbreviation", "derived_informal_ing", "historical_ssa_given_name", "reviewed_english_usage", "reviewed_wikipedia", "reviewed_manual_lexical_alias"} and item.get("approved", True) and not item.get("requiresFullNamedContext", False)
                    for item in record["evidence"]):
                 model.approved[key[1]].add(key[0])
             if number % 100000 == 0: progress('evidence',number)

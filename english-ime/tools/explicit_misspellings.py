@@ -37,6 +37,27 @@ def load(path):
     return pairs
 
 
+def ascii_input_pairs(rows,pairs):
+    """Keep listed spelling evidence when matching original lowercase ASCII keys.
+
+    This prepares positive labels only; independent approved names or modern
+    case-equivalent English senses still block the later exclusion rule.
+    """
+    result={word:set(values) for word,values in pairs.items()};proof={}
+    folded=defaultdict(list)
+    for word in pairs:folded[word.casefold()].append(word)
+    for row in rows:
+        word=row['surface']
+        if (word in result or not row['id'].startswith('tsv:') or not word.isascii() or
+                word!=word.lower() or pipeline.keyboard_reading(word)!=row['reading']):continue
+        labels=sorted(folded[word.casefold()])
+        if not labels:continue
+        result[word]=set().union(*(pairs[label] for label in labels))
+        proof[word]=dict(listedSpelling=labels[0],listedSpellings=labels,asciiInputCasefoldMatch=True,
+            matchingScope='original lowercase ASCII TSV input spelling only; retain the exact listed labels and all independent-reading guards, not a case rewrite or universal nonword claim')
+    return result,proof
+
+
 def exclusions(model, rows, pairs, exact_entries, pending, provenance=None, allow_word_sequences=False):
     approved = defaultdict(set)
     for surface, ids in model.approved.items():
@@ -66,7 +87,7 @@ def exclusions(model, rows, pairs, exact_entries, pending, provenance=None, allo
             'independentlyVerifiedCorrections': verified, 'approvedOriginalReadings': [],
             'scope': 'explicit typo label plus independently verified correction and no approved case-equivalent reading or unresolved exact English sense; not a claim of exhaustive source coverage'}
         if provenance is not None:
-            proof.update(provenance[surface])
+            proof.update(provenance.get(surface,{}))
         reviews.append(dict(row, decision='exclude', lexeme_ids='-', reason='malformed', evidence=proof['url']))
         pending.append({'sourceId': row['id'], 'surface': surface, 'reason': 'source_label_exclusion',
             'decisionReason': 'malformed', 'evidence': proof})
@@ -78,14 +99,19 @@ def extend(args):
     model, rows, sources, notices, pending = extension.load_base(args.base, args.seed)
     states = [json.loads(x) for x in (args.base / 'status.jsonl').read_text().splitlines()]
     selected = [row for row, state in zip(rows, states) if state['decision'] == 'pending']
+    folded=getattr(args,'ascii_input_casefold',False)
+    pairs,provenance=ascii_input_pairs(selected,pairs) if folded else (pairs,None)
     index = Index(args.index)
     exact = defaultdict(list)
     try:
-        for _, entry in index.lookup({row['surface'] for row in selected if row['surface'] in pairs}):
-            exact[entry['word']].append(entry)
+        candidates={row['surface'] for row in selected if row['surface'] in pairs}
+        by_fold=defaultdict(list)
+        for word in candidates:by_fold[word.casefold()].append(word)
+        for _, entry in index.lookup(candidates,folded=folded):
+            for word in by_fold[entry['word'].casefold()] if folded else [entry['word']]:exact[word].append(entry)
     finally:
         index.close()
-    additions = exclusions(model, selected, pairs, exact, pending)
+    additions = exclusions(model, selected, pairs, exact, pending,provenance)
     prior = args.base / 'reviewed-overrides.tsv'
     reviews = pipeline.read_table(prior, 'decisions') if prior.is_file() else []
     existing = {row['id'] for row in reviews}
@@ -93,6 +119,7 @@ def extend(args):
     prior = args.base / 'surface-corrections.tsv'
     corrections = pipeline.read_table(prior, 'corrections') if prior.is_file() else []
     sources['explicitMisspellingList'] = {'revision': REVISION, 'snapshotSha256': SNAPSHOT, 'url': URL,
+        'asciiInputCasefold':folded,
         'policy': 'explicit listed typo plus verified correction; approved case-equivalent readings and unresolved exact English senses block exclusion; machine decisions remain auditable and reopen on later evidence; absence alone never excludes'}
     notices['WIKIPEDIA-MISSPELLINGS-NOTICE.txt'] = ('Wikipedia contributors, Lists of common misspellings/For machines, revision ' + str(REVISION) + '.\n' + URL +
         '\nCC BY-SA 4.0; full license retained in CC-BY-SA-4.0.txt.\nChanges: selected explicit misspelling/correction pairs for existing source rows; cross-checked local English lexical evidence; recorded machine exclusions only when no approved original reading or unresolved English sense exists. The upstream list is incomplete and is not used as proof that unlisted strings are invalid.\n').encode()
@@ -109,4 +136,5 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ['base', 'seed', 'snapshot', 'index', 'out']:
         parser.add_argument('--' + name, type=Path, required=True)
+    parser.add_argument('--ascii-input-casefold',action='store_true')
     extend(parser.parse_args())

@@ -24,6 +24,7 @@ LICENSE_SHA = '3f941b3b89cf7b8370ceb83cc76d2120d471b58735d8ca60238a751a48d7f72f'
 DOMAINS = {'domain_technology','domain_business','domain_science','domain_sports','domain_entertainment',
     'domain_education','domain_medical','domain_food','domain_travel'}
 KINDS = {
+    'include_lexical_noun': ({'noun'}, {'noun','register_formal','register_informal'} | DOMAINS),
     'include_name': ({'noun','noun_proper'}, {'noun','noun_proper','name_person','name_place','name_organization',
         'name_product','name_brand','name_work','name_fictional','abbreviation'} | DOMAINS),
     'include_abbreviation': ({'abbreviation'}, {'abbreviation'} | DOMAINS),
@@ -33,6 +34,18 @@ KINDS = {
     'include_command': ({'identifier_command_line','domain_technology'}, {'identifier_command_line','domain_technology'}),
     'include_roman_numeral': ({'numeral','numeral_roman'}, {'numeral','numeral_roman'}),
     'include_taxonomic_name': ({'identifier_taxonomic_name','domain_science'}, {'identifier_taxonomic_name','domain_science'})}
+QUALIFIED_TITLE = re.compile(r'(.+) \((disambiguation|surname|given name|name|[\w -]*(?:film|album|song|band|company|software|novel|magazine|newspaper|TV series|video game|character))\)$')
+
+
+def reviewed_title_context(review, article):
+    context=review['contextKind'];title=article['title']
+    if context in {'qualified_article_title','qualified_disambiguation_item'}:
+        match=QUALIFIED_TITLE.fullmatch(title)
+        if not match or review.get('titleQualifier')!=match[2]:
+            raise ValueError('Qualified title needs an explicit supported descriptor review')
+        title=match[1]
+        context='full_article_title' if context=='qualified_article_title' else 'disambiguation_item'
+    return title,context
 
 
 def load_articles(prepared, license_file):
@@ -73,6 +86,8 @@ def validate_review(review, article):
     target = review['target'];members = set(review['categories']);required,allowed = KINDS[review['decision']]
     if not required <= members or not members <= allowed:
         raise ValueError('Wikipedia review cannot infer unrelated POS or inflections')
+    if review['decision']=='include_lexical_noun' and review.get('englishLexicalRoleConfirmed') is not True:
+        raise ValueError('An ordinary English noun requires an explicit English-usage review')
     witness = review['witness'];start,end = witness['start'],witness['end']
     if not isinstance(start,int) or not isinstance(end,int) or not 0 <= start < end <= len(article['text']):
         raise ValueError('Invalid reviewed Wikipedia passage bounds')
@@ -81,11 +96,23 @@ def validate_review(review, article):
         raise ValueError('Changed reviewed Wikipedia passage')
     if not re.search(r'(?<!\w)' + re.escape(target) + r'(?!\w)', passage):
         raise ValueError('Reviewed passage lacks the literal whole spelling')
-    if review['contextKind'] == 'full_article_title':
-        if not matches_title(target,article['title']):
+    title,context=reviewed_title_context(review,article)
+    token=re.escape(target)+r"(?![\w'’/-]|\.[\w])"
+    if context=='standalone_sentence_subject':
+        before=article['text'][:start]
+        if (start and not re.search(r'[.!?]\s+$|\n\s*$',before) or
+                re.search(r'\b(?:[A-Za-z]|subsp|ssp|var|sp)\.\s*$',before) or
+                not re.match(r'(?:(?:The|the|A|a|An|an) |(?:The|the) name )?["“]?'+token+r'["”]?\s+(?:is|are|was|were|refers|means|became|announced|launched|introduced|joined|won|plays|played|signed|performed|made|released|wrote|designed|developed|produced|supports|offers|provides)\b',passage)):
+            raise ValueError('A standalone subject needs its real sentence boundary and complete literal label')
+    elif context=='explicit_complete_alias':
+        if (start and article['text'][start-1].isalnum() or
+                not re.match(r'(?:known(?: simply)? as|called|named)\s+["“]?'+token+r'["”]?(?:[.,;:)]|\s+(?:is|are|was|were)\b)',passage)):
+            raise ValueError('An explicit alias needs a complete lower-case prose cue, not a compound or longer work title')
+    elif context == 'full_article_title':
+        if not matches_title(target,title):
             raise ValueError('A title component does not establish a standalone name')
-    elif review['contextKind'] == 'disambiguation_item':
-        if not matches_title(target,article['title']) or not re.match(r'["“]?' + re.escape(target) + r'["”]?(?:\s*\(|\s*,|\s*[–—])', passage):
+    elif context == 'disambiguation_item':
+        if not matches_title(target,title) or not re.match(r'["“]?' + re.escape(target) + r'["”]?(?:\s*\(|\s*,|\s*[–—])', passage):
             raise ValueError('Disambiguation evidence is only part of a longer name')
     else:
         raise ValueError('Unsupported Wikipedia passage context')
@@ -105,9 +132,10 @@ def attach(model, rows, articles, reviews, corrections):
             raise ValueError('Duplicate Wikipedia interpretation review')
         seen.add(token)
         target = review['target'];alias = yago_name_variants.ascii_name(target)
+        title,_=reviewed_title_context(review,article)
         selected = list(by_form[target.casefold()])
-        if target.casefold()!=article['title'].casefold() and matches_title(target,article['title']):
-            selected += by_form[article['title'].casefold()]
+        if target.casefold()!=title.casefold() and matches_title(target,title):
+            selected += by_form[title.casefold()]
         if alias and alias != target:
             selected += by_form[alias.casefold()]
         if ' ' in target:
@@ -122,8 +150,10 @@ def attach(model, rows, articles, reviews, corrections):
             rowGroup=article['rowGroup'], rowIndexInGroup=article['rowIndexInGroup'],
             declaredSourceLfsSha256=article['declaredSourceLfsSha256'], sourceWholeFileSha256IndependentlyVerified=False,
             reviewedPassage=review['witness'], contextKind=review['contextKind'], interpretation=review['interpretation'],
+            reviewedTitleQualifier=review.get('titleQualifier'),
             rationale=review['rationale'], preferredCaseClaimed=False,
-            scope='explicitly reviewed literal English-context name, abbreviation, symbol, phrase, numeral or taxonomic identifier; no title-only POS inference, inherited morphology, source endorsement, corpus intent or current availability claim; article prose is not redistributed')
+            englishLexicalRoleConfirmed=review.get('englishLexicalRoleConfirmed',False),
+            scope='explicitly reviewed English-context name, ordinary English noun, abbreviation, symbol, phrase, numeral or taxonomic identifier; no title-only POS inference, inherited morphology, source endorsement, corpus intent or current availability claim; article prose is not redistributed')
         lemma=review.get('lemma',target)
         model.add(key,lemma,target,members,proof,approved=True)
         for row in selected:
@@ -169,10 +199,15 @@ def extend(args):
     counts = attach(model,rows,articles,reviews,corrections)
     prior = args.base/'reviewed-overrides.tsv';decisions = pipeline.read_table(prior,'decisions') if prior.is_file() else []
     decisions,reopened = resolve_pending.revalidate_machine_reviews(model,decisions,pending,corrections)
-    sources['reviewedEnglishWikipedia'] = dict(revision=REVISION,config='20231101.en',sourceSnapshotSha256=SNAPSHOT,
+    prior_batch=sources.get('reviewedEnglishWikipedia')
+    batch = dict(revision=REVISION,config='20231101.en',sourceSnapshotSha256=SNAPSHOT,
         preparedManifestSha256=pipeline.digest(args.prepared/'manifest.json'),reviewsSha256=pipeline.digest(args.reviews),
+        researchArticles=meta['articles'],explicitInterpretationReviews=len(reviews),
         humanReviewClaimed=False,sourceWholeFileSha256IndependentlyVerified=False,
         policy='individual exact-passage reviews only; complete-title matches never automatically assign name/POS, interpretation boundaries remain separate, no source prose exported')
+    batches=list(prior_batch.get('batches',[prior_batch])) if prior_batch else []
+    if batch not in batches:batches.append(batch)
+    sources['reviewedEnglishWikipedia']=dict(batch,batches=batches)
     notices['ENGLISH-WIKIPEDIA-REVIEWED-NOTICE.txt'] = (
         'English Wikipedia contributors, dump 2023-11-01; wikimedia/wikipedia on Hugging Face, revision '+REVISION+'.\n'
         'https://huggingface.co/datasets/wikimedia/wikipedia ; individual source page URLs and article IDs are retained with facts.\n'

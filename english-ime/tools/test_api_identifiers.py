@@ -6,6 +6,20 @@ import test_lexicon_pipeline as fixtures
 
 
 class PublicApiIdentifierTests(unittest.TestCase):
+    def test_pending_lowercase_input_keeps_complete_documented_type_and_explicit_case_mapping(self):
+        model=pipeline.Lexicon(fixtures.SEED)
+        rows=[dict(id='tsv:1',surface='fixtureview',reading='fixtureview',cost=700),
+            dict(id='tsv:2',surface='view',reading='view',cost=701),
+            dict(id='tsv:3',surface='fixtureview',reading='different',cost=702),
+            dict(id='manual:1',surface='fIxTuReViEw',reading='fixtureview',cost=703)]
+        records=[('FixtureView','android.view.FixtureView','https://example.org/type','fixture')]
+        corrections=[];api.attach(model,rows,records,{r['id'] for r in rows},corrections)
+        self.assertEqual(('FixtureView',),pipeline.correction_targets(corrections,rows,model)['tsv:1'])
+        self.assertEqual({'tsv:1'},{r['id'] for r in corrections})
+        self.assertFalse(model.approved.get('view'));self.assertFalse(model.approved.get('fixtureview'))
+        self.assertFalse(model.approved.get('fIxTuReViEw'))
+        self.assertEqual({'identifier_programming_api','domain_technology'},model.members[next(iter(model.approved['FixtureView'])),'FixtureView'])
+
     def test_android_index_accepts_qualified_types_and_rejects_other_links(self):
         index=api.AndroidTypes();index.feed('<a href="/reference/android/widget/FixtureView">FixtureView</a>'
             '<a href="/reference/android/widget/FixtureView#method">method</a>'

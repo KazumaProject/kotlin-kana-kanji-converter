@@ -5,6 +5,16 @@ import test_lexicon_pipeline as fixtures
 
 
 class InitialCapitalsTests(unittest.TestCase):
+    def test_apostrophe_case_keeps_verified_ordinary_roles_without_promoting_named_references(self):
+        model=pipeline.Lexicon(fixtures.SEED)
+        model.add('fixture-address',"ma'am","ma'am",{'noun'},{'source':'wiktionary','url':'https://example.org/address'},approved=True)
+        model.add('fixture-loan','fixture','fixture',{'noun'},{'source':'reviewed_wikipedia','url':'https://example.org/ordinary'},approved=True)
+        model.add('fixture-name','named','named',{'noun','noun_proper'},{'source':'reviewed_wikipedia','url':'https://example.org/name'},approved=True)
+        rows=[dict(id='raw:'+str(i),surface=s) for i,s in enumerate(["Ma'am",'Fixture','Named'])]
+        c.attach(model,rows,{r['id'] for r in rows})
+        self.assertEqual({'noun','orthography_initial_capital'},model.members['fixture-address',"Ma'am"])
+        self.assertTrue(model.approved.get('Fixture'));self.assertFalse(model.approved.get('Named'))
+
     def test_same_ordinary_identity_without_invented_name_or_base_flags(self):
         model=pipeline.Lexicon(fixtures.SEED)
         model.add('fixture-compose','compose','compose',{'verb','verb_base'},{'source':'curated_seed','url':'https://example.org/compose'},approved=True)

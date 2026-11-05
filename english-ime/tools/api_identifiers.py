@@ -1,9 +1,10 @@
-"""Join existing manual type identifiers to pinned public API indexes.
+"""Join existing manual and reviewed pending inputs to pinned public API types.
 
 Qualified API context is retained. A class identifier does not establish an
 English noun, verb, brand, inflection, installed dependency or runtime feature.
 """
 import argparse
+from collections import defaultdict
 import hashlib
 from html.parser import HTMLParser
 import json
@@ -53,18 +54,31 @@ def load(directory,pins):
         if pipeline.digest(directory/name)!=expected:raise ValueError('Changed public API index or notice: '+name)
 
 
-def attach(model,rows,records):
+def attach(model,rows,records,pending_ids=(),corrections=None):
     extension.ensure_categories(model,{'identifier_programming_api'})
     wanted={row['surface'] for row in rows if row['id'].startswith('manual:')}
+    pending=defaultdict(list)
+    for row in rows:
+        if row['id'] in pending_ids and row['id'].startswith('tsv:') and row['surface']==row['surface'].lower():
+            pending[row['surface']].append(row)
+    if pending and corrections is None:raise ValueError('Pending API spellings require explicit correction output')
     adopted=set()
     for name,qualified,url,provider in sorted(set(records)):
-        if name not in wanted:continue
+        matches=[row for row in pending[name.lower()] if pipeline.keyboard_reading(name)==row['reading']]
+        if name not in wanted and not matches:continue
         key='public-api-'+hashlib.sha256(json.dumps([provider,qualified]).encode()).hexdigest()[:24]
         proof={'source':'public_api_identifier','url':url,'provider':provider,'qualifiedIdentifier':qualified,
-            'scope':'exact existing manual type identifier in a pinned public API index; no English lexical POS, brand identity, inflection or installed/runtime capability inference','approved':True}
+            'scope':'complete case-sensitive type identifier in a pinned public API index; exact manual spellings or verified pending ASCII input spellings only; no English lexical POS, brand identity, preferred input casing, inflection or installed/runtime capability inference','approved':True}
         values={'identifier_programming_api','domain_technology'}
         model.add(key,qualified,qualified,values,dict(proof,relation='qualified_identifier'),approved=True)
         model.add(key,qualified,name,values,proof,approved=True)
+        for row in matches:
+            if row['surface']==name:continue
+            prior={c['target']:dict(c) for c in corrections if c['id']==row['id']}
+            prior.setdefault(name,dict(id=row['id'],source=row['surface'],target=name,evidence=url))
+            relation='case_correction' if len(prior)==1 else 'case_candidates'
+            corrections[:]=[c for c in corrections if c['id']!=row['id']]
+            corrections += [dict(c,relation=relation) for _,c in sorted(prior.items())]
         adopted.add(name)
     return adopted
 
@@ -77,21 +91,22 @@ def extend(args):
         records += [(*record,'android_public_types') for record in index.types]
     records += [(*record,'python_3.14_public_types') for record in python_types((args.python/'objects.inv').read_bytes())]
     model,rows,sources,notices,pending=extension.load_base(args.base,args.seed)
-    adopted=attach(model,rows,records)
+    states=list(map(json.loads,(args.base/'status.jsonl').open()));ids={r['id'] for r in states if r['decision']=='pending'}
+    prior=args.base/'surface-corrections.tsv';corrections=pipeline.read_table(prior,'corrections') if prior.is_file() else []
+    adopted=attach(model,rows,records,ids,corrections)
     sources['publicApiIdentifiers']={'android':ANDROID_PINS,'python314':PYTHON_PINS,
-        'policy':'exact case-sensitive existing manual class/type names from official indexes, qualified identities retained; no English POS/inflection or dependency-availability inference'}
+        'policy':'complete type names from official indexes, qualified identities retained; exact manual spellings or verified pending ASCII TSV input spellings with explicit canonical-case candidates; no arbitrary case edits, title/name-component extraction, English POS/inflection or dependency-availability inference'}
     notices['PUBLIC-API-IDENTIFIERS-NOTICE.txt']=('Public API identifier facts from the Android Open Source Project/AndroidX contributors and Python Software Foundation/contributors.\n'
         'https://developer.android.com/reference/classes\nhttps://developer.android.com/reference/androidx/classes\nhttps://developer.android.com/license\n'
         'https://docs.python.org/3.14/objects.inv\nhttps://docs.python.org/3.14/license.html\n'
-        'Changes: extracted exact type identifiers and qualified documentation URLs from public indexes; joined existing manual input rows. No API prose, implementation code, images or software copied. Original documentation license statements are retained separately; public identifiers do not imply that a dependency is installed or a feature works.\n').encode()
+        'Changes: extracted complete exact type identifiers and qualified documentation URLs from public indexes; joined exact manual spellings and reviewed pending ASCII input spellings with explicit canonical-case candidates. No API prose, implementation code, images or software copied. Original documentation license statements are retained separately; public identifiers do not imply that a dependency is installed or a feature works.\n').encode()
     notices['ANDROID-API-DOCUMENTATION-LICENSE.html']=(args.android/'license.html').read_bytes()
     notices['PYTHON-3.14-LICENSE.html']=(args.python/'license.html').read_bytes()
     notices['PYTHON-3.14-COPYRIGHT.html']=(args.python/'copyright.html').read_bytes()
-    prior=args.base/'surface-corrections.tsv';corrections=pipeline.read_table(prior,'corrections') if prior.is_file() else []
     prior=args.base/'reviewed-overrides.tsv'
     summary=pipeline.publish(model,rows,args.base/'inventory.jsonl',args.out,sources,notices,pending,
         reviewed_decisions=prior if prior.is_file() else None,allow_input_spellings=True,corrections=corrections)
-    print(json.dumps(dict(documentedManualTypeSurfaces=len(adopted),**{key:summary[key] for key in ['includedRows','excludedRows','pendingRows']}),sort_keys=True))
+    print(json.dumps(dict(documentedTypeSurfaces=len(adopted),documentedManualTypeSurfaces=len(adopted & {r['surface'] for r in rows if r['id'].startswith('manual:')}),**{key:summary[key] for key in ['includedRows','excludedRows','pendingRows']}),sort_keys=True))
 
 
 if __name__=='__main__':

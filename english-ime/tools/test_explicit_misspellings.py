@@ -5,6 +5,22 @@ import test_lexicon_pipeline as fixtures
 
 
 class ExplicitMisspellingTests(unittest.TestCase):
+    def test_ascii_input_match_retains_exact_source_label_and_reopenable_guards(self):
+        source={'Typofixture':{'correctionfixture'}}
+        row=dict(id='tsv:1',surface='typofixture',reading='typofixture',cost=42)
+        pairs,proof=typos.ascii_input_pairs([row],source);audit=[]
+        result=typos.exclusions(self.model(),[row],pairs,{},audit,proof)
+        self.assertEqual(1,len(result));self.assertEqual('Typofixture',audit[0]['evidence']['listedSpelling'])
+        self.assertTrue(audit[0]['evidence']['asciiInputCasefoldMatch']);self.assertNotIn('typofixture',source)
+        modern={'typofixture':[dict(word='Typofixture',pos='noun',senses=[dict(glosses=['A modern noun.'])])]}
+        self.assertEqual([],typos.exclusions(self.model(),[row],pairs,modern,[],proof))
+
+    def test_casefold_does_not_infer_manual_aliases_or_changed_input_spellings(self):
+        for change in [dict(id='manual:1'),dict(reading='other'),dict(surface='Typofixture')]:
+            row=dict(id='tsv:1',surface='typofixture',reading='typofixture',cost=42);row.update(change)
+            pairs,proof=typos.ascii_input_pairs([row],{'TYPOFIXTURE':{'correctionfixture'}})
+            self.assertFalse(proof);self.assertNotIn(row['surface'],pairs)
+
     def model(self):
         model = pipeline.Lexicon(fixtures.SEED)
         model.add('verified-correction', 'correctionfixture', 'correctionfixture', {'noun'},

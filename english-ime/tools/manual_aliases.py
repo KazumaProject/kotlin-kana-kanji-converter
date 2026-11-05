@@ -16,16 +16,21 @@ EXPECTED = {'manual:890': ('cplusplus', 'C++', 10000),
             'manual:709': ('microsoft three sixty five', 'Microsoft 365', 9000)}
 
 
-def attach(model, rows, source, pending):
+def literal_mappings(source):
     if pipeline.digest(source) != MANUAL_SHA256:
         raise ValueError('Legacy manual input source changed')
     text = source.read_text()
     literals = {}
-    pattern = (r'Dictionary\(\s*reading\s*=\s*"([^"\n]+)",\s*cost\s*=\s*(\d+)\.toShort\(\),'
+    pattern = (r'Dictionary\(\s*reading\s*=\s*"([^"\n]+)",\s*cost\s*=\s*(\d+|\(\d+\))\.toShort\(\),'
                r'\s*word\s*=\s*"([^"\n]+)",\s*withUpperCase\s*=\s*(true|false)\s*\)')
     for match in re.finditer(pattern, text):
         reading, cost, surface, _ = match.groups()
-        literals[reading, surface, int(cost)] = text.count('\n', 0, match.start()) + 1
+        literals[reading, surface, int(cost.strip('()'))] = text.count('\n', 0, match.start()) + 1
+    return literals
+
+
+def attach(model, rows, source, pending):
+    literals=literal_mappings(source)
     actual = {row['id']: row for row in rows}
     known = {(r['relation'], r['source'], r['target']) for r in model.relations}
     for identifier, expected in EXPECTED.items():

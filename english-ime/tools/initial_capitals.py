@@ -10,7 +10,7 @@ from pathlib import Path
 import extend_lexicon as extension
 import lexicon_pipeline as pipeline
 
-SOURCES={'curated_seed','wiktionary','esdb','ngsl_list'}
+SOURCES={'curated_seed','wiktionary','esdb','ngsl_list','reviewed_wikipedia'}
 BASE_FLAGS={'verb_base','aux_be_base','aux_have_base','aux_do_base','adjective_base'}
 
 
@@ -19,7 +19,7 @@ def attach(model,rows,pending_ids):
     counts=Counter();ordinary=defaultdict(list)
     for key,form in list(model.forms.items()):
         surface=form['surface'];members=model.members[key]
-        if not re.fullmatch(r'[a-z]+(?: [a-z]+)*',surface) or key[0] not in model.approved[surface]:continue
+        if not re.fullmatch(r"[a-z]+(?:'[a-z]+)?(?: [a-z]+(?:'[a-z]+)?)*",surface) or key[0] not in model.approved[surface]:continue
         if 'noun_proper' in members or any(v.startswith(('name_','identifier_','orthography_')) for v in members):continue
         proof=next((p for p in model.evidence[key] if p['source'] in SOURCES and p.get('approved',True)),None)
         if proof:ordinary[surface].append((key,form,members.copy(),proof))
@@ -28,7 +28,7 @@ def attach(model,rows,pending_ids):
         original=row['surface']
         # Sentence-style or title-style initial capitals, never arbitrary
         # internal capitalization, ALL-CAPS or changes in letters/word spacing.
-        if original==original.lower() or not re.fullmatch(r'[A-Z][a-z]*(?: [A-Za-z][a-z]*)*',original):continue
+        if original==original.lower() or not re.fullmatch(r"[A-Z][a-z]*(?:'[a-z]+)?(?: [A-Za-z][a-z]*(?:'[a-z]+)?)*",original):continue
         for key,form,members,source in ordinary[original.lower()]:
             values=(members-BASE_FLAGS)|{'orthography_initial_capital'}
             proof={'source':'verified_initial_capital','url':source['url'],'legacySourceId':row['id'],

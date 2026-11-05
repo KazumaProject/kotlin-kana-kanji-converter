@@ -16,7 +16,7 @@ class LiteralInputAliasTests(unittest.TestCase):
         row=dict(id='manual:1',reading='example three sixty five',surface='Example 365',cost=9000)
         with tempfile.TemporaryDirectory() as folder:
             source=Path(folder)/'Manual.kt'
-            source.write_text('Dictionary(\n reading = "example three sixty five",\n cost = 9000.toShort(),\n word = "Example 365",\n withUpperCase = true\n)')
+            source.write_text('Dictionary(\n reading = "example three sixty five",\n cost = (9000).toShort(),\n word = "Example 365",\n withUpperCase = true\n)')
             with patch.object(aliases,'MANUAL_SHA256',hashlib.sha256(source.read_bytes()).hexdigest()),patch.object(aliases,'EXPECTED',{'manual:1':('example three sixty five','Example 365',9000)}):
                 audit=[];aliases.attach(model,[row],source,audit)
                 self.assertIn(('example three sixty five','Example 365'),{(r['source'],r['target']) for r in model.relations if r['relation']=='input_alias'})

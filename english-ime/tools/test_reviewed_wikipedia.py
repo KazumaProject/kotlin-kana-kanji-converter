@@ -25,6 +25,55 @@ def review(value):
 
 
 class WikipediaReviewTests(unittest.TestCase):
+    def test_independent_sentence_usage_cannot_clip_a_long_name_or_taxon_component(self):
+        value=article('A different heading','The Fixture is a software product.');r=review(value)
+        r.update(target='Fixture',contextKind='standalone_sentence_subject')
+        self.assertEqual(set(r['categories']),wiki.validate_review(r,value))
+        for text,start in [('Long Fixture is a software product.',5),('A. Fixture is a taxon.',3),('var. Fixture is a taxon.',5),('The Fixture Company is a software company.',0)]:
+            value=article('A different heading',text);test=copy.deepcopy(r)
+            test['witness']=dict(start=start,end=len(text),sha256=hashlib.sha256(text[start:].encode()).hexdigest())
+            with self.assertRaises(ValueError):wiki.validate_review(test,value)
+
+    def test_explicit_alias_is_complete_prose_and_never_a_longer_creative_work_title(self):
+        for text,valid in [('known simply as Fixture, a company.',True),('named Fixture, a software package.',True),('named Fixture Tools, a company.',False),('called Fixture-based, a technique.',False),('Called Fixture, the album A Girl Called Fixture.',False)]:
+            value=article('An unrelated heading',text);r=review(value);r.update(target='Fixture',contextKind='explicit_complete_alias')
+            if valid:wiki.validate_review(r,value)
+            else:
+                with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
+    def test_ordinary_noun_review_requires_explicit_english_use_and_never_invents_morphology(self):
+        value=article('A different heading','The fixture is a physical support.');r=review(value)
+        r.update(target='fixture',decision='include_lexical_noun',categories=['noun'],contextKind='standalone_sentence_subject')
+        with self.assertRaises(ValueError):wiki.validate_review(r,value)
+        r['englishLexicalRoleConfirmed']=True;self.assertEqual({'noun'},wiki.validate_review(r,value))
+        r['categories'].append('noun_count_singular')
+        with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
+    def test_qualified_title_needs_an_explicit_descriptor_and_literal_complete_body_label(self):
+        value=article('Fixture (software)','Fixture is a documented software product.');r=review(value)
+        r.update(target='Fixture',contextKind='qualified_article_title',titleQualifier='software')
+        model=pipeline.Lexicon(fixtures.SEED);corrections=[]
+        wiki.attach(model,[dict(id='tsv:1',surface='fixture',reading='fixture',cost=700)],{'123':value},[r],corrections)
+        self.assertTrue(model.approved['Fixture'])
+        self.assertEqual('software',model.evidence[next(iter(model.approved['Fixture'])),'Fixture'][0]['reviewedTitleQualifier'])
+        for change in ['implicit','wrong-descriptor','name-component','missing-literal','unsupported-descriptor']:
+            test=copy.deepcopy(r);source=copy.deepcopy(value)
+            if change=='implicit':test['contextKind']='full_article_title'
+            elif change=='wrong-descriptor':test['titleQualifier']='film'
+            elif change=='name-component':source['title']='Fixture Company (software)'
+            elif change=='unsupported-descriptor':source['title']='Fixture (random qualifier)';test['titleQualifier']='random qualifier'
+            else:
+                source['text']='A documented product.';source['textSha256']=hashlib.sha256(source['text'].encode()).hexdigest()
+                test['witness']=dict(start=0,end=len(source['text']),sha256=source['textSha256'])
+            with self.assertRaises(ValueError):wiki.validate_review(test,source)
+
+    def test_qualified_disambiguation_keeps_complete_item_guard_and_separate_interpretations(self):
+        value=article('Fixture (disambiguation)','Fixture (album), a documented album.');r=review(value)
+        r.update(target='Fixture',contextKind='qualified_disambiguation_item',titleQualifier='disambiguation',categories=['noun','noun_proper','name_work'])
+        self.assertEqual({'noun','noun_proper','name_work'},wiki.validate_review(r,value))
+        value['text']='Fixture Company, a company.';r['witness']=dict(start=0,end=len(value['text']),sha256=hashlib.sha256(value['text'].encode()).hexdigest())
+        with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
     def test_independent_review_remains_admitting_after_verified_reload(self):
         model=pipeline.Lexicon(fixtures.SEED);value=article()
         rows=[dict(id='tsv:1',surface='fixture',reading='fixture',cost=700)]
