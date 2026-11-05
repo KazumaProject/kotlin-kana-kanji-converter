@@ -1,0 +1,5 @@
+# Optional: prepare the pinned DBpedia14 title/label facts from Parquet.
+# Existing lexicon tools and prepared-source verification use the standard library.
+pyarrow==26.0.1
+# Optional: decode the pinned CC0 historical SSA-derived R data table.
+rdata==1.1.0
