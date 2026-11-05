@@ -25,6 +25,7 @@ DOMAINS = {'domain_technology','domain_business','domain_science','domain_sports
     'domain_education','domain_medical','domain_food','domain_travel'}
 KINDS = {
     'include_lexical_noun': ({'noun'}, {'noun','register_formal','register_informal'} | DOMAINS),
+    'include_lexical_adjective': ({'adjective'}, {'adjective','register_formal','register_informal'} | DOMAINS),
     'include_name': ({'noun','noun_proper'}, {'noun','noun_proper','name_person','name_place','name_organization',
         'name_product','name_brand','name_work','name_fictional','abbreviation'} | DOMAINS),
     'include_abbreviation': ({'abbreviation'}, {'abbreviation'} | DOMAINS),
@@ -104,8 +105,8 @@ def validate_review(review, article, predicates=None):
     target = review['target'];members = set(review['categories']);required,allowed = KINDS[review['decision']]
     if not required <= members or not members <= allowed:
         raise ValueError('Wikipedia review cannot infer unrelated POS or inflections')
-    if review['decision']=='include_lexical_noun' and review.get('englishLexicalRoleConfirmed') is not True:
-        raise ValueError('An ordinary English noun requires an explicit English-usage review')
+    if review['decision'].startswith('include_lexical_') and review.get('englishLexicalRoleConfirmed') is not True:
+        raise ValueError('An ordinary English lexical role requires an explicit English-usage review')
     witness = review['witness'];start,end = witness['start'],witness['end']
     if not isinstance(start,int) or not isinstance(end,int) or not 0 <= start < end <= len(article['text']):
         raise ValueError('Invalid reviewed Wikipedia passage bounds')
@@ -132,6 +133,18 @@ def validate_review(review, article, predicates=None):
         if (start and article['text'][start-1].isalnum() or
                 not re.match(r'(?:known(?: simply)? as|called|named)\s+["“]?'+token+r'["”]?(?:[.,;:)]|\s+(?:is|are|was|were)\b)',passage)):
             raise ValueError('An explicit alias needs a complete lower-case prose cue, not a compound or longer work title')
+    elif context=='quoted_personal_nickname':
+        name_word=r"[A-Z][\w’'.-]*"
+        pattern=(r'(?:'+name_word+r' ){1,6}["“]'+re.escape(target)+r'["”] '
+                 +name_word+r'(?: '+name_word+r'){0,5}\s*(?:\(|,)')
+        if (start!=0 or review['decision']!='include_name' or 'name_person' not in members or
+                review.get('personalNicknameConfirmed') is not True or not re.match(pattern,passage)):
+            raise ValueError('A quoted nickname needs an explicitly reviewed complete personal-name lead')
+    elif context=='explicit_fictional_name_apposition':
+        if (review['decision']!='include_name' or 'name_fictional' not in members or
+                review.get('fictionalNameConfirmed') is not True or start and article['text'][start-1].isalnum() or
+                not re.match(r'(?:the|a) (?:titular )?(?:monster|character), (?:the )?'+token+r',',passage)):
+            raise ValueError('A fictional name apposition needs an explicit complete entity label and interpretation')
     elif context == 'full_article_title':
         if not matches_title(target,title):
             raise ValueError('A title component does not establish a standalone name')
@@ -179,7 +192,9 @@ def attach(model, rows, articles, reviews, corrections):
             reviewedTitleQualifier=review.get('titleQualifier'),
             rationale=review['rationale'], preferredCaseClaimed=False,
             englishLexicalRoleConfirmed=review.get('englishLexicalRoleConfirmed',False),
-            scope='explicitly reviewed English-context name, ordinary English noun, abbreviation, symbol, phrase, numeral or taxonomic identifier; no title-only POS inference, inherited morphology, source endorsement, corpus intent or current availability claim; article prose is not redistributed')
+            personalNicknameConfirmed=review.get('personalNicknameConfirmed',False),
+            fictionalNameConfirmed=review.get('fictionalNameConfirmed',False),
+            scope='explicitly reviewed English-context name, ordinary English noun/adjective, abbreviation, symbol, phrase, numeral or taxonomic identifier; no title-only POS inference, inherited morphology, source endorsement, corpus intent or current availability claim; article prose is not redistributed')
         lemma=review.get('lemma',target)
         model.add(key,lemma,target,members,proof,approved=True)
         for row in selected:

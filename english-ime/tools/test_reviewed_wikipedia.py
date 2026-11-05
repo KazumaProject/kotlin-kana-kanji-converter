@@ -25,6 +25,42 @@ def review(value):
 
 
 class WikipediaReviewTests(unittest.TestCase):
+    def test_ordinary_adjective_requires_confirmed_role_without_inflection_or_name_inference(self):
+        value=article('Fixture (disambiguation)','Fixture relates to a historical doctrine.');r=review(value)
+        r.update(target='Fixture',decision='include_lexical_adjective',categories=['adjective'],contextKind='standalone_sentence_subject',
+                 predicateProof=dict(surface='relates',lexemeId='fixture-relate'))
+        predicates={'relates':{'fixture-relate'}}
+        with self.assertRaises(ValueError):wiki.validate_review(r,value,predicates)
+        r['englishLexicalRoleConfirmed']=True;self.assertEqual({'adjective'},wiki.validate_review(r,value,predicates))
+        for category in ['noun_proper','adjective_comparative','verb_present_3sg']:
+            with self.assertRaises(ValueError):wiki.validate_review(dict(r,categories=['adjective',category]),value,predicates)
+
+    def test_quoted_personal_nickname_requires_complete_quote_and_biographical_lead(self):
+        value=article('Person','Chanston James "Chansey" Paech (born 1987) is an Australian politician.');r=review(value)
+        r.update(target='Chansey',categories=['noun','noun_proper','name_person'],contextKind='quoted_personal_nickname',personalNicknameConfirmed=True)
+        self.assertEqual(set(r['categories']),wiki.validate_review(r,value))
+        for text in ['Chanston James "Chansey Paech" Smith (born 1987) is a person.',
+                     'An album called "Chansey" Paech, a recording.',
+                     'The story. Chanston James "Chansey" Paech (born 1987) is a person.']:
+            value=article('Person',text);r['witness']=dict(start=0,end=len(text),sha256=value['textSha256'])
+            with self.assertRaises(ValueError):wiki.validate_review(r,value)
+        value=article('Person','Chanston James "Chansey" Paech (born 1987) is a politician.')
+        r['witness']=dict(start=0,end=len(value['text']),sha256=value['textSha256'])
+        with self.assertRaises(ValueError):wiki.validate_review(dict(r,personalNicknameConfirmed=False),value)
+
+    def test_fictional_apposition_cannot_clip_longer_names_or_assign_real_species(self):
+        value=article('Another title','the titular monster, the Babadook, a fictional creature.');r=review(value)
+        r.update(target='Babadook',categories=['noun','noun_proper','name_fictional'],contextKind='explicit_fictional_name_apposition',fictionalNameConfirmed=True)
+        self.assertEqual(set(r['categories']),wiki.validate_review(r,value))
+        for text in ['the titular monster, the Babadook Junior, a fictional creature.',
+                     'the titular monster, the Babadook-like, a fictional creature.']:
+            value=article('Another title',text);r['witness']=dict(start=0,end=len(text),sha256=value['textSha256'])
+            with self.assertRaises(ValueError):wiki.validate_review(r,value)
+        value=article('Another title','the titular monster, the Babadook, a fictional creature.')
+        r['witness']=dict(start=0,end=len(value['text']),sha256=value['textSha256'])
+        with self.assertRaises(ValueError):wiki.validate_review(dict(r,fictionalNameConfirmed=False),value)
+        with self.assertRaises(ValueError):wiki.validate_review(dict(r,categories=['noun','noun_proper','identifier_taxonomic_name']),value)
+
     def test_extra_finite_predicate_needs_verified_english_verb_evidence(self):
         model=pipeline.Lexicon(fixtures.SEED)
         model.add('fixture-said','say','say',{'verb','verb_base'},{'source':'curated_seed','url':'https://example.org/say'},approved=True)
