@@ -2,6 +2,62 @@
 
 This JVM 17 module builds the English-input dictionaries. Run from the repository root.
 
+## Reproduce the completed dictionary
+
+The reviewed source bundle under `data/reviewed` contains decisions for all
+102,051 original rows: **101,626 admitted, 425 excluded, zero pending**. It
+preserves the original IDs, order, readings and costs, multiple lexical
+interpretations, lemma/form links, category memberships and case alternatives.
+The small `data/grammar` seed remains available for focused tests and examples.
+
+With Python 3.11+ and JDK 17:
+
+```sh
+python3 -B english-ime/tools/replay_source.py verify
+python3 -B english-ime/tools/replay_source.py build --out build/reviewed-english
+```
+
+The build checks the original ZIP, exports the current Kotlin manual/source
+inventory, compares every ordered tuple, and runs the existing `build-reviewed`
+command with corrections and all source notices. It compares every resulting
+payload, grammar table, compact category index and notice to the verified final
+build. The output directory must be new. Gradle may download its ordinary build
+dependencies when uncached; dictionary replay needs no classification API, keys
+or private research corpora. These commands do not publish or release assets.
+
+`manifest.json` pins the compressed archive and every uncompressed file with
+SHA-256 and byte lengths. Extraction rejects missing/extra files, duplicate
+members, links and escaping paths. Its `reviewed-replay-v1` format is distinct
+from a research materialization: it replays the completed ledger rather than
+repeating semantic research or synthesizing approval evidence. The large raw
+research evidence and source prose, definitions and code are omitted. Compact
+provenance retains lexical identities, source pointers, qualified namespaces
+and document checksums. Checksums are integrity checks, not digital signatures.
+
+[Category counts](data/reviewed/category-counts.tsv) distinguish admitted distinct
+candidate surfaces and original input rows from supporting model references.
+Categories overlap; their counts must not be summed as a vocabulary total.
+Named account/work references, technical identifiers and narrowly attested
+regional or expressive forms retain their documented meanings; they do not
+establish ordinary English senses or personal/legal identities.
+
+To inspect or evaluate the full tables:
+
+```sh
+python3 -B english-ime/tools/replay_source.py verify --out /tmp/reviewed-english-inputs
+./gradlew :english-ime:run --args='evaluate --lexicon /tmp/reviewed-english-inputs/grammar --text "He has <candidate>" --candidate taken --candidate took --format json'
+```
+
+All source notices travel with generated assets, including WordNet,
+Wiktionary/wordfreq share-alike data and EDRDG/JMnedict attribution and conditions.
+Keep the required source acknowledgements in the consuming application's
+About/Sources interface. The host checks identify Sumire consumer
+`427baa8ef19a5917ea931d6731ec9d1fd95289d7` and category reader
+`2a42c4b3c978a51243a9baeb7fc6777573e31712`; physical Android memory, IME UI and
+production ranking remain unverified.
+
+## Legacy compatibility
+
 ```sh
 ./gradlew :english-ime:test
 ./gradlew :english-ime:run --args='build-legacy --out build/legacy'
@@ -35,12 +91,12 @@ python3 -B english-ime/tools/classification.py align \
   --inventory /absolute/path/inventory.jsonl --wordnet /absolute/path/WordNet-3.0.tar.gz \
   --wiktextract /absolute/path/raw-wiktextract-data.jsonl.gz --wiktextract-sha256 "$WIKTEXTRACT_SHA256" \
   --out /absolute/path/evidence.jsonl
-./gradlew :english-ime:run --args='build-reviewed --decisions /absolute/path/decisions.tsv --lexicon /absolute/path/grammar --relations /absolute/path/relations.tsv --out /absolute/path/reviewed'
+./gradlew :english-ime:run --args='build-reviewed --decisions /absolute/path/decisions.tsv --lexicon /absolute/path/grammar --relations /absolute/path/grammar/relations.tsv --corrections /absolute/path/surface-corrections.tsv --notices /absolute/path/notices --out /absolute/path/reviewed'
 ```
 
 The inventory includes the first data line and the v23 manual tables, for 102,051 rows. IDs identify rows within these fixed inputs. Export again and compare the complete row inventory when the source changes. The Python 3.11+ alignment tool joins exact English surfaces to [WordNet 3.0](https://wordnet.princeton.edu/license-and-commercial-use) and the [Wiktextract raw snapshot](https://kaikki.org/dictionary/rawdata.html). Record the Wiktionary dump date, extractor revision and SHA-256 alongside the snapshot and follow the [Wiktionary attribution and share-alike terms](https://en.wiktionary.org/wiki/Wiktionary:Copyrights) when distributing derived data. WordNet hits are lexical leads. Wiktionary evidence carries sense, form and restriction information for review.
 
-The reviewed generator takes the same three lexicon tables as the CLI, a separate spelling relations table, and a TSV with header `id reading surface cost decision lexeme_ids reason evidence` (tab-separated). An `include` row takes one or more comma-separated lexeme IDs for that exact surface, reason `verified`, and an evidence URL. An `exclude` row uses `-` for lexeme IDs and one of `malformed`, `wrong_mapping`, `unattested`, `restricted`, or `unsupported_mapping` with its evidence URL. Use `restricted` when every verified sense is archaic, obsolete, offensive, or vulgar. Preserve any eligible modern senses. A mapped output containing spaces is unsupported by the current Sumire surface decoder. Identical reading and surface phrases can still use the reading as the surface. Missing, duplicate, or inconsistent decisions prevent output.
+The reviewed generator takes the same three lexicon tables as the CLI, a separate spelling relations table, and a TSV with header `id reading surface cost decision lexeme_ids reason evidence` (tab-separated). An `include` row takes one or more comma-separated lexeme IDs for the effective surfaces, reason `verified`, and an evidence URL. An `exclude` row uses `-` for lexeme IDs and one of `malformed`, `wrong_mapping`, `unattested`, `restricted`, `ineligible_senses`, `ineligible_reference`, or `unsupported_mapping` with its evidence URL. Use `restricted` when every verified sense is archaic, obsolete, offensive, or vulgar. Preserve eligible modern senses and independently attested names. Source absence alone does not establish a malformed word. Case and input-spelling alternatives must pass the existing guards and retain their original row. Mapped spaces use the reviewed alias/consumer contract tested above; replay adds no stricter CLI-only filter. Missing, duplicate, pending or inconsistent decisions prevent output. Binary generation retains the existing minimum-cost aggregation for duplicate reading/surface pairs; the complete original costs remain in the ledger and inventory.
 
 The build writes the four binary assets and a separate `grammar` directory. Relations describe contractions, regional spellings, hyphenation, capitalization and derivation. These links can have multiple targets and do not automatically create conversion entries. The generated Glide index omits legacy fallback additions. Sumire's own fallback path is a separate runtime path.
 
@@ -48,7 +104,20 @@ The build writes the four binary assets and a separate `grammar` directory. Rela
 
 Use `classification.py prepare --inventory INVENTORY --allowlist IDS --categories CATEGORIES --out BATCHES` to prepare stable chunks from an explicitly reviewed public input allowlist. The categories TSV is the named dictionary catalog. Each response JSONL uses the matching batch filename and has `id`, `surface`, `categories`, `batchSha256` and `categoriesSha256` fields on every row. Use `classification.py verify --batches BATCHES --responses RESPONSES --out PROPOSALS` to validate finished chunks and report which are still missing. Proposals are separate from inclusion decisions. The tooling operates on local files. For an authorized live Gemini run, check the existing free project's billing status, model, remaining limits and data terms before any request.
 
-The repository contains the grammar seed and relation examples. A completed full-source decision ledger is required to build the reviewed dictionary.
+The repository contains both the grammar seed and the completed replay inputs.
+For a newly completed research materialization, pack it only after its final
+audit and actual-reader checks succeed:
+
+```sh
+python3 -B english-ime/tools/replay_source.py pack \
+  --directory /path/to/final-materialization --audit /path/to/final-quality-audit.json \
+  --gold /path/to/verified-final-build --out /path/to/new-reviewed-source
+```
+
+The pack step requires zero pending rows, unchanged pinned original inputs and
+the exact final validation proofs. It preserves all source notices and produces
+a separate typed replay manifest. Research `load_base`/`verify` continue to
+require their full evidence and cannot consume this smaller replay bundle.
 
 
 ### Category-count performance check

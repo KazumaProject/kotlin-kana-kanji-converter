@@ -31,7 +31,7 @@ EXTRA_CATEGORIES = {
     "name_brand": ("Documented brand or explicit brand alias; company/product type and lexical inflections remain separate", "SpaceX, Next.js, Google Sheets"),
     "name_work": ("Attested title or alias of a specific creative work, including documented software; no inflection inference", "documented book, film or software titles"),
     "identifier_data_format": ("Documented data/file-format identifier or alias; no lexical POS or inflection inference", "documented file-format labels"),
-    "identifier_programming_api": ("Case-sensitive public programming API type or explicitly reviewed exported function identifier; qualified module context retained without English POS or inflection inference", "InputConnection, Coroutine, ViewModel, NextAuth"),
+    "identifier_programming_api": ("Case-sensitive public programming API type, explicitly reviewed exported function or documented public schema property; qualified interface context retained without English POS or inflection inference", "InputConnection, Coroutine, ViewModel, NextAuth, ofThese"),
     "identifier_command_template": ("Existing manual syntactic instantiation of a documented command template; argument values do not prove installed packages or existing project scripts", "npm run dev, black ."),
     "identifier_phonetic_code": ("Explicit NATO/ICAO phonetic-codeword reading; no month or personal-name sense inference", "november, zulu"),
     "orthography_informal_ing": ("Derived informal final-written-g omission from a verified English -ing verb form, with the original lemma and participle use", "drinkin, huntin"),

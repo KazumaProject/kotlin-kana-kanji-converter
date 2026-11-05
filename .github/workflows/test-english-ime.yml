@@ -31,3 +31,5 @@ jobs:
         run: python3 -B -m unittest discover -s english-ime/tools -p 'test_*.py'
       - name: Test English lexicon, review gate and binary writers
         run: bash ./gradlew :english-ime:test --no-daemon
+      - name: Verify completed source ledger and regenerate all reviewed assets
+        run: python3 -B english-ime/tools/replay_source.py build --out "$RUNNER_TEMP/reviewed-english"
