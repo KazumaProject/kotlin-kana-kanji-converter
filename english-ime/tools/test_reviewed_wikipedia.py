@@ -25,6 +25,39 @@ def review(value):
 
 
 class WikipediaReviewTests(unittest.TestCase):
+    def test_date_preface_keeps_the_real_subject_boundary_and_finite_evidence(self):
+        for prefix in ['In 1896, ','In September 2021, ']:
+            value=article('Another heading',prefix+'Fixture released a recording.');r=review(value)
+            r.update(target='Fixture',contextKind='standalone_sentence_subject');wiki.validate_review(r,value)
+        value=article('Another heading','In September 2021, Long Fixture released a recording.');r=review(value)
+        r.update(target='Fixture',contextKind='standalone_sentence_subject')
+        with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
+    def test_quoted_subject_needs_complete_reported_english_clause_not_name_fragment(self):
+        text='The critic said that "Fixture is a remarkable performer".';value=article('Different',text);r=review(value)
+        start=text.index('"');end=text.rindex('"')+1
+        r.update(target='Fixture',contextKind='quoted_sentence_subject',englishQuotationConfirmed=True,
+                 witness=dict(start=start,end=end,sha256=hashlib.sha256(text[start:end].encode()).hexdigest()))
+        wiki.validate_review(r,value)
+        with self.assertRaises(ValueError):wiki.validate_review(dict(r,englishQuotationConfirmed=False),value)
+        for text in ['The title is "Fixture is a remarkable performer".',
+                     'The critic said that "Fixture Junior is a performer".',
+                     'The critic said that "Fixture" is a performer.']:
+            value=article('Different',text);start=text.index('"');end=text.rindex('"')+1
+            r['witness']=dict(start=start,end=end,sha256=hashlib.sha256(text[start:end].encode()).hexdigest())
+            with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
+    def test_nominal_reference_requires_full_left_and_right_name_boundaries(self):
+        for text in ['as Fixture in 1971.','of The Fixture came later.','to just Fixture.']:
+            value=article('Different',text);r=review(value)
+            r.update(target='Fixture',contextKind='complete_nominal_reference',completeNominalReferenceConfirmed=True)
+            wiki.validate_review(r,value)
+            with self.assertRaises(ValueError):wiki.validate_review(dict(r,completeNominalReferenceConfirmed=False),value)
+        for text in ['of Long Fixture.','of Fixture Junior.','of Fixture-like.','as Fixture Holdings in 1971.']:
+            value=article('Different',text);r=review(value)
+            r.update(target='Fixture',contextKind='complete_nominal_reference',completeNominalReferenceConfirmed=True)
+            with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
     def test_ordinary_adjective_requires_confirmed_role_without_inflection_or_name_inference(self):
         value=article('Fixture (disambiguation)','Fixture relates to a historical doctrine.');r=review(value)
         r.update(target='Fixture',decision='include_lexical_adjective',categories=['adjective'],contextKind='standalone_sentence_subject',
@@ -95,7 +128,7 @@ class WikipediaReviewTests(unittest.TestCase):
                 with self.assertRaises(ValueError):wiki.validate_review(r,value)
 
     def test_explicit_alias_is_complete_prose_and_never_a_longer_creative_work_title(self):
-        for text,valid in [('known simply as Fixture, a company.',True),('named Fixture, a software package.',True),('named Fixture Tools, a company.',False),('called Fixture-based, a technique.',False),('Called Fixture, the album A Girl Called Fixture.',False)]:
+        for text,valid in [('known simply as Fixture, a company.',True),('named Fixture, a software package.',True),('nicknamed Fixture, a person.',True),('nicknamed Fixture Junior, a person.',False),('named Fixture Tools, a company.',False),('called Fixture-based, a technique.',False),('Called Fixture, the album A Girl Called Fixture.',False)]:
             value=article('An unrelated heading',text);r=review(value);r.update(target='Fixture',contextKind='explicit_complete_alias')
             if valid:wiki.validate_review(r,value)
             else:

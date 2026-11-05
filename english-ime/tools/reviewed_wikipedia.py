@@ -119,7 +119,9 @@ def validate_review(review, article, predicates=None):
     token=re.escape(target)+r"(?![\w'’/-]|\.[\w])"
     if context=='standalone_sentence_subject':
         before=article['text'][:start]
-        match=re.match(r'(?:(?:The|the|A|a|An|an) |(?:The|the) name )?["“]?'+token+r'["”]?\s+([a-z]+)\b',passage)
+        months='January|February|March|April|May|June|July|August|September|October|November|December'
+        date=r'(?:In (?:(?:'+months+r') )?[1-9][0-9]{3},\s+)?'
+        match=re.match(date+r'(?:(?:The|the|A|a|An|an) |(?:The|the) name )?["“]?'+token+r'["”]?\s+([a-z]+)\b',passage)
         if (start and not re.search(r'[.!?]\s+$|\n\s*$',before) or
                 re.search(r'\b(?:[A-Za-z]|subsp|ssp|var|sp|St|Dr|Mr|Mrs|Ms|Prof|Rev|Sr|Jr|Mt)\.\s*$',before) or
                 not match):
@@ -129,9 +131,22 @@ def validate_review(review, article, predicates=None):
             if (not isinstance(proof,dict) or predicates is None or proof.get('surface')!=match[1] or
                     proof.get('lexemeId') not in predicates.get(match[1],())):
                 raise ValueError('A new finite predicate requires independently approved English lexical evidence')
+    elif context=='quoted_sentence_subject':
+        before=article['text'][:start]
+        match=re.fullmatch(r'["“]'+token+r'\s+([a-z]+)\b[^"“”]*["”]',passage)
+        if (review['decision']!='include_name' or review.get('englishQuotationConfirmed') is not True or
+                not re.search(r'\b(?:said|wrote)(?: that)?[: ,]?\s*$',before) or
+                not match or match[1] not in SUBJECT_PREDICATES):
+            raise ValueError('A quoted subject needs a complete explicitly reviewed English quotation and reporting cue')
+    elif context=='complete_nominal_reference':
+        if (review['decision']!='include_name' or review.get('completeNominalReferenceConfirmed') is not True or
+                start and article['text'][start-1].isalnum() or
+                not re.match(r'(?:by|of|from|to|as|for|with|about|under|in)\s+(?:(?:the|The|just)\s+)?'+token+
+                    r'(?=[,.;:)]|\s+(?:(?:in|since|until) [1-9][0-9]{3}\b|(?:is|was|are|were|has|had|have|came)\b))',passage)):
+            raise ValueError('A nominal reference needs its complete prepositional name and explicit English-context review')
     elif context=='explicit_complete_alias':
         if (start and article['text'][start-1].isalnum() or
-                not re.match(r'(?:known(?: simply)? as|called|named)\s+["“]?'+token+r'["”]?(?:[.,;:)]|\s+(?:is|are|was|were)\b)',passage)):
+                not re.match(r'(?:known(?: simply)? as|called|named|nicknamed)\s+["“]?'+token+r'["”]?(?:[.,;:)]|\s+(?:is|are|was|were)\b)',passage)):
             raise ValueError('An explicit alias needs a complete lower-case prose cue, not a compound or longer work title')
     elif context=='quoted_personal_nickname':
         name_word=r"[A-Z][\w’'.-]*"
@@ -194,6 +209,8 @@ def attach(model, rows, articles, reviews, corrections):
             englishLexicalRoleConfirmed=review.get('englishLexicalRoleConfirmed',False),
             personalNicknameConfirmed=review.get('personalNicknameConfirmed',False),
             fictionalNameConfirmed=review.get('fictionalNameConfirmed',False),
+            englishQuotationConfirmed=review.get('englishQuotationConfirmed',False),
+            completeNominalReferenceConfirmed=review.get('completeNominalReferenceConfirmed',False),
             scope='explicitly reviewed English-context name, ordinary English noun/adjective, abbreviation, symbol, phrase, numeral or taxonomic identifier; no title-only POS inference, inherited morphology, source endorsement, corpus intent or current availability claim; article prose is not redistributed')
         lemma=review.get('lemma',target)
         model.add(key,lemma,target,members,proof,approved=True)

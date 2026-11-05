@@ -21,6 +21,8 @@ TECHNOLOGY_PINS={'google-cloud-products.html':'9e302c885832947d7fdc1daba5941a6ce
  'apple-technologies.json':'17f68e7ff58bfadf3d60134502950199a7c62f9881f0b7c3cd22a0b2560d761c'}
 FIREBASE_PRODUCT_PINS={'firebase-products.html':'629f43ccb7f67ea910fd6de96f0688244434c10e812721e81ec38fe6e52f073c',
  'firebase-products-run.html':'d27a5253bbe0f51809753e5f5867e7f123428aedd9471a7eeeae686fab7fcf57'}
+MANUFACTURER_PINS={'dassault-products.html':'742fdb58141ac717d9647ec5259dbcdfd63214a1d4a06b8c3ee7342e2d1d13b6',
+ 'asus-phones.html':'7da37bc8c206a82c54219012d7bf7fc5a6b4933a6967ebe9d72d1f2f005f538c'}
 APPLE={'Mac','MacBook Neo','MacBook Air','MacBook Pro','iMac','Mac mini','Mac Studio','Studio Display','Studio Display XDR',
  'Apple Creator Studio','Final Cut Pro','Pixelmator Pro','Logic Pro','Apple Books','Apple News','Apple Remote Desktop','Safari','QuickTime','Apple Podcasts','macOS','Apple Arcade','Find My',
  'iPad Pro','iPad Air','iPad','iPad mini','Apple Pencil','HomeKit','iPadOS','iCloud','Apple Pay','Apple Health','iOS','MagSafe','Apple Card','Apple CarPlay',
@@ -37,14 +39,58 @@ class Labels(HTMLParser):
         if self.kind=='jetbrains' and tag=='h3' and not self.stopped:self.active=tag;self.content=[]
         if self.kind=='google_cloud' and tag=='div' and 'owa4Ee' in attrs.get('class','').split():self.active=tag;self.content=[]
         if self.kind=='firebase' and tag=='div' and 'content__title' in attrs.get('class','').split():self.active=tag;self.content=[]
+        if self.kind=='asus' and tag=='h2' and 'seriesName' in attrs.get('class','').split():self.active=tag;self.content=[]
     def handle_data(self,data):
         if self.active:self.content.append(data)
     def handle_endtag(self,tag):
         if tag!=self.active:return
         label=' '.join(''.join(self.content).split())
         if self.kind=='jetbrains' and label=='Filters':self.stopped=True
-        elif label:self.records.append({'label':label,'selector':{'google':'p.product-filter__card-description','google_cloud':'div.owa4Ee','firebase':'div.content__title','jetbrains':'h3 before Filters'}[self.kind]})
+        elif label:self.records.append({'label':label,'selector':{'google':'p.product-filter__card-description','google_cloud':'div.owa4Ee','firebase':'div.content__title','jetbrains':'h3 before Filters','asus':'h2.seriesName'}[self.kind]})
         self.active=None
+
+
+class BrandCards(HTMLParser):
+    """Use a complete brand-card identity corroborated by its printed logo alt."""
+    def __init__(self):super().__init__();self.depth=0;self.card=None;self.records=[]
+    def handle_starttag(self,tag,attrs):
+        attrs=dict(attrs)
+        if tag=='div':
+            self.depth+=1
+            if 'ds-brand-card' in attrs.get('class','').split():
+                if self.card is not None:raise ValueError('Nested product brand cards')
+                label=attrs.get('id','');path=attrs.get('data-href','')
+                if (not label or any(c in label for c in '\t\r\n') or
+                        not re.fullmatch(r'/products/[a-z0-9-]+|https://[a-z0-9.-]+(?:/[a-zA-Z0-9._/-]*)?',path)):
+                    raise ValueError('Incomplete brand card identity')
+                self.card=dict(depth=self.depth,label=label,productPath=path,confirmed=False)
+        if tag=='img' and self.card and 'ds-list-of-brands-brand-logo' in attrs.get('class','').split():
+            if attrs.get('alt')==self.card['label']+' Logo':self.card['confirmed']=True
+    def handle_endtag(self,tag):
+        if tag!='div':return
+        if self.card and self.card['depth']==self.depth:
+            if self.card['confirmed']:self.records.append(dict(label=self.card['label'],productPath=self.card['productPath'],
+                logoAlt=self.card['label']+' Logo',selector='div.ds-brand-card[id] corroborated by img.ds-list-of-brands-brand-logo[alt]',
+                catalogKind='vendor_product_brand_label'))
+            self.card=None
+        self.depth-=1
+
+
+def manufacturer_records(dassault_html,asus_html):
+    parser=BrandCards();parser.feed(dassault_html)
+    records=[dict(r,sourceFile='dassault-products.html',url='https://www.3ds.com/products') for r in parser.records]
+    if not records:raise ValueError('Missing corroborated manufacturer brand cards')
+    parser=Labels('asus');parser.feed(asus_html)
+    records += [dict(r,sourceFile='asus-phones.html',url='https://www.asus.com/mobile-handhelds/phones/all-series/',
+        catalogKind='vendor_product_family_title') for r in parser.records]
+    if not parser.records:raise ValueError('Missing complete manufacturer product labels')
+    return [dict(r,snapshotSha256=MANUFACTURER_PINS[r['sourceFile']],snapshotKind='raw_html') for r in records]
+
+
+def load_manufacturers(directory):
+    for name,expected in MANUFACTURER_PINS.items():
+        if pipeline.digest(directory/name)!=expected:raise ValueError('Changed manufacturer catalog: '+name)
+    return manufacturer_records((directory/'dassault-products.html').read_text(),(directory/'asus-phones.html').read_text())
 
 
 def load(directory):
@@ -123,6 +169,8 @@ def attach(model,rows,records):
             'labelEvidence':record,'approved':True,'preferredVendorCaseClaimed':False,
             'scope':'factual product display label in vendor catalog; exact labels and existing manual case/space-free variants only; no artwork, marketing prose, current availability, corpus-intent or inflection claim'}
         members={'noun','noun_proper','name_product','domain_technology'}
+        if record.get('catalogKind')=='vendor_product_brand_label':members.add('name_brand')
+        extension.ensure_categories(model,members)
         model.add(key,label,label,members,proof,approved=True)
         for row in selected:
             if row['surface']!=label and not row['id'].startswith('manual:'):continue
@@ -131,9 +179,11 @@ def attach(model,rows,records):
 
 
 def extend(args):
+    manufacturers=getattr(args,'manufacturers',None)
     records=load(args.sources)
     if args.technologies:records+=load_technologies(args.technologies)
     if args.firebase_products:records+=load_firebase_products(args.firebase_products)
+    if manufacturers:records+=load_manufacturers(manufacturers)
     model,rows,sources,notices,pending=extension.load_base(args.base,args.seed);counts=attach(model,rows,records)
     if args.technologies:
         sources['officialTechnologyDisplayLabels']={'files':TECHNOLOGY_PINS,
@@ -145,6 +195,11 @@ def extend(args):
         sources['firebaseProductDisplayLabels']={'files':FIREBASE_PRODUCT_PINS,'policy':'complete printed product card titles only; original manual case/space-free variants retained, no label invented by prefixing the vendor name or deriving a product name from a URL slug'}
         notices['FIREBASE-PRODUCT-LABELS-ATTRIBUTION.txt']=('Google/Firebase contributors. https://firebase.google.com/products-build ; https://firebase.google.com/products-run\n'
             'Extracted factual complete printed product card titles and source citations only, retaining source hashes and original manual variants. No marketing prose, artwork, code or logos redistributed; no inferred vendor-prefixed label, current availability, preferred case or inflection. No license to redistribute marketing page content or artwork is asserted.\n').encode()
+    if manufacturers:
+        sources['manufacturerProductLabels']={'files':MANUFACTURER_PINS,
+            'policy':'complete Dassault product-brand card identities corroborated by explicit logo alternative text; complete ASUS phone-series headings; no product inferred from URL slugs, model suffix removal or marketing descriptions'}
+        notices['MANUFACTURER-PRODUCT-LABELS-ATTRIBUTION.txt']=('Factual product/brand labels: Dassault Systemes, https://www.3ds.com/products ; ASUS, https://www.asus.com/mobile-handhelds/phones/all-series/ .\n'
+            'Only complete card labels corroborated by explicit logo alternative text and complete product-family headings are selected, retaining source hashes and selector identities. No page prose, descriptions, artwork, logos or code are redistributed; no content license, trademark permission, current availability, preferred case or inflection is asserted.\n').encode()
     prior=args.base/'reviewed-overrides.tsv';reviews=pipeline.read_table(prior,'decisions') if prior.is_file() else []
     reviews,reopened=resolve_pending.revalidate_machine_reviews(model,reviews,pending)
     states=list(map(json.loads,(args.base/'status.jsonl').open()));selected=[r for r,s in zip(rows,states) if s['decision']=='pending' or r['id'] in reopened]
@@ -167,4 +222,5 @@ if __name__=='__main__':
     for name in ['base','seed','sources','index','out']:parser.add_argument('--'+name,type=Path,required=True)
     parser.add_argument('--technologies',type=Path,help='Optional pinned complete official product/framework indexes')
     parser.add_argument('--firebase-products',type=Path,help='Optional pinned Firebase Build/Run product card indexes')
+    parser.add_argument('--manufacturers',type=Path,help='Optional pinned Dassault/ASUS complete manufacturer catalog labels')
     extend(parser.parse_args())

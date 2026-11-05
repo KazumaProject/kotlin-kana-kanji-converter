@@ -5,6 +5,33 @@ import test_lexicon_pipeline as fixtures
 
 
 class OfficialCatalogTests(unittest.TestCase):
+    def manufacturer_fixture(self):
+        return '<div class="ds-brand-card" id="SOLIDWORKS" data-href="/products/solidworks"><div><img class="ds-list-of-brands-brand-logo" alt="SOLIDWORKS Logo"></div></div>'
+
+    def test_brand_card_name_requires_its_own_explicit_corroborating_label(self):
+        html=self.manufacturer_fixture();asus='<h2 class="seriesName">Zenfone</h2>'
+        records=p.manufacturer_records(html,asus)
+        self.assertEqual({'SOLIDWORKS','Zenfone'},{r['label'] for r in records})
+        for bad in [html.replace('SOLIDWORKS Logo','Invented Logo'),html.replace('id="SOLIDWORKS"','id="Other"'),
+                    '<img class="ds-list-of-brands-brand-logo" alt="SOLIDWORKS Logo">']:
+            with self.assertRaises(ValueError):p.manufacturer_records(bad,asus)
+
+    def test_complete_series_headings_never_extract_product_names_from_slugs_or_model_parts(self):
+        records=p.manufacturer_records(self.manufacturer_fixture(),
+            '<h2 class="seriesName">Zenfone</h2><h2 class="seriesName">Complete Phone Ultra</h2>'
+            '<a href="/phones/invented/">Learn more</a><h2>Invented</h2><p>Marketing Phone</p>')
+        self.assertEqual({'SOLIDWORKS','Zenfone','Complete Phone Ultra'},{r['label'] for r in records})
+        self.assertNotIn('Complete Phone',{r['label'] for r in records})
+
+    def test_brand_and_product_memberships_keep_literal_manual_case_without_english_inflections(self):
+        records=p.manufacturer_records(self.manufacturer_fixture(),'<h2 class="seriesName">Zenfone</h2>')
+        model=pipeline.Lexicon(fixtures.SEED)
+        p.attach(model,[dict(id='manual:1',surface='SolidWorks'),dict(id='tsv:1',surface='solidworks')],records)
+        key=next(iter(model.approved['SOLIDWORKS']))
+        self.assertEqual({'noun','noun_proper','name_product','name_brand','domain_technology'},model.members[key,'SOLIDWORKS'])
+        self.assertTrue(model.approved['SolidWorks']);self.assertFalse(model.approved.get('solidworks'))
+        self.assertFalse(model.approved.get('SolidWork'));model.validate()
+
     def technology_index(self):
         identifier='doc://com.apple.documentation/documentation/CoreML'
         return dict(kind='technologies',identifier=dict(url='doc://com.apple.welcome-experience-documentation/documentation/technologies'),
