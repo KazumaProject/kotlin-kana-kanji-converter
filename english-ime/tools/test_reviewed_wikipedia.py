@@ -25,6 +25,33 @@ def review(value):
 
 
 class WikipediaReviewTests(unittest.TestCase):
+    def test_reviewed_determined_noun_requires_explicit_english_role_and_complete_head(self):
+        for text,target in [('a fixture, which is described.','fixture'),('the fixture who works.','fixture'),('his fixture, which was changed.','fixture'),('These fixtures can be used.','fixtures')]:
+            value=article('Other',text);r=review(value)
+            r.update(target=target,decision='include_lexical_noun',categories=['noun'],contextKind='complete_determined_noun_head',englishLexicalRoleConfirmed=True)
+            wiki.validate_review(r,value)
+            with self.assertRaises(ValueError):wiki.validate_review(dict(r,englishLexicalRoleConfirmed=False),value)
+        for text in ['a fixture Junior,','a fixture-like,','a long fixture,']:
+            value=article('Other',text);r['witness']=dict(start=0,end=len(text),sha256=value['textSha256'])
+            with self.assertRaises(ValueError):wiki.validate_review(r,value)
+
+    def test_reviewed_adjective_requires_independent_ordinary_noun_and_explicit_english_role(self):
+        model=pipeline.Lexicon(fixtures.SEED);model.add('actual','variant','variants',{'noun','noun_count_plural'},dict(source='curated_seed',url='https://example.org/variant'),approved=True)
+        model.add('proper','Example','example',{'noun','noun_proper'},dict(source='curated_seed',url='https://example.org/example'),approved=True)
+        value=article('Other','Regional variants in the game.');r=review(value)
+        r.update(target='Regional',decision='include_lexical_adjective',categories=['adjective'],contextKind='reviewed_english_noun_modifier',englishLexicalRoleConfirmed=True,nounHeadProof=dict(surface='variants',lexemeId='actual'))
+        heads=wiki.approved_noun_heads(model);wiki.validate_review(r,value,noun_heads=heads);self.assertNotIn('example',heads)
+        for change in [dict(nounHeadProof=None),dict(nounHeadProof=dict(surface='variants',lexemeId='invented')),dict(englishLexicalRoleConfirmed=False)]:
+            with self.assertRaises(ValueError):wiki.validate_review(dict(r,**change),value,noun_heads=heads)
+        value=article('Other','Regional variants-like forms.');r['witness']=dict(start=0,end=len(value['text']),sha256=value['textSha256'])
+        with self.assertRaises(ValueError):wiki.validate_review(r,value,noun_heads=heads)
+
+    def test_explicit_brand_classifier_does_not_infer_a_product_or_person(self):
+        value=article('Other','The Fixture brand was launched.');r=review(value)
+        r.update(target='Fixture',categories=['noun','noun_proper','name_brand'],contextKind='named_classifier_phrase',namedClassifierConfirmed=True)
+        wiki.validate_review(r,value)
+        with self.assertRaises(ValueError):wiki.validate_review(dict(r,categories=['noun','noun_proper','name_product']),value)
+
     def test_family_first_name_preserves_whole_hyphenated_given_unit_and_opposite_role(self):
         proof=dict(surface='Kim',role='family',entryId=123,senseIndex=0,snapshotSha256=wiki.WIKTIONARY_SNAPSHOT)
         roles={('Kim','family',123,0):proof};value=article('Other','Kim Nam-joon (born 1994) is a musician.');r=review(value)

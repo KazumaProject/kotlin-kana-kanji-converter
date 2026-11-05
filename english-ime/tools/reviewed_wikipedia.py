@@ -115,6 +115,19 @@ def approved_nominal_modifiers(model):
     return result
 
 
+def approved_noun_heads(model):
+    """Independent ordinary English noun evidence for reviewed modifiers."""
+    result=defaultdict(set)
+    for key,form in model.forms.items():
+        members=model.members[key];surface=form['surface']
+        if (not re.fullmatch('[a-z]+',surface) or 'noun' not in members or
+                'noun_proper' in members or any(c.startswith(('name_','identifier_','orthography_')) for c in members) or
+                key[0] not in model.approved.get(surface,())):continue
+        if any(e['source'] in {'curated_seed','wiktionary','esdb','ngsl_list'} and e.get('approved',True)
+                for e in model.evidence[key]):result[surface].add(key[0])
+    return result
+
+
 def verified_person_name_roles(index, words):
     """Read actual unrestricted English given-name/surname sense categories."""
     import resolve_wiktionary
@@ -145,7 +158,7 @@ def verified_census_family_roles(directory, words):
     return result
 
 
-def validate_review(review, article, predicates=None, modifiers=None, name_roles=None):
+def validate_review(review, article, predicates=None, modifiers=None, name_roles=None, noun_heads=None):
     if (review['reviewer'] != 'implementation_agent' or not review['rationale'].strip() or
             not review['interpretation'].strip() or review['decision'] not in KINDS):
         raise ValueError('Missing explicit Wikipedia interpretation review')
@@ -214,10 +227,22 @@ def validate_review(review, article, predicates=None, modifiers=None, name_roles
                 not match or not isinstance(proof,dict) or modifiers is None or proof.get('surface')!=match[1] or
                 proof.get('lexemeId') not in modifiers.get(match[1],())):
             raise ValueError('A complete English noun phrase needs an independently verified modifier and whole noun head')
+    elif context=='complete_determined_noun_head':
+        if (review['decision']!='include_lexical_noun' or start and article['text'][start-1].isalnum() or
+                not re.match(r'(?:[Aa]n?|[Tt]he|[Tt]hese|[Tt]hose|[Hh]is|[Hh]er|[Tt]heir|[Ii]ts) '+token+
+                    r'(?=[,.;:)]|\s+(?:who|which|that|is|was|are|were|can|could|would|will)\b)',passage)):
+            raise ValueError('A determined English noun needs its whole head and an explicit English lexical-role review')
+    elif context=='reviewed_english_noun_modifier':
+        match=re.match(token+r" ([a-z]+)(?![\w'’/-])(?=[,.;:)]|\s+(?:of|in|with|from|for|to)\b)",passage)
+        proof=review.get('nounHeadProof') or {}
+        if (review['decision']!='include_lexical_adjective' or start and article['text'][start-1].isalnum() or
+                not match or not isinstance(proof,dict) or noun_heads is None or proof.get('surface')!=match[1] or
+                proof.get('lexemeId') not in noun_heads.get(match[1],())):
+            raise ValueError('An English adjective review needs its complete independently approved ordinary noun head')
     elif context=='named_classifier_phrase':
         classes={'controller':{'name_product'},'series':{'name_product','name_work','name_brand'},
                  'company':{'name_organization'},'band':{'name_organization'},'newspaper':{'name_work'},
-                 'family':{'name_person','name_fictional'}}
+                 'family':{'name_person','name_fictional'},'brand':{'name_brand'}}
         match=re.match(r'(?:(the|The) )?'+token+r' ([a-z]+|Series)(?=[,.;:)]|\s+(?:is|are|was|were|has|have|had)\b)',passage)
         before=article['text'][:start]
         if (review['decision']!='include_name' or review.get('namedClassifierConfirmed') is not True or
@@ -307,13 +332,14 @@ def validate_review(review, article, predicates=None, modifiers=None, name_roles
 def attach(model, rows, articles, reviews, corrections, name_roles=None):
     predicates=approved_finite_predicates(model) if any(r.get('predicateProof') for r in reviews) else None
     modifiers=approved_nominal_modifiers(model) if any(r.get('contextKind')=='complete_english_noun_phrase' for r in reviews) else None
+    noun_heads=approved_noun_heads(model) if any(r.get('nounHeadProof') for r in reviews) else None
     by_form = defaultdict(list)
     for row in rows:
         by_form[row['surface'].casefold()].append(row)
     seen = set();counts = Counter()
     for review in reviews:
         article = articles[review['articleId']]
-        members = validate_review(review, article,predicates,modifiers,name_roles)
+        members = validate_review(review, article,predicates,modifiers,name_roles,noun_heads)
         token = review['articleId'],review['target'],review['interpretation']
         if token in seen:
             raise ValueError('Duplicate Wikipedia interpretation review')
@@ -354,6 +380,7 @@ def attach(model, rows, articles, reviews, corrections, name_roles=None):
             nameGenitiveConfirmed=review.get('nameGenitiveConfirmed',False),
             prefacedNameSubjectConfirmed=review.get('prefacedNameSubjectConfirmed',False),
             modifierProof=review.get('modifierProof'),
+            nounHeadProof=review.get('nounHeadProof'),
             namedClassifierConfirmed=review.get('namedClassifierConfirmed',False),
             counterpartNameProof=review.get('counterpartNameProof'),
             personalNameUnitRole=review.get('personalNameUnitRole'),
