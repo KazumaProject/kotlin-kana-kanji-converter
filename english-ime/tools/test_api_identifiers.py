@@ -7,6 +7,23 @@ import test_lexicon_pipeline as fixtures
 
 
 class PublicApiIdentifierTests(unittest.TestCase):
+    def test_firebase_keeps_android_namespaces_and_explicit_swift_module_labels(self):
+        index=api.FirebaseTypes();index.feed('<div class="devsite-nav-title-no-path"><span>FirebaseFeature</span></div>'
+            '<a href="/docs/reference/android/com/google/firebase/auth/FirebaseAuth">FirebaseAuth</a>'
+            '<a href="/docs/reference/swift/firebasefeature/api/reference/Classes/Feature/Nested">Nested</a>'
+            '<a href="/docs/reference/swift/firebasefeature/api/reference/Functions/run">run</a>'
+            '<a href="/docs/reference/android/com/google/firebase/auth/FirebaseAuth#method">method</a>'
+            '<a href="https://other.test/docs/reference/android/com/google/firebase/auth/Invented">Invented</a>')
+        records=list(index.records())
+        self.assertEqual({'com.google.firebase.auth.FirebaseAuth','FirebaseFeature.Feature.Nested'},{r[1] for r in records})
+        self.assertEqual({'FirebaseAuth','Feature.Nested'},{r[0] for r in records})
+
+    def test_swift_namespace_is_not_guessed_from_a_url_slug(self):
+        index=api.FirebaseTypes();index.feed('<a href="/docs/reference/swift/firebasefeature/api/reference/Classes/Feature">Feature</a>')
+        self.assertFalse(list(index.records()))
+        index.feed('<div class="devsite-nav-title-no-path">FirebaseFeature</div><div class="devsite-nav-title-no-path">FirebaseFEATURE</div>')
+        with self.assertRaises(ValueError):list(index.records())
+
     def test_pending_lowercase_input_keeps_complete_documented_type_and_explicit_case_mapping(self):
         model=pipeline.Lexicon(fixtures.SEED)
         rows=[dict(id='tsv:1',surface='fixtureview',reading='fixtureview',cost=700),

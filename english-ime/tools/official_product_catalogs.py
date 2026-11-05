@@ -17,6 +17,10 @@ from wiktionary_index import Index
 PINS={'google.html':'76a04ca2c7acc4abba30c78cde9364af50a5a1c5616fff942ea731bb075f2ce8',
  'jetbrains.html':'f87df6507af89a8ec9cfa762802ee29eaaf4c1e9c5ffffa3aa89dca75777b86f',
  'web-excerpts.txt':'d888e386356ba1d0876859402dbb2a7a1f80dc435c0c49ed1ded2e79c4900b84'}
+TECHNOLOGY_PINS={'google-cloud-products.html':'9e302c885832947d7fdc1daba5941a6ce6997c59a8df04afb4889888dc47c050',
+ 'apple-technologies.json':'17f68e7ff58bfadf3d60134502950199a7c62f9881f0b7c3cd22a0b2560d761c'}
+FIREBASE_PRODUCT_PINS={'firebase-products.html':'629f43ccb7f67ea910fd6de96f0688244434c10e812721e81ec38fe6e52f073c',
+ 'firebase-products-run.html':'d27a5253bbe0f51809753e5f5867e7f123428aedd9471a7eeeae686fab7fcf57'}
 APPLE={'Mac','MacBook Neo','MacBook Air','MacBook Pro','iMac','Mac mini','Mac Studio','Studio Display','Studio Display XDR',
  'Apple Creator Studio','Final Cut Pro','Pixelmator Pro','Logic Pro','Apple Books','Apple News','Apple Remote Desktop','Safari','QuickTime','Apple Podcasts','macOS','Apple Arcade','Find My',
  'iPad Pro','iPad Air','iPad','iPad mini','Apple Pencil','HomeKit','iPadOS','iCloud','Apple Pay','Apple Health','iOS','MagSafe','Apple Card','Apple CarPlay',
@@ -31,13 +35,15 @@ class Labels(HTMLParser):
         attrs=dict(attrs)
         if self.kind=='google' and tag=='p' and 'product-filter__card-description' in attrs.get('class','').split():self.active=tag;self.content=[]
         if self.kind=='jetbrains' and tag=='h3' and not self.stopped:self.active=tag;self.content=[]
+        if self.kind=='google_cloud' and tag=='div' and 'owa4Ee' in attrs.get('class','').split():self.active=tag;self.content=[]
+        if self.kind=='firebase' and tag=='div' and 'content__title' in attrs.get('class','').split():self.active=tag;self.content=[]
     def handle_data(self,data):
         if self.active:self.content.append(data)
     def handle_endtag(self,tag):
         if tag!=self.active:return
         label=' '.join(''.join(self.content).split())
         if self.kind=='jetbrains' and label=='Filters':self.stopped=True
-        elif label:self.records.append({'label':label,'selector':'p.product-filter__card-description' if self.kind=='google' else 'h3 before Filters'})
+        elif label:self.records.append({'label':label,'selector':{'google':'p.product-filter__card-description','google_cloud':'div.owa4Ee','firebase':'div.content__title','jetbrains':'h3 before Filters'}[self.kind]})
         self.active=None
 
 
@@ -67,6 +73,44 @@ def load(directory):
     return records
 
 
+def technology_records(cloud_html,apple):
+    parser=Labels('google_cloud');parser.feed(cloud_html)
+    records=[dict(r,sourceFile='google-cloud-products.html',url='https://cloud.google.com/products',
+        snapshotKind='raw_html',catalogKind='vendor_product_display_label') for r in parser.records]
+    if (apple.get('kind')!='technologies' or apple.get('metadata',{}).get('title')!='Technologies' or
+            apple.get('identifier',{}).get('url')!='doc://com.apple.welcome-experience-documentation/documentation/technologies'):
+        raise ValueError('Unexpected Apple technologies index')
+    for identifier,value in sorted(apple['references'].items()):
+        if value.get('kind')!='symbol' or value.get('role')!='collection' or value.get('type')!='topic':continue
+        path=value['url'];label=value['title']
+        if (identifier!=value['identifier'] or not re.fullmatch(r'/documentation/[A-Za-z0-9_-]+',path) or
+                not identifier.startswith('doc://com.apple.documentation/documentation/') or
+                identifier.rsplit('/',1)[-1].casefold()!=path.rsplit('/',1)[-1].casefold() or
+                not label or any(c in label for c in '\t\r\n')):
+            raise ValueError('Inconsistent complete Apple technology identity')
+        records.append(dict(label=label,sourceFile='apple-technologies.json',url='https://developer.apple.com'+path,
+            selector='references: symbol / collection / topic',snapshotKind='official_json',
+            catalogKind='documented_technology_collection',documentationIdentifier=identifier))
+    return [dict(r,snapshotSha256=TECHNOLOGY_PINS[r['sourceFile']]) for r in records]
+
+
+def load_technologies(directory):
+    for name,expected in TECHNOLOGY_PINS.items():
+        if pipeline.digest(directory/name)!=expected:raise ValueError('Changed official technology index: '+name)
+    return technology_records((directory/'google-cloud-products.html').read_text(),json.loads((directory/'apple-technologies.json').read_text()))
+
+
+def load_firebase_products(directory):
+    records=[]
+    for name,expected in FIREBASE_PRODUCT_PINS.items():
+        if pipeline.digest(directory/name)!=expected:raise ValueError('Changed Firebase product catalog: '+name)
+        parser=Labels('firebase');parser.feed((directory/name).read_text())
+        if not parser.records:raise ValueError('Missing Firebase product card titles')
+        url='https://firebase.google.com/products-build' if name=='firebase-products.html' else 'https://firebase.google.com/products-run'
+        records += [dict(r,sourceFile=name,snapshotSha256=expected,url=url,snapshotKind='raw_html',catalogKind='vendor_product_card_title') for r in parser.records]
+    return records
+
+
 def attach(model,rows,records):
     by_name=defaultdict(list);counts=Counter()
     for row in rows:by_name[row['surface'].casefold()].append(row)
@@ -75,7 +119,7 @@ def attach(model,rows,records):
         if ' ' in label:selected += [r for r in by_name[label.replace(' ','').casefold()] if r['id'].startswith('manual:')]
         if not selected:continue
         key='official-product-'+hashlib.sha256(json.dumps([record['url'],label]).encode()).hexdigest()[:24]
-        proof={'source':'official_product_label','url':record['url'],'snapshotSha256':PINS[record['sourceFile']],
+        proof={'source':'official_product_label','url':record['url'],'snapshotSha256':record.get('snapshotSha256') or PINS[record['sourceFile']],
             'labelEvidence':record,'approved':True,'preferredVendorCaseClaimed':False,
             'scope':'factual product display label in vendor catalog; exact labels and existing manual case/space-free variants only; no artwork, marketing prose, current availability, corpus-intent or inflection claim'}
         members={'noun','noun_proper','name_product','domain_technology'}
@@ -87,7 +131,20 @@ def attach(model,rows,records):
 
 
 def extend(args):
-    records=load(args.sources);model,rows,sources,notices,pending=extension.load_base(args.base,args.seed);counts=attach(model,rows,records)
+    records=load(args.sources)
+    if args.technologies:records+=load_technologies(args.technologies)
+    if args.firebase_products:records+=load_firebase_products(args.firebase_products)
+    model,rows,sources,notices,pending=extension.load_base(args.base,args.seed);counts=attach(model,rows,records)
+    if args.technologies:
+        sources['officialTechnologyDisplayLabels']={'files':TECHNOLOGY_PINS,
+            'policy':'complete Google Cloud product display labels and Apple documented technology collection titles only; source fields and identities retained, no URL-slug name inference, page prose, artwork, implementation, current availability or preferred-case claim'}
+        notices['OFFICIAL-TECHNOLOGY-LABELS-ATTRIBUTION.txt']=('Factual display labels: Google Cloud, https://cloud.google.com/products ; Apple Developer Technologies, https://developer.apple.com/documentation/technologies ; JSON index https://developer.apple.com/tutorials/data/documentation/technologies.json .\n'
+            'Apple source copyright: Copyright 2026 Apple Inc. All rights reserved. Terms: https://www.apple.com/legal/internet-services/terms/site.html . Google terms: https://cloud.google.com/terms .\n'
+            'Only matching factual product/framework collection labels, complete documentation identifiers, source selectors and citations are extracted. No documentation prose, abstracts, marketing descriptions, code, artwork or logos redistributed. No trademark/artwork permission, installed capability, current availability, preferred spelling or inflection is implied. Existing original manual case/space variants remain separately identified.\n').encode()
+    if args.firebase_products:
+        sources['firebaseProductDisplayLabels']={'files':FIREBASE_PRODUCT_PINS,'policy':'complete printed product card titles only; original manual case/space-free variants retained, no label invented by prefixing the vendor name or deriving a product name from a URL slug'}
+        notices['FIREBASE-PRODUCT-LABELS-ATTRIBUTION.txt']=('Google/Firebase contributors. https://firebase.google.com/products-build ; https://firebase.google.com/products-run\n'
+            'Extracted factual complete printed product card titles and source citations only, retaining source hashes and original manual variants. No marketing prose, artwork, code or logos redistributed; no inferred vendor-prefixed label, current availability, preferred case or inflection. No license to redistribute marketing page content or artwork is asserted.\n').encode()
     prior=args.base/'reviewed-overrides.tsv';reviews=pipeline.read_table(prior,'decisions') if prior.is_file() else []
     reviews,reopened=resolve_pending.revalidate_machine_reviews(model,reviews,pending)
     states=list(map(json.loads,(args.base/'status.jsonl').open()));selected=[r for r,s in zip(rows,states) if s['decision']=='pending' or r['id'] in reopened]
@@ -108,4 +165,6 @@ def extend(args):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     for name in ['base','seed','sources','index','out']:parser.add_argument('--'+name,type=Path,required=True)
+    parser.add_argument('--technologies',type=Path,help='Optional pinned complete official product/framework indexes')
+    parser.add_argument('--firebase-products',type=Path,help='Optional pinned Firebase Build/Run product card indexes')
     extend(parser.parse_args())

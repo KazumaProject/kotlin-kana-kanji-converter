@@ -81,10 +81,23 @@ def matches_title(target,title):
 
 SUBJECT_PREDICATES=('is','are','was','were','refers','means','became','announced','launched','introduced','joined',
     'won','plays','played','signed','performed','made','released','wrote','designed','developed','produced',
-    'supports','offers','provides','had','began','did','received','moved','would')
+    'supports','offers','provides','had','has','have','began','did','received','moved','would')
 
 
-def validate_review(review, article):
+def approved_finite_predicates(model):
+    """Return independently approved English past/third-person finite forms."""
+    result=defaultdict(set)
+    for key,form in model.forms.items():
+        members=model.members[key];surface=form['surface']
+        if (not re.fullmatch('[a-z]+',surface) or not members&{'verb_past','verb_present_3sg'} or
+                'noun_proper' in members or any(c.startswith(('name_','identifier_','orthography_')) for c in members) or
+                key[0] not in model.approved.get(surface,())):continue
+        if any(e['source'] in {'curated_seed','wiktionary','esdb','ngsl_list'} and e.get('approved',True)
+                for e in model.evidence[key]):result[surface].add(key[0])
+    return result
+
+
+def validate_review(review, article, predicates=None):
     if (review['reviewer'] != 'implementation_agent' or not review['rationale'].strip() or
             not review['interpretation'].strip() or review['decision'] not in KINDS):
         raise ValueError('Missing explicit Wikipedia interpretation review')
@@ -105,10 +118,16 @@ def validate_review(review, article):
     token=re.escape(target)+r"(?![\w'’/-]|\.[\w])"
     if context=='standalone_sentence_subject':
         before=article['text'][:start]
+        match=re.match(r'(?:(?:The|the|A|a|An|an) |(?:The|the) name )?["“]?'+token+r'["”]?\s+([a-z]+)\b',passage)
         if (start and not re.search(r'[.!?]\s+$|\n\s*$',before) or
                 re.search(r'\b(?:[A-Za-z]|subsp|ssp|var|sp|St|Dr|Mr|Mrs|Ms|Prof|Rev|Sr|Jr|Mt)\.\s*$',before) or
-                not re.match(r'(?:(?:The|the|A|a|An|an) |(?:The|the) name )?["“]?'+token+r'["”]?\s+(?:'+'|'.join(SUBJECT_PREDICATES)+r')\b',passage)):
+                not match):
             raise ValueError('A standalone subject needs its real sentence boundary and complete literal label')
+        if match[1] not in SUBJECT_PREDICATES:
+            proof=review.get('predicateProof') or {}
+            if (not isinstance(proof,dict) or predicates is None or proof.get('surface')!=match[1] or
+                    proof.get('lexemeId') not in predicates.get(match[1],())):
+                raise ValueError('A new finite predicate requires independently approved English lexical evidence')
     elif context=='explicit_complete_alias':
         if (start and article['text'][start-1].isalnum() or
                 not re.match(r'(?:known(?: simply)? as|called|named)\s+["“]?'+token+r'["”]?(?:[.,;:)]|\s+(?:is|are|was|were)\b)',passage)):
@@ -125,13 +144,14 @@ def validate_review(review, article):
 
 
 def attach(model, rows, articles, reviews, corrections):
+    predicates=approved_finite_predicates(model) if any(r.get('predicateProof') for r in reviews) else None
     by_form = defaultdict(list)
     for row in rows:
         by_form[row['surface'].casefold()].append(row)
     seen = set();counts = Counter()
     for review in reviews:
         article = articles[review['articleId']]
-        members = validate_review(review, article)
+        members = validate_review(review, article,predicates)
         token = review['articleId'],review['target'],review['interpretation']
         if token in seen:
             raise ValueError('Duplicate Wikipedia interpretation review')
@@ -155,6 +175,7 @@ def attach(model, rows, articles, reviews, corrections):
             rowGroup=article['rowGroup'], rowIndexInGroup=article['rowIndexInGroup'],
             declaredSourceLfsSha256=article['declaredSourceLfsSha256'], sourceWholeFileSha256IndependentlyVerified=False,
             reviewedPassage=review['witness'], contextKind=review['contextKind'], interpretation=review['interpretation'],
+            predicateProof=review.get('predicateProof'),
             reviewedTitleQualifier=review.get('titleQualifier'),
             rationale=review['rationale'], preferredCaseClaimed=False,
             englishLexicalRoleConfirmed=review.get('englishLexicalRoleConfirmed',False),

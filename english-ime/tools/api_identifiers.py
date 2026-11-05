@@ -25,6 +25,7 @@ PYTHON_PINS = {'objects.inv':'84e65e567815e09d47444aca1d160f6ac771fa28096874f3ec
 KOTLIN_PINS = {'androidx-kotlin-classes.html':'788cee0d34a2f2ede4135db93352de156d9b86094853cb82b3062e9801160842',
     'kotlinx-coroutines-pages.json':'3c8ffab3f81c28df192450582a9d11fdeaa410e1281465ec079702026a33b76b',
     'kotlinx-coroutines-LICENSE.txt':'b1febe6399dffb10d19d35e7663ab16300c93cb0476a94115df1cc0097a8ffd8'}
+FIREBASE_PINS={'firebase-android-packages.html':'5c92b63c1cd83b93515d76a0f9501ba24f2001ee4463384f37d50ed0d6fe5669'}
 
 
 class AndroidTypes(HTMLParser):
@@ -37,6 +38,38 @@ class AndroidTypes(HTMLParser):
         if target.scheme not in {'','https'} or target.netloc and target.netloc!='developer.android.com' or target.fragment or target.query:return
         match=re.fullmatch(r'/reference/(?:kotlin/)?((?:android|androidx|java|javax)/(?:[a-z][A-Za-z0-9_]*/)*([A-Z][A-Za-z0-9_]*(?:\.[A-Z][A-Za-z0-9_]*)*))',target.path)
         if match:self.types.add((match[2],match[1].replace('/','.'),'https://developer.android.com'+target.path))
+
+
+class FirebaseTypes(HTMLParser):
+    def __init__(self):
+        super().__init__();self.types=set();self.links=[];self.modules=defaultdict(set);self.heading=None
+
+    def handle_starttag(self,tag,attrs):
+        attrs=dict(attrs)
+        if tag=='div' and 'devsite-nav-title-no-path' in attrs.get('class','').split():self.heading=[]
+        if tag=='a':self.links.append(attrs.get('href',''))
+
+    def handle_data(self,data):
+        if self.heading is not None:self.heading.append(data)
+
+    def handle_endtag(self,tag):
+        if tag=='div' and self.heading is not None:
+            label=''.join(self.heading).strip();self.heading=None
+            if re.fullmatch('Firebase[A-Z][A-Za-z0-9]*',label):self.modules[label.lower()].add(label)
+
+    def records(self):
+        for href in self.links:
+            target=urlsplit(href)
+            if target.scheme not in {'','https'} or target.netloc and target.netloc!='firebase.google.com' or target.query or target.fragment:continue
+            android=re.fullmatch(r'/docs/reference/android/((?:com/google)/(?:[a-z][A-Za-z0-9_]*/)*([A-Z][A-Za-z0-9_]*(?:\.[A-Z][A-Za-z0-9_]*)*))',target.path)
+            if android:
+                yield android[2],android[1].replace('/','.'),'https://firebase.google.com'+target.path,'firebase_android_public_types'
+            swift=re.fullmatch(r'/docs/reference/swift/(firebase[a-z0-9]+)/api/reference/Classes/([A-Z][A-Za-z0-9_]*(?:/[A-Z][A-Za-z0-9_]*)*)',target.path)
+            if swift and self.modules.get(swift[1]):
+                modules=self.modules[swift[1]]
+                if len(modules)!=1:raise ValueError('Ambiguous explicit Swift module label')
+                name=swift[2].replace('/','.');qualified=next(iter(modules))+'.'+name
+                yield name,qualified,'https://firebase.google.com'+target.path,'firebase_swift_public_types'
 
 
 def coroutine_types(raw):
@@ -114,6 +147,9 @@ def extend(args):
         index=AndroidTypes();index.feed((args.kotlin/'androidx-kotlin-classes.html').read_text())
         records += [(*record,'androidx_kotlin_public_types') for record in index.types]
         records += [(*record,'kotlinx_coroutines_public_types') for record in coroutine_types((args.kotlin/'kotlinx-coroutines-pages.json').read_text())]
+    if args.firebase:
+        load(args.firebase,FIREBASE_PINS)
+        index=FirebaseTypes();index.feed((args.firebase/'firebase-android-packages.html').read_text());records+=list(index.records())
     model,rows,sources,notices,pending=extension.load_base(args.base,args.seed)
     states=list(map(json.loads,(args.base/'status.jsonl').open()));ids={r['id'] for r in states if r['decision']=='pending'}
     prior=args.base/'surface-corrections.tsv';corrections=pipeline.read_table(prior,'corrections') if prior.is_file() else []
@@ -130,6 +166,12 @@ def extend(args):
         notices['KOTLINX-COROUTINES-LICENSE.txt']=(args.kotlin/'kotlinx-coroutines-LICENSE.txt').read_bytes()
     elif prior_kotlin:
         sources['publicApiIdentifiers']['kotlin']=prior_kotlin
+    if args.firebase:
+        sources['firebasePublicApiIdentifiers']={'files':FIREBASE_PINS,
+            'policy':'whole Android types or whole Swift class paths qualified by explicitly printed module labels in the pinned SDK reference navigation; no namespace case guessed from URL slugs, leaf extraction, functions or lexical POS inference'}
+        notices['FIREBASE-PUBLIC-API-NOTICE.txt']=('Firebase SDK contributors, Google. https://firebase.google.com/docs/reference/android/com/google/firebase/package-summary\n'
+            'https://developers.google.com/terms/site-policies\n'
+            'Identifier facts only from the Android and Swift type navigation: preserve complete type/class paths, explicitly printed Swift modules, qualified identities and documentation URLs. No prose, implementation or code samples redistributed. Reference content is CC BY 4.0 and code samples Apache 2.0 unless otherwise noted; existing full notices retained. No installed dependency, English POS, current availability or runtime feature implied.\n').encode()
     notices['PUBLIC-API-IDENTIFIERS-NOTICE.txt']=('Public API identifier facts from the Android Open Source Project/AndroidX contributors and Python Software Foundation/contributors.\n'
         'https://developer.android.com/reference/classes\nhttps://developer.android.com/reference/androidx/classes\nhttps://developer.android.com/license\n'
         'https://docs.python.org/3.14/objects.inv\nhttps://docs.python.org/3.14/license.html\n'
@@ -147,4 +189,5 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     for name in ['base','seed','android','python','out']:parser.add_argument('--'+name,type=Path,required=True)
     parser.add_argument('--kotlin',type=Path,help='Optional pinned Kotlin public type indexes and notice')
+    parser.add_argument('--firebase',type=Path,help='Optional pinned Firebase Android/Swift type navigation')
     extend(parser.parse_args())

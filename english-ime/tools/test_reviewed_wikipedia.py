@@ -25,6 +25,20 @@ def review(value):
 
 
 class WikipediaReviewTests(unittest.TestCase):
+    def test_extra_finite_predicate_needs_verified_english_verb_evidence(self):
+        model=pipeline.Lexicon(fixtures.SEED)
+        model.add('fixture-said','say','say',{'verb','verb_base'},{'source':'curated_seed','url':'https://example.org/say'},approved=True)
+        model.add('fixture-said','say','said',{'verb','verb_past'},{'source':'curated_seed','url':'https://example.org/say'},approved=True)
+        wiki.extension.ensure_categories(model,{'identifier_programming_api'})
+        model.add('fixture-api','Said','Said',{'identifier_programming_api'},{'source':'public_api_identifier','url':'https://example.org/api'},approved=True)
+        value=article('Other heading','Fixture said it was ready.');r=review(value)
+        r.update(target='Fixture',contextKind='standalone_sentence_subject',predicateProof=dict(surface='said',lexemeId='fixture-said'))
+        with self.assertRaises(ValueError):wiki.validate_review(r,value)
+        predicates=wiki.approved_finite_predicates(model);self.assertNotIn('Said',predicates)
+        wiki.validate_review(r,value,predicates)
+        for proof in [None,'not lexical evidence',dict(surface='said',lexemeId='fixture-api'),dict(surface='invented',lexemeId='fixture-said')]:
+            with self.assertRaises(ValueError):wiki.validate_review(dict(r,predicateProof=proof),value,predicates)
+
     def test_independent_sentence_usage_cannot_clip_a_long_name_or_taxon_component(self):
         value=article('A different heading','The Fixture is a software product.');r=review(value)
         r.update(target='Fixture',contextKind='standalone_sentence_subject')
@@ -35,7 +49,7 @@ class WikipediaReviewTests(unittest.TestCase):
             with self.assertRaises(ValueError):wiki.validate_review(test,value)
 
     def test_reviewed_finite_predicates_keep_sentence_and_whole_label_guards(self):
-        for predicate in ['had recently won','began instruction','did lease land','received royalties','moved home','would return']:
+        for predicate in ['had recently won','has returned','have returned','began instruction','did lease land','received royalties','moved home','would return']:
             value=article('Another heading','Fixture '+predicate+'.');r=review(value)
             r.update(target='Fixture',contextKind='standalone_sentence_subject')
             wiki.validate_review(r,value)
