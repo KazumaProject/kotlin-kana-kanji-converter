@@ -65,6 +65,15 @@ and hashes are recorded in manifest.json. Preserve these notices and attribution
 """
 
 
+def category_surface_counts(model):
+    """Count distinct surfaces per category across all lexical identities."""
+    surfaces = defaultdict(set)
+    for (_, surface), categories in model.members.items():
+        for category in categories:
+            surfaces[category].add(surface)
+    return {name: len(surfaces[name]) for name in sorted(model.names)}
+
+
 def jsonl(path, rows):
     with path.open("w", encoding="utf-8", newline="\n") as stream:
         for row in rows:
@@ -580,8 +589,7 @@ def publish(model, rows, inventory_path, output, sources, notice_contents, pendi
             status[index].update(decision=override["decision"], reason=override["reason"])
         sources["reviewedDecisionsSha256"] = digest(reviewed_decisions)
     counts = Counter(row["decision"] for row in decisions)
-    categories = {name: len({surface for (identifier, surface), values in model.members.items() if name in values})
-                  for name in sorted(model.names)}
+    categories = category_surface_counts(model)
     summary = {"inputRows": len(rows), "inputSurfaces": len(wanted),
                "classifiedRows": sum(bool(row["lexeme_ids"]) for row in status),
                "classifiedInputSurfaces": len(wanted & set(by_surface)),
@@ -702,8 +710,7 @@ def verify(directory):
     classified = sum(bool(row["lexeme_ids"]) for row in states)
     if fallback != [row for row, state in zip(rows, states) if state["decision"] == "pending"]:
         raise ValueError("Unreviewed fallback rows were lost, reordered or changed")
-    category_counts = {name: len({surface for (_, surface), values in model.members.items() if name in values})
-                       for name in sorted(model.names)}
+    category_counts = category_surface_counts(model)
     if (summary["inputRows"] != len(rows) or summary["includedRows"] != included or
             summary.get("surfaceCorrections", 0) != len(corrections) or
             summary.get("caseCandidateRows", 0) != sum(len(values) > 1 for values in targets.values()) or

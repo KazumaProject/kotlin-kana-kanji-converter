@@ -49,3 +49,33 @@ The build writes the four binary assets and a separate `grammar` directory. Rela
 Use `classification.py prepare --inventory INVENTORY --allowlist IDS --categories CATEGORIES --out BATCHES` to prepare stable chunks from an explicitly reviewed public input allowlist. The categories TSV is the named dictionary catalog. Each response JSONL uses the matching batch filename and has `id`, `surface`, `categories`, `batchSha256` and `categoriesSha256` fields on every row. Use `classification.py verify --batches BATCHES --responses RESPONSES --out PROPOSALS` to validate finished chunks and report which are still missing. Proposals are separate from inclusion decisions. The tooling operates on local files. For an authorized live Gemini run, check the existing free project's billing status, model, remaining limits and data terms before any request.
 
 The repository contains the grammar seed and relation examples. A completed full-source decision ledger is required to build the reviewed dictionary.
+
+
+### Category-count performance check
+
+`lexicon_pipeline.category_surface_counts` counts distinct surfaces across lexical
+identities in one membership pass. Sorted category order, empty definitions and
+homograph de-duplication retain the previous semantics; it does not cache results.
+
+For an existing public materialization, compare a pinned baseline source with the
+current implementation using the same interpreter:
+
+```sh
+git show f18eb132ffa5635200243d169647b0ebf60ab7ae:english-ime/tools/lexicon_pipeline.py > /tmp/lexicon_pipeline_baseline.py
+python3 english-ime/tools/benchmark_category_counts.py \
+  --baseline /tmp/lexicon_pipeline_baseline.py \
+  --candidate english-ime/tools/lexicon_pipeline.py \
+  --directory /path/to/public-materialization \
+  --seed english-ime/data/grammar --tools english-ime/tools \
+  --out /tmp/category-count-benchmark
+```
+
+The output directory must be new. The benchmark alternates sequential before/after
+runs, checks ordered category counts, and compares every generated file hash. Its
+end-to-end scope is a no-op extension: base verification, evidence reload,
+publication and staged verification. It excludes external-source reimport and
+JVM/Android readers. On 421,132 forms / 124 categories, seven local repetitions
+and three end-to-end repetitions per mode measured medians of 3.995 s vs 0.177 s
+for counting, and 72.62 s vs 60.38 s for the extension. The category calculation
+was observed three times per extension. These are host Python measurements, not
+smartphone timings. Run again for your interpreter and data.

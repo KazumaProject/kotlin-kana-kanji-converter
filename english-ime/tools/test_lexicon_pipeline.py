@@ -16,6 +16,50 @@ import lexicon_pipeline as pipeline
 SEED = Path(__file__).resolve().parents[1] / "data" / "grammar"
 
 
+class CategorySurfaceCountTests(unittest.TestCase):
+    def model(self, names, members):
+        from types import SimpleNamespace
+        return SimpleNamespace(names=set(names), members=members)
+
+    def test_distinct_surfaces_preserve_homographs_case_and_sorted_empty_categories(self):
+        model = self.model(['verb', 'noun', 'empty', 'proper'], {
+            ('noun-1', 'saw'): {'noun'}, ('verb-1', 'saw'): {'verb'},
+            ('noun-2', 'saw'): {'noun', 'proper'}, ('name-1', 'Saw'): {'proper'},
+            ('unicode', 'é'): {'noun', 'outside'}, ('unassigned', 'unused'): set(),
+        })
+        self.assertEqual([('empty', 0), ('noun', 2), ('proper', 2), ('verb', 1)],
+                         list(pipeline.category_surface_counts(model).items()))
+
+    def test_recomputes_after_membership_changes_without_mutating_or_caching(self):
+        model = self.model(['noun', 'verb'], {('n', 'cut'): {'noun'}})
+        before = pipeline.category_surface_counts(model)
+        model.members['v', 'cut'] = {'verb'}
+        model.members['n2', 'cut'] = {'noun'}
+        self.assertEqual({'noun': 1, 'verb': 1}, pipeline.category_surface_counts(model))
+        self.assertEqual({'noun': 1, 'verb': 0}, before)
+        self.assertEqual(3, len(model.members))
+        self.assertEqual({'noun'}, model.members['n', 'cut'])
+
+    def test_empty_catalog_and_unused_definitions(self):
+        self.assertEqual({}, pipeline.category_surface_counts(self.model([], {})))
+        self.assertEqual({'empty': 0}, pipeline.category_surface_counts(self.model(['empty'], {})))
+
+    def test_matches_legacy_semantics_across_deterministic_overlapping_catalogs(self):
+        import random
+        randomizer = random.Random(5072)
+        for _ in range(30):
+            names = {f'category-{i}' for i in range(randomizer.randrange(1, 15))}
+            choices = sorted(names | {'unknown'})
+            members = {(f'lexeme-{i}', f'surface-{randomizer.randrange(20)}'):
+                       set(randomizer.sample(choices, randomizer.randrange(len(choices) + 1)))
+                       for i in range(150)}
+            model = self.model(names, members)
+            expected = {name: len({surface for (_, surface), values in members.items() if name in values})
+                        for name in sorted(names)}
+            self.assertEqual(list(expected.items()), list(pipeline.category_surface_counts(model).items()))
+
+
+
 class PipelineTests(unittest.TestCase):
     def test_terminal_bang_transcription_keeps_letters_and_rejects_other_new_marks(self):
         self.assertEqual('fixture',pipeline.keyboard_reading('Fixture!'))
