@@ -1,10 +1,39 @@
 import unittest
+import hashlib,json,tempfile
+from pathlib import Path
+from unittest.mock import patch
 import explicit_misspellings as typos
 import lexicon_pipeline as pipeline
 import test_lexicon_pipeline as fixtures
 
 
 class ExplicitMisspellingTests(unittest.TestCase):
+    def test_whole_dictionary_requires_individual_unchanged_source_line_review(self):
+        row=dict(id='tsv:1',surface='typofixture',reading='typofixture',cost=700)
+        review=dict(row,decision='exclude_typo',sourceMisspelling='typofixture',sourceCorrection='correctionfixture, otherfixture,',
+            line=1,reviewer='implementation_agent',rationale='Explicit spelling label with an independently verified correction.')
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);(root/'dictionary.txt').write_text('typofixture->correctionfixture, otherfixture,\nunreviewed->correctionfixture\n')
+            (root/'README.rst').write_text('Fixture license statement.');(root/'CC-BY-SA-3.0.txt').write_text('Fixture license.')
+            pins={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in root.iterdir()}
+            with patch.object(typos,'CODESPELL_PINS',pins):
+                pairs,proof=typos.reviewed_codespell_pairs(root,[row],[review]);audit=[]
+                self.assertEqual({'typofixture'},set(pairs));self.assertEqual({'correctionfixture','otherfixture'},pairs['typofixture'])
+                decisions=typos.exclusions(self.model(),[row],pairs,{},audit,proof)
+                self.assertEqual(1,len(decisions));self.assertIn('#L1',decisions[0]['evidence'])
+                self.assertFalse(audit[0]['evidence']['universalNonwordClaimed'])
+                for change in [dict(cost=701),dict(line=2),dict(sourceCorrection='otherfixture'),dict(decision='include'),dict(reviewer='human')]:
+                    with self.assertRaises(ValueError):typos.reviewed_codespell_pairs(root,[row],[dict(review,**change)])
+                (root/'dictionary.txt').write_text('changed->correctionfixture\n')
+                with self.assertRaises(ValueError):typos.reviewed_codespell_pairs(root,[row],[review])
+
+    def test_punctuated_complete_name_blocks_a_spelling_exclusion_without_faking_a_raw_reading(self):
+        model=self.model();model.add('named','Typofixture!','Typofixture!',{'noun','noun_proper','name_person'},
+            {'source':'reviewed_wikipedia','url':'https://example.org/person'},approved=True)
+        row=dict(id='tsv:1',surface='typofixture',reading='typofixture',cost=700)
+        self.assertEqual([],typos.exclusions(model,[row],{'typofixture':{'correctionfixture'}},{},[]))
+        self.assertFalse(model.approved.get('typofixture'))
+
     def test_ascii_input_match_retains_exact_source_label_and_reopenable_guards(self):
         source={'Typofixture':{'correctionfixture'}}
         row=dict(id='tsv:1',surface='typofixture',reading='typofixture',cost=42)
