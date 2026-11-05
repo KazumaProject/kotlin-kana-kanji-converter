@@ -17,7 +17,7 @@ SEED = fixtures.SEED
 
 class ExtensionTests(unittest.TestCase):
     def test_reviewed_command_and_function_approvals_survive_reload_without_trusting_unknown_sources(self):
-        kinds=['reviewed_official_command_example','reviewed_formal_command_prefix','reviewed_public_api_function']
+        kinds=['reviewed_official_command_example','reviewed_formal_command_prefix','reviewed_public_api_function','reviewed_tatoeba_interjection']
         cases=[(kind,{},True) for kind in kinds]+[(kind,{'approved':False},False) for kind in kinds]+[(kind,{'requiresFullNamedContext':True},False) for kind in kinds]+[('unreviewed_unknown_source',{},False)]
         added=[]
         for number,(kind,flags,expected) in enumerate(cases):
@@ -27,7 +27,7 @@ class ExtensionTests(unittest.TestCase):
         model,rows,sources,notices,pending=extension.load_base(self.fixture.args.out,SEED)
         extension.ensure_categories(model,{'identifier_command_prefix','identifier_programming_api'})
         for row,kind,flags,expected in added:
-            category='identifier_programming_api' if kind=='reviewed_public_api_function' else 'identifier_command_prefix'
+            category='identifier_programming_api' if kind=='reviewed_public_api_function' else 'interjection' if kind=='reviewed_tatoeba_interjection' else 'identifier_command_prefix'
             proof=dict(source=kind,url='https://example.org/explicit-review',approved=True,**{k:v for k,v in flags.items() if k!='approved'})
             if 'approved' in flags:proof['approved']=flags['approved']
             model.add('fixture-'+row['id'],row['surface'],row['surface'],{category},proof,approved=expected or kind=='unreviewed_unknown_source')
