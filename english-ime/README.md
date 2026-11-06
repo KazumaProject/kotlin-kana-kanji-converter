@@ -91,6 +91,29 @@ Grammar ranks candidates available for the typed reading. Exact input such as
 `he take` keeps the typed verb rather than replacing it with a different
 inflection.
 
+## Add the reviewed practical vocabulary
+
+To include the practical vocabulary for everyday writing, work, technology
+and travel, generate the bundle with the supplement enabled.
+
+```sh
+python3 -B english-ime/tools/replay_source.py build \
+  --supplement english-ime/data/supplement --out /tmp/reviewed-english-extended
+./gradlew :english-ime:run --quiet --args='convert --assets /tmp/reviewed-english-extended --text twofactorauthentication --format json'
+```
+
+The supplement contains only reviewed forms with source identifiers. Joined
+and spaced readings are derived from the written form. Related inflections
+share a lexeme when their sources establish that relationship. Base readings,
+candidates, costs, notices, and original decisions are preserved. The new
+source notices and supplement manifest accompany the extended output. The
+original build command without the option still reproduces the base bundle.
+
+Use the same installed CLI to compare the two asset directories. The
+`:english-ime:verifySupplementAssets` task accepts `-PenglishBaseAssets`
+and `-PenglishExtendedAssets` and compares every decoded reading, candidate and
+original cost, plus each new lexical form and its categories.
+
 ## Legacy compatibility
 
 ```sh

@@ -112,6 +112,28 @@ class ReplayContractTest(unittest.TestCase):
         self.assertEqual((self.root / 'unpacked/manifest.json').read_bytes(),
                          (self.bundle / 'manifest.json').read_bytes())
 
+    def test_supplement_is_pinned_to_base_and_can_only_replace_its_payloads(self):
+        base = self.bundle / 'manifest.json'
+        directory = self.root / 'supplement'
+        directory.mkdir()
+        manifest = dict(kind='reviewed-english-supplement-v1', schemaVersion=1,
+                        baseManifestSha256=replay.sha(base),
+                        files={'entries.tsv': '1' * 64, 'notices/SOURCE.txt': '2' * 64},
+                        expectedOutputs={name: '3' * 64 for name in
+                                         replay.SUPPLEMENT_OUTPUTS | {'grammar/notices/SOURCE.txt'}})
+        path = directory / 'manifest.json'
+        path.write_text(json.dumps(manifest))
+        self.assertEqual(replay.supplement_outputs(directory, base), manifest['expectedOutputs'])
+        manifest['expectedOutputs']['surface-corrections.tsv'] = '4' * 64
+        path.write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(ValueError, 'Invalid supplement output hashes'):
+            replay.supplement_outputs(directory, base)
+        del manifest['expectedOutputs']['surface-corrections.tsv']
+        manifest['baseManifestSha256'] = '5' * 64
+        path.write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(ValueError, 'Invalid supplement or base manifest'):
+            replay.supplement_outputs(directory, base)
+
     def test_pending_guard(self):
         self.manifest['review'].update(complete=False, pendingRows=1, includedRows=3)
         self.update_archive_contract()

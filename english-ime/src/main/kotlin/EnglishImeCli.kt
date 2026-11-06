@@ -51,7 +51,7 @@ fun main(args: Array<String>) {
             exportInventory(File(options.optional("--source") ?: DEFAULT_SOURCE), File(options.required("--out")))
         }
         "build-reviewed" -> {
-            options.allow("--source", "--decisions", "--lexicon", "--relations", "--out", "--corrections", "--notices")
+            options.allow("--source", "--decisions", "--lexicon", "--relations", "--out", "--corrections", "--notices", "--supplement")
             buildReviewedDictionary(
                 File(options.optional("--source") ?: DEFAULT_SOURCE),
                 File(options.required("--decisions")),
@@ -60,6 +60,7 @@ fun main(args: Array<String>) {
                 File(options.required("--out")),
                 options.optional("--corrections")?.let(::File),
                 options.optional("--notices")?.let(::File),
+                options.optional("--supplement")?.let(::File),
             )
         }
         else -> error("Usage: export-inventory | build-reviewed | build-legacy [--source ZIP] --out DIR | evaluate --text TEXT --candidate WORD [--format text|json]" +

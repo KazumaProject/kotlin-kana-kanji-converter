@@ -222,6 +222,18 @@ class LOUDS {
         return search(2, s.toCharArray(), 0)
     }
 
+    internal fun getNodeIndex(surface: String, index: SuccinctBitVector): Int {
+        var first = 2
+        for ((offset, letter) in surface.withIndex()) {
+            var node = first
+            while (LBS[node] && labels[index.rank1(node)] != letter) node++
+            if (!LBS[node]) return -1
+            if (offset == surface.lastIndex) return node
+            first = index.select0(index.rank1(node)) + 1
+        }
+        return -1
+    }
+
     private fun search(index: Int, chars: CharArray, wordOffset: Int): Int {
         var index2 = index
         var wordOffset2 = wordOffset

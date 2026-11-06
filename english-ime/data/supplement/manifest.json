@@ -1,0 +1,68 @@
+{
+  "baseManifestSha256": "3bc919f0deecd9142dfa8ee5059193de22dc553ea467f82a981e3b21b28ad1aa",
+  "expectedOutputs": {
+    "grammar/bundle.properties": "8d7948dba98af2eb07b3df8abc2d1ad60f8a245dbbb28a10bc74e2b88b9d2a50",
+    "grammar/categories.ecat": "443f284da4af693528ef51c6f560ef162851090161598e98133ae5abf77c3dc5",
+    "grammar/forms.tsv": "91c2da0d0484fc8dadbb7b38c0f7d525e68cb820cf900958f2c462133887b45b",
+    "grammar/memberships.tsv": "54a0ba39ecad83c26d9dc7fd21c8d09627ae7b85d2e45ba76e1e361f1e35bd2a",
+    "grammar/notices/CMUDICT-LICENSE.txt": "bd4ce8e44170a5f9f481310ca85c51de3c4f851a65e679b40e603b143bd3542a",
+    "grammar/notices/PRACTICAL-ENGLISH-SOURCES.txt": "1f52e7d3b1e88a85aae0c1f56baec58f4f7d6f13f5fa2c49f4bbf342f46a140d",
+    "qwerty_glide_index.dat": "54a332d4bbac08f58481b86ed8a37cc6a76957d219ab0e4687a5c46305cb7ee3",
+    "reading.dat": "d8aa6a09e1f51deb9bed30bc73cb86a6fb655294838b7d9aa4413f25be3c92a5",
+    "token.dat": "c7c6f213b995d68cb6abf9416dd20e261262b6cfd7e67e48d6ea5273684bc7e6",
+    "word.dat": "6008c66d95f74c215b2c3bd0a2d124d60323cdfeedc66abb3e8d2364883dc52e"
+  },
+  "files": {
+    "entries.tsv": "fce8a11125f62a2ba02ddc5033f908064c89cab86d1bc7d07e4569b85c67a158",
+    "notices/CMUDICT-LICENSE.txt": "bd4ce8e44170a5f9f481310ca85c51de3c4f851a65e679b40e603b143bd3542a",
+    "notices/PRACTICAL-ENGLISH-SOURCES.txt": "1f52e7d3b1e88a85aae0c1f56baec58f4f7d6f13f5fa2c49f4bbf342f46a140d"
+  },
+  "kind": "reviewed-english-supplement-v1",
+  "schemaVersion": 1,
+  "sources": {
+    "bsl-stats.csv": {
+      "bytes": 59643,
+      "sha256": "45055265eb4e74c65f5d26edabbc1a0da38c45bbb924cd9bd01fd391b74ff157",
+      "url": "https://www.newgeneralservicelist.com/s/BSL_120_stats.csv"
+    },
+    "bsl.csv": {
+      "bytes": 52302,
+      "sha256": "c29d181e7916250d21b5c41d63bdcfa67c992f66ae1dbaa207db82728f16d54d",
+      "url": "https://www.newgeneralservicelist.com/s/BSL_120_lemmatized_for_research.csv"
+    },
+    "cmudict.dict": {
+      "bytes": 3618488,
+      "sha256": "81917843c7f44ce2b094ac63873c2c7a4cf802040792c455ba3ca406891c3d22",
+      "url": "https://raw.githubusercontent.com/cmusphinx/cmudict/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict"
+    },
+    "esdb": {
+      "databaseSha256": "83dc3c111e573667e7c12b607bb5e2fa5596fa452ecdc3123b3b12e0e0725140",
+      "recipe": "combine.py create-db --raw; omit data/coca_llm merge",
+      "revision": "1e5b7d3a72f47a71da5d28686c1dd4b397178485"
+    },
+    "ewt-train.conllu": {
+      "bytes": 15034493,
+      "sha256": "d68e06122a702464c613076523d56740f047e5bbe89dd90ec32737e04d952143",
+      "url": "https://raw.githubusercontent.com/UniversalDependencies/UD_English-EWT/b7711cce01cdd4f5fcc0a8199b8a50d951b16c0c/en_ewt-ud-train.conllu"
+    },
+    "gum-train.conllu": {
+      "bytes": 20996445,
+      "sha256": "88c410ca6a51ccc79f9536d75feb1633421691165cd191f8137f8b37569a0329",
+      "url": "https://raw.githubusercontent.com/UniversalDependencies/UD_English-GUM/b58e74bc22d17220c9198864c253a50a897bf27f/en_gum-ud-train.conllu"
+    },
+    "mdn": {
+      "revision": "696a0436bb4dd20eb4d30ac3f1d4fc5140d1eee9",
+      "url": "https://github.com/mdn/content/tree/696a0436bb4dd20eb4d30ac3f1d4fc5140d1eee9/files/en-us/glossary"
+    },
+    "ngsl.csv": {
+      "bytes": 89485,
+      "sha256": "d814f2a0a3c61479a2c5ad037661719a0cc6e7dbcde31f181b54f12d0f1e11a4",
+      "url": "https://www.newgeneralservicelist.com/s/NGSL_12_lemmatized_for_research.csv"
+    },
+    "wordnet.tar.gz": {
+      "bytes": 11537239,
+      "sha256": "640db279c949a88f61f851dd54ebbb22d003f8b90b85267042ef85a3781d3a52",
+      "url": "https://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.gz"
+    }
+  }
+}

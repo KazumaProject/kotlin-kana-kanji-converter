@@ -25,3 +25,19 @@ tasks.test {
     inputs.dir(layout.projectDirectory.dir("data/grammar"))
     inputs.file(layout.projectDirectory.file("data/1-grams_score_cost_pos_combined_with_ner.zip"))
 }
+
+tasks.register<JavaExec>("verifySupplementAssets") {
+    group = "verification"
+    description = "Checks every original and supplemental entry against generated assets."
+    dependsOn(tasks.testClasses)
+    classpath = sourceSets.test.get().runtimeClasspath
+    mainClass.set("conversion.VerifySupplementAssetsKt")
+    maxHeapSize = "4g"
+    doFirst {
+        args(
+            project.file(providers.gradleProperty("englishBaseAssets").get()).absolutePath,
+            project.file(providers.gradleProperty("englishExtendedAssets").get()).absolutePath,
+            layout.projectDirectory.file("data/supplement/entries.tsv").asFile.absolutePath,
+        )
+    }
+}
