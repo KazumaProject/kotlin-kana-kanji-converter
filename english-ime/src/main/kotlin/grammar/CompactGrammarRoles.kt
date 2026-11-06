@@ -35,7 +35,7 @@ internal class CompactGrammarRoles private constructor(private val data: ByteBuf
     private val fallbackPostings = data.getInt(84)
     private val end = data.getInt(88)
 
-    private val categoryNames: List<String>
+    val categoryNames: List<String>
 
     init {
         require(categoryCount in 1..1024 && maskWords == (categoryCount + 63) / 64) { "Invalid category count" }
@@ -87,15 +87,29 @@ internal class CompactGrammarRoles private constructor(private val data: ByteBuf
             collect(surface.toByteArray(Charsets.UTF_8), exact, exactCount, exactPostings, bits)
         }
         collect(normalized.toByteArray(Charsets.UTF_8), fallback, fallbackCount, fallbackPostings, bits)
-        if (bits.all { it == 0L }) return emptySet()
-        return buildSet {
-            for (word in bits.indices) {
-                var remaining = bits[word]
-                while (remaining != 0L) {
-                    add(categoryNames[word * 64 + remaining.countTrailingZeroBits()])
-                    remaining = remaining and (remaining - 1)
-                }
-            }
+        return decodeRoles(bits, categoryNames)
+    }
+
+    /** Fold each spelling to one mask and retain only roles beyond lowercase fallback for exact forms. */
+    internal fun runtimeEntries(): Sequence<Pair<String, List<Long>>> = sequence {
+        for (i in 0 until fallbackCount) {
+            val row = fallback + i * INDEX_ROW
+            val key = stringAt(data.getInt(row))
+            val roles = LongArray(maskWords)
+            collectPostings(row, fallbackPostings, roles)
+            if (roles.any { it != 0L }) yield(key to roles.toList())
+        }
+        for (i in 0 until exactCount) {
+            val row = exact + i * INDEX_ROW
+            val key = stringAt(data.getInt(row))
+            if (key == key.lowercase()) continue
+            val normalized = lookupKey(key)
+            val roles = LongArray(maskWords)
+            val inherited = LongArray(maskWords)
+            collectPostings(row, exactPostings, roles)
+            collect(normalized.toByteArray(Charsets.UTF_8), fallback, fallbackCount, fallbackPostings, inherited)
+            for (word in roles.indices) roles[word] = roles[word] and inherited[word].inv()
+            if (roles.any { it != 0L }) yield(key to roles.toList())
         }
     }
 
@@ -108,27 +122,26 @@ internal class CompactGrammarRoles private constructor(private val data: ByteBuf
             val id = data.getInt(row)
             val start = stringStart(id)
             val length = stringStart(id + 1) - start
-            var order = 0
-            for (i in 0 until minOf(key.size, length)) {
-                order = (key[i].toInt() and 255) - (data.get(start + i).toInt() and 255)
-                if (order != 0) break
-            }
-            if (order == 0) order = key.size - length
+            val order = compareKey(data, key, start, length)
             when {
                 order < 0 -> high = mid - 1
                 order > 0 -> low = mid + 1
                 else -> {
-                    val first = data.getInt(row + 4)
-                    val size = data.getInt(row + 8)
-                    for (i in first until first + size) {
-                        val form = data.getInt(postings + i * Int.SIZE_BYTES)
-                        val mask = maskOffset(data.getInt(forms + form * FORM_ROW + FORM_MASK))
-                        for (word in bits.indices) {
-                            bits[word] = bits[word] or data.getLong(mask + word * Long.SIZE_BYTES)
-                        }
-                    }
+                    collectPostings(row, postings, bits)
                     return
                 }
+            }
+        }
+    }
+
+    private fun collectPostings(row: Int, postings: Int, bits: LongArray) {
+        val first = data.getInt(row + 4)
+        val size = data.getInt(row + 8)
+        for (i in first until first + size) {
+            val form = data.getInt(postings + i * Int.SIZE_BYTES)
+            val mask = maskOffset(data.getInt(forms + form * FORM_ROW + FORM_MASK))
+            for (word in bits.indices) {
+                bits[word] = bits[word] or data.getLong(mask + word * Long.SIZE_BYTES)
             }
         }
     }
@@ -176,10 +189,10 @@ internal class CompactGrammarRoles private constructor(private val data: ByteBuf
     private fun stringStart(id: Int) = text + data.getInt(stringOffsets + id * Int.SIZE_BYTES)
 
     private fun stringAt(id: Int): String {
-        require(id in 0 until stringCount) { "Invalid category name reference" }
+        require(id in 0 until stringCount) { "Invalid string reference" }
         val start = stringStart(id)
         val length = stringStart(id + 1) - start
-        require(length in 1..data.capacity() - start) { "Invalid category name size" }
+        require(length in 1..data.capacity() - start) { "Invalid string size" }
         val bytes = ByteArray(length)
         data.get(start, bytes)
         return bytes.toString(Charsets.UTF_8)
@@ -189,7 +202,6 @@ internal class CompactGrammarRoles private constructor(private val data: ByteBuf
 
     companion object {
         private const val HEADER_SIZE = 96
-        private const val MAX_SIZE = 268_435_456
         private const val CATEGORY_ROW = 12
         private const val LEXEME_ROW = 8
         private const val FORM_ROW = 16
@@ -197,25 +209,51 @@ internal class CompactGrammarRoles private constructor(private val data: ByteBuf
         private const val INDEX_ROW = 12
         private val CATEGORY_NAME = Regex("[a-z][a-z0-9_]*")
 
-        fun load(file: Path, expectedHash: String?): CompactGrammarRoles {
-            try {
-                val mapped = FileChannel.open(file, READ).use { channel ->
-                    val size = channel.size()
-                    require(size in HEADER_SIZE.toLong()..MAX_SIZE.toLong()) { "Invalid file size" }
-                    channel.map(FileChannel.MapMode.READ_ONLY, 0, size)
-                }
-                require(mapped.getInt(0) == 0x45434154 && mapped.getInt(4) == 1 &&
-                    mapped.getInt(8) == mapped.capacity()) { "Invalid ECAT v1 header" }
-                val crc = CRC32().apply { update(mapped.duplicate().position(HEADER_SIZE)) }
-                require(crc.value.toInt() == mapped.getInt(12)) { "Invalid payload checksum" }
-                if (expectedHash != null) {
-                    val digest = MessageDigest.getInstance("SHA-256").apply { update(mapped.duplicate()) }
-                    require(HexFormat.of().formatHex(digest.digest()) == expectedHash) { "Bundle SHA-256 mismatch" }
-                }
-                return CompactGrammarRoles(mapped)
-            } catch (failure: IllegalArgumentException) {
-                throw IllegalArgumentException("Invalid compact grammar $file: ${failure.message}", failure)
+        fun load(file: Path, expectedHash: String?): CompactGrammarRoles =
+            readGrammarIndex(file, expectedHash, 0x45434154, HEADER_SIZE, ::CompactGrammarRoles)
+    }
+}
+
+internal fun decodeRoles(bits: LongArray, categoryNames: List<String>): Set<String> {
+    if (bits.all { it == 0L }) return emptySet()
+    return buildSet {
+        for (word in bits.indices) {
+            var remaining = bits[word]
+            while (remaining != 0L) {
+                add(categoryNames[word * 64 + remaining.countTrailingZeroBits()])
+                remaining = remaining and (remaining - 1)
             }
         }
+    }
+}
+
+internal fun compareKey(data: ByteBuffer, key: ByteArray, start: Int, length: Int): Int {
+    for (i in 0 until minOf(key.size, length)) {
+        val order = (key[i].toInt() and 255) - (data.get(start + i).toInt() and 255)
+        if (order != 0) return order
+    }
+    return key.size - length
+}
+
+internal fun <T> readGrammarIndex(
+    file: Path, expectedHash: String?, magic: Int, headerSize: Int, parse: (ByteBuffer) -> T,
+): T {
+    try {
+        val mapped = FileChannel.open(file, READ).use { channel ->
+            val size = channel.size()
+            require(size in headerSize.toLong()..268_435_456L) { "Invalid file size" }
+            channel.map(FileChannel.MapMode.READ_ONLY, 0, size)
+        }
+        require(mapped.getInt(0) == magic && mapped.getInt(4) == 1 &&
+            mapped.getInt(8) == mapped.capacity()) { "Invalid grammar index header" }
+        val crc = CRC32().apply { update(mapped.duplicate().position(headerSize)) }
+        require(crc.value.toInt() == mapped.getInt(12)) { "Invalid payload checksum" }
+        if (expectedHash != null) {
+            val digest = MessageDigest.getInstance("SHA-256").apply { update(mapped.duplicate()) }
+            require(HexFormat.of().formatHex(digest.digest()) == expectedHash) { "Bundle SHA-256 mismatch" }
+        }
+        return parse(mapped)
+    } catch (failure: IllegalArgumentException) {
+        throw IllegalArgumentException("Invalid compact grammar $file: ${failure.message}", failure)
     }
 }

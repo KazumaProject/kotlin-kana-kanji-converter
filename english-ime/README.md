@@ -60,7 +60,7 @@ production ranking remain unverified.
 
 Build the reviewed dictionary with the replay command above, then pass the
 generated directory to `convert`. The command reads the reviewed binary
-dictionary and uses the full grammar tables to rank the candidates it finds.
+dictionary and uses its grammar index to rank the candidates it finds.
 
 ```sh
 ./gradlew :english-ime:run --quiet --args='convert --assets /absolute/path/reviewed-english --text hecantake'
@@ -113,6 +113,20 @@ Use the same installed CLI to compare the two asset directories. The
 `:english-ime:verifySupplementAssets` task accepts `-PenglishBaseAssets`
 and `-PenglishExtendedAssets` and compares every decoded reading, candidate and
 original cost, plus each new lexical form and its categories.
+
+## Pack a runtime bundle
+
+After generating either reviewed bundle, use `pack-runtime` with a new output directory.
+
+```sh
+./gradlew :english-ime:run --quiet --args='pack-runtime --assets /tmp/reviewed-english-extended --out /tmp/english-runtime'
+./gradlew :english-ime:run --quiet --args='convert --assets /tmp/english-runtime --text hecantake'
+```
+
+The runtime bundle carries the conversion binaries, Glide index, source notices,
+provenance manifests, and a grammar index of shared category masks. Use the
+full reviewed bundle for `evaluate --lexicon` and for inspecting the review data.
+The runtime grammar index is supported by this module's `convert` command.
 
 ## Legacy compatibility
 

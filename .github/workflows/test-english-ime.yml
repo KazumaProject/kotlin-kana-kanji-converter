@@ -49,3 +49,10 @@ jobs:
           python3 -B english-ime/tools/verify_conversion_cli.py \
             --cli english-ime/build/install/english-ime/bin/english-ime \
             --assets "$RUNNER_TEMP/reviewed-english-extended" --supplement
+      - name: Pack and convert with the runtime bundle
+        run: |
+          english-ime/build/install/english-ime/bin/english-ime pack-runtime \
+            --assets "$RUNNER_TEMP/reviewed-english-extended" --out "$RUNNER_TEMP/english-runtime"
+          python3 -B english-ime/tools/verify_conversion_cli.py \
+            --cli english-ime/build/install/english-ime/bin/english-ime \
+            --assets "$RUNNER_TEMP/english-runtime" --supplement
