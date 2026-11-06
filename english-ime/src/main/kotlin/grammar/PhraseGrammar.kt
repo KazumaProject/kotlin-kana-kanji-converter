@@ -13,7 +13,7 @@ internal data class PhraseEvidence(
 }
 
 /** Scores local constructions. A missing or ambiguous analysis is not a rejection. */
-internal class PhraseGrammar(private val lexicon: Lexicon) {
+internal class PhraseGrammar(private val grammarRoles: GrammarRoles) {
     private data class Word(val text: String, val roles: Set<String>) {
         fun any(categories: Set<String>) = roles.any { it in categories }
         fun has(category: String) = category in roles
@@ -40,7 +40,8 @@ internal class PhraseGrammar(private val lexicon: Lexicon) {
     }
 
     private fun word(surface: String): Word = words.getOrPut(surface) {
-        Word(lookupKey(surface), lexicon.lookup(surface).flatMap { it.dictionaries }.toSet())
+        val normalized = lookupKey(surface)
+        Word(normalized, grammarRoles.lookup(surface, normalized))
     }
 
     private fun scoreClause(original: List<Word>): PhraseEvidence {

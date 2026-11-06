@@ -43,7 +43,7 @@ internal class PhraseConverter(private val dictionary: ReviewedDictionary) {
         }
         require(limit in 1..MAX_RESULTS) { "--limit must be in 1..$MAX_RESULTS" }
 
-        val grammar = PhraseGrammar(dictionary.lexicon)
+        val grammar = PhraseGrammar(dictionary.grammarRoles)
         val edges = lattice(text, prefixMode)
         val order = if (prefixMode) prefixOrder else exactOrder
         val paths = Array(text.length + 1) { mutableListOf<Path>() }

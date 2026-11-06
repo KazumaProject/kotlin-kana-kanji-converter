@@ -1,5 +1,7 @@
 package conversion
 
+import grammar.CompactGrammarRoles
+import grammar.GrammarRoles
 import grammar.Lexicon
 import grammar.lookupKey
 import louds.LOUDS
@@ -10,6 +12,8 @@ import java.io.File
 import java.io.IOException
 import java.io.ObjectInputFilter
 import java.io.ObjectInputStream
+import java.nio.file.Files
+import java.nio.file.LinkOption.NOFOLLOW_LINKS
 import java.util.BitSet
 import java.util.PriorityQueue
 import java.util.Properties
@@ -20,7 +24,7 @@ internal class ReviewedDictionary private constructor(
     private val reading: LOUDSWithTermId,
     private val words: LOUDS,
     private val tokens: TokenArray,
-    val lexicon: Lexicon,
+    val grammarRoles: GrammarRoles,
 ) {
     private val readingIndex = SuccinctBitVector(reading.LBS)
     private val leafIndex = SuccinctBitVector(reading.isLeaf)
@@ -100,7 +104,14 @@ internal class ReviewedDictionary private constructor(
                     bitvector = bits
                 }
             }
-            return ReviewedDictionary(reading, words, tokens, Lexicon.load(grammar))
+            val compact = grammar.resolve("categories.ecat").toPath()
+            val roles = if (Files.notExists(compact, NOFOLLOW_LINKS)) {
+                val lexicon = Lexicon.load(grammar)
+                GrammarRoles { surface, _ -> lexicon.lookup(surface).flatMap { it.dictionaries }.toSet() }
+            } else {
+                CompactGrammarRoles.load(compact, metadata.getProperty("categories.ecat.sha256"))
+            }
+            return ReviewedDictionary(reading, words, tokens, roles)
         }
     }
 }
