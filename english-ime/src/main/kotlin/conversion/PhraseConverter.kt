@@ -2,6 +2,7 @@ package conversion
 
 import grammar.PhraseEvidence
 import grammar.PhraseGrammar
+import grammar.lookupKey
 
 internal enum class SegmentKind { EXACT, COMPLETION, LITERAL }
 
@@ -13,6 +14,7 @@ internal data class Segment(
     val reading: String? = null,
     val cost: Int = 0,
     val inferredSpace: Boolean = false,
+    val splitDirectPrefix: Boolean = false,
     val unknown: Boolean = false,
 )
 
@@ -30,6 +32,7 @@ internal class PhraseConverter(private val dictionary: ReviewedDictionary) {
         val cost: Int = 0,
         val evidence: PhraseEvidence = PhraseEvidence(),
         val splits: Int = 0,
+        val splitDirectPrefix: Boolean = false,
         val unknownChars: Int = 0,
         val addedChars: Int = 0,
     )
@@ -42,6 +45,7 @@ internal class PhraseConverter(private val dictionary: ReviewedDictionary) {
 
         val grammar = PhraseGrammar(dictionary.lexicon)
         val edges = lattice(text, prefixMode)
+        val order = if (prefixMode) prefixOrder else exactOrder
         val paths = Array(text.length + 1) { mutableListOf<Path>() }
         paths[0].add(Path())
         for (offset in text.indices) {
@@ -57,62 +61,72 @@ internal class PhraseConverter(private val dictionary: ReviewedDictionary) {
                         path.cost + segment.cost,
                         grammar.score(segments.map { it.surface }),
                         path.splits + if (segment.inferredSpace) 1 else 0,
+                        path.splitDirectPrefix || segment.splitDirectPrefix,
                         path.unknownChars + if (segment.unknown) segment.end - segment.start else 0,
                         path.addedChars + if (segment.kind == SegmentKind.COMPLETION)
-                            segment.reading!!.length - (segment.end - segment.start) else 0,
+                            segment.reading!!.length - text.substring(segment.start, segment.end)
+                                .count { it !in keyboardPunctuation && it != '’' } else 0,
                     )
                 }
                 if (next.size > BEAM_WIDTH) {
-                    next.sortWith(pathOrder)
+                    next.sortWith(order)
                     next.subList(BEAM_WIDTH, next.size).clear()
                 }
             }
         }
-        return paths.last().sortedWith(pathOrder).distinctBy { it.text }.take(limit).map {
+        return paths.last().sortedWith(order).distinctBy { it.text }.take(limit).map {
             PhraseCandidate(it.text, it.segments, it.cost, it.evidence)
         }
     }
 
     private fun lattice(text: String, prefixMode: Boolean): Array<MutableList<Segment>> {
         val edges = Array(text.length) { mutableListOf<Segment>() }
-        val spans = inputWords.findAll(text).toList()
-        val wordEnds = spans.map { it.range.last + 1 }.toSet()
+        val spans = inputWords.findAll(text).map { it.range }.toMutableList()
+        val last = spans.lastOrNull()
+        if (prefixMode && last != null && last.last == text.lastIndex - 1 && text.last() in prefixPunctuation) {
+            spans[spans.lastIndex] = last.first..text.lastIndex
+        }
+        val wordEnds = spans.map { it.last + 1 }.toSet()
         val exact = mutableMapOf<String, List<DictionaryCandidate>>()
         fun lookup(reading: String) = exact.getOrPut(reading) { dictionary.exact(reading) }
         var previousEnd = 0
         for (span in spans) {
-            val start = span.range.first
-            val end = span.range.last + 1
+            val start = span.first
+            val end = span.last + 1
             if (previousEnd < start) edges[previousEnd] += literal(text, previousEnd, start)
             previousEnd = end
 
-            val raw = span.value
-            val reading = raw.lowercase().replace('’', '\'')
+            val reading = lookupKey(text.substring(start, end))
             val plain = latinWord.matches(reading)
-            val complete = prefixMode && end == text.length && plain
+            val complete = prefixMode && end == text.length
+            val directCompletions = if (complete) completions(reading, start, end, start) else emptyList()
             edges[start] += literal(text, start, end, unknown = true)
 
+            edges[start] += directCompletions
             if (!plain) {
                 val candidates = lookup(reading)
                 val normalized = reading.filterNot { it in keyboardPunctuation }
                 val restored = if (normalized == reading || normalized.isEmpty()) emptyList() else
-                    lookup(normalized).filter { it.surface.lowercase().replace('’', '\'') == reading }
+                    lookup(normalized).filter { lookupKey(it.surface) == reading }
                 edges[start] += (candidates + restored).distinct().map { it.segment(start, end, start) }
             } else {
                 val whole = lookup(reading)
                 // Explicit word boundaries take precedence when the word is registered.
                 if (spans.size > 1 && whole.isNotEmpty()) {
                     edges[start] += whole.map { it.segment(start, end, start) }
-                    if (complete) edges[start] += completions(reading, start, end, start)
                 } else {
                     for (offset in start until end) {
                         val remaining = reading.substring(offset - start)
                         for (prefix in dictionary.prefixes(remaining)) {
                             val stop = offset + prefix.length
                             if ((offset != start || stop != end) && !canSplit(prefix)) continue
-                            edges[offset] += lookup(prefix).map { it.segment(offset, stop, start) }
+                            edges[offset] += lookup(prefix).map {
+                                it.segment(offset, stop, start, splitDirectPrefix = directCompletions.isNotEmpty())
+                            }
                         }
-                        if (complete) edges[offset] += completions(remaining, offset, end, start)
+                        if (complete && offset > start) edges[offset] += completions(
+                            remaining, offset, end, start, splitDirectPrefix = directCompletions.isNotEmpty(),
+                        )
                     }
                 }
             }
@@ -129,10 +143,15 @@ internal class PhraseConverter(private val dictionary: ReviewedDictionary) {
         return edges
     }
 
-    private fun completions(reading: String, start: Int, end: Int, wordStart: Int): List<Segment> {
-        if (reading.length < MIN_COMPLETION_PREFIX) return emptyList()
-        return dictionary.complete(reading).filter { latinWord.matches(it.reading) }
-            .map { it.segment(start, end, wordStart, SegmentKind.COMPLETION) }
+    private fun completions(
+        reading: String, start: Int, end: Int, wordStart: Int, splitDirectPrefix: Boolean = false,
+    ): List<Segment> {
+        val key = reading.filterNot { it in prefixPunctuation }
+        if (key.length < MIN_COMPLETION_PREFIX || !completionKey.matches(key)) return emptyList()
+        val surfacePrefix = reading.takeIf { it != key }
+        return dictionary.complete(key, surfacePrefix).map {
+            it.segment(start, end, wordStart, SegmentKind.COMPLETION, splitDirectPrefix)
+        }
     }
 
     private fun canSplit(reading: String) = reading.length >= 2 || reading == "a" || reading == "i"
@@ -140,8 +159,12 @@ internal class PhraseConverter(private val dictionary: ReviewedDictionary) {
     private fun literal(text: String, start: Int, end: Int, unknown: Boolean = false) =
         Segment(start, end, text.substring(start, end), SegmentKind.LITERAL, unknown = unknown)
 
-    private fun DictionaryCandidate.segment(start: Int, end: Int, wordStart: Int, kind: SegmentKind = SegmentKind.EXACT) =
-        Segment(start, end, surface, kind, reading, cost, inferredSpace = start != wordStart)
+    private fun DictionaryCandidate.segment(
+        start: Int, end: Int, wordStart: Int, kind: SegmentKind = SegmentKind.EXACT, splitDirectPrefix: Boolean = false,
+    ) = Segment(
+        start, end, surface, kind, reading, cost, inferredSpace = start != wordStart,
+        splitDirectPrefix = splitDirectPrefix && start != wordStart,
+    )
 
     companion object {
         private const val MAX_INPUT = 256
@@ -149,15 +172,18 @@ internal class PhraseConverter(private val dictionary: ReviewedDictionary) {
         private const val BEAM_WIDTH = 96
         private const val MIN_COMPLETION_PREFIX = 2
         private const val keyboardPunctuation = "'-./"
+        private const val prefixPunctuation = "'’-"
+        private val completionKey = Regex("[a-z0-9]+")
         private val latinWord = Regex("[a-z]+")
         private val inputWords = Regex("""[\p{L}\p{N}][\p{L}\p{N}\p{M}]*(?:['’./_-][\p{L}\p{N}][\p{L}\p{N}\p{M}]*)*""")
-        private val pathOrder = compareBy<Path> { it.unknownChars }
-            .thenByDescending { it.evidence.clauses }
+        private val coverageOrder = compareBy<Path> { it.unknownChars }
+        private val grammarOrder = compareByDescending<Path> { it.evidence.clauses }
             .thenBy { if (it.evidence.clauses == 0) it.splits else 0 }
             .thenByDescending { it.evidence.score }
             .thenBy { it.splits }
-            .thenBy { it.addedChars }
-            .thenBy { it.cost }
-            .thenBy { it.text }
+        private val exactOrder = coverageOrder.then(grammarOrder)
+            .thenBy { it.addedChars }.thenBy { it.cost }.thenBy { it.text }
+        private val prefixOrder = coverageOrder.thenBy { it.splitDirectPrefix }.then(grammarOrder)
+            .thenBy { it.cost }.thenBy { it.addedChars }.thenBy { it.text }
     }
 }

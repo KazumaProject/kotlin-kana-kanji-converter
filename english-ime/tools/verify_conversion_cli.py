@@ -55,6 +55,17 @@ def verify(cli, assets):
     assert prefix["segments"][-1]["kind"] == "completion" and prefix["segments"][-1]["reading"] == "takes", prefix
     first("they tak", "they take", "FINITE_OTHER", options=("--mode", "prefix"))
     first("he has tak", "he has taken", "PERFECT_PARTICIPLE", options=("--mode", "prefix"))
+    first("hecantak", "he can take", "BARE_AFTER_MODAL_OR_DO", options=("--mode", "prefix"))
+    for typed, expected, max_rank in [
+        ("wo", "would", 5), ("wh", "which", 10), ("ple", "please", 5),
+        ("trav", "travel", 5), ("resch", "reschedule", 5),
+    ]:
+        result = candidates(typed, "--mode", "prefix")[:max_rank]
+        assert any(row["text"] == expected for row in result), (typed, result)
+    for typed, expected in [("don'", "don't"), ("don’", "don't"), ("wi-", "Wi-Fi")]:
+        result = first(typed, expected, options=("--mode", "prefix"))
+        assert result["segments"][0]["kind"] == "completion" and len(result["segments"]) == 1, result
+        assert all(s["kind"] != "completion" for row in candidates(typed) for s in row["segments"])
     exact = candidates("he take", "--limit", "50")
     assert exact[0]["text"] == "he take" and not any(row["text"] == "he takes" for row in exact), exact
     assert all(s["kind"] != "completion" for row in candidates("he tak!", "--mode", "prefix")
