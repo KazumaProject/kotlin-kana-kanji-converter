@@ -1,5 +1,6 @@
 import conversion.PhraseConverter
 import conversion.ReviewedDictionary
+import conversion.packReviewedRuntime
 import dictionary.Dictionary
 import grammar.CompactGrammarRoles
 import grammar.Lexicon
@@ -37,16 +38,29 @@ class CompactGrammarRolesTest {
 
         val compact = grammar.resolve("categories.ecat")
         writeCompactCategories(lexicon, compact)
-        metadata.appendText("categories.ecat.sha256=${categoryFileHash(compact)}\n")
+        val notice = grammar.resolve("notices").apply { mkdir() }.resolve("LICENSE.txt")
+        notice.writeText("Fixture source license\n")
+        metadata.appendText("categories.ecat.sha256=${categoryFileHash(compact)}\n" +
+            "noticeCount=1\nnotice.LICENSE.txt.sha256=${categoryFileHash(notice)}\n")
+        val packed = root.resolve("packed")
+        packReviewedRuntime(root, packed)
+        assertEquals(notice.readText(), packed.resolve("grammar/notices/LICENSE.txt").readText())
+        assertEquals(setOf("bundle.properties", "categories.erol", "notices"),
+            packed.resolve("grammar").list().orEmpty().toSet())
+        assertFailsWith<IllegalArgumentException> { packReviewedRuntime(root, packed) }
+
         tsvNames.forEach { Files.delete(grammar.resolve(it).toPath()) }
         val dictionary = ReviewedDictionary.load(root)
         val surfaces = lexicon.forms.map { it.key.surface }.toSet() +
             listOf("He", "HE", "he", "POKÉMON", "don’t", "don't", "DON'T", "unknown")
+        val runtime = ReviewedDictionary.load(packed)
         for (surface in surfaces) {
             val expected = lexicon.lookup(surface).flatMap { it.dictionaries }.toSet()
             assertEquals(expected, dictionary.grammarRoles.lookup(surface, lookupKey(surface)), surface)
+            assertEquals(expected, runtime.grammarRoles.lookup(surface, lookupKey(surface)), surface)
         }
         assertEquals(legacy, PhraseConverter(dictionary).convert("hecantake", false, 10))
+        assertEquals(legacy, PhraseConverter(runtime).convert("hecantake", false, 10))
     }
 
     @Test

@@ -1,5 +1,6 @@
 import conversion.PhraseConverter
 import conversion.ReviewedDictionary
+import conversion.packReviewedRuntime
 import grammar.ContextEvaluator
 import grammar.Lexicon
 import kotlinx.serialization.json.*
@@ -16,6 +17,10 @@ fun main(args: Array<String>) {
             )
         }
         "convert" -> convert(options)
+        "pack-runtime" -> {
+            options.allow("--assets", "--out")
+            packReviewedRuntime(File(options.required("--assets")), File(options.required("--out")))
+        }
         "evaluate" -> {
             options.allow("--text", "--candidate", "--format", "--lexicon")
             val lexicon = Lexicon.load(File(options.optional("--lexicon") ?: "data/grammar"))
@@ -64,7 +69,7 @@ fun main(args: Array<String>) {
             )
         }
         else -> error("Usage: export-inventory | build-reviewed | build-legacy [--source ZIP] --out DIR | evaluate --text TEXT --candidate WORD [--format text|json]" +
-            " | convert --assets DIR --text TEXT [--mode exact|prefix] [--limit N] [--format text|json]")
+            " | pack-runtime --assets DIR --out DIR | convert --assets DIR --text TEXT [--mode exact|prefix] [--limit N] [--format text|json]")
     }
 }
 
