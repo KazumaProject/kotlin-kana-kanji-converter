@@ -7,7 +7,7 @@ import subprocess
 import tempfile
 
 
-def verify(cli, assets):
+def verify(cli, assets, supplement=False):
     def invoke(text, *options, directory=assets):
         return subprocess.run(
             [str(cli), "convert", "--assets", str(directory), "--text", text, *options],
@@ -34,6 +34,22 @@ def verify(cli, assets):
         row = candidates(text, *options)[0]
         assert row["text"] == expected and set(reasons) <= set(row["reasons"]), row
         return row
+
+    if supplement:
+        for typed, expected in [
+            ("yall", "y'all"),
+            ("annualize", "annualize"),
+            ("autofill", "autofill"),
+            ("esim", "eSIM"),
+            ("carryon", "carry-on"),
+            ("twofactorauthentication", "two-factor authentication"),
+            ("two-factor authentication", "two-factor authentication"),
+        ]:
+            values = candidates(typed)
+            assert any(row["text"] == expected and len(row["segments"]) == 1 and
+                       row["segments"][0]["kind"] == "exact" for row in values), (typed, values)
+        print("Supplementary English vocabulary CLI checks passed.")
+        return
 
     joined = first("hecantake", "he can take", "FINITE_THIRD_SINGULAR", "BARE_AFTER_MODAL_OR_DO")
     assert [(s["start"], s["end"], s["reading"]) for s in joined["segments"]] == [
@@ -108,5 +124,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cli", required=True, type=Path)
     parser.add_argument("--assets", required=True, type=Path)
+    parser.add_argument("--supplement", action="store_true", help="Check the extended bundle")
     args = parser.parse_args()
-    verify(args.cli.resolve(), args.assets.resolve())
+    verify(args.cli.resolve(), args.assets.resolve(), args.supplement)

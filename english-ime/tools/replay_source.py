@@ -34,6 +34,10 @@ CORE = {'inventory.jsonl', 'decisions.tsv', 'surface-corrections.tsv',
 EXTRAS = {'review-provenance.jsonl', 'category-counts.tsv'}
 MAX_ARCHIVE = 64 * 1024 * 1024
 MAX_PAYLOAD = 512 * 1024 * 1024
+SUPPLEMENT_OUTPUTS = {
+    'reading.dat', 'word.dat', 'token.dat', 'qwerty_glide_index.dat',
+    'grammar/forms.tsv', 'grammar/memberships.tsv', 'grammar/categories.ecat', 'grammar/bundle.properties',
+}
 
 
 def require(condition, message):
@@ -241,9 +245,25 @@ def run_cli(args):
                    cwd=REPO, check=True)
 
 
-def build(manifest_path, source, output):
+def supplement_outputs(directory, base_manifest):
+    manifest = read_json(directory / 'manifest.json')
+    require(manifest.get('kind') == 'reviewed-english-supplement-v1' and manifest.get('schemaVersion') == 1 and
+            manifest.get('baseManifestSha256') == sha(base_manifest), 'Invalid supplement or base manifest')
+    files = manifest['files']
+    require('entries.tsv' in files and all(name == 'entries.tsv' or
+            re.fullmatch(r'notices/[A-Za-z0-9_.-]+', name) for name in files), 'Invalid supplement input paths')
+    notices = {'grammar/' + name for name in files if name.startswith('notices/')}
+    expected = manifest['expectedOutputs']
+    require(set(expected) == SUPPLEMENT_OUTPUTS | notices and
+            all(re.fullmatch('[0-9a-f]{64}', value) for value in expected.values()),
+            'Invalid supplement output hashes')
+    return expected
+
+
+def build(manifest_path, source, output, supplement=None):
     output = Path(output).resolve()
     require(not output.exists(), 'Build output already exists')
+    extension = supplement_outputs(supplement, manifest_path) if supplement is not None else {}
     with tempfile.TemporaryDirectory(prefix='english-replay-') as tmp:
         directory = Path(tmp) / 'sources'
         manifest, result = unpack(manifest_path, directory, source)
@@ -256,18 +276,29 @@ def build(manifest_path, source, output):
         run_cli(['build-reviewed', '--source', Path(source).resolve(), '--decisions', directory / 'decisions.tsv',
                  '--lexicon', directory / 'grammar', '--relations', directory / 'grammar/relations.tsv',
                  '--corrections', directory / 'surface-corrections.tsv', '--notices', directory / 'notices',
-                 '--out', generated])
-        expected = manifest['expectedOutputs']
+                 '--out', generated] + (['--supplement', supplement.resolve()] if extension else []))
+        expected = manifest['expectedOutputs'] | extension
         actual = {str(p.relative_to(generated)): sha(p) for p in generated.rglob('*') if p.is_file()}
         provenance = actual.pop('source-evidence-manifest.json', None)
         require(provenance == sha(manifest_path), 'Output lost its replay provenance')
-        require(actual == expected, 'Fresh JVM output differs from verified final dictionary')
+        if extension:
+            require(actual.pop('supplement-manifest.json', None) == sha(supplement / 'manifest.json'),
+                    'Output lost its supplement provenance')
+        if actual != expected:
+            differences = sorted(name for name in actual.keys() | expected.keys()
+                                 if actual.get(name) != expected.get(name))
+            raise ValueError('Fresh JVM output differs from verified final dictionary: ' + ', '.join(differences))
         output.parent.mkdir(parents=True, exist_ok=True)
         # Copy into a sibling then rename, even when system temp is on another volume.
         with tempfile.TemporaryDirectory(prefix='.english-replay-', dir=output.parent) as sibling:
             staged = Path(sibling) / 'dictionary'
             shutil.copytree(generated, staged)
             staged.rename(output)
+    if extension:
+        properties = dict(line.split('=', 1) for line in
+                          (output / 'grammar/bundle.properties').read_text(encoding='utf-8').splitlines())
+        result['supplement'] = {name: int(properties['supplement.' + name]) for name in
+                                ('formRows', 'surfaces', 'candidatePairs')}
     return dict(result, output=str(output), outputFilesVerified=len(expected), replayProvenanceVerified=True)
 
 
@@ -395,6 +426,8 @@ def main():
         command.add_argument('--manifest', type=Path, default=DEFAULT_MANIFEST)
         command.add_argument('--source', type=Path, default=DEFAULT_SOURCE)
         command.add_argument('--out', type=Path, required=name == 'build')
+        if name == 'build':
+            command.add_argument('--supplement', type=Path)
     command = commands.add_parser('pack')
     for name in ('directory', 'audit', 'gold', 'out'):
         command.add_argument('--' + name, type=Path, required=True)
@@ -404,7 +437,7 @@ def main():
         if args.command == 'pack':
             result = pack(args.directory, args.audit, args.gold, args.out, args.source)
         elif args.command == 'build':
-            result = build(args.manifest, args.source, args.out)
+            result = build(args.manifest, args.source, args.out, args.supplement)
         elif args.out:
             _, result = unpack(args.manifest, args.out, args.source)
         else:

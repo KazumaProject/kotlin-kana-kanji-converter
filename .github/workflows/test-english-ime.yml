@@ -38,3 +38,14 @@ jobs:
           python3 -B english-ime/tools/verify_conversion_cli.py \
             --cli english-ime/build/install/english-ime/bin/english-ime \
             --assets "$RUNNER_TEMP/reviewed-english"
+      - name: Reproduce and verify the supplementary vocabulary
+        run: |
+          python3 -B english-ime/tools/replay_source.py build \
+            --supplement english-ime/data/supplement \
+            --out "$RUNNER_TEMP/reviewed-english-extended"
+          bash ./gradlew :english-ime:verifySupplementAssets --no-daemon \
+            -PenglishBaseAssets="$RUNNER_TEMP/reviewed-english" \
+            -PenglishExtendedAssets="$RUNNER_TEMP/reviewed-english-extended"
+          python3 -B english-ime/tools/verify_conversion_cli.py \
+            --cli english-ime/build/install/english-ime/bin/english-ime \
+            --assets "$RUNNER_TEMP/reviewed-english-extended" --supplement
