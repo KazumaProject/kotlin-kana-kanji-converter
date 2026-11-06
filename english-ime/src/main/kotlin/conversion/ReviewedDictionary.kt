@@ -1,6 +1,7 @@
 package conversion
 
 import grammar.Lexicon
+import grammar.lookupKey
 import louds.LOUDS
 import louds.louds_with_term_id.LOUDSWithTermId
 import succinctBitVector.SuccinctBitVector
@@ -10,6 +11,7 @@ import java.io.IOException
 import java.io.ObjectInputFilter
 import java.io.ObjectInputStream
 import java.util.BitSet
+import java.util.PriorityQueue
 import java.util.Properties
 
 internal data class DictionaryCandidate(val reading: String, val surface: String, val cost: Int)
@@ -37,13 +39,28 @@ internal class ReviewedDictionary private constructor(
         }
     }
 
-    fun complete(prefix: String): List<DictionaryCandidate> =
-        reading.predictiveSearch(prefix, readingIndex, MAX_COMPLETION_READINGS)
-            .filter { it != prefix }
-            .flatMap(::exact)
+    fun complete(prefix: String, surfacePrefix: String? = null): List<DictionaryCandidate> {
+        val best = PriorityQueue(completionOrder.reversed())
+        for (key in reading.predictiveSearch(prefix, readingIndex)) {
+            if (key == prefix || !completionKey.matches(key)) continue
+            for (candidate in exact(key)) {
+                if (surfacePrefix != null && !lookupKey(candidate.surface).startsWith(surfacePrefix)) continue
+                if (best.size < MAX_COMPLETIONS) {
+                    best.add(candidate)
+                } else if (completionOrder.compare(candidate, best.element()) < 0) {
+                    best.remove()
+                    best.add(candidate)
+                }
+            }
+        }
+        return best.sortedWith(completionOrder)
+    }
 
     companion object {
-        private const val MAX_COMPLETION_READINGS = 128
+        private const val MAX_COMPLETIONS = 128
+        private val completionKey = Regex("[a-z0-9]+")
+        private val completionOrder = compareBy<DictionaryCandidate> { it.cost }
+            .thenBy { it.reading.length }.thenBy { it.reading }.thenBy { it.surface }
 
         fun load(directory: File): ReviewedDictionary {
             val grammar = directory.resolve("grammar")
