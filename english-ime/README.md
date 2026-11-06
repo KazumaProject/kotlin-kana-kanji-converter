@@ -128,6 +128,18 @@ provenance manifests, and a grammar index of shared category masks. Use the
 full reviewed bundle for `evaluate --lexicon` and for inspecting the review data.
 The runtime grammar index is supported by this module's `convert` command.
 
+To verify conversion with your own UTF-8 JSON array of input strings, pass
+`--inputs` to the CLI verifier. It checks both exact and prefix modes. Use
+`--reference-assets` to compare the entire JSON response, including candidate
+order, costs, grammar scores, and segments, against a second bundle.
+
+```sh
+python3 -B english-ime/tools/verify_conversion_cli.py \
+  --cli english-ime/build/install/english-ime/bin/english-ime \
+  --assets /tmp/english-runtime --reference-assets /tmp/reviewed-english-extended \
+  --inputs /tmp/english-inputs.json
+```
+
 ## Legacy compatibility
 
 ```sh
