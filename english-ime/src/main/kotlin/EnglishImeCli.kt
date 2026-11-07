@@ -9,7 +9,7 @@ fun main(args: Array<String>) {
         "build-legacy" -> {
             options.allow("--source", "--out")
             buildLegacyDictionary(
-                File(options.optional("--source") ?: "data/1-grams_score_cost_pos_combined_with_ner.zip"),
+                File(options.optional("--source") ?: DEFAULT_SOURCE),
                 File(options.required("--out")),
             )
         }
@@ -43,7 +43,23 @@ fun main(args: Array<String>) {
                 else -> error("--format must be text or json")
             }
         }
-        else -> error("Usage: build-legacy [--source ZIP] --out DIR | evaluate --text TEXT --candidate WORD [--format text|json]")
+        "export-inventory" -> {
+            options.allow("--source", "--out")
+            exportInventory(File(options.optional("--source") ?: DEFAULT_SOURCE), File(options.required("--out")))
+        }
+        "build-reviewed" -> {
+            options.allow("--source", "--decisions", "--lexicon", "--relations", "--out", "--corrections", "--notices")
+            buildReviewedDictionary(
+                File(options.optional("--source") ?: DEFAULT_SOURCE),
+                File(options.required("--decisions")),
+                File(options.required("--lexicon")),
+                File(options.required("--relations")),
+                File(options.required("--out")),
+                options.optional("--corrections")?.let(::File),
+                options.optional("--notices")?.let(::File),
+            )
+        }
+        else -> error("Usage: export-inventory | build-reviewed | build-legacy [--source ZIP] --out DIR | evaluate --text TEXT --candidate WORD [--format text|json]")
     }
 }
 
@@ -69,3 +85,5 @@ internal class CliOptions(arguments: List<String>) {
 
     fun required(flag: String): String = requireNotNull(optional(flag)) { "Required option: $flag" }
 }
+
+private const val DEFAULT_SOURCE = "data/1-grams_score_cost_pos_combined_with_ner.zip"

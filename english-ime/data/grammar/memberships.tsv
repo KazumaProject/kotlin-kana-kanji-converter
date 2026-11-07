@@ -60,6 +60,7 @@ aux_have_3sg	v-have	has
 aux_have_base	v-have	have
 aux_have_past	v-have	had
 aux_modal	aux-can	can
+aux_modal	aux-cannot	cannot
 aux_modal	aux-could	could
 aux_modal	aux-may	may
 aux_modal	aux-might	might
@@ -168,9 +169,14 @@ noun_count_singular	n-book	book
 noun_count_singular	n-car	car
 noun_count_singular	n-child	child
 noun_count_singular	n-coffee	coffee
+noun_count_singular	n-color	color
+noun_count_singular	n-colour	colour
+noun_count_singular	n-e-mail	e-mail
+noun_count_singular	n-email	email
 noun_count_singular	n-item	item
 noun_count_singular	n-list	list
 noun_count_singular	n-sheep	sheep
+noun_count_singular	n-teacher	teacher
 noun_plural_only	n-scissors	scissors
 noun_plural_only	n-trousers	trousers
 noun_proper	p-Canada	Canada
@@ -257,6 +263,7 @@ verb_base	v-have	have
 verb_base	v-saw	saw
 verb_base	v-see	see
 verb_base	v-take	take
+verb_base	v-teach	teach
 verb_base	v-work	work
 verb_ing	v-book	booking
 verb_ing	v-cut	cutting

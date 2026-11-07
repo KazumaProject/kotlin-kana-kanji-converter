@@ -20,12 +20,15 @@ class ContextEvaluator(private val lexicon: Lexicon) {
         val expectation = expectation(before, after)
         return candidates.map { candidate ->
             val forms = lexicon.lookup(candidate)
+            val syntacticForms = forms.filterNot { form -> form.dictionaries.all {
+                it.startsWith("domain_") || it.startsWith("register_") || it.startsWith("identifier_")
+            } }
             val supporting = forms.filter { form -> expectation?.allowed?.any { it in form.dictionaries } == true }
             when {
                 forms.isEmpty() -> CandidateEvaluation(candidate, 0, listOf("UNKNOWN_CANDIDATE"), emptyList())
                 expectation == null -> CandidateEvaluation(candidate, 0, listOf("INSUFFICIENT_CONTEXT"), forms)
                 supporting.isNotEmpty() -> CandidateEvaluation(candidate, 1, listOf(expectation.reason), supporting)
-                forms.all { form -> expectation.competing.any { it in form.dictionaries } } ->
+                syntacticForms.isNotEmpty() && syntacticForms.all { form -> expectation.competing.any { it in form.dictionaries } } ->
                     CandidateEvaluation(candidate, -1, listOf("EXPECTED_${expectation.reason}"), forms)
                 else -> CandidateEvaluation(candidate, 0, listOf("UNRESOLVED_INTERPRETATION"), forms)
             }
@@ -74,7 +77,9 @@ class ContextEvaluator(private val lexicon: Lexicon) {
                 Agreement.OTHER
             } else null
         }
-        val preposition = words.indexOfFirst { "preposition" in it }
+        val preposition = words.withIndex().firstOrNull { (index, roles) ->
+            index > 0 && "preposition" in roles
+        }?.index ?: -1
         if (preposition > 0) {
             if (subject(words.drop(preposition + 1)) == null) return null
             return subject(words.take(preposition))
@@ -89,7 +94,8 @@ class ContextEvaluator(private val lexicon: Lexicon) {
             if ("det_demonstrative_plural" in roles && "pronoun_demonstrative" in roles) return Agreement.OTHER
         }
         val head = words.last()
-        if (head.any { it == "noun_collective" || it in verbForms } && words.size == 1) return null
+        if (words.size == 1 && ("noun_collective" in head ||
+                head.any { it in verbForms } && head.none { it in pluralNouns || it == "noun_uncountable" })) return null
         if (words.dropLast(1).any { roles -> roles.none { it.startsWith("det_") || it.startsWith("adjective_") } }) return null
         val singular = head.any { it in singularNouns || it == "noun_uncountable" }
         val plural = head.any { it in pluralNouns }
@@ -135,6 +141,6 @@ class ContextEvaluator(private val lexicon: Lexicon) {
         )
         private val beComplement = setOf(
             "verb_ing", "verb_past_participle", "aux_be_ing", "aux_be_participle", "adjective_predicative",
-        ) + nominalForms
+        ) + pluralNouns + setOf("noun_uncountable", "noun_proper")
     }
 }

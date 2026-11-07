@@ -38,7 +38,7 @@ object QwertyGlideIndexGenerator {
         return entries.size
     }
 
-    fun buildEntries(dictList: List<Dictionary>): List<QwertyGlideIndexedEntry> {
+    fun buildEntries(dictList: List<Dictionary>, includeFallback: Boolean = true): List<QwertyGlideIndexedEntry> {
         val wordCosts = mutableMapOf<String, Int>()
 
         for (dictionary in dictList) {
@@ -59,8 +59,10 @@ object QwertyGlideIndexGenerator {
             wordCosts.mergeMin(word, dictionary.cost.toInt())
         }
 
-        for (fallbackWord in fallbackWords) {
-            wordCosts.mergeMin(fallbackWord, FALLBACK_WORD_COST)
+        if (includeFallback) {
+            for (fallbackWord in fallbackWords) {
+                wordCosts.mergeMin(fallbackWord, FALLBACK_WORD_COST)
+            }
         }
 
         return wordCosts
