@@ -250,6 +250,115 @@ separate denominators and domain counts; literal input echo, including partially
 hit. A report records case and asset hashes and cannot overwrite an earlier run.
 The evaluation is JVM CLI evidence, not verification of an Android IME.
 
+## 基本語とスペルミスの診断 / Basic vocabulary and typo diagnostic
+
+ここでの目標は、日常のメッセージ、検索、買い物、移動、仕事・学校の基本的な連絡に
+使う英語を、少ない打鍵と候補選択で自然な表記にできることです。
+1,000件は試行・評価の単位であり、実用性の達成条件ではありません。
+まず既存辞書の不足と検索・順位の問題を測ります。
+スペルミスからの候補提示も目標に含めますが、現在の変換器には誤字訂正検索がありません。
+このハーネスはその不足を測るもので、訂正エンジン自体の実装ではありません。
+定期実行は設定しません。辞書の自動採用・API呼出しも行いません。
+
+The goal is useful English entry for everyday messages, search, shopping, travel,
+and basic work/school communication, with few keystrokes and candidate selections.
+A 1,000-case pilot is a work unit, not a definition of completeness.
+`practical_harness.py` diagnoses the current converter before vocabulary or
+ranking changes. It includes typo suggestions as a required capability to measure;
+it does not implement a typo search engine or claim practical acceptance.
+
+```sh
+./gradlew :english-ime:installDist
+python3 -B english-ime/tools/practical_harness.py prepare \
+  --source-dir /tmp/english-basic-sources --fetch-sources \
+  --out /tmp/english-basic-suite
+python3 -B english-ime/tools/practical_harness.py evaluate \
+  --suite /tmp/english-basic-suite \
+  --baseline-assets /tmp/reviewed-english-extended \
+  --cli english-ime/build/install/english-ime/bin/english-ime \
+  --out /tmp/english-basic-baseline --split dev --rank-limit 1000
+```
+
+All downloads, cases, inventories, checkpoints and reports must be outside any
+Git checkout. Preparation pins and checks exact bytes, SHA-256, and source versions.
+It uses first-column headwords only: NGSL 1.2 (2,809), NGSL-Spoken 1.2 (721),
+and the supplementary list (52). Their union has 2,861 case-sensitive spellings
+(2,859 casefolded keys); `May`/`may` and `March`/`march` remain distinct targets.
+These are audit targets, **not newly added dictionary words**, and the lists'
+published text/conversation coverage is not an IME success rate.
+No inflected forms are inferred from lemmatized teaching/research lists.
+
+Separate diagnostic groups measure:
+
+- Exact basic headwords, including display capitalization; three-letter completion
+  for alphabetic targets longer than three letters. Source groups retain general,
+  spoken, and supplementary membership; these overlap and must not be summed.
+- Publicly listed spelling errors from the pinned codespell **data**, restricted
+  to single unannotated corrections independently present in the basic targets.
+  Annotated/ambiguous corrections and inputs that are basic headwords are skipped.
+  This list is not an observed IME error-frequency distribution.
+- Deterministic synthetic deletion, insertion, adjacent-QWERTY substitution and
+  adjacent transposition. Basic-word collisions are skipped; other legitimate
+  readings may remain and are counted as `knownInputCases` from each binary.
+  These are suggestion tests, not permission to automatically replace input.
+- Project-authored everyday phrases, contractions, and preservation examples for
+  correct words, a name, and an identifier. These small examples are smoke tests,
+  not proof of complete phrase or false-correction coverage.
+
+Coverage checks every target in the requested split against the decoded binary's
+reading/surface pairs, preserving output case. `targetCovered` means direct
+registration; a phrase can still be composed successfully from multiple words.
+Ranking uses a deterministic sample, round-robin across scenarios and edit types,
+with separate denominators. It does not weight synthetic errors as actual usage.
+An echoed input or partially copied alphanumeric span never counts as dictionary
+retrieval. Preservation has its own `preservedTop1` metric, where literal echo is
+appropriate. `*-diagnostics.jsonl` includes each sampled input, target, rank,
+registration status, diagnosis and proof; `missingBasicSpellings` lists basic gaps.
+
+All variants of a casefolded target share a deterministic 80/20 dev/holdout split;
+the realized counts can differ from 80/20. This is not a lemma-family split or a
+guaranteed untouched benchmark. Use `dev` for iteration, and reserve `holdout`
+for a later check; inspecting it repeatedly consumes that independence.
+Default ranking sample size is 1,000; `--split all` checks both splits explicitly.
+Use `--jobs 2` (up to 4) to run read-only JVM queries concurrently if memory allows;
+the default is one, and candidate scoring/checkpoint order stays deterministic.
+Acceptance thresholds for coverage, completion and typo success remain to be
+agreed. Reports deliberately contain no `practicalReady` judgment. Interactive
+typing latency, memory, and Android IME behavior remain unverified.
+
+For a comparison, add `--candidate-assets DIR` and, when comparing converter
+implementations, `--baseline-cli OLD_INSTALL/bin/english-ime`. Omitting candidate
+assets measures one baseline; identical engine/asset hashes reuse the same queries.
+Runs freeze suite/tool hashes, launcher/JAR hashes, and all asset hashes, and save
+candidate/segment evidence outside the repository. Re-running the same command
+resumes completed queries; changed inputs/options require a new output directory.
+`--fail-on-regression` fails on lost target registration, loss from the top five,
+loss of basic exact top one, or loss of correct first-candidate preservation in
+the measured sample. No measured regression is not evidence of practical readiness.
+
+### 評価素材のライセンス / Evaluation data licenses
+
+| Material | License | Attribution and source |
+| --- | --- | --- |
+| NGSL 1.2 and supplementary words | CC BY-SA 4.0 | [Browne, Culligan, Phillips / official NGSL page](https://www.newgeneralservicelist.com/new-general-service-list) |
+| NGSL-Spoken 1.2 | CC BY-SA 4.0 | [Browne and Culligan / official spoken page](https://www.newgeneralservicelist.com/ngsl-spoken) |
+| codespell spelling dictionary at `b53e95197f7c799674c785028a182e2dfd1df881` | CC BY-SA 3.0 | [codespell dictionary contributors; derived from English Wikipedia contributors / pinned license statement](https://github.com/codespell-project/codespell/blob/b53e95197f7c799674c785028a182e2dfd1df881/README.rst#license) |
+| Harness code and project-authored examples | MIT | [Project license](../LICENSE) |
+
+素材ごとの出典・版・SHA-256・ライセンスURL・表示すべき著作者・加工内容を
+`suite.json`、`attribution.json`、`ATTRIBUTION.txt`に記録し、評価出力にも引き継ぎます。
+派生評価データ集はCC BY-SA 4.0で提供し、元素材の表示と条件を保持します。
+コードのMITライセンスで辞書・評価データを一括して扱いません。
+今回、配布辞書やそのライセンス構成は変更しません。将来評価素材を辞書に採用する場合も、
+出典と適用条件を配布物に引き継ぐ必要があります。
+
+Generated suites and reports retain per-source attribution, versions, hashes,
+license URLs, and a description of selection/normalization/synthetic changes.
+The derived evaluation collection is CC BY-SA 4.0 with original source notices
+retained. This does not relicense program code or the existing dictionary bundle.
+No codespell GPL program/library code is imported. Preserve attribution and
+applicable share-alike terms if these data are later used in distributed assets.
+
 ## Legacy compatibility
 
 ```sh
