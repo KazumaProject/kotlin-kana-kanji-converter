@@ -9,6 +9,7 @@ import kotlinx.serialization.json.*
 import louds.LOUDS
 import prefix.PrefixTree
 import prefix.prefix_with_term_id.PrefixTreeWithTermId
+import succinctBitVector.SuccinctBitVector
 import java.io.File
 import java.io.ObjectOutputStream
 import java.nio.file.Files
@@ -63,6 +64,7 @@ internal fun buildReviewedDictionary(
     output: File,
     corrections: File? = null,
     notices: File? = null,
+    supplementDirectory: File? = null,
 ) {
     val lexicon = Lexicon.load(lexiconDirectory)
     val forms = lexicon.forms.associateBy { it.key }
@@ -70,6 +72,9 @@ internal fun buildReviewedDictionary(
     val originalRows = englishInventory(source)
     validateRelations(relations, knownSurfaces, originalRows)
     val accepted = selectReviewedRows(originalRows, decisions, forms.keys, corrections)
+    val supplement = supplementDirectory?.let {
+        ReviewedSupplement.load(it, lexiconDirectory.absoluteFile.parentFile.resolve("manifest.json"), lexicon, accepted, decisions)
+    }
     val noticeDirectory = requireNotNull(notices) { "Reviewed builds require --notices DIR" }
     require(noticeDirectory.isDirectory) { "Reviewed builds require --notices DIR" }
     val destination = output.absoluteFile
@@ -78,8 +83,8 @@ internal fun buildReviewedDictionary(
     require(parent.isDirectory || parent.mkdirs()) { "Cannot create $parent" }
     val staging = Files.createTempDirectory(parent.toPath(), ".english-reviewed-").toFile()
     try {
-        writeReviewedPayloads(accepted, staging)
-        writeReviewedCategoryBundle(lexiconDirectory, relations, decisions, noticeDirectory, staging)
+        writeReviewedPayloads(accepted + supplement?.candidates.orEmpty(), staging)
+        writeReviewedCategoryBundle(lexiconDirectory, relations, decisions, noticeDirectory, staging, lexicon, supplement)
         corrections?.copyTo(staging.resolve("surface-corrections.tsv"))
         Files.move(staging.toPath(), destination.toPath(), StandardCopyOption.ATOMIC_MOVE)
     } finally {
@@ -204,6 +209,7 @@ internal fun writeReviewedPayloads(input: List<Dictionary>, output: File) {
         it.writeObject(labels)
     }
     val wordIndex = LOUDS(word.LBS, labels, word.isLeaf)
+    val wordBits = SuccinctBitVector(word.LBS)
 
     val delimiterAfterLast = groups.size + candidates.size
     // The Android compact format retains only words with set bits. At a word boundary
@@ -219,7 +225,7 @@ internal fun writeReviewedPayloads(input: List<Dictionary>, output: File) {
         for (candidate in group) {
             costs[token] = candidate.cost
             if (candidate.reading != candidate.word) {
-                nodes[token] = wordIndex.getNodeIndex(candidate.word).also { require(it > 0) }
+                nodes[token] = wordIndex.getNodeIndex(candidate.word, wordBits).also { require(it > 0) }
             }
             bits.set(bit++)
             token++

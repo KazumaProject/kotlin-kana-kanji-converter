@@ -1,0 +1,46 @@
+Reviewed English supplementary vocabulary
+
+This ledger adds English spellings, lexical relationships, and reviewed categories.
+It does not reproduce source definitions, prose, example sentences, or pronunciations.
+Source references in entries.tsv identify the supporting publication and record.
+
+English Speller Database by Kevin Atkinson and contributors
+https://github.com/en-wl/wordlist/tree/1e5b7d3a72f47a71da5d28686c1dd4b397178485
+Use the ESDB copyright and source notices retained from the base bundle.
+The database was built from raw sources with the coca_llm merge omitted.
+
+CMU Pronouncing Dictionary, Carnegie Mellon University
+https://github.com/cmusphinx/cmudict/tree/74790861f652b15e4ac49015a90074ad62a27690
+See CMUDICT-LICENSE.txt. The ledger uses spelling attestations only.
+
+WordNet 3.0, Princeton University
+https://wordnet.princeton.edu/license-and-commercial-use
+See WORDNET-3.0-LICENSE.txt in the base bundle. Entries reference POS and
+synset offsets in this version. Glosses are not redistributed.
+
+New General Service List 1.2, Charles Browne, Brent Culligan, Joseph Phillips
+https://www.newgeneralservicelist.com/new-general-service-list
+Business Service List 1.2, Charles Browne and Brent Culligan
+https://www.newgeneralservicelist.com/business-service-list
+The lists are licensed under CC BY-SA 4.0
+https://creativecommons.org/licenses/by-sa/4.0/
+Their spellings and list membership inform review and prioritization.
+
+MDN Web Docs glossary, Mozilla Contributors
+https://developer.mozilla.org/en-US/docs/Glossary
+Glossary spelling attestations are taken from the revision in the manifest.
+Source prose is licensed under CC BY-SA 2.5 or later
+https://developer.mozilla.org/en-US/docs/MDN/Writing_guidelines/Attrib_copyright_license
+https://creativecommons.org/licenses/by-sa/2.5/
+
+Universal Dependencies English EWT and GUM, version 2.18
+https://universaldependencies.org/treebanks/en_ewt/index.html
+https://universaldependencies.org/treebanks/en_gum/index.html
+Public training annotations provide usage attestations. Corpus texts are not
+distributed. See the upstream projects for contributors and license details.
+
+Wiktionary and Wikivoyage contributors
+https://en.wiktionary.org/ and https://en.wikivoyage.org/
+CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/
+Reviewed spellings point to the relevant pages. Articles are not redistributed.
+For other published spellings, see the corresponding reference in the ledger.

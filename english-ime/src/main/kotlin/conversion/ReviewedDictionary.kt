@@ -29,6 +29,9 @@ internal class ReviewedDictionary private constructor(
 
     fun prefixes(text: String): List<String> = reading.commonPrefixSearch(text, readingIndex)
 
+    internal fun allCandidates(): Sequence<DictionaryCandidate> =
+        reading.predictiveSearch("", readingIndex).asSequence().flatMap { exact(it).asSequence() }
+
     fun exact(text: String): List<DictionaryCandidate> {
         val node = reading.getNodeIndex(text, readingIndex)
         if (node < 0 || !reading.isLeaf[node]) return emptyList()
