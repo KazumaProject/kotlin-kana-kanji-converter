@@ -61,5 +61,7 @@ class AutomaticAdoptionTest(unittest.TestCase):
                     patch.object(auto.h, 'prepare') as prepare:
                 first = auto.daily(args); second = auto.daily(args)
                 self.assertEqual(first, second)
+                self.assertEqual(0, first['apiCallsThisCommand'])
+                self.assertEqual(0, first['recordedApiAttempts'])
                 self.assertEqual(1, adoption.call_count)
                 prepare.assert_not_called()

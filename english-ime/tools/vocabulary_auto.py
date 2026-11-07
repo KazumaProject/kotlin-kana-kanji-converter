@@ -90,9 +90,11 @@ def daily(args):
         config, connection = h.state(run)
         try:
             count = connection.execute("select count(*) from candidates where decision='include'").fetchone()[0]
+            attempts = connection.execute('select count(*) from attempts').fetchone()[0]
         finally:
             connection.close()
-        result = dict(day=day, policy=POLICY, adoption=adoption, apiCalls=0)
+        result = dict(day=day, policy=POLICY, adoption=adoption, approvedCandidates=count,
+                      apiCallsThisCommand=0, recordedApiAttempts=attempts)
         if count:
             options.out = run / 'result'
             if not options.out.exists():
