@@ -255,6 +255,15 @@ class VocabularySourcesTest(unittest.TestCase):
             with patch.object(sources, 'source_files', return_value=pins), patch.object(sources, 'wordnet', return_value=wn):
                 result, _ = sources.collect(root, root, {'noun', 'noun_possessive_singular', 'domain_daily', 'domain_business'}, {'already'}, set())
             self.assertEqual(['fixturehead', "bank's"], [row['surface'] for row in result])
+            (root / 'document.txt').write_text('fixturehead')
+            (root / 'notice.txt').write_text('Synthetic fixture notice')
+            entry = candidate()['entries'][0] | {'surface': 'fixture', 'lemma': 'fixture'}
+            harness.dump(root / 'references.json', {'documents': [dict(file='document.txt', url=entry['evidence'],
+                sha256=harness.replay.sha(root / 'document.txt'), entries=[entry], notices=[dict(file='notice.txt',
+                name='TEST.txt', sha256=harness.replay.sha(root / 'notice.txt'))])]})
+            with patch.object(sources, 'source_files', return_value=pins), patch.object(sources, 'wordnet', return_value=wn):
+                with self.assertRaisesRegex(ValueError, 'literal attestation'):
+                    sources.collect(root, root, {'noun', 'domain_daily'}, set(), set(), root / 'references.json')
 
     def test_training_extraction_uses_observed_forms_and_rejects_typos_and_names(self):
         with tempfile.TemporaryDirectory() as temporary:

@@ -245,7 +245,8 @@ def collect(directory, esdb, categories, existing, excluded, references=None):
                     raise ValueError('Invalid or changed reference notice')
             for entry in reference['entries']:
                 if (set(entry) != set(FIELDS) or entry['evidence'] != reference['url'] or
-                        entry['domain'] not in DOMAINS or entry['surface'] not in text):
+                        entry['domain'] not in DOMAINS or not re.search(
+                            r'(?<![A-Za-z0-9])' + re.escape(entry['surface']) + r'(?![A-Za-z0-9])', text)):
                     raise ValueError('Reference entry lacks a literal attestation')
                 add(entry, dict(source='reviewed_reference', url=reference['url'], sourceSha256=reference['sha256']),
                     (1, 0, 0, key(entry['surface'])))
