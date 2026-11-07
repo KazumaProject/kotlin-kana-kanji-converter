@@ -71,7 +71,10 @@ dictionary and uses the full grammar tables to rank the candidates it finds.
 The first example ranks `he can take` first. The second can rank `it's working`
 above `its working` using the following word, while `the dog chased its tail`
 favors the possessive. The third uses the typed prefix to find forms such as
-`takes`. The default mode is `exact`. Both modes can infer boundaries in
+`takes`. The default mode is `exact`. Prefix mode considers dictionary cost
+before limiting completions, and favors completing the typed word over
+splitting it when both are possible. It also completes a partially typed
+spelling such as `don'` or `wi-`. Both modes can infer boundaries in
 joined input. In text that already has word boundaries, a registered word is
 kept intact. Sentence punctuation and unrecognized spans are copied from the input.
 
