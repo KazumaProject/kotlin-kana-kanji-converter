@@ -1,5 +1,7 @@
 package conversion
 
+import grammar.Lexicon
+import grammar.lookupKey
 import grammar.readTsv
 import supplementReadings
 import java.io.File
@@ -23,8 +25,13 @@ fun main(args: Array<String>) {
     val forms = File(args[2]).readTsv("lexeme_id", "lemma", "surface", "categories", "domain", "evidence", "source_ref")
     val expected = forms.flatMap { (_, _, surface) -> supplementReadings(surface).map { it to surface } }.toSet()
     check(after.keys - before.keys == expected) { "Supplement binary pairs differ from the reviewed ledger" }
+    val lexicon = Lexicon.load(File(args[1], "grammar"))
     for ((id, lemma, surface, categories) in forms) {
-        val form = extended.lexicon.lookup(surface).single { it.key.lexemeId == id && it.key.surface == surface }
+        val form = lexicon.lookup(surface).single { it.key.lexemeId == id && it.key.surface == surface }
+        val expectedRoles = lexicon.lookup(surface).flatMap { it.dictionaries }.toSet()
+        check(extended.grammarRoles.lookup(surface, lookupKey(surface)) == expectedRoles) {
+            "Supplement compact roles differ for $surface"
+        }
         check(form.lemma == lemma && form.dictionaries.containsAll(categories.split(','))) {
             "Supplement lexical form or categories differ for $id/$surface"
         }
