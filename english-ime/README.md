@@ -140,6 +140,116 @@ python3 -B english-ime/tools/verify_conversion_cli.py \
   --inputs /tmp/english-inputs.json
 ```
 
+## Grow the vocabulary with a resumable review harness
+
+The Python 3.11+ harness mines missing spellings from pinned public lexical sources.
+It compares them to **decoded runtime binary candidates**, not a similarly named
+text dictionary. It prioritizes missing headwords and observed training-corpus
+forms before possessives of already covered heads. Existing excluded spellings
+remain excluded. This workflow does not change the converter's grammar or costs.
+
+Keep all work outside the checkout, including ignored build directories. Start
+with the full extended bundle produced by the replay command above:
+
+```sh
+python3 -B english-ime/tools/vocabulary_harness.py prepare \
+  --work-dir /tmp/english-vocabulary-run \
+  --assets /tmp/reviewed-english-extended \
+  --source-dir /tmp/english-lexical-sources --esdb-dir /tmp/english-esdb \
+  --fetch-sources --max-candidates 1000
+python3 -B english-ime/tools/vocabulary_harness.py status \
+  --work-dir /tmp/english-vocabulary-run
+```
+
+`--fetch-sources` downloads inputs pinned by the current supplement manifest and
+prepares the pinned raw ESDB database without its LLM-assisted merge. Omit it to
+use an existing verified cache. Source changes fail verification. Additional
+explicitly reviewed reference documents can be supplied through `--references`:
+an external JSON manifest with `documents`, each containing `file`, `url`,
+`sha256`, `entries` using the seven supplement TSV fields, and `notices` with
+`file`, `name`, and `sha256`. Exact spellings must occur in the document; lexical
+roles require source review. Definitions and source prose stay outside Git.
+
+### Optional Gemini proposals, within a verified free project
+
+Gemini use is separate from signed-in Codex subscription usage. No API runs during
+ordinary builds or CI. Before each day's API work, check the project's Free tier,
+absence of billing, the key's project, and the actual model RPM/TPM/RPD in AI Studio.
+Save this operator confirmation outside the repository as `free-tier-proof.json`:
+
+```json
+{"project_id":"your-project-id","model":"gemini-3.5-flash-lite","free_tier":true,
+ "billing_enabled":false,"api_project_verified":true,"api_quota_verified":true,
+ "rpm":15,"tpm":250000,"rpd":500,"verified_at":"2026-11-07T12:00:00+00:00"}
+```
+
+The numbers above illustrate the format; use the limits actually displayed for
+your project. Confirmations expire after 24 hours. A key or a local confirmation
+file alone cannot prove Google's current billing state or the key's project.
+The harness does not enable billing, switch models, or use paid fallback tools.
+Set `GEMINI_API_KEY` or provide a protected external key file; never commit it.
+
+```sh
+python3 -B english-ime/tools/vocabulary_harness.py review \
+  --work-dir /tmp/english-vocabulary-run \
+  --free-proof /private/path/free-tier-proof.json \
+  --api-key-file /private/path/gemini-key --max-requests 1
+```
+
+Defaults are at most 20 candidates/request, one request/minute and 20 attempted
+requests/day, with smaller batches for the input budget. The daily counter is
+shared by project across runs in `~/.cache/english-vocabulary-harness/quota` and
+resets at midnight Pacific time. Failed/unknown requests count locally too.
+Other tools using the same Google project are outside this local counter.
+`--wait` paces additional calls; without it, rerun after `minute_limit`.
+Quota, transport and invalid-output errors save progress and stop. An interrupted
+inflight request may have reached Google; its reservation is retained on retry.
+Never change quota directories to evade limits.
+
+### Source review, reproducible build and evaluation
+
+`status` writes external `proposals.jsonl`. Gemini proposals alone cannot enter
+the dictionary. A Codex/operator source review supplies an external JSONL file
+with one record per reviewed candidate:
+
+```json
+{"id":"candidate ID","decision":"include","reason":"Source-backed review reason","proofIds":["supplied proof ID"]}
+```
+
+Decisions are `include`, `defer` or `exclude`; IDs and proof IDs must come from the
+sealed candidate snapshot. Source review also works without Gemini. Final
+decisions are immutable and idempotent; use a new run to revise them. This is
+not a claim of human review or that every candidate was assessed by Gemini.
+
+```sh
+python3 -B english-ime/tools/vocabulary_harness.py review \
+  --work-dir /tmp/english-vocabulary-run --decisions /tmp/source-review.jsonl
+python3 -B english-ime/tools/vocabulary_harness.py build \
+  --work-dir /tmp/english-vocabulary-run --out /tmp/english-vocabulary-result
+python3 -B english-ime/tools/vocabulary_harness.py evaluate \
+  --work-dir /tmp/english-vocabulary-run --assets /tmp/english-vocabulary-result/assets \
+  --cases /tmp/heldout-cases.jsonl
+```
+
+The build merges reviewed entries with the current supplement, preserves notices,
+freezes output hashes, replays from the original source bundle, audits every old
+and new binary pair/category, and compares full/runtime conversion results. It
+publishes `supplement`, `assets`, `runtime` and `verification.json` only on success.
+For a custom supplement, the binary audit accepts `-PenglishSupplementEntries`;
+`-PenglishRuntimeAssets` also audits every packed candidate and lexical surface role.
+Only reviewed `supplement/entries.tsv`, its manifest and required notices belong
+in a vocabulary PR; the generated binaries and verification report do not.
+
+Evaluation cases are frozen external JSONL records with exactly `id`, `input`,
+`expected`, `mode` (`exact`/`prefix`), `domain` and an HTTPS `source`. Use a pinned
+held-out corpus, not the training sources used for candidate selection. Coverage
+includes all cases, including missing words. Ranking uses a deterministic sample
+of at most 200 cases, balanced across available domains and ordered by hashed ID,
+configurable with `--sample-size`. Reports keep
+separate denominators and domain counts; literal input echo is never a dictionary
+hit. A report records case and asset hashes and cannot overwrite an earlier run.
+The evaluation is JVM CLI evidence, not verification of an Android IME.
+
 ## Legacy compatibility
 
 ```sh

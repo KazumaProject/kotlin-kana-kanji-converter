@@ -37,7 +37,9 @@ tasks.register<JavaExec>("verifySupplementAssets") {
         args(
             project.file(providers.gradleProperty("englishBaseAssets").get()).absolutePath,
             project.file(providers.gradleProperty("englishExtendedAssets").get()).absolutePath,
-            layout.projectDirectory.file("data/supplement/entries.tsv").asFile.absolutePath,
+            project.file(providers.gradleProperty("englishSupplementEntries")
+                .getOrElse(layout.projectDirectory.file("data/supplement/entries.tsv").asFile.absolutePath)).absolutePath,
         )
+        providers.gradleProperty("englishRuntimeAssets").orNull?.let { args(project.file(it).absolutePath) }
     }
 }

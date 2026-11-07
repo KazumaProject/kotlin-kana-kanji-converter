@@ -74,7 +74,7 @@ Actions は JapaneseCorpus の最新公開リリースを**一度だけ解決**�
 ```bash
 ./gradlew validateEnglishDictionary analyzeEnglishDictionary
 ./gradlew test check
-./gradlew run
+./gradlew :run
 ./gradlew verifyJapaneseKeyboardDictionaryAssets
 ```
 

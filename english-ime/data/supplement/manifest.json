@@ -1,21 +1,23 @@
 {
   "baseManifestSha256": "3bc919f0deecd9142dfa8ee5059193de22dc553ea467f82a981e3b21b28ad1aa",
   "expectedOutputs": {
-    "grammar/bundle.properties": "8d7948dba98af2eb07b3df8abc2d1ad60f8a245dbbb28a10bc74e2b88b9d2a50",
-    "grammar/categories.ecat": "443f284da4af693528ef51c6f560ef162851090161598e98133ae5abf77c3dc5",
-    "grammar/forms.tsv": "91c2da0d0484fc8dadbb7b38c0f7d525e68cb820cf900958f2c462133887b45b",
-    "grammar/memberships.tsv": "54a0ba39ecad83c26d9dc7fd21c8d09627ae7b85d2e45ba76e1e361f1e35bd2a",
+    "grammar/bundle.properties": "7727f077e746fe15a2ca2ebb6c4eda4c185eecaee3b6b120abe3227f88fcc749",
+    "grammar/categories.ecat": "7ed7a2d22cfdc8c136444d0eddc0626272ff40556fd0c302152e37af83d8cef0",
+    "grammar/forms.tsv": "c5af76ba0aa677a96d7a05a09c80b18eed398f25296ca8d2ddefc67a38ab1b99",
+    "grammar/memberships.tsv": "258da4548629358375f595ca25c5431989c4aee0817b3440400278056165d073",
     "grammar/notices/CMUDICT-LICENSE.txt": "bd4ce8e44170a5f9f481310ca85c51de3c4f851a65e679b40e603b143bd3542a",
     "grammar/notices/PRACTICAL-ENGLISH-SOURCES.txt": "1f52e7d3b1e88a85aae0c1f56baec58f4f7d6f13f5fa2c49f4bbf342f46a140d",
-    "qwerty_glide_index.dat": "54a332d4bbac08f58481b86ed8a37cc6a76957d219ab0e4687a5c46305cb7ee3",
-    "reading.dat": "d8aa6a09e1f51deb9bed30bc73cb86a6fb655294838b7d9aa4413f25be3c92a5",
-    "token.dat": "c7c6f213b995d68cb6abf9416dd20e261262b6cfd7e67e48d6ea5273684bc7e6",
-    "word.dat": "6008c66d95f74c215b2c3bd0a2d124d60323cdfeedc66abb3e8d2364883dc52e"
+    "grammar/notices/VOCABULARY-HARNESS-SOURCES.txt": "1d7f545d39fe1732ea326921b4c0cec91ddbd4aac1ea08c7fea83896be1ce526",
+    "qwerty_glide_index.dat": "4299e98afa88c5bea86801fc754520a0d78334c88d3997a86415b3d0edd79703",
+    "reading.dat": "483f53a12d61b129a5c8f244df18b184d6a51cb8305417363d1cce9a9f3fc2e0",
+    "token.dat": "1b356a3dd64da1793d7f6d96e4d086ec192a9a7f157dd7a88089a3e5d85c480f",
+    "word.dat": "43cffff42bc1e4b21f5041da045790a593c4b94ca6056e86efbbda1ef8c14636"
   },
   "files": {
-    "entries.tsv": "fce8a11125f62a2ba02ddc5033f908064c89cab86d1bc7d07e4569b85c67a158",
+    "entries.tsv": "974c0ab463480124783587ffac26541ac25288fb58ed5e543f55673dd8b51569",
     "notices/CMUDICT-LICENSE.txt": "bd4ce8e44170a5f9f481310ca85c51de3c4f851a65e679b40e603b143bd3542a",
-    "notices/PRACTICAL-ENGLISH-SOURCES.txt": "1f52e7d3b1e88a85aae0c1f56baec58f4f7d6f13f5fa2c49f4bbf342f46a140d"
+    "notices/PRACTICAL-ENGLISH-SOURCES.txt": "1f52e7d3b1e88a85aae0c1f56baec58f4f7d6f13f5fa2c49f4bbf342f46a140d",
+    "notices/VOCABULARY-HARNESS-SOURCES.txt": "1d7f545d39fe1732ea326921b4c0cec91ddbd4aac1ea08c7fea83896be1ce526"
   },
   "kind": "reviewed-english-supplement-v1",
   "schemaVersion": 1,
@@ -58,6 +60,50 @@
       "bytes": 89485,
       "sha256": "d814f2a0a3c61479a2c5ad037661719a0cc6e7dbcde31f181b54f12d0f1e11a4",
       "url": "https://www.newgeneralservicelist.com/s/NGSL_12_lemmatized_for_research.csv"
+    },
+    "vocabularyHarness": {
+      "bsl-stats.csv": {
+        "bytes": 59643,
+        "sha256": "45055265eb4e74c65f5d26edabbc1a0da38c45bbb924cd9bd01fd391b74ff157",
+        "url": "https://www.newgeneralservicelist.com/s/BSL_120_stats.csv"
+      },
+      "bsl.csv": {
+        "bytes": 52302,
+        "sha256": "c29d181e7916250d21b5c41d63bdcfa67c992f66ae1dbaa207db82728f16d54d",
+        "url": "https://www.newgeneralservicelist.com/s/BSL_120_lemmatized_for_research.csv"
+      },
+      "candidatesSha256": "b512fd8a4bdff6b03bcca5cf75417b420f007ef154deaf37ea4276ec7e2edfeb",
+      "cmudict.dict": {
+        "bytes": 3618488,
+        "sha256": "81917843c7f44ce2b094ac63873c2c7a4cf802040792c455ba3ca406891c3d22",
+        "url": "https://raw.githubusercontent.com/cmusphinx/cmudict/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict"
+      },
+      "decisionsSha256": "bc89cd05d427e1dd7d5ad4380bb33a0c174e264e1752465e6f7b034e8cd77934",
+      "esdb": {
+        "databaseSha256": "83dc3c111e573667e7c12b607bb5e2fa5596fa452ecdc3123b3b12e0e0725140",
+        "recipe": "combine.py create-db --raw; omit data/coca_llm merge",
+        "revision": "1e5b7d3a72f47a71da5d28686c1dd4b397178485"
+      },
+      "ewt-train.conllu": {
+        "bytes": 15034493,
+        "sha256": "d68e06122a702464c613076523d56740f047e5bbe89dd90ec32737e04d952143",
+        "url": "https://raw.githubusercontent.com/UniversalDependencies/UD_English-EWT/b7711cce01cdd4f5fcc0a8199b8a50d951b16c0c/en_ewt-ud-train.conllu"
+      },
+      "gum-train.conllu": {
+        "bytes": 20996445,
+        "sha256": "88c410ca6a51ccc79f9536d75feb1633421691165cd191f8137f8b37569a0329",
+        "url": "https://raw.githubusercontent.com/UniversalDependencies/UD_English-GUM/b58e74bc22d17220c9198864c253a50a897bf27f/en_gum-ud-train.conllu"
+      },
+      "ngsl.csv": {
+        "bytes": 89485,
+        "sha256": "d814f2a0a3c61479a2c5ad037661719a0cc6e7dbcde31f181b54f12d0f1e11a4",
+        "url": "https://www.newgeneralservicelist.com/s/NGSL_12_lemmatized_for_research.csv"
+      },
+      "wordnet.tar.gz": {
+        "bytes": 11537239,
+        "sha256": "640db279c949a88f61f851dd54ebbb22d003f8b90b85267042ef85a3781d3a52",
+        "url": "https://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.gz"
+      }
     },
     "wordnet.tar.gz": {
       "bytes": 11537239,

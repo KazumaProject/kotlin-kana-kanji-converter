@@ -55,6 +55,10 @@ fun main(args: Array<String>) {
             options.allow("--source", "--out")
             exportInventory(File(options.optional("--source") ?: DEFAULT_SOURCE), File(options.required("--out")))
         }
+        "export-candidates" -> {
+            options.allow("--assets", "--out")
+            exportCandidates(File(options.required("--assets")), File(options.required("--out")))
+        }
         "build-reviewed" -> {
             options.allow("--source", "--decisions", "--lexicon", "--relations", "--out", "--corrections", "--notices", "--supplement")
             buildReviewedDictionary(
@@ -69,7 +73,23 @@ fun main(args: Array<String>) {
             )
         }
         else -> error("Usage: export-inventory | build-reviewed | build-legacy [--source ZIP] --out DIR | evaluate --text TEXT --candidate WORD [--format text|json]" +
+            " | export-candidates --assets DIR --out FILE.jsonl" +
             " | pack-runtime --assets DIR --out DIR | convert --assets DIR --text TEXT [--mode exact|prefix] [--limit N] [--format text|json]")
+    }
+}
+
+internal fun exportCandidates(assets: File, output: File) {
+    val dictionary = ReviewedDictionary.load(assets)
+    // CREATE_NEW prevents an accidental overwrite of an existing baseline.
+    java.nio.file.Files.newBufferedWriter(output.toPath(), Charsets.UTF_8,
+        java.nio.file.StandardOpenOption.CREATE_NEW, java.nio.file.StandardOpenOption.WRITE).use { writer ->
+        for (candidate in dictionary.allCandidates()) {
+            writer.appendLine(buildJsonObject {
+                put("reading", candidate.reading)
+                put("surface", candidate.surface)
+                put("cost", candidate.cost)
+            }.toString())
+        }
     }
 }
 
