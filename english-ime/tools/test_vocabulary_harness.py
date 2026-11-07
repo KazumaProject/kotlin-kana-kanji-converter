@@ -203,6 +203,15 @@ class VocabularyHarnessTest(unittest.TestCase):
         self.assertEqual({domain: 2 for domain in sources.DOMAINS},
                          dict(harness.Counter(row['domain'] for row in sample)))
 
+    def test_matching_one_node_does_not_turn_a_partial_literal_echo_into_a_word_hit(self):
+        response = {'candidates': [dict(rank=1, text='bookxyz', segments=[
+            dict(kind='exact', surface='book'), dict(kind='literal', surface='xyz')])]}
+        self.assertIsNone(harness.retrieved_rank(response, 'bookxyz'))
+        response = {'candidates': [dict(rank=2, text='credit card', segments=[
+            dict(kind='exact', surface='credit'), dict(kind='literal', surface=' '),
+            dict(kind='exact', surface='card')])]}
+        self.assertEqual(2, harness.retrieved_rank(response, 'credit card'))
+
 
 class VocabularySourcesTest(unittest.TestCase):
     def test_download_checks_byte_limit_and_checksum_before_publishing(self):

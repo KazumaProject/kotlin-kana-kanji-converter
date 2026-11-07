@@ -441,6 +441,18 @@ def sample_cases(cases, limit):
     return selected
 
 
+def retrieved_rank(response, expected):
+    ranks = []
+    for row in response['candidates']:
+        segments = row['segments']
+        if (sources.key(row['text']) == sources.key(expected) and
+                any(segment['kind'] != 'literal' for segment in segments) and
+                all(segment['kind'] != 'literal' or not re.search(r'[A-Za-z0-9]', segment['surface'])
+                    for segment in segments)):
+            ranks.append(row['rank'])
+    return min(ranks) if ranks else None
+
+
 def evaluate(args):
     directory = external(args.work_dir)
     with lock(directory):
@@ -457,12 +469,13 @@ def evaluate(args):
                     isinstance(case['input'], str) and sources.valid_surface(case['expected']), 'Invalid evaluation case')
         candidate_hashes = asset_hashes(args.assets.resolve())
         asset_id = hashlib.sha256(json.dumps(candidate_hashes, sort_keys=True).encode()).hexdigest()[:12]
-        evaluation = directory / ('evaluation-' + replay.sha(cases_path)[:16] + '-' + asset_id + '-' + str(args.sample_size))
+        evaluation = directory / ('evaluation-' + replay.sha(cases_path)[:16] + '-' + asset_id + '-' + str(args.sample_size) + '-spans-v1')
         require(not evaluation.exists(), 'Evaluation already exists; keep the immutable previous result')
         selected = sample_cases(cases, args.sample_size)
         result = dict(schemaVersion=1, casesSha256=replay.sha(cases_path), totalCases=len(cases),
                       rankSample=len(selected), baselineAssetHashes=config['assetHashes'],
-                      candidateAssetHashes=candidate_hashes, samplePolicy='domain-balanced-hash-v1', results={})
+                      candidateAssetHashes=candidate_hashes, samplePolicy='domain-balanced-hash-v1',
+                      retrievalPolicy='dictionary-spans-v1', results={})
         with tempfile.TemporaryDirectory(prefix='.evaluation-', dir=directory) as temporary:
             staging = Path(temporary)
             for label, assets in [('before', Path(config['assets'])), ('after', args.assets.resolve())]:
@@ -479,10 +492,8 @@ def evaluate(args):
                 for case in selected:
                     response = json.loads(cli_run(args.cli, 'convert', '--assets', assets, '--text', case['input'],
                         '--mode', case['mode'], '--format', 'json', capture=True).stdout)
-                    # Literal echo is not evidence of dictionary coverage or retrieval.
-                    ranks = [row['rank'] for row in response['candidates'] if sources.key(row['text']) == sources.key(case['expected'])
-                             and any(segment['kind'] != 'literal' for segment in row['segments'])]
-                    rank = min(ranks) if ranks else None
+                    # One matched node does not establish retrieval of the full word.
+                    rank = retrieved_rank(response, case['expected'])
                     details.append(dict(id=case['id'], rank=rank))
                     for group in ['all', case['domain'], 'mode_' + case['mode']]:
                         counts[group]['rankCases'] += 1
@@ -493,7 +504,7 @@ def evaluate(args):
             shutil.copyfile(cases_path, staging / 'cases.jsonl')
             dump(staging / 'report.json', result)
             staging.rename(evaluation)
-        return {name: result[name] for name in ('schemaVersion', 'casesSha256', 'totalCases', 'rankSample', 'samplePolicy', 'results')} | {
+        return {name: result[name] for name in ('schemaVersion', 'casesSha256', 'totalCases', 'rankSample', 'samplePolicy', 'retrievalPolicy', 'results')} | {
             'report': str(evaluation / 'report.json')}
 
 

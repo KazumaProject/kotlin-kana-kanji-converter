@@ -246,7 +246,7 @@ held-out corpus, not the training sources used for candidate selection. Coverage
 includes all cases, including missing words. Ranking uses a deterministic sample
 of at most 200 cases, balanced across available domains and ordered by hashed ID,
 configurable with `--sample-size`. Reports keep
-separate denominators and domain counts; literal input echo is never a dictionary
+separate denominators and domain counts; literal input echo, including partially copied words, is never a dictionary
 hit. A report records case and asset hashes and cannot overwrite an earlier run.
 The evaluation is JVM CLI evidence, not verification of an Android IME.
 
