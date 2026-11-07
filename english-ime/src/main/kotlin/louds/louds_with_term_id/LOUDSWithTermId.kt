@@ -321,17 +321,18 @@ class LOUDSWithTermId {
         pos: Int,
         prefix: StringBuilder,
         succinctBitVector: SuccinctBitVector,
-        result: MutableList<String>
+        result: MutableList<String>,
+        limit: Int,
     ) {
         if (isLeaf[pos]) {
             result.add(prefix.toString())
         }
         var childPos = firstChild(pos, succinctBitVector)
-        while (childPos >= 0 && LBS[childPos]) {
+        while (result.size < limit && childPos >= 0 && LBS[childPos]) {
             val index = succinctBitVector.rank1(childPos)
             if (index >= labels.size) break
             prefix.append(labels[index])
-            collectWords(childPos, prefix, succinctBitVector, result)
+            collectWords(childPos, prefix, succinctBitVector, result, limit)
             prefix.deleteCharAt(prefix.length - 1)
             childPos++
         }
@@ -353,7 +354,11 @@ class LOUDSWithTermId {
         return result
     }
 
-    fun predictiveSearch(prefix: String, succinctBitVector: SuccinctBitVector): List<String> {
+    fun predictiveSearch(prefix: String, succinctBitVector: SuccinctBitVector): List<String> =
+        predictiveSearch(prefix, succinctBitVector, Int.MAX_VALUE)
+
+    internal fun predictiveSearch(prefix: String, succinctBitVector: SuccinctBitVector, limit: Int): List<String> {
+        require(limit > 0)
         val result = mutableListOf<String>()
         val resultTemp = StringBuilder()
         var n = 0
@@ -365,7 +370,7 @@ class LOUDSWithTermId {
             resultTemp.append(labels[index])
         }
         // Collect all words starting from the last matched node
-        collectWords(n, resultTemp, succinctBitVector, result)
+        collectWords(n, resultTemp, succinctBitVector, result, limit)
         return result
     }
 
