@@ -3,6 +3,8 @@ package conversion
 import grammar.CompactGrammarRoles
 import grammar.GrammarRoles
 import grammar.Lexicon
+import grammar.RUNTIME_ROLES_FILE
+import grammar.RuntimeGrammarRoles
 import grammar.lookupKey
 import louds.LOUDS
 import louds.louds_with_term_id.LOUDSWithTermId
@@ -71,10 +73,7 @@ internal class ReviewedDictionary private constructor(
 
         fun load(directory: File): ReviewedDictionary {
             val grammar = directory.resolve("grammar")
-            val metadata = Properties().apply { grammar.resolve("bundle.properties").inputStream().use(::load) }
-            require(metadata.getProperty("schemaVersion") == "1" && metadata.getProperty("reviewComplete") == "true") {
-                "Expected a completed reviewed dictionary in $directory"
-            }
+            val metadata = readReviewedMetadata(directory)
             val reading = directory.resolve("reading.dat").readPayload { input ->
                 val bits = input.readObject() as BitSet
                 val leaves = input.readObject() as BitSet
@@ -104,17 +103,32 @@ internal class ReviewedDictionary private constructor(
                     bitvector = bits
                 }
             }
+            val runtime = grammar.resolve(RUNTIME_ROLES_FILE).toPath()
             val compact = grammar.resolve("categories.ecat").toPath()
-            val roles = if (Files.notExists(compact, NOFOLLOW_LINKS)) {
-                val lexicon = Lexicon.load(grammar)
-                GrammarRoles { surface, _ -> lexicon.lookup(surface).flatMap { it.dictionaries }.toSet() }
-            } else {
-                CompactGrammarRoles.load(compact, metadata.getProperty("categories.ecat.sha256"))
+            val roles = when {
+                metadata.containsKey("$RUNTIME_ROLES_FILE.sha256") || !Files.notExists(runtime, NOFOLLOW_LINKS) ->
+                    RuntimeGrammarRoles.load(runtime, requireNotNull(metadata.getProperty("$RUNTIME_ROLES_FILE.sha256")) {
+                        "Missing runtime grammar hash in $directory"
+                    })
+                !Files.notExists(compact, NOFOLLOW_LINKS) ->
+                    CompactGrammarRoles.load(compact, metadata.getProperty("categories.ecat.sha256"))
+                else -> {
+                    val lexicon = Lexicon.load(grammar)
+                    GrammarRoles { surface, _ -> lexicon.lookup(surface).flatMap { it.dictionaries }.toSet() }
+                }
             }
             return ReviewedDictionary(reading, words, tokens, roles)
         }
     }
 }
+
+internal fun readReviewedMetadata(directory: File): Properties =
+    Properties().apply {
+        directory.resolve("grammar/bundle.properties").inputStream().use(::load)
+        require(getProperty("schemaVersion") == "1" && getProperty("reviewComplete") == "true") {
+            "Expected a completed reviewed dictionary in $directory"
+        }
+    }
 
 private val payloadTypes = setOf(BitSet::class.java, LongArray::class.java, IntArray::class.java,
     ShortArray::class.java, CharArray::class.java)
