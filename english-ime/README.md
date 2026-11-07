@@ -342,3 +342,32 @@ and three end-to-end repetitions per mode measured medians of 3.995 s vs 0.177 s
 for counting, and 72.62 s vs 60.38 s for the extension. The category calculation
 was observed three times per extension. These are host Python measurements, not
 smartphone timings. Run again for your interpreter and data.
+
+## Unattended adoption and daily execution
+
+`vocabulary_auto.py adopt` re-extracts candidates from checksum-verified sources
+and automatically adopts only multi-character spellings backed by ESDB size <=60,
+an eligible WordNet role, and CMU spelling, observed training usage, or a listed
+headword. Gemini defer/exclude proposals veto automatic adoption. Unsupported
+sources or insufficient evidence are deferred. These are automated source-policy
+decisions, not human reviews. The immutable candidate must match the new extraction.
+
+```sh
+python3 -B english-ime/tools/vocabulary_auto.py daily \
+  --work-dir /tmp/english-daily --timezone America/Toronto \
+  --assets /tmp/reviewed-english-extended \
+  --source-dir /tmp/english-lexical-sources --esdb-dir /tmp/english-esdb \
+  --max-candidates 1000
+```
+
+`daily` checkpoints one run per calendar day, resumes it after failure and builds
+only approved entries through the existing binary/replay/runtime validation gates.
+Outputs remain external. It makes zero implicit API calls. To use optional Gemini
+proposals, run `prepare` and `review` for that day's run before `daily` or `adopt`.
+Expired free-project confirmations must never be renewed just by changing their
+timestamp: recheck AI Studio, or continue with the source-only policy and report it.
+Scheduling is configured separately in the Codex app; local runs require the
+computer and app to be running. Verified dictionary changes can be copied to the
+working branch and published through a PR; no automatic main merge or app release
+is implemented. Use the newly adopted supplement's assets as the next day's
+baseline, so already adopted spellings are not selected again.
