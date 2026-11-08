@@ -1,0 +1,5 @@
+English dictionary source-tree acquisition. Wiktionary contributors, CC BY-SA 4.0.
+https://en.wiktionary.org/wiki/Wiktionary:Copyrights
+Changes: select exact English headwords from declared English topical categories and descendants; retain source paths and hashes; merge exact spellings. No definitions, invented words or derived inflections.
+Traversal completeness describes only the declared source scope, not all English, input frequency or sense disambiguation.
+Preserve the full CC BY-SA notice shipped with the existing dictionary.

@@ -1,0 +1,49 @@
+surface	change	kinds
+acoustic admittance	added	lexical
+acoustic emission	added	lexical
+acoustic impedance	added	lexical
+aftersound	added	lexical
+anechoic	added	lexical
+attack	metadata_only	lexical
+boom-boom	added	lexical
+co-sounding	metadata_only	lexical
+coresonant	metadata_only	lexical
+dead	metadata_only	lexical
+diaphragm	metadata_only	lexical
+DNZ	added	lexical
+eigentone	added	lexical
+fidelitous	added	lexical
+Helmholtz resonance	added	lexical
+high	metadata_only	lexical
+hot	metadata_only	lexical
+infrasonic	added	lexical
+LEDE	added	lexical
+live end dead end	added	lexical
+low	metadata_only	lexical
+microbarom	added	lexical
+near field	metadata_only	lexical
+onset	metadata_only	lexical
+panning	metadata_only	lexical
+partial	metadata_only	lexical
+phon	metadata_only	lexical
+phonometer	added	lexical
+precedence effect	added	lexical
+radiation impedance	added	lexical
+retardation	metadata_only	lexical
+reverb	metadata_only	lexical
+reverberation time	added	lexical
+sabin	metadata_only	lexical
+side	metadata_only	lexical
+SNR	metadata_only	lexical
+sone	metadata_only	lexical
+spatial unmasking	added	lexical
+time-delay spectrometry	added	lexical
+tonal noise	added	lexical
+transient	metadata_only	lexical
+transondent	added	lexical
+ultrasonic	metadata_only	lexical
+unison	metadata_only	lexical
+unlistenable	added	lexical
+wave field synthesis	added	lexical
+Wheatstone's rod	added	lexical
+whispering-gallery wave	added	lexical

@@ -1,0 +1,182 @@
+surface	change	kinds
+7-38-55 rule	added	lexical
+ACS	metadata_only	lexical
+agitprop	metadata_only	lexical
+allocution	added	lexical
+AM	metadata_only	lexical
+announce	metadata_only	lexical
+announcement	metadata_only	lexical
+answer	metadata_only	lexical
+aperture	metadata_only	lexical
+ask	metadata_only	lexical
+asynchronous	metadata_only	lexical
+AtoN	added	lexical
+blurt out	added	lexical
+body language	metadata_only	lexical
+bridge	metadata_only	lexical
+BTPAN	added	lexical
+by wire	added	lexical
+cable	metadata_only	lexical
+call sign	added	lexical
+calling name	added	lexical
+callout	metadata_only	lexical
+CAS	metadata_only	lexical
+cell	metadata_only	lexical
+CETI	metadata_only	lexical
+channel	metadata_only	lexical
+chiprate	added	lexical
+clatfart	added	lexical
+closed loop	metadata_only	lexical
+communicate	metadata_only	lexical
+communication	metadata_only	lexical
+cone of silence	added	lexical
+contact	metadata_only	lexical
+contact details	added	lexical
+cosmopolite	added	lexical
+CQI	metadata_only	lexical
+cross-cultural communication	added	lexical
+DCH	metadata_only	lexical
+death by PowerPoint	added	lexical
+declaration	metadata_only	lexical
+demonstration	metadata_only	lexical
+discussion	metadata_only	lexical
+display	metadata_only	lexical
+DPCCH	metadata_only	lexical
+DPCH	metadata_only	lexical
+DPDCH	metadata_only	lexical
+drop call	added	lexical
+DTMF	metadata_only	lexical
+ELT	added	lexical
+emergency locator transmitter	added	lexical
+emergency position indicating radio beacon	added	lexical
+empty phrase	added	lexical
+encode	metadata_only	lexical
+EPIRB	added	lexical
+ESnet	added	lexical
+exocommunication	added	lexical
+FDR	metadata_only	lexical
+fustian	metadata_only	lexical
+get across	added	lexical
+give the word	added	lexical
+guideword	added	lexical
+HDA	added	lexical
+HS-DSCH	metadata_only	lexical
+HS-PDSCH	metadata_only	lexical
+HS-SCCH	metadata_only	lexical
+HSCSD	metadata_only	lexical
+HSPA	metadata_only	lexical
+HSUPA	metadata_only	lexical
+human microphone	added	lexical
+ICT	metadata_only	lexical
+illocutionarity	added	lexical
+illocutionary act	added	lexical
+imply	metadata_only	lexical
+instant message	added	lexical
+instant messaging	added	lexical
+instant messenger	added	lexical
+internal monologue	added	lexical
+it is said	added	lexical
+jingle	metadata_only	lexical
+keepalive	metadata_only	lexical
+kiyi	added	lexical
+lalochezia	added	lexical
+land on	added	lexical
+LAPD	metadata_only	lexical
+LE LL	added	lexical
+lettermark	added	lexical
+LNA	metadata_only	lexical
+look	metadata_only	lexical
+LoRa	metadata_only	lexical
+low-noise block downconverter	added	lexical
+LTE	metadata_only	lexical
+Makaton	added	lexical
+mass communication	added	lexical
+mast	metadata_only	lexical
+MDI	metadata_only	lexical
+media	metadata_only	lexical
+message	metadata_only	lexical
+message in a bottle	added	lexical
+metanetwork	added	lexical
+METI	added	lexical
+mixnet	added	lexical
+model-based design	metadata_only	lexical
+monocycle	added	lexical
+Morse code	metadata_only	lexical
+Mull of Kintyre rule	added	lexical
+near field	metadata_only	lexical
+NFC	metadata_only	lexical
+note	metadata_only	lexical
+notice	metadata_only	lexical
+NPAPI	added	lexical
+nuncupatory	added	lexical
+OCS	metadata_only	lexical
+one-to-one	added	lexical
+OPC	metadata_only	lexical
+OPC AE	added	lexical
+OPC DA	added	lexical
+OPC HDA	added	lexical
+OPC UA	added	lexical
+OTA	metadata_only	lexical
+over the top	added	lexical
+over the wire	added	lexical
+payload	metadata_only	lexical
+PBEM	added	lexical
+PBeM	added	lexical
+PBM	metadata_only	lexical
+PECS	added	lexical
+people's mic	added	lexical
+people's microphone	added	lexical
+personal locator beacon	added	lexical
+phone call	metadata_only	lexical
+phone in	added	lexical
+phonecall	metadata_only	lexical
+PLB	metadata_only	lexical
+PLC	metadata_only	lexical
+plesiochronous	added	lexical
+poll	metadata_only	lexical
+popularise	metadata_only	lexical
+PowerPointlessness	added	lexical
+pray	metadata_only	lexical
+PRC	metadata_only	lexical
+presentation	metadata_only	lexical
+propose	metadata_only	lexical
+pseudochannel	metadata_only	lexical
+put over	added	lexical
+question	metadata_only	lexical
+radio beacon	added	lexical
+read	metadata_only	lexical
+repair	metadata_only	lexical
+SB	metadata_only	lexical
+send word	added	lexical
+show	metadata_only	lexical
+slant range	added	lexical
+snitch bitch	added	lexical
+SNR	metadata_only	lexical
+Solid Snake method	added	lexical
+space communication	added	lexical
+spacegram	added	lexical
+spin machine	added	lexical
+SSB	metadata_only	lexical
+tactile graphics	added	lexical
+tap	metadata_only	lexical
+TDS	metadata_only	lexical
+telecommunication	metadata_only	lexical
+textation	added	lexical
+time out	added	lexical
+time spent listening	added	lexical
+time-out	metadata_only	lexical
+timeout	metadata_only	lexical
+toll call	added	lexical
+transportability	added	lexical
+USB	metadata_only	lexical
+VCO	metadata_only	lexical
+view	metadata_only	lexical
+voice	metadata_only	lexical
+VSB	added	lexical
+WCDMA	added	lexical
+WebVTT	metadata_only	lexical
+whisper network	added	lexical
+word	metadata_only	lexical
+write	metadata_only	lexical
+XPS	metadata_only	lexical
+zoolingualism	added	lexical

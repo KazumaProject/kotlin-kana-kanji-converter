@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "maximumExistingSpellings": 50,
+  "maximumExistingSpellings": null,
   "suggestionsPerTopic": 100,
   "topicsPerRequest": 4,
-  "selection": "Count unique candidate spellings with actual topical memberships; prioritize the smallest categories. Gemini proposes spellings and topical placement, not source evidence.",
+  "selection": "No word-count eligibility cutoff. Re-measure all configured topics and use source-tree queue/exhaustion states for coverage; proposal size is only a transport batch.",
   "topics": [
     {
       "topic": "daily.time",

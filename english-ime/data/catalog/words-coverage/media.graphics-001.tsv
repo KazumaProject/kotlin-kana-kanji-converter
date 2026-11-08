@@ -1,0 +1,501 @@
+surface	change	kinds
+2.5D	added	lexical
+3D scanner	added	lexical
+8-bit	added	lexical
+AA	metadata_only	lexical
+AABB	added	lexical
+ABC	metadata_only	lexical
+accolade	metadata_only	lexical
+adaptive tile refresh	added	lexical
+addressability	added	lexical
+adscript	added	lexical
+aerial	metadata_only	lexical
+agate	metadata_only	lexical
+all caps	added	lexical
+alpha	metadata_only	lexical
+alpha layer	added	lexical
+ambiance	metadata_only	lexical
+angle bracket	metadata_only	lexical
+angle quote	added	lexical
+antialias	added	lexical
+antialiasing	added	lexical
+antiportal	added	lexical
+Antiqua	added	lexical
+antique	metadata_only	lexical
+antishadow	metadata_only	lexical
+apex	metadata_only	lexical
+apostrophe	metadata_only	lexical
+archigrapheme	added	lexical
+ARGB	added	lexical
+Arial	metadata_only	lexical
+armature	metadata_only	lexical
+artefacting	added	lexical
+artifacted	added	lexical
+artifacting	added	lexical
+ascendant	metadata_only	lexical
+ascender	added	lexical
+ascent	metadata_only	lexical
+asterism	added	lexical
+asteronym	added	lexical
+astonisher	added	lexical
+atlas	metadata_only	lexical
+ATR	metadata_only	lexical
+attribute	metadata_only	lexical
+automask	added	lexical
+AZDO	added	lexical
+back buffer	added	lexical
+backface	added	lexical
+backprime	added	lexical
+backtick	added	lexical
+backward slash	added	lexical
+bake	metadata_only	lexical
+bar	metadata_only	lexical
+baria	added	lexical
+Barnsley fern	added	lexical
+baseline	metadata_only	lexical
+Baskerville	metadata_only	lexical
+bastard type	added	lexical
+BDRF	added	lexical
+beam tracing	added	lexical
+beardline	added	lexical
+bezier	added	lexical
+bicameral	metadata_only	lexical
+bilevel	added	lexical
+billboard	metadata_only	lexical
+billboarded	added	lexical
+billboarding	added	lexical
+bindful	added	lexical
+bindless	added	lexical
+binning	metadata_only	lexical
+bit depth	metadata_only	lexical
+bitrange	added	lexical
+black	metadata_only	lexical
+black letter	added	lexical
+blackface	metadata_only	lexical
+blit	added	lexical
+blorph	added	lexical
+bob	metadata_only	lexical
+body line	added	lexical
+bold	metadata_only	lexical
+boldface	metadata_only	lexical
+boldfaced	added	lexical
+boldness	metadata_only	lexical
+bowl	metadata_only	lexical
+box-drawing character	added	lexical
+boxel	added	lexical
+bpp	metadata_only	lexical
+brace	metadata_only	lexical
+bracket	metadata_only	lexical
+BRDF	added	lexical
+Bresenham's algorithm	added	lexical
+brevier	added	lexical
+broken bar	added	lexical
+brush	metadata_only	lexical
+bucket rendering	added	lexical
+bullet	metadata_only	lexical
+bump-mapped	added	lexical
+bundle adjustment	added	lexical
+buttery	metadata_only	lexical
+buttery smooth	added	lexical
+buttonize	added	lexical
+BVH	added	lexical
+caesura	added	lexical
+calligraphic projection	metadata_only	lexical
+calligraphics	added	lexical
+callout	metadata_only	lexical
+camel case	metadata_only	lexical
+camelback	metadata_only	lexical
+camerality	added	lexical
+Canny edge detection	added	lexical
+Canny edge detector	added	lexical
+canvas	metadata_only	lexical
+cap up	added	lexical
+capitulum	added	lexical
+capline	added	lexical
+caps	metadata_only	lexical
+caps and small caps	added	lexical
+caption	metadata_only	lexical
+case	metadata_only	lexical
+caseman	added	lexical
+Caslon	added	lexical
+CATIA	metadata_only	lexical
+caustic	metadata_only	lexical
+cel-shaded	added	lexical
+centered dot	added	lexical
+CGA	metadata_only	lexical
+CGJ	added	lexical
+characters per inch	added	lexical
+checkerboard rendering	added	lexical
+checkerboarding	added	lexical
+cicero	metadata_only	lexical
+Clarendon	metadata_only	lexical
+CLDR	added	lexical
+clip	metadata_only	lexical
+clip font	added	lexical
+clipmap	added	lexical
+clipmapping	added	lexical
+clipping	metadata_only	lexical
+clothify	added	lexical
+CLUT	added	lexical
+Cohen-Sutherland algorithm	added	lexical
+colon-point	added	lexical
+color	metadata_only	lexical
+color banding	added	lexical
+color depth	added	lexical
+colormap	added	lexical
+column	metadata_only	lexical
+combining form	added	lexical
+come	metadata_only	lexical
+comma	metadata_only	lexical
+comma-point	added	lexical
+compositor	metadata_only	lexical
+compound point	added	lexical
+cone tracing	added	lexical
+control point	added	lexical
+copy	metadata_only	lexical
+Cornell box	added	lexical
+corner bracket	added	lexical
+counter	metadata_only	lexical
+Courier	added	lexical
+Couriers	added	lexical
+cpi	metadata_only	lexical
+cpp	metadata_only	lexical
+crotch	metadata_only	lexical
+CSG	metadata_only	lexical
+cube mapping	added	lexical
+cull	metadata_only	lexical
+curly	metadata_only	lexical
+curly quote	added	lexical
+cutaway	metadata_only	lexical
+cybergraphics	added	lexical
+dagger	metadata_only	lexical
+dash	metadata_only	lexical
+dead pixel	metadata_only	lexical
+decal	metadata_only	lexical
+decimal comma	added	lexical
+decimal point	metadata_only	lexical
+decimate	metadata_only	lexical
+deep color	added	lexical
+defiddle	added	lexical
+defringe	added	lexical
+dehaze	added	lexical
+Delaunay refinement	added	lexical
+Delaunay triangulation	added	lexical
+depth peeling	added	lexical
+deringing	added	lexical
+descender	added	lexical
+desktop publishing	added	lexical
+desnow	added	lexical
+desnowing	added	lexical
+despeckle	added	lexical
+despeckler	added	lexical
+DI	added	lexical
+diacritical mark	added	lexical
+diagonal	metadata_only	lexical
+diagonal mark	added	lexical
+dialytika	added	lexical
+diamond-square algorithm	added	lexical
+Didot	added	lexical
+Didot point	added	lexical
+dingbat	metadata_only	lexical
+dinkus	added	lexical
+dip	metadata_only	lexical
+disocclude	added	lexical
+disocclusion	added	lexical
+display list	added	lexical
+displayed	metadata_only	lexical
+dissolve	metadata_only	lexical
+distance fog	added	lexical
+distributed ray tracing	added	lexical
+dither	metadata_only	lexical
+dithered	added	lexical
+dixel	added	lexical
+DOP	added	lexical
+dots per inch	added	lexical
+double angle quote	added	lexical
+double space	added	lexical
+double-space	added	lexical
+double-spaced	metadata_only	lexical
+double-struck	added	lexical
+downstyle	added	lexical
+draw distance	added	lexical
+drawable	added	lexical
+drawcall	added	lexical
+drive	metadata_only	lexical
+drop cap	added	lexical
+drop letter	added	lexical
+dry transfer	added	lexical
+DSCGA	added	lexical
+DSI	metadata_only	lexical
+DTP	metadata_only	lexical
+dumb quotes	added	lexical
+dummy text	added	lexical
+duocase	added	lexical
+duospace	added	lexical
+duospaced	added	lexical
+duplexed	added	lexical
+DVI	metadata_only	lexical
+Dvorak	metadata_only	lexical
+edgel	added	lexical
+edgeloop	added	lexical
+EDID	added	lexical
+effect	metadata_only	lexical
+EGA	added	lexical
+EGS	metadata_only	lexical
+elite	metadata_only	lexical
+ellipsis	metadata_only	lexical
+em	metadata_only	lexical
+em dash	added	lexical
+em quad	added	lexical
+em rule	added	lexical
+em space	added	lexical
+embolden	metadata_only	lexical
+emphasis	metadata_only	lexical
+en	metadata_only	lexical
+en dash	added	lexical
+en quad	added	lexical
+en rule	added	lexical
+en space	added	lexical
+end mark	added	lexical
+environment mapping	added	lexical
+eraser dust	added	lexical
+error diffusion	added	lexical
+etaoin shrdlu	added	lexical
+EVGA	metadata_only	lexical
+extended	metadata_only	lexical
+extrabold	added	lexical
+extracondensed	added	lexical
+extralight	added	lexical
+eye	metadata_only	lexical
+fac	metadata_only	lexical
+fader	metadata_only	lexical
+fatface	added	lexical
+FDH	added	lexical
+feather	metadata_only	lexical
+figure space	added	lexical
+fillrate	added	lexical
+filmstrip	added	lexical
+fl	metadata_only	lexical
+flatten	metadata_only	lexical
+fleuron	added	lexical
+flood fill	added	lexical
+flowsnake	added	lexical
+Floyd-Steinberg	added	lexical
+flush	metadata_only	lexical
+flush left	added	lexical
+flush left and right	added	lexical
+flush right	added	lexical
+flyaround	added	lexical
+flyby	metadata_only	lexical
+fog	metadata_only	lexical
+font	metadata_only	lexical
+font name	added	lexical
+forced justified	added	lexical
+foreslash	added	lexical
+formfactor	added	lexical
+forward rendering	added	lexical
+forward slash	added	lexical
+forward stroke	added	lexical
+Fournier point	added	lexical
+fraction bar	added	lexical
+fraction slash	added	lexical
+fragment shader	added	lexical
+fraktur	added	lexical
+frankendoll	added	lexical
+free-hanging	added	lexical
+freecam	added	lexical
+French spacing	added	lexical
+FSAA	added	lexical
+full out	added	lexical
+full point	added	lexical
+full-point	added	lexical
+fullwidth	added	lexical
+furigana	added	lexical
+Futura	metadata_only	lexical
+FXAA	added	lexical
+G-buffer	added	lexical
+gamma	metadata_only	lexical
+Garamond	added	lexical
+Gaussian	metadata_only	lexical
+Gaussian splat	added	lexical
+geometric pen	added	lexical
+geometry shader	added	lexical
+geta mark	added	lexical
+GI	added	lexical
+Gill Sans	added	lexical
+glenzed	added	lexical
+glenzing	added	lexical
+glyph	metadata_only	lexical
+gnaborretni	added	lexical
+god ray	added	lexical
+Gosper curve	added	lexical
+Gosper island	added	lexical
+Gothic	added	lexical
+Gouraud	added	lexical
+Gouraud shading	added	lexical
+graph	metadata_only	lexical
+gravo-acute accent	added	lexical
+graymap	added	lexical
+grecs du roi	added	lexical
+greeking	added	lexical
+grotesque	metadata_only	lexical
+guard band	metadata_only	lexical
+gutter	metadata_only	lexical
+hair space	added	lexical
+half-space	added	lexical
+halfwidth	added	lexical
+HAM	added	lexical
+handset	metadata_only	lexical
+hanging	metadata_only	lexical
+hanging indentation	added	lexical
+hard space	added	lexical
+Harvard comma	added	lexical
+hash	metadata_only	lexical
+hat	metadata_only	lexical
+hatted	metadata_only	lexical
+headline	metadata_only	lexical
+headline style	added	lexical
+headtracking	added	lexical
+headwidth	added	lexical
+heavy metal umlaut	added	lexical
+hedera	added	lexical
+HEIC	metadata_only	lexical
+HEIF	added	lexical
+heightmap	added	lexical
+Helvetica	metadata_only	lexical
+hexacone	added	lexical
+hexel	added	lexical
+HGC	added	lexical
+high color	added	lexical
+hillshade	added	lexical
+hintable	added	lexical
+hinting	metadata_only	lexical
+hit point	added	lexical
+hitbox	added	lexical
+HLSL	added	lexical
+hogel	added	lexical
+hook	metadata_only	lexical
+hook above	added	lexical
+hooktop	added	lexical
+horizontal bar	added	lexical
+HSR	metadata_only	lexical
+humanist	metadata_only	lexical
+hungarumlaut	added	lexical
+hypertexture	added	lexical
+ICA	metadata_only	lexical
+ideographic space	added	lexical
+image histogram	added	lexical
+image processing	added	lexical
+immediate mode	added	lexical
+impostor	metadata_only	lexical
+indent	metadata_only	lexical
+indentation	metadata_only	lexical
+indention	added	lexical
+index	metadata_only	lexical
+inferior	metadata_only	lexical
+initial	metadata_only	lexical
+initial caps	added	lexical
+ink trap	added	lexical
+instance	metadata_only	lexical
+interpixel	added	lexical
+interpoint	added	lexical
+interpunct	added	lexical
+interrogative	metadata_only	lexical
+interrogative-point	added	lexical
+intervoxel	added	lexical
+inverted circumflex	added	lexical
+isoparm	added	lexical
+isophote	added	lexical
+isosurface	added	lexical
+italic	metadata_only	lexical
+italicize	metadata_only	lexical
+italicized	metadata_only	lexical
+italics	metadata_only	lexical
+jaggies	added	lexical
+JBIG	added	lexical
+JPEG	metadata_only	lexical
+JPEGged	added	lexical
+justification	metadata_only	lexical
+justified	metadata_only	lexical
+justifier	added	lexical
+justify	metadata_only	lexical
+kalotypography	added	lexical
+keming	added	lexical
+kern	metadata_only	lexical
+key	metadata_only	lexical
+kinetic typography	added	lexical
+large-scale	metadata_only	lexical
+lathe	metadata_only	lexical
+lead	metadata_only	lexical
+leading	metadata_only	lexical
+left-justified	added	lexical
+lenticular bracket	added	lexical
+letter case	added	lexical
+lettering	metadata_only	lexical
+lettermark	added	lexical
+letterset	added	lexical
+letterspace	added	lexical
+letterspacing	added	lexical
+liftout	added	lexical
+ligand	metadata_only	lexical
+ligate	added	lexical
+ligature	metadata_only	lexical
+ligatured	added	lexical
+light probe	added	lexical
+light profile	added	lexical
+lightmap	added	lexical
+lightmapped	added	lexical
+lightmapping	added	lexical
+lignel	added	lexical
+line break	added	lexical
+line crash	added	lexical
+line feed	added	lexical
+line-height	added	lexical
+lineal	metadata_only	lexical
+linel	added	lexical
+linespace	added	lexical
+linespacing	added	lexical
+literal	metadata_only	lexical
+LOD	metadata_only	lexical
+LoD	added	lexical
+logotype	added	lexical
+logotypy	added	lexical
+look development	added	lexical
+lorem ipsum	added	lexical
+low poly	added	lexical
+lower case	added	lexical
+LQ	metadata_only	lexical
+LSB	metadata_only	lexical
+lumel	added	lexical
+macroblocking	added	lexical
+majusculae	added	lexical
+Mandelbox	added	lexical
+Mandelbulb	added	lexical
+manicule	added	lexical
+manifold	metadata_only	lexical
+marching cubes	added	lexical
+margin	metadata_only	lexical
+match moving	added	lexical
+MCGA	added	lexical
+medial capital	added	lexical
+meshable	added	lexical
+meshlet	added	lexical
+metaball	added	lexical
+metasprite	added	lexical
+metasurface	added	lexical
+metatile	added	lexical
+metric-compatible	added	lexical
+Metropolis light transport	added	lexical
+microfacet	added	lexical
+micropolygon	added	lexical
+microtexture	added	lexical
+microtypography	added	lexical
+middle dot	added	lexical
+middot	added	lexical
+midline	metadata_only	lexical
+midpoint	metadata_only	lexical
+Mincho	added	lexical
+minion	metadata_only	lexical
+minionette	added	lexical
+mipmapped	added	lexical
+mipmapping	added	lexical

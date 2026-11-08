@@ -1,0 +1,501 @@
+surface	change	kinds
+1GL	added	lexical
+1TBS	added	lexical
+2GL	added	lexical
+3GL	added	lexical
+4GL	added	lexical
+5GL	added	lexical
+ABAP	added	lexical
+abstract data type	added	lexical
+accumulator	metadata_only	lexical
+activation record	added	lexical
+actual parameter	added	lexical
+ADL	metadata_only	lexical
+ADT	metadata_only	lexical
+adverb	metadata_only	lexical
+advice	metadata_only	lexical
+advices	metadata_only	lexical
+agent-oriented	added	lexical
+aggressive	metadata_only	lexical
+ajaxification	added	lexical
+alertable	added	lexical
+alg	metadata_only	lexical
+algebraic data type	added	lexical
+alias	metadata_only	lexical
+alive	metadata_only	lexical
+Allman style	added	lexical
+alloc	added	lexical
+altname	added	lexical
+analyst programmer	added	lexical
+anamorphism	added	lexical
+anaphoric macro	added	lexical
+answer set programming	added	lexical
+antibugging	added	lexical
+AoS	added	lexical
+API	metadata_only	lexical
+application programming interface	added	lexical
+applicationwide	added	lexical
+applicative	added	lexical
+ARC	metadata_only	lexical
+arg	metadata_only	lexical
+arglist	added	lexical
+array	metadata_only	lexical
+array decay	added	lexical
+array programming	added	lexical
+arraylet	added	lexical
+arrow	metadata_only	lexical
+artificial language	added	lexical
+as-if rule	added	lexical
+ASI	metadata_only	lexical
+ASL	added	lexical
+ASP	added	lexical
+aspect	metadata_only	lexical
+aspect-oriented programming	added	lexical
+aspectualize	added	lexical
+assembler	metadata_only	lexical
+assembly programming	added	lexical
+assembly time	added	lexical
+assert	metadata_only	lexical
+assertion	metadata_only	lexical
+assign	metadata_only	lexical
+assignment	metadata_only	lexical
+associativity	added	lexical
+atom	metadata_only	lexical
+atomic	metadata_only	lexical
+attribute	metadata_only	lexical
+attribute-oriented	added	lexical
+attribute-oriented programming	added	lexical
+attributed	metadata_only	lexical
+Atwood's Law	added	lexical
+augmented assignment	added	lexical
+autoflush	added	lexical
+autoloader	added	lexical
+autoloading	added	lexical
+automatic	metadata_only	lexical
+automatic programming	added	lexical
+autoprompt	added	lexical
+autovivification	added	lexical
+autovivify	added	lexical
+autowire	added	lexical
+awaitable	added	lexical
+awaiter	added	lexical
+back pointer	added	lexical
+bar	metadata_only	lexical
+bare metal	metadata_only	lexical
+bareword	added	lexical
+barrel file	added	lexical
+Barton-Nackman trick	added	lexical
+BaseBean	added	lexical
+baz	metadata_only	lexical
+BEAM	added	lexical
+Bean Scripting Framework	added	lexical
+beautify	metadata_only	lexical
+behavioral subtyping	added	lexical
+BFI	metadata_only	lexical
+BHB	metadata_only	lexical
+binary	metadata_only	lexical
+binary blob	added	lexical
+binary-safe	added	lexical
+bind	metadata_only	lexical
+binder	metadata_only	lexical
+binding	metadata_only	lexical
+binding time	added	lexical
+bit array	added	lexical
+bit string	added	lexical
+bitarray	added	lexical
+bitfield	added	lexical
+bitflag	added	lexical
+bitset	added	lexical
+bivariant	metadata_only	lexical
+black box	metadata_only	lexical
+black hole	metadata_only	lexical
+bless	metadata_only	lexical
+block	metadata_only	lexical
+block comment	added	lexical
+block-scoped	added	lexical
+blort	added	lexical
+Blub paradox	added	lexical
+body	metadata_only	lexical
+Boehm collector	added	lexical
+boilerplate code	added	lexical
+bool	metadata_only	lexical
+borrow	metadata_only	lexical
+bottom type	added	lexical
+bound variable	added	lexical
+brancher	added	lexical
+breadcrumb	metadata_only	lexical
+break	metadata_only	lexical
+bridge	metadata_only	lexical
+bug compatibility	added	lexical
+built-in	metadata_only	lexical
+bump	metadata_only	lexical
+busy loop	added	lexical
+busy wait	added	lexical
+bytestring	added	lexical
+C	metadata_only	lexical
+C family	added	lexical
+C-string	added	lexical
+C-style comment	added	lexical
+C-style string	added	lexical
+cache busting	added	lexical
+caddr	added	lexical
+cadr	added	lexical
+call by reference	added	lexical
+call by sharing	added	lexical
+call by value	added	lexical
+call site	added	lexical
+call-by-future	added	lexical
+call-by-name	added	lexical
+call-by-need	added	lexical
+call-by-reference	added	lexical
+call-by-value	added	lexical
+call-with-current-continuation	added	lexical
+callable	added	lexical
+callback hell	added	lexical
+callee	added	lexical
+caller	metadata_only	lexical
+callout	metadata_only	lexical
+calltip	added	lexical
+camel case	metadata_only	lexical
+caps	metadata_only	lexical
+car	metadata_only	lexical
+carry-lookahead	added	lexical
+case	metadata_only	lexical
+case folding	added	lexical
+case-sensitivity	added	lexical
+cast away	added	lexical
+castable	added	lexical
+casting	metadata_only	lexical
+catamorphism	added	lexical
+catcall	metadata_only	lexical
+cave	metadata_only	lexical
+CDI	added	lexical
+CDR	metadata_only	lexical
+cdr	metadata_only	lexical
+cell-oriented programming	added	lexical
+char	metadata_only	lexical
+charizing	added	lexical
+check out	added	lexical
+checked exception	added	lexical
+Cheshire cat	added	lexical
+child	metadata_only	lexical
+circuit breaker	metadata_only	lexical
+class-based	added	lexical
+class-based programming	added	lexical
+classitis	added	lexical
+clean coder	added	lexical
+clickjacking	metadata_only	lexical
+close to the metal	added	lexical
+closing form	added	lexical
+Cnile	added	lexical
+COBOLer	added	lexical
+coclass	metadata_only	lexical
+code	metadata_only	lexical
+code block	added	lexical
+code cave	added	lexical
+code completion	added	lexical
+code fence	added	lexical
+code folding	added	lexical
+code golf	added	lexical
+code monkey	added	lexical
+code morphing	added	lexical
+code-behind	added	lexical
+code-first	added	lexical
+codebase	metadata_only	lexical
+codebug	added	lexical
+coding time	added	lexical
+coercion	metadata_only	lexical
+CoffeeScript	metadata_only	lexical
+cofunction	metadata_only	lexical
+COM lite	added	lexical
+Comet	added	lexical
+command language	added	lexical
+command-line interface programming	added	lexical
+comment	metadata_only	lexical
+comment out	added	lexical
+commentation	added	lexical
+commentize	added	lexical
+commit	metadata_only	lexical
+Common Language Specification	added	lexical
+compare	metadata_only	lexical
+compile	metadata_only	lexical
+compile-and-go	added	lexical
+compile-time	added	lexical
+component-oriented	added	lexical
+composite pattern	added	lexical
+comprehension	metadata_only	lexical
+computer language	added	lexical
+computer programming	added	lexical
+concat	added	lexical
+concatenation	metadata_only	lexical
+concatenative programming	added	lexical
+concept programming	added	lexical
+concern	metadata_only	lexical
+concurrent programming	added	lexical
+conditional	metadata_only	lexical
+conditional assembly language	added	lexical
+conditional comment	added	lexical
+conditional logic	added	lexical
+conditional operator	added	lexical
+configuration language	added	lexical
+cons	metadata_only	lexical
+const	metadata_only	lexical
+const correctness	added	lexical
+const-correct	added	lexical
+constness	added	lexical
+constraint programming	added	lexical
+construction language	added	lexical
+content coupling	added	lexical
+context	metadata_only	lexical
+continuation	metadata_only	lexical
+continuation-passing style	added	lexical
+control structure	added	lexical
+controller	metadata_only	lexical
+COOL	added	lexical
+copartition	added	lexical
+copy-on-write proxy	added	lexical
+copybook	added	lexical
+coro	metadata_only	lexical
+costatement	added	lexical
+counter	metadata_only	lexical
+counterless	added	lexical
+counterprogramme	added	lexical
+CPS	metadata_only	lexical
+CPython	added	lexical
+CQRS	added	lexical
+CQS	added	lexical
+CRAN	added	lexical
+crate	metadata_only	lexical
+critical section	added	lexical
+croak	metadata_only	lexical
+cross-thread	added	lexical
+CRTP	added	lexical
+CRUD	metadata_only	lexical
+CSRF token	added	lexical
+CTFE	added	lexical
+CUD	added	lexical
+cuelist	added	lexical
+curiously recurring template pattern	added	lexical
+curly brace language	added	lexical
+curly braces language	added	lexical
+curly bracket	added	lexical
+curly bracket language	added	lexical
+curly-brace language	added	lexical
+curly-braces language	added	lexical
+curly-bracket language	added	lexical
+cursor	metadata_only	lexical
+dammit operator	added	lexical
+dangling else	added	lexical
+dangling pointer	added	lexical
+DASH	added	lexical
+dasherize	added	lexical
+data object	added	lexical
+data race	added	lexical
+data type	added	lexical
+data-driven programming	added	lexical
+data-oriented	added	lexical
+data-oriented programming	added	lexical
+data-structured programming	added	lexical
+database-first	added	lexical
+datathon	added	lexical
+date-time	added	lexical
+datetime	added	lexical
+DAWG	added	lexical
+DCL	metadata_only	lexical
+DDD	metadata_only	lexical
+dead code	added	lexical
+debounce	metadata_only	lexical
+debug	metadata_only	lexical
+debug mode	added	lexical
+debuggee	added	lexical
+debugger	metadata_only	lexical
+dec	metadata_only	lexical
+decay	metadata_only	lexical
+decision table programming	added	lexical
+declaration	metadata_only	lexical
+declarative	metadata_only	lexical
+declarative programming	added	lexical
+declarator	added	lexical
+declare	metadata_only	lexical
+decorate	metadata_only	lexical
+dedent	added	lexical
+dedentation	added	lexical
+defactor	added	lexical
+defensive programming	added	lexical
+deferred	metadata_only	lexical
+define	metadata_only	lexical
+definition	metadata_only	lexical
+deforestation	metadata_only	lexical
+defunctionalization	added	lexical
+defunctionalize	added	lexical
+delay	metadata_only	lexical
+delay slot	added	lexical
+delimited continuation	added	lexical
+delta time	added	lexical
+delta timing	added	lexical
+demangle	added	lexical
+dense array	added	lexical
+deoptimize	added	lexical
+deoptimizer	added	lexical
+dependee	added	lexical
+depender	added	lexical
+dereference	added	lexical
+dereferenceable	added	lexical
+dereferencer	added	lexical
+description language	added	lexical
+design by contract	added	lexical
+despaghettification	added	lexical
+despaghettify	added	lexical
+destring	added	lexical
+destringify	added	lexical
+destruct	metadata_only	lexical
+destructure	added	lexical
+desugar	added	lexical
+Deutsch limit	added	lexical
+DevEx	added	lexical
+devocalize	added	lexical
+DI	added	lexical
+dialect	metadata_only	lexical
+dialecting	added	lexical
+dimension	metadata_only	lexical
+DIP	metadata_only	lexical
+direct buffer	added	lexical
+directive	metadata_only	lexical
+discard	metadata_only	lexical
+dispatch table	added	lexical
+do-while loop	added	lexical
+docblock	added	lexical
+docroot	added	lexical
+docstring	added	lexical
+doctype	metadata_only	lexical
+documentation	metadata_only	lexical
+domain-specific language	added	lexical
+DOP	added	lexical
+dot release	added	lexical
+double	metadata_only	lexical
+double equals	added	lexical
+double free	added	lexical
+doubly-linked	added	lexical
+downcall	added	lexical
+downpointer	added	lexical
+DP	metadata_only	lexical
+drawcall	added	lexical
+DSL	metadata_only	lexical
+duck typing	added	lexical
+Duff's device	added	lexical
+dummy	metadata_only	lexical
+dunder	metadata_only	lexical
+durn	added	lexical
+DX	added	lexical
+Dx	added	lexical
+dynamic binding	added	lexical
+dynamic language	added	lexical
+dynamic-link library	added	lexical
+dynamically-typed	added	lexical
+dynamically-typed programming	added	lexical
+eager load	added	lexical
+EAR	added	lexical
+early binding	added	lexical
+early return	added	lexical
+early-bound	added	lexical
+eat	metadata_only	lexical
+EDT	metadata_only	lexical
+Elvis	metadata_only	lexical
+Elvis operator	added	lexical
+embarrassingly parallel	added	lexical
+embeddable programming	added	lexical
+emit	metadata_only	lexical
+empty	metadata_only	lexical
+empty string	added	lexical
+enbugging	added	lexical
+encapsulation	metadata_only	lexical
+encloser	added	lexical
+end-user programming	added	lexical
+endif	added	lexical
+endless loop	added	lexical
+endpoint	metadata_only	lexical
+enregister	added	lexical
+Entity Bean	added	lexical
+entry point	added	lexical
+entrypoint	added	lexical
+enum	metadata_only	lexical
+enumeration	metadata_only	lexical
+environment	metadata_only	lexical
+ephemeron	added	lexical
+equate	metadata_only	lexical
+errno	added	lexical
+escape	metadata_only	lexical
+esolang	added	lexical
+esoteric programming language	added	lexical
+ethical programming	added	lexical
+eval	metadata_only	lexical
+evaluation	metadata_only	lexical
+event-based	added	lexical
+event-based programming	added	lexical
+event-driven	added	lexical
+event-driven programming	added	lexical
+evil	metadata_only	lexical
+evolutionary programming	added	lexical
+exceptionless	added	lexical
+executable code	added	lexical
+existential	metadata_only	lexical
+existential type	added	lexical
+exit program	added	lexical
+exotype	added	lexical
+expando	added	lexical
+explode	metadata_only	lexical
+expression	metadata_only	lexical
+expression template	added	lexical
+expression-oriented programming	added	lexical
+expressive	metadata_only	lexical
+extern	metadata_only	lexical
+external	metadata_only	lexical
+facade	metadata_only	lexical
+facet name	added	lexical
+factory	metadata_only	lexical
+fail fast	added	lexical
+fall-through	added	lexical
+falsiness	added	lexical
+falsy	metadata_only	lexical
+far	metadata_only	lexical
+fat comma	added	lexical
+fault	metadata_only	lexical
+feat	metadata_only	lexical
+feature envy	added	lexical
+feature-oriented programming	added	lexical
+fence	metadata_only	lexical
+fencepost error	added	lexical
+fencepost problem	added	lexical
+filestream	added	lexical
+filler	metadata_only	lexical
+finalize	metadata_only	lexical
+finalizer	added	lexical
+fire and forget	added	lexical
+first class	metadata_only	lexical
+first-chance exception	added	lexical
+first-class citizen	added	lexical
+first-class continuation	added	lexical
+first-class entity	added	lexical
+first-class object	added	lexical
+first-class value	added	lexical
+fixity	added	lexical
+fixme	added	lexical
+fixture	metadata_only	lexical
+flatten	metadata_only	lexical
+flexbox	metadata_only	lexical
+flip-flop operator	added	lexical
+float	metadata_only	lexical
+flow-based programming	added	lexical
+flower box	added	lexical
+fluent	metadata_only	lexical
+fmt	metadata_only	lexical
+FMX	added	lexical
+fnord	added	lexical
+FOIT	added	lexical
+fold	metadata_only	lexical
+folding	metadata_only	lexical
+foo	metadata_only	lexical
+foobar	added	lexical
+footgun	added	lexical
+for loop	added	lexical
+foreach loop	added	lexical

@@ -1,0 +1,203 @@
+surface	change	kinds
+actuator	metadata_only	lexical
+add-on	added	lexical
+address bus	added	lexical
+ALU	added	lexical
+androgynous	metadata_only	lexical
+arithmetic logic unit	added	lexical
+average access time	added	lexical
+average seek time	added	lexical
+backward compatibility	metadata_only	lexical
+band printer	added	lexical
+bare board	added	lexical
+BlackBerry	added	lexical
+blowhole	metadata_only	lexical
+Blu-ray Disc	added	lexical
+Blu-ray drive	added	lexical
+boot time	added	lexical
+bus bridge	added	lexical
+capture card	added	lexical
+Cat 5	added	lexical
+CD drive	added	lexical
+central processing unit	added	lexical
+circuit board	metadata_only	lexical
+clock speed	added	lexical
+COB	metadata_only	lexical
+compact disc drive	added	lexical
+computer architecture	added	lexical
+control bus	added	lexical
+control key	added	lexical
+controller	metadata_only	lexical
+conventional memory	added	lexical
+copro	added	lexical
+coprocessor	metadata_only	lexical
+core	metadata_only	lexical
+credit card terminal	added	lexical
+daisywheel printer	added	lexical
+Data Carrier Equipment	added	lexical
+Data Circuit-Terminating Equipment	added	lexical
+Data Communications Equipment	added	lexical
+data stick	added	lexical
+data terminal equipment	added	lexical
+data wipe	added	lexical
+DCE	metadata_only	lexical
+deskside server	added	lexical
+device	metadata_only	lexical
+dGPU	added	lexical
+disk	metadata_only	lexical
+disk access time	added	lexical
+disk drive	metadata_only	lexical
+diskette	metadata_only	lexical
+dock connector	added	lexical
+docking port	added	lexical
+dongle	metadata_only	lexical
+dot matrix printer	added	lexical
+DPRAM	added	lexical
+dreamware	added	lexical
+drive	metadata_only	lexical
+DTE	metadata_only	lexical
+dust plug	added	lexical
+DVD drive	added	lexical
+DVD-R machine	added	lexical
+electromechanical computer	added	lexical
+EMI	metadata_only	lexical
+engineering sample	added	lexical
+enter key	added	lexical
+ESSD	added	lexical
+eSSD	added	lexical
+Ethernet card	added	lexical
+factory reset	added	lexical
+factory setting	added	lexical
+Fast SCSI	added	lexical
+FastWide SCSI	added	lexical
+fieldbus	added	lexical
+fighting stick	added	lexical
+fixed disk	added	lexical
+flash disk	added	lexical
+flash drive	added	lexical
+floating-point unit	added	lexical
+floppy disk	metadata_only	lexical
+floppy disk drive	added	lexical
+floppy drive	added	lexical
+forward compatibility	added	lexical
+FPDP	added	lexical
+FPU	added	lexical
+Franken-PC	added	lexical
+Frankenstein PC	added	lexical
+FW	added	lexical
+glass terminal	added	lexical
+graphics processing unit	added	lexical
+halftop	added	lexical
+hard disk	added	lexical
+hard drive	added	lexical
+hard reset	added	lexical
+hard-reset	added	lexical
+HBM	added	lexical
+HD DVD drive	added	lexical
+home computer	added	lexical
+human interface device	added	lexical
+IGP	metadata_only	lexical
+iGPU	metadata_only	lexical
+in-plane switching	metadata_only	lexical
+inkjet printer	added	lexical
+isostick	added	lexical
+keybounce	metadata_only	lexical
+keyer	added	lexical
+kick	metadata_only	lexical
+klunker	added	lexical
+KVM	metadata_only	lexical
+laser printer	added	lexical
+legacy-free	added	lexical
+light pen	added	lexical
+line printer	added	lexical
+LPR	metadata_only	lexical
+mask work	added	lexical
+mass storage	added	lexical
+maxicomputer	added	lexical
+maximum seek time	added	lexical
+MD drive	added	lexical
+MDI	metadata_only	lexical
+memory card	metadata_only	lexical
+memory cartridge	added	lexical
+microcomputer	metadata_only	lexical
+microprocessor	metadata_only	lexical
+minicomputer	metadata_only	lexical
+minidisc	added	lexical
+minimum seek time	added	lexical
+MMU	metadata_only	lexical
+mobo	metadata_only	lexical
+mouse bungee	added	lexical
+mouse mover	added	lexical
+multicore	metadata_only	lexical
+multidrop	added	lexical
+multiprocessor	metadata_only	lexical
+nanocarpet	added	lexical
+Narrow SCSI	added	lexical
+neocloud	added	lexical
+neural processing unit	added	lexical
+New World ROM	added	lexical
+non-volatile memory	added	lexical
+numeric keypad	added	lexical
+NVM	added	lexical
+optical disc	added	lexical
+PATA	added	lexical
+payment terminal	added	lexical
+PCI Express	added	lexical
+pedestal server	added	lexical
+peripheral	metadata_only	lexical
+peripheral device	added	lexical
+perpendicular recording	added	lexical
+POS terminal	added	lexical
+powerwash	added	lexical
+PPU	metadata_only	lexical
+PSG	metadata_only	lexical
+ready queue	added	lexical
+real storage	added	lexical
+return key	added	lexical
+RIMM	added	lexical
+road map	added	lexical
+rollover cable	added	lexical
+screen mask	metadata_only	lexical
+SCSI	metadata_only	lexical
+SDHC card	added	lexical
+sector	metadata_only	lexical
+seek time	added	lexical
+segment descriptor	added	lexical
+shield	metadata_only	lexical
+silicon lottery	added	lexical
+SIMM	added	lexical
+Small Computer Systems Interface	added	lexical
+SMART	added	lexical
+spinner	metadata_only	lexical
+startup time	added	lexical
+storage device	added	lexical
+storage medium	added	lexical
+streaming tape	added	lexical
+superfloppy	added	lexical
+system bus	added	lexical
+system pull	added	lexical
+thermal printer	added	lexical
+Thunderbolt chassis	added	lexical
+toner	metadata_only	lexical
+touch screen	added	lexical
+Ultra SCSI	added	lexical
+unicore	added	lexical
+USB data blocker	added	lexical
+USB key	added	lexical
+USB Type-C	added	lexical
+USB-A	added	lexical
+USB-C	added	lexical
+vertical alignment	added	lexical
+very-large-scale	added	lexical
+video card	added	lexical
+virtual 8086 mode	added	lexical
+volatile memory	added	lexical
+VPU	added	lexical
+waiting time	added	lexical
+watchdog timer	metadata_only	lexical
+web server	metadata_only	lexical
+Wide SCSI	added	lexical
+WideUltra SCSI	added	lexical
+WORM	added	lexical
+WORM drive	added	lexical
+write once	added	lexical

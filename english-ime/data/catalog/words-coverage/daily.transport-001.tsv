@@ -1,0 +1,501 @@
+surface	change	kinds
+2-1 road	metadata_only	lexical
+AAR	metadata_only	lexical
+accident	metadata_only	lexical
+accommodation on arrival	added	lexical
+ACM	metadata_only	lexical
+actual flying time	added	lexical
+adcol	added	lexical
+ADM	added	lexical
+aerial cableway	metadata_only	lexical
+aerial railway	metadata_only	lexical
+aerophobia	added	lexical
+AEV	metadata_only	lexical
+AFC	metadata_only	lexical
+AFCS	metadata_only	lexical
+agency credit memo	added	lexical
+agency debit memo	added	lexical
+air rage	metadata_only	lexical
+air ride	metadata_only	lexical
+air ticket	added	lexical
+airbill	metadata_only	lexical
+airline ticket	metadata_only	lexical
+airplane ticket	added	lexical
+airside	added	lexical
+aisle	metadata_only	lexical
+alignment	metadata_only	lexical
+all change	metadata_only	lexical
+all-terrain vehicle	metadata_only	lexical
+American plan	added	lexical
+AMT	metadata_only	lexical
+ANPR	metadata_only	lexical
+APM	metadata_only	lexical
+APTS	metadata_only	lexical
+arkship	metadata_only	lexical
+arrester bed	metadata_only	lexical
+arterial street	metadata_only	lexical
+artery	metadata_only	lexical
+article of extraordinary value	metadata_only	lexical
+ASN	metadata_only	lexical
+ATM	metadata_only	lexical
+ATP	metadata_only	lexical
+ATV	metadata_only	lexical
+Automated Transfer Vehicle	metadata_only	lexical
+available ton mile	metadata_only	lexical
+AWT	metadata_only	lexical
+axle load	metadata_only	lexical
+axle loading	metadata_only	lexical
+B-double	metadata_only	lexical
+babymoon	added	lexical
+back to back ticket	added	lexical
+backhaul	metadata_only	lexical
+backload	metadata_only	lexical
+backloading	metadata_only	lexical
+backpacker	metadata_only	lexical
+baggage check	added	lexical
+baggage drop	added	lexical
+base tunnel	metadata_only	lexical
+BFOD	added	lexical
+big rig	metadata_only	lexical
+bikepack	added	lexical
+bikepacking	added	lexical
+bird strike	metadata_only	lexical
+black spot	metadata_only	lexical
+blackout date	added	lexical
+blind	metadata_only	lexical
+blinded	metadata_only	lexical
+boat train	added	lexical
+book away	added	lexical
+booking class	added	lexical
+boot	metadata_only	lexical
+brake light	metadata_only	lexical
+braking distance	metadata_only	lexical
+BRS	metadata_only	lexical
+BRT	metadata_only	lexical
+bucket shop	added	lexical
+budget airline	added	lexical
+bulk	metadata_only	lexical
+bus buddy	metadata_only	lexical
+bus mile	metadata_only	lexical
+bus rapid transit	metadata_only	lexical
+bus replacement service	metadata_only	lexical
+bus stand	metadata_only	lexical
+business	metadata_only	lexical
+business class	added	lexical
+cabin	metadata_only	lexical
+cableway	metadata_only	lexical
+canard	metadata_only	lexical
+car brain	metadata_only	lexical
+car jockey	metadata_only	lexical
+caravanserai	added	lexical
+cargon	metadata_only	lexical
+carrying capacity	metadata_only	lexical
+case	metadata_only	lexical
+CASM	added	lexical
+catenary	metadata_only	lexical
+CEU	metadata_only	lexical
+check-in time	added	lexical
+checked	metadata_only	lexical
+chicken bus	metadata_only	lexical
+churn	metadata_only	lexical
+circuit	metadata_only	lexical
+circuity	metadata_only	lexical
+circulator	metadata_only	lexical
+CKIN	metadata_only	lexical
+clearance time	metadata_only	lexical
+cliff lift	metadata_only	lexical
+cliff railway	metadata_only	lexical
+clock-face timetable	metadata_only	lexical
+close	metadata_only	lexical
+clue card	added	lexical
+CMAQ	metadata_only	lexical
+collector road	metadata_only	lexical
+collector street	metadata_only	lexical
+comfort stop	added	lexical
+common carrier	metadata_only	lexical
+commuter	metadata_only	lexical
+conductor	metadata_only	lexical
+congestion charge	metadata_only	lexical
+congestion charging	metadata_only	lexical
+consolidator	added	lexical
+container	metadata_only	lexical
+covered wagon	metadata_only	lexical
+cross-border ticket	added	lexical
+CRS	metadata_only	lexical
+cruising	metadata_only	lexical
+crush load	metadata_only	lexical
+CSS	metadata_only	lexical
+curtain-sider	metadata_only	lexical
+cutline	added	lexical
+dangleway	metadata_only	lexical
+DAPO	added	lexical
+Datex2	metadata_only	lexical
+day return	added	lexical
+daycation	added	lexical
+deadhead	metadata_only	lexical
+debendification	metadata_only	lexical
+debris response area	metadata_only	lexical
+dehost	added	lexical
+detouristify	added	lexical
+diesel engine	metadata_only	lexical
+direct	metadata_only	lexical
+direct flight	added	lexical
+distributor road	metadata_only	lexical
+diversion	metadata_only	lexical
+dog	metadata_only	lexical
+DOJ	metadata_only	lexical
+double open jaw	added	lexical
+doughnutting	metadata_only	lexical
+down line	added	lexical
+DRA	metadata_only	lexical
+draw into	metadata_only	lexical
+drop lot	metadata_only	lexical
+drop ship	metadata_only	lexical
+drop yard	metadata_only	lexical
+ducat	metadata_only	lexical
+dunnage	metadata_only	lexical
+dwell time	metadata_only	lexical
+EC	metadata_only	lexical
+economy class	added	lexical
+EH	added	lexical
+El	metadata_only	lexical
+elapsed flying time	added	lexical
+electric bus	metadata_only	lexical
+emergency passport	added	lexical
+end item	added	lexical
+ERP	metadata_only	lexical
+ERTMS	metadata_only	lexical
+ET	added	lexical
+ETA	added	lexical
+ETCS	metadata_only	lexical
+European plan	added	lexical
+excess baggage	added	lexical
+excursion fare	added	lexical
+fam trip	added	lexical
+famil	added	lexical
+fare	metadata_only	lexical
+fare basis	added	lexical
+fare break point	added	lexical
+fare ladder	added	lexical
+faring	metadata_only	lexical
+FCC	added	lexical
+ferd	metadata_only	lexical
+first mile	metadata_only	lexical
+flat fare	metadata_only	lexical
+FLIFO	added	lexical
+flight code	added	lexical
+flight number	added	lexical
+flight status	added	lexical
+flight ticket	added	lexical
+flightmare	added	lexical
+float	metadata_only	lexical
+float-on float-off	metadata_only	lexical
+floating bus stop	metadata_only	lexical
+floating car data	metadata_only	lexical
+FMCSA	metadata_only	lexical
+FNU	added	lexical
+FOP	added	lexical
+free and easy	added	lexical
+frequent flyer	added	lexical
+fuel economy	metadata_only	lexical
+fuel tank	metadata_only	lexical
+full board	added	lexical
+gadgetbahn	metadata_only	lexical
+gate lice	added	lexical
+gate time	added	lexical
+gateline	metadata_only	lexical
+gaycation	added	lexical
+GDS	added	lexical
+girlcation	added	lexical
+global distribution system	added	lexical
+go-show	added	lexical
+goods	metadata_only	lexical
+Grand Tour	added	lexical
+great circle route	metadata_only	lexical
+GSA	metadata_only	lexical
+guaranteed arrival	added	lexical
+half board	added	lexical
+half fare	metadata_only	lexical
+hand truck	metadata_only	lexical
+handcart	metadata_only	lexical
+happy landings	added	lexical
+hard class	added	lexical
+haul road	metadata_only	lexical
+haul truck	metadata_only	lexical
+HBO	metadata_only	lexical
+head-on	metadata_only	lexical
+head-on collision	metadata_only	lexical
+headway	metadata_only	lexical
+helicopter	metadata_only	lexical
+HFR	metadata_only	lexical
+HGV	metadata_only	lexical
+high-occupancy vehicle	metadata_only	lexical
+higher intermediate point	added	lexical
+hitchhike	metadata_only	lexical
+HLLV	metadata_only	lexical
+horse bus	metadata_only	lexical
+horseless carriage	metadata_only	lexical
+hotel load	metadata_only	lexical
+hoverboard	metadata_only	lexical
+HSR	metadata_only	lexical
+hub-and-spoke	metadata_only	lexical
+hushpitality	added	lexical
+HX	added	lexical
+hybridization	metadata_only	lexical
+hydrogen station	metadata_only	lexical
+hypermobility	added	lexical
+IAS	metadata_only	lexical
+IC	metadata_only	lexical
+iceboating	metadata_only	lexical
+ICU	metadata_only	lexical
+IHVS	metadata_only	lexical
+implant	metadata_only	lexical
+intelligent transportation system	metadata_only	lexical
+interchange	metadata_only	lexical
+interline	metadata_only	lexical
+intersection	metadata_only	lexical
+iron horse	metadata_only	lexical
+ISA	metadata_only	lexical
+itinerary	metadata_only	lexical
+ITS	metadata_only	lexical
+jet plane	metadata_only	lexical
+jet set	added	lexical
+junket	metadata_only	lexical
+kangaroo route	added	lexical
+kk	metadata_only	lexical
+KPRA	metadata_only	lexical
+KVDT	added	lexical
+KVDT2	added	lexical
+KVDTP	added	lexical
+ladycation	added	lexical
+land	metadata_only	lexical
+landside	added	lexical
+last mile	metadata_only	lexical
+LBH	added	lexical
+LCC	metadata_only	lexical
+lead name	added	lexical
+LEZ	metadata_only	lexical
+LMC	metadata_only	lexical
+LNU	added	lexical
+lo-lo	metadata_only	lexical
+load factor	metadata_only	lexical
+local street	metadata_only	lexical
+long sell	added	lexical
+longhaul	metadata_only	lexical
+longhauled	metadata_only	lexical
+longhauling	metadata_only	lexical
+loop	metadata_only	lexical
+LOS	metadata_only	lexical
+loser back home	added	lexical
+low-cost carrier	added	lexical
+LPI	metadata_only	lexical
+Lufthansa	metadata_only	lexical
+Lufty	added	lexical
+mainlane	metadata_only	lexical
+managed motorway	metadata_only	lexical
+mancation	added	lexical
+manspreading	metadata_only	lexical
+MAP	added	lexical
+married sector	added	lexical
+maximum permitted mileage	added	lexical
+MCO	metadata_only	lexical
+MCT	metadata_only	lexical
+MDAC	added	lexical
+MDOT	metadata_only	lexical
+means of transportation	metadata_only	lexical
+MEDA	metadata_only	lexical
+megacarrier	metadata_only	lexical
+metal	metadata_only	lexical
+mile	metadata_only	lexical
+milk run	metadata_only	lexical
+milk truck	metadata_only	lexical
+minimum connecting time	added	lexical
+miscellaneous charge order	added	lexical
+modal shift	metadata_only	lexical
+mode	metadata_only	lexical
+modified American plan	added	lexical
+Mohring effect	metadata_only	lexical
+MPC	metadata_only	lexical
+MPM	metadata_only	lexical
+MRT	metadata_only	lexical
+MSC	metadata_only	lexical
+MTC	metadata_only	lexical
+MUCTC	metadata_only	lexical
+nav	metadata_only	lexical
+nearcation	added	lexical
+night fighter	metadata_only	lexical
+nonrev	added	lexical
+nonstop	metadata_only	lexical
+NTL	metadata_only	lexical
+NUC	added	lexical
+OAL	added	lexical
+OBC	metadata_only	lexical
+offload	metadata_only	lexical
+OID	metadata_only	lexical
+one-way	metadata_only	lexical
+one-way ticket	added	lexical
+open jaw	added	lexical
+operator	metadata_only	lexical
+OSI	added	lexical
+OTA	metadata_only	lexical
+overhead	metadata_only	lexical
+overheight	metadata_only	lexical
+overland	metadata_only	lexical
+overlength	metadata_only	lexical
+overweight	metadata_only	lexical
+overwidth	metadata_only	lexical
+owl bus	metadata_only	lexical
+P2P	metadata_only	lexical
+packing list	metadata_only	lexical
+pak pai	metadata_only	lexical
+pallet jack	metadata_only	lexical
+pallet truck	metadata_only	lexical
+panda crossing	metadata_only	lexical
+paper ticket	added	lexical
+paratransit	metadata_only	lexical
+passage plan	added	lexical
+passenger kilometer	metadata_only	lexical
+passer-by	added	lexical
+passive provision	metadata_only	lexical
+paternoster	metadata_only	lexical
+PCC	metadata_only	lexical
+pedestrian	metadata_only	lexical
+periplus	added	lexical
+piece system	added	lexical
+pilot vehicle	metadata_only	lexical
+PIR	added	lexical
+Pittsburgh left	metadata_only	lexical
+Pixie	added	lexical
+plane mile	metadata_only	lexical
+plane ticket	added	lexical
+plate	metadata_only	lexical
+plate away	added	lexical
+PLB	metadata_only	lexical
+ply	metadata_only	lexical
+PNR	metadata_only	lexical
+POCC	metadata_only	lexical
+point of departure	added	lexical
+point-to-point	metadata_only	lexical
+power unit	metadata_only	lexical
+PPBM	added	lexical
+priority	metadata_only	lexical
+property irregularity report	added	lexical
+protect	metadata_only	lexical
+pseudo-city code	added	lexical
+PTI	metadata_only	lexical
+PTV	metadata_only	lexical
+public transport	metadata_only	lexical
+pulse	metadata_only	lexical
+pump truck	metadata_only	lexical
+racecation	added	lexical
+rack rate	added	lexical
+rail replacement service	metadata_only	lexical
+RBD	added	lexical
+reaccommodate	added	lexical
+reconfirm	metadata_only	lexical
+red rattler	metadata_only	lexical
+red-eye	metadata_only	lexical
+RER	metadata_only	lexical
+reservation booking designator	added	lexical
+retention line	added	lexical
+return fare	added	lexical
+return ticket	added	lexical
+reval	added	lexical
+reverse	metadata_only	lexical
+right of repentance	added	lexical
+RNE	metadata_only	lexical
+ro-ro	metadata_only	lexical
+road pricing	metadata_only	lexical
+road service	metadata_only	lexical
+roadbook	added	lexical
+ROH	metadata_only	lexical
+roll-on roll-off	metadata_only	lexical
+roller blind	metadata_only	lexical
+round trip	added	lexical
+ROW	added	lexical
+RoW	added	lexical
+RR	metadata_only	lexical
+RSA	metadata_only	lexical
+RT	metadata_only	lexical
+run of house	added	lexical
+RV	metadata_only	lexical
+salt truck	metadata_only	lexical
+seat hogging	metadata_only	lexical
+seat only	added	lexical
+seat-mile	metadata_only	lexical
+seatmile	metadata_only	lexical
+second class	added	lexical
+see the world	added	lexical
+segment	metadata_only	lexical
+shield	metadata_only	lexical
+shipping	metadata_only	lexical
+SHLLV	metadata_only	lexical
+short tag	added	lexical
+show time	added	lexical
+shuttle driver	metadata_only	lexical
+single ticket	added	lexical
+SIPP	added	lexical
+sit-up-and-beg	metadata_only	lexical
+SITI	metadata_only	lexical
+SITO	metadata_only	lexical
+six-month club	added	lexical
+skid	metadata_only	lexical
+skylab	metadata_only	lexical
+slip lane	metadata_only	lexical
+SLS	metadata_only	lexical
+smart motorway	metadata_only	lexical
+snow train	metadata_only	lexical
+snowmobilist	metadata_only	lexical
+SOTI	added	lexical
+SOTO	added	lexical
+Space Launch System	metadata_only	lexical
+Space Launcher System	metadata_only	lexical
+space travel	added	lexical
+spaceline	added	lexical
+SPMT	metadata_only	lexical
+spur	metadata_only	lexical
+standby	metadata_only	lexical
+staycation	metadata_only	lexical
+STPC	added	lexical
+straddling bus	metadata_only	lexical
+summit tunnel	metadata_only	lexical
+sump buster	metadata_only	lexical
+surface mail	metadata_only	lexical
+suspend	metadata_only	lexical
+swap body	metadata_only	lexical
+SWIFT	metadata_only	lexical
+TCA	metadata_only	lexical
+TCP	metadata_only	lexical
+TD	added	lexical
+telpher	metadata_only	lexical
+telpher line	metadata_only	lexical
+telpherage	metadata_only	lexical
+terminus	metadata_only	lexical
+TfW	metadata_only	lexical
+third class	added	lexical
+thumb	metadata_only	lexical
+ticket designator	added	lexical
+ticket machine	added	lexical
+ticket point mileage	added	lexical
+ticket printer	added	lexical
+ticket stamping machine	added	lexical
+ticket time limit	added	lexical
+ticket vending machine	added	lexical
+ticketer	added	lexical
+time of arrival	added	lexical
+time of departure	added	lexical
+TNC	metadata_only	lexical
+TOD	metadata_only	lexical
+togethering	added	lexical
+tourist highway	added	lexical
+tourist home	added	lexical
+tourist visa	added	lexical
+TPM	metadata_only	lexical
+traction	metadata_only	lexical
+traction motor	metadata_only	lexical
+traffic conference area	added	lexical
+train ticket	added	lexical
+transfer	metadata_only	lexical
+transmodal	metadata_only	lexical
+transport	metadata_only	lexical
+transportation	metadata_only	lexical
