@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "maximumExistingSpellings": 50,
+  "suggestionsPerTopic": 100,
+  "topicsPerRequest": 4,
+  "selection": "Count unique candidate spellings with actual topical memberships; prioritize the smallest categories. Gemini proposes spellings and topical placement, not source evidence.",
+  "topics": [
+    {
+      "topic": "daily.time",
+      "kind": "lexical"
+    },
+    {
+      "topic": "daily.family",
+      "kind": "lexical"
+    },
+    {
+      "topic": "daily.home",
+      "kind": "lexical"
+    },
+    {
+      "topic": "daily.food",
+      "kind": "lexical"
+    },
+    {
+      "topic": "daily.shopping",
+      "kind": "lexical"
+    },
+    {
+      "topic": "daily.money",
+      "kind": "lexical"
+    },
+    {
+      "topic": "daily.transport",
+      "kind": "lexical"
+    },
+    {
+      "topic": "daily.health",
+      "kind": "lexical"
+    },
+    {
+      "topic": "daily.education",
+      "kind": "lexical"
+    },
+    {
+      "topic": "daily.work",
+      "kind": "lexical"
+    },
+    {
+      "topic": "daily.communication",
+      "kind": "lexical"
+    },
+    {
+      "topic": "technology.development",
+      "kind": "lexical"
+    },
+    {
+      "topic": "technology.web",
+      "kind": "lexical"
+    },
+    {
+      "topic": "technology.mobile",
+      "kind": "lexical"
+    },
+    {
+      "topic": "technology.os",
+      "kind": "lexical"
+    },
+    {
+      "topic": "technology.hardware",
+      "kind": "lexical"
+    },
+    {
+      "topic": "technology.network",
+      "kind": "lexical"
+    },
+    {
+      "topic": "technology.database",
+      "kind": "lexical"
+    },
+    {
+      "topic": "technology.cloud",
+      "kind": "lexical"
+    },
+    {
+      "topic": "technology.security",
+      "kind": "lexical"
+    },
+    {
+      "topic": "technology.ai",
+      "kind": "lexical"
+    },
+    {
+      "topic": "technology.languages",
+      "kind": "language"
+    },
+    {
+      "topic": "engineering.civil",
+      "kind": "lexical"
+    },
+    {
+      "topic": "engineering.environment",
+      "kind": "lexical"
+    },
+    {
+      "topic": "science.biology",
+      "kind": "lexical"
+    },
+    {
+      "topic": "science.medicine",
+      "kind": "lexical"
+    },
+    {
+      "topic": "science.agriculture",
+      "kind": "lexical"
+    },
+    {
+      "topic": "media.photography",
+      "kind": "lexical"
+    },
+    {
+      "topic": "media.audio",
+      "kind": "lexical"
+    },
+    {
+      "topic": "media.graphics",
+      "kind": "lexical"
+    },
+    {
+      "topic": "people.history",
+      "kind": "person"
+    },
+    {
+      "topic": "products.computing",
+      "kind": "product"
+    },
+    {
+      "topic": "products.imaging",
+      "kind": "product"
+    },
+    {
+      "topic": "products.home",
+      "kind": "product"
+    },
+    {
+      "topic": "products.lifestyle",
+      "kind": "brand"
+    },
+    {
+      "topic": "organizations.technology",
+      "kind": "organization"
+    },
+    {
+      "topic": "organizations.consumer",
+      "kind": "organization"
+    },
+    {
+      "topic": "services.communication",
+      "kind": "service"
+    },
+    {
+      "topic": "services.media",
+      "kind": "service"
+    },
+    {
+      "topic": "organizations.general",
+      "kind": "organization"
+    }
+  ]
+}

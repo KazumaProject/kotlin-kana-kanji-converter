@@ -1,0 +1,88 @@
+surface	change	kinds
+500px	added	service
+Agoda	added	service
+AliExpress	metadata_only	service
+Asana	metadata_only	service
+Behance	added	service
+Bitbucket	metadata_only	service
+Bitchute	added	service
+Blogger	metadata_only	service
+Booking.com	metadata_only	service
+Care.com	added	service
+Clubhouse	added	service
+Confluence	metadata_only	service
+Craigslist	added	service
+Deliveroo	added	service
+DiDi	metadata_only	service
+DoorDash	metadata_only	service
+Dribbble	added	service
+Dropbox	metadata_only	service
+eBay	metadata_only	service
+Element	metadata_only	service
+Ello	added	service
+Etsy	metadata_only	service
+Evernote	metadata_only	service
+Fiverr	metadata_only	service
+Flickr	metadata_only	service
+Freelancer	added	service
+Gab	added	service
+Getaround	added	service
+GitHub	metadata_only	service
+GitLab	metadata_only	service
+GoFundMe	metadata_only	service
+Gojek	added	service
+Google Docs	metadata_only	service
+Google Drive	metadata_only	service
+Google Sheets	metadata_only	service
+Google Slides	metadata_only	service
+Grubhub	metadata_only	service
+Gumtree	added	service
+Indiegogo	metadata_only	service
+Instacart	metadata_only	service
+JD.com	added	service
+Jira	metadata_only	service
+Just Eat	added	service
+Kickstarter	added	service
+Line	added	service
+Lyft	metadata_only	service
+Mastodon	metadata_only	service
+Matrix	added	service
+Mattermost	added	service
+Medium	metadata_only	service
+Notion	metadata_only	service
+Odysee	added	service
+OneDrive	metadata_only	service
+Parler	metadata_only	service
+Patreon	metadata_only	service
+Pinduoduo	added	service
+Pinterest	metadata_only	service
+Quora	added	service
+Rakuten	metadata_only	service
+Rocket.Chat	added	service
+Rumble	added	service
+Shopify	metadata_only	service
+Skype	metadata_only	service
+Snapchat	metadata_only	service
+Squarespace	metadata_only	service
+Stack Overflow	metadata_only	service
+Steemit	metadata_only	service
+Substack	metadata_only	service
+Taobao	metadata_only	service
+Threads	metadata_only	service
+Threema	added	service
+Toptal	added	service
+Trello	metadata_only	service
+Truth Social	added	service
+Tumblr	metadata_only	service
+Turo	added	service
+Uber	metadata_only	service
+Uber Eats	added	service
+Upwork	metadata_only	service
+Vero	added	service
+Viber	metadata_only	service
+WeChat	metadata_only	service
+Wix.com	added	service
+WordPress.com	added	service
+X	metadata_only	service
+Zalando	added	service
+Zoom	metadata_only	service

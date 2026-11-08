@@ -1,0 +1,66 @@
+surface	change	kinds
+activated sludge	added	lexical
+afforestation	metadata_only	lexical
+agroforestry	metadata_only	lexical
+algal bloom	added	lexical
+bioplastic	added	lexical
+blackwater	metadata_only	lexical
+cap and trade	added	lexical
+carbon offset	added	lexical
+carbon tax	added	lexical
+CFCs	metadata_only	lexical
+charging station	metadata_only	lexical
+climate refugee	added	lexical
+coral bleaching	added	lexical
+corporate social responsibility	added	lexical
+dead zone	metadata_only	lexical
+deforestation	metadata_only	lexical
+desertification	metadata_only	lexical
+e-waste	added	lexical
+eco-label	added	lexical
+electric vehicle	metadata_only	lexical
+emissions trading	added	lexical
+endangered species	metadata_only	lexical
+eutrophication	metadata_only	lexical
+fair trade	added	lexical
+fuel cell	metadata_only	lexical
+geothermal energy	metadata_only	lexical
+green bond	added	lexical
+green building	added	lexical
+greywater	added	lexical
+herbicide	metadata_only	lexical
+hybrid vehicle	metadata_only	lexical
+hydroelectric power	added	lexical
+hydrogen economy	metadata_only	lexical
+incineration	metadata_only	lexical
+invasive species	added	lexical
+IPCC	metadata_only	lexical
+Kyoto Protocol	added	lexical
+light pollution	added	lexical
+mass transit	added	lexical
+microplastics	metadata_only	lexical
+Montreal Protocol	added	lexical
+national park	added	lexical
+nature reserve	added	lexical
+noise pollution	added	lexical
+ocean acidification	added	lexical
+organic farming	added	lexical
+overfishing	metadata_only	lexical
+permaculture	metadata_only	lexical
+pesticide	metadata_only	lexical
+polluter pays principle	added	lexical
+public transport	metadata_only	lexical
+reforestation	metadata_only	lexical
+renewable energy	metadata_only	lexical
+smart grid	metadata_only	lexical
+smog	metadata_only	lexical
+soil conservation	added	lexical
+soil erosion	added	lexical
+solar power	metadata_only	lexical
+thermal pollution	added	lexical
+tidal power	metadata_only	lexical
+upcycling	metadata_only	lexical
+urban sprawl	added	lexical
+wave power	added	lexical
+wildlife corridor	added	lexical
+wind power	metadata_only	lexical

@@ -1,0 +1,47 @@
+surface	change	kinds
+anonymous function	added	lexical
+backward compatibility	metadata_only	lexical
+base class	added	lexical
+binary search	added	lexical
+bit shift	added	lexical
+breadth-first search	added	lexical
+breakpoint	metadata_only	lexical
+bubble sort	added	lexical
+buffer overflow	added	lexical
+call stack	metadata_only	lexical
+case sensitivity	added	lexical
+character encoding	metadata_only	lexical
+code coverage	added	lexical
+code smell	added	lexical
+command line interface	added	lexical
+concurrent execution	added	lexical
+continuous integration	metadata_only	lexical
+control flow	metadata_only	lexical
+core dump	added	lexical
+deep copy	metadata_only	lexical
+dependency injection	added	lexical
+depth-first search	added	lexical
+design pattern	added	lexical
+deterministic algorithm	added	lexical
+differential equation	metadata_only	lexical
+digital signature	metadata_only	lexical
+double precision	added	lexical
+dynamic dispatch	added	lexical
+edge case	added	lexical
+empty set	added	lexical
+event loop	added	lexical
+exception handling	added	lexical
+factory pattern	added	lexical
+fault tolerance	added	lexical
+file descriptor	added	lexical
+finite state machine	added	lexical
+floating-point number	added	lexical
+foreign key	metadata_only	lexical
+formal grammar	added	lexical
+forward declaration	added	lexical
+functional programming	added	lexical
+garbage collector	added	lexical
+generic programming	added	lexical
+greedy algorithm	added	lexical
+hash collision	added	lexical
+hash map	added	lexical

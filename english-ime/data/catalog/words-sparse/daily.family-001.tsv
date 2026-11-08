@@ -1,0 +1,97 @@
+surface	change	kinds
+adoption	metadata_only	lexical
+ancestor	metadata_only	lexical
+ancestors	metadata_only	lexical
+blood relative	added	lexical
+bride	metadata_only	lexical
+brother-in-law	metadata_only	lexical
+childhood	metadata_only	lexical
+clan	metadata_only	lexical
+couple	metadata_only	lexical
+dad	metadata_only	lexical
+dada	metadata_only	lexical
+dame	metadata_only	lexical
+daughter-in-law	metadata_only	lexical
+descendant	metadata_only	lexical
+descendants	metadata_only	lexical
+divorce	metadata_only	lexical
+domestic partner	added	lexical
+elder	metadata_only	lexical
+elders	metadata_only	lexical
+ex-husband	added	lexical
+ex-wife	added	lexical
+extended family	metadata_only	lexical
+father-in-law	metadata_only	lexical
+fiance	metadata_only	lexical
+fiancee	metadata_only	lexical
+first cousin	metadata_only	lexical
+foster child	added	lexical
+foster family	added	lexical
+foster parent	added	lexical
+fraternal	metadata_only	lexical
+genealogy	metadata_only	lexical
+generation	metadata_only	lexical
+goddaughter	metadata_only	lexical
+godfather	metadata_only	lexical
+godmother	metadata_only	lexical
+godson	metadata_only	lexical
+grandchild	metadata_only	lexical
+grandchildren	metadata_only	lexical
+granddaughter	metadata_only	lexical
+grandparents	metadata_only	lexical
+grandson	metadata_only	lexical
+great-grandchild	added	lexical
+great-grandfather	added	lexical
+great-grandmother	added	lexical
+great-grandparents	added	lexical
+groom	metadata_only	lexical
+half-brother	added	lexical
+half-sister	added	lexical
+household	metadata_only	lexical
+househusband	added	lexical
+housewife	metadata_only	lexical
+infant	metadata_only	lexical
+kin	metadata_only	lexical
+kinship	metadata_only	lexical
+lineage	metadata_only	lexical
+mama	metadata_only	lexical
+maternal	metadata_only	lexical
+maternity	metadata_only	lexical
+matriarch	metadata_only	lexical
+mom	metadata_only	lexical
+mother-in-law	metadata_only	lexical
+mummy	metadata_only	lexical
+nephew	metadata_only	lexical
+newborn	metadata_only	lexical
+niece	metadata_only	lexical
+nuclear family	added	lexical
+offspring	metadata_only	lexical
+orphan	metadata_only	lexical
+papa	metadata_only	lexical
+paternal	metadata_only	lexical
+paternity	metadata_only	lexical
+patriarch	metadata_only	lexical
+pedigree	metadata_only	lexical
+relation	metadata_only	lexical
+relatives	metadata_only	lexical
+second cousin	added	lexical
+sibling	metadata_only	lexical
+siblings	metadata_only	lexical
+sister-in-law	metadata_only	lexical
+son-in-law	metadata_only	lexical
+sororal	added	lexical
+spouse	metadata_only	lexical
+step-parent	added	lexical
+stepbrother	metadata_only	lexical
+stepchildren	metadata_only	lexical
+stepdaughter	metadata_only	lexical
+stepfamily	added	lexical
+stepfather	metadata_only	lexical
+stepmother	metadata_only	lexical
+stepsister	metadata_only	lexical
+stepson	metadata_only	lexical
+twin	metadata_only	lexical
+twins	metadata_only	lexical
+widow	metadata_only	lexical
+widower	metadata_only	lexical
+widowhood	metadata_only	lexical

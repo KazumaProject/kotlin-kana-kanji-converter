@@ -1,0 +1,95 @@
+surface	change	kinds
+airline	metadata_only	lexical
+airplane	metadata_only	lexical
+aisle seat	added	lexical
+auto insurance	added	lexical
+automatic transmission	added	lexical
+autopilot	metadata_only	lexical
+avgas	added	lexical
+axle	metadata_only	lexical
+backseat	metadata_only	lexical
+bag drop	added	lexical
+balaclava	metadata_only	lexical
+ballast	metadata_only	lexical
+barge	metadata_only	lexical
+battery life	added	lexical
+beaching	metadata_only	lexical
+beacon	metadata_only	lexical
+bed and breakfast	metadata_only	lexical
+beltline	metadata_only	lexical
+berth	metadata_only	lexical
+black box	metadata_only	lexical
+blind spot	metadata_only	lexical
+boardwalk	metadata_only	lexical
+body shop	added	lexical
+bollard	metadata_only	lexical
+bonnet	metadata_only	lexical
+boulevard	metadata_only	lexical
+brake pad	added	lexical
+breakdown	metadata_only	lexical
+bridge	metadata_only	lexical
+buffer	metadata_only	lexical
+bulkhead	metadata_only	lexical
+bullet train	added	lexical
+bumper car	added	lexical
+bus lane	added	lexical
+cabin crew	added	lexical
+cable car	metadata_only	lexical
+car rental	metadata_only	lexical
+car seat	added	lexical
+caravan	metadata_only	lexical
+carburetor	metadata_only	lexical
+cargo ship	added	lexical
+carpool	metadata_only	lexical
+carriage	metadata_only	lexical
+carrier	metadata_only	lexical
+carwash	metadata_only	lexical
+catalytic converter	added	lexical
+catamaran	metadata_only	lexical
+cavalry	metadata_only	lexical
+cellar	metadata_only	lexical
+center console	added	lexical
+central locking	added	lexical
+cesspit	metadata_only	lexical
+chassis	metadata_only	lexical
+chauffeur	metadata_only	lexical
+child lock	added	lexical
+cigarette lighter	added	lexical
+circuit breaker	metadata_only	lexical
+city center	added	lexical
+civic center	added	lexical
+clutch pedal	added	lexical
+co-pilot	added	lexical
+coastguard	metadata_only	lexical
+cockpit	metadata_only	lexical
+coin slot	added	lexical
+collateral	metadata_only	lexical
+combustion engine	added	lexical
+commuter train	added	lexical
+compass	metadata_only	lexical
+compressor	metadata_only	lexical
+concierge	metadata_only	lexical
+condominium	metadata_only	lexical
+connection	metadata_only	lexical
+control tower	metadata_only	lexical
+convertible	metadata_only	lexical
+conveyor belt	metadata_only	lexical
+coolant	metadata_only	lexical
+cordless	metadata_only	lexical
+cornice	metadata_only	lexical
+corridor	metadata_only	lexical
+costume	metadata_only	lexical
+couchette	added	lexical
+countertop	metadata_only	lexical
+countryside	metadata_only	lexical
+courtyard	metadata_only	lexical
+crane	metadata_only	lexical
+crankshaft	metadata_only	lexical
+cruise ship	metadata_only	lexical
+cruiser	metadata_only	lexical
+cul-de-sac	added	lexical
+curbside	metadata_only	lexical
+customs	metadata_only	lexical
+dashboard	metadata_only	lexical
+dead end	metadata_only	lexical
+deckhand	metadata_only	lexical

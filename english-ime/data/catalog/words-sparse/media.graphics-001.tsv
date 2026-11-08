@@ -1,0 +1,76 @@
+surface	change	kinds
+alpha channel	added	lexical
+aspect ratio	metadata_only	lexical
+bone	metadata_only	lexical
+bump mapping	added	lexical
+camera	metadata_only	lexical
+cel shading	added	lexical
+chroma key	added	lexical
+color space	metadata_only	lexical
+compositing	metadata_only	lexical
+contrast	metadata_only	lexical
+crop	metadata_only	lexical
+cube map	added	lexical
+curve	metadata_only	lexical
+depth of field	metadata_only	lexical
+displacement mapping	added	lexical
+dithering	metadata_only	lexical
+edge loop	added	lexical
+exposure	metadata_only	lexical
+extrude	metadata_only	lexical
+face	metadata_only	lexical
+field of view	added	lexical
+filter	metadata_only	lexical
+fractal	metadata_only	lexical
+frame rate	metadata_only	lexical
+gamma correction	added	lexical
+gizmo	metadata_only	lexical
+gradient	metadata_only	lexical
+greyscale	metadata_only	lexical
+HDR	metadata_only	lexical
+height map	added	lexical
+hue	metadata_only	lexical
+inverse kinematics	metadata_only	lexical
+layer	metadata_only	lexical
+line art	added	lexical
+lofting	added	lexical
+luminance	metadata_only	lexical
+mask	metadata_only	lexical
+material	metadata_only	lexical
+mesh	metadata_only	lexical
+mipmap	added	lexical
+modeler	metadata_only	lexical
+motion blur	added	lexical
+multisampling	added	lexical
+node	metadata_only	lexical
+normal	metadata_only	lexical
+opacity	metadata_only	lexical
+photogrammetry	metadata_only	lexical
+pixel	metadata_only	lexical
+pixel art	added	lexical
+polygon	metadata_only	lexical
+post-processing	added	lexical
+quad	metadata_only	lexical
+radiosity	added	lexical
+raster	metadata_only	lexical
+ray marching	added	lexical
+resolution	metadata_only	lexical
+rig	metadata_only	lexical
+rotoscoping	added	lexical
+saturation	metadata_only	lexical
+sculpting	metadata_only	lexical
+shadow map	added	lexical
+silhouette	metadata_only	lexical
+skinning	metadata_only	lexical
+skybox	metadata_only	lexical
+spline	metadata_only	lexical
+sprite	metadata_only	lexical
+surface normal	added	lexical
+tessellation	metadata_only	lexical
+texel	metadata_only	lexical
+texture	metadata_only	lexical
+tone mapping	added	lexical
+transparency	metadata_only	lexical
+triangle	metadata_only	lexical
+vector	metadata_only	lexical
+voxel	metadata_only	lexical

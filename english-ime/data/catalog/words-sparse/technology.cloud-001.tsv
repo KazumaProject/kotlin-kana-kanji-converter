@@ -1,0 +1,42 @@
+surface	change	kinds
+affinity	metadata_only	lexical
+artifact	metadata_only	lexical
+backbone	metadata_only	lexical
+bare metal	added	lexical
+blue-green deployment	added	lexical
+bucket	metadata_only	lexical
+cache	metadata_only	lexical
+capacity	metadata_only	lexical
+certificate authority	metadata_only	lexical
+CI/CD	metadata_only	lexical
+cold storage	added	lexical
+compute	metadata_only	lexical
+continuous delivery	metadata_only	lexical
+continuous integration	metadata_only	lexical
+cronjob	added	lexical
+daemon	metadata_only	lexical
+data lake	added	lexical
+data warehouse	added	lexical
+database	metadata_only	lexical
+declarative	metadata_only	lexical
+decommission	metadata_only	lexical
+DevOps	metadata_only	lexical
+digest	metadata_only	lexical
+drain	metadata_only	lexical
+edge computing	added	lexical
+elasticity	metadata_only	lexical
+endpoint	metadata_only	lexical
+ephemeral	metadata_only	lexical
+eviction	metadata_only	lexical
+failover	metadata_only	lexical
+fault tolerance	added	lexical
+firewall	metadata_only	lexical
+flannel	metadata_only	lexical
+gateway	metadata_only	lexical
+helm	metadata_only	lexical
+hypervisor	metadata_only	lexical
+imperative	metadata_only	lexical
+instance	metadata_only	lexical
+kernel	metadata_only	lexical
+label	metadata_only	lexical
+latency	metadata_only	lexical

@@ -1,0 +1,68 @@
+surface	change	kinds
+accelerometer	metadata_only	lexical
+airplane mode	added	lexical
+APK	metadata_only	lexical
+aspect ratio	metadata_only	lexical
+autofocus	metadata_only	lexical
+backup	metadata_only	lexical
+biometrics	metadata_only	lexical
+bitrate	metadata_only	lexical
+bootloader	metadata_only	lexical
+brightness	metadata_only	lexical
+cache	metadata_only	lexical
+camera roll	added	lexical
+cellular data	added	lexical
+chipset	metadata_only	lexical
+compass	metadata_only	lexical
+connectivity	metadata_only	lexical
+contacts	metadata_only	lexical
+dark mode	added	lexical
+display panel	added	lexical
+dual SIM	added	lexical
+eSIM	metadata_only	lexical
+file manager	added	lexical
+firmware	metadata_only	lexical
+flash memory	added	lexical
+flashlight	metadata_only	lexical
+formatting	metadata_only	lexical
+frame rate	metadata_only	lexical
+gallery	metadata_only	lexical
+gesture	metadata_only	lexical
+gyroscope	metadata_only	lexical
+hdr	metadata_only	lexical
+headset	metadata_only	lexical
+hotspot	metadata_only	lexical
+kernel	metadata_only	lexical
+keyboard	metadata_only	lexical
+launcher	metadata_only	lexical
+lock screen	added	lexical
+macro lens	added	lexical
+malware	metadata_only	lexical
+media player	added	lexical
+memory leak	added	lexical
+microphone	metadata_only	lexical
+microSD	metadata_only	lexical
+mobile data	added	lexical
+multi-touch	added	lexical
+multitasking	metadata_only	lexical
+night mode	added	lexical
+notch	metadata_only	lexical
+operating system	metadata_only	lexical
+pairing	metadata_only	lexical
+panorama	metadata_only	lexical
+passcode	metadata_only	lexical
+performance	metadata_only	lexical
+popup	metadata_only	lexical
+power bank	added	lexical
+processor	metadata_only	lexical
+push notification	added	lexical
+QR code	added	lexical
+RAM	metadata_only	lexical
+reboot	metadata_only	lexical
+refresh rate	added	lexical
+ringtone	metadata_only	lexical
+rooting	metadata_only	lexical
+screen time	added	lexical
+screenshot	metadata_only	lexical
+scroll	metadata_only	lexical
+setting	metadata_only	lexical

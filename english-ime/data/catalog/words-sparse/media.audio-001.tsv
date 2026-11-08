@@ -1,0 +1,75 @@
+surface	change	kinds
+Ableton Live	added	product
+amplifier	metadata_only	lexical
+attenuator	metadata_only	lexical
+audio frequency	added	lexical
+audio mastering	added	lexical
+bass	metadata_only	lexical
+bitrate	metadata_only	lexical
+cardioid	added	lexical
+click track	added	lexical
+condenser microphone	added	lexical
+crossover	metadata_only	lexical
+Cubase	metadata_only	product
+DAW	added	lexical
+diatonic	metadata_only	lexical
+distortion	metadata_only	lexical
+dither	metadata_only	lexical
+dynamic range	metadata_only	lexical
+earphone	metadata_only	lexical
+electric guitar	added	lexical
+feedback	metadata_only	lexical
+filter	metadata_only	lexical
+FL Studio	added	product
+flanger	added	lexical
+frequency	metadata_only	lexical
+frequency response	added	lexical
+gain	metadata_only	lexical
+high-pass filter	added	lexical
+in-ear monitor	added	lexical
+jack plug	added	lexical
+latency	metadata_only	lexical
+lavalier microphone	added	lexical
+Logic Pro	added	product
+low-pass filter	added	lexical
+mastering	metadata_only	lexical
+melodic	metadata_only	lexical
+mixing console	added	lexical
+mixing desk	added	lexical
+modulation	metadata_only	lexical
+monophonic	metadata_only	lexical
+mute	metadata_only	lexical
+octave	metadata_only	lexical
+oscillator	metadata_only	lexical
+pad	metadata_only	lexical
+phonograph	metadata_only	lexical
+pickup	metadata_only	lexical
+pink noise	added	lexical
+playback	metadata_only	lexical
+playlist	metadata_only	lexical
+polyphony	metadata_only	lexical
+pop filter	added	lexical
+power amplifier	added	lexical
+preamplifier	metadata_only	lexical
+producer	metadata_only	lexical
+psychoacoustics	added	lexical
+public address system	added	lexical
+quadraphonic	added	lexical
+rackmount	added	lexical
+receiver	metadata_only	lexical
+resonance	metadata_only	lexical
+ribbon microphone	added	lexical
+sampler	metadata_only	lexical
+sidechain	added	lexical
+sine wave	added	lexical
+sound design	added	lexical
+sound effect	added	lexical
+speaker enclosure	added	lexical
+stereo	metadata_only	lexical
+subwoofer	metadata_only	lexical
+sustain	metadata_only	lexical
+synthesizer	metadata_only	lexical
+talkback	metadata_only	lexical
+tempo	metadata_only	lexical
+tweeter	metadata_only	lexical
+woofer	metadata_only	lexical

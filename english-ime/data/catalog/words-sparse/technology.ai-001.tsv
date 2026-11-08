@@ -1,0 +1,46 @@
+surface	change	kinds
+activation function	added	lexical
+adam	metadata_only	lexical
+agent	metadata_only	lexical
+algorithm	metadata_only	lexical
+autoencoder	added	lexical
+backpropagation	added	lexical
+bias	metadata_only	lexical
+big data	added	lexical
+black box	metadata_only	lexical
+chatbot	metadata_only	lexical
+computer vision	added	lexical
+convolutional neural network	added	lexical
+cost function	added	lexical
+data mining	added	lexical
+decision tree	added	lexical
+dropout	metadata_only	lexical
+epoch	metadata_only	lexical
+expert system	added	lexical
+false negative	metadata_only	lexical
+false positive	metadata_only	lexical
+fine-tuning	metadata_only	lexical
+generative adversarial network	added	lexical
+genetic algorithm	added	lexical
+intelligent agent	added	lexical
+k-means clustering	added	lexical
+latent space	added	lexical
+linear regression	metadata_only	lexical
+natural language processing	added	lexical
+natural language understanding	added	lexical
+neuron	metadata_only	lexical
+objective function	added	lexical
+optimizer	metadata_only	lexical
+parameter	metadata_only	lexical
+perceptron	added	lexical
+prior probability	metadata_only	lexical
+random forest	added	lexical
+recurrent neural network	added	lexical
+regularization	metadata_only	lexical
+self-attention	added	lexical
+sentiment analysis	added	lexical
+sigmoid function	metadata_only	lexical
+support vector machine	added	lexical
+tensor	metadata_only	lexical
+weights	metadata_only	lexical
+zero-shot learning	added	lexical

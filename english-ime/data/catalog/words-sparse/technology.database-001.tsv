@@ -1,0 +1,44 @@
+surface	change	kinds
+ACID	added	lexical
+aggregation	metadata_only	lexical
+alias	metadata_only	lexical
+B-tree	added	lexical
+backup	metadata_only	lexical
+BCNF	added	lexical
+blob	metadata_only	lexical
+cache	metadata_only	lexical
+candidate key	added	lexical
+cardinality	metadata_only	lexical
+clustered index	added	lexical
+collation	metadata_only	lexical
+composite key	added	lexical
+concurrency	metadata_only	lexical
+connection	metadata_only	lexical
+cross join	added	lexical
+CTE	metadata_only	lexical
+data dictionary	added	lexical
+data integrity	added	lexical
+data mart	added	lexical
+data warehouse	added	lexical
+database engine	added	lexical
+DCL	metadata_only	lexical
+DDL	metadata_only	lexical
+denormalization	added	lexical
+DML	metadata_only	lexical
+entity relationship diagram	added	lexical
+ERD	added	lexical
+export	metadata_only	lexical
+failover	metadata_only	lexical
+fetch	metadata_only	lexical
+full outer join	added	lexical
+function	metadata_only	lexical
+hierarchical database	added	lexical
+import	metadata_only	lexical
+INT	added	lexical
+locking	metadata_only	lexical
+memory leak	added	lexical
+migration	metadata_only	lexical
+multitenancy	added	lexical
+NoSQL	metadata_only	lexical
+OLAP	metadata_only	lexical
+OLTP	added	lexical

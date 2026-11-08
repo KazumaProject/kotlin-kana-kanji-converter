@@ -390,6 +390,106 @@ roles require source review. Definitions and source prose stay outside Git.
 
 ### Optional Gemini proposals, within a verified free project
 
+For additional acquisition, [`gemini_acquisition.py`](tools/gemini_acquisition.py)
+prioritizes the topics in [gemini-acquisition-policy.json](data/catalog/gemini-acquisition-policy.json)
+that have at most 50 actual candidate spellings. It counts unique display spellings
+with real topical memberships, excluding grammar-only supporting forms. The policy
+covers 40 sparse topics across daily vocabulary, non-Web technical fields and names;
+large science/person/car categories are not the focus of this pass.
+
+```sh
+python3 -B english-ime/tools/gemini_acquisition.py prepare \
+  --assets /tmp/parent-english-assets --work-dir /tmp/english-sparse-leads
+python3 -B english-ime/tools/gemini_acquisition.py propose \
+  --work-dir /tmp/english-sparse-leads --free-proof /private/path/free-tier-proof.json \
+  --api-key-file /private/path/gemini-key --max-requests 10 --wait
+python3 -B english-ime/tools/gemini_acquisition.py fetch-evidence \
+  --work-dir /tmp/english-sparse-leads --source-dir /tmp/english-catalog-sources \
+  --lexical-source-dir /tmp/english-dictionary-sources --esdb-dir /tmp/english-esdb
+python3 -B english-ime/tools/catalog_harness.py prepare \
+  --assets /tmp/parent-english-assets --work-dir /tmp/english-sparse-run \
+  --gemini-dir /tmp/english-sparse-leads --source-dir /tmp/english-catalog-sources \
+  --lexical-source-dir /tmp/english-dictionary-sources --esdb-dir /tmp/english-esdb
+python3 -B english-ime/tools/catalog_harness.py adopt --work-dir /tmp/english-sparse-run
+python3 -B english-ime/tools/catalog_harness.py build \
+  --work-dir /tmp/english-sparse-run --out /tmp/english-sparse-result
+python3 -B english-ime/tools/gemini_acquisition.py coverage \
+  --work-dir /tmp/english-sparse-leads --assets /tmp/english-sparse-result/assets \
+  --out /tmp/english-sparse-coverage
+```
+
+Gemini proposes approximately 100 practical spellings per topic in small groups.
+This is a requested yield, not a maximum number of words adopted. Exact repeated
+leads are merged, and unused article hints for ordinary words are ignored.
+Conflicting named-entity titles, unexpected topics, incomplete generations and
+changed saved responses are rejected. Requests are reserved in the **same** project
+quota ledger as vocabulary review, including failed/unknown requests. Completed
+responses resume without a model call; inspect failed attempts before using
+`--retry-failed`. That flag first revalidates saved output, preserving its history.
+An existing macOS Keychain item can be used with `--keychain-service SERVICE`
+instead of a key file; its account must match the free-project proof.
+
+Model output never supplies a spelling proof or data license. Ordinary words must
+match pinned ESDB/WordNet data or an exact Wiktionary headword with an English
+section. Named spellings must match an English/default Wikidata label, alias or
+English article title; human/nonhuman checks also apply. No model-only proposal
+may annotate even an already existing candidate. Ordinary-word POS and inflections
+come from the dictionary adapters. Proper-name roles follow the declared entity
+kind. **Kind/topic placement is proposed by Gemini and may receive explicit
+corrections; spelling attestation does not independently verify placement, sense
+or input frequency.** Raw requests, responses, source payloads and operational reports
+remain outside Git. Sealed evidence is rechecked at adoption, without API calls.
+No recurring execution is added.
+
+Source failures stay explicitly pending. Resume them into a **new** directory,
+reusing the completed model responses and verified source pages without more model
+calls; the earlier sealed snapshot remains unchanged:
+
+```sh
+python3 -B english-ime/tools/gemini_acquisition.py resume-evidence \
+  --work-dir /tmp/english-sparse-leads --out /tmp/english-sparse-leads-next \
+  --source-dir /tmp/english-catalog-sources \
+  --lexical-source-dir /tmp/english-dictionary-sources --esdb-dir /tmp/english-esdb
+```
+
+Prepare a new catalog run with `--gemini-dir /tmp/english-sparse-leads-next`.
+
+The first build is staging for checking names. Before publishing, export its
+binary-verified ledger and run the focused name review to separate products,
+brands, organizations, services and capitalized generic article headings:
+
+```sh
+python3 -B english-ime/tools/catalog_review.py export \
+  --work-dir /tmp/english-sparse-run --assets /tmp/english-sparse-result/assets \
+  --out /tmp/english-sparse-review
+python3 -B english-ime/tools/gemini_acquisition.py review-names \
+  --work-dir /tmp/english-sparse-leads-next --ledger /tmp/english-sparse-review/adopted.tsv \
+  --out /tmp/english-name-review --free-proof /private/path/free-tier-proof.json \
+  --api-key-file /private/path/gemini-key
+```
+
+This is another explicit call within the same model/project quota, with no paid
+fallback. A generic heading such as `Softbox` is deferred as a product name; it is
+never silently lowercased into a new lexical spelling. Inspect the model's kind
+and topic decisions. Corrections can be finalized into a new external directory:
+
+```sh
+python3 -B english-ime/tools/gemini_acquisition.py finalize-names \
+  --work-dir /tmp/english-sparse-leads-next --review-dir /tmp/english-name-review \
+  --decisions /tmp/name-topic-corrections.json --out /tmp/english-name-review-final
+```
+
+The correction JSON is an array of `surface`, `kind`, `topics`, `decision` and
+`reason` records, limited to already reviewed spellings and declared topics.
+It cannot invent a word, rewrite its spelling or supply a spelling proof. Prepare
+a **new** catalog run against the same parent using `--gemini-named-review-dir
+/tmp/english-name-review-final`, then adopt/build/export that run. Both model
+decisions and explicit corrections remain hash-pinned in the final provenance.
+
+The stacked expansion has its own [adoption ledger](data/catalog/adopted-sparse.tsv)
+and [category pages](data/catalog/words-sparse), with the same spelling/source/license
+columns and binary/page verification as the earlier world-vocabulary expansion.
+
 Gemini use is separate from signed-in Codex subscription usage. No API runs during
 ordinary builds or CI. Before each day's API work, check the project's Free tier,
 absence of billing, the key's project, and the actual model RPM/TPM/RPD in AI Studio.
