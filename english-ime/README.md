@@ -130,6 +130,43 @@ provenance manifests, and a grammar index of shared category masks. Use the
 full reviewed bundle for `evaluate --lexicon` and for inspecting the review data.
 The runtime grammar index is supported by this module's `convert` command.
 
+Runtime packing writes **EROL v2**: sorted UTF-8 role keys share prefixes inside
+independent 32-key blocks. The reader also accepts v1 previews. This changes the
+CLI grammar index only; the app's serialized reading, word and token payloads
+are unchanged. EROL v2 needs the updated CLI; older CLIs cannot load that index.
+
+`tools/package_preview.py` separates app import assets from optional CLI support.
+It preserves every non-English base asset and all source notices, wraps reading
+and token payloads at the existing app paths, and puts grammar metadata/index
+and the Glide index in `english_dictionary_runtime_support.zip`. The app ZIP
+contains the three English payloads, notices and provenance. No vocabulary is
+removed. The distribution manifest pins both the optional archive and every
+reconstructed runtime payload, including the three shared core hashes.
+
+For CLI use, extract both ZIPs into the same directory, then unwrap
+`english/reading.dat.zip` and `english/token.dat.zip` into a new runtime directory,
+copy `english/word.dat`, `english/grammar/`, both provenance manifests and move
+`english/runtime-support/qwerty_glide_index.dat` to the runtime root. Verify the
+reconstructed files against `englishDictionary.runtimePayloadSha256` in the
+manifest before running the updated CLI. Android device behavior remains a
+separate check; this packaging does not add application support for CLI grammar.
+
+```sh
+python3 -B english-ime/tools/package_preview.py \
+  --base-archive /tmp/base/japanese_keyboard_dictionary_assets.zip \
+  --base-manifest /tmp/base/dictionary-distribution-manifest.json \
+  --base-licenses /tmp/base/DICTIONARY-LICENSES.txt \
+  --base-archive-sha256 VERIFIED_BASE_ZIP_SHA256 --base-release v1.7.284 \
+  --runtime /tmp/english-runtime --inventory /tmp/runtime-candidates.jsonl \
+  --revision EXACT_BUILDER_COMMIT --out /tmp/english-preview
+```
+
+Generate the inventory from that runtime with `export-candidates`. Keep raw
+inputs, generated ZIPs and measurement logs outside the repository. Packaging
+never calls Gemini or creates a schedule. Publish only after reconstructing the
+actual two archives and comparing all candidates and lexical roles to the full
+bundle; splitting alone is not a reduction in their combined download size.
+
 To verify conversion with your own UTF-8 JSON array of input strings, pass
 `--inputs` to the CLI verifier. It checks both exact and prefix modes. Use
 `--reference-assets` to compare the entire JSON response, including candidate
