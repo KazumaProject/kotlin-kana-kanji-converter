@@ -1,0 +1,7 @@
+Pantheon 2.0, 2025 Person Dataset. Pantheon by Datawheel and contributors. CC BY-SA 4.0.
+https://storage.googleapis.com/pantheon-public-data/person_2025_update.csv.bz2
+https://pantheon.world/data/permissions
+Citation requested by the publisher: Yu, A. Z., et al. (2016). Pantheon 1.0, a manually verified dataset of globally famous biographies. Scientific Data 2:150075. https://doi.org/10.1038/sdata.2015.75
+Changes: scan every published row; select exact supplied person names/QIDs; map provider occupation labels to dictionary topics; add a historical topic for supplied birth years before 1900. No HPI/rank/count cutoff, synthesized names or name splitting. Broad occupations do not establish a narrower sport or Olympic participation. Upstream classification is not an independent career audit.
+Raw dates, locations, coordinates, scores and social accounts remain outside the dictionary. Adult-industry records remain in curation and are excluded from distribution by the pinned policy.
+Preserve the full CC BY-SA 4.0 notice supplied with the dictionary.

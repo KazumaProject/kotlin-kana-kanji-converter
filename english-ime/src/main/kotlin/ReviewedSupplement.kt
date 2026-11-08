@@ -17,13 +17,15 @@ internal data class SupplementEntry(
 
 internal class ReviewedSupplement private constructor(
     val manifest: File,
-    val entriesFile: File,
+    val entryFiles: List<File>,
     val entries: List<SupplementEntry>,
     val metadata: List<SupplementEntry>,
     val categoryDefinitions: List<List<String>>,
     val candidates: List<Dictionary>,
     val notices: List<File>,
+    val distributionPolicy: DistributionPolicy? = null,
 ) {
+    val entriesFile: File get() = entryFiles.first()
     fun appendGrammar(grammar: File, base: Lexicon) {
         val forms = base.forms.associateBy { it.key }
         val additions = mutableMapOf<FormKey, SupplementEntry>()
@@ -48,19 +50,19 @@ internal class ReviewedSupplement private constructor(
         // Add annotations after materializing supporting forms so metadata cannot
         // suppress their existing grammatical roles during a later batch replay.
         metadata.forEach(::merge)
-        grammar.resolve("forms.tsv").appendText(buildString {
+        grammar.resolve("forms.tsv").appendWriter().use { writer ->
             for ((key, entry) in additions) {
-                if (key !in forms) appendLine(listOf(key.lexemeId, entry.lemma, key.surface, entry.evidence).joinToString("\t"))
+                if (key !in forms) writer.appendLine(listOf(key.lexemeId, entry.lemma, key.surface, entry.evidence).joinToString("\t"))
             }
-        })
-        grammar.resolve("memberships.tsv").appendText(buildString {
+        }
+        grammar.resolve("memberships.tsv").appendWriter().use { writer ->
             for ((key, entry) in additions) {
                 val original = forms[key]?.dictionaries.orEmpty()
                 for (category in (entry.categories - original).sorted()) {
-                    appendLine("$category\t${key.lexemeId}\t${key.surface}")
+                    writer.appendLine("$category\t${key.lexemeId}\t${key.surface}")
                 }
             }
-        })
+        }
     }
 
     fun properties(): Map<String, String> = mapOf(
@@ -68,7 +70,9 @@ internal class ReviewedSupplement private constructor(
         "supplement.formRows" to entries.size.toString(),
         "supplement.surfaces" to entries.map { it.key.surface }.distinct().size.toString(),
         "supplement.candidatePairs" to candidates.size.toString(),
-    ) + if (metadata.isEmpty() && categoryDefinitions.isEmpty()) emptyMap() else mapOf(
+    ) + (if (entryFiles.size==1) emptyMap() else entryFiles.associate {
+        "supplement.input.${it.name}.sha256" to categoryFileHash(it)
+    }) + if (metadata.isEmpty() && categoryDefinitions.isEmpty()) emptyMap() else mapOf(
         "supplement.metadataRows" to metadata.size.toString(),
         "supplement.additionalCategories" to categoryDefinitions.size.toString(),
     )
@@ -88,7 +92,8 @@ internal class ReviewedSupplement private constructor(
             }
             val files = manifest.getValue("files").jsonObject
             require("entries.tsv" in files && files.keys.all {
-                it == "entries.tsv" || version == 2 && it in setOf("categories.tsv", "metadata.tsv") ||
+                it == "entries.tsv" || version == 2 && (it in setOf("categories.tsv", "metadata.tsv", "distribution-exclusions.tsv") ||
+                    it.matches(Regex("entries-[0-9]{4}\\.tsv"))) ||
                     it.matches(Regex("notices/[A-Za-z0-9_.-]+"))
             }) { "Invalid supplement file list" }
             for ((name, hash) in files) {
@@ -97,7 +102,7 @@ internal class ReviewedSupplement private constructor(
                     "Supplement checksum differs for $name"
                 }
             }
-            val entriesFile = directory.resolve("entries.tsv")
+            val entryFiles = supplementEntryFiles(directory)
             val rejected = decisions.readTsv("id", "reading", "surface", "cost", "decision", "lexeme_ids", "reason", "evidence")
                 .filter { it[4] == "exclude" }.map { lookupKey(it[2]) }.toSet()
             val definitions = if ("categories.tsv" in files) directory.resolve("categories.tsv")
@@ -106,9 +111,11 @@ internal class ReviewedSupplement private constructor(
             require(newNames.distinct().size == newNames.size && newNames.all {
                 it.matches(Regex("topic_[a-z0-9_]+")) && it !in base.categories.map { category -> category.name }
             }) { "Invalid or repeated additional categories" }
-            val entries = readSupplementEntries(entriesFile, base, original, rejected, newNames.toSet())
+            val entries = readSupplementEntries(entryFiles, base, original, rejected, newNames.toSet())
             val metadata = if ("metadata.tsv" in files) readSupplementMetadata(
                 directory.resolve("metadata.tsv"), base, original, entries, newNames.toSet()) else emptyList()
+            val distribution = if ("distribution-exclusions.tsv" in files)
+                DistributionPolicy(directory.resolve("distribution-exclusions.tsv"), base, entries) else null
             require(newNames.all { name -> (entries + metadata).any { name in it.categories } }) {
                 "Additional category has no attested members"
             }
@@ -117,7 +124,7 @@ internal class ReviewedSupplement private constructor(
                 val cost = candidate.cost.toInt()
                 maxCostByReading.merge(candidate.reading, cost, ::maxOf)
             }
-            val candidates = entries.map { it.key.surface }.distinct().flatMap { surface ->
+            val candidates = entries.map { it.key.surface }.distinct().filter { distribution?.allows(it) != false }.flatMap { surface ->
                 supplementReadings(surface).map { key ->
                     // New homographs remain available without displacing the existing readings.
                     val cost = maxOf(6000, (maxCostByReading[key] ?: 0) + 1)
@@ -126,9 +133,21 @@ internal class ReviewedSupplement private constructor(
                 }
             }
             val notices = files.keys.filter { it.startsWith("notices/") }.sorted().map(directory::resolve)
-            return ReviewedSupplement(manifestFile, entriesFile, entries, metadata, definitions, candidates, notices)
+            return ReviewedSupplement(manifestFile, entryFiles, entries, metadata, definitions, candidates, notices, distribution)
         }
     }
+}
+
+private fun File.appendWriter() = java.io.FileOutputStream(this,true).bufferedWriter(Charsets.UTF_8)
+
+internal fun supplementEntryFiles(directory: File): List<File> {
+    val names=Json.parseToJsonElement(directory.resolve("manifest.json").readText()).jsonObject
+        .getValue("files").jsonObject.keys
+    val shards=names.filter { it.matches(Regex("entries-[0-9]{4}\\.tsv")) }.sorted()
+    require("entries.tsv" in names && shards==List(shards.size) { "entries-${(it+1).toString().padStart(4,'0')}.tsv" }) {
+        "Missing or reordered supplement entry shard"
+    }
+    return (listOf("entries.tsv")+shards).map(directory::resolve)
 }
 
 private val supportedSurface = Regex("[A-Za-z0-9]+(?:[ '’./-][A-Za-z0-9]+)*")
@@ -147,16 +166,21 @@ internal fun readSupplementEntries(
     file: File, base: Lexicon, original: List<Dictionary>, excludedSurfaces: Set<String>,
     additionalCategories: Set<String> = emptySet(),
 ): List<SupplementEntry> {
-    return readSupplementRows(file, base, original, excludedSurfaces, additionalCategories, emptyList(), false)
+    return readSupplementRows(listOf(file), base, original, excludedSurfaces, additionalCategories, emptyList(), false)
 }
+
+internal fun readSupplementEntries(
+    files: List<File>, base: Lexicon, original: List<Dictionary>, excludedSurfaces: Set<String>,
+    additionalCategories: Set<String> = emptySet(),
+): List<SupplementEntry> = readSupplementRows(files, base, original, excludedSurfaces, additionalCategories, emptyList(), false)
 
 internal fun readSupplementMetadata(
     file: File, base: Lexicon, original: List<Dictionary>, entries: List<SupplementEntry>,
     additionalCategories: Set<String>,
-): List<SupplementEntry> = readSupplementRows(file, base, original, emptySet(), additionalCategories, entries, true)
+): List<SupplementEntry> = readSupplementRows(listOf(file), base, original, emptySet(), additionalCategories, entries, true)
 
 private fun readSupplementRows(
-    file: File, base: Lexicon, original: List<Dictionary>, excludedSurfaces: Set<String>,
+    files: List<File>, base: Lexicon, original: List<Dictionary>, excludedSurfaces: Set<String>,
     additionalCategories: Set<String>, entries: List<SupplementEntry>, metadata: Boolean,
 ): List<SupplementEntry> {
     val categoryNames = base.categories.map { it.name }.toSet() + additionalCategories
@@ -170,7 +194,7 @@ private fun readSupplementRows(
     val originalSurfaces = original.map { it.word }.toSet()
     val availableSurfaces = originalSurfaces + entries.map { it.key.surface }
     val identities = mutableSetOf<FormKey>()
-    val rows = file.readTsv("lexeme_id", "lemma", "surface", "categories", "domain", "evidence", "source_ref")
+    val rows = files.flatMap { it.readTsv("lexeme_id", "lemma", "surface", "categories", "domain", "evidence", "source_ref") }
     require(rows.isNotEmpty() || metadata) { "Supplement must contain reviewed entries" }
     return rows.map { row ->
         val (id, lemma, surface, membership, domain) = row

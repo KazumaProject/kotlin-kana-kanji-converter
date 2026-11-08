@@ -32,6 +32,27 @@ class CatalogHarnessTest(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
+    def test_all_software_includes_unranked_active_names_and_excludes_disabled_casks(self):
+        source=self.root/'sources';source.mkdir();lexical=self.root/'lexical';lexical.mkdir()
+        records=[dict(token='popular',name=['Popular App']),dict(token='unranked',name=['Unranked App','Source Alias']),
+            dict(token='disabled',name=['Disabled App'],disabled=True),dict(token='deprecated',name=['Old App'],deprecated=True)]
+        h.dump(lexical/'cask.json',records)
+        h.dump(lexical/'cask-analytics.json',dict(items=[dict(cask='popular',number='1')]))
+        h.dump(lexical/'dictionary-sources.json',{})
+        taxonomy=self.root/'taxonomy.json';scopes=self.root/'scopes.json'
+        topics=[dict(TOPICS['technology.test'],id=t,category='topic_'+t.replace('.','_')) for t in ['names.product','products.software']]
+        h.dump(taxonomy,dict(schemaVersion=2,topics=topics))
+        h.dump(scopes,dict(schemaVersion=2,basicLists=False,productRankLimit=100,scopes=[]))
+        sources=dict(documents={},texts={},words={},paradigms={},wordnet={},mdnLabels={},pages=[],languages=set(),pins={},
+            legacy={'files':{'cask.json':{'sha256':h.replay.sha(lexical/'cask.json')}}})
+        args=argparse.Namespace(source_dir=source,lexical_source_dir=lexical,esdb_dir=self.root,
+            taxonomy=taxonomy,scopes=scopes,all_software=True)
+        with patch.object(c,'load_sources',return_value=sources):rows,_,_=c.compile_targets(args)
+        indexed={r['surface']:r for r in rows}
+        self.assertEqual({'Popular App','Unranked App','Source Alias'},set(indexed))
+        self.assertEqual(['names.product','products.software'],indexed['Popular App']['topics'])
+        self.assertEqual(['products.software'],indexed['Unranked App']['topics'])
+
     def test_existing_words_receive_only_metadata(self):
         rows, ops = c.audit([target('algorithm')], TOPICS, {('algorithm', 'algorithm')},
             {'algorithm': [form('algorithm', members={'noun'})]}, set())

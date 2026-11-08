@@ -1,0 +1,5 @@
+DBpedia and Wikipedia contributors. DBpedia data: CC BY-SA 3.0 / GFDL.
+https://www.dbpedia.org/about/
+https://www.dbpedia.org/resources/ontology/
+https://www.dbpedia.org/resources/sparql/
+Changes: select exact English source labels by the published type/category/occupation policies; join sports classifications by exact Wikidata identity; distinguish companies from product models; derive distribution exclusion keys from explicit source flags. No generated person names, model spellings or English article URLs. Preserve the query URLs and SHA-256 source pins in the authoring manifest and the full licenses alongside this notice. Source categories/types are classification evidence, not a guarantee of completeness, current popularity or career accuracy.

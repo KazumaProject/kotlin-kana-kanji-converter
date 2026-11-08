@@ -51,10 +51,11 @@ python3 -B english-ime/tools/replay_source.py verify --out /tmp/reviewed-english
 All source notices travel with generated assets, including WordNet,
 Wiktionary/wordfreq share-alike data and EDRDG/JMnedict attribution and conditions.
 Keep the required source acknowledgements in the consuming application's
-About/Sources interface. The host checks identify Sumire consumer
+About/Sources interface. Earlier host checks recorded Sumire consumer
 `427baa8ef19a5917ea931d6731ec9d1fd95289d7` and category reader
 `2a42c4b3c978a51243a9baeb7fc6777573e31712`; physical Android memory, IME UI and
-production ranking remain unverified.
+production ranking remain unverified. Those historical revisions do not verify
+the active Android consumer or the expanded bundle in this change.
 
 ## Convert English text
 
@@ -105,7 +106,8 @@ python3 -B english-ime/tools/replay_source.py build \
 The supplement contains only reviewed forms with source identifiers. Joined
 and spaced readings are derived from the written form. Related inflections
 share a lexeme when their sources establish that relationship. Base readings,
-candidates, costs, notices, and original decisions are preserved. The new
+costs, notices, and original decisions are retained, with explicit distribution
+exclusions described below. The new
 source notices and supplement manifest accompany the extended output. The
 original build command without the option still reproduces the base bundle.
 
@@ -140,13 +142,149 @@ python3 -B english-ime/tools/verify_conversion_cli.py \
   --inputs /tmp/english-inputs.json
 ```
 
+## 手動の大規模収集 / Complete named-vocabulary campaigns
+
+[`named_campaign.py`](tools/named_campaign.py) collects names, notable people,
+sport disciplines, dishes/drinks, car models, companies and products. It uses all
+published Pantheon people, all explicit English given/surname entries in the raw
+Wiktextract stream, qualified middle-name usages, complete declared DBpedia
+selectors, and all active Homebrew casks. It has no vocabulary-count or popularity
+rank cutoff. The [141-topic registry](data/catalog/taxonomy.json) keeps personal
+name components, people, product models, brands, companies and services separate.
+The [named vocabulary index](data/catalog/NAMED-VOCABULARY.md) links every adopted
+word and its category; categories overlap and their counts cannot be added.
+
+The [completion gates](data/catalog/named-goals.json) require source exhaustion,
+zero undecided/deferred/remaining eligible operations, mandatory practical
+spellings, preservation of medical/ordinary homonyms, and no excluded dictionary
+nodes. Counts are reports, never stopping conditions. Unsupported spellings,
+missing classifications and other blocked targets remain in the external audit.
+Completion means completion of the pinned scopes; it does not mean all English,
+every notable person, measured usage frequency or verified Android ranking.
+
+| Source / scope | Redistributed data license |
+| --- | --- |
+| [Wiktextract raw data](https://kaikki.org/dictionary/rawdata.html): English given names, surnames, dishes/drinks, sense review | Wiktionary contributors, CC BY-SA 4.0 / GFDL; extraction by Tatu Ylonen and contributors |
+| [Wikidata](https://www.wikidata.org/wiki/Wikidata:Licensing): explicit middle-name qualifier and case/victim flags | CC0 1.0 |
+| [Pantheon 2025](https://pantheon.world/data/datasets): all published individual biographies | [CC BY-SA 4.0](https://pantheon.world/data/permissions), Datawheel and contributors |
+| [DBpedia](https://www.dbpedia.org/about/): English labels, exact-identity sports metadata, explicit exclusion facts | CC BY-SA 3.0 / GFDL, DBpedia and Wikipedia contributors |
+| [WordNet 3.0](https://wordnet.princeton.edu/): all `noun.food` headwords and dish/beverage descendants | WordNet 3.0 terms, Princeton University |
+| [Homebrew casks](https://github.com/Homebrew/homebrew-cask): every active source-provided software name | BSD 2-Clause, Homebrew contributors |
+
+Full license texts, attribution and source query/archive hashes accompany the
+supplement. Data licenses apply separately from the program license. No articles,
+definitions, birth locations, social accounts or raw source dumps are committed.
+Sport occupations alone never establish Olympic participation or a narrower
+discipline: exact identity joins provide independent class/category evidence.
+An upstream class/category remains evidence rather than an independent career
+audit. Company names are not counted as product models. Inflections require an
+explicit lexical source; full names and middle names are not synthesized.
+
+Run the existing source-fetch commands below for the catalog/lexical sources,
+then collect into an external directory. The raw archive is large (about 3 GB
+compressed for this capture); collection streams the complete archive to EOF.
+Download the raw archive and its catalogue from the linked Kaikki page first.
+
+```sh
+python3 -B english-ime/tools/named_campaign.py collect \
+  --work-dir /tmp/named-sources --archive /tmp/raw-wiktextract-data.jsonl.gz \
+  --catalogue /tmp/kaikki-rawdata.html
+```
+
+`capture.json` records the completed sexual-slang snapshot directory to pass as
+`--restriction-dir` (the example assumes it completed in `batch-0000`). Source
+checkpoints can be resumed; failed, rate-limited or HTTP-200 partial SPARQL
+responses cannot finish a source. Classification/decision rules can be reapplied
+offline to captured identity facts without changing their query bytes.
+
+```sh
+python3 -B english-ime/tools/named_campaign.py run \
+  --work-dir /tmp/named-release --assets /tmp/current-full-english-assets \
+  --source-dir /tmp/english-catalog-sources \
+  --lexical-source-dir /tmp/english-dictionary-sources --esdb-dir /tmp/english-esdb \
+  --bulk-dir /tmp/named-sources/bulk --role-dir /tmp/named-sources/middle \
+  --pantheon-dir /tmp/named-sources/pantheon --food-dir /tmp/named-sources/food \
+  --enrichment-dir /tmp/named-sources/people-enrichment \
+  --dbpedia-dir /tmp/named-sources/dbpedia --sensitive-dir /tmp/named-sources/sensitive \
+  --restriction-dir /tmp/named-sources/sexual-slang/batch-0000
+```
+
+Run from a clean working copy whose supplement matches the baseline assets.
+Allow a 4 GB JVM heap for the complete bundle (`JAVA_OPTS=-Xmx4g` with the
+installed CLI); the Gradle `run` and verification tasks set this heap explicitly.
+The expanded tries exceed the former JVM reader's 4,000,000-element guard, so
+this change also updates that reader. It retains the type/depth allowlist and
+bounds primitive arrays by actual payload bytes, with a 128 MiB payload ceiling
+and a 32,000,000-element ceiling. Tiny streams declaring oversized arrays remain
+rejected. An active Android consumer has not been audited for these larger assets.
+`run` writes the source-backed distribution boundary and curation ledger in the
+checkout, freezes every target, adopts all eligible operations in resumable
+batches, builds full/runtime assets, checks all previous allowed pairs/costs and
+lexical bindings, then exports browseable word pages. The working directory must
+be new. After a failure, inspect the frozen stage; do not label it complete.
+Raw evidence, model responses, logs, inventories and generated binaries stay
+outside Git. Promote only verified supplement data/notices, the adoption ledger
+and requested word pages. TSV shards bound file size, not acquisition count.
+Admission is iterative: newly registered source-backed words can make additional
+metadata operations eligible. Continue to zero remaining operations, preserving
+the initial parent and ordinary-vocabulary protection scope across passes.
+A repeated pending-operation fingerprint stops as incomplete; no pass/word count
+can declare completion. Resume an already frozen, verified first stage with:
+
+```sh
+python3 -B english-ime/tools/named_campaign.py finish \
+  --work-dir /tmp/named-release \
+  --restriction-dir /tmp/named-sources/sexual-slang/batch-0000
+```
+
+`campaign.json` records `finalResult`; later passes live under `pass-NNNN`.
+The public ledger combines every pass relative to the original PR parent.
+
+Adult-industry people/products/services and unambiguous sexual slang are retained
+in authoring curation and removed from distribution. Page-level sexual categories
+alone cannot remove an ordinary or medical homonym: every captured English sense
+must be vulgar for the lowercase slang rule. Ambiguous senses remain visible for
+review; medical and sex-education terms stay eligible.
+
+The [case/victim policy](data/catalog/sensitive-policy.json) uses
+`case_context_only`: exclude case/accident names with explicit victims or positive
+casualties and victim names collected in that context. Retain independently
+sourced public-career/historical names rather than excluding them merely for
+victim flags. Historical birth dates alone do not establish independent notability.
+Pantheon career roles and DBpedia actor/singer/sport records provide that evidence;
+victim-only `INSPIRATION`/`COMPANION`/unspecified celebrity roles do not.
+Independently attested given/surname/middle-name components also stay generic
+name vocabulary. Prior ordinary lexical forms and non-person entity identifiers also protect ambiguous
+case/victim aliases (including the programming language `Python`). Lowercase single-word victim aliases are retained to avoid
+removing ordinary lexical homonyms. Wikidata case subjects require a point/start
+date and cannot themselves be human items; DBpedia incident subjects require an
+event type. Generic concepts such as `suicide` and `bottling` are not case names.
+The optional `all_positive_victims` mode is stricter. These are source-based selection flags,
+not independent findings about people or incidents. The external source capture
+retains the evidence; public case/victim matching keys use SHA-256 rather than
+publishing a new plaintext victim association list. Hashing is data minimization,
+not an anonymity guarantee. Proper one-word names match exact case so `She` does
+not remove `she`, and `Belladonna` does not remove medical `belladonna`.
+
+Filtering applies to complete candidate nodes/lexemes, grammar, relations and
+corrections in the **supplement-enabled build**. The original base-only replay
+remains the frozen original artifact. The format does not disambiguate homonym
+senses or prohibit literal input and compound output assembled from retained
+words. This is a dictionary distribution policy, not a global output censor.
+
+No recurring execution is installed. Optional `named_campaign.py advise` uses the
+existing verified Gemini Free Tier project proof, shared request/byte quota and
+external credential. It reports gaps and never supplies adoption authority or
+dictionary spellings; there is no paid fallback. Offline replay and CI require
+no Gemini credentials.
+
 ## 対象を固定して収録率を改善する / Operate the target catalog
 
 `catalog_harness.py` は、既存辞書を調べる前に必要語の集合を固定し、表記の収録率と
 カテゴリの補完率を別々に測定します。対象・保留語も分母に残します。1,000件は採用時の
 チェックポイントの大きさであり、必要語の上限ではありません。
 
-The versioned [taxonomy](data/catalog/taxonomy.json) defines 67 topical categories.
+The versioned [taxonomy](data/catalog/taxonomy.json) defines the topical categories.
 Alongside daily/IT vocabulary it covers mathematics, statistics, physics,
 electronics, embedded systems, mechanics, manufacturing, robotics, materials,
 chemistry, civil engineering, energy, environment, transport, aerospace, biology,
@@ -390,7 +528,7 @@ roles require source review. Definitions and source prose stay outside Git.
 
 ### Source coverage: collection does not finish at a word count
 
-The primary expansion harness is now
+The lexical category-walk harness is
 [`coverage_harness.py`](tools/coverage_harness.py), with the versioned
 [`coverage-policy.json`](data/catalog/coverage-policy.json). A category containing
 100, 1,000 or any other number of words is **not** considered complete. The
@@ -822,7 +960,12 @@ for counting, and 72.62 s vs 60.38 s for the extension. The category calculation
 was observed three times per extension. These are host Python measurements, not
 smartphone timings. Run again for your interpreter and data.
 
-## Unattended adoption and daily execution
+## Legacy unattended command (not scheduled)
+
+The current large acquisition campaign is manual. Use `named_campaign.py collect`
+and `run` described above; a calendar checkpoint or `--max-candidates` limit is
+not a completion criterion. The following older command remains available for
+existing callers. It does not install or enable a schedule.
 
 `vocabulary_auto.py adopt` re-extracts candidates from checksum-verified sources
 and automatically adopts only multi-character spellings backed by ESDB size <=60,
@@ -845,8 +988,7 @@ Outputs remain external. It makes zero implicit API calls. To use optional Gemin
 proposals, run `prepare` and `review` for that day's run before `daily` or `adopt`.
 Expired free-project confirmations must never be renewed just by changing their
 timestamp: recheck AI Studio, or continue with the source-only policy and report it.
-Scheduling is configured separately in the Codex app; local runs require the
-computer and app to be running. Verified dictionary changes can be copied to the
+Verified dictionary changes can be copied to the
 working branch and published through a PR; no automatic main merge or app release
 is implemented. Use the newly adopted supplement's assets as the next day's
 baseline, so already adopted spellings are not selected again.

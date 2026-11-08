@@ -1,0 +1,29 @@
+{
+  "files": {
+    "part-0000.tsv": {
+      "rows": 82007,
+      "sha256": "2dc192db9a40ad503c493ff58c57753f5a51719319627f8fdbce8f19df59a439"
+    },
+    "part-0001.tsv": {
+      "rows": 82418,
+      "sha256": "d36f0dcba74ffe2e368ecf6d4eeac0c0918c99938316e3b32a5a1685a6c43ab5"
+    },
+    "part-0002.tsv": {
+      "rows": 81841,
+      "sha256": "c1552f324aa5446149437aad6261dbb6fc697311f69cc0a8a1bc2a5a5ad73a17"
+    },
+    "part-0003.tsv": {
+      "rows": 81990,
+      "sha256": "1d2227ff66b36f59cd491ce4d92513cc94984bd3f5b4709595c0e98b8fa52806"
+    },
+    "part-0004.tsv": {
+      "rows": 82778,
+      "sha256": "493354de6809567bd3927b5b592ad93cd5cef7e65f80de96874ca3fd9b37b561"
+    },
+    "part-0005.tsv": {
+      "rows": 11446,
+      "sha256": "043409936d43a01b46a8ae00dc2626b4864901f76821c4b4e6df6abc778f399b"
+    }
+  },
+  "schemaVersion": 1
+}

@@ -10,6 +10,26 @@ import kotlinx.serialization.json.*
 
 class ReviewedSupplementTest {
     @Test
+    fun entryShardsShareIdentityAndLemmaValidation() {
+        val root=createTempDirectory("entry-shards").toFile()
+        try {
+            val base=Lexicon.load(File("data/grammar"))
+            val header="lexeme_id\tlemma\tsurface\tcategories\tdomain\tevidence\tsource_ref\n"
+            val first=root.resolve("entries.tsv").apply { writeText(header+
+                "fixture\tsample\tsamples\tnoun,domain_daily\tdaily\thttps://example.org\tfixture\n") }
+            val second=root.resolve("entries-0001.tsv").apply { writeText(header+
+                "fixture\tsample\tsample\tnoun,domain_daily\tdaily\thttps://example.org\tfixture\n") }
+            assertEquals(2,readSupplementEntries(listOf(first,second),base,emptyList(),emptySet()).size)
+            second.writeText(first.readText())
+            assertFailsWith<IllegalArgumentException> { readSupplementEntries(listOf(first,second),base,emptyList(),emptySet()) }
+            second.writeText(header+"fixture\tother\tother\tnoun,domain_daily\tdaily\thttps://example.org\tfixture\n")
+            assertFailsWith<IllegalArgumentException> { readSupplementEntries(listOf(first,second),base,emptyList(),emptySet()) }
+            root.resolve("manifest.json").writeText("{\"files\":{\"entries.tsv\":\"x\",\"entries-0002.tsv\":\"y\"}}")
+            assertFailsWith<IllegalArgumentException> { supplementEntryFiles(root) }
+        } finally { root.deleteRecursively() }
+    }
+
+    @Test
     fun metadataMayBindAnAlreadyMaterializedSupportingLemmaButCannotCreateACandidate() {
         val root = createTempDirectory("supporting-lemma-metadata").toFile()
         try {

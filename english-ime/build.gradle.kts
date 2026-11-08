@@ -15,6 +15,11 @@ application {
     mainClass.set("EnglishImeCliKt")
 }
 
+// The complete supplemental lexicon exceeds small/container JVM ergonomics.
+tasks.named<JavaExec>("run") {
+    maxHeapSize = "4g"
+}
+
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
     testImplementation(kotlin("test"))

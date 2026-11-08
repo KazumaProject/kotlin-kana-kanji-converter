@@ -26,6 +26,14 @@ import world_sources
 import discovery_sources
 import gemini_acquisition
 import coverage_sources
+import distribution_policy
+import role_sources
+import dbpedia_sources
+import bulk_names
+import pantheon_sources
+import bulk_food
+import people_enrichment
+import sensitive_sources
 
 PROFILE = 'dictionary-target-catalog-v2'
 CATALOG = h.REPO / 'english-ime/data/catalog'
@@ -247,7 +255,23 @@ def compile_targets(args):
         if getattr(args, 'gemini_dir', None) else ([], None, []))
     expansion, expansion_manifest, expansion_notices = (coverage_sources.collect(args.coverage_dir, args.coverage_policy)
         if getattr(args, 'coverage_dir', None) else ([], None, []))
-    sources = load_sources(args, [r['surface'] for r in discovered + leads + expansion])
+    roles,role_manifest=(role_sources.collect(args.role_dir) if getattr(args,'role_dir',None) else ([],None))
+    dbpedia,dbpedia_manifest,_=(dbpedia_sources.collect(args.dbpedia_dir,args.dbpedia_policy) if getattr(args,'dbpedia_dir',None) else ([],None,[]))
+    bulk,bulk_manifest=(bulk_names.collect(args.bulk_dir) if getattr(args,'bulk_dir',None) else ([],None))
+    pantheon,pantheon_manifest,pantheon_notices,_=(pantheon_sources.collect(args.pantheon_dir) if getattr(args,'pantheon_dir',None) else ([],None,[],[]))
+    food,food_manifest,food_notices=(bulk_food.collect(args.food_dir) if getattr(args,'food_dir',None) else ([],None,[]))
+    enrichment,enrichment_manifest=(people_enrichment.collect(args.enrichment_dir,args.pantheon_dir) if getattr(args,'enrichment_dir',None) else ([],None))
+    _,sensitive_manifest,_=(sensitive_sources.collect(args.sensitive_dir,args.pantheon_dir,public_people=dbpedia+bulk+roles,
+        public_people_snapshot=dict(dbpedia=dbpedia_manifest['sourceSnapshotSha256'] if dbpedia_manifest else None,
+            bulkNames=h.replay.sha(args.bulk_dir/'bulk.json') if bulk_manifest else None,
+            middleNames=role_manifest['sourceSnapshotSha256'] if role_manifest else None),
+        ordinary_assets=getattr(args,'ordinary_assets',None) or args.assets)
+        if getattr(args,'sensitive_dir',None) else ([],None,[]))
+    sources = load_sources(args, [r['surface'] for r in discovered + leads + expansion + roles + dbpedia + bulk + pantheon + food + enrichment])
+    wordnet_food_manifest=None
+    if food_manifest:
+        wordnet_food,wordnet_food_manifest=bulk_food.wordnet_records(args.lexical_source_dir/'wordnet.tar.gz',sources['pins']['wordnet.tar.gz']['sha256'])
+        food+=wordnet_food
     if lead_manifest:
         h.require(lead_manifest['lexicalSources'] == sources['pins'], 'Gemini acquisition lexical sources changed')
         h.require(lead_manifest['plan']['taxonomySha256'] == h.replay.sha(args.taxonomy), 'Gemini acquisition taxonomy changed')
@@ -279,16 +303,20 @@ def compile_targets(args):
     for scope in config['scopes']:
         for term in scope['terms']:
             add(term, scope['topic'], scope['kind'], scope['tier'], scope['sources'])
-    for record in discovered:
+    for record in discovered + roles + dbpedia + bulk + pantheon + food + enrichment:
         h.require(set(record['topics']) <= topics.keys(), 'Unknown discovered topic')
         for topic in record['topics']:
             item = add(record['surface'], topic, record['kind'], 'extended',
-                       ['esdb', 'wordnet'] if record['kind'] == 'lexical' else [], entity=record['entity'])
+                       ['esdb', 'wordnet'] if record['kind'] == 'lexical' else [],
+                       entity='name-component:'+record['surface'] if all(t.startswith('names.') for t in record['topics']) else record['entity'])
         item['proofs'].extend(dict(p) for p in record['proofs'])
+        if record.get('attestedSourceEntry'):
+            item['attestedSourceEntry']=record['attestedSourceEntry'];item['formKind']=record['formKind']
     for record in expansion:
         h.require(set(record['topics']) <= topics.keys(), 'Unknown source-coverage topic')
         for topic in record['topics']:
-            item = add(record['surface'], topic, record['kind'], 'extended', ['esdb','wordnet'], entity=record['entity'])
+            item = add(record['surface'], topic, record['kind'], 'extended', ['esdb','wordnet'],
+                       entity='name-component:'+record['surface'] if all(t.startswith('names.') for t in record['topics']) else record['entity'])
         item['proofs'].extend(dict(p) for p in record['proofs'])
         if record.get('sourceScopeDeferred'):item['sourceScopeDeferred']=True
     for record in leads:
@@ -302,13 +330,18 @@ def compile_targets(args):
     casks = json.loads((args.lexical_source_dir / 'cask.json').read_text())
     ranks = {r['cask']: int(r['number']) for r in json.loads((args.lexical_source_dir / 'cask-analytics.json').read_text())['items']}
     for record in sorted(casks, key=lambda r: (ranks.get(r['token'], 1000000), r['token'])):
-        if record.get('disabled') or record.get('deprecated') or ranks.get(record['token'], 1000000) > config['productRankLimit']:
+        if record.get('disabled') or record.get('deprecated'):
             continue
         for index, label in enumerate(record['name']):
-            item = add(label, 'names.product', 'product', 'core' if index == 0 else 'extended', ['homebrew'],
-                entity='homebrew:' + record['token'], form_kind='head' if index == 0 else 'alias')
-            item['proofs'].append(dict(source='homebrew', url='https://formulae.brew.sh/cask/' + record['token'],
-                sha256=sources['legacy']['files']['cask.json']['sha256'], record=record['token'], field='name', license='BSD-2-Clause'))
+            selections=[]
+            if ranks.get(record['token'],1000000)<=config['productRankLimit']:
+                selections.append(('names.product','core' if index==0 else 'extended'))
+            if getattr(args,'all_software',False):selections.append(('products.software','extended'))
+            for topic,tier in selections:
+                item = add(label, topic, 'product', tier, ['homebrew'],
+                    entity='homebrew:' + record['token'], form_kind='head' if index == 0 else 'alias')
+                item['proofs'].append(dict(source='homebrew', url='https://formulae.brew.sh/cask/' + record['token'],
+                    sha256=sources['legacy']['files']['cask.json']['sha256'], record=record['token'], field='name', license='BSD-2-Clause'))
 
     for item in targets.values():
         surface, kind = item['surface'], item['kind']
@@ -359,8 +392,13 @@ def compile_targets(args):
         if noun_head and (not item['sourceEntry'] or item['sourceEntry']['lemma'] != surface):
             item['sourceEntry'] = dict(lemma=surface, categories=['noun'], source_ref='wiktionary:' + str(noun_head['revision']))
             item['formKind'] = 'head'
+        if item.get('attestedSourceEntry'):item['sourceEntry']=item['attestedSourceEntry']
         item['proofs'] = canonical_proofs(item['proofs'])
     records = sorted(targets.values(), key=lambda r: (r['tier'] != 'core', r['surface'], r['kind'], r['id']))
+    blocked=distribution_policy.keys()
+    for record in records:
+        if distribution_policy.excluded(record['surface'],(record['sourceEntry'] or {}).get('lemma',record['surface']),blocked):
+            record['distributionRestricted']=True
     public = dict(profile=PROFILE, taxonomySha256=h.replay.sha(args.taxonomy), scopesSha256=h.replay.sha(args.scopes),
         documents=sources['documents'], lexicalSources=sources['pins'],
         mdnPages=[r for r, _ in sources['pages']],
@@ -399,6 +437,28 @@ def compile_targets(args):
     if expansion_manifest:
         public['sourceCoverage'] = coverage_sources.provenance(args.coverage_dir, expansion_manifest)
         notices.extend(expansion_notices)
+    if role_manifest:public['nameRoles']=role_manifest
+    if bulk_manifest:
+        public['bulkNames']=bulk_manifest
+        path=args.bulk_dir/'BULK-NAMES-SOURCES.txt'
+        notices.append(dict(name=path.name,path=str(path.resolve()),sha256=h.replay.sha(path)))
+    if dbpedia_manifest:
+        dbpedia_sources.check_notices(args.dbpedia_dir)
+        public['dbpedia']=dbpedia_manifest
+        for path in sorted(args.dbpedia_dir.glob('DBPEDIA-*')):
+            notices.append(dict(name=path.name,path=str(path.resolve()),sha256=h.replay.sha(path)))
+    if food_manifest:
+        public['food']=food_manifest
+        public['wordnetFood']=wordnet_food_manifest
+        notices.extend(food_notices)
+    if enrichment_manifest:public['peopleEnrichment']=enrichment_manifest
+    if sensitive_manifest:public['sensitive']=sensitive_manifest
+    if pantheon_manifest:
+        public['pantheon']=pantheon_manifest
+        notices.extend(pantheon_notices)
+    if distribution_policy.DEFAULT.exists():public['distributionPolicySha256']=h.replay.sha(distribution_policy.DEFAULT)
+    if getattr(args,'all_software',False):public['allActiveSoftware']=dict(source='cask.json',sha256=sources['legacy']['files']['cask.json']['sha256'],
+        scope='Every source-provided name of every active, non-deprecated cask; installation rank does not cap extended acquisition.')
     return records, topics, dict(catalogV2=public, references=dict(notices=notices))
 
 
@@ -449,13 +509,16 @@ def audit(targets, topics, pairs, analyses, excluded):
         missing = sorted(required - members)
         result = dict(id=target['id'], registered=registered, missingCategories=missing, status='present')
         category = 'domain_' + topics[target['topics'][0]]['domain']
-        if target.get('sourceScopeDeferred'):
+        if target.get('distributionRestricted'):
+            result['status']='restricted_distribution'
+        elif target.get('sourceScopeDeferred'):
             result['status'] = 'blocked_source_scope'
         elif target.get('deferredByNameReview'):
             result['status'] = 'blocked_named_review'
         elif not proofs:
             result['status'] = 'blocked_evidence'
-        elif not registered and not lexical.valid_surface(word):
+        elif not registered and (not lexical.valid_surface(word) or
+              target['sourceEntry'] and not lexical.valid_surface(target['sourceEntry']['lemma'])):
             result['status'] = 'blocked_format'
         elif not registered and (lexical.key(word) in excluded or word in surfaces):
             result['status'] = 'blocked_base_or_reading'
@@ -526,8 +589,10 @@ def prepare(args):
             targetsSha256=h.replay.sha(directory / 'targets.jsonl'), selectedCandidates=len(operations), availableCandidates=len(operations),
             topics=topics, sourcePaths={k: str(getattr(args, k).resolve()) for k in ['source_dir', 'lexical_source_dir', 'esdb_dir', 'taxonomy', 'scopes']},
             additionalCategories=[dict(category=r['category'], definition=r['definition'], examples=r['examples']) for r in topics.values()],
-            codeHashes={name: h.replay.sha(Path(__file__).with_name(name)) for name in ['catalog_harness.py', 'vocabulary_harness.py', 'dictionary_sources.py', 'world_sources.py']},
+            codeHashes={name: h.replay.sha(Path(__file__).with_name(name)) for name in ['catalog_harness.py', 'vocabulary_harness.py', 'dictionary_sources.py', 'world_sources.py', 'distribution_policy.py', 'vocabulary_sources.py']},
             baseRevision=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=h.REPO, text=True).strip())
+        config['catalogOptions']=dict(all_software=getattr(args,'all_software',False))
+        if getattr(args,'sensitive_dir',None):config['sourcePaths']['ordinary_assets']=str((getattr(args,'ordinary_assets',None) or args.assets).resolve())
         if getattr(args, 'discovery_dir', None):
             config['sourcePaths'].update({k: str(getattr(args, k).resolve()) for k in ['discovery_dir', 'discovery_policy']})
             config['codeHashes']['discovery_sources.py'] = h.replay.sha(Path(__file__).with_name('discovery_sources.py'))
@@ -539,6 +604,22 @@ def prepare(args):
         if getattr(args, 'coverage_dir', None):
             config['sourcePaths'].update({k:str(getattr(args,k).resolve()) for k in ['coverage_dir','coverage_policy']})
             config['codeHashes']['coverage_sources.py'] = h.replay.sha(Path(__file__).with_name('coverage_sources.py'))
+        if getattr(args,'role_dir',None):
+            config['sourcePaths']['role_dir']=str(args.role_dir.resolve())
+            config['codeHashes']['role_sources.py']=h.replay.sha(Path(__file__).with_name('role_sources.py'))
+        if getattr(args,'dbpedia_dir',None):
+            config['sourcePaths'].update({k:str(getattr(args,k).resolve()) for k in ['dbpedia_dir','dbpedia_policy']})
+            config['codeHashes']['dbpedia_sources.py']=h.replay.sha(Path(__file__).with_name('dbpedia_sources.py'))
+        for provider,path_name in [('bulk_food','food_dir'),('people_enrichment','enrichment_dir'),('sensitive_sources','sensitive_dir')]:
+            if getattr(args,path_name,None):
+                config['sourcePaths'][path_name]=str(getattr(args,path_name).resolve())
+                config['codeHashes'][provider+'.py']=h.replay.sha(Path(__file__).with_name(provider+'.py'))
+        if getattr(args,'pantheon_dir',None):
+            config['sourcePaths']['pantheon_dir']=str(args.pantheon_dir.resolve())
+            config['codeHashes']['pantheon_sources.py']=h.replay.sha(Path(__file__).with_name('pantheon_sources.py'))
+        if getattr(args,'bulk_dir',None):
+            config['sourcePaths']['bulk_dir']=str(args.bulk_dir.resolve())
+            config['codeHashes']['bulk_names.py']=h.replay.sha(Path(__file__).with_name('bulk_names.py'))
         h.dump(directory / 'run.json', config)
         return dict(targets=len(targets), plannedOperations=len(operations), changes=dict(Counter(r['status'] for r in results)))
 
@@ -555,7 +636,7 @@ def adopt(args):
         config, connection = checked_state(directory)
         try:
             h.require(h.asset_hashes(Path(config['assets'])) == config['assetHashes'], 'Baseline assets changed')
-            options = argparse.Namespace(**{k: Path(v) for k, v in config['sourcePaths'].items()})
+            options = argparse.Namespace(**{k: Path(v) for k, v in config['sourcePaths'].items()},**config.get('catalogOptions',{}))
             targets, topics, sources = compile_targets(options)
             h.require(targets == h.json_lines(directory / 'targets.jsonl') and sources == config['sources'], 'Source or target declarations changed')
             # Recompute operations as well; editing SQLite cannot authorize new metadata.
@@ -669,6 +750,15 @@ def main():
         if name == 'adopt':
             p.add_argument('--batch-size', type=int, choices=range(1, 10001), default=1000)
         if name == 'prepare':
+            p.add_argument('--all-software',action='store_true')
+            p.add_argument('--pantheon-dir',type=Path)
+            p.add_argument('--food-dir',type=Path)
+            p.add_argument('--enrichment-dir',type=Path)
+            p.add_argument('--sensitive-dir',type=Path)
+            p.add_argument('--bulk-dir',type=Path)
+            p.add_argument('--dbpedia-dir',type=Path)
+            p.add_argument('--dbpedia-policy',type=Path,default=CATALOG/'dbpedia-policy.json')
+            p.add_argument('--role-dir',type=Path)
             p.add_argument('--gemini-dir', type=Path)
             p.add_argument('--gemini-named-review-dir', type=Path)
             p.add_argument('--coverage-dir', type=Path)

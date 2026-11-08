@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "provider": "wiktionary",
+  "language": "en",
+  "pageSize": 500,
+  "categoryPrefixes": [
+    "Category:English ",
+    "Category:en:"
+  ],
+  "purpose": "Identify sexual slang by intersection of sexual-topic membership and vulgarity; preserve medical and educational terms.",
+  "roots": [
+    {
+      "topic": "restricted.vulgar",
+      "category": "Category:English vulgarities"
+    },
+    {
+      "topic": "restricted.sex",
+      "category": "Category:en:Sex"
+    },
+    {
+      "topic": "restricted.sex",
+      "category": "Category:en:Pornography"
+    }
+  ],
+  "excludeCategoryPatterns": []
+}

@@ -1,0 +1,190 @@
+{
+  "batchSize": 1000,
+  "categoryRules": [
+    {
+      "pattern": "(?:^|_)skateboarders(?:_|$)",
+      "topic": "people.sports.skateboarding"
+    },
+    {
+      "pattern": "(?:^|_)snowboarders(?:_|$)",
+      "topic": "people.sports.snowboarding"
+    },
+    {
+      "pattern": "(?:^|_)(?:mixed_martial_artists|mixed_martial_arts_fighters)(?:_|$)",
+      "topic": "people.sports.mma"
+    },
+    {
+      "pattern": "(?:^|_)kickboxers(?:_|$)",
+      "topic": "people.sports.kickboxing"
+    },
+    {
+      "pattern": "(?:^|_)judoka(?:_|$)",
+      "topic": "people.sports.judo"
+    },
+    {
+      "pattern": "(?:^|_)weightlifters(?:_|$)",
+      "topic": "people.sports.weightlifting"
+    },
+    {
+      "pattern": "(?:^|_)(?:shooters|sport_shooters)(?:_|$)",
+      "topic": "people.sports.shooting"
+    },
+    {
+      "pattern": "(?:^|_)alpine_skiers(?:_|$)",
+      "topic": "people.sports.alpine_skiing"
+    },
+    {
+      "pattern": "(?:^|_)lugers(?:_|$)",
+      "topic": "people.sports.luge"
+    },
+    {
+      "pattern": "(?:^|_)triathletes(?:_|$)",
+      "topic": "people.sports.triathlon"
+    },
+    {
+      "pattern": "(?:^|_)(?:sport_climbers|rock_climbers)(?:_|$)",
+      "topic": "people.sports.climbing"
+    },
+    {
+      "pattern": "(?:^|_)(?:competitors|players|athletes|swimmers|runners|gymnasts|skaters|skiers|skateboarders|snowboarders|boxers|wrestlers|judoka|rowers|cyclists|fencers|shooters|sailors|divers|archers|canoeists|weightlifters|equestrians|triathletes|surfers|climbers|skeleton_racers|bobsledders|bobsleigh_competitors|lugers|curlers|biathletes|kayakers|pentathletes)_(?:at|in)_the_[0-9]{4}_(?:Summer|Winter)_Olympics(?:_|$)",
+      "topic": "people.sports.olympics"
+    },
+    {
+      "pattern": "^Olympic_.*(?:medalists|competitors|players|athletes|skaters|skiers|skateboarders|snowboarders|boxers|wrestlers|judoka|rowers|cyclists|fencers|shooters|sailors|divers|archers|canoeists|weightlifters|runners|gymnasts|swimmers)_for_",
+      "topic": "people.sports.olympics"
+    },
+    {
+      "pattern": "(?:^|_)(?:ski_jumpers)(?:_|$)",
+      "topic": "people.sports.ski_jumping"
+    },
+    {
+      "pattern": "(?:^|_)(?:cross-country_skiers|cross_country_skiers)(?:_|$)",
+      "topic": "people.sports.cross_country_skiing"
+    },
+    {
+      "pattern": "(?:^|_)(?:figure_skaters)(?:_|$)",
+      "topic": "people.sports.figure_skating"
+    },
+    {
+      "pattern": "(?:^|_)(?:speed_skaters)(?:_|$)",
+      "topic": "people.sports.speed_skating"
+    },
+    {
+      "pattern": "(?:^|_)(?:bobsledders|bobsleigh_pilots|bobsleigh_brakemen)(?:_|$)",
+      "topic": "people.sports.bobsleigh"
+    },
+    {
+      "pattern": "(?:^|_)(?:biathletes)(?:_|$)",
+      "topic": "people.sports.biathlon"
+    },
+    {
+      "pattern": "(?:^|_)(?:curlers)(?:_|$)",
+      "topic": "people.sports.curling"
+    },
+    {
+      "pattern": "(?:^|_)(?:Nordic_combined_skiers)(?:_|$)",
+      "topic": "people.sports.nordic_combined"
+    },
+    {
+      "pattern": "(?:^|_)(?:skeleton_racers)(?:_|$)",
+      "topic": "people.sports.skeleton"
+    },
+    {
+      "pattern": "(?:^|_)(?:divers)(?:_|$)",
+      "topic": "people.sports.diving"
+    },
+    {
+      "pattern": "(?:^|_)(?:water_polo_players)(?:_|$)",
+      "topic": "people.sports.water_polo"
+    },
+    {
+      "pattern": "(?:^|_)(?:modern_pentathletes)(?:_|$)",
+      "topic": "people.sports.modern_pentathlon"
+    },
+    {
+      "pattern": "(?:^|_)(?:lacrosse_players)(?:_|$)",
+      "topic": "people.sports.lacrosse"
+    },
+    {
+      "pattern": "(?:^|_)(?:squash_players)(?:_|$)",
+      "topic": "people.sports.squash"
+    },
+    {
+      "pattern": "(?:^|_)(?:softball_players)(?:_|$)",
+      "topic": "people.sports.softball"
+    },
+    {
+      "pattern": "(?:^|_)(?:synchronised_swimmers|synchronized_swimmers|artistic_swimmers)(?:_|$)",
+      "topic": "people.sports.artistic_swimming"
+    },
+    {
+      "pattern": "(?:^|_)(?:short_track_speed_skaters)(?:_|$)",
+      "topic": "people.sports.short_track_speed_skating"
+    },
+    {
+      "pattern": "(?:^|_)(?:ski_mountaineers)(?:_|$)",
+      "topic": "people.sports.ski_mountaineering"
+    },
+    {
+      "pattern": "(?:^|_)(?:sprinters|hurdlers|middle-distance_runners|long-distance_runners|marathon_runners|racewalkers|steeplechasers|high_jumpers|long_jumpers|triple_jumpers|pole_vaulters|shot_putters|discus_throwers|hammer_throwers|javelin_throwers|decathletes|heptathletes|track_and_field_athletes)(?:_|$)",
+      "topic": "people.sports.athletics"
+    },
+    {
+      "pattern": "(?:^|_)archers(?:_|$)",
+      "topic": "people.sports.archery"
+    },
+    {
+      "pattern": "(?:^|_)surfers(?:_|$)",
+      "topic": "people.sports.surfing"
+    }
+  ],
+  "classTopics": {
+    "AmericanFootballPlayer": "people.sports.american_football",
+    "ArcherPlayer": "people.sports.archery",
+    "Athlete": "people.sports",
+    "AthleticsPlayer": "people.sports.athletics",
+    "BadmintonPlayer": "people.sports.badminton",
+    "BaseballPlayer": "people.sports.baseball",
+    "BasketballPlayer": "people.sports.basketball",
+    "Biathlete": "people.sports.biathlon",
+    "BobsleighAthlete": "people.sports.bobsleigh",
+    "Boxer": "people.sports.boxing",
+    "Canoeist": "people.sports.canoeing",
+    "Cricketer": "people.sports.cricket",
+    "CrossCountrySkier": "people.sports.cross_country_skiing",
+    "Curler": "people.sports.curling",
+    "Cyclist": "people.sports.cycling",
+    "Fencer": "people.sports.fencing",
+    "FigureSkater": "people.sports.figure_skating",
+    "GolfPlayer": "people.sports.golf",
+    "Gymnast": "people.sports.gymnastics",
+    "HandballPlayer": "people.sports.handball",
+    "HighDiver": "people.sports.diving",
+    "HorseRider": "people.sports.equestrian",
+    "IceHockeyPlayer": "people.sports.hockey",
+    "LacrossePlayer": "people.sports.lacrosse",
+    "MartialArtist": "people.sports.martial_arts",
+    "MotorsportRacer": "people.sports.racing",
+    "NordicCombined": "people.sports.nordic_combined",
+    "Rower": "people.sports.rowing",
+    "RugbyPlayer": "people.sports.rugby",
+    "Sailor": "people.sports.sailing",
+    "Skater": "people.sports.skating",
+    "Ski_jumper": "people.sports.ski_jumping",
+    "Skier": "people.sports.skiing",
+    "SoccerPlayer": "people.sports.soccer",
+    "SpeedSkater": "people.sports.speed_skating",
+    "SquashPlayer": "people.sports.squash",
+    "Surfer": "people.sports.surfing",
+    "Swimmer": "people.sports.swimming",
+    "TableTennisPlayer": "people.sports.table_tennis",
+    "TennisPlayer": "people.sports.tennis",
+    "VolleyballPlayer": "people.sports.volleyball",
+    "WaterPoloPlayer": "people.sports.water_polo",
+    "Wrestler": "people.sports.wrestling"
+  },
+  "httpMethod": "POST",
+  "purpose": "Look up every published Pantheon individual, including sportspeople whose provider primary occupation is actor, politician, musician or another non-sport field. Preserve exact QID joins and classify narrow sports/Olympic participation only from explicit DBpedia class/category evidence. Reuse unchanged sports batches; no word/person/rank cutoff.",
+  "schemaVersion": 1,
+  "allPeople": true
+}

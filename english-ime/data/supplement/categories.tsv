@@ -1,5 +1,7 @@
 category	definition	examples
+topic_daily_beverages	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
 topic_daily_communication	会話・連絡 / Source-attested vocabulary in daily.communication; not a sense-disambiguation rule.	hello, goodbye, please
+topic_daily_dishes	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
 topic_daily_education	学校・学習 / Source-attested vocabulary in daily.education; not a sense-disambiguation rule.	school, student, teacher
 topic_daily_family	家族・人間関係 / Source-attested vocabulary in daily.family; not a sense-disambiguation rule.	family, parent, mother
 topic_daily_food	食事・料理 / Source-attested vocabulary in daily.food; not a sense-disambiguation rule.	food, breakfast, lunch
@@ -26,20 +28,90 @@ topic_engineering_transport	自動車・鉄道・物流 / Project-declared, sour
 topic_media_audio	音響・音楽制作 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	sound pressure, sound pressure level, decibel
 topic_media_graphics	CG・デザイン・ゲーム制作 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	computer graphics, raster graphics, vector graphics
 topic_media_photography	写真・光学・映像 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	aperture, shutter speed, focal length
+topic_names_given	Source-attested given-name vocabulary; not inferred by splitting full names.	James, Mary
+topic_names_middle	Explicitly attested middle-name usage; not inferred from name order.	Nicole, Lynn
 topic_names_person	名・姓 / Source-attested vocabulary in names.person; not a sense-disambiguation rule.	John, Mary, James
 topic_names_product	商品・ソフトウェア名 / Source-attested vocabulary in names.product; not a sense-disambiguation rule.	published product names
+topic_names_surname	Source-attested surname vocabulary; not inferred by splitting full names.	Smith, Brown
 topic_organizations_consumer	生活・交通・流通企業 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	IKEA, Walmart, Costco
 topic_organizations_general	分野横断企業・組織 / Source-typed direct class members; extended vocabulary, not sense disambiguation.	source-attested names
 topic_organizations_technology	技術・製造企業 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Apple, Microsoft, Google
+topic_people_actors	Source-typed actors and acting-occupation descendants; adult-industry persons are retained only in curation.	Tom Hanks, Meryl Streep
+topic_people_arts	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
 topic_people_business	経営・事業・発明 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Steve Jobs, Bill Gates, Warren Buffett
+topic_people_food	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
 topic_people_history	歴史上の人物 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Cleopatra, Julius Caesar, Alexander the Great
 topic_people_literature	作家・思想家 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	William Shakespeare, Jane Austen, Charles Dickens
 topic_people_music	音楽家・歌手 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Taylor Swift, Michael Jackson, Madonna
+topic_people_notable	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_performers	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
 topic_people_public	政治・社会活動 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Nelson Mandela, Mahatma Gandhi, Martin Luther King Jr.
 topic_people_science	科学者・技術者 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Albert Einstein, Marie Curie, Isaac Newton
 topic_people_screen	俳優・映画・舞台 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Charlie Chaplin, Audrey Hepburn, Meryl Streep
+topic_people_singers	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
 topic_people_sports	スポーツ選手 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Lionel Messi, Cristiano Ronaldo, Pelé
+topic_people_sports_alpine_skiing	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_american_football	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_artistic_swimming	Source-attested discipline; broad athlete labels alone do not establish membership.	source-attested spellings
+topic_people_sports_athletics	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_badminton	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_baseball	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_basketball	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_biathlon	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_bobsleigh	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_boxing	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_canoeing	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_climbing	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_cricket	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_cross_country_skiing	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_curling	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_cycling	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_diving	Source-attested discipline; broad athlete labels alone do not establish membership.	source-attested spellings
+topic_people_sports_equestrian	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_fencing	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_figure_skating	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_golf	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_gymnastics	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_handball	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_hockey	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_judo	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_kickboxing	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_lacrosse	Source-attested discipline; broad athlete labels alone do not establish membership.	source-attested spellings
+topic_people_sports_luge	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_martial_arts	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_mind_sports	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_mma	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_modern_pentathlon	Source-attested discipline; broad athlete labels alone do not establish membership.	source-attested spellings
+topic_people_sports_nordic_combined	Source-attested discipline; broad athlete labels alone do not establish membership.	source-attested spellings
+topic_people_sports_olympics	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_racing	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_rowing	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_rugby	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_sailing	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_shooting	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_short_track_speed_skating	Source-attested discipline; broad athlete labels alone do not establish membership.	source-attested spellings
+topic_people_sports_skateboarding	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_skating	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_skeleton	Source-attested discipline; broad athlete labels alone do not establish membership.	source-attested spellings
+topic_people_sports_ski_jumping	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_ski_mountaineering	Source-attested discipline; broad athlete labels alone do not establish membership.	source-attested spellings
+topic_people_sports_skiing	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_snowboarding	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_soccer	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_softball	Source-attested discipline; broad athlete labels alone do not establish membership.	source-attested spellings
+topic_people_sports_speed_skating	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_squash	Source-attested discipline; broad athlete labels alone do not establish membership.	source-attested spellings
+topic_people_sports_staff	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_swimming	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_table_tennis	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_tennis	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_triathlon	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_volleyball	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_water_polo	Source-attested discipline; broad athlete labels alone do not establish membership.	source-attested spellings
+topic_people_sports_weightlifting	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
+topic_people_sports_wrestling	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
 topic_products_brands	分野横断ブランド / Source-typed direct class members; extended vocabulary, not sense disambiguation.	source-attested names
+topic_products_cars	Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.	source-attested spellings
 topic_products_computing	PC・モバイル・ゲーム機 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	iPhone, iPad, MacBook Air
 topic_products_home	家電・生活関連名 / Source-attested product, brand and organization spellings; kind is recorded separately.	Roomba, Thermomix, Instant Pot
 topic_products_imaging	写真・音響関連名 / Source-attested product, brand and organization spellings; kind is recorded separately.	Canon EOS R5, Canon EOS R6, Canon EOS 5D

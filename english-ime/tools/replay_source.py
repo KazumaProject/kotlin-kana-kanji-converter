@@ -246,7 +246,7 @@ def run_cli(args):
 
 
 def supplement_output_names(manifest):
-    return SUPPLEMENT_OUTPUTS | ({'grammar/categories.tsv'} if 'categories.tsv' in manifest['files'] else set()) | {
+    return SUPPLEMENT_OUTPUTS | ({'grammar/relations.tsv','surface-corrections.tsv'} if 'distribution-exclusions.tsv' in manifest['files'] else set()) | ({'grammar/categories.tsv'} if 'categories.tsv' in manifest['files'] else set()) | {
         'grammar/' + name for name in manifest['files'] if name.startswith('notices/')}
 
 
@@ -256,13 +256,21 @@ def supplement_outputs(directory, base_manifest):
     require(version in {1, 2} and manifest.get('kind') == f'reviewed-english-supplement-v{version}' and
             manifest.get('baseManifestSha256') == sha(base_manifest), 'Invalid supplement or base manifest')
     files = manifest['files']
-    require('entries.tsv' in files and all(name == 'entries.tsv' or version == 2 and name in {'categories.tsv', 'metadata.tsv'} or
+    require('entries.tsv' in files and all(name == 'entries.tsv' or version == 2 and (name in {'categories.tsv', 'metadata.tsv', 'distribution-exclusions.tsv'} or re.fullmatch(r'entries-[0-9]{4}\.tsv',name)) or
             re.fullmatch(r'notices/[A-Za-z0-9_.-]+', name) for name in files), 'Invalid supplement input paths')
     expected = manifest['expectedOutputs']
     require(set(expected) == supplement_output_names(manifest) and
             all(re.fullmatch('[0-9a-f]{64}', value) for value in expected.values()),
             'Invalid supplement output hashes')
     return expected
+
+
+def shipping_supplement_hash(directory):
+    manifest=read_json(directory/'manifest.json')
+    if 'distribution-exclusions.tsv' not in manifest['files']:return sha(directory/'manifest.json')
+    data=dict(schemaVersion=1,kind='english-distribution-provenance',authoringManifestSha256=sha(directory/'manifest.json'),
+              distributionPolicySha256=manifest['files']['distribution-exclusions.tsv'])
+    return hashlib.sha256((json.dumps(data,ensure_ascii=False,separators=(',',':'))+'\n').encode()).hexdigest()
 
 
 def build(manifest_path, source, output, supplement=None):
@@ -287,7 +295,7 @@ def build(manifest_path, source, output, supplement=None):
         provenance = actual.pop('source-evidence-manifest.json', None)
         require(provenance == sha(manifest_path), 'Output lost its replay provenance')
         if extension:
-            require(actual.pop('supplement-manifest.json', None) == sha(supplement / 'manifest.json'),
+            require(actual.pop('supplement-manifest.json', None) == shipping_supplement_hash(supplement),
                     'Output lost its supplement provenance')
         if actual != expected:
             differences = sorted(name for name in actual.keys() | expected.keys()
