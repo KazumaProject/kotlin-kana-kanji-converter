@@ -38,6 +38,7 @@ topic_people_public	政治・社会活動 / Project-declared, source-attested to
 topic_people_science	科学者・技術者 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Albert Einstein, Marie Curie, Isaac Newton
 topic_people_screen	俳優・映画・舞台 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Charlie Chaplin, Audrey Hepburn, Meryl Streep
 topic_people_sports	スポーツ選手 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Lionel Messi, Cristiano Ronaldo, Pelé
+topic_products_brands	分野横断ブランド / Source-typed direct class members; extended vocabulary, not sense disambiguation.	source-attested names
 topic_products_computing	PC・モバイル・ゲーム機 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	iPhone, iPad, MacBook Air
 topic_products_home	家電・生活関連名 / Source-attested product, brand and organization spellings; kind is recorded separately.	Roomba, Thermomix, Instant Pot
 topic_products_imaging	写真・音響関連名 / Source-attested product, brand and organization spellings; kind is recorded separately.	Canon EOS R5, Canon EOS R6, Canon EOS 5D
@@ -51,6 +52,7 @@ topic_science_medicine	医療・医療機器 / Project-declared, source-attested
 topic_science_physics	物理・計測 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	force, mass, acceleration
 topic_science_statistics	統計・実験計画 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	probability, statistics, sample
 topic_services_communication	連絡・SNS・共同作業サービス / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	WhatsApp, Telegram, Signal
+topic_services_general	Source-typed websites and web services; extended vocabulary, not a usage-frequency claim.	source-attested service names
 topic_services_media	動画・音楽・旅行サービス / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	YouTube, YouTube Music, Apple Music
 topic_technology_ai	AI・機械学習 / Source-attested vocabulary in technology.ai; not a sense-disambiguation rule.	machine learning, artificial intelligence, neural network
 topic_technology_cloud	クラウド・コンテナ / Source-attested vocabulary in technology.cloud; not a sense-disambiguation rule.	cloud, container, image

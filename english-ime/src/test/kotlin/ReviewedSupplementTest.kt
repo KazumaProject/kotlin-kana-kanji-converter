@@ -10,6 +10,25 @@ import kotlinx.serialization.json.*
 
 class ReviewedSupplementTest {
     @Test
+    fun metadataMayBindAnAlreadyMaterializedSupportingLemmaButCannotCreateACandidate() {
+        val root = createTempDirectory("supporting-lemma-metadata").toFile()
+        try {
+            val base = Lexicon.load(File("data/grammar"))
+            val entry = SupplementEntry(grammar.FormKey("sample-forms", "samples"), "sample",
+                setOf("noun", "noun_count_plural", "domain_science"), "https://example.org/samples")
+            val metadata = root.resolve("metadata.tsv").apply {
+                writeText("lexeme_id\tlemma\tsurface\tcategories\tdomain\tevidence\tsource_ref\n" +
+                    "sample-forms\tsample\tsample\tdomain_science,topic_fixture\tscience\thttps://example.org/sample\tfixture\n")
+            }
+            val original = listOf(Dictionary("sample", 100, "sample", false))
+            assertEquals(1, readSupplementMetadata(metadata, base, original, listOf(entry), setOf("topic_fixture")).size)
+            assertFailsWith<IllegalArgumentException> {
+                readSupplementMetadata(metadata, base, emptyList(), listOf(entry), setOf("topic_fixture"))
+            }
+        } finally { root.deleteRecursively() }
+    }
+
+    @Test
     fun readingsComeFromTheConfirmedSurface() {
         assertEquals(setOf("two-factor authentication", "twofactor authentication", "twofactorauthentication"),
             supplementReadings("two-factor authentication"))
@@ -68,7 +87,7 @@ class ReviewedSupplementTest {
         try {
             val grammar = File("data/grammar")
             val base = Lexicon.load(grammar)
-            val original = listOf(Dictionary("fast", 123, "fast", false))
+            val original = listOf(Dictionary("fast", 123, "fast", false), Dictionary("sample", 100, "sample", false))
             val header = "lexeme_id\tlemma\tsurface\tcategories\tdomain\tevidence\tsource_ref\n"
             val decisions = root.resolve("decisions.tsv").apply {
                 writeText("id\treading\tsurface\tcost\tdecision\tlexeme_ids\treason\tevidence\n" +
@@ -77,9 +96,11 @@ class ReviewedSupplementTest {
             val sourceManifest = root.resolve("base.json").apply { writeText("{}") }
             val supp = root.resolve("supplement").apply { mkdir() }
             supp.resolve("entries.tsv").writeText(header +
-                "topic-gap\tsample gap\tsample gap\tnoun,domain_science,topic_fixture\tscience\thttps://example.org/gap\tfixture:gap\n")
+                "topic-gap\tsample gap\tsample gap\tnoun,domain_science,topic_fixture\tscience\thttps://example.org/gap\tfixture:gap\n" +
+                "sample-forms\tsample\tsamples\tnoun,noun_count_plural,domain_science\tscience\thttps://example.org/samples\tfixture\n")
             supp.resolve("metadata.tsv").writeText(header +
-                "adj-fast\tfast\tfast\tdomain_technology,topic_fixture\ttechnology\thttps://example.org/fast\tfixture:fast\n")
+                "adj-fast\tfast\tfast\tdomain_technology,topic_fixture\ttechnology\thttps://example.org/fast\tfixture:fast\n" +
+                "sample-forms\tsample\tsample\tdomain_science,topic_fixture\tscience\thttps://example.org/sample\tfixture\n")
             supp.resolve("categories.tsv").writeText("category\tdefinition\texamples\n" +
                 "topic_fixture\tAttested fixture vocabulary\tfast, sample gap\n")
             supp.resolve("notices").mkdir()
@@ -104,6 +125,9 @@ class ReviewedSupplementTest {
             assertTrue("topic_fixture" in dictionary.grammarRoles.lookup("fast", "fast"))
             assertTrue("domain_science" in dictionary.grammarRoles.lookup("sample gap", "sample gap"))
             val lexicon = Lexicon.load(assets.resolve("grammar"))
+            val supporting = lexicon.lookup("sample").single { it.key.lexemeId == "sample-forms" }
+            assertTrue(supporting.dictionaries.containsAll(setOf("noun", "domain_science", "topic_fixture")))
+            assertTrue("noun_count_plural" !in supporting.dictionaries)
             val fast = lexicon.forms.single { it.key.lexemeId == "adj-fast" && it.key.surface == "fast" }
             assertTrue(fast.dictionaries.containsAll(base.lookup("fast").first { it.key.lexemeId == "adj-fast" }.dictionaries))
             val runtime = root.resolve("runtime")

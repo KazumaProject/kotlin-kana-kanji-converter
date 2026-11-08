@@ -1,0 +1,16 @@
+surface	change	kinds
+TGV	metadata_only	lexical
+THD	metadata_only	lexical
+thermal design power	added	lexical
+thermionic valve	added	lexical
+thermistor	metadata_only	lexical
+thermopile	added	lexical
+thin-film	added	lexical
+through-hole technology	added	lexical
+THT	added	lexical
+thyratron	added	lexical
+thyristor	metadata_only	lexical
+TI	added	lexical
+transistor	metadata_only	lexical
+voltage	metadata_only	lexical
+voltage regulator	added	lexical

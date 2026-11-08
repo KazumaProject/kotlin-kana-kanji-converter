@@ -1,0 +1,264 @@
+surface	change	kinds
+PCA	metadata_only	lexical
+PCC	metadata_only	lexical
+PCR	metadata_only	lexical
+peakedness	added	lexical
+pentadal	added	lexical
+pentile	added	lexical
+Pepsi paradox	added	lexical
+percentilation	added	lexical
+percentile	metadata_only	lexical
+PERMANOVA	added	lexical
+permillile	added	lexical
+phone survey	added	lexical
+pie chart	added	lexical
+pivot	metadata_only	lexical
+pivotal quantity	added	lexical
+plateau effect	added	lexical
+platykurtic	added	lexical
+platykurtosis	added	lexical
+platykurtotic	added	lexical
+PLSA	added	lexical
+PLSI	added	lexical
+pmf	metadata_only	lexical
+point mass	added	lexical
+Poisson distribution	added	lexical
+Poisson process	added	lexical
+polychoric	added	lexical
+polyserial	added	lexical
+population	metadata_only	lexical
+population mean	added	lexical
+posterior probability	added	lexical
+power	metadata_only	lexical
+PPMCC	added	lexical
+PPV	metadata_only	lexical
+prediction	metadata_only	lexical
+predictive	metadata_only	lexical
+presmooth	added	lexical
+presmoothing	added	lexical
+principle of indifference	added	lexical
+prior	metadata_only	lexical
+prior probability	added	lexical
+proba	metadata_only	lexical
+probabilistic programming	added	lexical
+probability	metadata_only	lexical
+probability distribution	added	lexical
+probable error	added	lexical
+probit	added	lexical
+projection matrix	added	lexical
+promax	added	lexical
+psephology	added	lexical
+pseudocount	added	lexical
+pseudolikelihood	added	lexical
+pseudolongitudinal	added	lexical
+pseudomedian	added	lexical
+pseudopopulation	added	lexical
+pseudoreplicate	added	lexical
+pseudoreplication	added	lexical
+pseudoresidual	added	lexical
+PSU	added	lexical
+Q1	added	lexical
+Q3	added	lexical
+quadratic form	added	lexical
+quantile	added	lexical
+quantitative research	added	lexical
+quartile	metadata_only	lexical
+quartimax	added	lexical
+quintile	metadata_only	lexical
+Rademacher distribution	added	lexical
+random	metadata_only	lexical
+random sample	added	lexical
+random sequence	added	lexical
+random variable	added	lexical
+randomized controlled trial	added	lexical
+range	metadata_only	lexical
+Rao-Blackwellization	added	lexical
+Rao-Blackwellize	added	lexical
+Rao-Blackwellized	added	lexical
+ratio scale	added	lexical
+ratio variable	added	lexical
+raw	metadata_only	lexical
+raw data	added	lexical
+RCT	metadata_only	lexical
+RDS	metadata_only	lexical
+rebin	added	lexical
+regress	metadata_only	lexical
+regressand	added	lexical
+regression	metadata_only	lexical
+regression to the mean	added	lexical
+regressional	added	lexical
+regulize	added	lexical
+rejection region	added	lexical
+relative frequency	added	lexical
+resampling	added	lexical
+residual	metadata_only	lexical
+residual sum of squares	added	lexical
+resistant	metadata_only	lexical
+reweight	added	lexical
+Rice distribution	added	lexical
+RMS	added	lexical
+rms	metadata_only	lexical
+robust	metadata_only	lexical
+robustify	added	lexical
+ROC	added	lexical
+RR	metadata_only	lexical
+RSL	metadata_only	lexical
+RSS	metadata_only	lexical
+RV	metadata_only	lexical
+sample	metadata_only	lexical
+sample function	added	lexical
+sample mean	added	lexical
+sample path	added	lexical
+sample size	added	lexical
+samplesize	added	lexical
+sampling	metadata_only	lexical
+sampling bias	added	lexical
+sampling error	added	lexical
+scatter plot	added	lexical
+scedastic	added	lexical
+scedasticity	added	lexical
+SD	added	lexical
+seasonalize	added	lexical
+self-selection	added	lexical
+SEM	added	lexical
+semimean	added	lexical
+semipartial	added	lexical
+semivariance	added	lexical
+semivariogram	added	lexical
+sensitivity	metadata_only	lexical
+septile	added	lexical
+sequantitative	added	lexical
+sequential probability ratio test	added	lexical
+sextile	added	lexical
+shorth	added	lexical
+sigma	metadata_only	lexical
+sigmoid function	added	lexical
+sigmoidal	added	lexical
+significance level	added	lexical
+significant	metadata_only	lexical
+simple majority	added	lexical
+skew	metadata_only	lexical
+skew normal distribution	added	lexical
+skewed	metadata_only	lexical
+skewness	added	lexical
+smooth	metadata_only	lexical
+smoothing	metadata_only	lexical
+snowball sample	added	lexical
+snowball sampling	added	lexical
+Sobel test	added	lexical
+softmax	added	lexical
+sojourn time	added	lexical
+spaghetti model	added	lexical
+sparsistency	added	lexical
+Spearman's rank correlation coefficient	added	lexical
+Spearman's rho	added	lexical
+specificity	metadata_only	lexical
+spherical	metadata_only	lexical
+Spiders Georg	added	lexical
+spie chart	added	lexical
+spread	metadata_only	lexical
+SRS	added	lexical
+SS	metadata_only	lexical
+SSR	metadata_only	lexical
+SSU	metadata_only	lexical
+standard deviation	added	lexical
+standard error	added	lexical
+standard normal distribution	added	lexical
+standard normal random variable	added	lexical
+standardized variable	added	lexical
+statistical inference	added	lexical
+statistical power	added	lexical
+statistical process control	added	lexical
+statistical significance	added	lexical
+statistically significant	added	lexical
+statistician	metadata_only	lexical
+statistics	metadata_only	lexical
+stem and leaf	added	lexical
+stem-and-leaf	added	lexical
+stemplot	added	lexical
+stochastic matrix	added	lexical
+strict-sense stationary	added	lexical
+Student's t distribution	added	lexical
+Student's t test	added	lexical
+studentization	added	lexical
+studentize	added	lexical
+studentized	added	lexical
+studentizing	added	lexical
+subaverage	added	lexical
+subcohort	added	lexical
+subdistribution	added	lexical
+superdistribution	added	lexical
+supermajority	metadata_only	lexical
+supramedian	added	lexical
+sympercent	added	lexical
+t distribution	added	lexical
+t test	added	lexical
+t-distribution	added	lexical
+t-test	added	lexical
+tabulating machine	added	lexical
+tail	metadata_only	lexical
+tertile	added	lexical
+test-retest method	added	lexical
+tetrachoric	added	lexical
+tie	metadata_only	lexical
+time series	added	lexical
+time-space grid	added	lexical
+time-use survey	added	lexical
+timeweighted	added	lexical
+Tobit	metadata_only	lexical
+TOI	metadata_only	lexical
+transdimensional	added	lexical
+trendless	added	lexical
+trendlessness	added	lexical
+trimean	added	lexical
+TSS	added	lexical
+Tukey lambda distribution	added	lexical
+Tukey's range test	added	lexical
+two-way	metadata_only	lexical
+type I error	added	lexical
+type II error	added	lexical
+unassociated	added	lexical
+unconfidence	added	lexical
+uncorrelated	metadata_only	lexical
+undercoverage	added	lexical
+underdispersive	added	lexical
+underfactorization	added	lexical
+underfit	added	lexical
+universe	metadata_only	lexical
+update	metadata_only	lexical
+upweight	added	lexical
+URL	metadata_only	lexical
+var	metadata_only	lexical
+variance	metadata_only	lexical
+variate	added	lexical
+variation ratio	added	lexical
+varimax	added	lexical
+variogram	added	lexical
+ventile	added	lexical
+vigintile	added	lexical
+vincentization	added	lexical
+vital index	added	lexical
+VSL	added	lexical
+Wald test	added	lexical
+weight	metadata_only	lexical
+weightable	added	lexical
+weighted	metadata_only	lexical
+weighting	metadata_only	lexical
+whisker	metadata_only	lexical
+whiten	metadata_only	lexical
+whiteness	metadata_only	lexical
+Wilks's theorem	added	lexical
+Wilson score interval	added	lexical
+window function	added	lexical
+winsorization	added	lexical
+winsorize	added	lexical
+Wishart distribution	added	lexical
+within one sigma	added	lexical
+WLS	metadata_only	lexical
+y-o-y	added	lexical
+YoY	added	lexical
+Yule-Simon distribution	added	lexical
+Z score	added	lexical
+z-test	added	lexical
+ziggurat algorithm	added	lexical
+Zipfian distribution	added	lexical

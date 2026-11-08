@@ -1,0 +1,155 @@
+surface	change	kinds
+activated complex	added	lexical
+activation energy	added	lexical
+activationless	added	lexical
+alternating current	metadata_only	lexical
+alternative energy	added	lexical
+ASE	added	lexical
+athermic	added	lexical
+Atomic Age	added	lexical
+atomic energy	metadata_only	lexical
+autothermic	added	lexical
+barrierless	added	lexical
+baseload	metadata_only	lexical
+battery capacity	added	lexical
+BDE	metadata_only	lexical
+bioenergy	metadata_only	lexical
+blackbody	added	lexical
+bond dissociation energy	added	lexical
+bond energy	added	lexical
+Born-Haber cycle	added	lexical
+BTU	metadata_only	lexical
+calcine	added	lexical
+calefactory	added	lexical
+caloric	metadata_only	lexical
+calorific value	added	lexical
+charging station	added	lexical
+chemical energy	added	lexical
+chemiexcitation	added	lexical
+chemoelectrical	added	lexical
+chi	metadata_only	lexical
+closed system	added	lexical
+cohesive energy	added	lexical
+cold fusion	added	lexical
+combustion	metadata_only	lexical
+conformer	added	lexical
+cracking	metadata_only	lexical
+deactivation energy	added	lexical
+death ray	added	lexical
+deexcitate	added	lexical
+deexcite	added	lexical
+deuterium bottleneck	added	lexical
+direct current	metadata_only	lexical
+discharge	metadata_only	lexical
+disrupter	added	lexical
+dissociation energy	added	lexical
+doomer	added	lexical
+DPV	added	lexical
+dynamo	metadata_only	lexical
+Dyson sphere	added	lexical
+Dyson-Harrop satellite	added	lexical
+Eddington limit	added	lexical
+Eddington luminosity	added	lexical
+efficiency	metadata_only	lexical
+electric vehicle	added	lexical
+electrical energy	added	lexical
+electricity	metadata_only	lexical
+electrochemical potential	added	lexical
+electromagnetic radiation	added	lexical
+energon	metadata_only	lexical
+energy	metadata_only	lexical
+energy density	added	lexical
+energy mix	added	lexical
+energy storage	added	lexical
+energy vampire	added	lexical
+energy weapon	added	lexical
+enthalpy	metadata_only	lexical
+extension block	added	lexical
+floating wind turbine	added	lexical
+free energy	added	lexical
+fuel cell	metadata_only	lexical
+generator	metadata_only	lexical
+geothermal	metadata_only	lexical
+geothermal energy	added	lexical
+Gibbs free energy	added	lexical
+graser	added	lexical
+green energy	added	lexical
+green hydrogen	added	lexical
+heat	metadata_only	lexical
+heat pump	added	lexical
+Helmholtz free energy	added	lexical
+horsepower-hour	added	lexical
+hot fusion	added	lexical
+hydrino	added	lexical
+hydrogen cycle	added	lexical
+hydrogen economy	added	lexical
+hydrogen station	added	lexical
+hydrogen vehicle	added	lexical
+hydropower	metadata_only	lexical
+inverter	metadata_only	lexical
+ionization energy	added	lexical
+isotope shift	added	lexical
+joule	metadata_only	lexical
+Kardashev scale	added	lexical
+kinetic	metadata_only	lexical
+kinetic energy	added	lexical
+lead-acid battery	added	lexical
+light	metadata_only	lexical
+lithium-ion battery	added	lexical
+negative	metadata_only	lexical
+Newton's cradle	added	lexical
+nuclear binding energy	added	lexical
+nuclear energy	metadata_only	lexical
+nuclear power	added	lexical
+optical spectrum	added	lexical
+orgone	added	lexical
+over-unity	added	lexical
+Penrose process	added	lexical
+photochemical reaction	added	lexical
+photovoltaic cell	added	lexical
+photovoltaic effect	added	lexical
+Planck star	added	lexical
+positive	metadata_only	lexical
+potential	metadata_only	lexical
+potential energy	added	lexical
+power factor	added	lexical
+power grid	added	lexical
+power satellite	added	lexical
+power transmission	added	lexical
+pyrolysis	metadata_only	lexical
+radiation	metadata_only	lexical
+renewable energy	added	lexical
+resource energy	added	lexical
+reversible	metadata_only	lexical
+smart grid	added	lexical
+solar	metadata_only	lexical
+solar energy	added	lexical
+solar panel	added	lexical
+solar power	added	lexical
+solarpunk	added	lexical
+space heater	added	lexical
+space power system	added	lexical
+specific energy	added	lexical
+spectrum	metadata_only	lexical
+star lifting	added	lexical
+static cling	added	lexical
+static electricity	added	lexical
+sunwing	added	lexical
+superenergy	added	lexical
+surge protector	added	lexical
+surge suppressor	added	lexical
+Tesla coil	added	lexical
+thermal energy	added	lexical
+thermalize	added	lexical
+thermodynamics	metadata_only	lexical
+tidal energy	added	lexical
+tidal power	added	lexical
+transformer	metadata_only	lexical
+turbine	metadata_only	lexical
+vacuum catastrophe	added	lexical
+vacuum energy	added	lexical
+wake loss	added	lexical
+warming room	added	lexical
+wind energy	added	lexical
+wind power	added	lexical
+X-ray	added	lexical

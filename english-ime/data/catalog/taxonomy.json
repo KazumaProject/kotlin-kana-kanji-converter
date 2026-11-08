@@ -512,6 +512,30 @@
       "label": "動画・音楽・旅行サービス",
       "definition": "動画・音楽・旅行サービス / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
       "examples": "YouTube, YouTube Music, Apple Music"
+    },
+    {
+      "id": "products.brands",
+      "category": "topic_products_brands",
+      "domain": "business",
+      "label": "分野横断ブランド",
+      "definition": "分野横断ブランド / Source-typed direct class members; extended vocabulary, not sense disambiguation.",
+      "examples": "source-attested names"
+    },
+    {
+      "id": "organizations.general",
+      "category": "topic_organizations_general",
+      "domain": "business",
+      "label": "分野横断企業・組織",
+      "definition": "分野横断企業・組織 / Source-typed direct class members; extended vocabulary, not sense disambiguation.",
+      "examples": "source-attested names"
+    },
+    {
+      "id": "services.general",
+      "category": "topic_services_general",
+      "domain": "daily",
+      "label": "分野横断ウェブサービス",
+      "definition": "Source-typed websites and web services; extended vocabulary, not a usage-frequency claim.",
+      "examples": "source-attested service names"
     }
   ]
 }

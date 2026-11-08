@@ -1,0 +1,16 @@
+surface	change	kinds
+AirPods	metadata_only	product
+Apple Watch	metadata_only	product
+iMac	metadata_only	product
+iPad	metadata_only	product
+iPhone	metadata_only	product
+Kindle	metadata_only	product
+MacBook Air	metadata_only	product
+MacBook Pro	metadata_only	product
+Nintendo Switch	added	product
+Pixelbook	added	product
+PlayStation 5	added	product
+Raspberry Pi	added	product
+Steam Deck	metadata_only	product
+ThinkPad	metadata_only	product
+Xbox Series X and Series S	added	product

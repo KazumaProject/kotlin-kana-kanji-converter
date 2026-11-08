@@ -1,0 +1,240 @@
+surface	change	kinds
+3D printing	added	lexical
+accumulator	metadata_only	lexical
+additive manufacturing	added	lexical
+adjunctive	metadata_only	lexical
+airshaft	added	lexical
+alligatoring	added	lexical
+AM	metadata_only	lexical
+AMR	metadata_only	lexical
+andon	added	lexical
+antisagging	added	lexical
+assembly line	metadata_only	lexical
+autonomation	added	lexical
+babysitter test	added	lexical
+batch up	added	lexical
+beater	metadata_only	lexical
+bill of materials	metadata_only	lexical
+bleeding	metadata_only	lexical
+blow down	added	lexical
+blowdown	added	lexical
+BoM	metadata_only	lexical
+brazing	metadata_only	lexical
+buncher	added	lexical
+burn-in	metadata_only	lexical
+button pusher	added	lexical
+buyer	metadata_only	lexical
+CAD	metadata_only	lexical
+CAD/CAM	added	lexical
+CADCAM	added	lexical
+CAN	added	lexical
+candroy	added	lexical
+carrier	metadata_only	lexical
+CASE	added	lexical
+casting	metadata_only	lexical
+cavity	metadata_only	lexical
+cement works	added	lexical
+CKD	metadata_only	lexical
+clamshell	metadata_only	lexical
+cleantech	metadata_only	lexical
+clickability	added	lexical
+clickable	metadata_only	lexical
+CMO	metadata_only	lexical
+CNC	metadata_only	lexical
+coagent	added	lexical
+cobble	metadata_only	lexical
+coextrusion	added	lexical
+compound curve	added	lexical
+computer-aided design	added	lexical
+computer-aided manufacturing	added	lexical
+concave	metadata_only	lexical
+construction unit	added	lexical
+conveyor belt	metadata_only	lexical
+core	metadata_only	lexical
+corebox	added	lexical
+cosmetic second	added	lexical
+coupon	metadata_only	lexical
+CPS	added	lexical
+cps	metadata_only	lexical
+CQV	added	lexical
+CVD	metadata_only	lexical
+Czochralski	added	lexical
+Czochralski method	added	lexical
+Czochralski process	added	lexical
+Czochralski technique	added	lexical
+dark factory	added	lexical
+datum	metadata_only	lexical
+deadman	metadata_only	lexical
+demand-driven	added	lexical
+detackifier	added	lexical
+dial gauge	added	lexical
+die-cut	added	lexical
+digital twin	added	lexical
+dingleberry	added	lexical
+DIPSe	added	lexical
+doffer	added	lexical
+draw	metadata_only	lexical
+drilling	metadata_only	lexical
+drop-in	added	lexical
+earing	added	lexical
+electroplate	metadata_only	lexical
+electroplating	metadata_only	lexical
+EPS	added	lexical
+escape	metadata_only	lexical
+explicit modeling	added	lexical
+expression	metadata_only	lexical
+extrusion	metadata_only	lexical
+factory second	added	lexical
+failure analysis	added	lexical
+FDM	metadata_only	lexical
+feathered	metadata_only	lexical
+feeder line	added	lexical
+festoon	metadata_only	lexical
+finite element analysis	added	lexical
+firewater	added	lexical
+first article	added	lexical
+fitting	metadata_only	lexical
+flexible	metadata_only	lexical
+forging	metadata_only	lexical
+fuse	metadata_only	lexical
+fuze	metadata_only	lexical
+gassing	metadata_only	lexical
+greentech	added	lexical
+grinding	metadata_only	lexical
+grinding machine	added	lexical
+heat treatment	added	lexical
+HMC	metadata_only	lexical
+horizontal machining center	added	lexical
+ICT	metadata_only	lexical
+IL6S	added	lexical
+implicit modeling	added	lexical
+industrial quality	added	lexical
+initial reject	added	lexical
+injection molding	added	lexical
+interplant	added	lexical
+JIS	added	lexical
+JIT	added	lexical
+just-in-time	added	lexical
+kanban	metadata_only	lexical
+KD	metadata_only	lexical
+kitting	added	lexical
+Kyropoulos method	added	lexical
+Kyropoulos technique	added	lexical
+LIGA	metadata_only	lexical
+lights-out	added	lexical
+lubro-cooling	added	lexical
+machine tool	added	lexical
+machining	metadata_only	lexical
+machining center	added	lexical
+makespan	added	lexical
+makeup	metadata_only	lexical
+manu	metadata_only	lexical
+manufacturing	metadata_only	lexical
+microfabrication	added	lexical
+mill	metadata_only	lexical
+mill car	added	lexical
+milling	metadata_only	lexical
+milling machine	added	lexical
+MOCVD	added	lexical
+model number	added	lexical
+molding flash	added	lexical
+MOVPE	added	lexical
+MRB	added	lexical
+mule twist	added	lexical
+nip point	added	lexical
+no-go	added	lexical
+OD	added	lexical
+off-gas	added	lexical
+oil-canning	added	lexical
+ooze leather	added	lexical
+orange peel	added	lexical
+orthographically	added	lexical
+overkill	metadata_only	lexical
+paper clay	added	lexical
+part number	added	lexical
+PDA	metadata_only	lexical
+physical twin	added	lexical
+pinion wire	added	lexical
+pipemaking	added	lexical
+poka-yoke	added	lexical
+PPT	added	lexical
+precalciner	added	lexical
+prefade	added	lexical
+press box	added	lexical
+prilled	added	lexical
+process	metadata_only	lexical
+process tomography	added	lexical
+product code	added	lexical
+production line	added	lexical
+production manager	added	lexical
+QR	added	lexical
+quality assurance	added	lexical
+quality control	added	lexical
+racetracking	added	lexical
+raw mill	added	lexical
+rawmix	added	lexical
+reoperate	added	lexical
+respot	added	lexical
+rig	metadata_only	lexical
+roll-to-roll	added	lexical
+roundness	metadata_only	lexical
+Russia iron	added	lexical
+sable iron	added	lexical
+sacrificial anode	added	lexical
+scalable	metadata_only	lexical
+scale	metadata_only	lexical
+Schoop	added	lexical
+secondary	metadata_only	lexical
+semi-finished	added	lexical
+semi-manufactured	added	lexical
+SFC	metadata_only	lexical
+sheep-split	added	lexical
+sheet metal	added	lexical
+shimming	added	lexical
+shimstock	added	lexical
+shingle	metadata_only	lexical
+single curve	added	lexical
+SIR	added	lexical
+slack fill	added	lexical
+sleeved	metadata_only	lexical
+slotter	added	lexical
+smeltery	added	lexical
+smokestack industry	added	lexical
+soldering	metadata_only	lexical
+solid model	added	lexical
+Solvay process	added	lexical
+SOP	added	lexical
+spanish	metadata_only	lexical
+spanishing	added	lexical
+spherize	added	lexical
+spunlaid	added	lexical
+SRM	metadata_only	lexical
+standard operating procedure	added	lexical
+statistical process control	added	lexical
+sticky	metadata_only	lexical
+stripper	metadata_only	lexical
+stripper plate	added	lexical
+superplant	added	lexical
+surface finish	added	lexical
+surface roughness	added	lexical
+Swiss-turn	added	lexical
+tack	metadata_only	lexical
+tackifier	added	lexical
+takt time	added	lexical
+tramper	added	lexical
+trepan	added	lexical
+turning	metadata_only	lexical
+turning center	added	lexical
+turret	metadata_only	lexical
+ultrasonic bath	added	lexical
+underhead	added	lexical
+underkill	added	lexical
+vertical machining center	added	lexical
+verticalize	added	lexical
+VMC	metadata_only	lexical
+VSU	added	lexical
+web	metadata_only	lexical
+welding	metadata_only	lexical
+wiggler	added	lexical
+wriggler	added	lexical
+XPS	added	lexical

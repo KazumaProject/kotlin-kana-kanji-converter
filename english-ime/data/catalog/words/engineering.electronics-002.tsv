@@ -1,0 +1,501 @@
+surface	change	kinds
+laminar	metadata_only	lexical
+land	metadata_only	lexical
+large scale integration	added	lexical
+latch	metadata_only	lexical
+latch-up	added	lexical
+latency	metadata_only	lexical
+layout	metadata_only	lexical
+LCA	metadata_only	lexical
+LCD	metadata_only	lexical
+LDO	added	lexical
+let-through	added	lexical
+level-triggered	added	lexical
+LF	added	lexical
+Li-ion	added	lexical
+light-dependent resistor	added	lexical
+limiter	metadata_only	lexical
+line card	added	lexical
+lineman splice	added	lexical
+LiPo	added	lexical
+lithium battery	added	lexical
+lithium ion battery	added	lexical
+lithium-ion battery	added	lexical
+LNA	metadata_only	lexical
+LO	added	lexical
+load voltage	added	lexical
+logic analyzer	added	lexical
+logic gate	added	lexical
+logic high	added	lexical
+logic level	added	lexical
+logic low	added	lexical
+lossless junction	added	lexical
+low-powered	added	lexical
+lowpass	added	lexical
+LSI	metadata_only	lexical
+LW	metadata_only	lexical
+magic smoke	added	lexical
+magnetic strip	added	lexical
+magnetic tape	added	lexical
+major appliance	added	lexical
+make-before-break	added	lexical
+male-to-female	added	lexical
+mapper	metadata_only	lexical
+matrix	metadata_only	lexical
+matrixing	added	lexical
+MBD	added	lexical
+MC	added	lexical
+MCM	added	lexical
+MCU	metadata_only	lexical
+MDA	metadata_only	lexical
+MDM	metadata_only	lexical
+medium scale integration	added	lexical
+Meissner oscillator	added	lexical
+memistor	added	lexical
+memory bank	added	lexical
+memory chip	added	lexical
+memory effect	added	lexical
+mesa	metadata_only	lexical
+mesh	metadata_only	lexical
+mesh analysis	added	lexical
+mesh current	added	lexical
+MF	metadata_only	lexical
+MFD	added	lexical
+MHL	metadata_only	lexical
+mica insulator	added	lexical
+microcircuit	added	lexical
+microcircuitry	added	lexical
+microcontroller	metadata_only	lexical
+microphonics	added	lexical
+microvia	added	lexical
+Miller effect	added	lexical
+milliohmmeter	added	lexical
+MIMO	metadata_only	lexical
+minigrid	added	lexical
+misclock	added	lexical
+misgating	added	lexical
+mixer	metadata_only	lexical
+MLC	metadata_only	lexical
+MM	added	lexical
+MMA	metadata_only	lexical
+MMC	metadata_only	lexical
+mode	metadata_only	lexical
+model-based design	added	lexical
+modulate	metadata_only	lexical
+monoscope	added	lexical
+monostable	added	lexical
+MOS	added	lexical
+MOSFET	metadata_only	lexical
+MOT	added	lexical
+MOV	metadata_only	lexical
+MP4 player	added	lexical
+MSI	metadata_only	lexical
+multi-box	added	lexical
+multiar	added	lexical
+multifuse	added	lexical
+multigated	added	lexical
+multigrid	added	lexical
+multivibrator	added	lexical
+MW	metadata_only	lexical
+N-V	added	lexical
+NAND gate	added	lexical
+NC	metadata_only	lexical
+NCAP	added	lexical
+NCO	metadata_only	lexical
+NDC	metadata_only	lexical
+NDR	metadata_only	lexical
+near field	added	lexical
+negative edge	added	lexical
+negative-edge-triggered	added	lexical
+neper	added	lexical
+net	metadata_only	lexical
+netlist	added	lexical
+neurotronic	added	lexical
+nicad	added	lexical
+Nixie tube	added	lexical
+nMOS	metadata_only	lexical
+nMOSFET	added	lexical
+NO	added	lexical
+NOC	metadata_only	lexical
+nodal analysis	added	lexical
+node	metadata_only	lexical
+non-volatile random access memory	added	lexical
+nondopant	added	lexical
+nonode	added	lexical
+nonsmart	added	lexical
+nor	metadata_only	lexical
+NOR gate	added	lexical
+northbridge	metadata_only	lexical
+Norton's theorem	added	lexical
+NOT gate	added	lexical
+notch	metadata_only	lexical
+NPN	metadata_only	lexical
+NSMD	added	lexical
+NTC	metadata_only	lexical
+NTIDS	added	lexical
+NVRAM	added	lexical
+o-scope	added	lexical
+octal data rate	added	lexical
+octode	added	lexical
+ODR	added	lexical
+OFDM	metadata_only	lexical
+off time	added	lexical
+Old World ROM	added	lexical
+on silent	added	lexical
+one-cold	added	lexical
+one-hot	added	lexical
+one-shot	added	lexical
+op-amp	added	lexical
+open	metadata_only	lexical
+open circuit	added	lexical
+operational amplifier	added	lexical
+opto-interrupter	added	lexical
+or	metadata_only	lexical
+OR gate	added	lexical
+order	metadata_only	lexical
+organic electroluminescent display	added	lexical
+oscillator	metadata_only	lexical
+oscillograph	added	lexical
+oscillography	added	lexical
+oscilloscope	metadata_only	lexical
+OSTC	added	lexical
+OTA	added	lexical
+OTP	metadata_only	lexical
+out-of-battery	added	lexical
+overpulse	added	lexical
+overscaling	added	lexical
+overtrip	added	lexical
+P5	added	lexical
+pad	metadata_only	lexical
+pad down	added	lexical
+PAE	added	lexical
+PAL	added	lexical
+PAM	added	lexical
+paraformer	added	lexical
+parasitic	metadata_only	lexical
+parasitic element	added	lexical
+PARD	added	lexical
+pass transistor	added	lexical
+passive	metadata_only	lexical
+passthrough	metadata_only	lexical
+PCA	metadata_only	lexical
+PCB	metadata_only	lexical
+pclk	added	lexical
+PD	added	lexical
+PDA	metadata_only	lexical
+PDLC	added	lexical
+PDP	metadata_only	lexical
+PE	added	lexical
+peak detector	added	lexical
+peckerhead	added	lexical
+pedestal	metadata_only	lexical
+penny	metadata_only	lexical
+pentode	added	lexical
+periphonic	added	lexical
+PES	added	lexical
+pf	metadata_only	lexical
+PFD	metadata_only	lexical
+PGA	metadata_only	lexical
+PGND	added	lexical
+phase angle	added	lexical
+phase inverter	added	lexical
+phase-locked loop	added	lexical
+photochop	added	lexical
+photochopper	added	lexical
+photodiode	metadata_only	lexical
+photomultiplier tube	added	lexical
+photoresistor	added	lexical
+photothyristor	added	lexical
+phototransistor	added	lexical
+photovoltaic cell	added	lexical
+PI	added	lexical
+PIC	added	lexical
+picture tube	added	lexical
+pin header	added	lexical
+pinch roller	added	lexical
+pinout	added	lexical
+PIO	metadata_only	lexical
+PIV	metadata_only	lexical
+PLA	metadata_only	lexical
+player	metadata_only	lexical
+PLC	metadata_only	lexical
+plc	metadata_only	lexical
+PLD	metadata_only	lexical
+PLED	added	lexical
+PLIC	added	lexical
+PLL	metadata_only	lexical
+PM	metadata_only	lexical
+pMOS	added	lexical
+pMOSFET	added	lexical
+PMT	metadata_only	lexical
+PNP	metadata_only	lexical
+point-to-point	added	lexical
+polyfuse	added	lexical
+polysilicon	metadata_only	lexical
+polyswitch	added	lexical
+PoP	added	lexical
+populate	metadata_only	lexical
+position	metadata_only	lexical
+positive edge	added	lexical
+positive-edge-triggered	added	lexical
+post-transistor	added	lexical
+pot	metadata_only	lexical
+pot mod	added	lexical
+potentiometer	metadata_only	lexical
+pothead	metadata_only	lexical
+power brick	added	lexical
+power cord	added	lexical
+power electronics	added	lexical
+power supply	metadata_only	lexical
+power-cycle	added	lexical
+power-hungry	added	lexical
+power-intensive	added	lexical
+PQ	metadata_only	lexical
+PR	metadata_only	lexical
+prebaking	added	lexical
+predivider	added	lexical
+prescaler	added	lexical
+preset	metadata_only	lexical
+press	metadata_only	lexical
+pretrigger	added	lexical
+primary	metadata_only	lexical
+printed circuit board	added	lexical
+programmable logic array	added	lexical
+programmable read-only memory	added	lexical
+PROM	added	lexical
+propagation mode	added	lexical
+propagation time	added	lexical
+protoboard	added	lexical
+PS/2	added	lexical
+pseudochannel	added	lexical
+PSM	metadata_only	lexical
+PSSD	added	lexical
+PSU	added	lexical
+PTH	metadata_only	lexical
+pull-down resistor	added	lexical
+pull-up	added	lexical
+pullability	added	lexical
+pulse	metadata_only	lexical
+pulse repetition time	added	lexical
+pumping time	added	lexical
+punch hole	added	lexical
+purple plague	added	lexical
+PUT	added	lexical
+PVT	added	lexical
+PWA	metadata_only	lexical
+PWB	added	lexical
+PWM	metadata_only	lexical
+Q	added	lexical
+QDR	added	lexical
+QFET	added	lexical
+QLC	added	lexical
+quad	metadata_only	lexical
+quadripole	added	lexical
+quadrupler	added	lexical
+quartz crystal	added	lexical
+race	metadata_only	lexical
+race condition	metadata_only	lexical
+race hazard	added	lexical
+radiator	metadata_only	lexical
+radionics	added	lexical
+rail	metadata_only	lexical
+random access memory	added	lexical
+raster	metadata_only	lexical
+ratioless	added	lexical
+ratiometric	added	lexical
+RBW	added	lexical
+reactive	metadata_only	lexical
+reactor	metadata_only	lexical
+readerboard	added	lexical
+reballing	added	lexical
+receiver	metadata_only	lexical
+recell	added	lexical
+reception	metadata_only	lexical
+reconductor	added	lexical
+recorder	metadata_only	lexical
+rectifier	metadata_only	lexical
+rectify	metadata_only	lexical
+refreshable	added	lexical
+regional converter	added	lexical
+relay	metadata_only	lexical
+remote control	metadata_only	lexical
+Rent's rule	added	lexical
+repeater	metadata_only	lexical
+repetition time	added	lexical
+replenisher	added	lexical
+reseat	added	lexical
+reset button	added	lexical
+resettable fuse	added	lexical
+resistance	metadata_only	lexical
+resistive	metadata_only	lexical
+resistor	metadata_only	lexical
+resonance	metadata_only	lexical
+response time	added	lexical
+responsor	added	lexical
+RF	added	lexical
+RFFE	added	lexical
+RFID	metadata_only	lexical
+rheostat	added	lexical
+ring modulation	added	lexical
+ripple	metadata_only	lexical
+rise time	added	lexical
+RMS	added	lexical
+rms	metadata_only	lexical
+roll off	added	lexical
+ROM	metadata_only	lexical
+router	metadata_only	lexical
+routiner	added	lexical
+RS-MMC	added	lexical
+RSDS	added	lexical
+RTC	metadata_only	lexical
+RTL	metadata_only	lexical
+RX	added	lexical
+Rx	added	lexical
+rx	metadata_only	lexical
+sand battery	added	lexical
+SB	added	lexical
+SBC	metadata_only	lexical
+SBH	added	lexical
+scalar	metadata_only	lexical
+scan line	added	lexical
+Schmitt trigger	added	lexical
+SCNR	added	lexical
+SCR	metadata_only	lexical
+screen mask	added	lexical
+screen tearing	added	lexical
+SDR	metadata_only	lexical
+SDSL	added	lexical
+second source	added	lexical
+secondary	metadata_only	lexical
+security camera	added	lexical
+SED	added	lexical
+self-clocking	added	lexical
+selfie camera	added	lexical
+semiconductor	metadata_only	lexical
+sensitivity	metadata_only	lexical
+serial time-encoded amplified microscopy	added	lexical
+SES	added	lexical
+setup time	added	lexical
+seven-segment	added	lexical
+SFG	metadata_only	lexical
+SHF	added	lexical
+shield	metadata_only	lexical
+shielded twisted pair	added	lexical
+short circuit	metadata_only	lexical
+SI	added	lexical
+signal processing	added	lexical
+signal tracer	added	lexical
+silicon photonics	added	lexical
+single data rate	added	lexical
+skew	metadata_only	lexical
+SLC	metadata_only	lexical
+SLD	metadata_only	lexical
+small appliance	added	lexical
+Small Scale Integration	added	lexical
+SMD	metadata_only	lexical
+smearer	added	lexical
+SMF	metadata_only	lexical
+SMPS	added	lexical
+SMR	metadata_only	lexical
+SMT	added	lexical
+SNR	metadata_only	lexical
+SO-DIMM	added	lexical
+SOA	metadata_only	lexical
+SOC	added	lexical
+SODIMM	added	lexical
+soft error	added	lexical
+soft key	added	lexical
+solar array	added	lexical
+solar cell	added	lexical
+solar panel	added	lexical
+solder mask	added	lexical
+solder resist	added	lexical
+solder stop	added	lexical
+solenoid	metadata_only	lexical
+solid-state	metadata_only	lexical
+solid-state battery	added	lexical
+solion	added	lexical
+source	metadata_only	lexical
+southbridge	metadata_only	lexical
+spacistor	added	lexical
+SPD	added	lexical
+SPI	metadata_only	lexical
+split-ring	added	lexical
+spur	metadata_only	lexical
+squeg	added	lexical
+squegger	added	lexical
+squegging	added	lexical
+SRAM	metadata_only	lexical
+SSB	metadata_only	lexical
+SSD	metadata_only	lexical
+SSI	metadata_only	lexical
+SSL	metadata_only	lexical
+SSR	metadata_only	lexical
+STA	added	lexical
+stage	metadata_only	lexical
+standby	metadata_only	lexical
+standby time	added	lexical
+stby	added	lexical
+Steiner point	added	lexical
+sticky bit	added	lexical
+storage battery	added	lexical
+storage time	added	lexical
+storage tube	added	lexical
+STP	metadata_only	lexical
+strand	metadata_only	lexical
+strappable	added	lexical
+strapper	added	lexical
+stripboard	added	lexical
+stub	metadata_only	lexical
+stuck pixel	added	lexical
+subchanneled	added	lexical
+subconstellation	added	lexical
+subplatter	added	lexical
+subraster	added	lexical
+subsignal	added	lexical
+subswitch	added	lexical
+suicide battery	added	lexical
+summator	added	lexical
+supercharge	metadata_only	lexical
+supercharger	metadata_only	lexical
+superheterodyne	added	lexical
+supermesh	added	lexical
+supernode	added	lexical
+superregenerative	added	lexical
+superregenerator	added	lexical
+suppress	metadata_only	lexical
+surface-conduction electron-emitter display	added	lexical
+surface-mount	added	lexical
+surface-mount technology	added	lexical
+surveillance camera	added	lexical
+SW	metadata_only	lexical
+switcher	metadata_only	lexical
+switchmode	added	lexical
+synchronizer	added	lexical
+synchronous speed	added	lexical
+synchronverter	added	lexical
+synthesizer	metadata_only	lexical
+syntonization	added	lexical
+syntonize	added	lexical
+syntony	added	lexical
+Sziklai pair	added	lexical
+tag strip	added	lexical
+talkie-walkie	added	lexical
+tant	metadata_only	lexical
+tape out	added	lexical
+tape player	added	lexical
+tape recorder	metadata_only	lexical
+tapeless	added	lexical
+tapeout	added	lexical
+taxel	added	lexical
+TB	added	lexical
+TC	metadata_only	lexical
+TCO	metadata_only	lexical
+TCON	added	lexical
+TDC	metadata_only	lexical
+TEC	added	lexical
+tech giant	added	lexical
+terminal	metadata_only	lexical
+terminator	metadata_only	lexical
+tethered	metadata_only	lexical
+tetrode	added	lexical

@@ -146,7 +146,7 @@ python3 -B english-ime/tools/verify_conversion_cli.py \
 カテゴリの補完率を別々に測定します。対象・保留語も分母に残します。1,000件は採用時の
 チェックポイントの大きさであり、必要語の上限ではありません。
 
-The versioned [taxonomy](data/catalog/taxonomy.json) defines 64 topical categories.
+The versioned [taxonomy](data/catalog/taxonomy.json) defines 67 topical categories.
 Alongside daily/IT vocabulary it covers mathematics, statistics, physics,
 electronics, embedded systems, mechanics, manufacturing, robotics, materials,
 chemistry, civil engineering, energy, environment, transport, aerospace, biology,
@@ -248,7 +248,10 @@ public adoption ledger for this expansion: spellings, kinds, categories, change
 types, lexical identities, source links, licenses and entity IDs. This requested
 dictionary data is committed; raw responses and operational reports are external.
 Inspect it directly on GitHub, download it as TSV, or read the full lists in the PR.
-CI verifies the ledger against regenerated assets using:
+Large releases also provide small category-specific TSV pages under
+[`data/catalog/words`](data/catalog/words), linked from the PR's count table.
+CI verifies the ledger against regenerated assets and checks every category page
+against that ledger (including page boundaries, spellings, kinds and change types):
 
 ```sh
 python3 -B english-ime/tools/catalog_review.py verify \
@@ -260,8 +263,62 @@ spellings receiving metadata. Categories overlap and must not be summed.
 The review ledger lists only topic memberships assigned by this operation, not
 previously registered related topics; `topics=-` denotes domain-only annotations.
 Source existence, a Wikipedia article, and popularity are separate signals. The current
-selection uses explicit required lists; it imports no page-view ranking or public
+core selection uses explicit required lists; it imports no page-view ranking or public
 name-frequency statistics and makes no global coverage claim.
+
+### Discover candidates beyond the regression list
+
+The fixed required-word catalog is a regression benchmark, not an acquisition cap.
+`discover` independently enumerates source classes/categories using
+[discovery-policy.json](data/catalog/discovery-policy.json): Wikidata human
+occupations and product/brand/organization/service classes, and English Wiktionary
+technical categories. It follows pagination and merges source IDs and exact
+spellings. Discovered targets have the `extended` tier and separate identities;
+they do not add requirements to an existing core benchmark item.
+
+```sh
+python3 -B english-ime/tools/catalog_harness.py discover \
+  --source-dir /tmp/english-discovery --max-requests 120 \
+  --max-new-pages-per-selector 2
+python3 -B english-ime/tools/catalog_harness.py prepare \
+  --work-dir /tmp/english-discovery-run --assets /tmp/reviewed-english-extended \
+  --source-dir /tmp/english-catalog-sources --discovery-dir /tmp/english-discovery \
+  --lexical-source-dir /tmp/english-dictionary-sources --esdb-dir /tmp/english-esdb
+```
+
+Request/page settings bound source traffic per invocation, not adopted word counts.
+Zero pages means no per-selector request cap. Sealed snapshots record actual rows,
+source hashes and continuation/status for every selector. Budget stops, timeouts
+and rate limits remain explicitly incomplete; partial data is not reported as
+source exhaustion. Successful pages remain usable. Resume into a **new** snapshot:
+
+```sh
+python3 -B english-ime/tools/catalog_harness.py discover \
+  --source-dir /tmp/english-discovery-next --resume-from /tmp/english-discovery \
+  --max-new-pages-per-selector 1
+```
+
+Prior snapshots/decisions remain reproducible. Untouched fields are visited before
+extending large fields. Wikidata uses declared direct classes/occupations, an
+English article and a minimum number of language sitelinks: an explicit source
+breadth proxy, not IME input frequency. Wiktionary supplies direct members of
+declared English topical categories. Neither path invents words or aliases.
+Existing format/exclusion gates and real-binary audits still apply. The funnel
+distinguishes source rows, distinct targets, existing spellings, new spellings,
+annotations, withholding and pending source work.
+
+Combine batches relative to the PR's actual parent inventory so an earlier addition
+is not counted as an existing word merely because a later batch adds another topic:
+
+```sh
+python3 -B english-ime/tools/catalog_review.py publish \
+  --ledger /tmp/first-adopted.tsv --ledger /tmp/next-adopted.tsv \
+  --parent-inventory /tmp/first-run/baseline.jsonl \
+  --assets /tmp/latest-result/assets --out /tmp/english-publication
+```
+
+This verifies the combined ledger against the latest binaries and emits unique
+counts, a category count/link table, and 500-word TSV pages for browsing on GitHub.
 
 For missing MDN evidence, `fetch-references --work-dir /tmp/english-catalog-run
 --source-dir /tmp/english-catalog-new-sources` can add official glossary pages to a

@@ -1,0 +1,501 @@
+surface	change	kinds
+18650	added	lexical
+2170	added	lexical
+3D IC	added	lexical
+3GPP	added	lexical
+808	added	lexical
+A battery	added	lexical
+AAL	added	lexical
+AAL2	added	lexical
+AAL5	added	lexical
+ABC	metadata_only	lexical
+aberration	metadata_only	lexical
+abfarad	added	lexical
+AC adapter	added	lexical
+ACCH	added	lexical
+ACI	metadata_only	lexical
+ACIR	added	lexical
+ACLR	added	lexical
+ACPR	added	lexical
+ACRR	added	lexical
+ACS	added	lexical
+active	metadata_only	lexical
+ACW	metadata_only	lexical
+ADC	metadata_only	lexical
+ADPLL	added	lexical
+ALD	metadata_only	lexical
+ALE	added	lexical
+aligner	added	lexical
+alligator clamp	added	lexical
+alligator clip	added	lexical
+ALS	added	lexical
+AMEPD	added	lexical
+AMLCD	added	lexical
+AMOLED	metadata_only	lexical
+amplification	metadata_only	lexical
+amplifier	metadata_only	lexical
+AMPS	added	lexical
+analog signal	added	lexical
+analog-to-digital converter	added	lexical
+anchor pylon	added	lexical
+AND gate	added	lexical
+anode	metadata_only	lexical
+anticathode	added	lexical
+antimetry	added	lexical
+arbiter	metadata_only	lexical
+ARC	added	lexical
+arch	metadata_only	lexical
+ARF	added	lexical
+Armstrong oscillator	added	lexical
+ASIC	metadata_only	lexical
+ASM	added	lexical
+assert	metadata_only	lexical
+astable	added	lexical
+ATM	added	lexical
+attenuate	metadata_only	lexical
+audiotape	metadata_only	lexical
+autocorrelator	added	lexical
+autofocus	metadata_only	lexical
+autogain	added	lexical
+autoheterodyne	added	lexical
+autopolar	added	lexical
+autopolarity	added	lexical
+autorouter	added	lexical
+autozeroing	added	lexical
+axial lead	added	lexical
+B battery	added	lexical
+backgate	added	lexical
+backplane	metadata_only	lexical
+ball grid array	added	lexical
+ballast	metadata_only	lexical
+ballout	added	lexical
+balun	added	lexical
+band-pass	added	lexical
+band-stop	added	lexical
+bandreject	added	lexical
+bar	metadata_only	lexical
+barnacle	metadata_only	lexical
+barretter	added	lexical
+base	metadata_only	lexical
+baseband	metadata_only	lexical
+battery	metadata_only	lexical
+battery cell	added	lexical
+battery charger	added	lexical
+battery pack	added	lexical
+battery-backed	added	lexical
+BB	added	lexical
+BCD	metadata_only	lexical
+bed of nails	added	lexical
+beltpack	added	lexical
+BFC	metadata_only	lexical
+bias	metadata_only	lexical
+biaswise	added	lexical
+bioelectronic	added	lexical
+bioelectronics	added	lexical
+biotelemetry	added	lexical
+birdie	metadata_only	lexical
+bistable	added	lexical
+bitline	added	lexical
+blip	metadata_only	lexical
+blivet	added	lexical
+blob chip	added	lexical
+blowable	added	lexical
+BMS	metadata_only	lexical
+board finger	added	lexical
+boom	metadata_only	lexical
+bounce	metadata_only	lexical
+breadboard	metadata_only	lexical
+breadboardable	added	lexical
+breakout	metadata_only	lexical
+breakout board	added	lexical
+brick-wall limiter	added	lexical
+bricking	metadata_only	lexical
+bridge	metadata_only	lexical
+brightup	added	lexical
+bring up	added	lexical
+bringup	added	lexical
+BSC	added	lexical
+BT	added	lexical
+buck	metadata_only	lexical
+bucket brigade	added	lexical
+bulger	metadata_only	lexical
+buncher	added	lexical
+burn-in	metadata_only	lexical
+burst mode	added	lexical
+bus	metadata_only	lexical
+bus-holder	added	lexical
+bus-keeper	added	lexical
+calligraphic projection	added	lexical
+camcorder	metadata_only	lexical
+cap	metadata_only	lexical
+capacitance	metadata_only	lexical
+capacitively	added	lexical
+capacitor	metadata_only	lexical
+capacitor plague	added	lexical
+capstan	metadata_only	lexical
+card clash	added	lexical
+carrier	metadata_only	lexical
+cartridge ejector	added	lexical
+CAS	added	lexical
+cassette player	added	lexical
+cassette recorder	added	lexical
+cat's whisker	added	lexical
+cathode	metadata_only	lexical
+cathode ray tube	added	lexical
+cavity magnetron	added	lexical
+CBDC	added	lexical
+CC RAM	added	lexical
+CCD	metadata_only	lexical
+CCN	metadata_only	lexical
+CCTV camera	added	lexical
+CD player	added	lexical
+CD3	added	lexical
+CD5	added	lexical
+CDC	metadata_only	lexical
+CDMA	metadata_only	lexical
+CDR	added	lexical
+center tap	added	lexical
+CES	added	lexical
+channel	metadata_only	lexical
+charactron	added	lexical
+chicken bit	added	lexical
+chip	metadata_only	lexical
+chipless	added	lexical
+chiplet	added	lexical
+chipset	metadata_only	lexical
+choke	metadata_only	lexical
+chopper	metadata_only	lexical
+circuit board	added	lexical
+circuit topology	added	lexical
+circulator	metadata_only	lexical
+ckt	added	lexical
+clamp	metadata_only	lexical
+clamper	added	lexical
+CLB	metadata_only	lexical
+clearance time	added	lexical
+clicker	metadata_only	lexical
+clipper	metadata_only	lexical
+CLK	added	lexical
+clock	metadata_only	lexical
+clock generator	added	lexical
+clock out	added	lexical
+clock rate	added	lexical
+clock skew	added	lexical
+clocked	metadata_only	lexical
+CLR	added	lexical
+CLV	added	lexical
+CMFB	added	lexical
+CMOS	metadata_only	lexical
+coaxial cable	added	lexical
+COB	added	lexical
+coil	metadata_only	lexical
+coil whine	added	lexical
+cold cathode	added	lexical
+cold-cathode	added	lexical
+collector	metadata_only	lexical
+combinational circuit	added	lexical
+command guidance	added	lexical
+commutate	added	lexical
+commutation	metadata_only	lexical
+compand	added	lexical
+companding	added	lexical
+compandor	added	lexical
+complement	metadata_only	lexical
+computer chip	added	lexical
+condensator	added	lexical
+condenser	metadata_only	lexical
+conductance	metadata_only	lexical
+connect time	added	lexical
+connectorize	added	lexical
+constellation	metadata_only	lexical
+controller	metadata_only	lexical
+CORDIC	added	lexical
+coupling	metadata_only	lexical
+CPLD	added	lexical
+CQI	added	lexical
+crossatron	added	lexical
+crossbar switch	added	lexical
+crossover	metadata_only	lexical
+crosstalk	metadata_only	lexical
+crowbarred	added	lexical
+CRT	metadata_only	lexical
+crystal set	added	lexical
+CTI	metadata_only	lexical
+cue	metadata_only	lexical
+current	metadata_only	lexical
+current divider	added	lexical
+cut-out	added	lexical
+CVBS	added	lexical
+CVC	metadata_only	lexical
+CVD	metadata_only	lexical
+cyber transport	added	lexical
+cyber transport system	added	lexical
+cyber transport systems	added	lexical
+cycle	metadata_only	lexical
+cycloconversion	added	lexical
+cycloconverter	added	lexical
+D	metadata_only	lexical
+D-sub	added	lexical
+DAC	metadata_only	lexical
+daisy chain	added	lexical
+daisy-chain	added	lexical
+Darlington	metadata_only	lexical
+Darlington pair	added	lexical
+DAS	added	lexical
+data rate	added	lexical
+datapad	added	lexical
+daughterboard	added	lexical
+DCH	added	lexical
+DCIM	added	lexical
+DDR	metadata_only	lexical
+DDS	metadata_only	lexical
+dead pixel	added	lexical
+dead-bug	added	lexical
+deassert	added	lexical
+deassertion	added	lexical
+debounce	added	lexical
+debug	metadata_only	lexical
+decade	metadata_only	lexical
+decade box	added	lexical
+decade counter	added	lexical
+decay	metadata_only	lexical
+default	metadata_only	lexical
+dekatron	added	lexical
+delay line	added	lexical
+demod	added	lexical
+demultiplex	added	lexical
+demultiplexer	added	lexical
+depopulate	metadata_only	lexical
+difference gate	added	lexical
+digger gold	added	lexical
+digit trunk	added	lexical
+digital camera	added	lexical
+digital decay	added	lexical
+digital electronics	added	lexical
+digital meter	added	lexical
+digital predistortion	added	lexical
+digital signal	added	lexical
+digital still camera	added	lexical
+digital-to-analog converter	added	lexical
+DIN connector	added	lexical
+diode	metadata_only	lexical
+DIP	added	lexical
+DIP switch	added	lexical
+director	metadata_only	lexical
+disable	metadata_only	lexical
+discrete component	added	lexical
+display tearing	added	lexical
+dither	metadata_only	lexical
+DLC	metadata_only	lexical
+DLL	metadata_only	lexical
+DLT	metadata_only	lexical
+DNI	metadata_only	lexical
+dock	metadata_only	lexical
+dope	metadata_only	lexical
+doped	metadata_only	lexical
+downconversion	added	lexical
+DPCCH	added	lexical
+DPCH	added	lexical
+DPD	metadata_only	lexical
+DPDCH	added	lexical
+DPLL	added	lexical
+DPRFP	added	lexical
+drain	metadata_only	lexical
+DRAM	added	lexical
+DRC	metadata_only	lexical
+dropout	metadata_only	lexical
+dry cell	added	lexical
+DSP	metadata_only	lexical
+DTE	metadata_only	lexical
+duplexer	added	lexical
+DUT	added	lexical
+duty cycle	added	lexical
+dynamic headroom	added	lexical
+e-book reader	added	lexical
+e-reader	added	lexical
+Early effect	added	lexical
+EC	metadata_only	lexical
+ECL	metadata_only	lexical
+ECM	metadata_only	lexical
+EDD	metadata_only	lexical
+EDFA	added	lexical
+edge-triggered	added	lexical
+EEPROM	metadata_only	lexical
+EFF	added	lexical
+eFuse	added	lexical
+EIDE	metadata_only	lexical
+elaboration	metadata_only	lexical
+electrical bus	added	lexical
+electrolytic capacitor	added	lexical
+electromagnetic interference	added	lexical
+electron multiplier	added	lexical
+electronic	metadata_only	lexical
+electronics	metadata_only	lexical
+electrotech	added	lexical
+ELF	added	lexical
+EMCON	added	lexical
+emitter	metadata_only	lexical
+emitter-coupled logic	added	lexical
+eMMC	added	lexical
+enable	metadata_only	lexical
+energy-intensive	added	lexical
+envelope	metadata_only	lexical
+envelope detector	added	lexical
+EPD	metadata_only	lexical
+EPIC	added	lexical
+EPROM	metadata_only	lexical
+equalizer	metadata_only	lexical
+equivalence gate	added	lexical
+ERA	metadata_only	lexical
+erasable programmable logic device	added	lexical
+ESC	metadata_only	lexical
+ESR	metadata_only	lexical
+ESS	added	lexical
+essential mesh	added	lexical
+EVM	metadata_only	lexical
+extension	metadata_only	lexical
+extension cord	added	lexical
+extension lead	added	lexical
+extension reel	added	lexical
+extremely low frequency	added	lexical
+eye pattern	added	lexical
+fall time	added	lexical
+FALSE	added	lexical
+false	metadata_only	lexical
+fanin	added	lexical
+fanout	added	lexical
+fast Fourier transform	added	lexical
+FDM	metadata_only	lexical
+FDR	metadata_only	lexical
+FED	added	lexical
+feed-through	added	lexical
+feedback	metadata_only	lexical
+feedpoint	added	lexical
+FEM	added	lexical
+female-to-male	added	lexical
+FET	added	lexical
+FFC	metadata_only	lexical
+FICT	added	lexical
+field	metadata_only	lexical
+field emission display	added	lexical
+field-programmable gate array	added	lexical
+firm error	added	lexical
+first-order hold	added	lexical
+fish paper	added	lexical
+flashcard	metadata_only	lexical
+flatpack	added	lexical
+flip-flop	metadata_only	lexical
+float	metadata_only	lexical
+floating ground	added	lexical
+floor plan	metadata_only	lexical
+floorplanning	added	lexical
+flutter	metadata_only	lexical
+fluxonium	added	lexical
+FOH	added	lexical
+FPC	metadata_only	lexical
+FPGA	metadata_only	lexical
+frame	metadata_only	lexical
+frame-alignment recovery time	added	lexical
+frequency domain	added	lexical
+frequency multiplier	added	lexical
+full adder	added	lexical
+function multiplier	added	lexical
+fuzzy controller	added	lexical
+gain	metadata_only	lexical
+gate	metadata_only	lexical
+gate array	added	lexical
+gate off	added	lexical
+gater	added	lexical
+gating	metadata_only	lexical
+gender changer	added	lexical
+gender mender	added	lexical
+generation loss	added	lexical
+GFET	added	lexical
+ghosting	metadata_only	lexical
+gimmick	metadata_only	lexical
+gimmick capacitor	added	lexical
+glomper	added	lexical
+GMPLS	added	lexical
+GND	metadata_only	lexical
+grid	metadata_only	lexical
+ground loop	added	lexical
+ground out	added	lexical
+GST	metadata_only	lexical
+GTL	metadata_only	lexical
+GTO	metadata_only	lexical
+Gunn effect	added	lexical
+Gunning transceiver logic	added	lexical
+half adder	added	lexical
+hard error	added	lexical
+hard-wire	added	lexical
+hardware description language	added	lexical
+hardwired	metadata_only	lexical
+HAT	added	lexical
+HCLK	added	lexical
+HDL	metadata_only	lexical
+HDR	added	lexical
+headroom	metadata_only	lexical
+HEI	added	lexical
+heptode	added	lexical
+heterojunction	added	lexical
+heterotransistor	added	lexical
+hexode	added	lexical
+HF	added	lexical
+high-level synthesis	added	lexical
+highpass	added	lexical
+HIL	metadata_only	lexical
+HLS	metadata_only	lexical
+hold time	added	lexical
+HOT	added	lexical
+hot microphone	added	lexical
+howlround	added	lexical
+HS-DSCH	added	lexical
+HS-PDSCH	added	lexical
+HS-SCCH	added	lexical
+HSCSD	added	lexical
+HSUPA	added	lexical
+HSYNC	added	lexical
+hum-buzz	added	lexical
+hybrid	metadata_only	lexical
+IC	metadata_only	lexical
+ICNIRP	added	lexical
+ICT	metadata_only	lexical
+IDE	metadata_only	lexical
+IED	metadata_only	lexical
+IF	added	lexical
+IGBT	added	lexical
+IGCT	added	lexical
+immittance	added	lexical
+impedance	metadata_only	lexical
+implementation	metadata_only	lexical
+in-circuit	added	lexical
+in-plane switching	added	lexical
+inductance	metadata_only	lexical
+inductor	metadata_only	lexical
+input	metadata_only	lexical
+integrated circuit	added	lexical
+interaxis	added	lexical
+interconnect	metadata_only	lexical
+interlace	metadata_only	lexical
+interposer	added	lexical
+interrupt	metadata_only	lexical
+inverting function	added	lexical
+IO	added	lexical
+IOT	added	lexical
+IPS	added	lexical
+iris	metadata_only	lexical
+ISF	metadata_only	lexical
+jack	metadata_only	lexical
+jack in	added	lexical
+Jacob's ladder	added	lexical
+jellybean	metadata_only	lexical
+jellybean part	added	lexical
+JFET	added	lexical
+jiffy	metadata_only	lexical
+jump wire	added	lexical
+jumpered	added	lexical
+junction	metadata_only	lexical
+keepalive	added	lexical
+keybounce	added	lexical
+KGB	metadata_only	lexical
+kludge	added	lexical

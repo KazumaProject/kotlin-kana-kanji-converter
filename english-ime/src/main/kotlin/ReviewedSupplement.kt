@@ -27,11 +27,12 @@ internal class ReviewedSupplement private constructor(
     fun appendGrammar(grammar: File, base: Lexicon) {
         val forms = base.forms.associateBy { it.key }
         val additions = mutableMapOf<FormKey, SupplementEntry>()
-        for (entry in entries + metadata) {
+        fun merge(entry: SupplementEntry) {
             val previous = additions[entry.key]
             require(previous == null || previous.lemma == entry.lemma) { "Conflicting supplemental lemma" }
             additions[entry.key] = entry.copy(categories = entry.categories + previous?.categories.orEmpty())
         }
+        entries.forEach(::merge)
         if (categoryDefinitions.isNotEmpty()) grammar.resolve("categories.tsv").appendText(
             categoryDefinitions.joinToString("\n", postfix = "\n") { it.joinToString("\t") })
         // Supporting lemmas belong to the grammar tables. Only explicit entries
@@ -44,6 +45,9 @@ internal class ReviewedSupplement private constructor(
                 additions[lemmaKey] = entry.copy(key = lemmaKey, categories = roles)
             }
         }
+        // Add annotations after materializing supporting forms so metadata cannot
+        // suppress their existing grammatical roles during a later batch replay.
+        metadata.forEach(::merge)
         grammar.resolve("forms.tsv").appendText(buildString {
             for ((key, entry) in additions) {
                 if (key !in forms) appendLine(listOf(key.lexemeId, entry.lemma, key.surface, entry.evidence).joinToString("\t"))
@@ -158,7 +162,11 @@ private fun readSupplementRows(
     val categoryNames = base.categories.map { it.name }.toSet() + additionalCategories
     val lemmas = base.forms.associate { it.key.lexemeId to it.lemma }.toMutableMap()
     entries.forEach { lemmas[it.key.lexemeId] = it.lemma }
-    val knownForms = base.forms.map { it.key }.toSet() + entries.map { it.key }
+    // appendGrammar materializes these supporting lemmas as real lexical forms.
+    // Later batches may annotate them when the display spelling is a candidate.
+    val knownForms = base.forms.map { it.key }.toSet() + entries.flatMap {
+        listOf(it.key, FormKey(it.key.lexemeId, it.lemma))
+    }
     val originalSurfaces = original.map { it.word }.toSet()
     val availableSurfaces = originalSurfaces + entries.map { it.key.surface }
     val identities = mutableSetOf<FormKey>()

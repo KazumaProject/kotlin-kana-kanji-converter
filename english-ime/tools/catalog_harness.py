@@ -23,6 +23,7 @@ import vocabulary_sources as lexical
 from extend_lexicon import categories_for, roles_for
 from prepare_esdb import URL as ESDB_URL
 import world_sources
+import discovery_sources
 
 PROFILE = 'dictionary-target-catalog-v2'
 CATALOG = h.REPO / 'english-ime/data/catalog'
@@ -172,7 +173,7 @@ def registry(taxonomy, scopes):
     return by_id, config
 
 
-def load_sources(args):
+def load_sources(args, extra_words=()):
     directory, lexical_dir, esdb = (h.external(getattr(args, k)) for k in ['source_dir', 'lexical_source_dir', 'esdb_dir'])
     documents = verify_documents(directory)
     old = legacy.verify(lexical_dir)
@@ -200,6 +201,7 @@ def load_sources(args):
     try:
         _, scope = registry(args.taxonomy, args.scopes)
         wanted = {term for group in scope['scopes'] for term in group['terms']}
+        wanted.update(extra_words)
         if scope['basicLists']:
             for name in legacy.BASIC:
                 with (lexical_dir / name).open(encoding='utf-8-sig', newline='') as stream:
@@ -227,7 +229,9 @@ def load_sources(args):
 
 def compile_targets(args):
     topics, config = registry(args.taxonomy, args.scopes)
-    sources = load_sources(args)
+    discovered, discovery_manifest, discovery_notices = (discovery_sources.collect(args.discovery_dir, args.discovery_policy)
+        if getattr(args, 'discovery_dir', None) else ([], None, []))
+    sources = load_sources(args, [r['surface'] for r in discovered])
     world_index, world_manifest = world_sources.indices(args.source_dir, args.scopes) if config.get('worldSources') else ({}, None)
     targets = {}
 
@@ -256,6 +260,12 @@ def compile_targets(args):
     for scope in config['scopes']:
         for term in scope['terms']:
             add(term, scope['topic'], scope['kind'], scope['tier'], scope['sources'])
+    for record in discovered:
+        h.require(set(record['topics']) <= topics.keys(), 'Unknown discovered topic')
+        for topic in record['topics']:
+            item = add(record['surface'], topic, record['kind'], 'extended',
+                       ['esdb', 'wordnet'] if record['kind'] == 'lexical' else [], entity=record['entity'])
+        item['proofs'].extend(dict(p) for p in record['proofs'])
     casks = json.loads((args.lexical_source_dir / 'cask.json').read_text())
     ranks = {r['cask']: int(r['number']) for r in json.loads((args.lexical_source_dir / 'cask-analytics.json').read_text())['items']}
     for record in sorted(casks, key=lambda r: (ranks.get(r['token'], 1000000), r['token'])):
@@ -349,6 +359,9 @@ def compile_targets(args):
         public['worldSources'] = world_manifest
         notices.extend(dict(name=name, path=str(args.source_dir.resolve() / name), sha256=record['sha256'])
             for name, record in world_manifest['files'].items() if name.startswith('WORLD-'))
+    if discovery_manifest:
+        public['discovery'] = discovery_manifest
+        notices.extend(discovery_notices)
     return records, topics, dict(catalogV2=public, references=dict(notices=notices))
 
 
@@ -469,6 +482,9 @@ def prepare(args):
             additionalCategories=[dict(category=r['category'], definition=r['definition'], examples=r['examples']) for r in topics.values()],
             codeHashes={name: h.replay.sha(Path(__file__).with_name(name)) for name in ['catalog_harness.py', 'vocabulary_harness.py', 'dictionary_sources.py', 'world_sources.py']},
             baseRevision=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=h.REPO, text=True).strip())
+        if getattr(args, 'discovery_dir', None):
+            config['sourcePaths'].update({k: str(getattr(args, k).resolve()) for k in ['discovery_dir', 'discovery_policy']})
+            config['codeHashes']['discovery_sources.py'] = h.replay.sha(Path(__file__).with_name('discovery_sources.py'))
         h.dump(directory / 'run.json', config)
         return dict(targets=len(targets), plannedOperations=len(operations), changes=dict(Counter(r['status'] for r in results)))
 
@@ -558,7 +574,7 @@ def report(args):
             catalogCodeHashesAtPrepare=config.get('codeHashes', {}),
             reportCodeHashes={name: h.replay.sha(Path(__file__).with_name(name)) for name in
                 ['catalog_harness.py', 'vocabulary_harness.py', 'replay_source.py']},
-            scope='Fixed declared target set, not all English; duplicate topic membership is not additive.',
+            scope='Fixed core regression requirements plus frozen extended discovery; not all English. Topic counts overlap.',
             groups=groups,
             plannedChanges=dict(Counter(r['status'] for r in before.values())),
             newRegisteredSpellings=len({indexed[r['id']]['surface'] for r in after if r['registered'] and not before[r['id']]['registered']}),
@@ -582,6 +598,12 @@ def main():
     world = commands.add_parser('fetch-world')
     world.add_argument('--source-dir', type=Path, required=True)
     world.add_argument('--scopes', type=Path, default=CATALOG / 'core-targets.json')
+    discover = commands.add_parser('discover')
+    discover.add_argument('--source-dir', type=Path, required=True)
+    discover.add_argument('--policy', type=Path, default=CATALOG / 'discovery-policy.json')
+    discover.add_argument('--max-requests', type=int, default=120)
+    discover.add_argument('--resume-from', type=Path)
+    discover.add_argument('--max-new-pages-per-selector', type=int, default=0)
     resolver = commands.add_parser('fetch-references')
     resolver.add_argument('--source-dir', type=Path, required=True)
     resolver.add_argument('--work-dir', type=Path, required=True)
@@ -593,6 +615,8 @@ def main():
         if name == 'adopt':
             p.add_argument('--batch-size', type=int, choices=range(1, 10001), default=1000)
         if name == 'prepare':
+            p.add_argument('--discovery-dir', type=Path)
+            p.add_argument('--discovery-policy', type=Path, default=CATALOG / 'discovery-policy.json')
             for option in ['source-dir', 'lexical-source-dir', 'esdb-dir', 'assets']:
                 p.add_argument('--' + option, type=Path, required=True)
             p.add_argument('--supplement', type=Path, default=lexical.SUPPLEMENT)
@@ -603,7 +627,11 @@ def main():
         if name == 'report':
             p.add_argument('--assets', type=Path)
     args = parser.parse_args()
-    if args.command == 'fetch-world':
+    if args.command == 'discover':
+        result = discovery_sources.fetch(args.source_dir, args.policy, args.max_requests, args.resume_from,
+                                         args.max_new_pages_per_selector)
+        result = dict(complete=result['complete'], counts=result['counts'], modelApiCalls=0)
+    elif args.command == 'fetch-world':
         result = world_sources.fetch(args.source_dir, args.scopes)
         result = dict(files=len(result['files']), batches=len(result['batches']), modelApiCalls=0)
     else:

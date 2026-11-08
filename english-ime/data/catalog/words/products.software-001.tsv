@@ -1,0 +1,233 @@
+surface	change	kinds
+3DMark	added	product
+Active Desktop	added	product
+ActiveSync	added	product
+Adaware Antivirus	added	product
+Adobe After Effects	metadata_only	product
+Adobe AIR	added	product
+Adobe Express	added	product
+Adobe Illustrator	metadata_only	product
+Adobe InDesign	metadata_only	product
+Adobe PageMaker	added	product
+Adobe Photoshop	added	product
+Adobe Premiere Pro	metadata_only	product
+AlexNet	added	product
+AlphaFold	added	product
+Amazon Kindle	added	product
+Android SDK	added	product
+anoNet	added	product
+AnyDesk	metadata_only	product
+AnyLogic	added	product
+Apple Home	added	product
+AutoCAD	metadata_only	product
+autocorrection	added	product
+AutoIt	added	product
+Babylon	added	product
+BearShare	added	product
+BibTeX	added	product
+BIOS	added	product
+BlackBerry World	added	product
+Blender	metadata_only	product
+Bonjour	added	product
+Bonzi Buddy	added	product
+Boot Camp	added	product
+Cainiao	added	product
+Calligra Suite	added	product
+Carnivore	added	product
+CarPlay	metadata_only	product
+CFosSpeed	added	product
+CHARMM	added	product
+Cleverbot	added	product
+Code Red	added	product
+Cover Flow	added	product
+CPU-Z	added	product
+Daemon Tools	added	product
+Dashboard	added	product
+DaVinci Resolve	added	product
+Deezer	metadata_only	product
+Desmos	added	product
+DiDi	added	product
+Diella	added	product
+Direct3D	added	product
+DirectX	metadata_only	product
+Disk Cleanup	added	product
+Dubsmash	added	product
+Earth Simulator	added	product
+ELIZA	added	product
+Encarta	added	product
+ExPASy	added	product
+Expression Studio	added	product
+Filecoin	added	product
+FineReader PDF	added	product
+Fluent Design System	added	product
+FreeSync	added	product
+Front Row	added	product
+Galaxy Store	added	product
+Game Center	added	product
+Games for Windows	added	product
+GameSpy	added	product
+generative pre-trained transformer	added	product
+GG	added	product
+GitHub Copilot	metadata_only	product
+GNOME Shell	added	product
+Google AdSense	added	product
+Google Checkout	added	product
+Google Cloud Print	added	product
+Google Code Search	added	product
+Google Docs Editors	added	product
+Google File System	added	product
+Google Finance	added	product
+Google Fit	added	product
+Google Keep	added	product
+Google Pack	added	product
+Google Page Creator	added	product
+Google Pay Send	added	product
+Google Shopping	added	product
+Google Sites	added	product
+Google Sky	added	product
+Google Street View	added	product
+Google Talk	added	product
+Google Toolbar	added	product
+Google Translator Toolkit	added	product
+Google Videos	added	product
+Google Voice	added	product
+Google Voice Search	added	product
+Google Web Accelerator	added	product
+Graphics Device Interface	added	product
+Holographic Versatile Disc	added	product
+Houdini	metadata_only	product
+HTC Sense	added	product
+iGoogle	added	product
+InterBase	added	product
+Invision Community	added	product
+iOS 27	added	product
+Java	metadata_only	product
+Java applet	added	product
+Java Database Connectivity	added	product
+JavaBeans	added	product
+Joost	metadata_only	product
+KeePassXC	metadata_only	product
+Keras	metadata_only	product
+Kinect	metadata_only	product
+Labelflash	added	product
+LightScribe	added	product
+LimeSurvey	added	product
+Linguee	added	product
+Linux	metadata_only	product
+LLaMA	added	product
+Mach	added	product
+Mantis Bug Tracker	added	product
+Manus	added	product
+Material Design	metadata_only	product
+Mathcad	added	product
+MATLAB	metadata_only	product
+Megurine Luka	added	product
+Mental Ray	added	product
+Metasploit	added	product
+Metro	added	product
+Microsoft BizTalk Server	added	product
+Microsoft Dynamics AX	added	product
+Microsoft Dynamics NAV	added	product
+Microsoft Excel	metadata_only	product
+Microsoft Expression Web	added	product
+Microsoft Math Solver	added	product
+Microsoft Money	added	product
+Microsoft Office 2010	added	product
+Microsoft Office 2013	added	product
+Microsoft Outlook	added	product
+Microsoft Power BI	added	product
+Microsoft PowerPoint	added	product
+Microsoft Surface	added	product
+Microsoft Visual SourceSafe	added	product
+Microsoft Word	metadata_only	product
+MicroStation	added	product
+Monkey's Audio	added	product
+Musixmatch	added	product
+Napster	metadata_only	product
+Netcat	added	product
+Netflix	metadata_only	product
+Network Control Program	added	product
+Niconico	added	product
+Nintendo Switch Online	added	product
+NordVPN	added	product
+Omeka	added	product
+One UI	added	product
+OpenAI Codex	added	product
+OpenGL ES	added	product
+OpenJDK	added	product
+OpenMP	added	product
+OpenSocial	added	product
+Pivot Animator	added	product
+PlayStation Now	added	product
+Polkadot	added	product
+Praat	added	product
+Proton Mail	metadata_only	product
+QQ Music	added	product
+QuarkXPress	added	product
+React Native	metadata_only	product
+ReadyBoost	added	product
+REBOL	added	product
+recommender system	added	product
+RETScreen	added	product
+Rich Communication Services	added	product
+RockMelt	added	product
+root	metadata_only	product
+Samsung DeX	added	product
+Samsung Knox	added	product
+sandbox	metadata_only	product
+Scrapy	added	product
+Security-Enhanced Linux	added	product
+Simulink	added	product
+Skype	added	product
+SolidWorks	metadata_only	product
+Soulseek	added	product
+Source Filmmaker	added	product
+Sublime Text	metadata_only	product
+System Restore	added	product
+Task Manager	added	product
+Tesseract	added	product
+The Open Network	added	product
+TouchWiz	added	product
+Trados Studio	added	product
+trash	metadata_only	product
+Tron	added	product
+TrueCaller	added	product
+Uber	metadata_only	product
+UC Browser	added	product
+Ultrasurf	added	product
+Unreal Engine 5	added	product
+User Account Control	added	product
+vBulletin	added	product
+Veo	added	product
+VSCO	added	product
+Vulkan	metadata_only	product
+WebGL	metadata_only	product
+Webtoon	added	product
+Weverse	added	product
+Wikiwand	added	product
+Windows Desktop Gadgets	added	product
+Windows DVD Maker	added	product
+Windows Firewall	added	product
+Windows Genuine Advantage	added	product
+Windows Insider	added	product
+Windows Installer	added	product
+Windows Journal	added	product
+Windows Live OneCare	added	product
+Windows Live Spaces	added	product
+Windows Mixed Reality	added	product
+Windows Phone	added	product
+Windows Photo Gallery	added	product
+Windows Server Update Services	added	product
+Windows Small Business Server	added	product
+Windows Subsystem for Linux	added	product
+Windows To Go	added	product
+Windows Virtual PC	added	product
+WinMX	added	product
+Wolfram Language	added	product
+Wolfram Mathematica	added	product
+Wordfast	added	product
+WoW64	added	product
+X display manager	added	product
+ZBrush	metadata_only	product
+Zhihu	added	product
+Zune	metadata_only	product

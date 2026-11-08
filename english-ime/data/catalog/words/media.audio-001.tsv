@@ -1,0 +1,25 @@
+surface	change	kinds
+acoustics	metadata_only	lexical
+audio interface	added	lexical
+balanced audio	added	lexical
+bit depth	added	lexical
+compressor	metadata_only	lexical
+decibel	metadata_only	lexical
+digital audio workstation	added	lexical
+echo	metadata_only	lexical
+equalizer	metadata_only	lexical
+harmonics	metadata_only	lexical
+headphone	metadata_only	lexical
+impedance matching	added	lexical
+limiter	metadata_only	lexical
+loudspeaker	metadata_only	lexical
+microphone	metadata_only	lexical
+MIDI	added	lexical
+noise gate	added	lexical
+overtone	metadata_only	lexical
+phantom power	added	lexical
+pitch	metadata_only	lexical
+reverberation	metadata_only	lexical
+sound pressure	added	lexical
+sound pressure level	added	lexical
+timbre	metadata_only	lexical

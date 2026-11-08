@@ -1,0 +1,72 @@
+surface	change	kinds
+telegraph office	added	lexical
+telemetry	metadata_only	lexical
+telephone conference	added	lexical
+teleport	metadata_only	lexical
+teletraffic	added	lexical
+terminal	metadata_only	lexical
+text message	added	lexical
+thermocouple	metadata_only	lexical
+throwbox	added	lexical
+time and frequency transfer	added	lexical
+time difference of arrival	added	lexical
+time diversity	added	lexical
+time division	added	lexical
+time of origin	added	lexical
+time-assignment speech interpolation	added	lexical
+time-hopping	added	lexical
+TM	added	lexical
+TNC	added	lexical
+TNs	metadata_only	lexical
+tp	metadata_only	lexical
+transducer	metadata_only	lexical
+transmission time	added	lexical
+transmitter	metadata_only	lexical
+transmux	added	lexical
+tree-and-branch	added	lexical
+trellis	metadata_only	lexical
+trombone	metadata_only	lexical
+truck roll	added	lexical
+trunk	metadata_only	lexical
+Turing switch	added	lexical
+TX	added	lexical
+Tx	added	lexical
+tx	metadata_only	lexical
+UART	added	lexical
+ultra high frequency	added	lexical
+unit interval	added	lexical
+uplead	added	lexical
+uplink	metadata_only	lexical
+USSD	added	lexical
+VDSL	added	lexical
+vidcall	added	lexical
+vidchat	added	lexical
+video call	added	lexical
+video conference	added	lexical
+vidnumber	added	lexical
+vidphone	added	lexical
+VoLTE	added	lexical
+VSAT	added	lexical
+WAE	added	lexical
+WAP	added	lexical
+watch receiver	added	lexical
+watchdog timer	added	lexical
+waterfilling	added	lexical
+wavelet modulation	added	lexical
+WebRTC	metadata_only	lexical
+WeChat	metadata_only	lexical
+Western Union splice	added	lexical
+WhatsApp	metadata_only	lexical
+WiMAX	metadata_only	lexical
+wireline	metadata_only	lexical
+WLNP	added	lexical
+WNP	added	lexical
+WSPR	added	lexical
+WTAI	added	lexical
+xDSL	added	lexical
+xPON	added	lexical
+Zalo	added	lexical
+zero out	added	lexical
+ZF	metadata_only	lexical
+Zoom fatigue	added	lexical
+Zoombombing	added	lexical

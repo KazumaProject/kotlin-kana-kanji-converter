@@ -1,0 +1,25 @@
+surface	change	kinds
+ambient occlusion	added	lexical
+animation	metadata_only	lexical
+anti-aliasing	added	lexical
+collision detection	added	lexical
+computer graphics	added	lexical
+game engine	added	lexical
+global illumination	added	lexical
+kerning	added	lexical
+keyframe	added	lexical
+motion capture	added	lexical
+normal mapping	added	lexical
+physics engine	added	lexical
+polygon mesh	added	lexical
+raster graphics	added	lexical
+rasterization	added	lexical
+ray tracing	added	lexical
+rendering	metadata_only	lexical
+rigging	metadata_only	lexical
+shader	metadata_only	lexical
+skeletal animation	added	lexical
+texture mapping	added	lexical
+typography	metadata_only	lexical
+vector graphics	added	lexical
+vertex	metadata_only	lexical
