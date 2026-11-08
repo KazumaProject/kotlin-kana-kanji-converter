@@ -83,9 +83,14 @@ internal fun buildReviewedDictionary(
     require(parent.isDirectory || parent.mkdirs()) { "Cannot create $parent" }
     val staging = Files.createTempDirectory(parent.toPath(), ".english-reviewed-").toFile()
     try {
-        writeReviewedPayloads(accepted + supplement?.candidates.orEmpty(), staging)
+        writeReviewedPayloads((accepted + supplement?.candidates.orEmpty()).filter {
+            supplement?.distributionPolicy?.allows(it.word) != false
+        }, staging)
         writeReviewedCategoryBundle(lexiconDirectory, relations, decisions, noticeDirectory, staging, lexicon, supplement)
         corrections?.copyTo(staging.resolve("surface-corrections.tsv"))
+        supplement?.distributionPolicy?.let { policy ->
+            staging.resolve("surface-corrections.tsv").takeIf { it.isFile }?.let(policy::filterTable)
+        }
         Files.move(staging.toPath(), destination.toPath(), StandardCopyOption.ATOMIC_MOVE)
     } finally {
         staging.deleteRecursively()

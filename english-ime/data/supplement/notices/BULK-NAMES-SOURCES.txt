@@ -1,0 +1,7 @@
+Wiktionary contributors: English proper-name records, CC BY-SA 4.0 / GFDL.
+Raw Wiktextract extraction by Tatu Ylonen and contributors, downloaded from https://kaikki.org/dictionary/raw-wiktextract-data.jsonl.gz
+Catalogue: https://kaikki.org/dictionary/rawdata.html
+Changes: scan complete gzip to EOF, retain explicit English name categories and exact attested spellings; retain selected English entries for homonym/medical distribution review. No name splitting or generated combinations.
+The source archive and selected raw rows are retained outside Git; checksums identify the exact capture.
+https://en.wiktionary.org/wiki/Wiktionary:Copyrights
+Preserve the full CC BY-SA 4.0 / GFDL notices supplied with this dictionary.

@@ -27,9 +27,15 @@ def policy(path):
     h.require(rule['schemaVersion'] == 1 and rule['provider'] == 'wiktionary' and rule['language'] == 'en' and
               rule['pageSize'] == 500 and rule['roots'], 'Invalid source-coverage policy')
     h.require(len({(r['topic'], r['category']) for r in rule['roots']}) == len(rule['roots']) and
-              all(r['category'].startswith('Category:en:') for r in rule['roots']), 'Invalid/duplicate source roots')
+              all(english_category(r['category'],rule) for r in rule['roots']), 'Invalid/duplicate source roots')
+    h.require(set(rule.get('categoryPrefixes',['Category:en:'])) <= {'Category:en:','Category:English '},
+              'Unsupported English category prefix')
     for pattern in rule['excludeCategoryPatterns']: re.compile(pattern)
     return rule
+
+
+def english_category(category, rule):
+    return any(category.startswith(prefix) for prefix in rule.get('categoryPrefixes',['Category:en:']))
 
 
 def request_url(category, phase, continuation):
@@ -91,7 +97,7 @@ def replay(rule, pages, directory):
         if page['phase'] == 'children':
             for row in rows:
                 category = row['title']
-                if not category.startswith('Category:en:'):
+                if not english_category(category,rule):
                     excluded.append(dict(topic=node['topic'], category=category, reason='not-English-category'))
                 elif any(re.search(p, category) for p in rule['excludeCategoryPatterns']):
                     excluded.append(dict(topic=node['topic'], category=category, reason='declared-scope-exclusion'))

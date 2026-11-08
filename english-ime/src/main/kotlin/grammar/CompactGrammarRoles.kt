@@ -236,7 +236,7 @@ internal fun compareKey(data: ByteBuffer, key: ByteArray, start: Int, length: In
 }
 
 internal fun <T> readGrammarIndex(
-    file: Path, expectedHash: String?, magic: Int, headerSize: Int, parse: (ByteBuffer) -> T,
+    file: Path, expectedHash: String?, magic: Int, headerSize: Int, parse: (ByteBuffer) -> T, versions: Set<Int> = setOf(1),
 ): T {
     try {
         val mapped = FileChannel.open(file, READ).use { channel ->
@@ -244,7 +244,7 @@ internal fun <T> readGrammarIndex(
             require(size in headerSize.toLong()..268_435_456L) { "Invalid file size" }
             channel.map(FileChannel.MapMode.READ_ONLY, 0, size)
         }
-        require(mapped.getInt(0) == magic && mapped.getInt(4) == 1 &&
+        require(mapped.getInt(0) == magic && mapped.getInt(4) in versions &&
             mapped.getInt(8) == mapped.capacity()) { "Invalid grammar index header" }
         val crc = CRC32().apply { update(mapped.duplicate().position(headerSize)) }
         require(crc.value.toInt() == mapped.getInt(12)) { "Invalid payload checksum" }

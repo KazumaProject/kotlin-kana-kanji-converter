@@ -41,6 +41,46 @@ def read_entries(path):
         return list(reader)
 
 
+def entry_files(directory):
+    manifest=json.loads((directory/'manifest.json').read_text())
+    parts=sorted(n for n in manifest['files'] if re.fullmatch(r'entries-[0-9]{4}\.tsv',n))
+    if parts != [f'entries-{i:04}.tsv' for i in range(1,len(parts)+1)]:
+        raise ValueError('Missing/reordered supplement entry shard')
+    return [directory/n for n in ['entries.tsv',*parts]]
+
+
+def read_supplement_entries(directory):
+    return [row for path in entry_files(directory) for row in read_entries(path)]
+
+
+def write_table_shards(directory,stem,fields,rows,max_bytes=16*1024*1024,plain_first=False):
+    """Bound Git/review file size without bounding the acquired vocabulary."""
+    directory.mkdir(parents=True,exist_ok=True)
+    def encoded(row):
+        buffer=io.StringIO();writer=csv.DictWriter(buffer,fieldnames=fields,delimiter='\t',lineterminator='\n')
+        if row is None:writer.writeheader()
+        else:writer.writerow(row)
+        return buffer.getvalue().encode('utf-8')
+    header=encoded(None);stream=None;size=0;index=0;files={}
+    try:
+        for row in rows:
+            body=encoded(row)
+            if len(header)+len(body)>max_bytes:raise ValueError('A dictionary row exceeds the shard size')
+            if stream is None or size+len(body)>max_bytes:
+                if stream:stream.close()
+                name=stem+'.tsv' if plain_first and index==0 else f'{stem}-{index:04}.tsv'
+                stream=(directory/name).open('wb');stream.write(header);size=len(header)
+                files[name]=dict(rows=0);index+=1
+            stream.write(body);size+=len(body);files[name]['rows']+=1
+        if stream is None:
+            name=stem+'.tsv' if plain_first else stem+'-0000.tsv'
+            (directory/name).write_bytes(header);files[name]=dict(rows=0)
+    finally:
+        if stream:stream.close()
+    for name,value in files.items():value['sha256']=sha(directory/name)
+    return files
+
+
 def fetch_sources(directory, esdb):
     """Fetch only pinned public inputs, keeping downloads and the source checkout external."""
     pins = json.loads((SUPPLEMENT / 'manifest.json').read_text())['sources']

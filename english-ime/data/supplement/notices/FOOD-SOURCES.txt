@@ -1,0 +1,5 @@
+Wiktionary contributors, CC BY-SA 4.0 / GFDL. Raw Wiktextract by Tatu Ylonen and contributors.
+https://kaikki.org/dictionary/raw-wiktextract-data.jsonl.gz
+https://en.wiktionary.org/wiki/Wiktionary:Copyrights
+Changes: scan the complete raw source to EOF; retain exact English noun/proper-name records whose source categories match the published food/drink policy. Preserve source-attested lemma/form links; no generated dishes, invented spellings, translated names or derived inflections. Category membership is not a claim that every sense is culinary.
+Preserve the full CC BY-SA 4.0 / GFDL notices supplied with this dictionary.

@@ -98,7 +98,7 @@ def verify_assets(directory, supplement):
     manifest = replay.read_json(replay.DEFAULT_MANIFEST)
     expected = manifest['expectedOutputs'] | replay.supplement_outputs(supplement, replay.DEFAULT_MANIFEST)
     expected['source-evidence-manifest.json'] = replay.sha(replay.DEFAULT_MANIFEST)
-    expected['supplement-manifest.json'] = replay.sha(supplement / 'manifest.json')
+    expected['supplement-manifest.json'] = replay.shipping_supplement_hash(supplement)
     require(asset_hashes(directory) == expected, 'Baseline assets differ from the pinned reviewed supplement')
     return expected
 
@@ -375,7 +375,11 @@ def build(args):
             require(replay.sha(current / 'manifest.json') == config['supplementManifestSha256'], 'Starting supplement changed')
             additions, decisions = approved_entries(connection)
             annotations = approved_metadata(connection)
-            require(additions or annotations, 'No source-reviewed include decisions; Gemini proposals alone cannot be built')
+            boundary=config['sources'].get('catalogV2',{})
+            policy=current/'distribution-exclusions.tsv'
+            policy_only=boundary.get('sensitive',{}).get('complete') and policy.is_file() and boundary.get('distributionPolicySha256')==replay.sha(policy)
+            require(additions or annotations or policy_only,
+                    'No source-reviewed decisions or pinned complete distribution policy; Gemini proposals alone cannot be built')
             destination = external(args.out)
             require(not destination.exists(), 'Build output already exists')
             destination.parent.mkdir(parents=True, exist_ok=True)
@@ -396,11 +400,13 @@ def build(args):
                     require(not target.exists() or replay.sha(target) == record['sha256'], 'Conflicting reference notices')
                     if not target.exists():
                         shutil.copyfile(record['path'], target)
-                combined = merge_memberships(sources.read_entries(current / 'entries.tsv') + additions)
-                with (supplement / 'entries.tsv').open('w', encoding='utf-8', newline='') as stream:
-                    writer = csv.DictWriter(stream, fieldnames=sources.FIELDS, delimiter='\t', lineterminator='\n')
-                    writer.writeheader()
-                    writer.writerows(combined)
+                exclusion=current/'distribution-exclusions.tsv'
+                if exclusion.exists():
+                    require(config['sources'].get('catalogV2',{}).get('distributionPolicySha256')==replay.sha(exclusion),
+                            'Distribution policy changed since preparation')
+                    shutil.copyfile(exclusion,supplement/exclusion.name)
+                combined = merge_memberships(sources.read_supplement_entries(current) + additions)
+                entry_parts=sources.write_table_shards(supplement,'entries',sources.FIELDS,combined,plain_first=True)
                 old_metadata = sources.read_entries(current / 'metadata.tsv') if 'metadata.tsv' in old['files'] else []
                 metadata = merge_memberships(old_metadata + annotations)
                 if metadata:
@@ -440,7 +446,7 @@ def build(args):
                 manifest = dict(old, files={str(p.relative_to(supplement)): replay.sha(p) for p in sorted(supplement.rglob('*')) if p.is_file()},
                     expectedOutputs={}, sources=old['sources'] | {'vocabularyHarness': dict(public_sources,
                         candidatesSha256=config['candidatesSha256'], decisionsSha256=decision_hash)})
-                if metadata or definitions:
+                if metadata or definitions or len(entry_parts)>1:
                     manifest.update(kind='reviewed-english-supplement-v2', schemaVersion=2)
                 dump(supplement / 'manifest.json', manifest)
                 inputs = directory / 'base-inputs'

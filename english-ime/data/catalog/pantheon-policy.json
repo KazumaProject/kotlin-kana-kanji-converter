@@ -1,0 +1,286 @@
+{
+  "dataset": "Pantheon 2.0, 2025 Person Dataset",
+  "historicalBornBefore": 1900,
+  "license": "CC-BY-SA-4.0",
+  "occupationTopics": {
+    "ACTOR": [
+      "people.actors",
+      "people.screen"
+    ],
+    "AMERICAN FOOTBALL PLAYER": [
+      "people.sports.american_football"
+    ],
+    "ANTHROPOLOGIST": [
+      "people.science"
+    ],
+    "ARCHAEOLOGIST": [
+      "people.science"
+    ],
+    "ARCHITECT": [
+      "people.arts"
+    ],
+    "ARTIST": [
+      "people.arts"
+    ],
+    "ASTRONAUT": [
+      "people.science"
+    ],
+    "ASTRONOMER": [
+      "people.science"
+    ],
+    "ATHLETE": [
+      "people.sports"
+    ],
+    "BADMINTON PLAYER": [
+      "people.sports.badminton"
+    ],
+    "BASEBALL PLAYER": [
+      "people.sports.baseball"
+    ],
+    "BASKETBALL PLAYER": [
+      "people.sports.basketball"
+    ],
+    "BIOLOGIST": [
+      "people.science"
+    ],
+    "BOXER": [
+      "people.sports.boxing"
+    ],
+    "BULLFIGHTER": [
+      "people.performers"
+    ],
+    "BUSINESSPERSON": [
+      "people.business"
+    ],
+    "CHEF": [
+      "people.food"
+    ],
+    "CHEMIST": [
+      "people.science"
+    ],
+    "CHESS PLAYER": [
+      "people.sports.mind_sports"
+    ],
+    "COACH": [
+      "people.sports.staff"
+    ],
+    "COMEDIAN": [
+      "people.screen"
+    ],
+    "COMIC ARTIST": [
+      "people.arts"
+    ],
+    "COMPOSER": [
+      "people.music"
+    ],
+    "COMPUTER SCIENTIST": [
+      "people.science"
+    ],
+    "CONDUCTOR": [
+      "people.music"
+    ],
+    "CRICKETER": [
+      "people.sports.cricket"
+    ],
+    "CRITIC": [
+      "people.literature"
+    ],
+    "CYCLIST": [
+      "people.sports.cycling"
+    ],
+    "DANCER": [
+      "people.performers"
+    ],
+    "DESIGNER": [
+      "people.arts"
+    ],
+    "DIPLOMAT": [
+      "people.public"
+    ],
+    "ECONOMIST": [
+      "people.science"
+    ],
+    "ENGINEER": [
+      "people.science"
+    ],
+    "FASHION DESIGNER": [
+      "people.arts"
+    ],
+    "FENCER": [
+      "people.sports.fencing"
+    ],
+    "FILM DIRECTOR": [
+      "people.screen"
+    ],
+    "GAME DESIGNER": [
+      "people.arts"
+    ],
+    "GEOGRAPHER": [
+      "people.science"
+    ],
+    "GEOLOGIST": [
+      "people.science"
+    ],
+    "GO PLAYER": [
+      "people.sports.mind_sports"
+    ],
+    "GOLFER": [
+      "people.sports.golf"
+    ],
+    "GYMNAST": [
+      "people.sports.gymnastics"
+    ],
+    "HANDBALL PLAYER": [
+      "people.sports.handball"
+    ],
+    "HISTORIAN": [
+      "people.literature"
+    ],
+    "HOCKEY PLAYER": [
+      "people.sports.hockey"
+    ],
+    "INVENTOR": [
+      "people.science"
+    ],
+    "JOURNALIST": [
+      "people.literature"
+    ],
+    "JUDGE": [
+      "people.public"
+    ],
+    "LAWYER": [
+      "people.public"
+    ],
+    "LINGUIST": [
+      "people.science"
+    ],
+    "MAGICIAN": [
+      "people.performers"
+    ],
+    "MARTIAL ARTS": [
+      "people.sports.martial_arts"
+    ],
+    "MATHEMATICIAN": [
+      "people.science"
+    ],
+    "MILITARY PERSONNEL": [
+      "people.public"
+    ],
+    "MODEL": [
+      "people.performers"
+    ],
+    "MOUNTAINEER": [
+      "people.sports.climbing"
+    ],
+    "MUSICIAN": [
+      "people.music"
+    ],
+    "NOBLEMAN": [
+      "people.public"
+    ],
+    "PAINTER": [
+      "people.arts"
+    ],
+    "PHILOSOPHER": [
+      "people.literature"
+    ],
+    "PHOTOGRAPHER": [
+      "people.arts"
+    ],
+    "PHYSICIAN": [
+      "people.science"
+    ],
+    "PHYSICIST": [
+      "people.science"
+    ],
+    "POKER PLAYER": [
+      "people.sports.mind_sports"
+    ],
+    "POLITICAL SCIENTIST": [
+      "people.public"
+    ],
+    "POLITICIAN": [
+      "people.public"
+    ],
+    "PRESENTER": [
+      "people.screen"
+    ],
+    "PRODUCER": [
+      "people.screen"
+    ],
+    "PSYCHOLOGIST": [
+      "people.science"
+    ],
+    "PUBLIC WORKER": [
+      "people.public"
+    ],
+    "RACING DRIVER": [
+      "people.sports.racing"
+    ],
+    "REFEREE": [
+      "people.sports.staff"
+    ],
+    "RELIGIOUS FIGURE": [
+      "people.public"
+    ],
+    "RUGBY PLAYER": [
+      "people.sports.rugby"
+    ],
+    "SCULPTOR": [
+      "people.arts"
+    ],
+    "SINGER": [
+      "people.singers",
+      "people.music"
+    ],
+    "SKATER": [
+      "people.sports.skating"
+    ],
+    "SKIER": [
+      "people.sports.skiing"
+    ],
+    "SNOOKER": [
+      "people.sports.mind_sports"
+    ],
+    "SOCCER PLAYER": [
+      "people.sports.soccer"
+    ],
+    "SOCIAL ACTIVIST": [
+      "people.public"
+    ],
+    "SOCIOLOGIST": [
+      "people.science"
+    ],
+    "STATISTICIAN": [
+      "people.science"
+    ],
+    "SWIMMER": [
+      "people.sports.swimming"
+    ],
+    "TABLE TENNIS PLAYER": [
+      "people.sports.table_tennis"
+    ],
+    "TENNIS PLAYER": [
+      "people.sports.tennis"
+    ],
+    "VOLLEYBALL PLAYER": [
+      "people.sports.volleyball"
+    ],
+    "WRESTLER": [
+      "people.sports.wrestling"
+    ],
+    "WRITER": [
+      "people.literature"
+    ],
+    "YOUTUBER": [
+      "people.screen"
+    ]
+  },
+  "permissionsUrl": "https://pantheon.world/data/permissions",
+  "purpose": "Scan every published row to EOF; no HPI, rank, language-count or adoption-count cutoff. Exact source name and QID; groups excluded. Broad occupations never imply a narrower sport or Olympic participation.",
+  "restrictedOccupations": {
+    "PORNOGRAPHIC ACTOR": "adult-industry-person"
+  },
+  "schemaVersion": 1,
+  "url": "https://storage.googleapis.com/pantheon-public-data/person_2025_update.csv.bz2"
+}

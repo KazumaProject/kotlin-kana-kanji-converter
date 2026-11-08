@@ -37,8 +37,10 @@ internal fun writeReviewedCategoryBundle(
     val names = listOf("categories.tsv", "forms.tsv", "memberships.tsv")
     names.forEach { lexicon.resolve(it).copyTo(grammar.resolve(it)) }
     supplement?.appendGrammar(grammar, requireNotNull(base))
+    supplement?.distributionPolicy?.filterGrammar(grammar)
     writeCompactCategories(Lexicon.load(grammar), grammar.resolve("categories.ecat"))
     relations.copyTo(grammar.resolve("relations.tsv"))
+    supplement?.distributionPolicy?.filterTable(grammar.resolve("relations.tsv"))
     val destinationNotices = grammar.resolve("notices").apply { mkdir() }
     noticeFiles.forEach { it.copyTo(destinationNotices.resolve(it.name)) }
     val properties = sortedMapOf(
@@ -52,7 +54,10 @@ internal fun writeReviewedCategoryBundle(
     noticeFiles.forEach { properties["notice.${it.name}.sha256"] = categoryFileHash(destinationNotices.resolve(it.name)) }
     supplement?.let {
         properties.putAll(it.properties())
-        it.manifest.copyTo(output.resolve("supplement-manifest.json"))
+        if (it.distributionPolicy != null) {
+            properties["distribution.policy.sha256"] = categoryFileHash(it.distributionPolicy.file)
+            output.resolve("supplement-manifest.json").writeText(it.distributionPolicy.publicManifest(it.manifest))
+        } else it.manifest.copyTo(output.resolve("supplement-manifest.json"))
     }
     grammar.resolve("bundle.properties").writeText(properties.entries.joinToString("\n", postfix="\n") { "${it.key}=${it.value}" })
     sourceManifest.takeIf { it.isFile }?.copyTo(output.resolve("source-evidence-manifest.json"))

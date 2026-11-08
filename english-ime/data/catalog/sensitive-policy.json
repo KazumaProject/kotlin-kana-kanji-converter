@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "pageSize": 500,
+  "victimMode": "case_context_only",
+  "availableVictimModes": [
+    "all_positive_victims",
+    "case_context_only"
+  ],
+  "independentPublicRolesExclude": [
+    "",
+    "CELEBRITY",
+    "COMPANION",
+    "INSPIRATION",
+    "MAFIOSO",
+    "EXTREMIST",
+    "PIRATE",
+    "PORNOGRAPHIC ACTOR"
+  ],
+  "purpose": "Retain source evidence for curation. Exclude case/accident subjects and victim-context names from distributed assets; retain independently sourced public-career/historical names even with victim flags. A historical birth date alone is insufficient. No claim to detect every incident or disambiguate all homonyms.",
+  "selectors": [
+    {
+      "id": "victim-relations",
+      "provider": "wikidata",
+      "reason": "victim-person",
+      "body": "?case wdt:P8032 ?item. ?item wdt:P31 wd:Q5."
+    },
+    {
+      "id": "case-subjects",
+      "provider": "wikidata",
+      "reason": "victim-related-subject",
+      "body": "?item wdt:P8032 ?victim. FILTER(EXISTS { ?item wdt:P585 ?date } || EXISTS { ?item wdt:P580 ?date }) FILTER NOT EXISTS { ?item wdt:P31 wd:Q5 }"
+    },
+    {
+      "id": "homicide-flags",
+      "provider": "wikidata",
+      "reason": "victim-person",
+      "body": "?item wdt:P1196 wd:Q149086; wdt:P31 wd:Q5."
+    },
+    {
+      "id": "accidental-death-flags",
+      "provider": "wikidata",
+      "reason": "victim-person",
+      "body": "?item wdt:P1196 wd:Q21142718; wdt:P31 wd:Q5."
+    },
+    {
+      "id": "explicit-victim-incidents",
+      "provider": "dbpedia",
+      "reason": "victim-related-subject",
+      "body": "VALUES ?relation { dbp:victim dbp:victims } ?item ?relation ?victim; a dbo:Event. ?victim a dbo:Person."
+    },
+    {
+      "id": "explicit-victim-people",
+      "provider": "dbpedia",
+      "reason": "victim-person",
+      "body": "VALUES ?relation { dbp:victim dbp:victims } ?case ?relation ?item. ?item a dbo:Person."
+    },
+    {
+      "id": "positive-casualty-events",
+      "provider": "dbpedia",
+      "reason": "victim-related-subject",
+      "body": "?item a dbo:Event. VALUES ?metric { dbp:fatalities dbp:injuries dbp:deaths dbo:numberOfDeaths dbo:numberOfInjured } ?item ?metric ?count. FILTER(isNumeric(?count) && ?count > 0)"
+    }
+  ]
+}

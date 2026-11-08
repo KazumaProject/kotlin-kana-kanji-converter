@@ -133,12 +133,23 @@ internal fun readReviewedMetadata(directory: File): Properties =
 private val payloadTypes = setOf(BitSet::class.java, LongArray::class.java, IntArray::class.java,
     ShortArray::class.java, CharArray::class.java)
 
-private fun <T> File.readPayload(read: (ObjectInputStream) -> T): T {
+internal fun <T> File.readPayload(read: (ObjectInputStream) -> T): T {
     try {
+        val payloadBytes=length()
+        require(payloadBytes in 1..128L*1024*1024) { "Reviewed payload exceeds the byte limit" }
         return ObjectInputStream(inputStream().buffered()).use { input ->
             input.setObjectInputFilter { info ->
+                // An array must fit in the actual serialized file before it can
+                // be allocated. This admits full dictionaries without accepting
+                // a tiny malicious stream declaring an enormous array.
+                val width=when(info.serialClass()) {
+                    LongArray::class.java -> 8
+                    IntArray::class.java -> 4
+                    ShortArray::class.java, CharArray::class.java -> 2
+                    else -> 1
+                }
                 when {
-                    info.arrayLength() > 4_000_000 || info.depth() > 4 -> ObjectInputFilter.Status.REJECTED
+                    info.arrayLength() > minOf(32_000_000L,payloadBytes/width) || info.depth() > 4 -> ObjectInputFilter.Status.REJECTED
                     info.serialClass() == null -> ObjectInputFilter.Status.UNDECIDED
                     info.serialClass() in payloadTypes -> ObjectInputFilter.Status.ALLOWED
                     else -> ObjectInputFilter.Status.REJECTED

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Exact English noun/proper-name records in the full raw Wiktextract dump. Category selection is explicit, not a word-count target or a claim to cover every cuisine.",
+  "categoryPatterns": {
+    "daily.dishes": ["(?i)^en:.*(?:foods|dishes|soups|sandwiches|desserts|cakes|pastries|breads|noodles|pasta|curries|stews|salads|dumplings|sauces|condiments)(?:$| from | of )"],
+    "daily.beverages": ["(?i)^en:.*(?:beverages|drinks|cocktails|teas|coffees|beers|wines)(?:$| from | of )"]
+  }
+}

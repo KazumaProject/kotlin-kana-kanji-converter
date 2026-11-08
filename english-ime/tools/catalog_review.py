@@ -9,6 +9,7 @@ import tempfile
 
 import catalog_harness as c
 import vocabulary_harness as h
+import distribution_policy
 
 FIELDS = ['target_id', 'surface', 'kind', 'topics', 'change', 'lexeme_id', 'lemma', 'evidence', 'licenses', 'entities']
 WORD_FIELDS = ['surface', 'change', 'kinds']
@@ -19,13 +20,23 @@ def assigned_topics(target, entry, topics):
     return ','.join(t for t in target['topics'] if topics[t]['category'] in memberships) or '-'
 
 
-def verify_rows(rows, topics, pairs, analyses):
+def verify_rows(rows, topics, pairs, analyses, blocked=frozenset()):
     surfaces = {surface for _, surface in pairs}
     seen = set()
     for row in rows:
         identity = row['target_id'], row['lexeme_id'], row['surface']
         h.require(identity not in seen and row['kind'] in c.world_sources.KINDS, 'Duplicate/invalid adopted record')
         seen.add(identity)
+        if distribution_policy.excluded(row['surface'],row['surface'],blocked):
+            h.require(row['surface'] not in surfaces and not analyses.get(row['surface']),
+                      'Restricted authoring record leaked into distribution: '+row['surface'])
+            continue
+        if distribution_policy.excluded(row['lemma'],row['lemma'],blocked):
+            remaining=analyses.get(row['surface'],[])
+            h.require(not any(f['lexeme_id']==row['lexeme_id'] or distribution_policy.excluded(row['surface'],f['lemma'],blocked)
+                for f in remaining),'Restricted lexical analysis leaked into distribution: '+row['surface'])
+            h.require(row['surface'] not in surfaces or remaining,'Restricted orphan candidate leaked into distribution: '+row['surface'])
+            continue
         h.require(row['surface'] in surfaces, 'Adopted spelling absent from binary: ' + row['surface'])
         required = {topics[t]['category'] for t in row['topics'].split(',') if t != '-'}
         form = next((f for f in analyses.get(row['surface'], []) if f['lexeme_id'] == row['lexeme_id']), None)
@@ -36,6 +47,16 @@ def verify_rows(rows, topics, pairs, analyses):
 
 
 def read(path):
+    if path.is_dir():
+        index=h.replay.read_json(path/'index.json')
+        h.require(index['schemaVersion']==1 and set(p.name for p in path.iterdir())=={'index.json',*index['files']},
+            'Missing/unexpected adoption ledger shard')
+        result=[]
+        for name,record in sorted(index['files'].items()):
+            h.require(re.fullmatch(r'part-[0-9]{4}\.tsv',name) and not (path/name).is_symlink() and
+                h.replay.sha(path/name)==record['sha256'],'Changed adoption ledger shard')
+            rows=read(path/name);h.require(len(rows)==record['rows'],'Changed adoption ledger row count');result.extend(rows)
+        return result
     with path.open(encoding='utf-8', newline='') as stream:
         reader = csv.DictReader(stream, delimiter='\t')
         h.require(reader.fieldnames == FIELDS, 'Invalid adopted vocabulary header')
@@ -120,9 +141,28 @@ def verify(args):
     topics, _ = c.registry(args.taxonomy, args.scopes)
     with tempfile.TemporaryDirectory() as temp:
         pairs, analyses = c.inventory(args.assets.resolve(), args.cli.resolve(), Path(temp) / 'inventory.jsonl')
-    verify_rows(rows, topics, pairs, analyses)
+    blocked=distribution_policy.for_assets(args.assets.resolve())
+    verify_rows(rows, topics, pairs, analyses, blocked)
     verify_pages(args.word_lists, rows, topics)
+    if getattr(args,'goals',None):verify_goals(h.replay.read_json(args.goals),topics,pairs,analyses,blocked)
     return summary(rows, topics)
+
+
+def verify_goals(goals,topics,pairs,analyses,blocked):
+    """Public artifact gates; source exhaustion remains a separate capture audit."""
+    surfaces={s for _,s in pairs}
+    for topic,words in goals['requiredSpellings'].items():
+        category=topics[topic]['category']
+        for word in words:
+            h.require(word in surfaces and any(category in f['memberships'] for f in analyses.get(word,[])),
+                'Missing required spelling/topic: '+topic+'/'+word)
+    h.require(set(goals['preserveMedicalSpellings'])<=surfaces,'Missing protected ordinary/medical vocabulary')
+    h.require(all(distribution_policy.excluded(s,s,blocked) for s in goals.get('requiredExclusionSpellings',[])),
+        'Missing required distribution exclusion')
+    h.require(not any(distribution_policy.excluded(s,s,blocked) for s in surfaces),'Restricted candidate leaked')
+    if goals.get('requireNonemptyTopics'):
+        represented={m for s,forms in analyses.items() if s in surfaces for f in forms for m in f['memberships']}
+        h.require(all(v['category'] in represented for v in topics.values()),'Empty declared vocabulary topic')
 
 
 def word_pages(rows, topics):
@@ -183,7 +223,11 @@ def publish(args):
     output = h.external(args.out)
     h.require(not output.exists() and not output.is_relative_to(args.assets.resolve()), 'Use a new external publication directory')
     output.mkdir(parents=True)
-    c.table(output / 'adopted.tsv', FIELDS, rows)
+    if getattr(args,'shard_ledger',False):
+        folder=output/'adopted'
+        files=c.lexical.write_table_shards(folder,'part',FIELDS,rows)
+        h.dump(folder/'index.json',dict(schemaVersion=1,files=files))
+    else:c.table(output / 'adopted.tsv', FIELDS, rows)
     counts = summary(rows, topics)
     h.dump(output / 'counts.json', counts)
     lists = output / 'words'; lists.mkdir()
@@ -218,10 +262,12 @@ def main():
             parser.add_argument('--taxonomy', type=Path, default=c.CATALOG / 'taxonomy.json')
             parser.add_argument('--scopes', type=Path, default=c.CATALOG / 'core-targets.json')
             if name == 'publish':
+                parser.add_argument('--shard-ledger', action='store_true')
                 parser.add_argument('--parent-inventory', type=Path, required=True)
                 parser.add_argument('--out', type=Path, required=True)
             else:
                 parser.add_argument('--word-lists', type=Path, default=c.CATALOG / 'words')
+                parser.add_argument('--goals',type=Path,help='Verify the public mandatory spellings, exclusions and topic gates')
     args = p.parse_args()
     print(json.dumps(globals()[args.command](args), ensure_ascii=False, sort_keys=True))
 

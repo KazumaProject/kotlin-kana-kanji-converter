@@ -1,0 +1,338 @@
+{
+  "schemaVersion": 1,
+  "pageSize": 5000,
+  "license": "CC-BY-SA-3.0",
+  "licenseUrl": "https://mappings.dbpedia.org/index.php/DBpedia_Mappings:Copyrights",
+  "purpose": "Exact typed English DBpedia labels and scoped product/brand categories. No count-based adoption cap; no frequency guarantee. Reject partial HTTP 200 results.",
+  "selectors": [
+    {
+      "id": "adult-services",
+      "topic": "services.general",
+      "kind": "service",
+      "categories": [
+        "Erotica_and_pornography_websites",
+        "Pornographic_film_studios",
+        "Pornographic_magazines"
+      ],
+      "requireManufacturer": false,
+      "restricted": true,
+      "categoryDepth": 2
+    },
+    {
+      "id": "audio-makers",
+      "topic": "organizations.technology",
+      "kind": "organization",
+      "categories": [
+        "Audio_equipment_manufacturers",
+        "Photography_companies"
+      ],
+      "requireManufacturer": false,
+      "categoryDepth": 2,
+      "extraTopics": [
+        "media.audio",
+        "media.photography"
+      ]
+    },
+    {
+      "id": "computing",
+      "topic": "products.computing",
+      "kind": "product",
+      "categories": [
+        "Smartphones",
+        "Laptops",
+        "Tablet_computers",
+        "Video_game_consoles"
+      ],
+      "requireManufacturer": true,
+      "categoryDepth": 2,
+      "includeRawManufacturer": true
+    },
+    {
+      "id": "home",
+      "topic": "products.home",
+      "kind": "product",
+      "categories": [
+        "Home_appliances",
+        "Vacuum_cleaners",
+        "Robotic_vacuum_cleaners",
+        "Washing_machines",
+        "Refrigerators",
+        "Microwave_ovens",
+        "Coffee_appliances",
+        "Dishwashers",
+        "Air_purifiers",
+        "Lawn_mowers",
+        "Personal_robots"
+      ],
+      "requireManufacturer": true,
+      "categoryDepth": 2,
+      "includeRawManufacturer": true
+    },
+    {
+      "id": "home-makers",
+      "topic": "organizations.consumer",
+      "kind": "organization",
+      "categories": [
+        "Home_appliance_manufacturers",
+        "Home_appliance_brands"
+      ],
+      "requireManufacturer": false,
+      "categoryDepth": 2,
+      "extraTopics": [
+        "daily.home"
+      ]
+    },
+    {
+      "id": "imaging",
+      "topic": "products.imaging",
+      "kind": "product",
+      "categories": [
+        "Digital_cameras",
+        "Single-lens_reflex_cameras",
+        "Mirrorless_interchangeable-lens_cameras",
+        "Headphones",
+        "Microphones",
+        "Digital_audio_players"
+      ],
+      "requireManufacturer": true,
+      "categoryDepth": 2,
+      "includeRawManufacturer": true
+    },
+    {
+      "id": "lifestyle",
+      "topic": "products.lifestyle",
+      "kind": "brand",
+      "categories": [
+        "Food_brands",
+        "Clothing_brands",
+        "Cosmetics_brands"
+      ],
+      "requireManufacturer": false,
+      "categoryDepth": 2
+    },
+    {
+      "id": "actors",
+      "topic": "people.actors",
+      "extraTopics": [
+        "people.screen"
+      ],
+      "kind": "person",
+      "class": "Actor",
+      "queryVersion": 4,
+      "pageSize": 5000,
+      "occupationValues": [
+        "Actor",
+        "Actress",
+        "actor",
+        "actress",
+        "Voice actor",
+        "Voice actress",
+        "voice actor",
+        "voice actress",
+        "Film actor",
+        "Film actress",
+        "Stage actor",
+        "Stage actress",
+        "Television actor",
+        "Television actress"
+      ]
+    },
+    {
+      "id": "adult-performers",
+      "topic": "people.actors",
+      "extraTopics": [],
+      "kind": "person",
+      "restricted": true,
+      "class": "AdultActor",
+      "queryVersion": 4,
+      "pageSize": 5000,
+      "occupationPattern": "(pornograph|porn[_ -]*(actor|actress|performer|star)|adult[_ -]*(film|entertainment|actor|actress|performer))"
+    },
+    {
+      "id": "adult-products",
+      "topic": "products.lifestyle",
+      "kind": "product",
+      "restricted": true,
+      "categories": [
+        "Sex_toys"
+      ],
+      "requireManufacturer": true,
+      "categoryDepth": 2,
+      "includeRawManufacturer": true
+    },
+    {
+      "id": "device-makers",
+      "topic": "organizations.technology",
+      "kind": "organization",
+      "categories": [
+        "Computer_companies",
+        "Consumer_electronics_brands",
+        "Electronics_companies"
+      ],
+      "categoryDepth": 2
+    },
+    {
+      "id": "communication-services",
+      "topic": "services.communication",
+      "kind": "service",
+      "categories": [
+        "Social_networking_services",
+        "Instant_messaging",
+        "Webmail",
+        "Videotelephony"
+      ],
+      "categoryDepth": 2
+    },
+    {
+      "id": "media-services",
+      "topic": "services.media",
+      "kind": "service",
+      "categories": [
+        "Music_streaming_services",
+        "Video_on_demand_services",
+        "Online_travel_agencies"
+      ],
+      "categoryDepth": 2
+    },
+    {
+      "id": "baseball",
+      "kind": "person",
+      "topic": "people.sports.baseball",
+      "extraTopics": [
+        "people.sports"
+      ],
+      "class": "BaseballPlayer",
+      "queryVersion": 4,
+      "pageSize": 5000
+    },
+    {
+      "id": "basketball",
+      "kind": "person",
+      "topic": "people.sports.basketball",
+      "extraTopics": [
+        "people.sports"
+      ],
+      "class": "BasketballPlayer",
+      "queryVersion": 4,
+      "pageSize": 5000
+    },
+    {
+      "id": "american-football",
+      "kind": "person",
+      "topic": "people.sports.american_football",
+      "extraTopics": [
+        "people.sports"
+      ],
+      "class": "AmericanFootballPlayer",
+      "queryVersion": 4,
+      "pageSize": 5000
+    },
+    {
+      "id": "boxing",
+      "kind": "person",
+      "topic": "people.sports.boxing",
+      "extraTopics": [
+        "people.sports"
+      ],
+      "class": "Boxer",
+      "queryVersion": 4,
+      "pageSize": 5000
+    },
+    {
+      "id": "car-models",
+      "kind": "product",
+      "topic": "products.cars",
+      "extraTopics": [
+        "products.mobility"
+      ],
+      "class": "Automobile",
+      "queryVersion": 4,
+      "pageSize": 5000
+    },
+    {
+      "id": "companies",
+      "kind": "organization",
+      "topic": "organizations.general",
+      "extraTopics": [],
+      "class": "Company",
+      "queryVersion": 4,
+      "pageSize": 5000
+    },
+    {
+      "id": "singers",
+      "kind": "person",
+      "topic": "people.singers",
+      "extraTopics": [
+        "people.music"
+      ],
+      "class": "Singer",
+      "queryVersion": 4,
+      "pageSize": 5000,
+      "requirePerson": true,
+      "occupationValues": [
+        "Singer",
+        "singer",
+        "Singer-songwriter",
+        "singer-songwriter",
+        "Singer-Songwriter",
+        "Vocalist",
+        "vocalist",
+        "Rapper",
+        "rapper"
+      ]
+    },
+    {
+      "id": "skateboarding",
+      "kind": "person",
+      "topic": "people.sports.skateboarding",
+      "extraTopics": [
+        "people.sports"
+      ],
+      "categories": [
+        "Skateboarders"
+      ],
+      "categoryDepth": 3
+    },
+    {
+      "id": "snowboarding",
+      "kind": "person",
+      "topic": "people.sports.snowboarding",
+      "extraTopics": [
+        "people.sports"
+      ],
+      "categories": [
+        "Snowboarders"
+      ],
+      "categoryDepth": 3
+    },
+    {
+      "id": "mma",
+      "kind": "person",
+      "topic": "people.sports.mma",
+      "extraTopics": [
+        "people.sports"
+      ],
+      "categories": [
+        "Mixed_martial_artists"
+      ],
+      "categoryDepth": 3,
+      "timeoutMs": 120000
+    },
+    {
+      "id": "kickboxing",
+      "kind": "person",
+      "topic": "people.sports.kickboxing",
+      "extraTopics": [
+        "people.sports"
+      ],
+      "categories": [
+        "Kickboxers"
+      ],
+      "categoryDepth": 3,
+      "timeoutMs": 120000
+    }
+  ],
+  "pagination": "Keyset within disjoint complete URI ranges for large scopes; all ranges including punctuation/non-Latin initials must finish. Ranges are transport partitions, never vocabulary caps.",
+  "categoryScope": "Direct categories and two documented category edges, plus required entity types/manufacturer links. Wikipedia category edges are not an unlimited is-a hierarchy.",
+  "personScope": "Exact English DBpedia actor labels and explicitly listed occupation labels. The full Pantheon 2025 dataset supplies the default notable-person and sports population. Generic DBpedia Athlete traversal is not a practical frequency filter and is not used as a completion shortcut."
+}

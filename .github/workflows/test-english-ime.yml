@@ -17,7 +17,9 @@ concurrency:
 jobs:
   english-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
+    env:
+      JAVA_OPTS: -Xmx4g
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
@@ -58,6 +60,11 @@ jobs:
             --assets "$RUNNER_TEMP/reviewed-english-extended" \
             --ledger english-ime/data/catalog/adopted-coverage.tsv \
             --word-lists english-ime/data/catalog/words-coverage
+          python3 -B english-ime/tools/catalog_review.py verify \
+            --assets "$RUNNER_TEMP/reviewed-english-extended" \
+            --ledger english-ime/data/catalog/adopted-named \
+            --word-lists english-ime/data/catalog/words-named \
+            --goals english-ime/data/catalog/named-goals.json
       - name: Compare packed and full conversion results for both bundles
         run: |
           english-ime/build/install/english-ime/bin/english-ime pack-runtime \

@@ -536,6 +536,598 @@
       "label": "分野横断ウェブサービス",
       "definition": "Source-typed websites and web services; extended vocabulary, not a usage-frequency claim.",
       "examples": "source-attested service names"
+    },
+    {
+      "id": "names.given",
+      "category": "topic_names_given",
+      "domain": "education",
+      "label": "名（ファーストネーム）",
+      "definition": "Source-attested given-name vocabulary; not inferred by splitting full names.",
+      "examples": "James, Mary"
+    },
+    {
+      "id": "names.surname",
+      "category": "topic_names_surname",
+      "domain": "education",
+      "label": "姓（ファミリーネーム）",
+      "definition": "Source-attested surname vocabulary; not inferred by splitting full names.",
+      "examples": "Smith, Brown"
+    },
+    {
+      "id": "names.middle",
+      "category": "topic_names_middle",
+      "domain": "education",
+      "label": "ミドルネーム",
+      "definition": "Explicitly attested middle-name usage; not inferred from name order.",
+      "examples": "Nicole, Lynn"
+    },
+    {
+      "id": "people.actors",
+      "category": "topic_people_actors",
+      "domain": "entertainment",
+      "label": "俳優（映画・テレビ・舞台・声優）",
+      "definition": "Source-typed actors and acting-occupation descendants; adult-industry persons are retained only in curation.",
+      "examples": "Tom Hanks, Meryl Streep"
+    },
+    {
+      "id": "people.notable",
+      "category": "topic_people_notable",
+      "domain": "education",
+      "label": "著名人物公開データ",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.singers",
+      "category": "topic_people_singers",
+      "domain": "entertainment",
+      "label": "歌手・シンガー",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.arts",
+      "category": "topic_people_arts",
+      "domain": "entertainment",
+      "label": "美術・建築・デザインの人物",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.performers",
+      "category": "topic_people_performers",
+      "domain": "entertainment",
+      "label": "舞台・ダンス・モデル等の人物",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.food",
+      "category": "topic_people_food",
+      "domain": "food",
+      "label": "料理人",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "daily.dishes",
+      "category": "topic_daily_dishes",
+      "domain": "food",
+      "label": "料理・調理済み食品名",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "daily.beverages",
+      "category": "topic_daily_beverages",
+      "domain": "food",
+      "label": "飲料名",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "products.cars",
+      "category": "topic_products_cars",
+      "domain": "travel",
+      "label": "自動車の車名・モデル",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.soccer",
+      "category": "topic_people_sports_soccer",
+      "domain": "sports",
+      "label": "サッカー選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.baseball",
+      "category": "topic_people_sports_baseball",
+      "domain": "sports",
+      "label": "野球選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.basketball",
+      "category": "topic_people_sports_basketball",
+      "domain": "sports",
+      "label": "バスケットボール選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.american_football",
+      "category": "topic_people_sports_american_football",
+      "domain": "sports",
+      "label": "アメリカンフットボール選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.mma",
+      "category": "topic_people_sports_mma",
+      "domain": "sports",
+      "label": "MMA選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.kickboxing",
+      "category": "topic_people_sports_kickboxing",
+      "domain": "sports",
+      "label": "キックボクサー",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.boxing",
+      "category": "topic_people_sports_boxing",
+      "domain": "sports",
+      "label": "ボクサー",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.skateboarding",
+      "category": "topic_people_sports_skateboarding",
+      "domain": "sports",
+      "label": "スケートボーダー",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.snowboarding",
+      "category": "topic_people_sports_snowboarding",
+      "domain": "sports",
+      "label": "スノーボーダー",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.olympics",
+      "category": "topic_people_sports_olympics",
+      "domain": "sports",
+      "label": "五輪出場選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.skating",
+      "category": "topic_people_sports_skating",
+      "domain": "sports",
+      "label": "スケート競技の選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.skiing",
+      "category": "topic_people_sports_skiing",
+      "domain": "sports",
+      "label": "スキー競技の選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.martial_arts",
+      "category": "topic_people_sports_martial_arts",
+      "domain": "sports",
+      "label": "武道・格闘技の選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.swimming",
+      "category": "topic_people_sports_swimming",
+      "domain": "sports",
+      "label": "競泳・水泳選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.gymnastics",
+      "category": "topic_people_sports_gymnastics",
+      "domain": "sports",
+      "label": "体操選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.cycling",
+      "category": "topic_people_sports_cycling",
+      "domain": "sports",
+      "label": "自転車競技の選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.tennis",
+      "category": "topic_people_sports_tennis",
+      "domain": "sports",
+      "label": "テニス選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.badminton",
+      "category": "topic_people_sports_badminton",
+      "domain": "sports",
+      "label": "バドミントン選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.table_tennis",
+      "category": "topic_people_sports_table_tennis",
+      "domain": "sports",
+      "label": "卓球選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.volleyball",
+      "category": "topic_people_sports_volleyball",
+      "domain": "sports",
+      "label": "バレーボール選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.handball",
+      "category": "topic_people_sports_handball",
+      "domain": "sports",
+      "label": "ハンドボール選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.hockey",
+      "category": "topic_people_sports_hockey",
+      "domain": "sports",
+      "label": "ホッケー選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.rugby",
+      "category": "topic_people_sports_rugby",
+      "domain": "sports",
+      "label": "ラグビー選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.cricket",
+      "category": "topic_people_sports_cricket",
+      "domain": "sports",
+      "label": "クリケット選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.golf",
+      "category": "topic_people_sports_golf",
+      "domain": "sports",
+      "label": "ゴルフ選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.wrestling",
+      "category": "topic_people_sports_wrestling",
+      "domain": "sports",
+      "label": "レスリング・プロレス選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.fencing",
+      "category": "topic_people_sports_fencing",
+      "domain": "sports",
+      "label": "フェンシング選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.athletics",
+      "category": "topic_people_sports_athletics",
+      "domain": "sports",
+      "label": "陸上競技の選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.judo",
+      "category": "topic_people_sports_judo",
+      "domain": "sports",
+      "label": "柔道選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.weightlifting",
+      "category": "topic_people_sports_weightlifting",
+      "domain": "sports",
+      "label": "重量挙げの選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.rowing",
+      "category": "topic_people_sports_rowing",
+      "domain": "sports",
+      "label": "ボート競技の選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.canoeing",
+      "category": "topic_people_sports_canoeing",
+      "domain": "sports",
+      "label": "カヌー競技の選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.equestrian",
+      "category": "topic_people_sports_equestrian",
+      "domain": "sports",
+      "label": "馬術選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.archery",
+      "category": "topic_people_sports_archery",
+      "domain": "sports",
+      "label": "アーチェリー選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.shooting",
+      "category": "topic_people_sports_shooting",
+      "domain": "sports",
+      "label": "射撃選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.sailing",
+      "category": "topic_people_sports_sailing",
+      "domain": "sports",
+      "label": "セーリング選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.surfing",
+      "category": "topic_people_sports_surfing",
+      "domain": "sports",
+      "label": "サーフィン選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.climbing",
+      "category": "topic_people_sports_climbing",
+      "domain": "sports",
+      "label": "登山・スポーツクライミングの人物",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.figure_skating",
+      "category": "topic_people_sports_figure_skating",
+      "domain": "sports",
+      "label": "フィギュアスケート選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.speed_skating",
+      "category": "topic_people_sports_speed_skating",
+      "domain": "sports",
+      "label": "スピードスケート選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.alpine_skiing",
+      "category": "topic_people_sports_alpine_skiing",
+      "domain": "sports",
+      "label": "アルペンスキー選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.cross_country_skiing",
+      "category": "topic_people_sports_cross_country_skiing",
+      "domain": "sports",
+      "label": "クロスカントリースキー選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.ski_jumping",
+      "category": "topic_people_sports_ski_jumping",
+      "domain": "sports",
+      "label": "スキージャンプ選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.biathlon",
+      "category": "topic_people_sports_biathlon",
+      "domain": "sports",
+      "label": "バイアスロン選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.curling",
+      "category": "topic_people_sports_curling",
+      "domain": "sports",
+      "label": "カーリング選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.bobsleigh",
+      "category": "topic_people_sports_bobsleigh",
+      "domain": "sports",
+      "label": "ボブスレー選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.luge",
+      "category": "topic_people_sports_luge",
+      "domain": "sports",
+      "label": "リュージュ選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.triathlon",
+      "category": "topic_people_sports_triathlon",
+      "domain": "sports",
+      "label": "トライアスロン選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.racing",
+      "category": "topic_people_sports_racing",
+      "domain": "sports",
+      "label": "モータースポーツ選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.staff",
+      "category": "topic_people_sports_staff",
+      "domain": "sports",
+      "label": "コーチ・審判",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.mind_sports",
+      "category": "topic_people_sports_mind_sports",
+      "domain": "sports",
+      "label": "チェス・囲碁等の選手",
+      "definition": "Exact source-attested person/word classification in the declared acquisition policy; not a frequency or exhaustive-English claim.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.nordic_combined",
+      "category": "topic_people_sports_nordic_combined",
+      "domain": "sports",
+      "label": "ノルディック複合選手",
+      "definition": "Source-attested discipline; broad athlete labels alone do not establish membership.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.skeleton",
+      "category": "topic_people_sports_skeleton",
+      "domain": "sports",
+      "label": "スケルトン選手",
+      "definition": "Source-attested discipline; broad athlete labels alone do not establish membership.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.diving",
+      "category": "topic_people_sports_diving",
+      "domain": "sports",
+      "label": "飛込選手",
+      "definition": "Source-attested discipline; broad athlete labels alone do not establish membership.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.water_polo",
+      "category": "topic_people_sports_water_polo",
+      "domain": "sports",
+      "label": "水球選手",
+      "definition": "Source-attested discipline; broad athlete labels alone do not establish membership.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.modern_pentathlon",
+      "category": "topic_people_sports_modern_pentathlon",
+      "domain": "sports",
+      "label": "近代五種の選手",
+      "definition": "Source-attested discipline; broad athlete labels alone do not establish membership.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.lacrosse",
+      "category": "topic_people_sports_lacrosse",
+      "domain": "sports",
+      "label": "ラクロス選手",
+      "definition": "Source-attested discipline; broad athlete labels alone do not establish membership.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.squash",
+      "category": "topic_people_sports_squash",
+      "domain": "sports",
+      "label": "スカッシュ選手",
+      "definition": "Source-attested discipline; broad athlete labels alone do not establish membership.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.softball",
+      "category": "topic_people_sports_softball",
+      "domain": "sports",
+      "label": "ソフトボール選手",
+      "definition": "Source-attested discipline; broad athlete labels alone do not establish membership.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.artistic_swimming",
+      "category": "topic_people_sports_artistic_swimming",
+      "domain": "sports",
+      "label": "アーティスティックスイミング選手",
+      "definition": "Source-attested discipline; broad athlete labels alone do not establish membership.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.short_track_speed_skating",
+      "category": "topic_people_sports_short_track_speed_skating",
+      "domain": "sports",
+      "label": "ショートトラック選手",
+      "definition": "Source-attested discipline; broad athlete labels alone do not establish membership.",
+      "examples": "source-attested spellings"
+    },
+    {
+      "id": "people.sports.ski_mountaineering",
+      "category": "topic_people_sports_ski_mountaineering",
+      "domain": "sports",
+      "label": "山岳スキー選手",
+      "definition": "Source-attested discipline; broad athlete labels alone do not establish membership.",
+      "examples": "source-attested spellings"
     }
   ]
 }

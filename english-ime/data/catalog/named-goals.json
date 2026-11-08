@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "completion": "Exhaust the declared source scopes and resolve every eligible acquisition operation. A request budget, batch size, sample count or successful model response never completes the campaign.",
+  "requiredSources": [
+    "bulkNames",
+    "middleNames",
+    "dbpedia",
+    "sexualSlang",
+    "allActiveSoftware",
+    "pantheon",
+    "food",
+    "peopleEnrichment",
+    "sensitive",
+    "wordnetFood"
+  ],
+  "requiredSpellings": {
+    "names.given": [
+      "John",
+      "Mary",
+      "James",
+      "Alice"
+    ],
+    "names.surname": [
+      "Smith",
+      "Brown",
+      "Johnson",
+      "Williams"
+    ],
+    "names.middle": [
+      "Nicole",
+      "Lynn",
+      "James",
+      "John"
+    ],
+    "people.actors": [
+      "Tom Hanks",
+      "Meryl Streep",
+      "Scarlett Johansson",
+      "Brad Pitt",
+      "Leonardo DiCaprio",
+      "Emma Watson",
+      "Keanu Reeves",
+      "Morgan Freeman",
+      "Jackie Chan",
+      "Ken Watanabe"
+    ],
+    "products.computing": [
+      "iPhone",
+      "iPad"
+    ],
+    "products.software": [
+      "Mozilla Firefox",
+      "Microsoft Visual Studio Code"
+    ],
+    "people.science": [
+      "Nikola Tesla",
+      "Elon Musk"
+    ],
+    "people.sports.soccer": [
+      "Cristiano Ronaldo"
+    ],
+    "people.sports.basketball": [
+      "Michael Jordan"
+    ],
+    "people.sports.baseball": [
+      "Shohei Ohtani"
+    ],
+    "people.sports.skateboarding": [
+      "Tony Hawk"
+    ],
+    "people.sports.snowboarding": [
+      "Shaun White"
+    ],
+    "people.sports.mma": [
+      "Conor McGregor"
+    ],
+    "people.singers": [
+      "Taylor Swift",
+      "Freddie Mercury"
+    ],
+    "people.history": [
+      "Nikola Tesla"
+    ],
+    "daily.dishes": [
+      "sushi",
+      "ramen",
+      "ratatouille"
+    ],
+    "daily.beverages": [
+      "coffee",
+      "tea",
+      "beer",
+      "espresso",
+      "cappuccino"
+    ],
+    "products.cars": [
+      "Toyota Corolla",
+      "Ford Mustang"
+    ],
+    "organizations.consumer": [
+      "Toyota"
+    ],
+    "people.sports.olympics": [
+      "Usain Bolt"
+    ],
+    "organizations.general": [
+      "Ford Motor Company"
+    ],
+    "people.music": [
+      "John Lennon"
+    ],
+    "people.public": [
+      "Abraham Lincoln"
+    ],
+    "technology.languages": [
+      "Python"
+    ],
+    "people.sports.archery": [
+      "Ki Bo-bae"
+    ],
+    "people.sports.surfing": [
+      "Kanoa Igarashi"
+    ]
+  },
+  "preserveMedicalSpellings": [
+    "AIDS",
+    "puberty",
+    "menstruation",
+    "contraception",
+    "consent",
+    "penis",
+    "vagina",
+    "condom",
+    "orgasm",
+    "masturbation",
+    "she",
+    "belladonna",
+    "suicide",
+    "bottling",
+    "acquitted",
+    "lilo",
+    "python",
+    "pythons"
+  ],
+  "scopeLimit": "Completion applies to the pinned source scopes. It does not establish coverage of all English, current popularity, user input frequency or application ranking. Known missing source facets remain visible in the category report.",
+  "requiredExclusionSpellings": [
+    "Pornhub",
+    "Columbine High School massacre",
+    "Murder of George Floyd"
+  ],
+  "requireNonemptyTopics": true
+}
