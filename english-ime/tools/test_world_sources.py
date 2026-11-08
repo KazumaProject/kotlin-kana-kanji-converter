@@ -76,6 +76,22 @@ class WorldSourcesTest(unittest.TestCase):
         self.assertIn('<details>', text)
         self.assertIn('`known`', text)
 
+    def test_public_review_counts_only_topics_actually_assigned_by_the_operation(self):
+        topics = {'existing': {'category': 'topic_existing', 'label': 'Existing'}, 'added': {'category': 'topic_added', 'label': 'Added'}}
+        target = dict(topics=['existing', 'added'])
+        entry = dict(categories='domain_science,topic_added')
+        assigned = r.assigned_topics(target, entry, topics)
+        self.assertEqual('added', assigned)
+        row = dict(surface='word', change='metadata_only', topics=assigned)
+        counts = r.summary([row], topics)
+        self.assertNotIn('existing', counts['categories'])
+        self.assertNotIn('Existing /', r.markdown([row], topics, counts))
+        row['topics'] = r.assigned_topics(target, dict(categories='domain_science'), topics)
+        counts = r.summary([row], topics)
+        self.assertEqual({}, counts['categories'])
+        self.assertEqual(1, counts['annotatedSpellings'])
+        self.assertIn('`word`', r.markdown([row], topics, counts))
+
     def test_frozen_adapters_select_exact_curated_evidence_and_reject_source_tampering(self):
         with tempfile.TemporaryDirectory() as tmp:
             p = Path(tmp)

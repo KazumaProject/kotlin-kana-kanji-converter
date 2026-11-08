@@ -256,8 +256,10 @@ python3 -B english-ime/tools/catalog_review.py verify \
 ```
 
 Counts distinguish new display spellings (including case variants) from existing
-spellings receiving metadata. Categories overlap and must not be summed. Source
-existence, a Wikipedia article, and popularity are separate signals. The current
+spellings receiving metadata. Categories overlap and must not be summed.
+The review ledger lists only topic memberships assigned by this operation, not
+previously registered related topics; `topics=-` denotes domain-only annotations.
+Source existence, a Wikipedia article, and popularity are separate signals. The current
 selection uses explicit required lists; it imports no page-view ranking or public
 name-frequency statistics and makes no global coverage claim.
 

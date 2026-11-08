@@ -12,6 +12,11 @@ import vocabulary_harness as h
 FIELDS = ['target_id', 'surface', 'kind', 'topics', 'change', 'lexeme_id', 'lemma', 'evidence', 'licenses', 'entities']
 
 
+def assigned_topics(target, entry, topics):
+    memberships = set(entry['categories'].split(','))
+    return ','.join(t for t in target['topics'] if topics[t]['category'] in memberships) or '-'
+
+
 def verify_rows(rows, topics, pairs, analyses):
     surfaces = {surface for _, surface in pairs}
     seen = set()
@@ -20,7 +25,7 @@ def verify_rows(rows, topics, pairs, analyses):
         h.require(identity not in seen and row['kind'] in c.world_sources.KINDS, 'Duplicate/invalid adopted record')
         seen.add(identity)
         h.require(row['surface'] in surfaces, 'Adopted spelling absent from binary: ' + row['surface'])
-        required = {topics[t]['category'] for t in row['topics'].split(',')}
+        required = {topics[t]['category'] for t in row['topics'].split(',') if t != '-'}
         form = next((f for f in analyses.get(row['surface'], []) if f['lexeme_id'] == row['lexeme_id']), None)
         h.require(form and form['lemma'] == row['lemma'] and required <= form['memberships'],
             'Adopted form/topic absent from dictionary: ' + row['surface'])
@@ -39,7 +44,8 @@ def summary(rows, topics):
     grouped = defaultdict(list)
     for row in rows:
         for topic in row['topics'].split(','):
-            grouped[topic].append(row)
+            if topic != '-':
+                grouped[topic].append(row)
     result = {}
     for topic, records in sorted(grouped.items()):
         added = {r['surface'] for r in records if r['change'] != 'metadata_only'}
@@ -66,6 +72,9 @@ def markdown(rows, topics, counts):
             '**追加表記 / Added**', '', ', '.join('`' + word.replace('`', '\\`') + '`' for word in sorted(added)) or '—', '',
             '**既存表記へのカテゴリ付与 / Existing spellings annotated**', '',
             ', '.join('`' + word.replace('`', '\\`') + '`' for word in sorted(metadata)) or '—', '', '</details>', '']
+    domain_only = sorted({r['surface'] for r in rows if r['topics'] == '-'})
+    if domain_only:
+        lines += ['Domain-only metadata / domainのみ付与: ' + ', '.join('`' + s + '`' for s in domain_only), '']
     return '\n'.join(lines)
 
 
@@ -83,7 +92,7 @@ def export(args):
                 target = targets[operation['id']]
                 for entry in operation['entries'] + operation.get('metadata', []):
                     rows.append(dict(target_id=operation['id'], surface=entry['surface'], kind=target['kind'],
-                        topics=','.join(target['topics']), change=operation['change'], lexeme_id=entry['lexeme_id'],
+                        topics=assigned_topics(target, entry, topics), change=operation['change'], lexeme_id=entry['lexeme_id'],
                         lemma=entry['lemma'], evidence=entry['evidence'],
                         licenses=','.join(sorted({p['license'] for p in operation['proofs']})),
                         entities=','.join(sorted({p['entity'] for p in operation['proofs'] if p.get('entity')})) or '-'))
