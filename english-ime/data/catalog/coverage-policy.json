@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "provider": "wiktionary",
+  "language": "en",
+  "purpose": "Source-backed English IME vocabulary breadth. Word counts are observations, never stop criteria.",
+  "roots": [
+    {
+      "topic": "science.medicine",
+      "category": "Category:en:Medicine"
+    },
+    {
+      "topic": "science.biology",
+      "category": "Category:en:Biology"
+    },
+    {
+      "topic": "science.agriculture",
+      "category": "Category:en:Agriculture"
+    },
+    {
+      "topic": "engineering.civil",
+      "category": "Category:en:Construction"
+    },
+    {
+      "topic": "engineering.civil",
+      "category": "Category:en:Architecture"
+    },
+    {
+      "topic": "engineering.environment",
+      "category": "Category:en:Ecology"
+    },
+    {
+      "topic": "engineering.environment",
+      "category": "Category:en:Environmentalism"
+    },
+    {
+      "topic": "media.photography",
+      "category": "Category:en:Photography"
+    },
+    {
+      "topic": "media.audio",
+      "category": "Category:en:Acoustics"
+    },
+    {
+      "topic": "media.audio",
+      "category": "Category:en:Audio"
+    },
+    {
+      "topic": "media.graphics",
+      "category": "Category:en:Computer graphics"
+    },
+    {
+      "topic": "media.graphics",
+      "category": "Category:en:Typography"
+    },
+    {
+      "topic": "daily.home",
+      "category": "Category:en:Home"
+    },
+    {
+      "topic": "daily.home",
+      "category": "Category:en:Furniture"
+    },
+    {
+      "topic": "daily.home",
+      "category": "Category:en:Home appliances"
+    },
+    {
+      "topic": "daily.food",
+      "category": "Category:en:Food"
+    },
+    {
+      "topic": "daily.food",
+      "category": "Category:en:Cooking"
+    },
+    {
+      "topic": "daily.family",
+      "category": "Category:en:Family"
+    },
+    {
+      "topic": "daily.family",
+      "category": "Category:en:Relationships"
+    },
+    {
+      "topic": "daily.money",
+      "category": "Category:en:Finance"
+    },
+    {
+      "topic": "daily.money",
+      "category": "Category:en:Banking"
+    },
+    {
+      "topic": "daily.money",
+      "category": "Category:en:Economics"
+    },
+    {
+      "topic": "daily.shopping",
+      "category": "Category:en:Commerce"
+    },
+    {
+      "topic": "daily.shopping",
+      "category": "Category:en:Retailing"
+    },
+    {
+      "topic": "daily.transport",
+      "category": "Category:en:Transport"
+    },
+    {
+      "topic": "daily.transport",
+      "category": "Category:en:Travel"
+    },
+    {
+      "topic": "daily.health",
+      "category": "Category:en:Healthcare"
+    },
+    {
+      "topic": "daily.health",
+      "category": "Category:en:Nutrition"
+    },
+    {
+      "topic": "daily.education",
+      "category": "Category:en:Education"
+    },
+    {
+      "topic": "daily.work",
+      "category": "Category:en:Business"
+    },
+    {
+      "topic": "daily.work",
+      "category": "Category:en:Employment"
+    },
+    {
+      "topic": "daily.communication",
+      "category": "Category:en:Communication"
+    },
+    {
+      "topic": "daily.time",
+      "category": "Category:en:Time"
+    },
+    {
+      "topic": "technology.hardware",
+      "category": "Category:en:Computer hardware"
+    },
+    {
+      "topic": "technology.network",
+      "category": "Category:en:Networking"
+    },
+    {
+      "topic": "technology.network",
+      "category": "Category:en:Telecommunications"
+    },
+    {
+      "topic": "technology.database",
+      "category": "Category:en:Databases"
+    },
+    {
+      "topic": "technology.os",
+      "category": "Category:en:Operating systems"
+    },
+    {
+      "topic": "technology.development",
+      "category": "Category:en:Programming"
+    },
+    {
+      "topic": "technology.mobile",
+      "category": "Category:en:Mobile phones"
+    },
+    {
+      "topic": "technology.cloud",
+      "category": "Category:en:Cloud computing"
+    },
+    {
+      "topic": "technology.security",
+      "category": "Category:en:Computer security"
+    },
+    {
+      "topic": "technology.security",
+      "category": "Category:en:Cryptography"
+    },
+    {
+      "topic": "technology.ai",
+      "category": "Category:en:Artificial intelligence"
+    },
+    {
+      "topic": "technology.ai",
+      "category": "Category:en:Machine learning"
+    },
+    {
+      "topic": "technology.web",
+      "category": "Category:en:Internet"
+    },
+    {
+      "topic": "technology.web",
+      "category": "Category:en:World Wide Web"
+    }
+  ],
+  "excludeCategoryPatterns": [
+    "(?i)taxonomic names",
+    "(?i)specific epithets",
+    "(?i)taxonomic (?:author|epithet)",
+    "(?i)obsolete",
+    "(?i)archaic",
+    "(?i)historical (?:forms|spellings)"
+  ],
+  "scopeExclusionReason": "Taxonomic identifiers and explicitly obsolete/archaic branches are outside this practical-vocabulary pass; not evidence that their words do not exist.",
+  "pageSize": 500
+}

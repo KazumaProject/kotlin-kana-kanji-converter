@@ -1,0 +1,259 @@
+surface	change	kinds
+2PL	added	lexical
+after image journal	added	lexical
+aggregate function	added	lexical
+analytic function	added	lexical
+anti-index	added	lexical
+antijoin	added	lexical
+Armstrong's axioms	added	lexical
+autocommit	added	lexical
+autoextend	added	lexical
+autoextension	added	lexical
+autojoin	added	lexical
+autovacuum	added	lexical
+before image journal	added	lexical
+BFILE	added	lexical
+BIDS	added	lexical
+big data	metadata_only	lexical
+binary large object	added	lexical
+bitemporal	added	lexical
+BLOB	added	lexical
+bookmark	metadata_only	lexical
+Boyce-Codd normal form	added	lexical
+business key	added	lexical
+capped collection	added	lexical
+Cartesian product	metadata_only	lexical
+CK	added	lexical
+clause	metadata_only	lexical
+CLOB	added	lexical
+clustered	metadata_only	lexical
+clustering key	added	lexical
+coalesce	metadata_only	lexical
+coercibility	added	lexical
+cold	metadata_only	lexical
+columnstore	added	lexical
+commit point	added	lexical
+compound key	added	lexical
+covering index	added	lexical
+crosswalk	metadata_only	lexical
+crow's foot	added	lexical
+CRUD	metadata_only	lexical
+CUD	added	lexical
+curation	metadata_only	lexical
+cursorless	added	lexical
+data lake	metadata_only	lexical
+data lakehouse	added	lexical
+data mining	metadata_only	lexical
+data model	added	lexical
+data record	added	lexical
+data table	added	lexical
+databank	metadata_only	lexical
+database administrator	added	lexical
+database analyst	added	lexical
+database key	added	lexical
+database management system	added	lexical
+database model	added	lexical
+database transaction	added	lexical
+databased	added	lexical
+datahub	added	lexical
+datasheet	metadata_only	lexical
+DB	added	lexical
+DBA	added	lexical
+DBaaS	added	lexical
+DBM	metadata_only	lexical
+DBMS	metadata_only	lexical
+denormalize	added	lexical
+denormalized	added	lexical
+denormalizer	added	lexical
+dependency theory	added	lexical
+DKNF	added	lexical
+DMS	added	lexical
+document-oriented	added	lexical
+DRI	metadata_only	lexical
+dynaset	added	lexical
+eager load	added	lexical
+entity	metadata_only	lexical
+equijoin	added	lexical
+escrowable	added	lexical
+exogenous	metadata_only	lexical
+fact	metadata_only	lexical
+fact table	added	lexical
+fifth normal form	added	lexical
+filegroup	added	lexical
+firehose cursor	added	lexical
+first normal form	added	lexical
+FK	added	lexical
+flashback	metadata_only	lexical
+fourth normal form	added	lexical
+full join	added	lexical
+functional dependency	added	lexical
+generalized search tree	added	lexical
+geodatabase	added	lexical
+golden record	added	lexical
+GTID	added	lexical
+habtm	added	lexical
+hard deletion	added	lexical
+hint	metadata_only	lexical
+HQL	added	lexical
+HSQLDB	added	lexical
+hyperbase	added	lexical
+hyperindex	added	lexical
+identifier	metadata_only	lexical
+image copy	added	lexical
+inner join	added	lexical
+interquery	added	lexical
+intraquery	added	lexical
+JDBC	metadata_only	lexical
+junction table	added	lexical
+key	metadata_only	lexical
+keyset	added	lexical
+keyspace	added	lexical
+knowledge base	added	lexical
+lakehouse	added	lexical
+latch	metadata_only	lexical
+lazy load	added	lexical
+left join	added	lexical
+left outer join	added	lexical
+LOB	added	lexical
+materialization	added	lexical
+materialize	metadata_only	lexical
+MDX	metadata_only	lexical
+metabase	added	lexical
+metadatabase	added	lexical
+metastore	added	lexical
+MGCC	added	lexical
+mirror server journal	added	lexical
+multijoin	added	lexical
+multischema	added	lexical
+multitable	added	lexical
+mutating table	added	lexical
+natural join	added	lexical
+natural key	added	lexical
+NewSQL	added	lexical
+nonclustered	added	lexical
+nonclustered index	added	lexical
+nondatabase	added	lexical
+nonrelational	added	lexical
+normal form	added	lexical
+normalize	metadata_only	lexical
+O/RM	added	lexical
+ODBC	metadata_only	lexical
+OPMN	added	lexical
+optimistic concurrency	added	lexical
+ORM	metadata_only	lexical
+outer join	added	lexical
+parameterize	added	lexical
+pessimistic concurrency	added	lexical
+PK	added	lexical
+PL/SQL	added	lexical
+prepared statement	added	lexical
+prewrite	added	lexical
+pseudocolumn	added	lexical
+pseudorelational	added	lexical
+QBE	added	lexical
+QID	added	lexical
+QL	metadata_only	lexical
+query language	added	lexical
+query plan	added	lexical
+query processing	added	lexical
+RAC	metadata_only	lexical
+RDBMS	metadata_only	lexical
+recordset	added	lexical
+referential integrity	added	lexical
+reindex	added	lexical
+relation	metadata_only	lexical
+relational	metadata_only	lexical
+relational attribute	added	lexical
+relational database	added	lexical
+relational model	added	lexical
+relvar	added	lexical
+reshard	added	lexical
+resultset	added	lexical
+reverse image search	added	lexical
+right join	added	lexical
+right outer join	added	lexical
+RMAN	added	lexical
+role-based	added	lexical
+rowset	added	lexical
+rowstore	added	lexical
+RRD	added	lexical
+sargability	added	lexical
+sargable	added	lexical
+savepoint	added	lexical
+SCD	metadata_only	lexical
+scrub	metadata_only	lexical
+SDL	metadata_only	lexical
+second normal form	added	lexical
+select	metadata_only	lexical
+selection	metadata_only	lexical
+semijoin	added	lexical
+shard	metadata_only	lexical
+sharding	added	lexical
+showplan	added	lexical
+skip-level	added	lexical
+skyline	metadata_only	lexical
+skyline operator	added	lexical
+snowflake	metadata_only	lexical
+soft deletion	added	lexical
+soft-delete	added	lexical
+SQS	metadata_only	lexical
+SSB	metadata_only	lexical
+SSDL	added	lexical
+SSDT	added	lexical
+SSIS	added	lexical
+SSRS	added	lexical
+stale read	added	lexical
+star schema	added	lexical
+storage engine	added	lexical
+stored procedure	added	lexical
+Structured Query Language	added	lexical
+subdatabase	added	lexical
+subdatasheet	added	lexical
+subjoin	added	lexical
+subquery	added	lexical
+subselect	added	lexical
+subtable	added	lexical
+subtransaction	added	lexical
+superdatabase	added	lexical
+superkey	added	lexical
+surrogate	metadata_only	lexical
+surrogate key	added	lexical
+synonym	metadata_only	lexical
+T-SQL	added	lexical
+tablebase	added	lexical
+tablespace	added	lexical
+tailable	added	lexical
+termbase	added	lexical
+textbase	added	lexical
+theta join	added	lexical
+third normal form	added	lexical
+time travel	added	lexical
+timestamp-based concurrency control	added	lexical
+TOAST	added	lexical
+Transact-SQL	added	lexical
+transaction block	added	lexical
+transaction time	added	lexical
+transitive dependency	added	lexical
+trigger	metadata_only	lexical
+triplestore	added	lexical
+tritemporal	added	lexical
+TSDB	added	lexical
+tuple	metadata_only	lexical
+undrop	added	lexical
+unique key	added	lexical
+unpivot	added	lexical
+upsert	added	lexical
+upsertion	added	lexical
+USP	metadata_only	lexical
+vacuum	metadata_only	lexical
+valid time	added	lexical
+varchar	added	lexical
+variabilize	added	lexical
+varray	added	lexical
+VLDB	added	lexical
+VOB	added	lexical
+wide column store	added	lexical
+window function	metadata_only	lexical
+witness	metadata_only	lexical
+WMS	added	lexical
+write-ahead logging	added	lexical

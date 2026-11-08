@@ -66,6 +66,12 @@ class CatalogHarnessTest(unittest.TestCase):
         self.assertTrue(all(r['status'] == 'blocked_format' for r in rows))
         self.assertEqual([], ops)
 
+    def test_source_notations_do_not_pad_vocabulary_adoption(self):
+        notation=target('1234');notation['sourceScopeDeferred']=True
+        rows,ops=c.audit([notation],TOPICS,set(),{},set())
+        self.assertEqual('blocked_source_scope',rows[0]['status'])
+        self.assertEqual([],ops)
+
     def test_already_encoded_punctuation_can_receive_metadata_without_new_readings(self):
         rows, ops = c.audit([target('C++', 'language')], TOPICS, {('cpp', 'C++')},
             {'C++': [form('C++', members={'identifier_computer_language'})]}, set())

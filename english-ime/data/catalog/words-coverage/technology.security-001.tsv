@@ -1,0 +1,439 @@
+surface	change	kinds
+0wn	added	lexical
+2FA	added	lexical
+3DES	added	lexical
+accumulator	metadata_only	lexical
+AEAD	added	lexical
+AFU	added	lexical
+air gap	added	lexical
+air-gapped	added	lexical
+AISI	metadata_only	lexical
+Alice	metadata_only	lexical
+antimalware	added	lexical
+antiphishing	added	lexical
+antireplay	added	lexical
+antisniffing	added	lexical
+antispoof	added	lexical
+antispoofing	added	lexical
+antispyware	added	lexical
+aristocrat	metadata_only	lexical
+ASLR	added	lexical
+asymmetric	metadata_only	lexical
+atbash	added	lexical
+ATO	metadata_only	lexical
+atomic authorization	added	lexical
+attack surface	added	lexical
+autoclave	metadata_only	lexical
+autokey	added	lexical
+avalanche effect	metadata_only	lexical
+back door	added	lexical
+Bazeries cylinder	added	lexical
+BEC	metadata_only	lexical
+BFU	added	lexical
+bifid cipher	added	lexical
+billion laughs	added	lexical
+birthday attack	added	lexical
+bit	metadata_only	lexical
+BitB	added	lexical
+black chamber	added	lexical
+black hat	added	lexical
+black room	added	lexical
+blindable	added	lexical
+block	metadata_only	lexical
+block cipher	added	lexical
+Blowfish	added	lexical
+blue team	added	lexical
+bluebugging	added	lexical
+Bob	metadata_only	lexical
+bootkit	added	lexical
+bot farm	added	lexical
+bot herd	added	lexical
+botherder	added	lexical
+botmaster	added	lexical
+BPC	metadata_only	lexical
+buffer overrun	added	lexical
+BYOK	added	lexical
+BYOVD	added	lexical
+Byzantine attack	added	lexical
+Caesar cipher	added	lexical
+Caesar substitution	added	lexical
+camfecting	added	lexical
+capture the flag	added	lexical
+Cardan grille	added	lexical
+chosen-ciphertext attack	added	lexical
+chosen-plaintext attack	added	lexical
+cilly	added	lexical
+ciphertext-only attack	added	lexical
+CIRT	added	lexical
+classical cipher	added	lexical
+cleartext	added	lexical
+CM	added	lexical
+code	metadata_only	lexical
+codebook	added	lexical
+codetext	added	lexical
+codeword	metadata_only	lexical
+cold boot attack	added	lexical
+collision attack	added	lexical
+computationally secure	added	lexical
+computer security	added	lexical
+computer virus	added	lexical
+Coppersmith method	added	lexical
+Coppersmith's attack	added	lexical
+covertext	added	lexical
+CPA	metadata_only	lexical
+crib	metadata_only	lexical
+cross-origin	added	lexical
+cross-site	added	lexical
+CRQC	added	lexical
+cryptanalyst	added	lexical
+crypto	metadata_only	lexical
+cryptofunction	added	lexical
+cryptographer	added	lexical
+cryptographist	added	lexical
+cryptojack	added	lexical
+cryptolibertarian	added	lexical
+cryptolibertarianism	added	lexical
+cryptolinguist	added	lexical
+cryptolocker	added	lexical
+cryptologist	added	lexical
+cryptomathematician	added	lexical
+cryptoprocessing	added	lexical
+cryptoprocessor	added	lexical
+cryptovariable	added	lexical
+cryptoviral	added	lexical
+cryptoviral extortion	added	lexical
+cryptovirology	added	lexical
+cryptovirus	added	lexical
+cryptoworm	added	lexical
+CSIRT	added	lexical
+CSPRNG	added	lexical
+CSR	metadata_only	lexical
+CSRF token	added	lexical
+cyberdefense	added	lexical
+cybersafety	added	lexical
+DAC	metadata_only	lexical
+data leak	added	lexical
+data poisoning	added	lexical
+data privacy	added	lexical
+DDoS	metadata_only	lexical
+decode	metadata_only	lexical
+delta	metadata_only	lexical
+deniable authentication	added	lexical
+deniable encryption	added	lexical
+denial-of-service attack	added	lexical
+deperimeterization	added	lexical
+deperimeterized	added	lexical
+depth	metadata_only	lexical
+Diffie-Hellman	added	lexical
+digest	metadata_only	lexical
+double extortion	added	lexical
+DPV	metadata_only	lexical
+drive-by download	added	lexical
+DSA	metadata_only	lexical
+duress password	added	lexical
+e-safe	added	lexical
+e-safety	added	lexical
+EBG13	added	lexical
+ECC	metadata_only	lexical
+ECDSA	added	lexical
+Ed25519	added	lexical
+EDR	metadata_only	lexical
+elliptic-curve cryptography	added	lexical
+encrypt	metadata_only	lexical
+Eve	added	lexical
+evil maid attack	added	lexical
+exfil	added	lexical
+exfiltrate	added	lexical
+Feistel cipher	added	lexical
+FIDO	added	lexical
+firecall	added	lexical
+firewall	metadata_only	lexical
+Fleissner grille	added	lexical
+forty weepy weepy	added	lexical
+foursquare	metadata_only	lexical
+fractionate	added	lexical
+fractionation	metadata_only	lexical
+FS	added	lexical
+FW	added	lexical
+gadget	metadata_only	lexical
+GCM	metadata_only	lexical
+GMAC	metadata_only	lexical
+goat file	added	lexical
+govware	added	lexical
+GPC	metadata_only	lexical
+gray hat	added	lexical
+grille	metadata_only	lexical
+hacklog	added	lexical
+HAIFA	added	lexical
+HIBP	added	lexical
+HKP	added	lexical
+HMAC	metadata_only	lexical
+HNDL	added	lexical
+homomorphic encryption	added	lexical
+ICF	metadata_only	lexical
+idiomorph	added	lexical
+infosec	metadata_only	lexical
+infostealer	added	lexical
+IOC	added	lexical
+IP	metadata_only	lexical
+IV	metadata_only	lexical
+jailbreaker	added	lexical
+Jefferson disk	added	lexical
+JOSE	added	lexical
+Julius Caesar cipher	added	lexical
+JWE	added	lexical
+JWK	added	lexical
+JWKS	added	lexical
+JWS	added	lexical
+JWT	metadata_only	lexical
+KASLR	added	lexical
+KDF	metadata_only	lexical
+KEK	added	lexical
+KEM	metadata_only	lexical
+Kerberoasting	added	lexical
+Kerckhoffs's principle	added	lexical
+key	metadata_only	lexical
+key encapsulation mechanism	added	lexical
+key exchange	added	lexical
+key logger	added	lexical
+key stretching	added	lexical
+keybit	added	lexical
+keychain	metadata_only	lexical
+keyholder	added	lexical
+keyholding	added	lexical
+keypair	added	lexical
+keyphrase	added	lexical
+keyring	metadata_only	lexical
+keyserver	added	lexical
+keysigning	added	lexical
+keyspace	added	lexical
+keystream	added	lexical
+keyword	metadata_only	lexical
+KMS	added	lexical
+knapsack	metadata_only	lexical
+known-plaintext attack	added	lexical
+login CSRF	added	lexical
+LOLBin	added	lexical
+MAC	metadata_only	lexical
+malleability	metadata_only	lexical
+malleable	metadata_only	lexical
+malleation	added	lexical
+Mallet	added	lexical
+Mallory	metadata_only	lexical
+malvertising	added	lexical
+Mark of the Web	added	lexical
+MD5	added	lexical
+MD5-summed	added	lexical
+MDC	metadata_only	lexical
+Merkle tree	added	lexical
+MFA	metadata_only	lexical
+MITM	added	lexical
+mixed alphabet	added	lexical
+MMB	added	lexical
+modular calculus	added	lexical
+monoalphabetic	added	lexical
+monoliteral	added	lexical
+multi-factor authentication	added	lexical
+multicollision	added	lexical
+mutated cross-site scripting	added	lexical
+mXSS	added	lexical
+Needham-Schroeder protocol	added	lexical
+netsec	added	lexical
+Nihilist cipher	added	lexical
+nonce	metadata_only	lexical
+nothing-up-my-sleeve number	added	lexical
+oblivious transfer	added	lexical
+OIDC	metadata_only	lexical
+one-time pad	added	lexical
+OTP	metadata_only	lexical
+out-of-band	metadata_only	lexical
+OWASP	metadata_only	lexical
+pad	metadata_only	lexical
+padding	metadata_only	lexical
+PAKE	added	lexical
+Party A	added	lexical
+Party B	added	lexical
+passive attack	added	lexical
+password wallet	added	lexical
+pastejacking	added	lexical
+patristocrat	added	lexical
+pattern word	added	lexical
+Peggy	added	lexical
+pepper	metadata_only	lexical
+permutation box	added	lexical
+persistent cross-site scripting	added	lexical
+PFS	metadata_only	lexical
+phisher	added	lexical
+phisherman	added	lexical
+pigpen	metadata_only	lexical
+pigpen cipher	added	lexical
+PKC	metadata_only	lexical
+plain text	added	lexical
+plaintext	metadata_only	lexical
+Playfair	metadata_only	lexical
+poisoning attack	added	lexical
+policeware	added	lexical
+Polybius square	metadata_only	lexical
+polynomial basis	added	lexical
+PoP	metadata_only	lexical
+post-quantum	added	lexical
+POW	added	lexical
+PoW	added	lexical
+preimage attack	added	lexical
+preshared	added	lexical
+presignature	added	lexical
+privilege escalation	metadata_only	lexical
+prompt injection	added	lexical
+proof of work	added	lexical
+pubkey	added	lexical
+public-key cryptography	added	lexical
+pwn	metadata_only	lexical
+PWS	added	lexical
+Q-Day	added	lexical
+QID	added	lexical
+QKD	added	lexical
+quantum cryptography	added	lexical
+quishing	added	lexical
+rail fence cipher	added	lexical
+rainbow	metadata_only	lexical
+rainbow table	added	lexical
+ransomware	metadata_only	lexical
+ratchet	metadata_only	lexical
+RBAC	added	lexical
+RCE	metadata_only	lexical
+red team	added	lexical
+ReDoS	added	lexical
+reflected cross-site scripting	added	lexical
+replay attack	metadata_only	lexical
+retrovirus	metadata_only	lexical
+rootable	added	lexical
+rootkit	metadata_only	lexical
+rot-13	added	lexical
+ROT13	added	lexical
+rot13	added	lexical
+rotor machine	added	lexical
+RSA	metadata_only	lexical
+rubber-hose cryptanalysis	added	lexical
+Russian copulation	added	lexical
+S-box	added	lexical
+salt	metadata_only	lexical
+SAN	added	lexical
+Schneier's law	added	lexical
+second preimage attack	added	lexical
+secret key	added	lexical
+secret sharing	added	lexical
+security by design	added	lexical
+security hole	added	lexical
+security principal	added	lexical
+security through obscurity	added	lexical
+seed	metadata_only	lexical
+seed number	added	lexical
+self-signed	added	lexical
+self-signing	added	lexical
+self-XSS	added	lexical
+SEM	metadata_only	lexical
+semiweak	added	lexical
+session fixation	added	lexical
+session hijacking	metadata_only	lexical
+SHA	added	lexical
+Shannon's maxim	added	lexical
+shoulder surfer	added	lexical
+shoulder surfing	added	lexical
+SIEM	metadata_only	lexical
+signature	metadata_only	lexical
+SIM	metadata_only	lexical
+sink function	added	lexical
+sinkhole	metadata_only	lexical
+SIRT	added	lexical
+SLSA	added	lexical
+SMP	metadata_only	lexical
+smudge attack	added	lexical
+smurf	metadata_only	lexical
+smurf attack	added	lexical
+smurfable	added	lexical
+smurfer	added	lexical
+SNARG	added	lexical
+SNARK	added	lexical
+social engineering	metadata_only	lexical
+spamtrap	added	lexical
+spearphisher	added	lexical
+spearphishing	added	lexical
+spice	metadata_only	lexical
+split key	added	lexical
+SPN	metadata_only	lexical
+spn	metadata_only	lexical
+sponge construction	added	lexical
+sponge function	added	lexical
+spray	metadata_only	lexical
+SQLi	added	lexical
+SRES	metadata_only	lexical
+stack smashing	added	lexical
+stealer	metadata_only	lexical
+steckered	added	lexical
+steganography	added	lexical
+stego	added	lexical
+stegotext	added	lexical
+stream cipher	added	lexical
+subkey	added	lexical
+subround	added	lexical
+substitution cipher	added	lexical
+supply chain attack	added	lexical
+surface area	added	lexical
+Sybil	added	lexical
+Sybil attack	added	lexical
+symmetric	metadata_only	lexical
+tainted	metadata_only	lexical
+threat actor	added	lexical
+Threefish	added	lexical
+thumbprint	metadata_only	lexical
+transposition cipher	added	lexical
+trapdoor	metadata_only	lexical
+trapdoor function	added	lexical
+trifid cipher	added	lexical
+Trojan	added	lexical
+Trojan horse	added	lexical
+Trojan-horse	added	lexical
+trojanization	added	lexical
+trojanize	added	lexical
+trust anchor	added	lexical
+trust and safety	added	lexical
+trustlet	added	lexical
+truststore	added	lexical
+TTP	metadata_only	lexical
+Turingery	added	lexical
+Turingismus	added	lexical
+tweak	metadata_only	lexical
+tweakable	added	lexical
+two-factor authentication	metadata_only	lexical
+Twofish	added	lexical
+U2F	added	lexical
+unblind	added	lexical
+unkeyed	added	lexical
+unsalted	metadata_only	lexical
+unsteckered	added	lexical
+USB killer	added	lexical
+UTM	metadata_only	lexical
+VBA stomping	added	lexical
+VBS	metadata_only	lexical
+Victor	added	lexical
+vishing	added	lexical
+VMS	added	lexical
+vuln	added	lexical
+vulnbox	added	lexical
+WAM	metadata_only	lexical
+watering hole attack	added	lexical
+web of trust	added	lexical
+web shell	added	lexical
+white hat	added	lexical
+whiten	metadata_only	lexical
+wormable	added	lexical
+wrench attack	added	lexical
+write-what-where	added	lexical
+XML bomb	added	lexical
+XSRF	added	lexical
+XXE	added	lexical
+zero-click	added	lexical
+zero-day	added	lexical
+zero-knowledge proof	added	lexical
+zeroization	added	lexical
+ZTA	added	lexical

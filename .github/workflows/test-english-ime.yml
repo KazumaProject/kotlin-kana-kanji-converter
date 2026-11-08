@@ -54,6 +54,10 @@ jobs:
             --assets "$RUNNER_TEMP/reviewed-english-extended" \
             --ledger english-ime/data/catalog/adopted-sparse.tsv \
             --word-lists english-ime/data/catalog/words-sparse
+          python3 -B english-ime/tools/catalog_review.py verify \
+            --assets "$RUNNER_TEMP/reviewed-english-extended" \
+            --ledger english-ime/data/catalog/adopted-coverage.tsv \
+            --word-lists english-ime/data/catalog/words-coverage
       - name: Compare packed and full conversion results for both bundles
         run: |
           english-ime/build/install/english-ime/bin/english-ime pack-runtime \

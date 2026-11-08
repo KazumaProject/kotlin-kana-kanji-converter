@@ -1,0 +1,501 @@
+surface	change	kinds
+1ANCP	added	lexical
+1ASES	added	lexical
+1MM	added	lexical
+1MMS	added	lexical
+1MR	metadata_only	lexical
+1NCP	added	lexical
+6in4	added	lexical
+802.11e	added	lexical
+802.11i	metadata_only	lexical
+access	metadata_only	lexical
+access point	added	lexical
+ACK	added	lexical
+acknowledgment	metadata_only	lexical
+acoustic coupler	metadata_only	lexical
+acquisition time	metadata_only	lexical
+ad hoc	metadata_only	lexical
+address	metadata_only	lexical
+address message	metadata_only	lexical
+Address Resolution Protocol	added	lexical
+ADSL	metadata_only	lexical
+aggregate throughput	added	lexical
+aggregation	metadata_only	lexical
+air gap	added	lexical
+AirDrop	metadata_only	lexical
+ALG	added	lexical
+all-figure number	metadata_only	lexical
+answerback	metadata_only	lexical
+antipacket	added	lexical
+anycast	added	lexical
+anycasting	added	lexical
+APON	added	lexical
+application protocol data unit	added	lexical
+APT	added	lexical
+ARPANET	metadata_only	lexical
+ASN	metadata_only	lexical
+asymmetric digital subscriber line	metadata_only	lexical
+asymptotic throughput	added	lexical
+asynchronous transfer mode	added	lexical
+ATM	metadata_only	lexical
+attack time	metadata_only	lexical
+audimeter	metadata_only	lexical
+autobaud	metadata_only	lexical
+autocall	metadata_only	lexical
+AWS	metadata_only	lexical
+AYT	added	lexical
+Baby Bell	metadata_only	lexical
+back-to-back connection	metadata_only	lexical
+band	metadata_only	lexical
+bar	metadata_only	lexical
+base communications	metadata_only	lexical
+base station	metadata_only	lexical
+base station subsystem	metadata_only	lexical
+baseband	metadata_only	lexical
+baud	metadata_only	lexical
+BBS	metadata_only	lexical
+BCI	metadata_only	lexical
+beaconing	metadata_only	lexical
+beeper	metadata_only	lexical
+BHCA	metadata_only	lexical
+BICC	metadata_only	lexical
+big ugly dish	metadata_only	lexical
+big-endian	added	lexical
+bit interval	metadata_only	lexical
+bit stuffing	metadata_only	lexical
+bit time	added	lexical
+bit-count integrity	added	lexical
+bitrate	metadata_only	lexical
+BitTorrent	added	lexical
+black noise	metadata_only	lexical
+black spot	metadata_only	lexical
+BLE	metadata_only	lexical
+blind spot	metadata_only	lexical
+Bluetooth	metadata_only	lexical
+BNC	metadata_only	lexical
+BNC connector	metadata_only	lexical
+bogon	added	lexical
+bonding	metadata_only	lexical
+BORSCHT	metadata_only	lexical
+botherance	metadata_only	lexical
+botsitting	added	lexical
+BPL	metadata_only	lexical
+BPON	added	lexical
+BPV	metadata_only	lexical
+break up	metadata_only	lexical
+bridge	metadata_only	lexical
+bridgeline	metadata_only	lexical
+broadband	metadata_only	lexical
+broadcast radiation	metadata_only	lexical
+broadcast storm	metadata_only	lexical
+BT	metadata_only	lexical
+BUD	metadata_only	lexical
+buffer	metadata_only	lexical
+bufferbloat	added	lexical
+bus	metadata_only	lexical
+bus topology	added	lexical
+butt set	metadata_only	lexical
+buttinsky	metadata_only	lexical
+C-bander	metadata_only	lexical
+C10K problem	added	lexical
+C10M problem	added	lexical
+C2	added	lexical
+cable station	metadata_only	lexical
+cableco	metadata_only	lexical
+call delay	metadata_only	lexical
+call tree	metadata_only	lexical
+capcode	metadata_only	lexical
+carrier	metadata_only	lexical
+carrier hotel	added	lexical
+catenet	added	lexical
+CCI	metadata_only	lexical
+CCN	metadata_only	lexical
+CD	metadata_only	lexical
+CDAA	metadata_only	lexical
+CDD	metadata_only	lexical
+CDDA	metadata_only	lexical
+celerity	metadata_only	lexical
+cell	metadata_only	lexical
+cellular	metadata_only	lexical
+Centrex	metadata_only	lexical
+CGI	metadata_only	lexical
+churn	metadata_only	lexical
+civision	metadata_only	lexical
+cleardown	metadata_only	lexical
+clearing	metadata_only	lexical
+CLEC	metadata_only	lexical
+CLI	metadata_only	lexical
+client-side	added	lexical
+client-side storage	added	lexical
+cloud	metadata_only	lexical
+CMI	metadata_only	lexical
+CMS	metadata_only	lexical
+coaxial cable	metadata_only	lexical
+COCOT	metadata_only	lexical
+collision detection	metadata_only	lexical
+common carrier	metadata_only	lexical
+commonality	metadata_only	lexical
+compatibility	metadata_only	lexical
+computer network	added	lexical
+concentrator	metadata_only	lexical
+conducted interference	metadata_only	lexical
+connect time	metadata_only	lexical
+connectivity	metadata_only	lexical
+contention	metadata_only	lexical
+control plane	metadata_only	lexical
+conversation	metadata_only	lexical
+coverage	metadata_only	lexical
+CPDL	metadata_only	lexical
+CPDLC	metadata_only	lexical
+CPS	metadata_only	lexical
+cps	metadata_only	lexical
+credentials	metadata_only	lexical
+cross-pol	metadata_only	lexical
+crossband	metadata_only	lexical
+crossover cable	added	lexical
+CS	metadata_only	lexical
+CSD	metadata_only	lexical
+CSP	metadata_only	lexical
+CTI	metadata_only	lexical
+cutover	metadata_only	lexical
+CW	metadata_only	lexical
+CX	metadata_only	lexical
+D2C	metadata_only	lexical
+D2M	metadata_only	lexical
+data set	metadata_only	lexical
+database dump	added	lexical
+DCB	metadata_only	lexical
+DCF	metadata_only	lexical
+DCIM	metadata_only	lexical
+DCN	added	lexical
+DDD	metadata_only	lexical
+DDI	metadata_only	lexical
+de-emphasis	metadata_only	lexical
+dead zone	metadata_only	lexical
+default gateway	added	lexical
+defed	metadata_only	lexical
+dejitterize	metadata_only	lexical
+demarc	metadata_only	lexical
+demarc extension	metadata_only	lexical
+dequantize	metadata_only	lexical
+deskside server	added	lexical
+dial-around	metadata_only	lexical
+dial-in	added	lexical
+dialout	metadata_only	lexical
+digital footprint	metadata_only	lexical
+direct-to-cell	metadata_only	lexical
+directory traversal	metadata_only	lexical
+Discord	metadata_only	lexical
+dish	metadata_only	lexical
+dishowner	metadata_only	lexical
+distance vector	added	lexical
+diverter	metadata_only	lexical
+DL	metadata_only	lexical
+DLC	metadata_only	lexical
+DLS	added	lexical
+DLU	metadata_only	lexical
+DMS	added	lexical
+DOCSIS	metadata_only	lexical
+downlink	metadata_only	lexical
+downstream	metadata_only	lexical
+DRCP	metadata_only	lexical
+drop	metadata_only	lexical
+DSL	metadata_only	lexical
+DTC	metadata_only	lexical
+DTD	metadata_only	lexical
+DTIM	added	lexical
+DTLS	metadata_only	lexical
+DTM	metadata_only	lexical
+dumb pipe	added	lexical
+duobinary	metadata_only	lexical
+duplex	metadata_only	lexical
+dynamic IP address	metadata_only	lexical
+eavesdropping	metadata_only	lexical
+ECIS	metadata_only	lexical
+electronic mail	metadata_only	lexical
+ELFEXT	metadata_only	lexical
+EMCON	metadata_only	lexical
+EME	metadata_only	lexical
+EMI	metadata_only	lexical
+encapsulate	metadata_only	lexical
+end-node	metadata_only	lexical
+entity tag	added	lexical
+envelope	metadata_only	lexical
+EOT	metadata_only	lexical
+EPON	added	lexical
+erlang	metadata_only	lexical
+ERP	metadata_only	lexical
+error	metadata_only	lexical
+errored	metadata_only	lexical
+escape character	metadata_only	lexical
+escape sequence	metadata_only	lexical
+eSIM	metadata_only	lexical
+Ethernet card	added	lexical
+ETSI	metadata_only	lexical
+EUI	metadata_only	lexical
+EUI-48	added	lexical
+EUI-64	added	lexical
+evil twin	added	lexical
+exit node	metadata_only	lexical
+ext	metadata_only	lexical
+extension	metadata_only	lexical
+FAB	metadata_only	lexical
+fail closed	added	lexical
+fail open	added	lexical
+false	metadata_only	lexical
+far field	metadata_only	lexical
+far-field	metadata_only	lexical
+FCD	metadata_only	lexical
+FDD	metadata_only	lexical
+fed	metadata_only	lexical
+federated	metadata_only	lexical
+federation	metadata_only	lexical
+femtocell	metadata_only	lexical
+FEXT	metadata_only	lexical
+Fido	added	lexical
+fieldbus	added	lexical
+FIN	metadata_only	lexical
+flap	metadata_only	lexical
+flapping	metadata_only	lexical
+flash	metadata_only	lexical
+flash cut	metadata_only	lexical
+flit	metadata_only	lexical
+FMNP	metadata_only	lexical
+forward echo	metadata_only	lexical
+forward link	metadata_only	lexical
+frame	metadata_only	lexical
+frame-alignment recovery time	metadata_only	lexical
+free roam	metadata_only	lexical
+frequency	metadata_only	lexical
+frequency assignment	metadata_only	lexical
+frequency band	metadata_only	lexical
+FSM	metadata_only	lexical
+FSPL	metadata_only	lexical
+FT	metadata_only	lexical
+FTA	metadata_only	lexical
+FTE	metadata_only	lexical
+FTTB	metadata_only	lexical
+FTTC	metadata_only	lexical
+FTTD	metadata_only	lexical
+FTTH	metadata_only	lexical
+FTTL	metadata_only	lexical
+FTTN	metadata_only	lexical
+FTTO	metadata_only	lexical
+FTTP	metadata_only	lexical
+FTTR	metadata_only	lexical
+FTTS	metadata_only	lexical
+FTTT	metadata_only	lexical
+FTTX	metadata_only	lexical
+full duplex	metadata_only	lexical
+G-PON	added	lexical
+gatewaying	added	lexical
+GBIC	metadata_only	lexical
+GBR	metadata_only	lexical
+GEPON	added	lexical
+GFC	metadata_only	lexical
+GIP	metadata_only	lexical
+glue record	added	lexical
+goodput	added	lexical
+GoS	metadata_only	lexical
+GPON	added	lexical
+GRX	metadata_only	lexical
+GSM-R	metadata_only	lexical
+guard band	metadata_only	lexical
+guardrailed	added	lexical
+hacker	metadata_only	lexical
+half duplex	metadata_only	lexical
+half-duplex	metadata_only	lexical
+ham band	metadata_only	lexical
+Hamming code	metadata_only	lexical
+hardware node	metadata_only	lexical
+hash	metadata_only	lexical
+hash noise	metadata_only	lexical
+HDSL	metadata_only	lexical
+headend	metadata_only	lexical
+header	metadata_only	lexical
+helpline	metadata_only	lexical
+HES	metadata_only	lexical
+hole punch	added	lexical
+holepunch	added	lexical
+homeset	metadata_only	lexical
+homochronous	metadata_only	lexical
+hook flash	metadata_only	lexical
+hop	metadata_only	lexical
+hopset	metadata_only	lexical
+hosts file	added	lexical
+hot spot	added	lexical
+HSDPA	metadata_only	lexical
+HTTP/2	metadata_only	lexical
+hub-and-spoke	metadata_only	lexical
+hypernetworked	added	lexical
+Hypertext Transfer Protocol	added	lexical
+identity broker	added	lexical
+identity provider	metadata_only	lexical
+IGP	metadata_only	lexical
+IGRP	added	lexical
+ILEC	metadata_only	lexical
+IMS	metadata_only	lexical
+IMSI	metadata_only	lexical
+in-band signaling	metadata_only	lexical
+inband	metadata_only	lexical
+inset	metadata_only	lexical
+interdigit	metadata_only	lexical
+internet	metadata_only	lexical
+Internet of Things	metadata_only	lexical
+Internet service provider	metadata_only	lexical
+internetted	added	lexical
+internetting	added	lexical
+interpacket	added	lexical
+intrapacket	added	lexical
+intrusion	metadata_only	lexical
+IOT	metadata_only	lexical
+IP	metadata_only	lexical
+IP tracker	added	lexical
+IPBX	metadata_only	lexical
+IPFS	added	lexical
+IPL	metadata_only	lexical
+IPX	added	lexical
+IPX/SPX	added	lexical
+ISDN	metadata_only	lexical
+ISI	metadata_only	lexical
+ISIM	metadata_only	lexical
+ITU-T	metadata_only	lexical
+jumbo frame	added	lexical
+jumbogram	added	lexical
+kerchunker	metadata_only	lexical
+keysender	metadata_only	lexical
+kilobyte	metadata_only	lexical
+L1	added	lexical
+L2	added	lexical
+L3	added	lexical
+LAA	metadata_only	lexical
+lag time	added	lexical
+LAPD	metadata_only	lexical
+last mile	metadata_only	lexical
+LATA	metadata_only	lexical
+latency time	added	lexical
+layer	metadata_only	lexical
+layer 8	added	lexical
+LDP	added	lexical
+LF	metadata_only	lexical
+line card	metadata_only	lexical
+lineman splice	metadata_only	lexical
+link state	added	lexical
+LIR	metadata_only	lexical
+LNP	metadata_only	lexical
+LNR	metadata_only	lexical
+local ring	added	lexical
+localhost	metadata_only	lexical
+log	metadata_only	lexical
+LOS	metadata_only	lexical
+lossful	metadata_only	lexical
+lossy	metadata_only	lexical
+LPN	metadata_only	lexical
+LPT	metadata_only	lexical
+LPWAN	added	lexical
+LUDs	metadata_only	lexical
+LVDS	metadata_only	lexical
+Ma Bell	metadata_only	lexical
+MAC	metadata_only	lexical
+MAC-48	added	lexical
+magic packet	added	lexical
+man-in-the-middle attack	added	lexical
+Manchester coding	metadata_only	lexical
+Martian packet	added	lexical
+mastergroup	metadata_only	lexical
+maximum throughput	added	lexical
+MBR	metadata_only	lexical
+MCU	metadata_only	lexical
+MDC	metadata_only	lexical
+mechanical splice	metadata_only	lexical
+meet-me room	metadata_only	lexical
+mesh	metadata_only	lexical
+middle mile	metadata_only	lexical
+middlebox	added	lexical
+midframe	metadata_only	lexical
+MIME	added	lexical
+MIMO	metadata_only	lexical
+minidish	metadata_only	lexical
+MMF	metadata_only	lexical
+MMR	metadata_only	lexical
+MMS	metadata_only	lexical
+MNP	metadata_only	lexical
+mobile station	metadata_only	lexical
+mobile virtual network operator	metadata_only	lexical
+Morse code	metadata_only	lexical
+MPLS	metadata_only	lexical
+MQTT	metadata_only	lexical
+MRD	metadata_only	lexical
+MSB	metadata_only	lexical
+MSP	metadata_only	lexical
+MTP	metadata_only	lexical
+MTSO	metadata_only	lexical
+multicasting	added	lexical
+multiexchange	metadata_only	lexical
+multihop	added	lexical
+multihopping	added	lexical
+multilink	metadata_only	lexical
+multilinking	metadata_only	lexical
+multinumber	metadata_only	lexical
+multipath	metadata_only	lexical
+multiplexer	metadata_only	lexical
+multipoint	metadata_only	lexical
+multiuser	metadata_only	lexical
+MVNO	metadata_only	lexical
+N-facility	metadata_only	lexical
+nack	metadata_only	lexical
+Nagios	added	lexical
+NANP	metadata_only	lexical
+natting	added	lexical
+NBMR	metadata_only	lexical
+NDC	metadata_only	lexical
+Needham-Schroeder protocol	added	lexical
+net-neutral	added	lexical
+netco	metadata_only	lexical
+netcode	added	lexical
+network interface card	metadata_only	lexical
+network neutrality	added	lexical
+network subsystem	metadata_only	lexical
+Network Time Protocol	added	lexical
+network topology	added	lexical
+NEXT	metadata_only	lexical
+next generation networking	added	lexical
+NGN	metadata_only	lexical
+NIC	metadata_only	lexical
+node	metadata_only	lexical
+NOMA	metadata_only	lexical
+nonlandline	metadata_only	lexical
+nonmulticast	added	lexical
+nonrepudiation	metadata_only	lexical
+nonwireline	metadata_only	lexical
+NRE	metadata_only	lexical
+NSAPI	metadata_only	lexical
+NVP	added	lexical
+OFDM	metadata_only	lexical
+offload	metadata_only	lexical
+offset time	metadata_only	lexical
+OLT	added	lexical
+on-path attack	added	lexical
+onion network	added	lexical
+onion router	added	lexical
+online service provider	metadata_only	lexical
+ONT	metadata_only	lexical
+ONU	metadata_only	lexical
+OOLR	metadata_only	lexical
+operating time	metadata_only	lexical
+optical switch	metadata_only	lexical
+OSI	added	lexical
+OSI layer	added	lexical
+OSI layer 8	added	lexical
+OSP	metadata_only	lexical
+OSPF	metadata_only	lexical
+OSS	metadata_only	lexical
+OTP	metadata_only	lexical
+out-of-band	metadata_only	lexical
+out-of-band signaling	metadata_only	lexical
+outband	metadata_only	lexical
+overbuilder	metadata_only	lexical
+overmodulation	metadata_only	lexical
+oversubscribe	added	lexical
+oversubscription	added	lexical
+P2P	metadata_only	lexical

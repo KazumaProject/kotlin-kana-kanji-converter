@@ -25,6 +25,7 @@ from prepare_esdb import URL as ESDB_URL
 import world_sources
 import discovery_sources
 import gemini_acquisition
+import coverage_sources
 
 PROFILE = 'dictionary-target-catalog-v2'
 CATALOG = h.REPO / 'english-ime/data/catalog'
@@ -244,7 +245,9 @@ def compile_targets(args):
         if getattr(args, 'discovery_dir', None) else ([], None, []))
     leads, lead_manifest, lead_notices = (gemini_acquisition.collect(args.gemini_dir, getattr(args, 'gemini_named_review_dir', None))
         if getattr(args, 'gemini_dir', None) else ([], None, []))
-    sources = load_sources(args, [r['surface'] for r in discovered + leads])
+    expansion, expansion_manifest, expansion_notices = (coverage_sources.collect(args.coverage_dir, args.coverage_policy)
+        if getattr(args, 'coverage_dir', None) else ([], None, []))
+    sources = load_sources(args, [r['surface'] for r in discovered + leads + expansion])
     if lead_manifest:
         h.require(lead_manifest['lexicalSources'] == sources['pins'], 'Gemini acquisition lexical sources changed')
         h.require(lead_manifest['plan']['taxonomySha256'] == h.replay.sha(args.taxonomy), 'Gemini acquisition taxonomy changed')
@@ -282,6 +285,12 @@ def compile_targets(args):
             item = add(record['surface'], topic, record['kind'], 'extended',
                        ['esdb', 'wordnet'] if record['kind'] == 'lexical' else [], entity=record['entity'])
         item['proofs'].extend(dict(p) for p in record['proofs'])
+    for record in expansion:
+        h.require(set(record['topics']) <= topics.keys(), 'Unknown source-coverage topic')
+        for topic in record['topics']:
+            item = add(record['surface'], topic, record['kind'], 'extended', ['esdb','wordnet'], entity=record['entity'])
+        item['proofs'].extend(dict(p) for p in record['proofs'])
+        if record.get('sourceScopeDeferred'):item['sourceScopeDeferred']=True
     for record in leads:
         h.require(set(record['topics']) <= topics.keys(), 'Unknown Gemini-proposed topic')
         for topic in record['topics']:
@@ -387,6 +396,9 @@ def compile_targets(args):
     if lead_manifest:
         public['geminiAcquisition'] = lead_manifest
         notices.extend(lead_notices)
+    if expansion_manifest:
+        public['sourceCoverage'] = coverage_sources.provenance(args.coverage_dir, expansion_manifest)
+        notices.extend(expansion_notices)
     return records, topics, dict(catalogV2=public, references=dict(notices=notices))
 
 
@@ -437,7 +449,9 @@ def audit(targets, topics, pairs, analyses, excluded):
         missing = sorted(required - members)
         result = dict(id=target['id'], registered=registered, missingCategories=missing, status='present')
         category = 'domain_' + topics[target['topics'][0]]['domain']
-        if target.get('deferredByNameReview'):
+        if target.get('sourceScopeDeferred'):
+            result['status'] = 'blocked_source_scope'
+        elif target.get('deferredByNameReview'):
             result['status'] = 'blocked_named_review'
         elif not proofs:
             result['status'] = 'blocked_evidence'
@@ -522,6 +536,9 @@ def prepare(args):
             config['codeHashes']['gemini_acquisition.py'] = h.replay.sha(Path(__file__).with_name('gemini_acquisition.py'))
             if getattr(args, 'gemini_named_review_dir', None):
                 config['sourcePaths']['gemini_named_review_dir'] = str(args.gemini_named_review_dir.resolve())
+        if getattr(args, 'coverage_dir', None):
+            config['sourcePaths'].update({k:str(getattr(args,k).resolve()) for k in ['coverage_dir','coverage_policy']})
+            config['codeHashes']['coverage_sources.py'] = h.replay.sha(Path(__file__).with_name('coverage_sources.py'))
         h.dump(directory / 'run.json', config)
         return dict(targets=len(targets), plannedOperations=len(operations), changes=dict(Counter(r['status'] for r in results)))
 
@@ -654,6 +671,8 @@ def main():
         if name == 'prepare':
             p.add_argument('--gemini-dir', type=Path)
             p.add_argument('--gemini-named-review-dir', type=Path)
+            p.add_argument('--coverage-dir', type=Path)
+            p.add_argument('--coverage-policy', type=Path, default=CATALOG/'coverage-policy.json')
             p.add_argument('--discovery-dir', type=Path)
             p.add_argument('--discovery-policy', type=Path, default=CATALOG / 'discovery-policy.json')
             for option in ['source-dir', 'lexical-source-dir', 'esdb-dir', 'assets']:

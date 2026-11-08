@@ -1,0 +1,81 @@
+surface	change	kinds
+0G	added	lexical
+2.5G	added	lexical
+2.75G	added	lexical
+2G	added	lexical
+3G	added	lexical
+4G	added	lexical
+4G LTE	added	lexical
+5G	added	lexical
+Altai	metadata_only	lexical
+app	metadata_only	lexical
+BlackBerry	added	lexical
+camera phone	added	lexical
+candy bar phone	added	lexical
+cell phone	metadata_only	lexical
+cellular	metadata_only	lexical
+cellular mobile	added	lexical
+cellular phone	added	lexical
+cellular telephone	added	lexical
+celly	metadata_only	lexical
+CNA	metadata_only	lexical
+data	metadata_only	lexical
+dumbphone	added	lexical
+EDGE	added	lexical
+EGPRS	added	lexical
+feature phone	added	lexical
+flip phone	added	lexical
+flip smartphone	added	lexical
+FUP	added	lexical
+General Packet Radio Service	added	lexical
+Googlephone	added	lexical
+GPRS	metadata_only	lexical
+GSM	added	lexical
+handphone	added	lexical
+hands-free	added	lexical
+HSPA	metadata_only	lexical
+Huawei	metadata_only	lexical
+iPadOS	metadata_only	lexical
+iPhone	metadata_only	lexical
+IrDA	added	lexical
+locked	metadata_only	lexical
+locking shift	added	lexical
+long term evolution	added	lexical
+LTE	metadata_only	lexical
+mastertone	added	lexical
+MDA	metadata_only	lexical
+mobile	metadata_only	lexical
+mobile number	added	lexical
+mobile phone	added	lexical
+mobile telephone	added	lexical
+Nokia	metadata_only	lexical
+NPAPI	added	lexical
+NSA	metadata_only	lexical
+on silent	metadata_only	lexical
+phone case	added	lexical
+realtone	added	lexical
+ringxiety	added	lexical
+Samsung	metadata_only	lexical
+screen protector	added	lexical
+selfie	metadata_only	lexical
+selfie stick	added	lexical
+silent mode	added	lexical
+SIM card	metadata_only	lexical
+smartphone	metadata_only	lexical
+Subscriber Identity Module	metadata_only	lexical
+Symbian	metadata_only	lexical
+T9	added	lexical
+talk time	added	lexical
+tappigraphy	added	lexical
+touchphone	added	lexical
+triple SIM	added	lexical
+truetone	added	lexical
+UC	added	lexical
+UMTS	metadata_only	lexical
+unlock	metadata_only	lexical
+unlocked	metadata_only	lexical
+vibrate mode	added	lexical
+Voice over NR	added	lexical
+WCDMA	added	lexical
+wireless internet	added	lexical
+WP	added	lexical

@@ -1,0 +1,315 @@
+surface	change	kinds
+packet switching	added	lexical
+packet tracer	added	lexical
+packet-switched	metadata_only	lexical
+page	metadata_only	lexical
+pager	metadata_only	lexical
+PAP	added	lexical
+passthrough	metadata_only	lexical
+PAT	added	lexical
+PBT	metadata_only	lexical
+PBX	metadata_only	lexical
+PCS	metadata_only	lexical
+PDC	metadata_only	lexical
+pedestal	metadata_only	lexical
+phone tree	metadata_only	lexical
+phonopore	metadata_only	lexical
+picocell	metadata_only	lexical
+PIFA	metadata_only	lexical
+pilot	metadata_only	lexical
+ping	metadata_only	lexical
+pingable	added	lexical
+pinhole	metadata_only	lexical
+pizza dish	metadata_only	lexical
+PLC	metadata_only	lexical
+PLMN	metadata_only	lexical
+point-to-point	metadata_only	lexical
+Polybius square	metadata_only	lexical
+PON	added	lexical
+pong	metadata_only	lexical
+POP	metadata_only	lexical
+PoP	metadata_only	lexical
+port knocking	added	lexical
+port triggering	added	lexical
+portscan	added	lexical
+post office telephone system	metadata_only	lexical
+postcursor	metadata_only	lexical
+POTS	metadata_only	lexical
+preamble	metadata_only	lexical
+precertificate	added	lexical
+precursor	metadata_only	lexical
+prefix	metadata_only	lexical
+presentity	metadata_only	lexical
+PRI	metadata_only	lexical
+primary rate interface	metadata_only	lexical
+primary time standard	metadata_only	lexical
+private branch exchange	metadata_only	lexical
+promiscuous	metadata_only	lexical
+proration	metadata_only	lexical
+protocol stack	added	lexical
+PS	metadata_only	lexical
+PSDU	metadata_only	lexical
+pseudowire	metadata_only	lexical
+PSNEXT	metadata_only	lexical
+PSTN	metadata_only	lexical
+PTB	metadata_only	lexical
+PTC	metadata_only	lexical
+PTT	metadata_only	lexical
+punchdown	metadata_only	lexical
+push time	metadata_only	lexical
+PVC	metadata_only	lexical
+quad	metadata_only	lexical
+quality of service	metadata_only	lexical
+quantize	metadata_only	lexical
+queueable	added	lexical
+radar cross section	metadata_only	lexical
+radio band	metadata_only	lexical
+radio-frequency identification	metadata_only	lexical
+range extender	metadata_only	lexical
+rat-tail splice	metadata_only	lexical
+RBOC	metadata_only	lexical
+RCS	metadata_only	lexical
+read	metadata_only	lexical
+readback	metadata_only	lexical
+realm	metadata_only	lexical
+receive	metadata_only	lexical
+redialer	metadata_only	lexical
+redundant	metadata_only	lexical
+refarmed	metadata_only	lexical
+refarming	metadata_only	lexical
+register	metadata_only	lexical
+REIN	metadata_only	lexical
+RELP	metadata_only	lexical
+remote access	metadata_only	lexical
+REN	metadata_only	lexical
+repeatered	metadata_only	lexical
+reperforator	metadata_only	lexical
+request	metadata_only	lexical
+resource	metadata_only	lexical
+reverse link	metadata_only	lexical
+reverse proxy	added	lexical
+RFB	metadata_only	lexical
+RFFE	metadata_only	lexical
+rgr	metadata_only	lexical
+ring	metadata_only	lexical
+ring time	metadata_only	lexical
+ringback	metadata_only	lexical
+ringdown	metadata_only	lexical
+ringer equivalence number	metadata_only	lexical
+RIP	added	lexical
+RJ	metadata_only	lexical
+roam	metadata_only	lexical
+roamable	metadata_only	lexical
+roaming	metadata_only	lexical
+roger	metadata_only	lexical
+rogue access point	added	lexical
+ROIP	metadata_only	lexical
+rollback netcode	added	lexical
+round-trip delay time	metadata_only	lexical
+round-trip time	metadata_only	lexical
+routing	metadata_only	lexical
+RS-232	metadata_only	lexical
+RTC	metadata_only	lexical
+RTT	metadata_only	lexical
+runt	metadata_only	lexical
+RX	metadata_only	lexical
+Rx	metadata_only	lexical
+rx	metadata_only	lexical
+RY	metadata_only	lexical
+SAN	added	lexical
+saturation	metadata_only	lexical
+SBC	metadata_only	lexical
+SDLC	added	lexical
+SDP	metadata_only	lexical
+SDR	metadata_only	lexical
+SDU	metadata_only	lexical
+security distance	metadata_only	lexical
+self-clocking	metadata_only	lexical
+semiduplex	metadata_only	lexical
+send	metadata_only	lexical
+SerDes	metadata_only	lexical
+servco	metadata_only	lexical
+server computer	added	lexical
+server farm	added	lexical
+server-side	added	lexical
+server-side storage	added	lexical
+service set identifier	added	lexical
+sessionless	added	lexical
+share	metadata_only	lexical
+SHINE	metadata_only	lexical
+short wave	metadata_only	lexical
+shortwave	metadata_only	lexical
+signalling event	metadata_only	lexical
+SIM	metadata_only	lexical
+SIM card	metadata_only	lexical
+simplex	metadata_only	lexical
+single-user	metadata_only	lexical
+SIPRNET	added	lexical
+SIT	metadata_only	lexical
+Skynet	metadata_only	lexical
+slam	metadata_only	lexical
+slip	metadata_only	lexical
+slot time	added	lexical
+SMB	added	lexical
+SMS	metadata_only	lexical
+SNAP	metadata_only	lexical
+SNI	metadata_only	lexical
+sniffer	metadata_only	lexical
+Snoopy cap	metadata_only	lexical
+sock	metadata_only	lexical
+softmodem	added	lexical
+softswitch	metadata_only	lexical
+software defined radio	metadata_only	lexical
+softwire	added	lexical
+source routing	added	lexical
+SPA	metadata_only	lexical
+SPE	metadata_only	lexical
+spectrum	metadata_only	lexical
+speedshift	metadata_only	lexical
+split horizon	added	lexical
+SPN	metadata_only	lexical
+spot beam	metadata_only	lexical
+spudger	metadata_only	lexical
+SPX	metadata_only	lexical
+squelch circuit	metadata_only	lexical
+SRES	metadata_only	lexical
+SSRF	added	lexical
+stack	metadata_only	lexical
+star	metadata_only	lexical
+star ring	added	lexical
+star topology	added	lexical
+static IP address	metadata_only	lexical
+station-to-station	metadata_only	lexical
+storage area network	added	lexical
+store and forward	metadata_only	lexical
+STP	metadata_only	lexical
+streamer	metadata_only	lexical
+streaming data	metadata_only	lexical
+streaming encoder	metadata_only	lexical
+streaming media	added	lexical
+streaming server	added	lexical
+structured wiring	metadata_only	lexical
+subcarrier	metadata_only	lexical
+subinterface	metadata_only	lexical
+submessage	metadata_only	lexical
+subnet	metadata_only	lexical
+subpacket	metadata_only	lexical
+Subscriber Identity Module	metadata_only	lexical
+super high frequency	metadata_only	lexical
+superband	metadata_only	lexical
+superframe	metadata_only	lexical
+supergroup	metadata_only	lexical
+supermastergroup	metadata_only	lexical
+superpeer	added	lexical
+supertrunk	metadata_only	lexical
+supertrunking	metadata_only	lexical
+supplicant	metadata_only	lexical
+supranet	added	lexical
+switch	metadata_only	lexical
+switchboard	metadata_only	lexical
+switching	metadata_only	lexical
+switchport	added	lexical
+switchroom	metadata_only	lexical
+symbol	metadata_only	lexical
+T-carrier	metadata_only	lexical
+T3	added	lexical
+TDD	metadata_only	lexical
+technography	metadata_only	lexical
+telecommunications tower	metadata_only	lexical
+teleconference	metadata_only	lexical
+teledensity	metadata_only	lexical
+teledensity rate	metadata_only	lexical
+telegraph office	metadata_only	lexical
+telemetry	metadata_only	lexical
+telephone conference	metadata_only	lexical
+teleport	metadata_only	lexical
+teletraffic	metadata_only	lexical
+terminal	metadata_only	lexical
+text message	metadata_only	lexical
+TFTP	added	lexical
+throughput	metadata_only	lexical
+throwbox	metadata_only	lexical
+time and frequency transfer	metadata_only	lexical
+time difference of arrival	metadata_only	lexical
+time diversity	metadata_only	lexical
+time division	metadata_only	lexical
+time of origin	metadata_only	lexical
+time to live	added	lexical
+time-assignment speech interpolation	metadata_only	lexical
+time-hopping	metadata_only	lexical
+Time-Triggered Protocol	added	lexical
+timestamp reply	added	lexical
+tinygram	added	lexical
+TM	metadata_only	lexical
+TNC	metadata_only	lexical
+TNs	metadata_only	lexical
+TOAD attack	added	lexical
+TOFU	added	lexical
+TP	added	lexical
+tp	metadata_only	lexical
+TPC	metadata_only	lexical
+trailer	metadata_only	lexical
+transmission time	metadata_only	lexical
+transmux	metadata_only	lexical
+tree-and-branch	metadata_only	lexical
+trellis	metadata_only	lexical
+trombone	metadata_only	lexical
+truck roll	metadata_only	lexical
+trunk	metadata_only	lexical
+TUFU	added	lexical
+tunnel	metadata_only	lexical
+tunnel broker	added	lexical
+Turing switch	metadata_only	lexical
+TX	metadata_only	lexical
+Tx	metadata_only	lexical
+tx	metadata_only	lexical
+ultra high frequency	metadata_only	lexical
+unacked	added	lexical
+unicast	added	lexical
+unit interval	metadata_only	lexical
+untunneled	added	lexical
+uplead	metadata_only	lexical
+uplink	metadata_only	lexical
+USSD	metadata_only	lexical
+VDSL	metadata_only	lexical
+vidcall	metadata_only	lexical
+vidchat	metadata_only	lexical
+video call	metadata_only	lexical
+video conference	metadata_only	lexical
+vidnumber	metadata_only	lexical
+vidphone	metadata_only	lexical
+VLT	metadata_only	lexical
+VNC	metadata_only	lexical
+VoLTE	metadata_only	lexical
+VSAT	metadata_only	lexical
+WAE	metadata_only	lexical
+WAP	metadata_only	lexical
+watch receiver	metadata_only	lexical
+waterfilling	metadata_only	lexical
+wavelet modulation	metadata_only	lexical
+WebRTC	metadata_only	lexical
+WeChat	metadata_only	lexical
+Western Union splice	metadata_only	lexical
+WhatsApp	metadata_only	lexical
+WiMAX	metadata_only	lexical
+wireless	metadata_only	lexical
+wireline	metadata_only	lexical
+WLNP	metadata_only	lexical
+WNP	metadata_only	lexical
+WSPR	metadata_only	lexical
+WTAI	metadata_only	lexical
+WWAN	added	lexical
+xDSL	metadata_only	lexical
+XmlHTTP	added	lexical
+xPON	metadata_only	lexical
+XTP	added	lexical
+Zalo	metadata_only	lexical
+zero out	metadata_only	lexical
+ZF	metadata_only	lexical
+zombie client	added	lexical
+zombie computer	added	lexical
+zombie master	added	lexical
+zombie network	added	lexical
+zone	metadata_only	lexical
+Zoom fatigue	metadata_only	lexical
+Zoombombing	metadata_only	lexical

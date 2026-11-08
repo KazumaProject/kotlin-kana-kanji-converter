@@ -388,14 +388,85 @@ an external JSON manifest with `documents`, each containing `file`, `url`,
 `file`, `name`, and `sha256`. Exact spellings must occur in the document; lexical
 roles require source review. Definitions and source prose stay outside Git.
 
-### Optional Gemini proposals, within a verified free project
+### Source coverage: collection does not finish at a word count
+
+The primary expansion harness is now
+[`coverage_harness.py`](tools/coverage_harness.py), with the versioned
+[`coverage-policy.json`](data/catalog/coverage-policy.json). A category containing
+100, 1,000 or any other number of words is **not** considered complete. The
+collector follows the declared English Wiktionary roots, every pagination cursor
+and discovered subcategories. It records source paths, scope exclusions, cycles,
+missing source roots and remaining work. Only the end of the declared source walk
+can finish that walk; this still does not prove completeness of English or useful
+IME input. Pure numeric/symbol notations are withheld from this vocabulary pass.
+
+Gemini prioritizes **observed source-category IDs**, rather than generating a
+small list of words and treating it as the entire requirement. It cannot invent
+source nodes or spelling evidence. Source and model budgets limit an invocation,
+not the number of words adopted. Budget stops, source failures, missing mappings
+and unreviewed frontier nodes remain explicit, separate states. Categories with
+more than 50 spellings remain eligible for further work.
+
+Run one complete budgeted pass, including source acquisition, independent
+adoption, real-binary audits, before/after assessment and browseable word lists:
+
+```sh
+python3 -B english-ime/tools/coverage_harness.py run \
+  --work-dir /tmp/english-coverage-pass --assets /tmp/current-english-assets \
+  --catalog-source-dir /tmp/english-catalog-sources \
+  --lexical-source-dir /tmp/english-dictionary-sources --esdb-dir /tmp/english-esdb \
+  --free-proof /private/path/free-tier-proof.json --api-key-file /private/path/gemini-key \
+  --source-budget 300 --model-budget 6
+```
+
+`result/` contains verified full/runtime assets; `publication/` contains the
+adopted TSV and paged word lists; `before/` and `after/` contain source and actual
+dictionary counts. A pass with no planned changes retains the baseline assets
+and reports `noChanges`; it does not attempt an empty build. Reusing a pass directory
+requires identical source-snapshot, policy and baseline-asset hashes.
+All outputs and raw source/model data must stay outside Git.
+Only the adopted dictionary, requested public lists and implementation are
+promoted. No recurring execution or paid fallback is introduced.
+
+For a subsequent pass, resume the source queue into a **new** snapshot:
+
+```sh
+python3 -B english-ime/tools/coverage_sources.py \
+  --source-dir /tmp/english-coverage-next \
+  --resume-from /tmp/english-coverage-pass/sources --max-requests 300
+python3 -B english-ime/tools/coverage_harness.py run \
+  --snapshot /tmp/english-coverage-next --work-dir /tmp/english-coverage-next-run \
+  --assets /tmp/current-english-assets --catalog-source-dir /tmp/english-catalog-sources \
+  --lexical-source-dir /tmp/english-dictionary-sources --esdb-dir /tmp/english-esdb
+```
+
+A supplied snapshot is an offline input to `run`; it causes no model calls. Live
+advice is also available separately via `advise`, with resumable response batches
+and the same verified free-project quota ledger. Advice schedules sources, not
+word acceptance. The source collector checkpoints every request reservation and
+successful page; interrupted calls remain counted. Snapshots stay immutable.
+
+Assessments distinguish raw source headwords, actual registered spellings,
+assigned memberships, missing dictionary spellings, format/notation withholding,
+pending categories, missing roots and topics with no declared provider. Unmapped
+topics are not silently treated as covered. The current policy focuses on ordinary
+daily/technical words; it does not claim to cover all named entities. Source-tree
+membership attests English spelling/topic context, not measured frequency,
+modernity, sense disambiguation or Android input quality. Existing lexical
+adapters supply POS when available; no inflections are invented.
+
+The [coverage adoption ledger](data/catalog/adopted-coverage.tsv) and
+[category word pages](data/catalog/words-coverage) are verified against regenerated
+binaries in CI alongside the earlier ledgers.
+
+### Optional Gemini seed proposals, within a verified free project
 
 For additional acquisition, [`gemini_acquisition.py`](tools/gemini_acquisition.py)
 prioritizes the topics in [gemini-acquisition-policy.json](data/catalog/gemini-acquisition-policy.json)
-that have at most 50 actual candidate spellings. It counts unique display spellings
-with real topical memberships, excluding grammar-only supporting forms. The policy
-covers 40 sparse topics across daily vocabulary, non-Web technical fields and names;
-large science/person/car categories are not the focus of this pass.
+by actual candidate spelling counts, excluding grammar-only supporting forms.
+The previous 50-spelling eligibility cutoff is disabled. Approximately 100 leads
+is a single API packet, not a completeness criterion. These optional seed proposals
+supplement the source-walk harness above; they do not replace its queue or gap report.
 
 ```sh
 python3 -B english-ime/tools/gemini_acquisition.py prepare \

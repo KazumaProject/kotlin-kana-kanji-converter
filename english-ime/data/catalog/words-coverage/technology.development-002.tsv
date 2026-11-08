@@ -1,0 +1,501 @@
+surface	change	kinds
+form	metadata_only	lexical
+formal	metadata_only	lexical
+formal parameter	added	lexical
+format string	added	lexical
+Fortranlike	added	lexical
+forward-declare	added	lexical
+FOUC	added	lexical
+Four-Russians	added	lexical
+FOUT	added	lexical
+FPO	metadata_only	lexical
+free	metadata_only	lexical
+free store	added	lexical
+free variable	added	lexical
+freestanding	metadata_only	lexical
+freestore	added	lexical
+frob	added	lexical
+FRP	metadata_only	lexical
+FSVO	added	lexical
+func	metadata_only	lexical
+funct	added	lexical
+function-level programming	added	lexical
+functional	metadata_only	lexical
+functionalism	metadata_only	lexical
+functionalize	added	lexical
+functor	metadata_only	lexical
+future	metadata_only	lexical
+G2P	added	lexical
+GADT	added	lexical
+gap buffer	added	lexical
+garbage collect	added	lexical
+garbage collected	added	lexical
+GC	added	lexical
+GEGL	added	lexical
+genericize	added	lexical
+generics	metadata_only	lexical
+genetic programming	added	lexical
+genexp	added	lexical
+GIL	added	lexical
+gist	metadata_only	lexical
+glob	metadata_only	lexical
+global scope	metadata_only	lexical
+glvalue	added	lexical
+gnisrap	added	lexical
+go to	added	lexical
+God class	added	lexical
+God object	added	lexical
+gold	metadata_only	lexical
+golfed	metadata_only	lexical
+golflang	added	lexical
+Gopher	added	lexical
+gopher	metadata_only	lexical
+goroutine	added	lexical
+GOT	added	lexical
+GOTO	added	lexical
+gradual typing	added	lexical
+gradually typed	added	lexical
+grammar-oriented programming	added	lexical
+grapheme-phoneme correspondence	added	lexical
+grapheme-to-phoneme	added	lexical
+graphical user interface programming	added	lexical
+guard	metadata_only	lexical
+hack up	added	lexical
+hackathon	metadata_only	lexical
+handler	metadata_only	lexical
+hard float	added	lexical
+hardfloat	added	lexical
+has-a	added	lexical
+hash rocket	added	lexical
+Haskeller	added	lexical
+hat	metadata_only	lexical
+HATEOAS	added	lexical
+haystack	metadata_only	lexical
+hazard	metadata_only	lexical
+HDFS	added	lexical
+header	metadata_only	lexical
+header file	added	lexical
+header guard	added	lexical
+Hello World	added	lexical
+here document	added	lexical
+heredoc	added	lexical
+hidden code	added	lexical
+high-level language	added	lexical
+high-level synthesis	metadata_only	lexical
+hit	metadata_only	lexical
+HKT	metadata_only	lexical
+HLL	added	lexical
+HOF	added	lexical
+homoiconic	added	lexical
+homoiconicity	added	lexical
+hook	metadata_only	lexical
+hot	metadata_only	lexical
+HTTP verb	added	lexical
+Hungarian	metadata_only	lexical
+Hungarian notation	added	lexical
+hydrate	metadata_only	lexical
+hygienic	metadata_only	lexical
+hylomorphism	added	lexical
+hyperoperator	added	lexical
+hypersequential	added	lexical
+hyperslice	added	lexical
+IAT	metadata_only	lexical
+ICBM address	added	lexical
+ICE	added	lexical
+identifier	metadata_only	lexical
+idiom	metadata_only	lexical
+idiomatic	metadata_only	lexical
+IDL	metadata_only	lexical
+IDLE	added	lexical
+IDT	added	lexical
+if-then	added	lexical
+if-then-else	added	lexical
+ifdef	added	lexical
+IIFE	metadata_only	lexical
+ILP	metadata_only	lexical
+imbrication	added	lexical
+immutable	metadata_only	lexical
+imperative programming	added	lexical
+impl	added	lexical
+implement	metadata_only	lexical
+implementable	added	lexical
+implode	metadata_only	lexical
+impure	metadata_only	lexical
+inc	metadata_only	lexical
+include	metadata_only	lexical
+include guard	added	lexical
+incrementalize	added	lexical
+index	metadata_only	lexical
+index register	added	lexical
+indexer	metadata_only	lexical
+indify	added	lexical
+indirect	metadata_only	lexical
+indirection	added	lexical
+infinite loop	added	lexical
+infinite recursion	added	lexical
+inherit	metadata_only	lexical
+inheritance	metadata_only	lexical
+inheritor	metadata_only	lexical
+initialization	metadata_only	lexical
+initializer	added	lexical
+inlining	added	lexical
+InnerSource	added	lexical
+INT	metadata_only	lexical
+int	metadata_only	lexical
+intent filter	added	lexical
+intentional programming	added	lexical
+interactive mode programming	added	lexical
+INTERCAL	added	lexical
+intercal	added	lexical
+interceptor	metadata_only	lexical
+interface segregation principle	added	lexical
+intern	metadata_only	lexical
+internalize	metadata_only	lexical
+interning	metadata_only	lexical
+interpreted	metadata_only	lexical
+intertype	added	lexical
+intrinsic	metadata_only	lexical
+introspect	added	lexical
+introspectability	added	lexical
+intrusive	metadata_only	lexical
+invariant	metadata_only	lexical
+invariant section	added	lexical
+inversion of control	added	lexical
+invocation	metadata_only	lexical
+is-a	added	lexical
+isomorphic	metadata_only	lexical
+ISP	added	lexical
+iterable	added	lexical
+iteratee	added	lexical
+iterative programming	added	lexical
+IVT	added	lexical
+jagged array	added	lexical
+JAPH	added	lexical
+JAXB	added	lexical
+jellybean	metadata_only	lexical
+Jensen's device	added	lexical
+JEP	metadata_only	lexical
+JHTML	added	lexical
+JMP	metadata_only	lexical
+JNI	added	lexical
+Joda-Time	added	lexical
+join point	added	lexical
+JScript	added	lexical
+jump	metadata_only	lexical
+jump out	added	lexical
+junction	metadata_only	lexical
+kang	metadata_only	lexical
+kangaroo code	added	lexical
+kata	metadata_only	lexical
+kebab case	metadata_only	lexical
+kernel	metadata_only	lexical
+keymask	added	lexical
+keyword	metadata_only	lexical
+KLOC	added	lexical
+Kotlin	metadata_only	lexical
+KVO	added	lexical
+lambda	metadata_only	lexical
+lambda function	added	lexical
+language lawyer	added	lexical
+language server	added	lexical
+language-oriented	added	lexical
+language-oriented programming	added	lexical
+large curly bracket	added	lexical
+lasagna code	added	lexical
+late binding	added	lexical
+late-bound	added	lexical
+launder	metadata_only	lexical
+lazy initialisation	added	lexical
+lazy load	added	lexical
+LC	added	lexical
+leaf	metadata_only	lexical
+leaning toothpick syndrome	added	lexical
+length operator	added	lexical
+lens	metadata_only	lexical
+lexical scoping	added	lexical
+lexically scoped	added	lexical
+lexicon	metadata_only	lexical
+LGTM	added	lexical
+library file	added	lexical
+lift	metadata_only	lexical
+linalg	added	lexical
+line noise	added	lexical
+line number	added	lexical
+LINQ	metadata_only	lexical
+linting	added	lexical
+Lisper	added	lexical
+Lispish	added	lexical
+Lisplike	added	lexical
+list-based programming	added	lexical
+listcomp	added	lexical
+listener	metadata_only	lexical
+literal	metadata_only	lexical
+literate programming	added	lexical
+little language	added	lexical
+live	metadata_only	lexical
+LLL	metadata_only	lexical
+LLVM	metadata_only	lexical
+load module	added	lexical
+load-and-go	added	lexical
+LOC	added	lexical
+LoC	added	lexical
+local	metadata_only	lexical
+locale-aware	added	lexical
+logic error	added	lexical
+logic programming	added	lexical
+logpoint	added	lexical
+long	metadata_only	lexical
+long long	added	lexical
+loop	metadata_only	lexical
+low-level language	added	lexical
+lower camel case	added	lexical
+LP	metadata_only	lexical
+LSP	metadata_only	lexical
+LTS	metadata_only	lexical
+Lubarsky's law of cybernetic entomology	added	lexical
+lvalue	added	lexical
+MACH	added	lexical
+machine language	added	lexical
+machine programming	added	lexical
+machine translation	added	lexical
+macro	metadata_only	lexical
+macro guard	added	lexical
+macroroutine	added	lexical
+magic	metadata_only	lexical
+magic string	added	lexical
+manifest file	added	lexical
+manifest typing	added	lexical
+mark and sweep	added	lexical
+markup language	added	lexical
+mask	metadata_only	lexical
+match	metadata_only	lexical
+match-merge	added	lexical
+mathematical programming	added	lexical
+maybe type	added	lexical
+MBD	metadata_only	lexical
+MCI	metadata_only	lexical
+MDB	metadata_only	lexical
+MEAN	added	lexical
+membar	added	lexical
+member function	added	lexical
+memberwise	added	lexical
+memo	metadata_only	lexical
+memory barrier	added	lexical
+memory safety	added	lexical
+memory-safe	added	lexical
+memory-unsafe	added	lexical
+merge request	added	lexical
+MERN	added	lexical
+message pump	added	lexical
+message-driven bean	added	lexical
+metafunction	added	lexical
+metamethod	added	lexical
+metaoperator	added	lexical
+metaprogram	added	lexical
+metaprogrammable	added	lexical
+metaprogrammer	added	lexical
+metaprogramming	added	lexical
+metasyntactic variable	added	lexical
+metatable	added	lexical
+metatype	added	lexical
+MEVN	added	lexical
+MFC	metadata_only	lexical
+MGCC	added	lexical
+micro-optimization	added	lexical
+microframework	added	lexical
+microroutine	added	lexical
+MinGW	added	lexical
+minify	added	lexical
+minilanguage	added	lexical
+mix-in	added	lexical
+ML	added	lexical
+MMAPI	added	lexical
+mock out	added	lexical
+mod	metadata_only	lexical
+model	metadata_only	lexical
+model-first	added	lexical
+model-view-controller	added	lexical
+model-view-presenter	added	lexical
+modeling language	added	lexical
+modifier	metadata_only	lexical
+modular programming	added	lexical
+modulus	metadata_only	lexical
+monad	metadata_only	lexical
+monkey patch	added	lexical
+monoid	added	lexical
+monolithic programming	added	lexical
+monomorphic	added	lexical
+most vexing parse	added	lexical
+move	metadata_only	lexical
+MQTT-SN	added	lexical
+MSIL	added	lexical
+multi-paradigm programming	added	lexical
+multicast	metadata_only	lexical
+multidictionary	added	lexical
+multiple inheritance	added	lexical
+multiprogram	added	lexical
+multiton	added	lexical
+mutable	metadata_only	lexical
+mutating	metadata_only	lexical
+mutex	metadata_only	lexical
+MVC	metadata_only	lexical
+MVCC	metadata_only	lexical
+MVI	metadata_only	lexical
+MVP	metadata_only	lexical
+MVVM	metadata_only	lexical
+MVW	added	lexical
+name binding	added	lexical
+named	metadata_only	lexical
+named parameter	added	lexical
+nano-COM	added	lexical
+narrow	metadata_only	lexical
+narrowing conversion	added	lexical
+nasal demon	added	lexical
+natural language programming	added	lexical
+near	metadata_only	lexical
+needle	metadata_only	lexical
+negative indexing	added	lexical
+NELIAC	added	lexical
+nesting	metadata_only	lexical
+new	metadata_only	lexical
+new up	added	lexical
+newless	added	lexical
+NFT	added	lexical
+niebloid	added	lexical
+noise word	added	lexical
+nominative type system	added	lexical
+non-const	added	lexical
+non-direct buffer	added	lexical
+non-virtual interface	added	lexical
+non-virtual interface pattern	added	lexical
+nonassignable	added	lexical
+nonbsp	added	lexical
+nondeterministic programming	added	lexical
+nonfunctional	metadata_only	lexical
+noninherited	added	lexical
+noninterface	added	lexical
+nonliteral	added	lexical
+nonprimitive	added	lexical
+nop	metadata_only	lexical
+NOP sled	added	lexical
+notelist	added	lexical
+nowdoc	added	lexical
+NRVO	added	lexical
+null-terminated	added	lexical
+nullary	added	lexical
+nullptr	added	lexical
+numeric promotion	added	lexical
+NVI	added	lexical
+obj	metadata_only	lexical
+object pool pattern	added	lexical
+object-based programming	added	lexical
+object-oriented	added	lexical
+object-oriented language	added	lexical
+object-oriented programming	added	lexical
+OBOE	added	lexical
+OBP	metadata_only	lexical
+OCP	metadata_only	lexical
+ODR	metadata_only	lexical
+off-by-one bug	added	lexical
+off-by-one error	added	lexical
+offset	metadata_only	lexical
+offside rule	added	lexical
+one true brace style	added	lexical
+one-shot	metadata_only	lexical
+OOM	added	lexical
+OOP	metadata_only	lexical
+OOPL	added	lexical
+OPC	metadata_only	lexical
+OPC AE	added	lexical
+OPC DA	added	lexical
+OPC HDA	added	lexical
+OPC UA	added	lexical
+open-closed principle	added	lexical
+open/closed principle	added	lexical
+optimization	metadata_only	lexical
+optimize out	added	lexical
+option type	added	lexical
+optional	metadata_only	lexical
+OTBS	added	lexical
+out of process	added	lexical
+out-of-band	metadata_only	lexical
+outcase	added	lexical
+outprogram	added	lexical
+overcomment	added	lexical
+overindex	added	lexical
+overlay	metadata_only	lexical
+overload	metadata_only	lexical
+overloadable	added	lexical
+oversubscribe	added	lexical
+oversubscription	added	lexical
+OWL	added	lexical
+p-code	added	lexical
+P/Invoke	added	lexical
+paamayim nekudotayim	added	lexical
+pair programming	added	lexical
+parallelize	added	lexical
+parallelizer	added	lexical
+param	metadata_only	lexical
+parameterize	added	lexical
+parametric polymorphism	added	lexical
+parametrize	added	lexical
+parent	metadata_only	lexical
+Parsons problem	added	lexical
+partial	metadata_only	lexical
+partial application	added	lexical
+partial function application	added	lexical
+Pascal case	added	lexical
+Pascal string	added	lexical
+pass by value	added	lexical
+pass-by-value	added	lexical
+PAT	added	lexical
+patchset	added	lexical
+peepholing	added	lexical
+PEP	added	lexical
+Perlish	added	lexical
+pessimization	added	lexical
+pickle	metadata_only	lexical
+picture	metadata_only	lexical
+PIE	added	lexical
+pin	metadata_only	lexical
+pivot	metadata_only	lexical
+playground	metadata_only	lexical
+PLINQ	added	lexical
+plumbing	metadata_only	lexical
+POD	added	lexical
+point-free	added	lexical
+pointcut	added	lexical
+pointer	metadata_only	lexical
+pointerless	added	lexical
+pointerlike	added	lexical
+pointless	metadata_only	lexical
+pointy	metadata_only	lexical
+polyfill	metadata_only	lexical
+polyglot	metadata_only	lexical
+polymorphic	metadata_only	lexical
+polymorphic iteration	added	lexical
+porcelain	metadata_only	lexical
+position-independent executable	added	lexical
+positional	metadata_only	lexical
+positional parameter	added	lexical
+post-build	added	lexical
+postcondition	added	lexical
+PPL	added	lexical
+pragma	added	lexical
+pragmat	added	lexical
+pre-hook	added	lexical
+precedence rule	added	lexical
+pred	metadata_only	lexical
+predeclaration	added	lexical
+predeclare	added	lexical
+predicate	metadata_only	lexical
+prefab	metadata_only	lexical
+preloader	added	lexical
+prelude	metadata_only	lexical
+premature optimisation	added	lexical
+premature optimization	added	lexical
+prettify	added	lexical
+pretty	metadata_only	lexical
+pretty-print	added	lexical
+PRG	metadata_only	lexical
+primitive	metadata_only	lexical

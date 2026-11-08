@@ -1,0 +1,501 @@
+surface	change	kinds
+a day late and a dollar short	added	lexical
+a hair past a freckle	added	lexical
+a year and a day	added	lexical
+academic quarter	added	lexical
+academic year	added	lexical
+adjourn	metadata_only	lexical
+adjournment	metadata_only	lexical
+AEST	metadata_only	lexical
+after	metadata_only	lexical
+afterward	metadata_only	lexical
+age-old	added	lexical
+agelong	added	lexical
+ago	metadata_only	lexical
+all at once	added	lexical
+all the time	added	lexical
+all-nighter	added	lexical
+always	metadata_only	lexical
+anachrony	added	lexical
+ancient	metadata_only	lexical
+ancient history	added	lexical
+ancient times	added	lexical
+annually	metadata_only	lexical
+ante-historic	added	lexical
+antebellum	metadata_only	lexical
+antediluvian	metadata_only	lexical
+any more	added	lexical
+any time now	added	lexical
+anytime	metadata_only	lexical
+around the clock	added	lexical
+around the corner	added	lexical
+around-the-clock	metadata_only	lexical
+arrow of time	metadata_only	lexical
+as of late	added	lexical
+ASAP	metadata_only	lexical
+astronomical time	added	lexical
+at a time	added	lexical
+at midnight	added	lexical
+at the latest	added	lexical
+Atomic Age	metadata_only	lexical
+atomic time	added	lexical
+august	metadata_only	lexical
+awhile	metadata_only	lexical
+babyhood	metadata_only	lexical
+banner year	added	lexical
+bat of an eye	added	lexical
+bath time	added	lexical
+beard-second	added	lexical
+bezzle	added	lexical
+biannual	metadata_only	lexical
+biennial	metadata_only	lexical
+biennium	added	lexical
+bimonthly	metadata_only	lexical
+birth	metadata_only	lexical
+blink of an eye	added	lexical
+blue moon	added	lexical
+Bombay Time	added	lexical
+bottom of the hour	added	lexical
+British Summer Time	added	lexical
+Bronze Age	added	lexical
+business hours	added	lexical
+caesium clock	added	lexical
+Calcutta Time	added	lexical
+carbon-date	added	lexical
+causality	metadata_only	lexical
+CDT	metadata_only	lexical
+cease	metadata_only	lexical
+ceaselessly	metadata_only	lexical
+centennial	metadata_only	lexical
+centennium	added	lexical
+centimillennium	added	lexical
+centisecond	added	lexical
+Central European Midsummer Time	added	lexical
+Changpai Time Zone	added	lexical
+characteristic time	metadata_only	lexical
+childhood	metadata_only	lexical
+childtime	added	lexical
+chiliad	added	lexical
+chiliasm	added	lexical
+Chitrabaanu	added	lexical
+Christmas is coming	added	lexical
+chronocentric	added	lexical
+chronocentrism	added	lexical
+chronoception	added	lexical
+chronocide	added	lexical
+chronocoordinate	added	lexical
+chronokinesis	added	lexical
+chronologic	added	lexical
+chronological	metadata_only	lexical
+chronologically	metadata_only	lexical
+chronologize	added	lexical
+chronomancer	added	lexical
+chronon	metadata_only	lexical
+chronophagous	added	lexical
+Chronos	added	lexical
+chronoscopy	added	lexical
+chronostasis	added	lexical
+chronotaxis	added	lexical
+Chungyuan Standard Time Zone	added	lexical
+clock hour	added	lexical
+clock is ticking	added	lexical
+clock on	added	lexical
+clock paradox	added	lexical
+clocktime	metadata_only	lexical
+closed timelike curve	metadata_only	lexical
+coinstantaneousness	added	lexical
+common	metadata_only	lexical
+confinement time	added	lexical
+contemporaneous	metadata_only	lexical
+contemporaneously	metadata_only	lexical
+continental time zone	added	lexical
+continual	metadata_only	lexical
+continually	metadata_only	lexical
+continuous	metadata_only	lexical
+cooling-off period	added	lexical
+Coordinated Mars Time	added	lexical
+Coordinated Universal Time	added	lexical
+Copernican time principle	added	lexical
+Copper Age	added	lexical
+Coronatide	added	lexical
+coronatime	added	lexical
+cosmic calendar	added	lexical
+COVID-tide	added	lexical
+COVIDtide	added	lexical
+Covidtide	added	lexical
+CST	metadata_only	lexical
+cusper	added	lexical
+cyclic	metadata_only	lexical
+Dark Ages	added	lexical
+darwin	metadata_only	lexical
+date of birth	added	lexical
+date of death	added	lexical
+dated	metadata_only	lexical
+dawdle	metadata_only	lexical
+dawn of time	added	lexical
+day and night	added	lexical
+daylight saving time	added	lexical
+daylong	metadata_only	lexical
+dayslong	added	lexical
+daytime	metadata_only	lexical
+DDMMYYYY	added	lexical
+dead week	added	lexical
+decade long	added	lexical
+decade-long	added	lexical
+decadelong	added	lexical
+decamillennial	added	lexical
+decay constant	added	lexical
+decennal	added	lexical
+decennalian	added	lexical
+decenniad	added	lexical
+decennial	metadata_only	lexical
+decennium	added	lexical
+deep time	added	lexical
+diachronic	metadata_only	lexical
+diachrony	added	lexical
+digital immigrant	added	lexical
+dilatory	metadata_only	lexical
+do time	added	lexical
+dodecade	added	lexical
+dogwatch	added	lexical
+donkey's	added	lexical
+doomsday	metadata_only	lexical
+downtime	metadata_only	lexical
+drawn-out	added	lexical
+DST	added	lexical
+DTC	metadata_only	lexical
+due date	added	lexical
+duodecade	added	lexical
+during	metadata_only	lexical
+Dvapara Yuga	added	lexical
+earlier	metadata_only	lexical
+earliest	metadata_only	lexical
+early childhood	added	lexical
+earlycomer	added	lexical
+Earth day	added	lexical
+echo time	added	lexical
+EDT	metadata_only	lexical
+egg timer	added	lexical
+eight o'clock	added	lexical
+elapse	metadata_only	lexical
+eleven o'clock	added	lexical
+eleventh hour	added	lexical
+Elon time	added	lexical
+eon	metadata_only	lexical
+epact	added	lexical
+epagomena	added	lexical
+ephemeral	metadata_only	lexical
+equal hour	added	lexical
+equinoctial	added	lexical
+EST	added	lexical
+eternal	metadata_only	lexical
+eternal recurrence	added	lexical
+eternal return	added	lexical
+eternality	added	lexical
+eternally	metadata_only	lexical
+eventual	metadata_only	lexical
+ever and anon	added	lexical
+every so often	added	lexical
+expiry date	added	lexical
+extratemporal	added	lexical
+eyeblink	added	lexical
+fall on	added	lexical
+fashion week	added	lexical
+fashionably late	added	lexical
+Father Time	added	lexical
+fifteen hundred	added	lexical
+Filipino time	added	lexical
+fillip	metadata_only	lexical
+financial year	added	lexical
+first of never	added	lexical
+five o'clock	added	lexical
+five-second rule	added	lexical
+flicker	metadata_only	lexical
+floruit	added	lexical
+forebear	metadata_only	lexical
+forever and a day	added	lexical
+fortnite	added	lexical
+four o'clock	added	lexical
+four score and seven years ago	added	lexical
+fourth dimension	added	lexical
+fractal response time	added	lexical
+free time	added	lexical
+freeze-up	added	lexical
+French Revolutionary Time	added	lexical
+frequency	metadata_only	lexical
+frequent	metadata_only	lexical
+frequently	metadata_only	lexical
+Frinight	added	lexical
+from time to time	added	lexical
+frozar	added	lexical
+frozen star	added	lexical
+frozon	added	lexical
+fullness of time	added	lexical
+galactic year	added	lexical
+generation ship	added	lexical
+genship	added	lexical
+geologic era	added	lexical
+geologic time	added	lexical
+geologic time scale	added	lexical
+gerospan	added	lexical
+gestation period	added	lexical
+giga-annum	added	lexical
+gigasecond	added	lexical
+gigayear	added	lexical
+gliff	added	lexical
+gloaming	metadata_only	lexical
+GMT	metadata_only	lexical
+golden age	added	lexical
+golden number	added	lexical
+Greenwich Time Signal	added	lexical
+H1	added	lexical
+H2	added	lexical
+half past	added	lexical
+half-decade	added	lexical
+half-life	added	lexical
+half-time	metadata_only	lexical
+half-year	added	lexical
+halfmonth	added	lexical
+harvest time	added	lexical
+healthspan	added	lexical
+hebdomadal	added	lexical
+hebdomadary	added	lexical
+henceforth	metadata_only	lexical
+high time	added	lexical
+historic	metadata_only	lexical
+historical	metadata_only	lexical
+historically	metadata_only	lexical
+hitherto	metadata_only	lexical
+HMS	metadata_only	lexical
+horology	added	lexical
+hot minute	added	lexical
+hourful	added	lexical
+hourlong	added	lexical
+hourly	metadata_only	lexical
+hourslong	added	lexical
+HST	metadata_only	lexical
+hydrogen maser atomic clock	added	lexical
+hypertime	added	lexical
+I don't have all day	added	lexical
+ice age	added	lexical
+ICT	metadata_only	lexical
+ides of March	added	lexical
+immediately	metadata_only	lexical
+impending	metadata_only	lexical
+impermanent	metadata_only	lexical
+in a few shakes	added	lexical
+in a minute	added	lexical
+in living memory	added	lexical
+in perpetuity	added	lexical
+in recent memory	added	lexical
+in season	added	lexical
+in the blink of an eye	added	lexical
+in the nick of time	added	lexical
+in the twinkling of a bedstaff	added	lexical
+in the wink of an eye	added	lexical
+in three days	added	lexical
+in two shakes of a lamb's tail	added	lexical
+indefinitely	metadata_only	lexical
+infanthood	added	lexical
+insertion time	added	lexical
+instantaneous	metadata_only	lexical
+instantaneously	metadata_only	lexical
+instantly	metadata_only	lexical
+interbellum	added	lexical
+interminable	metadata_only	lexical
+intermission	metadata_only	lexical
+intermittency	added	lexical
+intermittent	metadata_only	lexical
+intermittently	metadata_only	lexical
+intertestamental	added	lexical
+Iron Age	added	lexical
+isochronon	added	lexical
+Israel Daylight Time	added	lexical
+jiffy	metadata_only	lexical
+JST	added	lexical
+just in time	added	lexical
+kairos	metadata_only	lexical
+Kali Yuga	added	lexical
+Kansu-Szechuan Time Zone	added	lexical
+kappa effect	added	lexical
+kill time	added	lexical
+kiloannum	added	lexical
+kiloday	added	lexical
+kilosecond	added	lexical
+kiloyear	added	lexical
+Krita Yuga	added	lexical
+Kunlun Time Zone	added	lexical
+lagtime	added	lexical
+last week	added	lexical
+last-time	added	lexical
+lately	metadata_only	lexical
+later	metadata_only	lexical
+latest	metadata_only	lexical
+Latin time	added	lexical
+latter-day	added	lexical
+learning season	added	lexical
+life expectancy	added	lexical
+life long	added	lexical
+life-long	added	lexical
+lifelong	metadata_only	lexical
+lifespan	metadata_only	lexical
+light equation	added	lexical
+like clockwork	added	lexical
+LMT	metadata_only	lexical
+local mean sidereal time	added	lexical
+local sidereal time	added	lexical
+local time	added	lexical
+long-span	added	lexical
+longevity	metadata_only	lexical
+lost in time	added	lexical
+luster	metadata_only	lexical
+lustre	metadata_only	lexical
+lustrum	added	lexical
+Madras Time	added	lexical
+magnetic local time	added	lexical
+Mars Coordinated Time	added	lexical
+matins	metadata_only	lexical
+mauvais quart d'heure	added	lexical
+MDT	metadata_only	lexical
+me time	added	lexical
+mean sidereal time	added	lexical
+meantime	metadata_only	lexical
+meanwhile	metadata_only	lexical
+mediaeval	metadata_only	lexical
+megasecond	added	lexical
+megayear	added	lexical
+menstrual	metadata_only	lexical
+metronomy	added	lexical
+microcentury	added	lexical
+microfortnight	added	lexical
+Middle Ages	added	lexical
+millennial	metadata_only	lexical
+millennium bug	added	lexical
+millifortnight	added	lexical
+millionennium	added	lexical
+minuteslong	added	lexical
+mists of time	added	lexical
+modern	metadata_only	lexical
+modern history	added	lexical
+modernity	metadata_only	lexical
+modernly	added	lexical
+momentarily	metadata_only	lexical
+momentary	metadata_only	lexical
+momentless	added	lexical
+Monight	added	lexical
+month of Sundays	added	lexical
+monthlong	added	lexical
+monthslong	added	lexical
+mooch	metadata_only	lexical
+morrow	metadata_only	lexical
+MST	metadata_only	lexical
+muhurta	added	lexical
+multicentury	added	lexical
+multiday	added	lexical
+multidecade	added	lexical
+multihour	added	lexical
+multiminute	added	lexical
+multisecond	added	lexical
+multisecular	added	lexical
+MYA	added	lexical
+nanocentury	added	lexical
+nanofortnight	added	lexical
+never	metadata_only	lexical
+never again	added	lexical
+never put off until tomorrow what you can do today	added	lexical
+new year	added	lexical
+New York minute	added	lexical
+New York second	added	lexical
+next	metadata_only	lexical
+next time	added	lexical
+next tomorrow	added	lexical
+next week	added	lexical
+nick of time	added	lexical
+nick-of-time	added	lexical
+Nigerian time	added	lexical
+nightlong	added	lexical
+nightly	metadata_only	lexical
+nighttime	metadata_only	lexical
+nine o'clock	added	lexical
+nocturnally	added	lexical
+non-Archimedean time	added	lexical
+none too soon	added	lexical
+Nortia	added	lexical
+not a minute too soon	added	lexical
+not a moment too soon	added	lexical
+novennial	added	lexical
+now and again	added	lexical
+now and then	added	lexical
+nychthemeron	added	lexical
+occasional	metadata_only	lexical
+occasionally	metadata_only	lexical
+octingenary	added	lexical
+octingentenary	added	lexical
+of late	added	lexical
+off-season	added	lexical
+office hours	added	lexical
+oft	metadata_only	lexical
+often	metadata_only	lexical
+ohnosecond	added	lexical
+old age	added	lexical
+Olympiad	added	lexical
+on midnight	added	lexical
+on the hour	added	lexical
+on time	added	lexical
+once	metadata_only	lexical
+once in a blue moon	added	lexical
+once in a purple moon	added	lexical
+one day	added	lexical
+one o'clock	added	lexical
+ongoing	metadata_only	lexical
+operating time	metadata_only	lexical
+ordinal date	added	lexical
+origin	metadata_only	lexical
+over and over	added	lexical
+passage of time	added	lexical
+pcm	metadata_only	lexical
+PDT	metadata_only	lexical
+peacetime	metadata_only	lexical
+perennial	metadata_only	lexical
+perennially	metadata_only	lexical
+periodic	metadata_only	lexical
+periodic month	added	lexical
+periodically	metadata_only	lexical
+permanently	metadata_only	lexical
+perpetual	metadata_only	lexical
+perpetually	metadata_only	lexical
+perpetuate	metadata_only	lexical
+perpetuity	metadata_only	lexical
+plurisecular	added	lexical
+post-modern	added	lexical
+postbellum	added	lexical
+posterior	metadata_only	lexical
+postmodern	metadata_only	lexical
+postpone	metadata_only	lexical
+postprandial	metadata_only	lexical
+postprandially	added	lexical
+pre-hexameral	added	lexical
+precosmic	added	lexical
+precreative	added	lexical
+predecessor	metadata_only	lexical
+prehistory	metadata_only	lexical
+preplanetary	added	lexical
+prepone	added	lexical
+preprandial	added	lexical
+preprandially	added	lexical
+pretemporal	added	lexical
+previously	metadata_only	lexical
+primary time standard	metadata_only	lexical
+prime-time	added	lexical
+primordial	metadata_only	lexical
+prior	metadata_only	lexical
+procrastinate	metadata_only	lexical
+procrastination	metadata_only	lexical
+procrastination is the thief of time	added	lexical
+proemptosis	added	lexical
+prolong	metadata_only	lexical
+promptly	metadata_only	lexical
+proper time	added	lexical
+prophetic week	added	lexical
+protracted	metadata_only	lexical
+PST	added	lexical

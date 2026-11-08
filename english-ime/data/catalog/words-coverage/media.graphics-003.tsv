@@ -1,0 +1,12 @@
+surface	change	kinds
+XGA	added	lexical
+z-buffer	added	lexical
+z-buffering	added	lexical
+z-culling	added	lexical
+z-fighting	added	lexical
+z-index	added	lexical
+z-order	added	lexical
+z-test	metadata_only	lexical
+ZWJ	added	lexical
+ZWNBSP	added	lexical
+ZWNJ	added	lexical
