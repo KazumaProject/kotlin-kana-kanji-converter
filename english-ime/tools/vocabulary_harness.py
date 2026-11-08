@@ -346,6 +346,24 @@ def approved_entries(connection):
     return entries, decisions
 
 
+def approved_metadata(connection):
+    return [entry for row in connection.execute("select payload from candidates where decision='include' order by position")
+            for entry in json.loads(row['payload']).get('metadata', [])]
+
+
+def merge_memberships(entries):
+    merged = {}
+    for entry in entries:
+        identity = entry['lexeme_id'], entry['surface']
+        if identity not in merged:
+            merged[identity] = dict(entry)
+        else:
+            prior = merged[identity]
+            require(prior['lemma'] == entry['lemma'], 'Conflicting supplemental lemma')
+            prior['categories'] = ','.join(sorted(set(prior['categories'].split(',')) | set(entry['categories'].split(','))))
+    return sorted(merged.values(), key=lambda e: (sources.key(e['surface']), e['surface'], e['lexeme_id']))
+
+
 def build(args):
     directory = external(args.work_dir)
     with lock(directory):
@@ -356,7 +374,8 @@ def build(args):
             current = Path(config['supplement'])
             require(replay.sha(current / 'manifest.json') == config['supplementManifestSha256'], 'Starting supplement changed')
             additions, decisions = approved_entries(connection)
-            require(additions, 'No source-reviewed include decisions; Gemini proposals alone cannot be built')
+            annotations = approved_metadata(connection)
+            require(additions or annotations, 'No source-reviewed include decisions; Gemini proposals alone cannot be built')
             destination = external(args.out)
             require(not destination.exists(), 'Build output already exists')
             destination.parent.mkdir(parents=True, exist_ok=True)
@@ -377,13 +396,33 @@ def build(args):
                     require(not target.exists() or replay.sha(target) == record['sha256'], 'Conflicting reference notices')
                     if not target.exists():
                         shutil.copyfile(record['path'], target)
-                combined = sources.read_entries(current / 'entries.tsv') + additions
-                require(len({(e['lexeme_id'], e['surface']) for e in combined}) == len(combined), 'Duplicate supplement identity')
-                combined.sort(key=lambda entry: (sources.key(entry['surface']), entry['surface'], entry['lexeme_id']))
+                combined = merge_memberships(sources.read_entries(current / 'entries.tsv') + additions)
                 with (supplement / 'entries.tsv').open('w', encoding='utf-8', newline='') as stream:
                     writer = csv.DictWriter(stream, fieldnames=sources.FIELDS, delimiter='\t', lineterminator='\n')
                     writer.writeheader()
                     writer.writerows(combined)
+                old_metadata = sources.read_entries(current / 'metadata.tsv') if 'metadata.tsv' in old['files'] else []
+                metadata = merge_memberships(old_metadata + annotations)
+                if metadata:
+                    with (supplement / 'metadata.tsv').open('w', encoding='utf-8', newline='') as stream:
+                        writer = csv.DictWriter(stream, fieldnames=sources.FIELDS, delimiter='\t', lineterminator='\n')
+                        writer.writeheader()
+                        writer.writerows(metadata)
+                definitions = {}
+                if 'categories.tsv' in old['files']:
+                    with (current / 'categories.tsv').open(encoding='utf-8') as stream:
+                        definitions = {r['category']: r for r in csv.DictReader(stream, delimiter='\t')}
+                used = {c for e in combined + metadata for c in e['categories'].split(',')}
+                for record in config.get('additionalCategories', []):
+                    if record['category'] in used:
+                        require(record['category'] not in definitions or definitions[record['category']] == record,
+                            'Changed category definition')
+                        definitions[record['category']] = record
+                if definitions:
+                    with (supplement / 'categories.tsv').open('w', encoding='utf-8', newline='') as stream:
+                        writer = csv.DictWriter(stream, fieldnames=['category', 'definition', 'examples'], delimiter='\t', lineterminator='\n')
+                        writer.writeheader()
+                        writer.writerows(definitions[k] for k in sorted(definitions))
                 notice = supplement / 'notices/VOCABULARY-HARNESS-SOURCES.txt'
                 notice.write_text('English vocabulary supplement: selected attested spellings and lexical roles from the pinned\n'
                     'lexical sources and catalogs identified in entries.tsv and manifest.json.\n'
@@ -394,9 +433,15 @@ def build(args):
                 public_sources = json.loads(json.dumps(config['sources']))
                 for record in public_sources.get('references', {}).get('notices', []):
                     record.pop('path', None)
+                # Appending data must not discard the source/license pins of
+                # earlier acquisitions that remain in the combined ledger.
+                if 'vocabularyHarness' in old['sources']:
+                    public_sources['previous'] = old['sources']['vocabularyHarness']
                 manifest = dict(old, files={str(p.relative_to(supplement)): replay.sha(p) for p in sorted(supplement.rglob('*')) if p.is_file()},
                     expectedOutputs={}, sources=old['sources'] | {'vocabularyHarness': dict(public_sources,
                         candidatesSha256=config['candidatesSha256'], decisionsSha256=decision_hash)})
+                if metadata or definitions:
+                    manifest.update(kind='reviewed-english-supplement-v2', schemaVersion=2)
                 dump(supplement / 'manifest.json', manifest)
                 inputs = directory / 'base-inputs'
                 # Revalidate extracted inputs instead of trusting a previous extraction.
@@ -406,7 +451,7 @@ def build(args):
                     '--lexicon', inputs / 'grammar', '--relations', inputs / 'grammar/relations.tsv',
                     '--corrections', inputs / 'surface-corrections.tsv', '--notices', inputs / 'notices',
                     '--supplement', supplement, '--out', raw)
-                names = replay.SUPPLEMENT_OUTPUTS | {'grammar/' + name for name in manifest['files'] if name.startswith('notices/')}
+                names = replay.supplement_output_names(manifest)
                 manifest['expectedOutputs'] = {name: replay.sha(raw / name) for name in sorted(names)}
                 dump(supplement / 'manifest.json', manifest)
                 assets = staged / 'assets'
@@ -425,7 +470,9 @@ def build(args):
                     path.rename(published / path.name)
                 dump(published / 'verification.json', dict(schemaVersion=1, candidatesSha256=config['candidatesSha256'],
                     decisionsSha256=decision_hash, addedSurfaces=len({e['surface'] for e in additions}),
-                    addedFormRows=len(additions), replayVerified=True, binaryAuditVerified=True,
+                    addedFormRows=len(additions), metadataOperations=len(annotations), metadataRows=len(metadata),
+                    metadataSpellings=len({e['surface'] for e in annotations}), additionalCategories=len(definitions),
+                    replayVerified=True, binaryAuditVerified=True,
                     runtimeParityVerified=True, runtimeRolesVerified=True))
                 published.rename(destination)
             return replay.read_json(destination / 'verification.json')

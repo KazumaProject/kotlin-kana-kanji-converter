@@ -1,0 +1,22 @@
+Dictionary topic catalog: source labels/terms selected by project-authored scopes.
+Changes: match exact declared spellings in pinned sources, normalize document whitespace, attach topical memberships; lowercase ordinary terms are explicitly declared by project scopes and may match heading case variants; names, languages and acronyms retain exact case. No suffix or plural derivation. No definitions, code examples or articles redistributed; no claim of disambiguated senses or preferred title case.
+kubernetes: Kubernetes documentation contributors
+https://kubernetes.io/docs/reference/glossary/
+CC-BY-4.0 — https://raw.githubusercontent.com/kubernetes/website/main/LICENSE
+linguist: GitHub and Linguist contributors
+https://raw.githubusercontent.com/github-linguist/linguist/main/lib/linguist/languages.yml
+MIT — https://raw.githubusercontent.com/github-linguist/linguist/main/LICENSE
+ml: Microsoft and .NET documentation contributors
+https://raw.githubusercontent.com/dotnet/docs/main/docs/machine-learning/resources/glossary.md
+CC-BY-4.0 — https://raw.githubusercontent.com/dotnet/docs/main/LICENSE
+postgres: PostgreSQL Global Development Group; University of California
+https://raw.githubusercontent.com/postgres/postgres/REL_18_STABLE/doc/src/sgml/glossary.sgml
+PostgreSQL — https://raw.githubusercontent.com/postgres/postgres/REL_18_STABLE/COPYRIGHT
+python: Python Software Foundation and contributors
+https://raw.githubusercontent.com/python/cpython/3.14/Doc/glossary.rst
+PSF-2.0 — https://raw.githubusercontent.com/python/cpython/3.14/LICENSE
+transformers: Hugging Face and Transformers contributors
+https://raw.githubusercontent.com/huggingface/transformers/main/docs/source/en/glossary.md
+Apache-2.0 — https://raw.githubusercontent.com/huggingface/transformers/main/LICENSE
+MDN Web Docs contributors; exact term matches in referenced glossary pages. CC BY-SA 2.5 or later.
+https://developer.mozilla.org/en-US/docs/MDN/Writing_guidelines/Attrib_copyright_license

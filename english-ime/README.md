@@ -140,6 +140,100 @@ python3 -B english-ime/tools/verify_conversion_cli.py \
   --inputs /tmp/english-inputs.json
 ```
 
+## 対象を固定して収録率を改善する / Operate the target catalog
+
+`catalog_harness.py` は、既存辞書を調べる前に必要語の集合を固定し、表記の収録率と
+カテゴリの補完率を別々に測定します。対象・保留語も分母に残します。1,000件は採用時の
+チェックポイントの大きさであり、必要語の上限ではありません。
+
+The versioned [taxonomy](data/catalog/taxonomy.json) defines 25 topical categories:
+daily general/time/family/home/food/shopping/money/transport/health/education/work/
+communication; technology development/web/mobile/OS/hardware/network/database/cloud/
+security/AI/languages; and person/product names. The independent
+[target declarations](data/catalog/core-targets.json) combine NGSL headwords, explicit
+everyday/technical requirements, attested given names/surnames, and a frozen top-100
+Homebrew catalog selection. Primary product labels are core; explicit additional
+labels are extended. These are scoped requirements, not a claim to cover all English.
+
+Topic, lexical role, lemma/form, entity kind and target tier are separate axes.
+Existing reviewed lexical analyses can support topic-only enrichment. Their lemma,
+POS, readings and costs are retained; annotations cannot invent grammatical roles or
+new candidates. New spellings require independent source evidence. Ordinary lowercase
+terms are declared explicitly and may match source heading case; names, acronyms and
+language labels require exact case. No suffix/plural derivation is performed. Topic
+membership classifies declared surface vocabulary; it does not disambiguate senses.
+
+Use Python 3.11+, the installed JDK 17 CLI, and new external work/output directories.
+First obtain the lexical sources with `dictionary_sources.py fetch` as shown below,
+and build the current full extended dictionary. Then:
+
+```sh
+python3 -B english-ime/tools/catalog_harness.py fetch \
+  --source-dir /tmp/english-catalog-sources
+python3 -B english-ime/tools/catalog_harness.py prepare \
+  --work-dir /tmp/english-catalog-run --assets /tmp/reviewed-english-extended \
+  --source-dir /tmp/english-catalog-sources \
+  --lexical-source-dir /tmp/english-dictionary-sources --esdb-dir /tmp/english-esdb
+python3 -B english-ime/tools/catalog_harness.py report \
+  --work-dir /tmp/english-catalog-run --out /tmp/english-catalog-before
+python3 -B english-ime/tools/catalog_harness.py adopt \
+  --work-dir /tmp/english-catalog-run --batch-size 1000
+python3 -B english-ime/tools/catalog_harness.py build \
+  --work-dir /tmp/english-catalog-run --out /tmp/english-catalog-result
+python3 -B english-ime/tools/catalog_harness.py report \
+  --work-dir /tmp/english-catalog-run --assets /tmp/english-catalog-result/assets \
+  --out /tmp/english-catalog-after
+```
+
+`fetch` freezes source/notice bytes, URLs, authors, capture times and hashes; it
+verifies an existing snapshot instead of refreshing it. `prepare` seals the complete
+targets, source proofs, decoded baseline inventory and planned changes.
+`adopt` re-extracts source evidence and dictionary bindings, then commits decisions
+in resumable batches with an immutable journal. Repetition does not double-adopt.
+Optional previous model vetoes remain vetoes; no model output establishes a word.
+If `prepare` reports zero planned operations, no build is needed; retain the
+baseline report as the result and inspect its unresolved targets.
+
+`report.json`, `coverage.tsv` and `unresolved.jsonl` distinguish existing spellings,
+new normalized spellings, case variants, metadata-only operations and blocked
+evidence/format/binding cases, with core/extended and per-topic denominators. A
+registered spelling means an actual decoded candidate under some real reading; it
+does not assert typing, completion or ranking behavior. Coverage of overlapping
+topics is not additive. Reports and all downloaded sources remain outside Git.
+Targets retain kind/entity identity, so a shared display spelling can have several
+targets. Coverage denominators count targets; newly registered spelling totals
+count distinct display strings.
+
+For missing MDN evidence, `fetch-references --work-dir /tmp/english-catalog-run
+--source-dir /tmp/english-catalog-new-sources` can add official glossary pages to a
+copy of a source snapshot. It records download failures. Prepare a **new** run from
+the enriched snapshot; a sealed run never changes its target/evidence inputs.
+
+Supplement schema v2 adds `categories.tsv` (topic definitions) and `metadata.tsv`
+(topic/domain memberships attached to exact existing lexical identities), with
+manifest checksums. Schema v1 replay remains supported. Existing punctuation such
+as an already encoded `C++` can receive metadata without new readings; unsupported
+**new** labels remain blocked. The binary category format remains ECAT1. Build
+replays fresh inputs and verifies all previous reading/surface/cost pairs, lexical
+analyses and memberships, plus full/runtime parity. These are JVM checks; Android
+IME compatibility remains unverified for these additions.
+
+Additional source notices accompany the adopted data:
+
+| Source | License / attribution |
+| --- | --- |
+| [Python glossary](https://github.com/python/cpython/blob/3.14/Doc/glossary.rst) | [PSF 2.0 and bundled terms](https://github.com/python/cpython/blob/3.14/LICENSE), Python Software Foundation and contributors |
+| [PostgreSQL glossary](https://github.com/postgres/postgres/blob/REL_18_STABLE/doc/src/sgml/glossary.sgml) | [PostgreSQL](https://github.com/postgres/postgres/blob/REL_18_STABLE/COPYRIGHT), PostgreSQL Global Development Group / University of California |
+| [.NET ML glossary](https://github.com/dotnet/docs/blob/main/docs/machine-learning/resources/glossary.md) | [CC BY 4.0](https://github.com/dotnet/docs/blob/main/LICENSE), Microsoft and .NET documentation contributors |
+| [Transformers glossary](https://github.com/huggingface/transformers/blob/main/docs/source/en/glossary.md) | [Apache 2.0](https://github.com/huggingface/transformers/blob/main/LICENSE), Hugging Face and contributors |
+| [Kubernetes glossary](https://kubernetes.io/docs/reference/glossary/) | [CC BY 4.0](https://github.com/kubernetes/website/blob/main/LICENSE), Kubernetes documentation contributors |
+| [Linguist language names](https://github.com/github-linguist/linguist/blob/main/lib/linguist/languages.yml) | [MIT](https://github.com/github-linguist/linguist/blob/main/LICENSE), GitHub and Linguist contributors |
+
+NGSL, ESDB, WordNet, MDN and Homebrew terms/attribution from the acquisition section
+below are retained. Data licenses apply separately from the program's MIT license.
+This workflow makes **zero external AI API calls**, has no paid fallback and does
+not install a schedule. It can be operated manually using public sources.
+
 ## Grow the vocabulary with a resumable review harness
 
 For category-balanced dictionary acquisition, use `--profile dictionary` in the
@@ -241,8 +335,9 @@ and new binary pair/category, and compares full/runtime conversion results. It
 publishes `supplement`, `assets`, `runtime` and `verification.json` only on success.
 For a custom supplement, the binary audit accepts `-PenglishSupplementEntries`;
 `-PenglishRuntimeAssets` also audits every packed candidate and lexical surface role.
-Only reviewed `supplement/entries.tsv`, its manifest and required notices belong
-in a vocabulary PR; the generated binaries and verification report do not.
+Only adopted `supplement/entries.tsv`, optional v2 `metadata.tsv`/`categories.tsv`,
+its manifest and required notices belong in the data change; the generated binaries
+and verification report do not.
 
 Evaluation cases are frozen external JSONL records with exactly `id`, `input`,
 `expected`, `mode` (`exact`/`prefix`), `domain` and an HTTPS `source`. Use a pinned

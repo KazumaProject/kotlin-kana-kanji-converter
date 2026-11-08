@@ -28,7 +28,10 @@ fun main(args: Array<String>) {
     val expected = forms.flatMap { (_, _, surface) -> supplementReadings(surface).map { it to surface } }.toSet() - before.keys
     check(after.keys - before.keys == expected) { "Supplement binary pairs differ from the reviewed ledger" }
     val lexicon = Lexicon.load(File(args[1], "grammar"))
-    for ((id, lemma, surface, categories) in forms) {
+    val metadataFile = File(args[2]).parentFile.resolve("metadata.tsv")
+    val metadata = if (metadataFile.isFile) metadataFile.readTsv(
+        "lexeme_id", "lemma", "surface", "categories", "domain", "evidence", "source_ref") else emptyList()
+    for ((id, lemma, surface, categories) in forms + metadata) {
         val form = lexicon.lookup(surface).single { it.key.lexemeId == id && it.key.surface == surface }
         val expectedRoles = lexicon.lookup(surface).flatMap { it.dictionaries }.toSet()
         check(extended.grammarRoles.lookup(surface, lookupKey(surface)) == expectedRoles) {
@@ -36,6 +39,14 @@ fun main(args: Array<String>) {
         }
         check(form.lemma == lemma && form.dictionaries.containsAll(categories.split(','))) {
             "Supplement lexical form or categories differ for $id/$surface"
+        }
+    }
+    val beforeLexicon = Lexicon.load(File(args[0], "grammar"))
+    val afterForms = lexicon.forms.associateBy { it.key }
+    for (form in beforeLexicon.forms) {
+        val current = checkNotNull(afterForms[form.key]) { "Missing prior lexical analysis ${form.key}" }
+        check(current.lemma == form.lemma && current.dictionaries.containsAll(form.dictionaries)) {
+            "Changed or removed prior lexical analysis ${form.key}"
         }
     }
     runtime?.let {

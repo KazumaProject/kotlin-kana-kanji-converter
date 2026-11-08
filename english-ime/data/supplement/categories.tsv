@@ -1,0 +1,26 @@
+category	definition	examples
+topic_daily_communication	会話・連絡 / Source-attested vocabulary in daily.communication; not a sense-disambiguation rule.	hello, goodbye, please
+topic_daily_education	学校・学習 / Source-attested vocabulary in daily.education; not a sense-disambiguation rule.	school, student, teacher
+topic_daily_family	家族・人間関係 / Source-attested vocabulary in daily.family; not a sense-disambiguation rule.	family, parent, mother
+topic_daily_food	食事・料理 / Source-attested vocabulary in daily.food; not a sense-disambiguation rule.	food, breakfast, lunch
+topic_daily_general	Source-listed basic vocabulary; membership is topical, not sense disambiguation.	book, water
+topic_daily_health	健康・受診 / Source-attested vocabulary in daily.health; not a sense-disambiguation rule.	health, hospital, clinic
+topic_daily_home	住まい・家事 / Source-attested vocabulary in daily.home; not a sense-disambiguation rule.	home, house, apartment
+topic_daily_money	お金・手続き / Source-attested vocabulary in daily.money; not a sense-disambiguation rule.	money, bank, bank account
+topic_daily_shopping	買い物 / Source-attested vocabulary in daily.shopping; not a sense-disambiguation rule.	shop, store, supermarket
+topic_daily_time	日時 / Source-attested vocabulary in daily.time; not a sense-disambiguation rule.	today, tomorrow, yesterday
+topic_daily_transport	移動・旅行 / Source-attested vocabulary in daily.transport; not a sense-disambiguation rule.	travel, trip, train
+topic_daily_work	仕事・連絡 / Source-attested vocabulary in daily.work; not a sense-disambiguation rule.	work, job, office
+topic_names_person	名・姓 / Source-attested vocabulary in names.person; not a sense-disambiguation rule.	John, Mary, James
+topic_names_product	商品・ソフトウェア名 / Source-attested vocabulary in names.product; not a sense-disambiguation rule.	published product names
+topic_technology_ai	AI・機械学習 / Source-attested vocabulary in technology.ai; not a sense-disambiguation rule.	machine learning, artificial intelligence, neural network
+topic_technology_cloud	クラウド・コンテナ / Source-attested vocabulary in technology.cloud; not a sense-disambiguation rule.	cloud, container, image
+topic_technology_database	データベース / Source-attested vocabulary in technology.database; not a sense-disambiguation rule.	database, SQL, query
+topic_technology_development	開発・プログラミング / Source-attested vocabulary in technology.development; not a sense-disambiguation rule.	algorithm, compiler, interpreter
+topic_technology_hardware	ハードウェア / Source-attested vocabulary in technology.hardware; not a sense-disambiguation rule.	CPU, GPU, RAM
+topic_technology_languages	コンピューター言語 / Source-attested vocabulary in technology.languages; not a sense-disambiguation rule.	Python, Kotlin, Java
+topic_technology_mobile	モバイル / Source-attested vocabulary in technology.mobile; not a sense-disambiguation rule.	Android, iOS, application
+topic_technology_network	ネットワーク / Source-attested vocabulary in technology.network; not a sense-disambiguation rule.	network, protocol, TCP
+topic_technology_os	OS・実行環境 / Source-attested vocabulary in technology.os; not a sense-disambiguation rule.	operating system, kernel, process
+topic_technology_security	セキュリティ / Source-attested vocabulary in technology.security; not a sense-disambiguation rule.	security, authentication, authorization
+topic_technology_web	Web / Source-attested vocabulary in technology.web; not a sense-disambiguation rule.	HTML, CSS, JavaScript

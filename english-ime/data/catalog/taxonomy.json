@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 2,
+  "topics": [
+    {
+      "id": "daily.general",
+      "category": "topic_daily_general",
+      "domain": "daily",
+      "label": "基本日常語",
+      "definition": "Source-listed basic vocabulary; membership is topical, not sense disambiguation.",
+      "examples": "book, water"
+    },
+    {
+      "id": "daily.time",
+      "category": "topic_daily_time",
+      "domain": "daily",
+      "label": "日時",
+      "definition": "日時 / Source-attested vocabulary in daily.time; not a sense-disambiguation rule.",
+      "examples": "today, tomorrow, yesterday"
+    },
+    {
+      "id": "daily.family",
+      "category": "topic_daily_family",
+      "domain": "daily",
+      "label": "家族・人間関係",
+      "definition": "家族・人間関係 / Source-attested vocabulary in daily.family; not a sense-disambiguation rule.",
+      "examples": "family, parent, mother"
+    },
+    {
+      "id": "daily.home",
+      "category": "topic_daily_home",
+      "domain": "daily",
+      "label": "住まい・家事",
+      "definition": "住まい・家事 / Source-attested vocabulary in daily.home; not a sense-disambiguation rule.",
+      "examples": "home, house, apartment"
+    },
+    {
+      "id": "daily.food",
+      "category": "topic_daily_food",
+      "domain": "daily",
+      "label": "食事・料理",
+      "definition": "食事・料理 / Source-attested vocabulary in daily.food; not a sense-disambiguation rule.",
+      "examples": "food, breakfast, lunch"
+    },
+    {
+      "id": "daily.shopping",
+      "category": "topic_daily_shopping",
+      "domain": "daily",
+      "label": "買い物",
+      "definition": "買い物 / Source-attested vocabulary in daily.shopping; not a sense-disambiguation rule.",
+      "examples": "shop, store, supermarket"
+    },
+    {
+      "id": "daily.money",
+      "category": "topic_daily_money",
+      "domain": "daily",
+      "label": "お金・手続き",
+      "definition": "お金・手続き / Source-attested vocabulary in daily.money; not a sense-disambiguation rule.",
+      "examples": "money, bank, bank account"
+    },
+    {
+      "id": "daily.transport",
+      "category": "topic_daily_transport",
+      "domain": "travel",
+      "label": "移動・旅行",
+      "definition": "移動・旅行 / Source-attested vocabulary in daily.transport; not a sense-disambiguation rule.",
+      "examples": "travel, trip, train"
+    },
+    {
+      "id": "daily.health",
+      "category": "topic_daily_health",
+      "domain": "daily",
+      "label": "健康・受診",
+      "definition": "健康・受診 / Source-attested vocabulary in daily.health; not a sense-disambiguation rule.",
+      "examples": "health, hospital, clinic"
+    },
+    {
+      "id": "daily.education",
+      "category": "topic_daily_education",
+      "domain": "daily",
+      "label": "学校・学習",
+      "definition": "学校・学習 / Source-attested vocabulary in daily.education; not a sense-disambiguation rule.",
+      "examples": "school, student, teacher"
+    },
+    {
+      "id": "daily.work",
+      "category": "topic_daily_work",
+      "domain": "business",
+      "label": "仕事・連絡",
+      "definition": "仕事・連絡 / Source-attested vocabulary in daily.work; not a sense-disambiguation rule.",
+      "examples": "work, job, office"
+    },
+    {
+      "id": "daily.communication",
+      "category": "topic_daily_communication",
+      "domain": "daily",
+      "label": "会話・連絡",
+      "definition": "会話・連絡 / Source-attested vocabulary in daily.communication; not a sense-disambiguation rule.",
+      "examples": "hello, goodbye, please"
+    },
+    {
+      "id": "technology.development",
+      "category": "topic_technology_development",
+      "domain": "technology",
+      "label": "開発・プログラミング",
+      "definition": "開発・プログラミング / Source-attested vocabulary in technology.development; not a sense-disambiguation rule.",
+      "examples": "algorithm, compiler, interpreter"
+    },
+    {
+      "id": "technology.web",
+      "category": "topic_technology_web",
+      "domain": "technology",
+      "label": "Web",
+      "definition": "Web / Source-attested vocabulary in technology.web; not a sense-disambiguation rule.",
+      "examples": "HTML, CSS, JavaScript"
+    },
+    {
+      "id": "technology.mobile",
+      "category": "topic_technology_mobile",
+      "domain": "technology",
+      "label": "モバイル",
+      "definition": "モバイル / Source-attested vocabulary in technology.mobile; not a sense-disambiguation rule.",
+      "examples": "Android, iOS, application"
+    },
+    {
+      "id": "technology.os",
+      "category": "topic_technology_os",
+      "domain": "technology",
+      "label": "OS・実行環境",
+      "definition": "OS・実行環境 / Source-attested vocabulary in technology.os; not a sense-disambiguation rule.",
+      "examples": "operating system, kernel, process"
+    },
+    {
+      "id": "technology.hardware",
+      "category": "topic_technology_hardware",
+      "domain": "technology",
+      "label": "ハードウェア",
+      "definition": "ハードウェア / Source-attested vocabulary in technology.hardware; not a sense-disambiguation rule.",
+      "examples": "CPU, GPU, RAM"
+    },
+    {
+      "id": "technology.network",
+      "category": "topic_technology_network",
+      "domain": "technology",
+      "label": "ネットワーク",
+      "definition": "ネットワーク / Source-attested vocabulary in technology.network; not a sense-disambiguation rule.",
+      "examples": "network, protocol, TCP"
+    },
+    {
+      "id": "technology.database",
+      "category": "topic_technology_database",
+      "domain": "technology",
+      "label": "データベース",
+      "definition": "データベース / Source-attested vocabulary in technology.database; not a sense-disambiguation rule.",
+      "examples": "database, SQL, query"
+    },
+    {
+      "id": "technology.cloud",
+      "category": "topic_technology_cloud",
+      "domain": "technology",
+      "label": "クラウド・コンテナ",
+      "definition": "クラウド・コンテナ / Source-attested vocabulary in technology.cloud; not a sense-disambiguation rule.",
+      "examples": "cloud, container, image"
+    },
+    {
+      "id": "technology.security",
+      "category": "topic_technology_security",
+      "domain": "technology",
+      "label": "セキュリティ",
+      "definition": "セキュリティ / Source-attested vocabulary in technology.security; not a sense-disambiguation rule.",
+      "examples": "security, authentication, authorization"
+    },
+    {
+      "id": "technology.ai",
+      "category": "topic_technology_ai",
+      "domain": "technology",
+      "label": "AI・機械学習",
+      "definition": "AI・機械学習 / Source-attested vocabulary in technology.ai; not a sense-disambiguation rule.",
+      "examples": "machine learning, artificial intelligence, neural network"
+    },
+    {
+      "id": "names.person",
+      "category": "topic_names_person",
+      "domain": "daily",
+      "label": "名・姓",
+      "definition": "名・姓 / Source-attested vocabulary in names.person; not a sense-disambiguation rule.",
+      "examples": "John, Mary, James"
+    },
+    {
+      "id": "names.product",
+      "category": "topic_names_product",
+      "domain": "technology",
+      "label": "商品・ソフトウェア名",
+      "definition": "商品・ソフトウェア名 / Source-attested vocabulary in names.product; not a sense-disambiguation rule.",
+      "examples": "published product names"
+    },
+    {
+      "id": "technology.languages",
+      "category": "topic_technology_languages",
+      "domain": "technology",
+      "label": "コンピューター言語",
+      "definition": "コンピューター言語 / Source-attested vocabulary in technology.languages; not a sense-disambiguation rule.",
+      "examples": "Python, Kotlin, Java"
+    }
+  ]
+}
