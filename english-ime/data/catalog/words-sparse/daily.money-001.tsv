@@ -1,0 +1,98 @@
+surface	change	kinds
+accountant	metadata_only	lexical
+accounting	metadata_only	lexical
+asset	metadata_only	lexical
+audit	metadata_only	lexical
+auditor	metadata_only	lexical
+automatic teller machine	added	lexical
+bank statement	added	lexical
+bankbook	metadata_only	lexical
+bankruptcy	metadata_only	lexical
+bearer bond	added	lexical
+beneficiary	metadata_only	lexical
+benefit	metadata_only	lexical
+bidding	metadata_only	lexical
+bond	metadata_only	lexical
+bonus	metadata_only	lexical
+bookkeeping	metadata_only	lexical
+borrower	metadata_only	lexical
+broker	metadata_only	lexical
+capital	metadata_only	lexical
+cash	metadata_only	lexical
+cash flow	metadata_only	lexical
+cashier	metadata_only	lexical
+certificate of deposit	added	lexical
+certified public accountant	added	lexical
+change	metadata_only	lexical
+check	metadata_only	lexical
+checking account	metadata_only	lexical
+claim	metadata_only	lexical
+collateral	metadata_only	lexical
+commission	metadata_only	lexical
+commodity	metadata_only	lexical
+compound interest	added	lexical
+consumer price index	added	lexical
+credit	metadata_only	lexical
+credit card	metadata_only	lexical
+credit limit	added	lexical
+credit score	added	lexical
+credit union	added	lexical
+creditor	metadata_only	lexical
+currency exchange	added	lexical
+customs duty	added	lexical
+debit	metadata_only	lexical
+debit card	metadata_only	lexical
+deductible	metadata_only	lexical
+deflation	metadata_only	lexical
+depreciation	metadata_only	lexical
+direct debit	added	lexical
+discount	metadata_only	lexical
+dividend	metadata_only	lexical
+document	metadata_only	lexical
+donation	metadata_only	lexical
+draft	metadata_only	lexical
+earnest money	added	lexical
+earnings	metadata_only	lexical
+economic growth	added	lexical
+economy	metadata_only	lexical
+endorsement	metadata_only	lexical
+equity	metadata_only	lexical
+escrow	metadata_only	lexical
+estate	metadata_only	lexical
+exchange rate	metadata_only	lexical
+excise tax	added	lexical
+expense	metadata_only	lexical
+export	metadata_only	lexical
+financial statement	added	lexical
+fine	metadata_only	lexical
+fiscal year	metadata_only	lexical
+fixed asset	added	lexical
+foreclosure	metadata_only	lexical
+foreign currency	added	lexical
+form	metadata_only	lexical
+fund	metadata_only	lexical
+futures	metadata_only	lexical
+gift card	added	lexical
+grant	metadata_only	lexical
+gross domestic product	added	lexical
+gross income	added	lexical
+guarantor	metadata_only	lexical
+health insurance	metadata_only	lexical
+hourly wage	added	lexical
+import	metadata_only	lexical
+inflation	metadata_only	lexical
+inheritance	metadata_only	lexical
+installment	metadata_only	lexical
+insurance policy	added	lexical
+investment	metadata_only	lexical
+lease	metadata_only	lexical
+ledger	metadata_only	lexical
+liability	metadata_only	lexical
+life insurance	added	lexical
+line of credit	added	lexical
+liquidity	metadata_only	lexical
+mortgage	metadata_only	lexical
+mutual fund	added	lexical
+net income	added	lexical
+overdraft	metadata_only	lexical
+pension	metadata_only	lexical

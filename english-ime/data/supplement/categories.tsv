@@ -29,6 +29,7 @@ topic_media_photography	写真・光学・映像 / Project-declared, source-atte
 topic_names_person	名・姓 / Source-attested vocabulary in names.person; not a sense-disambiguation rule.	John, Mary, James
 topic_names_product	商品・ソフトウェア名 / Source-attested vocabulary in names.product; not a sense-disambiguation rule.	published product names
 topic_organizations_consumer	生活・交通・流通企業 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	IKEA, Walmart, Costco
+topic_organizations_general	分野横断企業・組織 / Source-typed direct class members; extended vocabulary, not sense disambiguation.	source-attested names
 topic_organizations_technology	技術・製造企業 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Apple, Microsoft, Google
 topic_people_business	経営・事業・発明 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Steve Jobs, Bill Gates, Warren Buffett
 topic_people_history	歴史上の人物 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Cleopatra, Julius Caesar, Alexander the Great

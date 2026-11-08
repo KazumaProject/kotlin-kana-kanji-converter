@@ -24,6 +24,7 @@ from extend_lexicon import categories_for, roles_for
 from prepare_esdb import URL as ESDB_URL
 import world_sources
 import discovery_sources
+import gemini_acquisition
 
 PROFILE = 'dictionary-target-catalog-v2'
 CATALOG = h.REPO / 'english-ime/data/catalog'
@@ -46,6 +47,16 @@ DOCUMENTS = {
 
 def identity(value):
     return hashlib.sha256(json.dumps(value, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:24]
+
+
+def canonical_proofs(records):
+    indexed = {}
+    for record in records:
+        body = {k: v for k, v in record.items() if k != 'id'}
+        identifier = identity(body)
+        h.require(identifier not in indexed or indexed[identifier] == dict(body, id=identifier), 'Source proof identity collision')
+        indexed[identifier] = dict(body, id=identifier)
+    return [indexed[k] for k in sorted(indexed)]
 
 
 def table(path, fields, records):
@@ -231,7 +242,12 @@ def compile_targets(args):
     topics, config = registry(args.taxonomy, args.scopes)
     discovered, discovery_manifest, discovery_notices = (discovery_sources.collect(args.discovery_dir, args.discovery_policy)
         if getattr(args, 'discovery_dir', None) else ([], None, []))
-    sources = load_sources(args, [r['surface'] for r in discovered])
+    leads, lead_manifest, lead_notices = (gemini_acquisition.collect(args.gemini_dir, getattr(args, 'gemini_named_review_dir', None))
+        if getattr(args, 'gemini_dir', None) else ([], None, []))
+    sources = load_sources(args, [r['surface'] for r in discovered + leads])
+    if lead_manifest:
+        h.require(lead_manifest['lexicalSources'] == sources['pins'], 'Gemini acquisition lexical sources changed')
+        h.require(lead_manifest['plan']['taxonomySha256'] == h.replay.sha(args.taxonomy), 'Gemini acquisition taxonomy changed')
     world_index, world_manifest = world_sources.indices(args.source_dir, args.scopes) if config.get('worldSources') else ({}, None)
     targets = {}
 
@@ -265,6 +281,14 @@ def compile_targets(args):
         for topic in record['topics']:
             item = add(record['surface'], topic, record['kind'], 'extended',
                        ['esdb', 'wordnet'] if record['kind'] == 'lexical' else [], entity=record['entity'])
+        item['proofs'].extend(dict(p) for p in record['proofs'])
+    for record in leads:
+        h.require(set(record['topics']) <= topics.keys(), 'Unknown Gemini-proposed topic')
+        for topic in record['topics']:
+            item = add(record['surface'], topic, record['kind'], 'extended',
+                       ['esdb', 'wordnet'] if record['kind'] == 'lexical' else [], entity=record['entity'])
+        item['requireIndependentProof'] = True
+        if record.get('deferredByNameReview'): item['deferredByNameReview'] = True
         item['proofs'].extend(dict(p) for p in record['proofs'])
     casks = json.loads((args.lexical_source_dir / 'cask.json').read_text())
     ranks = {r['cask']: int(r['number']) for r in json.loads((args.lexical_source_dir / 'cask-analytics.json').read_text())['items']}
@@ -326,9 +350,7 @@ def compile_targets(args):
         if noun_head and (not item['sourceEntry'] or item['sourceEntry']['lemma'] != surface):
             item['sourceEntry'] = dict(lemma=surface, categories=['noun'], source_ref='wiktionary:' + str(noun_head['revision']))
             item['formKind'] = 'head'
-        for proof in item['proofs']:
-            proof['id'] = identity(proof)
-        item['proofs'].sort(key=lambda p: p['id'])
+        item['proofs'] = canonical_proofs(item['proofs'])
     records = sorted(targets.values(), key=lambda r: (r['tier'] != 'core', r['surface'], r['kind'], r['id']))
     public = dict(profile=PROFILE, taxonomySha256=h.replay.sha(args.taxonomy), scopesSha256=h.replay.sha(args.scopes),
         documents=sources['documents'], lexicalSources=sources['pins'],
@@ -362,6 +384,9 @@ def compile_targets(args):
     if discovery_manifest:
         public['discovery'] = discovery_manifest
         notices.extend(discovery_notices)
+    if lead_manifest:
+        public['geminiAcquisition'] = lead_manifest
+        notices.extend(lead_notices)
     return records, topics, dict(catalogV2=public, references=dict(notices=notices))
 
 
@@ -398,7 +423,7 @@ def audit(targets, topics, pairs, analyses, excluded):
             bool(preferred) and not bool(f['memberships'] & preferred),
             'domain_technology' not in f['memberships'] if any(t.startswith('technology.') for t in target['topics']) else False,
             f['lemma'] != word, f['lexeme_id']))
-        if not proofs and registered:
+        if not proofs and registered and not target.get('requireIndependentProof'):
             # Existing reviewed analyses can support topic-only enrichment, never a new spelling.
             if target['kind'] == 'person':
                 eligible = [f for f in eligible if 'name_person' in f['memberships']]
@@ -412,7 +437,9 @@ def audit(targets, topics, pairs, analyses, excluded):
         missing = sorted(required - members)
         result = dict(id=target['id'], registered=registered, missingCategories=missing, status='present')
         category = 'domain_' + topics[target['topics'][0]]['domain']
-        if not proofs:
+        if target.get('deferredByNameReview'):
+            result['status'] = 'blocked_named_review'
+        elif not proofs:
             result['status'] = 'blocked_evidence'
         elif not registered and not lexical.valid_surface(word):
             result['status'] = 'blocked_format'
@@ -459,6 +486,11 @@ def excluded_inputs(directory):
 
 def prepare(args):
     directory = h.external(args.work_dir)
+    h.require(not getattr(args, 'gemini_named_review_dir', None) or getattr(args, 'gemini_dir', None),
+              'A named review requires its Gemini acquisition directory')
+    if getattr(args, 'gemini_dir', None):
+        h.require(gemini_acquisition.verify(args.gemini_dir)['plan']['assets'] == h.asset_hashes(args.assets.resolve()),
+                  'Gemini acquisition baseline differs from this catalog run')
     with h.lock(directory):
         h.require(set(p.name for p in directory.iterdir()) <= {'.lock'}, 'Use a new work directory')
         targets, topics, source_manifest = compile_targets(args)
@@ -485,6 +517,11 @@ def prepare(args):
         if getattr(args, 'discovery_dir', None):
             config['sourcePaths'].update({k: str(getattr(args, k).resolve()) for k in ['discovery_dir', 'discovery_policy']})
             config['codeHashes']['discovery_sources.py'] = h.replay.sha(Path(__file__).with_name('discovery_sources.py'))
+        if getattr(args, 'gemini_dir', None):
+            config['sourcePaths']['gemini_dir'] = str(args.gemini_dir.resolve())
+            config['codeHashes']['gemini_acquisition.py'] = h.replay.sha(Path(__file__).with_name('gemini_acquisition.py'))
+            if getattr(args, 'gemini_named_review_dir', None):
+                config['sourcePaths']['gemini_named_review_dir'] = str(args.gemini_named_review_dir.resolve())
         h.dump(directory / 'run.json', config)
         return dict(targets=len(targets), plannedOperations=len(operations), changes=dict(Counter(r['status'] for r in results)))
 
@@ -615,6 +652,8 @@ def main():
         if name == 'adopt':
             p.add_argument('--batch-size', type=int, choices=range(1, 10001), default=1000)
         if name == 'prepare':
+            p.add_argument('--gemini-dir', type=Path)
+            p.add_argument('--gemini-named-review-dir', type=Path)
             p.add_argument('--discovery-dir', type=Path)
             p.add_argument('--discovery-policy', type=Path, default=CATALOG / 'discovery-policy.json')
             for option in ['source-dir', 'lexical-source-dir', 'esdb-dir', 'assets']:

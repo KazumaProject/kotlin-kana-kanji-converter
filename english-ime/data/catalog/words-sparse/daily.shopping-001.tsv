@@ -1,0 +1,83 @@
+surface	change	kinds
+aisle	metadata_only	lexical
+assistant	metadata_only	lexical
+availability	metadata_only	lexical
+backorder	added	lexical
+bakery	metadata_only	lexical
+banknotes	metadata_only	lexical
+barcode	metadata_only	lexical
+bargain	metadata_only	lexical
+bill	metadata_only	lexical
+bookstore	metadata_only	lexical
+boutique	metadata_only	lexical
+bow	metadata_only	lexical
+box	metadata_only	lexical
+butcher	metadata_only	lexical
+buyer	metadata_only	lexical
+carton	metadata_only	lexical
+cash register	metadata_only	lexical
+changing room	added	lexical
+clearance	metadata_only	lexical
+clerk	metadata_only	lexical
+client	metadata_only	lexical
+coins	metadata_only	lexical
+consumer	metadata_only	lexical
+contactless	metadata_only	lexical
+convenience store	metadata_only	lexical
+counter	metadata_only	lexical
+coupon	metadata_only	lexical
+courier	metadata_only	lexical
+department	metadata_only	lexical
+department store	metadata_only	lexical
+drugstore	metadata_only	lexical
+favorites	metadata_only	lexical
+fitting room	added	lexical
+florist	metadata_only	lexical
+gift card	added	lexical
+gift certificate	added	lexical
+hanger	metadata_only	lexical
+in stock	added	lexical
+inventory	metadata_only	lexical
+invoice	metadata_only	lexical
+label	metadata_only	lexical
+loyalty card	added	lexical
+mall	metadata_only	lexical
+manager	metadata_only	lexical
+mannequin	metadata_only	lexical
+market	metadata_only	lexical
+marketplace	metadata_only	lexical
+membership card	added	lexical
+mirror	metadata_only	lexical
+out of stock	added	lexical
+outlet	metadata_only	lexical
+paper bag	added	lexical
+parcel	metadata_only	lexical
+pharmacy	metadata_only	lexical
+PIN	metadata_only	lexical
+plastic bag	added	lexical
+points	metadata_only	lexical
+preorder	metadata_only	lexical
+price tag	added	lexical
+promo code	added	lexical
+promotion	metadata_only	lexical
+purchase	metadata_only	lexical
+purse	metadata_only	lexical
+quality	metadata_only	lexical
+quantity	metadata_only	lexical
+reward	metadata_only	lexical
+ribbon	metadata_only	lexical
+salesperson	metadata_only	lexical
+scanner	metadata_only	lexical
+self checkout	added	lexical
+shelf	metadata_only	lexical
+shopper	metadata_only	lexical
+shopping bag	added	lexical
+shopping mall	added	lexical
+signature	metadata_only	lexical
+store brand	added	lexical
+tote bag	added	lexical
+transaction	metadata_only	lexical
+voucher	metadata_only	lexical
+wallet	metadata_only	lexical
+wishlist	metadata_only	lexical
+wrapping	metadata_only	lexical

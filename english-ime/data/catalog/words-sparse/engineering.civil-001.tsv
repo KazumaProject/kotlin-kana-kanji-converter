@@ -1,0 +1,82 @@
+surface	change	kinds
+backfill	metadata_only	lexical
+bar chart	metadata_only	lexical
+belling	metadata_only	lexical
+bim	metadata_only	lexical
+bitumen	metadata_only	lexical
+bolt	metadata_only	lexical
+bridge	metadata_only	lexical
+buoyancy	metadata_only	lexical
+caisson	metadata_only	lexical
+camber	metadata_only	lexical
+canal	metadata_only	lexical
+cement	metadata_only	lexical
+centerline	metadata_only	lexical
+cofferdam	added	lexical
+compaction	metadata_only	lexical
+compressibility	metadata_only	lexical
+compressive strength	added	lexical
+concrete	metadata_only	lexical
+corrosion	metadata_only	lexical
+culvert	metadata_only	lexical
+dam	metadata_only	lexical
+deflection	metadata_only	lexical
+demolition	metadata_only	lexical
+dike	metadata_only	lexical
+dozer	metadata_only	lexical
+earthwork	metadata_only	lexical
+elasticity	metadata_only	lexical
+embankment	metadata_only	lexical
+erosion	metadata_only	lexical
+excavation	metadata_only	lexical
+expansion joint	added	lexical
+factor of safety	added	lexical
+fatigue	metadata_only	lexical
+formwork	metadata_only	lexical
+friction pile	added	lexical
+gantry crane	added	lexical
+geotextile	added	lexical
+girder	metadata_only	lexical
+grade	metadata_only	lexical
+gravel	metadata_only	lexical
+groundwater	metadata_only	lexical
+grout	metadata_only	lexical
+highway	metadata_only	lexical
+hydraulic conductivity	added	lexical
+hydrology	metadata_only	lexical
+inclinometer	added	lexical
+infrastructure	metadata_only	lexical
+levee	metadata_only	lexical
+lime	metadata_only	lexical
+liquefaction	metadata_only	lexical
+live load	added	lexical
+masonry	metadata_only	lexical
+membrane	metadata_only	lexical
+micropile	added	lexical
+modulus of elasticity	added	lexical
+moment	metadata_only	lexical
+mortar	metadata_only	lexical
+mud	metadata_only	lexical
+pavement	metadata_only	lexical
+pedestrian bridge	added	lexical
+permeability	metadata_only	lexical
+pier	metadata_only	lexical
+pile	metadata_only	lexical
+pipe	metadata_only	lexical
+plasticity	metadata_only	lexical
+pore water pressure	added	lexical
+portland cement	metadata_only	lexical
+project management	added	lexical
+raft foundation	added	lexical
+rebar	metadata_only	lexical
+reservoir	metadata_only	lexical
+rigidity	metadata_only	lexical
+riprap	added	lexical
+roadway	metadata_only	lexical
+safety factor	added	lexical
+sand	metadata_only	lexical
+scaffolding	metadata_only	lexical
+scour	metadata_only	lexical
+seawall	metadata_only	lexical
+sedimentation	metadata_only	lexical
+settlement	metadata_only	lexical

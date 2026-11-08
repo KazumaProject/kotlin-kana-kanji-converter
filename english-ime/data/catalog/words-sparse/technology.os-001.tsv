@@ -1,0 +1,70 @@
+surface	change	kinds
+access control list	added	lexical
+ACL	metadata_only	lexical
+batch file	added	lexical
+benchmark	metadata_only	lexical
+boot loader	added	lexical
+chroot	added	lexical
+container	metadata_only	lexical
+control panel	metadata_only	lexical
+core dump	added	lexical
+crontab	metadata_only	lexical
+daemon	metadata_only	lexical
+debugger	metadata_only	lexical
+device driver	metadata_only	lexical
+environment	metadata_only	lexical
+executable	metadata_only	lexical
+file descriptor	added	lexical
+firewall	metadata_only	lexical
+garbage collection	metadata_only	lexical
+gdb	metadata_only	lexical
+hard link	added	lexical
+hotfix	metadata_only	lexical
+hypervisor	metadata_only	lexical
+inode	added	lexical
+installer	metadata_only	lexical
+interrupt	metadata_only	lexical
+job control	added	lexical
+library	metadata_only	lexical
+memory leak	added	lexical
+message queue	added	lexical
+mount point	added	lexical
+mutex	added	lexical
+named pipe	added	lexical
+namespace	metadata_only	lexical
+package manager	added	lexical
+page fault	added	lexical
+paging	metadata_only	lexical
+patch	metadata_only	lexical
+pipe	metadata_only	lexical
+POST	added	lexical
+privilege escalation	added	lexical
+profiler	metadata_only	lexical
+redirection	metadata_only	lexical
+registry	metadata_only	lexical
+repository	metadata_only	lexical
+root user	added	lexical
+safe mode	added	lexical
+sandbox	metadata_only	lexical
+segmentation	metadata_only	lexical
+segmentation fault	added	lexical
+semaphore	metadata_only	lexical
+service	metadata_only	lexical
+shell script	added	lexical
+socket	metadata_only	lexical
+spinlock	added	lexical
+standard error	metadata_only	lexical
+stderr	added	lexical
+stdin	added	lexical
+stdout	added	lexical
+stress test	added	lexical
+superuser	added	lexical
+swapping	metadata_only	lexical
+symbolic link	added	lexical
+syslog	added	lexical
+system call	added	lexical
+task manager	added	lexical
+TLB	metadata_only	lexical
+UEFI	metadata_only	lexical
+uptime	metadata_only	lexical
+virtual memory	added	lexical

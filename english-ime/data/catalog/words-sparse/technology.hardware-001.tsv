@@ -1,0 +1,88 @@
+surface	change	kinds
+accelerator card	added	lexical
+ASIC	metadata_only	lexical
+aspect ratio	metadata_only	lexical
+backlight	metadata_only	lexical
+backplane	metadata_only	lexical
+battery	metadata_only	lexical
+breadboard	metadata_only	lexical
+Brother	added	organization
+bus	metadata_only	lexical
+capacitor	metadata_only	lexical
+chassis	metadata_only	lexical
+chipset	metadata_only	lexical
+Corsair	added	brand
+crystal oscillator	added	lexical
+daughterboard	metadata_only	lexical
+DIMM	metadata_only	lexical
+diode	metadata_only	lexical
+docking station	added	lexical
+DSP	metadata_only	lexical
+EEPROM	metadata_only	lexical
+Epson	metadata_only	organization
+expansion card	added	lexical
+flash memory	added	lexical
+FPGA	metadata_only	lexical
+graphics tablet	added	lexical
+HDMI	metadata_only	lexical
+headset	metadata_only	lexical
+heat sink	added	lexical
+hub	metadata_only	lexical
+inductor	metadata_only	lexical
+LED	metadata_only	lexical
+lithium-ion battery	metadata_only	lexical
+logic analyzer	metadata_only	lexical
+Logitech	metadata_only	brand
+LPDDR	added	lexical
+mainframe	metadata_only	lexical
+microcontroller	metadata_only	lexical
+microphone	metadata_only	lexical
+modem	metadata_only	lexical
+multimeter	metadata_only	lexical
+network interface card	added	lexical
+NIC	added	lexical
+northbridge	metadata_only	lexical
+NPU	added	lexical
+NVMe	metadata_only	lexical
+optical drive	added	lexical
+oscillator	metadata_only	lexical
+oscilloscope	metadata_only	lexical
+PCIe	metadata_only	lexical
+pixel	metadata_only	lexical
+port replicator	added	lexical
+printed circuit board	metadata_only	lexical
+printer	metadata_only	lexical
+projector	metadata_only	lexical
+PSU	metadata_only	lexical
+quantum computer	added	lexical
+qubit	metadata_only	lexical
+rackmount	added	lexical
+refresh rate	added	lexical
+repeater	metadata_only	lexical
+resistor	metadata_only	lexical
+resolution	metadata_only	lexical
+response time	metadata_only	lexical
+router	metadata_only	lexical
+SATA	metadata_only	lexical
+scanner	metadata_only	lexical
+semiconductor	metadata_only	lexical
+SoC	added	lexical
+SODIMM	metadata_only	lexical
+solder	metadata_only	lexical
+soldering iron	added	lexical
+sound card	added	lexical
+southbridge	metadata_only	lexical
+speaker	metadata_only	lexical
+SteelSeries	added	brand
+stylus	metadata_only	lexical
+subpixel	added	lexical
+supercomputer	metadata_only	lexical
+switch	metadata_only	lexical
+thermal paste	added	lexical
+Thunderbolt	metadata_only	lexical
+touchpad	metadata_only	lexical
+TPU	metadata_only	lexical
+trackball	metadata_only	lexical
+transistor	metadata_only	lexical
+VRAM	metadata_only	lexical
+webcam	metadata_only	lexical

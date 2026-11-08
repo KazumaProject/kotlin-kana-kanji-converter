@@ -1,0 +1,70 @@
+surface	change	kinds
+ARP	added	lexical
+bandwidth	metadata_only	lexical
+BGP	metadata_only	lexical
+broadcast	metadata_only	lexical
+cable modem	added	lexical
+captive portal	added	lexical
+CDN	metadata_only	lexical
+CIDR	added	lexical
+client	metadata_only	lexical
+connectionless	added	lexical
+datagram	metadata_only	lexical
+DHCP	metadata_only	lexical
+dial-up	added	lexical
+egress	metadata_only	lexical
+encapsulation	metadata_only	lexical
+ethernet	metadata_only	lexical
+extranet	added	lexical
+fiber optic	added	lexical
+flow control	added	lexical
+forward proxy	added	lexical
+FQDN	added	lexical
+FTP	metadata_only	lexical
+handshake	metadata_only	lexical
+HTTP	metadata_only	lexical
+HTTPS	metadata_only	lexical
+hub	metadata_only	lexical
+ICMP	metadata_only	lexical
+IMAP	metadata_only	lexical
+ingress	metadata_only	lexical
+intranet	metadata_only	lexical
+IPv4	metadata_only	lexical
+IPv6	metadata_only	lexical
+jitter	metadata_only	lexical
+keepalive	metadata_only	lexical
+LAN	added	lexical
+local loop	metadata_only	lexical
+loopback	added	lexical
+MAC address	added	lexical
+mesh network	added	lexical
+metropolitan area network	added	lexical
+multicast	metadata_only	lexical
+multiplexing	metadata_only	lexical
+nameserver	added	lexical
+NAT	added	lexical
+netmask	added	lexical
+network socket	added	lexical
+NTP	metadata_only	lexical
+OSI model	added	lexical
+packet loss	added	lexical
+patch panel	added	lexical
+peering	metadata_only	lexical
+POP3	metadata_only	lexical
+QoS	metadata_only	lexical
+RFC	metadata_only	lexical
+RTSP	added	lexical
+SCTP	metadata_only	lexical
+SMTP	metadata_only	lexical
+SNMP	metadata_only	lexical
+SSH	metadata_only	lexical
+SSID	metadata_only	lexical
+TCP/IP	metadata_only	lexical
+TTL	metadata_only	lexical
+URI	metadata_only	lexical
+URL	metadata_only	lexical
+UTP	metadata_only	lexical
+VLAN	metadata_only	lexical
+VPN	metadata_only	lexical
+WAN	added	lexical
+Wi-Fi	metadata_only	lexical

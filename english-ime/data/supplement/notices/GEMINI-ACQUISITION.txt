@@ -1,0 +1,6 @@
+Sparse English vocabulary acquisition. Gemini proposes spellings and topical placement; it is not a spelling, part-of-speech, frequency or license authority.
+Adoption requires independent attestation from pinned ESDB/WordNet or English Wiktionary/Wikidata.
+Wiktionary contributors: English headword attestation, CC BY-SA 4.0; https://en.wiktionary.org/wiki/Wiktionary:Copyrights
+Wikidata contributors: structured labels, aliases and English sitelinks, CC0 1.0; https://www.wikidata.org/wiki/Wikidata:Licensing
+Retain the existing ESDB, WordNet, CC0 and CC BY-SA full notices shipped in this bundle.
+Changes: select exactly attested proposed spellings; attach model-proposed topical memberships. Do not copy definitions, articles, quotations, or invent morphology.

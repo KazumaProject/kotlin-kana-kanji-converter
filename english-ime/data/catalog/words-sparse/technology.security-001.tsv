@@ -1,0 +1,58 @@
+surface	change	kinds
+access control	added	lexical
+access control list	added	lexical
+adware	metadata_only	lexical
+AES	added	lexical
+antivirus	metadata_only	lexical
+audit	metadata_only	lexical
+backdoor	metadata_only	lexical
+bad actor	added	lexical
+bastion	metadata_only	lexical
+biometric	metadata_only	lexical
+botnet	metadata_only	lexical
+buffer overflow	added	lexical
+cipher	metadata_only	lexical
+ciphertext	metadata_only	lexical
+CISO	added	lexical
+clickjacking	added	lexical
+code review	metadata_only	lexical
+compromise	metadata_only	lexical
+confidentiality	metadata_only	lexical
+consent	metadata_only	lexical
+cookie	metadata_only	lexical
+cryptanalysis	metadata_only	lexical
+cryptography	metadata_only	lexical
+CVE	metadata_only	lexical
+cyberattack	metadata_only	lexical
+cybercrime	metadata_only	lexical
+cybersecurity	metadata_only	lexical
+data breach	added	lexical
+decryption	metadata_only	lexical
+defacement	added	lexical
+defense in depth	added	lexical
+denial of service	added	lexical
+DES	added	lexical
+dictionary attack	added	lexical
+digital certificate	metadata_only	lexical
+digital forensics	added	lexical
+digital rights management	added	lexical
+directory traversal	added	lexical
+DLP	metadata_only	lexical
+DoS	added	lexical
+exfiltration	added	lexical
+fail-safe	metadata_only	lexical
+false positive	metadata_only	lexical
+fault	metadata_only	lexical
+fingerprint	metadata_only	lexical
+firmware	metadata_only	lexical
+forensics	metadata_only	lexical
+GDPR	metadata_only	lexical
+hacker	metadata_only	lexical
+hardening	metadata_only	lexical
+honeypot	metadata_only	lexical
+HTTPS	metadata_only	lexical
+identity theft	added	lexical
+information security	added	lexical
+injection	metadata_only	lexical
+integrity	metadata_only	lexical
+keylogger	metadata_only	lexical

@@ -1,0 +1,52 @@
+surface	change	kinds
+bokeh	metadata_only	lexical
+burst mode	metadata_only	lexical
+cable release	added	lexical
+clipping	metadata_only	lexical
+color temperature	metadata_only	lexical
+contrast	metadata_only	lexical
+eye tracking	added	lexical
+fish-eye lens	added	lexical
+full-frame	added	lexical
+ghosting	metadata_only	lexical
+gimbal	metadata_only	lexical
+grain	metadata_only	lexical
+green screen	added	lexical
+halo effect	added	lexical
+highlights	metadata_only	lexical
+histogram	metadata_only	lexical
+hot shoe	added	lexical
+intervalometer	added	lexical
+JPEG	metadata_only	lexical
+Kelvin scale	added	lexical
+lens flare	added	lexical
+lens hood	added	lexical
+LUT	metadata_only	lexical
+macro lens	added	lexical
+medium format	added	lexical
+megapixels	metadata_only	lexical
+memory card	added	lexical
+midtones	added	lexical
+monopod	added	lexical
+multiple exposure	added	lexical
+noise reduction	added	lexical
+prime lens	added	lexical
+reflector	metadata_only	lexical
+remote control	metadata_only	lexical
+ring light	added	lexical
+saturation	metadata_only	lexical
+SD card	added	lexical
+self-timer	added	lexical
+shadows	metadata_only	lexical
+sharpness	metadata_only	lexical
+shutter	metadata_only	lexical
+slow motion	added	lexical
+softbox	added	lexical
+telephoto lens	added	lexical
+time exposure	added	lexical
+time-lapse	added	lexical
+tripod	metadata_only	lexical
+viewfinder	metadata_only	lexical
+vignetting	added	lexical
+wide-angle lens	added	lexical
+zoom lens	added	lexical

@@ -1,0 +1,51 @@
+surface	change	kinds
+AirTag	metadata_only	product
+Alienware	metadata_only	brand
+Apple Vision Pro	added	product
+Chromebook	metadata_only	product
+Chromecast	metadata_only	product
+Dell XPS	added	product
+Dreamcast	metadata_only	product
+DualSense	added	product
+DualShock	metadata_only	product
+Echo Dot	added	product
+Fire TV	metadata_only	product
+Fitbit	metadata_only	brand
+Galaxy Tab	added	product
+Game Boy	added	product
+GameCube	metadata_only	product
+Garmin	metadata_only	brand
+Google Pixel	metadata_only	brand
+HomePod	added	product
+HP Spectre	added	product
+HTC Vive	metadata_only	brand
+Inspiron	added	product
+iPad Air	added	product
+iPad Mini	added	product
+iPad Pro	added	product
+iPhone 15	added	product
+Lenovo Legion	added	brand
+Mac Pro	metadata_only	product
+MacBook	metadata_only	product
+Meta Quest	added	product
+Microsoft Surface	metadata_only	brand
+Nintendo 3DS	added	product
+Oculus Rift	added	product
+Pimax	added	brand
+PlayStation	metadata_only	brand
+PlayStation 4	added	product
+PlayStation Vita	added	product
+Pro Display XDR	added	product
+PSP	metadata_only	product
+Radeon	metadata_only	brand
+Roku	metadata_only	brand
+Surface	added	brand
+Surface Pro	added	product
+Valve Index	added	product
+Wii	metadata_only	product
+Wii U	added	product
+Xbox	metadata_only	brand
+Xbox 360	added	product
+Xbox One	added	product
+Xbox Wireless Controller	added	product
+Xperia	metadata_only	brand

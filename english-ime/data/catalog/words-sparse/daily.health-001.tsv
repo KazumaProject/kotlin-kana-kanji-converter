@@ -1,0 +1,93 @@
+surface	change	kinds
+antibiotics	metadata_only	lexical
+asthma	metadata_only	lexical
+backache	metadata_only	lexical
+bandage	metadata_only	lexical
+blood test	added	lexical
+bruise	metadata_only	lexical
+cancer	metadata_only	lexical
+cardiology	metadata_only	lexical
+cast	metadata_only	lexical
+checkup	metadata_only	lexical
+chill	metadata_only	lexical
+chronic	metadata_only	lexical
+cold	metadata_only	lexical
+congestion	metadata_only	lexical
+consultation	metadata_only	lexical
+contagious	metadata_only	lexical
+cramps	metadata_only	lexical
+crutches	metadata_only	lexical
+dehydration	metadata_only	lexical
+depression	metadata_only	lexical
+diabetes	metadata_only	lexical
+diarrhea	metadata_only	lexical
+dietary fiber	added	lexical
+dizziness	metadata_only	lexical
+earache	metadata_only	lexical
+eczema	metadata_only	lexical
+emergency room	metadata_only	lexical
+exhaustion	metadata_only	lexical
+fainting	metadata_only	lexical
+fatigue	metadata_only	lexical
+first aid kit	added	lexical
+flu	metadata_only	lexical
+fracture	metadata_only	lexical
+generic drug	added	lexical
+germs	metadata_only	lexical
+gynecologist	metadata_only	lexical
+hay fever	metadata_only	lexical
+heal	metadata_only	lexical
+heart attack	added	lexical
+heartburn	metadata_only	lexical
+heat stroke	added	lexical
+hives	metadata_only	lexical
+hypertension	metadata_only	lexical
+immunization	metadata_only	lexical
+indigestion	metadata_only	lexical
+inflammation	metadata_only	lexical
+insomnia	metadata_only	lexical
+itchy	metadata_only	lexical
+kidney stone	added	lexical
+laxative	metadata_only	lexical
+lotion	metadata_only	lexical
+medical history	added	lexical
+mental health	added	lexical
+migraine	metadata_only	lexical
+mineral	metadata_only	lexical
+morning sickness	added	lexical
+motion sickness	added	lexical
+mumps	metadata_only	lexical
+nausea	metadata_only	lexical
+neurologist	metadata_only	lexical
+nightmare	metadata_only	lexical
+nosebleed	metadata_only	lexical
+nutritionist	metadata_only	lexical
+obesity	metadata_only	lexical
+ointment	metadata_only	lexical
+oncology	metadata_only	lexical
+optometrist	metadata_only	lexical
+orthopedic	metadata_only	lexical
+over-the-counter	added	lexical
+overweight	metadata_only	lexical
+pad	metadata_only	lexical
+painkiller	metadata_only	lexical
+paramedic	metadata_only	lexical
+pediatrician	metadata_only	lexical
+physical therapy	added	lexical
+pneumonia	metadata_only	lexical
+poison	metadata_only	lexical
+pollen	metadata_only	lexical
+pregnancy	metadata_only	lexical
+psychiatrist	metadata_only	lexical
+psychologist	metadata_only	lexical
+pulmonologist	added	lexical
+pulse	metadata_only	lexical
+quarantine	metadata_only	lexical
+rash	metadata_only	lexical
+recovery	metadata_only	lexical
+redness	metadata_only	lexical
+rehydration	metadata_only	lexical
+relaxation	metadata_only	lexical
+remission	metadata_only	lexical
+runny nose	added	lexical
+sanitizer	metadata_only	lexical

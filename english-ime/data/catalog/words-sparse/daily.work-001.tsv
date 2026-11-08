@@ -1,0 +1,92 @@
+surface	change	kinds
+agenda	metadata_only	lexical
+appraisal	metadata_only	lexical
+benefit	metadata_only	lexical
+binder	metadata_only	lexical
+bonus	metadata_only	lexical
+boss	metadata_only	lexical
+budget	metadata_only	lexical
+business trip	added	lexical
+calendar	metadata_only	lexical
+CEO	metadata_only	lexical
+chair	metadata_only	lexical
+chart	metadata_only	lexical
+client	metadata_only	lexical
+clock in	added	lexical
+clock out	metadata_only	lexical
+computer	metadata_only	lexical
+consultant	metadata_only	lexical
+contractor	metadata_only	lexical
+copier	metadata_only	lexical
+cubicle	metadata_only	lexical
+day off	added	lexical
+deliverable	metadata_only	lexical
+demotion	metadata_only	lexical
+department	metadata_only	lexical
+desk	metadata_only	lexical
+director	metadata_only	lexical
+employee	metadata_only	lexical
+employer	metadata_only	lexical
+evaluation	metadata_only	lexical
+executive	metadata_only	lexical
+feedback	metadata_only	lexical
+fire	metadata_only	lexical
+folder	metadata_only	lexical
+forecast	metadata_only	lexical
+freelancer	metadata_only	lexical
+goal	metadata_only	lexical
+graph	metadata_only	lexical
+hire	metadata_only	lexical
+holiday	metadata_only	lexical
+human resources	added	lexical
+insurance	metadata_only	lexical
+keyboard	metadata_only	lexical
+laptop	metadata_only	lexical
+layoff	metadata_only	lexical
+leave	metadata_only	lexical
+marker	metadata_only	lexical
+maternity leave	added	lexical
+milestone	metadata_only	lexical
+minutes	metadata_only	lexical
+monitor	metadata_only	lexical
+mouse	metadata_only	lexical
+notebook	metadata_only	lexical
+notepad	metadata_only	lexical
+objective	metadata_only	lexical
+outsource	metadata_only	lexical
+paperclip	metadata_only	lexical
+partner	metadata_only	lexical
+paternity leave	added	lexical
+payroll	metadata_only	lexical
+pen	metadata_only	lexical
+pencil	metadata_only	lexical
+pension	metadata_only	lexical
+planner	metadata_only	lexical
+presentation	metadata_only	lexical
+printer	metadata_only	lexical
+projector	metadata_only	lexical
+promotion	metadata_only	lexical
+receipt	metadata_only	lexical
+reimbursement	metadata_only	lexical
+remote work	added	lexical
+resignation	metadata_only	lexical
+retirement	metadata_only	lexical
+review	metadata_only	lexical
+salary	metadata_only	lexical
+scanner	metadata_only	lexical
+shift	metadata_only	lexical
+sick leave	added	lexical
+slide	metadata_only	lexical
+spreadsheet	metadata_only	lexical
+staff	metadata_only	lexical
+stakeholder	metadata_only	lexical
+stapler	metadata_only	lexical
+sticky note	added	lexical
+supervisor	metadata_only	lexical
+target	metadata_only	lexical
+team	metadata_only	lexical
+telecommute	metadata_only	lexical
+timesheet	added	lexical
+travel expense	added	lexical
+wage	metadata_only	lexical
+whiteboard	metadata_only	lexical
