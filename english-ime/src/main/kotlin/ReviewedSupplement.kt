@@ -104,7 +104,8 @@ internal class ReviewedSupplement private constructor(
 
 private val supportedSurface = Regex("[A-Za-z0-9]+(?:[ '’./-][A-Za-z0-9]+)*")
 private val domains = setOf("daily", "business", "technology", "travel")
-private val lexicalRoles = setOf("noun", "verb", "adjective", "adverb", "contraction", "abbreviation", "phrase")
+private val lexicalRoles = setOf("noun", "verb", "adjective", "adverb", "pronoun", "determiner",
+    "preposition", "conjunction", "interjection", "contraction", "abbreviation", "phrase")
 
 internal fun supplementReadings(surface: String): Set<String> {
     require(surface.length in 1..64 && supportedSurface.matches(surface)) { "Invalid supplement surface: $surface" }
@@ -118,7 +119,7 @@ internal fun readSupplementEntries(
 ): List<SupplementEntry> {
     val categoryNames = base.categories.map { it.name }.toSet()
     val lemmas = base.forms.associate { it.key.lexemeId to it.lemma }.toMutableMap()
-    val originalSurfaces = original.map { lookupKey(it.word) }.toSet()
+    val originalSurfaces = original.map { it.word }.toSet()
     val identities = mutableSetOf<FormKey>()
     val rows = file.readTsv("lexeme_id", "lemma", "surface", "categories", "domain", "evidence", "source_ref")
     require(rows.isNotEmpty()) { "Supplement must contain reviewed entries" }
@@ -132,7 +133,7 @@ internal fun readSupplementEntries(
         require(lemma.length <= 64 && supportedSurface.matches(lemma) && lemmas.putIfAbsent(id, lemma).let { it == null || it == lemma }) {
             "Invalid or conflicting supplement lemma for $key"
         }
-        require(lookupKey(surface) !in originalSurfaces && lookupKey(surface) !in excludedSurfaces) {
+        require(surface !in originalSurfaces && lookupKey(surface) !in excludedSurfaces) {
             "Supplement repeats an existing or excluded surface: $surface"
         }
         val categories = membership.split(',')

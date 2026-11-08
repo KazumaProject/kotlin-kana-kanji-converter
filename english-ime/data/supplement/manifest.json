@@ -1,23 +1,33 @@
 {
   "baseManifestSha256": "3bc919f0deecd9142dfa8ee5059193de22dc553ea467f82a981e3b21b28ad1aa",
   "expectedOutputs": {
-    "grammar/bundle.properties": "7727f077e746fe15a2ca2ebb6c4eda4c185eecaee3b6b120abe3227f88fcc749",
-    "grammar/categories.ecat": "7ed7a2d22cfdc8c136444d0eddc0626272ff40556fd0c302152e37af83d8cef0",
-    "grammar/forms.tsv": "c5af76ba0aa677a96d7a05a09c80b18eed398f25296ca8d2ddefc67a38ab1b99",
-    "grammar/memberships.tsv": "258da4548629358375f595ca25c5431989c4aee0817b3440400278056165d073",
+    "grammar/bundle.properties": "d7419d3502041a0062911167b74b71fe8302ad2d905c46802c2d40f295ec4338",
+    "grammar/categories.ecat": "727ecf743037ca016f65e2a5a516fc7e2a628e49a4f02f35ce28bdf46a87c3e8",
+    "grammar/forms.tsv": "2051bfcfcf03cac22ba4b06c402ce98b4e47ca75924053912ff1fc59541711c6",
+    "grammar/memberships.tsv": "8e9972b813e70f2a0ab637a6f8c15d24b939ad4ba4abb44f36ccbe87475e1dd8",
     "grammar/notices/CMUDICT-LICENSE.txt": "bd4ce8e44170a5f9f481310ca85c51de3c4f851a65e679b40e603b143bd3542a",
+    "grammar/notices/DICTIONARY-MDN-DICTIONARY-NOTICE.txt": "dc332480eca19e707322cb9c2a4c3e974e7929999b1393131472f703527a70a8",
+    "grammar/notices/DICTIONARY-NGSL-DICTIONARY-NOTICE.txt": "100c5b1f036e7ef9156bcf71939ccca7681aba59533c124650f57c5cd6785216",
+    "grammar/notices/DICTIONARY-homebrew-analytics-license.txt": "f80329e58613ad669c0e73cb132d8060b9b2c55e339c73848068e4d1567f4627",
+    "grammar/notices/DICTIONARY-homebrew-license.txt": "abd8be86c5738400f30c426bc88d90495b2dcfca9fe20b8d9b925599a55528b0",
+    "grammar/notices/DICTIONARY-mdn-license.txt": "97a45d9a5c27c90ad7f058b20a870f11a24717f0eb4585f141948d25b74c4d89",
     "grammar/notices/PRACTICAL-ENGLISH-SOURCES.txt": "1f52e7d3b1e88a85aae0c1f56baec58f4f7d6f13f5fa2c49f4bbf342f46a140d",
-    "grammar/notices/VOCABULARY-HARNESS-SOURCES.txt": "1d7f545d39fe1732ea326921b4c0cec91ddbd4aac1ea08c7fea83896be1ce526",
-    "qwerty_glide_index.dat": "4299e98afa88c5bea86801fc754520a0d78334c88d3997a86415b3d0edd79703",
-    "reading.dat": "483f53a12d61b129a5c8f244df18b184d6a51cb8305417363d1cce9a9f3fc2e0",
-    "token.dat": "1b356a3dd64da1793d7f6d96e4d086ec192a9a7f157dd7a88089a3e5d85c480f",
-    "word.dat": "43cffff42bc1e4b21f5041da045790a593c4b94ca6056e86efbbda1ef8c14636"
+    "grammar/notices/VOCABULARY-HARNESS-SOURCES.txt": "fe253ab24366a179d0249292ed074445510531ab3ac05b28d2fa45ba9542eada",
+    "qwerty_glide_index.dat": "a75a9a5462ea487a62fbcde390ce0f537eb38279605ff67379625805e6b50215",
+    "reading.dat": "e3df0b0b5bb08aeca6316308a7d1d79d931c2b2dd72bda2555c1c34010182700",
+    "token.dat": "4aeb64847d310b9bbc8c314da08a1204f0c5ce0e079d5a53ad423088cfef79e2",
+    "word.dat": "a1efab8eefd6ee085dac024d9e29cb21b8dca56d7b22e627447997d94e628c6c"
   },
   "files": {
-    "entries.tsv": "974c0ab463480124783587ffac26541ac25288fb58ed5e543f55673dd8b51569",
+    "entries.tsv": "879dbd8f826fba3d74f6024dba10d6dea8ed7ab7cdd1c830f7a6666a22481cf8",
     "notices/CMUDICT-LICENSE.txt": "bd4ce8e44170a5f9f481310ca85c51de3c4f851a65e679b40e603b143bd3542a",
+    "notices/DICTIONARY-MDN-DICTIONARY-NOTICE.txt": "dc332480eca19e707322cb9c2a4c3e974e7929999b1393131472f703527a70a8",
+    "notices/DICTIONARY-NGSL-DICTIONARY-NOTICE.txt": "100c5b1f036e7ef9156bcf71939ccca7681aba59533c124650f57c5cd6785216",
+    "notices/DICTIONARY-homebrew-analytics-license.txt": "f80329e58613ad669c0e73cb132d8060b9b2c55e339c73848068e4d1567f4627",
+    "notices/DICTIONARY-homebrew-license.txt": "abd8be86c5738400f30c426bc88d90495b2dcfca9fe20b8d9b925599a55528b0",
+    "notices/DICTIONARY-mdn-license.txt": "97a45d9a5c27c90ad7f058b20a870f11a24717f0eb4585f141948d25b74c4d89",
     "notices/PRACTICAL-ENGLISH-SOURCES.txt": "1f52e7d3b1e88a85aae0c1f56baec58f4f7d6f13f5fa2c49f4bbf342f46a140d",
-    "notices/VOCABULARY-HARNESS-SOURCES.txt": "1d7f545d39fe1732ea326921b4c0cec91ddbd4aac1ea08c7fea83896be1ce526"
+    "notices/VOCABULARY-HARNESS-SOURCES.txt": "fe253ab24366a179d0249292ed074445510531ab3ac05b28d2fa45ba9542eada"
   },
   "kind": "reviewed-english-supplement-v1",
   "schemaVersion": 1,
@@ -72,13 +82,117 @@
         "sha256": "c29d181e7916250d21b5c41d63bdcfa67c992f66ae1dbaa207db82728f16d54d",
         "url": "https://www.newgeneralservicelist.com/s/BSL_120_lemmatized_for_research.csv"
       },
-      "candidatesSha256": "b512fd8a4bdff6b03bcca5cf75417b420f007ef154deaf37ea4276ec7e2edfeb",
+      "candidatesSha256": "6936df3636707d006e91823686b15ba1ff2c2504a2279bb382a22f336a9aadfc",
       "cmudict.dict": {
         "bytes": 3618488,
         "sha256": "81917843c7f44ce2b094ac63873c2c7a4cf802040792c455ba3ca406891c3d22",
         "url": "https://raw.githubusercontent.com/cmusphinx/cmudict/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict"
       },
-      "decisionsSha256": "bc89cd05d427e1dd7d5ad4380bb33a0c174e264e1752465e6f7b034e8cd77934",
+      "decisionsSha256": "dcbb534a805418488b72e80e55c203c852ee6e004d336ac994a4aed81310543b",
+      "dictionaryCatalog": {
+        "availableFacets": {
+          "basic": 88,
+          "daily": 95,
+          "inflection": 6,
+          "orthography": 1001,
+          "person": 976,
+          "product": 6366,
+          "technology": 6750
+        },
+        "manifest": {
+          "basicPins": {
+            "ngsl-spoken-stats.csv": "07708940c50a07cac4f507fd1e87bdd50081d7b87713a66a99beb3c8c4d11ac8",
+            "ngsl-stats.csv": "2098bab8955a120a9766c6282a51d7d578c6cb0a7d946600d2ffb73ba25a0b44",
+            "ngsl-supplementary.csv": "7bb4c76cbe43ae87240be4ac7ada370b9e1a0d9d631d8c4430138646965d03f6"
+          },
+          "capturedAt": "2026-11-08T00:32:55.626200+00:00",
+          "files": {
+            "MDN-DICTIONARY-NOTICE.txt": {
+              "bytes": 312,
+              "sha256": "dc332480eca19e707322cb9c2a4c3e974e7929999b1393131472f703527a70a8"
+            },
+            "NGSL-DICTIONARY-NOTICE.txt": {
+              "bytes": 456,
+              "sha256": "100c5b1f036e7ef9156bcf71939ccca7681aba59533c124650f57c5cd6785216"
+            },
+            "cask-analytics.json": {
+              "bytes": 1466222,
+              "sha256": "145c66cc0ed7c8454e987edbb819e2eab03c3c49346876893a8b6c23588df8c0",
+              "url": "https://formulae.brew.sh/api/analytics/cask-install/90d.json"
+            },
+            "cask.json": {
+              "bytes": 19388682,
+              "sha256": "97328b5a4ea28ee119751c9567d369a146acef789679e8fe17330dc72099d39c",
+              "url": "https://formulae.brew.sh/api/cask.json"
+            },
+            "homebrew-analytics-license.txt": {
+              "bytes": 1334,
+              "sha256": "f80329e58613ad669c0e73cb132d8060b9b2c55e339c73848068e4d1567f4627",
+              "url": "https://raw.githubusercontent.com/Homebrew/formulae.brew.sh/main/LICENSE.txt"
+            },
+            "homebrew-license.txt": {
+              "bytes": 1334,
+              "sha256": "abd8be86c5738400f30c426bc88d90495b2dcfca9fe20b8d9b925599a55528b0",
+              "url": "https://raw.githubusercontent.com/Homebrew/homebrew-cask/0c830359022240eec6b89d6fd598eb451b8b7dd2/LICENSE"
+            },
+            "mdn-glossary.html": {
+              "bytes": 183763,
+              "sha256": "78ec5b149fc5fead41cd09b5db60c64b2981df7d2f2f5b76fd8203b010bcdc0a",
+              "url": "https://developer.mozilla.org/en-US/docs/Glossary"
+            },
+            "mdn-license.md": {
+              "bytes": 23775,
+              "sha256": "97a45d9a5c27c90ad7f058b20a870f11a24717f0eb4585f141948d25b74c4d89",
+              "url": "https://raw.githubusercontent.com/mdn/content/main/LICENSE.md"
+            }
+          },
+          "licenses": {
+            "esdb": {
+              "attribution": "ESDB and component word-list contributors; retain complete Copyright and sources notices",
+              "id": "LicenseRef-ESDB",
+              "url": "https://github.com/en-wl/wordlist/blob/1e5b7d3a72f47a71da5d28686c1dd4b397178485/Copyright"
+            },
+            "homebrew": {
+              "attribution": "Homebrew contributors",
+              "id": "BSD-2-Clause",
+              "url": "https://raw.githubusercontent.com/Homebrew/homebrew-cask/0c830359022240eec6b89d6fd598eb451b8b7dd2/LICENSE"
+            },
+            "homebrew_analytics": {
+              "attribution": "Homebrew contributors",
+              "id": "BSD-2-Clause",
+              "url": "https://github.com/Homebrew/formulae.brew.sh/blob/main/LICENSE.txt"
+            },
+            "mdn": {
+              "attribution": "MDN Web Docs contributors",
+              "id": "CC-BY-SA-2.5-or-later",
+              "url": "https://creativecommons.org/licenses/by-sa/2.5/"
+            },
+            "ngsl": {
+              "attribution": "Browne, Culligan, Phillips; see NGSL notice",
+              "id": "CC-BY-SA-4.0",
+              "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+            }
+          },
+          "profile": "dictionary-catalog-v1",
+          "schemaVersion": 1
+        },
+        "manifestSha256": "6781b7ea1a58942f1421b907f4daab0773a2b91d028c97e546320b93bc4e176f",
+        "observedFacetRows": {
+          "basic": 6599,
+          "daily": 3277,
+          "inflection": 2252,
+          "orthography": 2820,
+          "person": 2695,
+          "product": 7110,
+          "technology": 7743
+        },
+        "scope": "Exact source spellings and ESDB paradigms only; no typo/ranking behavior, generated morphology, or current product availability claim",
+        "withheldReasons": {
+          "already-registered-spelling": 11874,
+          "inflection-needs-usage-review": 6620,
+          "unsupported-format": 351
+        }
+      },
       "esdb": {
         "databaseSha256": "83dc3c111e573667e7c12b607bb5e2fa5596fa452ecdc3123b3b12e0e0725140",
         "recipe": "combine.py create-db --raw; omit data/coca_llm merge",
@@ -98,6 +212,30 @@
         "bytes": 89485,
         "sha256": "d814f2a0a3c61479a2c5ad037661719a0cc6e7dbcde31f181b54f12d0f1e11a4",
         "url": "https://www.newgeneralservicelist.com/s/NGSL_12_lemmatized_for_research.csv"
+      },
+      "references": {
+        "notices": [
+          {
+            "name": "DICTIONARY-mdn-license.txt",
+            "sha256": "97a45d9a5c27c90ad7f058b20a870f11a24717f0eb4585f141948d25b74c4d89"
+          },
+          {
+            "name": "DICTIONARY-homebrew-license.txt",
+            "sha256": "abd8be86c5738400f30c426bc88d90495b2dcfca9fe20b8d9b925599a55528b0"
+          },
+          {
+            "name": "DICTIONARY-homebrew-analytics-license.txt",
+            "sha256": "f80329e58613ad669c0e73cb132d8060b9b2c55e339c73848068e4d1567f4627"
+          },
+          {
+            "name": "DICTIONARY-NGSL-DICTIONARY-NOTICE.txt",
+            "sha256": "100c5b1f036e7ef9156bcf71939ccca7681aba59533c124650f57c5cd6785216"
+          },
+          {
+            "name": "DICTIONARY-MDN-DICTIONARY-NOTICE.txt",
+            "sha256": "dc332480eca19e707322cb9c2a4c3e974e7929999b1393131472f703527a70a8"
+          }
+        ]
       },
       "wordnet.tar.gz": {
         "bytes": 11537239,

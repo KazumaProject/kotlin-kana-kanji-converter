@@ -1,0 +1,4 @@
+MDN Web Docs contributors. https://developer.mozilla.org/en-US/docs/Glossary
+CC BY-SA 2.5 or later.
+https://creativecommons.org/licenses/by-sa/2.5/
+Changes: extract glossary-link labels and their URLs; retain exact display spelling. No definitions or code examples copied; no English POS or morphology inferred.

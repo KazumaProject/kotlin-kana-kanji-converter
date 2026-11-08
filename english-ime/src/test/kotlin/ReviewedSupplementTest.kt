@@ -28,7 +28,7 @@ class ReviewedSupplementTest {
             file.writeText(header + row)
             assertEquals("example gap", readSupplementEntries(file, base, emptyList(), emptySet()).single().key.surface)
             assertFailsWith<IllegalArgumentException> {
-                readSupplementEntries(file, base, listOf(Dictionary("examplegap", 100, "Example Gap", true)), emptySet())
+                readSupplementEntries(file, base, listOf(Dictionary("examplegap", 100, "example gap", true)), emptySet())
             }
             assertFailsWith<IllegalArgumentException> {
                 readSupplementEntries(file, base, emptyList(), setOf("example gap"))
@@ -37,6 +37,24 @@ class ReviewedSupplementTest {
             assertFailsWith<IllegalArgumentException> { readSupplementEntries(file, base, emptyList(), emptySet()) }
             file.writeText(header + row.replace("noun,domain_daily", "noun,domain_daily,imaginary_category"))
             assertFailsWith<IllegalArgumentException> { readSupplementEntries(file, base, emptyList(), emptySet()) }
+        } finally {
+            directory.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun acceptsAttestedCaseVariantsAndFunctionWordFormsWithoutRelaxingExclusions() {
+        val directory = createTempDirectory("reviewed-display-case-test").toFile()
+        try {
+            val file = directory.resolve("entries.tsv")
+            val base = Lexicon.load(File("data/grammar"))
+            val header = "lexeme_id\tlemma\tsurface\tcategories\tdomain\tevidence\tsource_ref\n"
+            file.writeText(header + "month-may\tMay\tMay\tnoun,noun_proper,domain_daily\tdaily\thttps://example.org/calendar\tcalendar:May\n")
+            val original = listOf(Dictionary("may", 100, "may", false))
+            assertEquals("May", readSupplementEntries(file, base, original, emptySet()).single().key.surface)
+            assertFailsWith<IllegalArgumentException> { readSupplementEntries(file, base, original, setOf("may")) }
+            file.writeText(header + "pronoun-we\twe\tus\tpronoun,domain_daily\tdaily\thttps://example.org/pronouns\tverified:us\n")
+            assertEquals("us", readSupplementEntries(file, base, emptyList(), emptySet()).single().key.surface)
         } finally {
             directory.deleteRecursively()
         }

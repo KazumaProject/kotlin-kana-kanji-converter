@@ -44,6 +44,7 @@ def adopt(args):
     with h.lock(directory):
         config, connection = h.state(directory)
         try:
+            h.require(not config.get('sourceProfile'), 'Use dictionary_sources.py adopt for dictionary catalog runs')
             rows = connection.execute('select * from candidates where decision is null order by position').fetchall()
             candidates = [(json.loads(row['payload']), json.loads(row['proposal']) if row['proposal'] else None) for row in rows]
             if not candidates:

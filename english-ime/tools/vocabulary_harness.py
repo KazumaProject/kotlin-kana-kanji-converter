@@ -123,8 +123,13 @@ def prepare(args):
         require(not (directory / 'run.json').exists(), 'Run exists; use review/status to resume it')
         require(not (directory / 'state.sqlite3').exists(), 'Incomplete prepare; use a new work directory')
         supplement = args.supplement.resolve()
+        dictionary_profile = getattr(args, 'profile', 'vocabulary') == 'dictionary'
         if args.fetch_sources:
-            sources.fetch_sources(external(args.source_dir), external(args.esdb_dir))
+            if dictionary_profile:
+                import dictionary_sources
+                dictionary_sources.fetch(args.source_dir, args.esdb_dir)
+            else:
+                sources.fetch_sources(external(args.source_dir), external(args.esdb_dir))
         hashes = verify_assets(args.assets.resolve(), supplement)
         inputs = directory / 'base-inputs'
         replay.unpack(replay.DEFAULT_MANIFEST, inputs, replay.DEFAULT_SOURCE)
@@ -134,9 +139,15 @@ def prepare(args):
             excluded = {sources.key(row['surface']) for row in csv.DictReader(stream, delimiter='\t') if row['decision'] == 'exclude'}
         cli_run(args.cli, 'export-candidates', '--assets', args.assets.resolve(), '--out', directory / 'baseline.jsonl')
         baseline = json_lines(directory / 'baseline.jsonl')
-        candidates, source_manifest = sources.collect(args.source_dir.resolve(), args.esdb_dir.resolve(), categories,
-            {sources.key(row['surface']) for row in baseline}, excluded, args.references)
-        selected = candidates[:args.max_candidates]
+        if dictionary_profile:
+            import dictionary_sources
+            candidates, source_manifest = dictionary_sources.collect(args.source_dir.resolve(), args.esdb_dir.resolve(), categories,
+                {row['surface'] for row in baseline}, excluded, args.references, directory)
+            selected = dictionary_sources.balanced(candidates, args.max_candidates)
+        else:
+            candidates, source_manifest = sources.collect(args.source_dir.resolve(), args.esdb_dir.resolve(), categories,
+                {sources.key(row['surface']) for row in baseline}, excluded, args.references)
+            selected = candidates[:args.max_candidates]
         require(selected, 'No eligible missing vocabulary candidates')
         write_lines(directory / 'candidates.jsonl', selected)
         with sqlite3.connect(directory / 'state.sqlite3') as connection:
@@ -157,8 +168,11 @@ def prepare(args):
             promptSha256=hashlib.sha256((PROMPT + json.dumps(DECISION_SCHEMA, sort_keys=True)).encode()).hexdigest(),
             codeHashes={name: replay.sha(Path(__file__).parent / name) for name in
                         ['vocabulary_harness.py', 'vocabulary_sources.py']})
+        if dictionary_profile:
+            config['sourceProfile'] = dictionary_sources.PROFILE
+            config['codeHashes']['dictionary_sources.py'] = replay.sha(Path(__file__).parent / 'dictionary_sources.py')
         dump(directory / 'run.json', config)
-        return dict(selected=len(selected), available=len(candidates), exhausted=len(selected) < args.max_candidates)
+        return dict(selected=len(selected), available=len(candidates), exhausted=len(candidates) <= len(selected))
 
 
 def validate_decisions(items, candidates, complete=True):
@@ -372,7 +386,7 @@ def build(args):
                     writer.writerows(combined)
                 notice = supplement / 'notices/VOCABULARY-HARNESS-SOURCES.txt'
                 notice.write_text('English vocabulary supplement: selected attested spellings and lexical roles from the pinned\n'
-                    'ESDB and WordNet sources and explicitly reviewed references identified in entries.tsv and manifest.json.\n'
+                    'lexical sources and catalogs identified in entries.tsv and manifest.json.\n'
                     'No source definitions or corpus text are redistributed. Preserve all base and supplement notices,\n'
                     'including ESDB copyright/source notices, WordNet terms and applicable share-alike attribution.\n'
                     'AI proposals are not human review. Final source decisions are recorded separately by the harness.\n', encoding='utf-8')
@@ -528,7 +542,11 @@ def status(args):
                 reviewedLexemes=len({(e['lexeme_id'], e['lemma']) for e in included}),
                 reviewedLemmaSpellings=len({e['lemma'] for e in included}),
                 addedFormRows=len(included), inflectedFormRows=sum(e['surface'] != e['lemma'] for e in included),
-                compounds=len({e['surface'] for e in included if ' ' in e['surface']}))
+                compounds=len({e['surface'] for e in included if ' ' in e['surface']})) | (
+                dict(sourceProfile=config['sourceProfile'],
+                    candidateFacets=dict(Counter(f for row in candidates for f in json.loads(row['payload']).get('facets', []))),
+                    adoptedFacets=dict(Counter(f for row in candidates if row['decision'] == 'include'
+                        for f in json.loads(row['payload']).get('facets', [])))) if config.get('sourceProfile') else {})
         finally:
             connection.close()
 
@@ -545,6 +563,8 @@ def parser():
         if name in {'prepare', 'evaluate'}:
             command.add_argument('--assets', type=Path, required=True)
         if name == 'prepare':
+            command.add_argument('--profile', choices=['vocabulary', 'dictionary'], default='vocabulary',
+                help='Dictionary profile collects basic/daily words, attested forms, terms, products and people')
             command.add_argument('--source-dir', type=Path, required=True)
             command.add_argument('--esdb-dir', type=Path, required=True)
             command.add_argument('--supplement', type=Path, default=sources.SUPPLEMENT)
