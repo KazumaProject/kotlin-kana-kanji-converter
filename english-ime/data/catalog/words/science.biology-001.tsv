@@ -1,0 +1,31 @@
+surface	change	kinds
+amino acid	added	lexical
+antibody	metadata_only	lexical
+antigen	metadata_only	lexical
+ascorbic acid	added	lexical
+bacteria	metadata_only	lexical
+caffeine	metadata_only	lexical
+cell	metadata_only	lexical
+cell division	added	lexical
+cell membrane	added	lexical
+chromosome	metadata_only	lexical
+DNA	added	lexical
+DNA sequencing	added	lexical
+enzyme	metadata_only	lexical
+gene	metadata_only	lexical
+gene expression	added	lexical
+genetic engineering	metadata_only	lexical
+genome	metadata_only	lexical
+glucose	metadata_only	lexical
+lactic acid	added	lexical
+metabolism	metadata_only	lexical
+microorganism	metadata_only	lexical
+organ	metadata_only	lexical
+photosynthesis	metadata_only	lexical
+polymerase chain reaction	added	lexical
+protein	metadata_only	lexical
+RNA	metadata_only	lexical
+stem cell	added	lexical
+sucrose	metadata_only	lexical
+tissue	metadata_only	lexical
+virus	metadata_only	lexical

@@ -1,0 +1,26 @@
+surface	change	kinds
+agriculture	metadata_only	lexical
+aquaculture	metadata_only	lexical
+cold chain	added	lexical
+crop rotation	added	lexical
+cultivar	metadata_only	lexical
+feed	metadata_only	lexical
+fermentation	metadata_only	lexical
+fertilizer	metadata_only	lexical
+food additive	added	lexical
+food preservation	added	lexical
+food safety	added	lexical
+germination	metadata_only	lexical
+greenhouse	metadata_only	lexical
+harvest	metadata_only	lexical
+herbicide	metadata_only	lexical
+horticulture	metadata_only	lexical
+hydroponics	metadata_only	lexical
+irrigation	metadata_only	lexical
+livestock	metadata_only	lexical
+pasteurization	metadata_only	lexical
+pesticide	metadata_only	lexical
+pollination	metadata_only	lexical
+shelf life	added	lexical
+soil fertility	added	lexical
+yield	metadata_only	lexical

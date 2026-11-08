@@ -1,0 +1,24 @@
+surface	change	kinds
+aperture	metadata_only	lexical
+aspect ratio	metadata_only	lexical
+autofocus	metadata_only	lexical
+bitrate	metadata_only	lexical
+chromatic aberration	added	lexical
+color grading	added	lexical
+color space	metadata_only	lexical
+colour space	added	lexical
+compression artifact	added	lexical
+depth of field	added	lexical
+diffraction	metadata_only	lexical
+digital zoom	added	lexical
+dynamic range	added	lexical
+exposure	metadata_only	lexical
+focal length	added	lexical
+frame rate	metadata_only	lexical
+image sensor	added	lexical
+image stabilization	added	lexical
+polarization	metadata_only	lexical
+refraction	metadata_only	lexical
+shutter speed	added	lexical
+video codec	added	lexical
+white balance	added	lexical

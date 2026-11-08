@@ -1,0 +1,31 @@
+surface	change	kinds
+aggregate	metadata_only	lexical
+architecture	metadata_only	lexical
+asphalt	metadata_only	lexical
+beam	metadata_only	lexical
+bearing capacity	added	lexical
+building code	added	lexical
+building envelope	added	lexical
+cantilever	metadata_only	lexical
+civil engineering	added	lexical
+column	metadata_only	lexical
+construction management	added	lexical
+contour line	added	lexical
+drainage	metadata_only	lexical
+elevation	metadata_only	lexical
+foundation	metadata_only	lexical
+geotechnical engineering	added	lexical
+load-bearing wall	added	lexical
+prestressed concrete	added	lexical
+reinforced concrete	added	lexical
+retaining wall	added	lexical
+seismic design	added	lexical
+sewage	metadata_only	lexical
+shear wall	added	lexical
+slope	metadata_only	lexical
+soil mechanics	added	lexical
+structural engineering	added	lexical
+surveying	metadata_only	lexical
+thermal insulation	added	lexical
+truss	metadata_only	lexical
+waterproofing	metadata_only	lexical

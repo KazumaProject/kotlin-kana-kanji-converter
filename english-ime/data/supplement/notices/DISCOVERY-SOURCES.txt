@@ -1,0 +1,7 @@
+Category-based English vocabulary discovery.
+Wikidata contributors: typed query results, labels and English sitelinks, CC0 1.0.
+https://www.wikidata.org/wiki/Wikidata:Licensing
+Wiktionary contributors: English topical category members, CC BY-SA 4.0.
+https://en.wiktionary.org/wiki/Wiktionary:Copyrights
+Changes: select direct source category/class members; merge exact spellings and entity IDs; attach source-backed topical memberships. No definitions, articles, generated morphology or aliases.
+Sitelinks are a cross-language encyclopedia-breadth proxy, not measured IME frequency. All discovered targets are extended-tier; fixed core regression targets stay independent.

@@ -1,0 +1,127 @@
+surface	change	kinds
+adatom	added	lexical
+alloy	metadata_only	lexical
+aluminium	metadata_only	lexical
+aluminum	metadata_only	lexical
+anelastic	added	lexical
+anti-degradable	added	lexical
+BHN	added	lexical
+biocomposite	added	lexical
+brittleness	metadata_only	lexical
+Burgers vector	added	lexical
+carbon fiber	added	lexical
+carbon fibre	added	lexical
+ceramic	metadata_only	lexical
+ceramography	added	lexical
+chalcogel	added	lexical
+Charpy	added	lexical
+Charpy impact test	added	lexical
+Charpy machine	added	lexical
+chromocarbon	added	lexical
+CMS	metadata_only	lexical
+coercivity	added	lexical
+composite material	added	lexical
+copper	metadata_only	lexical
+corrosion	metadata_only	lexical
+creep	metadata_only	lexical
+cross-linked polyethylene	added	lexical
+crystal structure	added	lexical
+DAC	metadata_only	lexical
+DBTT	added	lexical
+differential thermal analysis	added	lexical
+Dirac cone	added	lexical
+dislocation	metadata_only	lexical
+dopant	metadata_only	lexical
+ductility	metadata_only	lexical
+ECM	metadata_only	lexical
+elastic deformation	added	lexical
+elastic recovery	added	lexical
+elastica	added	lexical
+elasticity	metadata_only	lexical
+electroplastic	added	lexical
+electroplasticity	added	lexical
+energetic	metadata_only	lexical
+epitaxiality	added	lexical
+FATT	metadata_only	lexical
+flow stress	added	lexical
+fracture toughness	added	lexical
+glass transition	added	lexical
+goldene	added	lexical
+grain boundary	added	lexical
+graphene	metadata_only	lexical
+Hall-Petch equation	added	lexical
+hardness	metadata_only	lexical
+homoepitaxial	added	lexical
+HRA	metadata_only	lexical
+HRB	added	lexical
+HRC	metadata_only	lexical
+HRD	metadata_only	lexical
+HRE	metadata_only	lexical
+HRF	added	lexical
+HRG	added	lexical
+hydrogen embrittlement	added	lexical
+impact energy	added	lexical
+intergranule	added	lexical
+ksi	metadata_only	lexical
+Laves phase	added	lexical
+layup	metadata_only	lexical
+LYP	added	lexical
+mat sci	added	lexical
+materialography	added	lexical
+modelless	added	lexical
+Msi	added	lexical
+MXene	added	lexical
+nanocellulose	added	lexical
+nanodiffraction	added	lexical
+nanoslab	added	lexical
+NFC	metadata_only	lexical
+nickel-rich	added	lexical
+novolac	added	lexical
+open assembly time	added	lexical
+outgas	added	lexical
+oxidation	metadata_only	lexical
+passivation	metadata_only	lexical
+peapod	added	lexical
+phase diagram	added	lexical
+plastic deformation	added	lexical
+plasticity	metadata_only	lexical
+Poisson effect	added	lexical
+polymer	metadata_only	lexical
+postyield	added	lexical
+pozzolanic	added	lexical
+pozzolanicity	added	lexical
+programmable matter	added	lexical
+purple plague	added	lexical
+pyrosol	added	lexical
+resilient	metadata_only	lexical
+Rockwell hardness	added	lexical
+Rockwell scale	added	lexical
+SDAS	added	lexical
+self-finishing	added	lexical
+self-healing	added	lexical
+spallation	added	lexical
+stainless steel	added	lexical
+steel	metadata_only	lexical
+supercomposite	added	lexical
+superprotonic	added	lexical
+TCR	metadata_only	lexical
+tensile strength	added	lexical
+tetravinyltetramethylcyclotetrasiloxane	added	lexical
+thermal stress	added	lexical
+thermoporometry	added	lexical
+tin cry	added	lexical
+tin pest	added	lexical
+titanium	metadata_only	lexical
+toughness	metadata_only	lexical
+triskele	added	lexical
+UYP	added	lexical
+void	metadata_only	lexical
+Wigner effect	added	lexical
+wring	metadata_only	lexical
+yield	metadata_only	lexical
+yield point	added	lexical
+yield strain	added	lexical
+yield strength	added	lexical
+yield stress	added	lexical
+Young's modulus	added	lexical
+zeogrid	added	lexical

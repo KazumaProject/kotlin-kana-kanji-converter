@@ -1,0 +1,29 @@
+surface	change	kinds
+anatomy	metadata_only	lexical
+anesthesia	metadata_only	lexical
+biopsy	metadata_only	lexical
+blood glucose	added	lexical
+catheter	metadata_only	lexical
+clinical trial	added	lexical
+computed tomography	added	lexical
+contraindication	added	lexical
+defibrillator	metadata_only	lexical
+diagnosis	metadata_only	lexical
+dosage	metadata_only	lexical
+electrocardiogram	metadata_only	lexical
+endoscope	metadata_only	lexical
+heart rate	added	lexical
+magnetic resonance imaging	added	lexical
+pacemaker	metadata_only	lexical
+physiology	metadata_only	lexical
+placebo	metadata_only	lexical
+prognosis	metadata_only	lexical
+pulse oximeter	added	lexical
+rehabilitation	metadata_only	lexical
+respiratory rate	added	lexical
+sphygmomanometer	added	lexical
+sterilization	metadata_only	lexical
+stethoscope	metadata_only	lexical
+syringe	metadata_only	lexical
+ultrasound	metadata_only	lexical
+ventilator	metadata_only	lexical

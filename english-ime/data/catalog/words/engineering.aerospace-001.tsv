@@ -1,0 +1,156 @@
+surface	change	kinds
+abort	metadata_only	lexical
+advance angle	added	lexical
+aeronautics	metadata_only	lexical
+aeroplane	metadata_only	lexical
+aerospace engineering	added	lexical
+ailerons	metadata_only	lexical
+airbreathing	added	lexical
+aircraft	metadata_only	lexical
+aircraft station	added	lexical
+airfoil	metadata_only	lexical
+airhole	added	lexical
+alien reproduction vehicle	added	lexical
+alpha hinge	added	lexical
+angle of attack	added	lexical
+angle of incidence	added	lexical
+anhedral	added	lexical
+attitude	metadata_only	lexical
+backtaxi	added	lexical
+boilerplate	metadata_only	lexical
+bracing	metadata_only	lexical
+canopy	metadata_only	lexical
+CCM	added	lexical
+centre of lift	added	lexical
+chine	metadata_only	lexical
+chord	metadata_only	lexical
+CLV	added	lexical
+COL	added	lexical
+combined cycle	added	lexical
+combustion chamber	added	lexical
+compound balloon	added	lexical
+constant speed drive	added	lexical
+control surface	added	lexical
+cruise	metadata_only	lexical
+delta hinge	added	lexical
+delta wing	added	lexical
+depth	metadata_only	lexical
+dihedral	metadata_only	lexical
+dip	metadata_only	lexical
+dope	metadata_only	lexical
+drag	metadata_only	lexical
+drag parachute	added	lexical
+draglessness	added	lexical
+drogue	metadata_only	lexical
+elevator	metadata_only	lexical
+escape velocity	added	lexical
+exhaust velocity	added	lexical
+Fairey-Youngman flap	added	lexical
+FCU	metadata_only	lexical
+feather	metadata_only	lexical
+featherable	added	lexical
+flaperon	added	lexical
+fleet leader	added	lexical
+flutter	metadata_only	lexical
+foreplane	added	lexical
+formate	metadata_only	lexical
+Fowler flap	added	lexical
+FSW	added	lexical
+fuselage	metadata_only	lexical
+geostationary orbit	added	lexical
+ground effect	added	lexical
+ground proximity warning system	added	lexical
+hard launch	added	lexical
+HIV	metadata_only	lexical
+homebuild	added	lexical
+HS3	added	lexical
+hypergol	added	lexical
+hypergolic	added	lexical
+hypersonic	metadata_only	lexical
+innage	added	lexical
+j/s	added	lexical
+jet engine	added	lexical
+K-factor	added	lexical
+keel	metadata_only	lexical
+Krueger flap	added	lexical
+launch vehicle	added	lexical
+lead-lag	added	lexical
+leading edge	added	lexical
+lift	metadata_only	lexical
+LOAC	added	lexical
+low Earth orbit	added	lexical
+LTE	metadata_only	lexical
+mainspar	added	lexical
+MET	added	lexical
+MGB	metadata_only	lexical
+midair	metadata_only	lexical
+middeck	added	lexical
+MPS	added	lexical
+narrowbody	added	lexical
+near space	added	lexical
+nose cap	added	lexical
+nozzle	metadata_only	lexical
+orbital mechanics	added	lexical
+orbital velocity	added	lexical
+paper airplane	added	lexical
+paradrogue	added	lexical
+payload	metadata_only	lexical
+phugoid	added	lexical
+plasmasonic	added	lexical
+plopter	added	lexical
+polyhedral	metadata_only	lexical
+power dive	added	lexical
+power-egg	added	lexical
+preburner	added	lexical
+probe	metadata_only	lexical
+probe-and-drogue	added	lexical
+propeller	metadata_only	lexical
+propulsor	added	lexical
+pulsejet	added	lexical
+push the envelope	added	lexical
+pusher	metadata_only	lexical
+ramjet	metadata_only	lexical
+reentrant	added	lexical
+reentry	metadata_only	lexical
+reheat	metadata_only	lexical
+rib	metadata_only	lexical
+rocket	metadata_only	lexical
+rocket engine	added	lexical
+roll rate	added	lexical
+rover	metadata_only	lexical
+rudder	metadata_only	lexical
+rudder roll	added	lexical
+satellite	metadata_only	lexical
+SCA	metadata_only	lexical
+scramjet	added	lexical
+Sears-Haack body	added	lexical
+slingshot effect	added	lexical
+snap roll	added	lexical
+soft landing	added	lexical
+soft launch	added	lexical
+spacecraft	metadata_only	lexical
+spacedive	added	lexical
+spar	metadata_only	lexical
+spoiler	metadata_only	lexical
+stall	metadata_only	lexical
+super stall	added	lexical
+sustainer	metadata_only	lexical
+tail cone	added	lexical
+TGS	added	lexical
+thrust	metadata_only	lexical
+trailing edge	added	lexical
+trial balloon	added	lexical
+trim tab	added	lexical
+turbofan	metadata_only	lexical
+turbojet	metadata_only	lexical
+turboprop	metadata_only	lexical
+variable sweep	added	lexical
+vortex generator	added	lexical
+washout	metadata_only	lexical
+wide-body	added	lexical
+widebodied	added	lexical
+widebody	metadata_only	lexical
+wing fence	added	lexical
+wing in ground effect	added	lexical
+winglet	added	lexical
+Zap flap	added	lexical

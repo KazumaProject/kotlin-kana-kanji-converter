@@ -1,0 +1,8 @@
+surface	change	kinds
+optimization	metadata_only	lexical
+polynomial	metadata_only	lexical
+prime number	added	lexical
+rational number	added	lexical
+real number	added	lexical
+tensor	metadata_only	lexical
+vector	metadata_only	lexical

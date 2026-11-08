@@ -1,0 +1,117 @@
+surface	change	kinds
+actroid	added	lexical
+actuator	metadata_only	lexical
+affordance	added	lexical
+android	metadata_only	lexical
+andy	metadata_only	lexical
+animatronics	metadata_only	lexical
+anthropomimetic	added	lexical
+AprilTag	added	lexical
+astrobot	added	lexical
+autonomous robot	added	lexical
+AUV	added	lexical
+AWS	metadata_only	lexical
+biobot	added	lexical
+biometamorphic	added	lexical
+bion	metadata_only	lexical
+bot	metadata_only	lexical
+Brobot	added	lexical
+chatbot	metadata_only	lexical
+cobot	added	lexical
+control system	added	lexical
+cybersurgeon	added	lexical
+DAMN	added	lexical
+degrees of freedom	added	lexical
+drillable	added	lexical
+droid	metadata_only	lexical
+encoder	metadata_only	lexical
+feedback	metadata_only	lexical
+feedforward	added	lexical
+fembot	added	lexical
+fin gripper	added	lexical
+First Law of Robotics	added	lexical
+forebeam	added	lexical
+grey goo	added	lexical
+GROVER	added	lexical
+gynoid	added	lexical
+humaniform	added	lexical
+humanoid	metadata_only	lexical
+IAD	metadata_only	lexical
+ICRA	added	lexical
+inverse kinematics	added	lexical
+Kalman filter	added	lexical
+kidnapped robot problem	added	lexical
+killbot	added	lexical
+kinematics	metadata_only	lexical
+localization	metadata_only	lexical
+LUCAS	added	lexical
+malebot	added	lexical
+manipulator	metadata_only	lexical
+master-slave manipulator	added	lexical
+mecha	metadata_only	lexical
+mechanoid	added	lexical
+microwalk	added	lexical
+microwalking	added	lexical
+Moravec's paradox	added	lexical
+motion planning	added	lexical
+multi-temporal	added	lexical
+multigait	added	lexical
+nanite	metadata_only	lexical
+nanobot	added	lexical
+nanorobot	added	lexical
+nanorobotics	added	lexical
+nanoswarm	added	lexical
+overshoot	metadata_only	lexical
+pedipulator	added	lexical
+PID controller	added	lexical
+pornbot	added	lexical
+prostibot	added	lexical
+remote surgery	added	lexical
+RHU	added	lexical
+robocop	metadata_only	lexical
+robonaut	added	lexical
+robopsychologist	added	lexical
+robot	metadata_only	lexical
+robot revolution	added	lexical
+robotgirl	added	lexical
+robotic	metadata_only	lexical
+robotic arm	added	lexical
+roboticist	added	lexical
+robotics	metadata_only	lexical
+robotkind	added	lexical
+roomba	metadata_only	lexical
+SARMO	added	lexical
+seadrone	added	lexical
+Second Law of Robotics	added	lexical
+self-right	added	lexical
+sensor fusion	added	lexical
+setpoint	added	lexical
+settling time	added	lexical
+sexbot	added	lexical
+sexdroid	added	lexical
+slaughterbot	added	lexical
+stability	metadata_only	lexical
+state space	added	lexical
+step response	added	lexical
+stepper motor	added	lexical
+synth	metadata_only	lexical
+teleassistance	added	lexical
+telefactor	added	lexical
+telemanipulator	added	lexical
+teleop	added	lexical
+teleoperator	added	lexical
+telesurgery	added	lexical
+Third Law of Robotics	added	lexical
+Three Laws of Robotics	added	lexical
+throwbot	added	lexical
+trajectory	metadata_only	lexical
+transfer function	added	lexical
+UCAS	metadata_only	lexical
+UCAV	added	lexical
+uncanny valley	added	lexical
+underactuate	added	lexical
+visual servoing	added	lexical
+waldo	metadata_only	lexical
+work envelope	added	lexical
+workspace	metadata_only	lexical
+xenobot	added	lexical

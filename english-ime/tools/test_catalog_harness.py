@@ -110,6 +110,28 @@ class CatalogHarnessTest(unittest.TestCase):
         self.assertFalse(c.attested('RAM', 'Ram'))
         self.assertEqual('real text', c.plain('<script>invented term</script><p>real text</p>'))
 
+    def test_attested_noun_head_does_not_inherit_an_unrelated_verb_paradigm(self):
+        source = self.root / 'sources'; source.mkdir()
+        lexical = self.root / 'lexical'; lexical.mkdir()
+        (lexical / 'cask.json').write_text('[]')
+        (lexical / 'cask-analytics.json').write_text('{"items": []}')
+        (lexical / 'dictionary-sources.json').write_text('{}')
+        taxonomy = self.root / 'taxonomy.json'; scopes = self.root / 'scopes.json'
+        h.dump(taxonomy, dict(schemaVersion=2, topics=list(TOPICS.values())))
+        h.dump(scopes, dict(schemaVersion=2, basicLists=False, productRankLimit=0, scopes=[
+            dict(topic='technology.test', kind='lexical', tier='core', sources=['esdb', 'wiktionary'], terms=['kerning'])]))
+        sources = dict(documents={}, texts={}, words={'kerning': [dict(word='kerning', lemma='kern',
+            pos_class='', pos='vg', base_pos='v', word_id=1, lemma_id=2)]}, paradigms={2: {'vg'}},
+            wordnet={}, mdnLabels={}, pages=[], languages=set(), pins={'esdb': {'databaseSha256': 'a' * 64}}, legacy={})
+        proof = dict(source='wiktionary', revision=42, headRole='noun', url='https://en.wiktionary.org/wiki/kerning')
+        args = argparse.Namespace(source_dir=source, lexical_source_dir=lexical, esdb_dir=self.root, taxonomy=taxonomy, scopes=scopes)
+        with patch.object(c, 'load_sources', return_value=sources), \
+             patch.object(c, 'roles_for', return_value={'verb'}), patch.object(c, 'categories_for', return_value={'verb', 'verb_ing'}), \
+             patch.object(c.world_sources, 'matching', return_value=[proof]):
+            targets, _, _ = c.compile_targets(args)
+        self.assertEqual(dict(lemma='kerning', categories=['noun'], source_ref='wiktionary:42'), targets[0]['sourceEntry'])
+        self.assertEqual('head', targets[0]['formKind'])
+
     def test_unknown_topics_and_providers_are_rejected(self):
         taxonomy = self.root / 'taxonomy.json'; scopes = self.root / 'scopes.json'
         h.dump(taxonomy, dict(schemaVersion=2, topics=list(TOPICS.values())))

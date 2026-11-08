@@ -1,0 +1,15 @@
+surface	change	kinds
+Discord	metadata_only	service
+FaceTime	metadata_only	service
+Gmail	metadata_only	service
+Google Meet	metadata_only	service
+Instagram	metadata_only	service
+LinkedIn	metadata_only	service
+Microsoft Teams	metadata_only	service
+Outlook.com	added	service
+Reddit	metadata_only	service
+Signal	metadata_only	service
+Slack	metadata_only	service
+Telegram	metadata_only	service
+TikTok	metadata_only	service
+WhatsApp	metadata_only	service

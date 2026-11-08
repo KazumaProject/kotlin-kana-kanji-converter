@@ -1,0 +1,501 @@
+surface	change	kinds
+000	added	lexical
+102	added	lexical
+105	added	lexical
+108	added	lexical
+110	added	lexical
+111	added	lexical
+112	added	lexical
+119	added	lexical
+1MR	added	lexical
+30	added	lexical
+802.11i	added	lexical
+9-1-1	added	lexical
+911	added	lexical
+995	added	lexical
+999	added	lexical
+accelerometer	metadata_only	lexical
+acknowledgment	metadata_only	lexical
+acoustic coupler	added	lexical
+acquisition time	added	lexical
+address message	added	lexical
+ADSL	metadata_only	lexical
+all-figure number	added	lexical
+analog-to-digital converter	added	lexical
+answerback	added	lexical
+antenna	metadata_only	lexical
+ASN	metadata_only	lexical
+asymmetric digital subscriber line	added	lexical
+ATM	added	lexical
+attack time	added	lexical
+audimeter	added	lexical
+autobaud	added	lexical
+autocall	added	lexical
+AWS	metadata_only	lexical
+Baby Bell	added	lexical
+back-to-back connection	added	lexical
+band	metadata_only	lexical
+bar	metadata_only	lexical
+base communications	added	lexical
+base station	added	lexical
+base station subsystem	added	lexical
+baseband	metadata_only	lexical
+baud	metadata_only	lexical
+baud rate	added	lexical
+BBS	added	lexical
+beaconing	added	lexical
+beeper	metadata_only	lexical
+BHCA	added	lexical
+BICC	added	lexical
+big ugly dish	added	lexical
+bit interval	added	lexical
+bit stuffing	added	lexical
+bitrate	metadata_only	lexical
+black noise	added	lexical
+black spot	added	lexical
+BLE	metadata_only	lexical
+blind spot	metadata_only	lexical
+BNC	metadata_only	lexical
+BNC connector	added	lexical
+bootloader	metadata_only	lexical
+BORSCHT	added	lexical
+botherance	added	lexical
+BPV	added	lexical
+break up	added	lexical
+bridgeline	added	lexical
+broadband	metadata_only	lexical
+broadcast radiation	added	lexical
+broadcast storm	added	lexical
+BUD	added	lexical
+buffer	metadata_only	lexical
+butt set	added	lexical
+buttinsky	added	lexical
+C-bander	added	lexical
+cable station	added	lexical
+cableco	added	lexical
+call delay	added	lexical
+call tree	added	lexical
+capcode	added	lexical
+carrier	metadata_only	lexical
+CCI	metadata_only	lexical
+CDAA	added	lexical
+CDD	metadata_only	lexical
+CDDA	added	lexical
+celerity	metadata_only	lexical
+cell	metadata_only	lexical
+cellular	metadata_only	lexical
+Centrex	added	lexical
+churn	metadata_only	lexical
+civision	added	lexical
+cleardown	added	lexical
+clearing	metadata_only	lexical
+CLEC	added	lexical
+CLI	metadata_only	lexical
+cloud	metadata_only	lexical
+CMI	metadata_only	lexical
+CMS	metadata_only	lexical
+coaxial cable	added	lexical
+COCOT	added	lexical
+common carrier	added	lexical
+commonality	metadata_only	lexical
+compatibility	metadata_only	lexical
+concentrator	metadata_only	lexical
+conducted interference	added	lexical
+connectivity	metadata_only	lexical
+contention	metadata_only	lexical
+coverage	metadata_only	lexical
+CPDL	added	lexical
+CPDLC	added	lexical
+CPS	added	lexical
+cps	metadata_only	lexical
+cross-pol	added	lexical
+crossband	added	lexical
+CS	added	lexical
+CSD	metadata_only	lexical
+CSP	metadata_only	lexical
+CTI	metadata_only	lexical
+cutover	added	lexical
+CW	added	lexical
+D2C	added	lexical
+D2M	added	lexical
+data set	added	lexical
+DCIM	added	lexical
+DDD	metadata_only	lexical
+DDI	metadata_only	lexical
+de-emphasis	added	lexical
+dead zone	added	lexical
+defed	added	lexical
+dejitterize	added	lexical
+demarc	added	lexical
+demarc extension	added	lexical
+demodulation	metadata_only	lexical
+dequantize	added	lexical
+device driver	added	lexical
+dial-around	added	lexical
+dialout	added	lexical
+digital footprint	added	lexical
+digital-to-analog converter	added	lexical
+direct-to-cell	added	lexical
+Discord	metadata_only	lexical
+dish	metadata_only	lexical
+dishowner	added	lexical
+diverter	added	lexical
+DL	added	lexical
+DLC	metadata_only	lexical
+DLU	added	lexical
+DOCSIS	metadata_only	lexical
+downlink	metadata_only	lexical
+DRCP	added	lexical
+drop	metadata_only	lexical
+DSL	metadata_only	lexical
+DTC	metadata_only	lexical
+DTD	metadata_only	lexical
+DTLS	metadata_only	lexical
+DTM	metadata_only	lexical
+duobinary	added	lexical
+duplex	metadata_only	lexical
+dynamic IP address	added	lexical
+eavesdropping	metadata_only	lexical
+ECIS	added	lexical
+ELFEXT	added	lexical
+embedded system	added	lexical
+EMCON	added	lexical
+EME	added	lexical
+end-node	added	lexical
+endpoint	metadata_only	lexical
+EOT	metadata_only	lexical
+erlang	metadata_only	lexical
+ERP	metadata_only	lexical
+error	metadata_only	lexical
+errored	added	lexical
+escape character	metadata_only	lexical
+escape sequence	added	lexical
+eSIM	metadata_only	lexical
+ETSI	metadata_only	lexical
+exit node	added	lexical
+ext	metadata_only	lexical
+extension	metadata_only	lexical
+FAB	added	lexical
+false	metadata_only	lexical
+far field	added	lexical
+far-field	added	lexical
+FCD	added	lexical
+FDD	metadata_only	lexical
+fed	metadata_only	lexical
+federated	metadata_only	lexical
+federation	metadata_only	lexical
+femtocell	added	lexical
+FEXT	added	lexical
+FIN	added	lexical
+firmware	metadata_only	lexical
+flap	metadata_only	lexical
+flapping	metadata_only	lexical
+flash	metadata_only	lexical
+flash cut	added	lexical
+FMNP	added	lexical
+forward echo	added	lexical
+forward link	added	lexical
+frame-alignment recovery time	added	lexical
+free roam	added	lexical
+frequency	metadata_only	lexical
+frequency assignment	added	lexical
+frequency band	added	lexical
+FSM	metadata_only	lexical
+FSPL	added	lexical
+FT	added	lexical
+FTA	metadata_only	lexical
+FTTB	added	lexical
+FTTC	added	lexical
+FTTD	added	lexical
+FTTH	metadata_only	lexical
+FTTL	added	lexical
+FTTN	added	lexical
+FTTO	added	lexical
+FTTP	added	lexical
+FTTR	added	lexical
+FTTS	added	lexical
+FTTT	added	lexical
+FTTX	added	lexical
+full duplex	added	lexical
+gateway	metadata_only	lexical
+GBIC	added	lexical
+GBR	metadata_only	lexical
+GIP	added	lexical
+GoS	added	lexical
+GRX	added	lexical
+GSM-R	added	lexical
+guard band	added	lexical
+gyroscope	metadata_only	lexical
+hacker	metadata_only	lexical
+half duplex	added	lexical
+half-duplex	added	lexical
+ham band	added	lexical
+Hamming code	added	lexical
+hardware node	added	lexical
+hash	metadata_only	lexical
+hash noise	added	lexical
+HDSL	added	lexical
+headend	added	lexical
+helpline	metadata_only	lexical
+HES	added	lexical
+homeset	added	lexical
+homochronous	added	lexical
+hook flash	added	lexical
+hopset	added	lexical
+HSDPA	added	lexical
+I2C	added	lexical
+ILEC	added	lexical
+IMS	metadata_only	lexical
+IMSI	added	lexical
+in-band signaling	added	lexical
+inband	added	lexical
+inset	metadata_only	lexical
+interdigit	added	lexical
+Internet of Things	added	lexical
+Internet service provider	added	lexical
+interrupt	metadata_only	lexical
+IOT	added	lexical
+IPBX	added	lexical
+IPL	metadata_only	lexical
+ISDN	metadata_only	lexical
+ISI	metadata_only	lexical
+ISIM	added	lexical
+ITU-T	added	lexical
+jitter	metadata_only	lexical
+kerchunker	added	lexical
+keysender	added	lexical
+LAPD	metadata_only	lexical
+last mile	added	lexical
+LATA	added	lexical
+LF	added	lexical
+line card	added	lexical
+lineman splice	added	lexical
+LIR	added	lexical
+LNP	metadata_only	lexical
+LNR	metadata_only	lexical
+local loop	added	lexical
+logic analyzer	added	lexical
+LOS	added	lexical
+lossful	added	lexical
+lossy	metadata_only	lexical
+LPT	metadata_only	lexical
+LUDs	added	lexical
+LVDS	added	lexical
+Ma Bell	added	lexical
+MAC	added	lexical
+Manchester coding	added	lexical
+mastergroup	added	lexical
+MBR	metadata_only	lexical
+MCU	metadata_only	lexical
+MDC	metadata_only	lexical
+mechanical splice	added	lexical
+meet-me room	added	lexical
+middle mile	added	lexical
+midframe	added	lexical
+MIMO	metadata_only	lexical
+minidish	added	lexical
+MMF	metadata_only	lexical
+MMS	metadata_only	lexical
+MNP	added	lexical
+mobile station	added	lexical
+mobile virtual network operator	added	lexical
+modulation	metadata_only	lexical
+Morse code	added	lexical
+MQTT	added	lexical
+MSB	metadata_only	lexical
+MTSO	added	lexical
+multiexchange	added	lexical
+multilink	added	lexical
+multilinking	added	lexical
+multimeter	metadata_only	lexical
+multinumber	added	lexical
+multipath	metadata_only	lexical
+multiplexer	metadata_only	lexical
+multipoint	metadata_only	lexical
+multiuser	added	lexical
+MVNO	metadata_only	lexical
+N-facility	added	lexical
+NANP	added	lexical
+NBMR	added	lexical
+netco	added	lexical
+network subsystem	added	lexical
+NEXT	added	lexical
+NOMA	added	lexical
+nonlandline	added	lexical
+nonrepudiation	added	lexical
+nonwireline	added	lexical
+NSAPI	added	lexical
+OFDM	metadata_only	lexical
+offload	metadata_only	lexical
+offset time	added	lexical
+online service provider	added	lexical
+OOLR	added	lexical
+operating time	added	lexical
+optical switch	added	lexical
+oscilloscope	metadata_only	lexical
+OSP	metadata_only	lexical
+OSS	added	lexical
+OTP	metadata_only	lexical
+out-of-band	added	lexical
+out-of-band signaling	added	lexical
+outband	added	lexical
+overbuilder	added	lexical
+overmodulation	added	lexical
+packet-switched	added	lexical
+page	metadata_only	lexical
+pager	metadata_only	lexical
+PBX	metadata_only	lexical
+PCS	added	lexical
+PDC	metadata_only	lexical
+pedestal	metadata_only	lexical
+phone tree	added	lexical
+phonopore	added	lexical
+picocell	added	lexical
+PIFA	added	lexical
+pilot	metadata_only	lexical
+pizza dish	added	lexical
+PLC	metadata_only	lexical
+PLMN	added	lexical
+point-to-point	added	lexical
+Polybius square	added	lexical
+POP	added	lexical
+PoP	added	lexical
+post office telephone system	added	lexical
+postcursor	added	lexical
+POTS	added	lexical
+precursor	metadata_only	lexical
+prefix	metadata_only	lexical
+presentity	added	lexical
+PRI	metadata_only	lexical
+primary rate interface	added	lexical
+primary time standard	added	lexical
+private branch exchange	added	lexical
+proration	added	lexical
+PS	metadata_only	lexical
+PSDU	added	lexical
+pseudowire	added	lexical
+PSNEXT	added	lexical
+PSTN	metadata_only	lexical
+PTC	metadata_only	lexical
+PTT	metadata_only	lexical
+pulse-width modulation	added	lexical
+punchdown	added	lexical
+push time	added	lexical
+QoS	metadata_only	lexical
+quad	metadata_only	lexical
+quality of service	added	lexical
+quantize	added	lexical
+radar cross section	added	lexical
+radio band	added	lexical
+radio frequency	added	lexical
+radio-frequency identification	added	lexical
+range extender	added	lexical
+rat-tail splice	added	lexical
+RBOC	added	lexical
+RCS	metadata_only	lexical
+read	metadata_only	lexical
+readback	added	lexical
+real-time operating system	added	lexical
+receive	metadata_only	lexical
+receiver	metadata_only	lexical
+redialer	added	lexical
+refarmed	added	lexical
+refarming	added	lexical
+register	metadata_only	lexical
+REIN	added	lexical
+RELP	added	lexical
+remote access	added	lexical
+REN	added	lexical
+repeatered	added	lexical
+reperforator	added	lexical
+reverse link	added	lexical
+RFB	added	lexical
+RFFE	added	lexical
+rgr	added	lexical
+ring time	added	lexical
+ringback	added	lexical
+ringdown	added	lexical
+ringer equivalence number	added	lexical
+RJ	metadata_only	lexical
+roam	metadata_only	lexical
+roamable	added	lexical
+roaming	metadata_only	lexical
+roger	metadata_only	lexical
+ROIP	added	lexical
+round-trip delay time	added	lexical
+round-trip time	added	lexical
+router	metadata_only	lexical
+RS-232	added	lexical
+RTC	metadata_only	lexical
+RTT	metadata_only	lexical
+RX	added	lexical
+Rx	added	lexical
+rx	metadata_only	lexical
+RY	metadata_only	lexical
+sampling rate	added	lexical
+saturation	metadata_only	lexical
+SDP	metadata_only	lexical
+SDR	metadata_only	lexical
+SDU	metadata_only	lexical
+security distance	added	lexical
+self-clocking	added	lexical
+semiduplex	added	lexical
+send	metadata_only	lexical
+SerDes	added	lexical
+serial communication	added	lexical
+servco	added	lexical
+SHINE	added	lexical
+short wave	added	lexical
+shortwave	metadata_only	lexical
+signalling event	added	lexical
+SIM	added	lexical
+SIM card	added	lexical
+simplex	metadata_only	lexical
+single-user	added	lexical
+SIT	added	lexical
+Skynet	metadata_only	lexical
+slam	metadata_only	lexical
+slip	metadata_only	lexical
+SMS	metadata_only	lexical
+Snoopy cap	added	lexical
+softswitch	added	lexical
+software defined radio	added	lexical
+SPE	metadata_only	lexical
+spectrum	metadata_only	lexical
+speedshift	added	lexical
+SPI	metadata_only	lexical
+SPN	added	lexical
+spot beam	added	lexical
+spudger	added	lexical
+squelch circuit	added	lexical
+SRES	added	lexical
+static IP address	added	lexical
+station-to-station	added	lexical
+store and forward	added	lexical
+streaming data	added	lexical
+streaming encoder	added	lexical
+structured wiring	added	lexical
+subcarrier	metadata_only	lexical
+subinterface	added	lexical
+submessage	added	lexical
+subpacket	added	lexical
+Subscriber Identity Module	added	lexical
+super high frequency	added	lexical
+superband	added	lexical
+superframe	added	lexical
+supergroup	metadata_only	lexical
+supermastergroup	added	lexical
+supertrunk	added	lexical
+supertrunking	added	lexical
+switch	metadata_only	lexical
+switchboard	metadata_only	lexical
+switchroom	added	lexical
+symbol	metadata_only	lexical
+T-carrier	added	lexical
+TCP/IP	added	lexical
+TDD	metadata_only	lexical
+technography	added	lexical
+telecommunications tower	added	lexical
+teleconference	metadata_only	lexical
+teledensity	added	lexical
+teledensity rate	added	lexical

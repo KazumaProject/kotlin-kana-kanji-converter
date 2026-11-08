@@ -1,0 +1,501 @@
+surface	change	kinds
+2SLS	added	lexical
+68-95-99.7 rule	added	lexical
+AA	metadata_only	lexical
+absolute deviation	added	lexical
+absolute frequency	added	lexical
+absorbing	metadata_only	lexical
+age distribution	added	lexical
+agrimetric	added	lexical
+agrimetrics	added	lexical
+algebraic statistics	added	lexical
+allokurtic	added	lexical
+alpha	metadata_only	lexical
+alpha error	added	lexical
+alpha level	added	lexical
+alternative hypothesis	added	lexical
+analysis of variance	added	lexical
+ANCOVA	added	lexical
+Anderson-Darling test	added	lexical
+anentropy	added	lexical
+ANOVA	metadata_only	lexical
+anticorrelation	added	lexical
+antithetic	added	lexical
+applied statistics	added	lexical
+AR	added	lexical
+ARCH	added	lexical
+ARIMA	added	lexical
+arithmetic average	added	lexical
+arithmetic density	added	lexical
+arithmetic mean	added	lexical
+ARMA	metadata_only	lexical
+ASD	metadata_only	lexical
+association	metadata_only	lexical
+assoziation	added	lexical
+atomless	added	lexical
+autocorrelation	metadata_only	lexical
+autocovariance	added	lexical
+autoregressive	added	lexical
+average	metadata_only	lexical
+backshift	added	lexical
+bagplot	added	lexical
+balance	metadata_only	lexical
+bar chart	added	lexical
+bar graph	added	lexical
+base year	added	lexical
+Bayesian	added	lexical
+Bayesian inference	added	lexical
+Bayesian network	added	lexical
+Bayesianism	added	lexical
+Behrens-Fisher problem	added	lexical
+Berkson's paradox	added	lexical
+Bernoulli distribution	added	lexical
+Bernoulli process	added	lexical
+Bernoulli trial	added	lexical
+Bessel's correction	added	lexical
+beta distribution	added	lexical
+beta error	added	lexical
+bias	metadata_only	lexical
+bias-robust	added	lexical
+biased	metadata_only	lexical
+bicorrelation	added	lexical
+bimodality	added	lexical
+bin	metadata_only	lexical
+binarize	added	lexical
+binary distribution	added	lexical
+bincount	added	lexical
+binning	metadata_only	lexical
+binomial	metadata_only	lexical
+binomial distribution	added	lexical
+binomial random variable	added	lexical
+binomial test	added	lexical
+binsize	added	lexical
+binwidth	added	lexical
+bipower	added	lexical
+birthday effect	added	lexical
+biserial	added	lexical
+bivariate normal distribution	added	lexical
+BLUP	added	lexical
+Bonferroni	added	lexical
+Bonferroni correction	added	lexical
+Bonferroni inequality	added	lexical
+bootstrap	metadata_only	lexical
+bootstrapper	added	lexical
+box and whiskers plot	added	lexical
+box plot	added	lexical
+Box-Cox distribution	added	lexical
+breakdown point	added	lexical
+cannot-link	added	lexical
+case fatality rate	added	lexical
+categorical variable	added	lexical
+Cauchy distribution	added	lexical
+ceiling effect	added	lexical
+cell	metadata_only	lexical
+censor	metadata_only	lexical
+censoring	metadata_only	lexical
+centerpoint	metadata_only	lexical
+central limit theorem	added	lexical
+central moment	added	lexical
+central tendency	added	lexical
+centroid	metadata_only	lexical
+CFA	metadata_only	lexical
+CFR	metadata_only	lexical
+changepoint	added	lexical
+Chapman-Robbins bound	added	lexical
+Chebyshev's inequality	added	lexical
+chi distribution	added	lexical
+chi-square distribution	added	lexical
+chunklet	added	lexical
+CI	metadata_only	lexical
+circular graph	added	lexical
+class	metadata_only	lexical
+cluster	metadata_only	lexical
+cluster analysis	added	lexical
+clustering illusion	added	lexical
+CMFB	added	lexical
+cocluster	added	lexical
+coefficient of alienation	added	lexical
+coefficient of determination	added	lexical
+cohort	metadata_only	lexical
+cohort effect	added	lexical
+cointegrate	added	lexical
+compressed sensing	added	lexical
+concept drift	added	lexical
+conditionalization	added	lexical
+confidence interval	added	lexical
+confidence level	added	lexical
+confidence limits	added	lexical
+confound	metadata_only	lexical
+confounding variable	added	lexical
+constraint cluster	added	lexical
+contactive	added	lexical
+contingency table	added	lexical
+continuous variable	added	lexical
+control	metadata_only	lexical
+control group	added	lexical
+copula	metadata_only	lexical
+correlation	metadata_only	lexical
+correlation coefficient	added	lexical
+correlative	metadata_only	lexical
+correlator	added	lexical
+counts	metadata_only	lexical
+covariable	added	lexical
+covariance	metadata_only	lexical
+covariate	added	lexical
+covary	added	lexical
+cross section	metadata_only	lexical
+cross tab	added	lexical
+cross tabulation	added	lexical
+cross-countries	added	lexical
+cross-tab	added	lexical
+cross-validate	added	lexical
+cross-validation	added	lexical
+crossbreak	added	lexical
+crosscorrelation	added	lexical
+crosstab	added	lexical
+crude	metadata_only	lexical
+cumulative error	added	lexical
+CV	metadata_only	lexical
+dark figure	added	lexical
+data collection	added	lexical
+data dredging	added	lexical
+data set	added	lexical
+data smoothing	added	lexical
+decile	metadata_only	lexical
+decision theory	added	lexical
+demean	metadata_only	lexical
+demeaned	metadata_only	lexical
+Deming regression	added	lexical
+density	metadata_only	lexical
+dependent	metadata_only	lexical
+dependent variable	added	lexical
+depth	metadata_only	lexical
+descriptive statistics	added	lexical
+deseasonalize	added	lexical
+detrend	added	lexical
+detrended	added	lexical
+detrending	added	lexical
+deviate	metadata_only	lexical
+deviation	metadata_only	lexical
+diffogram	added	lexical
+disattenuation	added	lexical
+disconcordance	added	lexical
+discordant	metadata_only	lexical
+discrete choice analysis	added	lexical
+discrete variable	added	lexical
+disordinal	added	lexical
+distribution	metadata_only	lexical
+distribution curve	added	lexical
+distribution-free	added	lexical
+DOE	added	lexical
+double descent	added	lexical
+downweight	added	lexical
+dummy variable	added	lexical
+EDP	metadata_only	lexical
+EFA	metadata_only	lexical
+effect	metadata_only	lexical
+effect size	added	lexical
+ELBO	added	lexical
+EMA	added	lexical
+empirical rule	added	lexical
+entropy	metadata_only	lexical
+enumerate	metadata_only	lexical
+Epps effect	added	lexical
+equimax	added	lexical
+equinormality	added	lexical
+equiquantal	added	lexical
+ergodic	metadata_only	lexical
+error	metadata_only	lexical
+error function	added	lexical
+error of the first kind	added	lexical
+error of the second kind	added	lexical
+ESS	added	lexical
+estimand	added	lexical
+estimator	metadata_only	lexical
+eventology	added	lexical
+EVT	added	lexical
+excess kurtosis	added	lexical
+expectancy	metadata_only	lexical
+expectation	metadata_only	lexical
+explanator	added	lexical
+exponential distribution	added	lexical
+exponential smoothing	added	lexical
+extrabinomial	added	lexical
+extraneous variable	added	lexical
+F distribution	added	lexical
+factor analysis	added	lexical
+factored	metadata_only	lexical
+factorial table	added	lexical
+factorist	added	lexical
+fair	metadata_only	lexical
+fair coin	added	lexical
+false negative	added	lexical
+false positive	added	lexical
+familywise	added	lexical
+fat tail	added	lexical
+fat-tailed	added	lexical
+FDR	metadata_only	lexical
+feature	metadata_only	lexical
+Fermi-Dirac distribution function	added	lexical
+fiducially	added	lexical
+Fisher information	added	lexical
+Fisher-Tippett-Gnedenko theorem	added	lexical
+fit	metadata_only	lexical
+flatness	metadata_only	lexical
+floor effect	added	lexical
+forest plot	added	lexical
+fractile	added	lexical
+fraternal birth order effect	added	lexical
+frequency	metadata_only	lexical
+frequency distribution	added	lexical
+frequency polygon	added	lexical
+funnel plot	added	lexical
+FVU	added	lexical
+FWE	added	lexical
+FWER	added	lexical
+Galton's problem	added	lexical
+gambler's ruin	added	lexical
+gamma distribution	added	lexical
+GARCH	added	lexical
+Gaussian	added	lexical
+Gaussian distribution	added	lexical
+geoadditive	added	lexical
+Gerschenkron effect	added	lexical
+GEV	metadata_only	lexical
+Gibbs measure	added	lexical
+Gibbs sampling	added	lexical
+Gibbs state	added	lexical
+Gini coefficient	added	lexical
+GIS	added	lexical
+GLM	added	lexical
+Gompertz distribution	added	lexical
+Goodman and Kruskal's gamma	added	lexical
+Goodman and Kruskal's lambda	added	lexical
+GPD	metadata_only	lexical
+grand mean	added	lexical
+graph	metadata_only	lexical
+Gumbel distribution	added	lexical
+Hammersley-Chapman-Robbins bound	added	lexical
+hazard ratio	added	lexical
+healthy participant effect	added	lexical
+heavy tail	added	lexical
+heavy-tailed	added	lexical
+Hellinger distance	added	lexical
+heteroaddition	added	lexical
+heterokurtosis	added	lexical
+heterokurtosis-robust	added	lexical
+heteroscedasticity	added	lexical
+heteroscedasticity-robust	added	lexical
+hexadecile	added	lexical
+hidden Markov model	added	lexical
+hinge	metadata_only	lexical
+histogram	metadata_only	lexical
+HMM	added	lexical
+hockey stick	added	lexical
+homokurtosis	added	lexical
+homoscedastic	added	lexical
+homoscedasticity	added	lexical
+hyperdistribution	added	lexical
+hypergeometric distribution	added	lexical
+hypergeometric random variable	added	lexical
+hyperparameter	metadata_only	lexical
+hypervariance	added	lexical
+IDF	metadata_only	lexical
+ignorable	added	lexical
+iid	metadata_only	lexical
+iid-ness	added	lexical
+imputation	metadata_only	lexical
+impute	metadata_only	lexical
+independent variable	added	lexical
+indicator variable	added	lexical
+individual	metadata_only	lexical
+inferential statistics	added	lexical
+infit	added	lexical
+information entropy	added	lexical
+inlier	added	lexical
+interdistributional	added	lexical
+intermatch	added	lexical
+intermean	added	lexical
+interpercentile	added	lexical
+interquartile	added	lexical
+interquartile range	added	lexical
+intersample	added	lexical
+interval variable	added	lexical
+intracorrelation	added	lexical
+intraobserver	added	lexical
+intraquartile	added	lexical
+IPD	metadata_only	lexical
+IQR	added	lexical
+isoaddition	added	lexical
+isokurtic	added	lexical
+item set	added	lexical
+IV	metadata_only	lexical
+Jaccard distance	added	lexical
+Jaccard index	added	lexical
+jack-knife	added	lexical
+jackknife	metadata_only	lexical
+James-Stein estimator	added	lexical
+KAP	metadata_only	lexical
+Kendall rank correlation coefficient	added	lexical
+KF	metadata_only	lexical
+kitchen sink regression	added	lexical
+kurtosis	added	lexical
+L-estimator	added	lexical
+Laplace distribution	added	lexical
+latent	metadata_only	lexical
+latent variable	added	lexical
+law of averages	added	lexical
+law of large numbers	added	lexical
+LDA	metadata_only	lexical
+leave-one-out	added	lexical
+leptokurtic	added	lexical
+leptokurtosis	added	lexical
+leptokurtotic	added	lexical
+level	metadata_only	lexical
+leverage	metadata_only	lexical
+likelihood	metadata_only	lexical
+line chart	added	lexical
+line graph	added	lexical
+line plot	added	lexical
+linear regression	added	lexical
+LOD	added	lexical
+lod	metadata_only	lexical
+LOESS	added	lexical
+log-logistic	added	lexical
+logistic	metadata_only	lexical
+logistic regression	added	lexical
+loglikelihood	added	lexical
+logseries	added	lexical
+long tail	added	lexical
+LOOCV	added	lexical
+LRL	added	lexical
+LV	added	lexical
+MA	metadata_only	lexical
+MAE	added	lexical
+MANCOVA	added	lexical
+Mann-Whitney U test	added	lexical
+MAR	added	lexical
+margin of error	added	lexical
+Markov renewal process	added	lexical
+Markovian	added	lexical
+mathematical statistics	added	lexical
+maxent	added	lexical
+maximum	metadata_only	lexical
+maxplane	added	lexical
+MCAR	added	lexical
+MCMC	added	lexical
+MCTS	added	lexical
+mean	metadata_only	lexical
+mean absolute deviation	added	lexical
+measure of central tendency	added	lexical
+measure of location	added	lexical
+medcouple	added	lexical
+median	metadata_only	lexical
+Mellin transform	added	lexical
+mesokurtic	added	lexical
+mesokurtosis	added	lexical
+meta-analysis	added	lexical
+metalog	added	lexical
+metaregression	added	lexical
+Metropolis-Hastings algorithm	added	lexical
+mgf	added	lexical
+microdata	added	lexical
+microstatistics	added	lexical
+midcorrelation	added	lexical
+midhinge	added	lexical
+midspread	added	lexical
+midsummary	added	lexical
+millile	added	lexical
+minimum	metadata_only	lexical
+MIP	metadata_only	lexical
+missing	metadata_only	lexical
+missingness	added	lexical
+mixing	metadata_only	lexical
+mixingness	added	lexical
+MLE	metadata_only	lexical
+MLM	metadata_only	lexical
+MNAR	added	lexical
+mod	metadata_only	lexical
+modal	metadata_only	lexical
+mode	metadata_only	lexical
+MoE	added	lexical
+MoM	added	lexical
+Monte Carlo	added	lexical
+Monte Carlo method	added	lexical
+Moran's I	added	lexical
+moving average	added	lexical
+MRP	metadata_only	lexical
+MSD	metadata_only	lexical
+MSE	metadata_only	lexical
+multicollinearity	added	lexical
+multicovariate	added	lexical
+multideviation	added	lexical
+multinormal	added	lexical
+multinormality	added	lexical
+must-link	added	lexical
+MV	added	lexical
+NB	added	lexical
+negative binomial distribution	added	lexical
+neutrosophics	added	lexical
+Neyman-Pearson lemma	added	lexical
+noise	metadata_only	lexical
+nominal	metadata_only	lexical
+nominal variable	added	lexical
+noncentral chi-square distribution	added	lexical
+nondeath	added	lexical
+noninterview	added	lexical
+nonnormal	added	lexical
+nonnormally	added	lexical
+nonoutlier	added	lexical
+nonparametric	metadata_only	lexical
+nonparametrics	added	lexical
+nonsampling	added	lexical
+nonstationary	added	lexical
+normal	metadata_only	lexical
+normal distribution	added	lexical
+normal random variable	added	lexical
+normality	metadata_only	lexical
+normalization	metadata_only	lexical
+normalize	metadata_only	lexical
+normally	metadata_only	lexical
+normed	metadata_only	lexical
+nowcast	added	lexical
+nowcasting	added	lexical
+NPV	metadata_only	lexical
+nuisance parameter	added	lexical
+null	metadata_only	lexical
+null hypothesis	added	lexical
+oblimax	added	lexical
+oblimin	added	lexical
+observational error	added	lexical
+octile	added	lexical
+ogive	added	lexical
+OLS	metadata_only	lexical
+ordinal variable	added	lexical
+ordinate	metadata_only	lexical
+ordination	metadata_only	lexical
+orthogonal	metadata_only	lexical
+orthogonality	added	lexical
+outfit	metadata_only	lexical
+outlier	metadata_only	lexical
+outlyingness	added	lexical
+OVB	added	lexical
+overdisperse	added	lexical
+overdispersion	added	lexical
+overdispersive	added	lexical
+overfactorization	added	lexical
+overfit	added	lexical
+overfitting	added	lexical
+overmatching	added	lexical
+overparameterize	added	lexical
+oversample	added	lexical
+p	metadata_only	lexical
+p-hack	added	lexical
+p-hacking	added	lexical
+p-value	added	lexical
+parameter	metadata_only	lexical
+Pareto distribution	added	lexical
+partial	metadata_only	lexical
+partial autocorrelation	added	lexical
+particle distribution function	added	lexical
+path analysis	added	lexical

@@ -899,7 +899,107 @@
         "Davis",
         "Wilson",
         "Anderson",
-        "Taylor"
+        "Taylor",
+        "Olivia",
+        "Emma",
+        "Charlotte",
+        "Amelia",
+        "Sophia",
+        "Isabella",
+        "Mia",
+        "Emily",
+        "Grace",
+        "Chloe",
+        "Victoria",
+        "Lily",
+        "Hannah",
+        "Alice",
+        "Anna",
+        "Maria",
+        "Sofia",
+        "Aisha",
+        "Fatima",
+        "Yuki",
+        "Akira",
+        "Sakura",
+        "Haruka",
+        "Liam",
+        "Noah",
+        "Oliver",
+        "Elijah",
+        "Lucas",
+        "Mason",
+        "Ethan",
+        "Daniel",
+        "Henry",
+        "Alexander",
+        "Samuel",
+        "Joseph",
+        "Benjamin",
+        "Jack",
+        "Leo",
+        "Oscar",
+        "Adam",
+        "Muhammad",
+        "Mohammed",
+        "Omar",
+        "Ahmed",
+        "Ibrahim",
+        "Hiroshi",
+        "Takashi",
+        "Kenji",
+        "Haruto",
+        "Satoshi",
+        "Kim",
+        "Lee",
+        "Park",
+        "Chen",
+        "Wang",
+        "Li",
+        "Liu",
+        "Zhang",
+        "Huang",
+        "Nguyen",
+        "Tran",
+        "Pham",
+        "Ng",
+        "Lim",
+        "Tan",
+        "Singh",
+        "Kaur",
+        "Patel",
+        "Sharma",
+        "Kumar",
+        "Ali",
+        "Khan",
+        "Hassan",
+        "Silva",
+        "Santos",
+        "Ferreira",
+        "Costa",
+        "Garcia",
+        "Rodriguez",
+        "Martinez",
+        "Lopez",
+        "Gonzalez",
+        "Yamamoto",
+        "Tanaka",
+        "Sato",
+        "Suzuki",
+        "Takahashi",
+        "Ito",
+        "Watanabe",
+        "Nakamura",
+        "Kobayashi",
+        "Kato",
+        "Martin",
+        "Thomas",
+        "Moore",
+        "Jackson",
+        "Thompson",
+        "White",
+        "Harris",
+        "Clark"
       ]
     },
     {
@@ -939,6 +1039,1692 @@
         "Bash",
         "PowerShell"
       ]
+    },
+    {
+      "topic": "science.mathematics",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "algebra",
+        "geometry",
+        "calculus",
+        "arithmetic",
+        "equation",
+        "inequality",
+        "polynomial",
+        "coefficient",
+        "exponent",
+        "logarithm",
+        "fraction",
+        "decimal",
+        "integer",
+        "rational number",
+        "real number",
+        "complex number",
+        "prime number",
+        "matrix",
+        "vector",
+        "tensor",
+        "derivative",
+        "integral",
+        "differential equation",
+        "eigenvalue",
+        "eigenvector",
+        "linear algebra",
+        "numerical analysis",
+        "Fourier transform",
+        "Laplace transform",
+        "optimization"
+      ]
+    },
+    {
+      "topic": "science.statistics",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "probability",
+        "statistics",
+        "sample",
+        "population",
+        "mean",
+        "median",
+        "mode",
+        "variance",
+        "standard deviation",
+        "confidence interval",
+        "hypothesis test",
+        "statistical significance",
+        "p-value",
+        "correlation",
+        "covariance",
+        "linear regression",
+        "logistic regression",
+        "normal distribution",
+        "binomial distribution",
+        "Poisson distribution",
+        "random variable",
+        "sampling bias",
+        "sample size",
+        "control group",
+        "randomized controlled trial",
+        "Bayesian inference",
+        "likelihood",
+        "estimator",
+        "outlier",
+        "time series"
+      ]
+    },
+    {
+      "topic": "science.physics",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "force",
+        "mass",
+        "acceleration",
+        "velocity",
+        "momentum",
+        "torque",
+        "work",
+        "energy",
+        "power",
+        "pressure",
+        "density",
+        "temperature",
+        "heat",
+        "entropy",
+        "frequency",
+        "wavelength",
+        "amplitude",
+        "resonance",
+        "electric field",
+        "magnetic field",
+        "angular momentum",
+        "moment of inertia",
+        "potential energy",
+        "kinetic energy",
+        "specific heat",
+        "thermal conductivity",
+        "measurement uncertainty",
+        "calibration",
+        "accuracy",
+        "precision"
+      ]
+    },
+    {
+      "topic": "engineering.electronics",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "voltage",
+        "current",
+        "resistance",
+        "capacitance",
+        "inductance",
+        "impedance",
+        "conductance",
+        "resistor",
+        "capacitor",
+        "inductor",
+        "diode",
+        "transistor",
+        "semiconductor",
+        "integrated circuit",
+        "printed circuit board",
+        "operational amplifier",
+        "voltage regulator",
+        "power supply",
+        "oscillator",
+        "rectifier",
+        "analog signal",
+        "digital signal",
+        "signal processing",
+        "electromagnetic interference",
+        "ground loop",
+        "short circuit",
+        "open circuit",
+        "logic gate",
+        "microcontroller",
+        "photodiode"
+      ]
+    },
+    {
+      "topic": "engineering.embedded",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "embedded system",
+        "real-time operating system",
+        "interrupt",
+        "watchdog timer",
+        "device driver",
+        "bootloader",
+        "firmware",
+        "analog-to-digital converter",
+        "digital-to-analog converter",
+        "pulse-width modulation",
+        "serial communication",
+        "baud rate",
+        "sampling rate",
+        "antenna",
+        "modulation",
+        "demodulation",
+        "carrier frequency",
+        "radio frequency",
+        "transmitter",
+        "receiver",
+        "transducer",
+        "thermocouple",
+        "accelerometer",
+        "gyroscope",
+        "oscilloscope",
+        "multimeter",
+        "logic analyzer",
+        "UART",
+        "SPI",
+        "I2C"
+      ]
+    },
+    {
+      "topic": "engineering.mechanical",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "bearing",
+        "gear",
+        "shaft",
+        "coupling",
+        "clutch",
+        "brake",
+        "spring",
+        "damper",
+        "piston",
+        "cylinder",
+        "crankshaft",
+        "camshaft",
+        "flywheel",
+        "pulley",
+        "belt drive",
+        "chain drive",
+        "gear ratio",
+        "friction",
+        "lubrication",
+        "hydraulic pressure",
+        "pneumatics",
+        "mechanical advantage",
+        "tensile stress",
+        "shear stress",
+        "bending moment",
+        "fatigue",
+        "tolerance",
+        "clearance",
+        "thermal expansion",
+        "vibration"
+      ]
+    },
+    {
+      "topic": "engineering.manufacturing",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "manufacturing",
+        "machining",
+        "milling",
+        "turning",
+        "drilling",
+        "grinding",
+        "casting",
+        "forging",
+        "welding",
+        "soldering",
+        "brazing",
+        "injection molding",
+        "extrusion",
+        "sheet metal",
+        "heat treatment",
+        "surface finish",
+        "surface roughness",
+        "dimensional tolerance",
+        "quality control",
+        "quality assurance",
+        "statistical process control",
+        "failure analysis",
+        "root cause analysis",
+        "finite element analysis",
+        "computer-aided design",
+        "computer-aided manufacturing",
+        "additive manufacturing",
+        "3D printing",
+        "CNC",
+        "CAD"
+      ]
+    },
+    {
+      "topic": "engineering.robotics",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "control system",
+        "feedback",
+        "feedforward",
+        "setpoint",
+        "closed-loop control",
+        "open-loop control",
+        "PID controller",
+        "transfer function",
+        "state space",
+        "stability",
+        "step response",
+        "overshoot",
+        "settling time",
+        "actuator",
+        "servo motor",
+        "stepper motor",
+        "encoder",
+        "end effector",
+        "robotic arm",
+        "kinematics",
+        "inverse kinematics",
+        "degrees of freedom",
+        "path planning",
+        "motion planning",
+        "localization",
+        "sensor fusion",
+        "autonomous robot",
+        "Kalman filter",
+        "trajectory",
+        "manipulator"
+      ]
+    },
+    {
+      "topic": "engineering.materials",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "alloy",
+        "steel",
+        "stainless steel",
+        "aluminium",
+        "aluminum",
+        "titanium",
+        "copper",
+        "polymer",
+        "ceramic",
+        "composite material",
+        "carbon fiber",
+        "carbon fibre",
+        "graphene",
+        "ductility",
+        "brittleness",
+        "hardness",
+        "toughness",
+        "elasticity",
+        "plasticity",
+        "Young's modulus",
+        "yield strength",
+        "tensile strength",
+        "fracture toughness",
+        "corrosion",
+        "oxidation",
+        "crystal structure",
+        "grain boundary",
+        "phase diagram",
+        "thermal stress",
+        "creep"
+      ]
+    },
+    {
+      "topic": "engineering.chemical",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "atom",
+        "molecule",
+        "ion",
+        "isotope",
+        "chemical bond",
+        "catalyst",
+        "solvent",
+        "solute",
+        "solution",
+        "concentration",
+        "molar mass",
+        "molarity",
+        "acidity",
+        "alkalinity",
+        "electrolysis",
+        "distillation",
+        "filtration",
+        "crystallization",
+        "polymerization",
+        "heat exchanger",
+        "chemical reactor",
+        "reaction rate",
+        "activation energy",
+        "sodium chloride",
+        "sodium bicarbonate",
+        "calcium carbonate",
+        "carbon dioxide",
+        "hydrogen peroxide",
+        "ethanol",
+        "citric acid"
+      ]
+    },
+    {
+      "topic": "engineering.civil",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "civil engineering",
+        "structural engineering",
+        "architecture",
+        "foundation",
+        "beam",
+        "column",
+        "truss",
+        "reinforced concrete",
+        "prestressed concrete",
+        "load-bearing wall",
+        "retaining wall",
+        "shear wall",
+        "building envelope",
+        "thermal insulation",
+        "waterproofing",
+        "drainage",
+        "sewage",
+        "asphalt",
+        "aggregate",
+        "soil mechanics",
+        "geotechnical engineering",
+        "bearing capacity",
+        "seismic design",
+        "surveying",
+        "elevation",
+        "contour line",
+        "slope",
+        "cantilever",
+        "building code",
+        "construction management"
+      ]
+    },
+    {
+      "topic": "engineering.energy",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "renewable energy",
+        "solar power",
+        "wind power",
+        "hydropower",
+        "geothermal energy",
+        "nuclear power",
+        "power grid",
+        "alternating current",
+        "direct current",
+        "transformer",
+        "inverter",
+        "generator",
+        "turbine",
+        "photovoltaic cell",
+        "solar panel",
+        "fuel cell",
+        "lithium-ion battery",
+        "lead-acid battery",
+        "battery capacity",
+        "energy density",
+        "power factor",
+        "efficiency",
+        "heat pump",
+        "thermal energy",
+        "energy storage",
+        "electric vehicle",
+        "charging station",
+        "smart grid",
+        "load balancing",
+        "power transmission"
+      ]
+    },
+    {
+      "topic": "engineering.environment",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "greenhouse gas",
+        "carbon footprint",
+        "carbon neutrality",
+        "climate change",
+        "global warming",
+        "carbon capture",
+        "life cycle assessment",
+        "recycling",
+        "wastewater treatment",
+        "water purification",
+        "desalination",
+        "air pollution",
+        "particulate matter",
+        "biodiversity",
+        "ecosystem",
+        "sustainability",
+        "environmental impact assessment",
+        "circular economy",
+        "biodegradable",
+        "composting",
+        "landfill",
+        "soil contamination",
+        "water quality",
+        "ozone layer",
+        "acid rain"
+      ]
+    },
+    {
+      "topic": "engineering.transport",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "internal combustion engine",
+        "electric motor",
+        "transmission",
+        "differential",
+        "suspension",
+        "steering",
+        "power steering",
+        "anti-lock braking system",
+        "regenerative braking",
+        "traction control",
+        "aerodynamics",
+        "drag coefficient",
+        "fuel economy",
+        "hybrid vehicle",
+        "railway",
+        "railroad",
+        "rolling stock",
+        "rail gauge",
+        "freight",
+        "intermodal transport",
+        "supply chain",
+        "logistics",
+        "warehouse",
+        "inventory management",
+        "last-mile delivery"
+      ]
+    },
+    {
+      "topic": "engineering.aerospace",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "aerospace engineering",
+        "aircraft",
+        "airfoil",
+        "fuselage",
+        "ailerons",
+        "rudder",
+        "elevator",
+        "lift",
+        "drag",
+        "thrust",
+        "propeller",
+        "jet engine",
+        "turbofan",
+        "rocket engine",
+        "combustion chamber",
+        "nozzle",
+        "orbital mechanics",
+        "escape velocity",
+        "orbital velocity",
+        "low Earth orbit",
+        "geostationary orbit",
+        "satellite",
+        "spacecraft",
+        "payload",
+        "reentry",
+        "launch vehicle"
+      ]
+    },
+    {
+      "topic": "science.biology",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "cell",
+        "tissue",
+        "organ",
+        "chromosome",
+        "gene",
+        "genome",
+        "DNA",
+        "RNA",
+        "protein",
+        "amino acid",
+        "enzyme",
+        "antibody",
+        "antigen",
+        "metabolism",
+        "photosynthesis",
+        "cell membrane",
+        "cell division",
+        "gene expression",
+        "DNA sequencing",
+        "genetic engineering",
+        "polymerase chain reaction",
+        "stem cell",
+        "microorganism",
+        "bacteria",
+        "virus",
+        "glucose",
+        "sucrose",
+        "caffeine",
+        "lactic acid",
+        "ascorbic acid"
+      ]
+    },
+    {
+      "topic": "science.medicine",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "anatomy",
+        "physiology",
+        "diagnosis",
+        "prognosis",
+        "clinical trial",
+        "placebo",
+        "dosage",
+        "contraindication",
+        "adverse reaction",
+        "blood glucose",
+        "blood oxygen",
+        "heart rate",
+        "respiratory rate",
+        "electrocardiogram",
+        "ultrasound",
+        "magnetic resonance imaging",
+        "computed tomography",
+        "endoscope",
+        "ventilator",
+        "defibrillator",
+        "pacemaker",
+        "pulse oximeter",
+        "stethoscope",
+        "sphygmomanometer",
+        "syringe",
+        "catheter",
+        "biopsy",
+        "anesthesia",
+        "rehabilitation",
+        "sterilization"
+      ]
+    },
+    {
+      "topic": "science.agriculture",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "agriculture",
+        "horticulture",
+        "irrigation",
+        "fertilizer",
+        "pesticide",
+        "herbicide",
+        "crop rotation",
+        "soil fertility",
+        "germination",
+        "pollination",
+        "cultivar",
+        "greenhouse",
+        "hydroponics",
+        "aquaculture",
+        "livestock",
+        "feed",
+        "harvest",
+        "yield",
+        "food safety",
+        "pasteurization",
+        "fermentation",
+        "food preservation",
+        "cold chain",
+        "shelf life",
+        "food additive"
+      ]
+    },
+    {
+      "topic": "media.photography",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "aperture",
+        "shutter speed",
+        "focal length",
+        "depth of field",
+        "exposure",
+        "white balance",
+        "dynamic range",
+        "image sensor",
+        "optical zoom",
+        "digital zoom",
+        "image stabilization",
+        "autofocus",
+        "lens aberration",
+        "chromatic aberration",
+        "diffraction",
+        "refraction",
+        "polarization",
+        "frame rate",
+        "aspect ratio",
+        "color space",
+        "colour space",
+        "color grading",
+        "video codec",
+        "bitrate",
+        "compression artifact"
+      ]
+    },
+    {
+      "topic": "media.audio",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "sound pressure",
+        "sound pressure level",
+        "decibel",
+        "pitch",
+        "timbre",
+        "harmonics",
+        "overtone",
+        "reverberation",
+        "echo",
+        "acoustics",
+        "equalizer",
+        "compressor",
+        "limiter",
+        "noise gate",
+        "audio interface",
+        "microphone",
+        "loudspeaker",
+        "headphone",
+        "impedance matching",
+        "balanced audio",
+        "phantom power",
+        "sample rate",
+        "bit depth",
+        "digital audio workstation",
+        "MIDI"
+      ]
+    },
+    {
+      "topic": "media.graphics",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "esdb",
+        "wordnet",
+        "wiktionary",
+        "qudt",
+        "chebi"
+      ],
+      "terms": [
+        "computer graphics",
+        "raster graphics",
+        "vector graphics",
+        "rendering",
+        "ray tracing",
+        "rasterization",
+        "texture mapping",
+        "normal mapping",
+        "polygon mesh",
+        "vertex",
+        "shader",
+        "animation",
+        "keyframe",
+        "motion capture",
+        "rigging",
+        "skeletal animation",
+        "anti-aliasing",
+        "global illumination",
+        "ambient occlusion",
+        "level of detail",
+        "collision detection",
+        "physics engine",
+        "game engine",
+        "typography",
+        "kerning"
+      ]
+    },
+    {
+      "topic": "people.science",
+      "kind": "person",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Albert Einstein",
+        "Marie Curie",
+        "Isaac Newton",
+        "Charles Darwin",
+        "Nikola Tesla",
+        "Ada Lovelace",
+        "Alan Turing",
+        "Grace Hopper",
+        "Katherine Johnson",
+        "Stephen Hawking",
+        "Richard Feynman",
+        "Tu Youyou",
+        "Katalin Karikó",
+        "Tim Berners-Lee"
+      ]
+    },
+    {
+      "topic": "people.literature",
+      "kind": "person",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "William Shakespeare",
+        "Jane Austen",
+        "Charles Dickens",
+        "George Orwell",
+        "Agatha Christie",
+        "J. R. R. Tolkien",
+        "Virginia Woolf",
+        "Mark Twain",
+        "Toni Morrison",
+        "Haruki Murakami",
+        "Natsume Sōseki",
+        "Chinua Achebe",
+        "Gabriel García Márquez",
+        "Rabindranath Tagore"
+      ]
+    },
+    {
+      "topic": "people.music",
+      "kind": "person",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Taylor Swift",
+        "Michael Jackson",
+        "Madonna",
+        "Prince",
+        "Beyoncé",
+        "Lady Gaga",
+        "Adele",
+        "Freddie Mercury",
+        "David Bowie",
+        "Bob Dylan",
+        "Ludwig van Beethoven",
+        "Wolfgang Amadeus Mozart",
+        "Johann Sebastian Bach",
+        "Ryuichi Sakamoto"
+      ]
+    },
+    {
+      "topic": "people.screen",
+      "kind": "person",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Charlie Chaplin",
+        "Audrey Hepburn",
+        "Meryl Streep",
+        "Tom Hanks",
+        "Denzel Washington",
+        "Leonardo DiCaprio",
+        "Jackie Chan",
+        "Bruce Lee",
+        "Shah Rukh Khan",
+        "Michelle Yeoh",
+        "Hayao Miyazaki",
+        "Akira Kurosawa",
+        "Steven Spielberg",
+        "Christopher Nolan"
+      ]
+    },
+    {
+      "topic": "people.sports",
+      "kind": "person",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Lionel Messi",
+        "Cristiano Ronaldo",
+        "Pelé",
+        "Diego Maradona",
+        "Serena Williams",
+        "Roger Federer",
+        "Rafael Nadal",
+        "Naomi Osaka",
+        "Shohei Ohtani",
+        "Ichiro Suzuki",
+        "Michael Jordan",
+        "LeBron James",
+        "Usain Bolt",
+        "Simone Biles"
+      ]
+    },
+    {
+      "topic": "people.public",
+      "kind": "person",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Nelson Mandela",
+        "Mahatma Gandhi",
+        "Martin Luther King Jr.",
+        "Rosa Parks",
+        "Malala Yousafzai",
+        "Barack Obama",
+        "Abraham Lincoln",
+        "Winston Churchill",
+        "Angela Merkel",
+        "Jacinda Ardern",
+        "Shinzo Abe",
+        "Lee Kuan Yew",
+        "Wangari Maathai",
+        "Desmond Tutu"
+      ]
+    },
+    {
+      "topic": "people.business",
+      "kind": "person",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Steve Jobs",
+        "Bill Gates",
+        "Warren Buffett",
+        "Elon Musk",
+        "Jeff Bezos",
+        "Tim Cook",
+        "Satya Nadella",
+        "Jensen Huang",
+        "Lisa Su",
+        "Akio Toyoda",
+        "Soichiro Honda",
+        "Masayoshi Son",
+        "Oprah Winfrey",
+        "Indra Nooyi"
+      ]
+    },
+    {
+      "topic": "people.history",
+      "kind": "person",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Cleopatra",
+        "Julius Caesar",
+        "Alexander the Great",
+        "Napoleon",
+        "Joan of Arc",
+        "Leonardo da Vinci",
+        "Michelangelo",
+        "Galileo Galilei",
+        "Genghis Khan",
+        "Murasaki Shikibu",
+        "Sei Shōnagon",
+        "Florence Nightingale",
+        "Helen Keller",
+        "Amelia Earhart"
+      ]
+    },
+    {
+      "topic": "products.computing",
+      "kind": "product",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "iPhone",
+        "iPad",
+        "MacBook Air",
+        "MacBook Pro",
+        "iMac",
+        "Apple Watch",
+        "AirPods",
+        "ThinkPad",
+        "Raspberry Pi",
+        "Steam Deck",
+        "Nintendo Switch",
+        "PlayStation 5",
+        "Xbox Series X and Series S",
+        "Kindle"
+      ]
+    },
+    {
+      "topic": "products.mobility",
+      "kind": "product",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Toyota Corolla",
+        "Toyota Prius",
+        "Toyota Yaris",
+        "Toyota Land Cruiser",
+        "Honda Civic",
+        "Honda Accord",
+        "Nissan Leaf",
+        "Mazda MX-5",
+        "Tesla Model 3",
+        "Tesla Model Y",
+        "Ford Mustang",
+        "Volkswagen Golf",
+        "BMW 3 Series",
+        "Boeing 747"
+      ]
+    },
+    {
+      "topic": "products.imaging",
+      "kind": "product",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Canon EOS R5",
+        "Canon EOS R6",
+        "Canon EOS 5D",
+        "Nikon Z6",
+        "Nikon Z7",
+        "Nikon D850",
+        "Fujifilm X-T5",
+        "Fujifilm X100",
+        "Walkman",
+        "iPod"
+      ]
+    },
+    {
+      "topic": "products.home",
+      "kind": "product",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Roomba",
+        "Thermomix",
+        "Instant Pot",
+        "Sodastream",
+        "Dyson Airblade",
+        "Amazon Echo",
+        "Philips Hue",
+        "Ring Video Doorbell",
+        "Nest Learning Thermostat"
+      ]
+    },
+    {
+      "topic": "products.software",
+      "kind": "product",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Microsoft Word",
+        "Microsoft Excel",
+        "Microsoft PowerPoint",
+        "Microsoft Outlook",
+        "Adobe Photoshop",
+        "Adobe Illustrator",
+        "Adobe Premiere Pro",
+        "Adobe After Effects",
+        "Blender",
+        "AutoCAD",
+        "SolidWorks",
+        "MATLAB",
+        "Wolfram Mathematica",
+        "DaVinci Resolve"
+      ]
+    },
+    {
+      "topic": "products.lifestyle",
+      "kind": "brand",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Coca-Cola",
+        "Pepsi",
+        "Fanta",
+        "Sprite",
+        "Nescafé",
+        "Kit Kat",
+        "Oreo",
+        "Nutella",
+        "LEGO",
+        "Uniqlo",
+        "Patagonia",
+        "The North Face",
+        "Adidas",
+        "Nike"
+      ]
+    },
+    {
+      "topic": "organizations.technology",
+      "kind": "organization",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Apple",
+        "Microsoft",
+        "Google",
+        "Amazon",
+        "Samsung",
+        "Sony",
+        "Nintendo",
+        "Intel",
+        "AMD",
+        "Nvidia",
+        "TSMC",
+        "Toyota",
+        "Honda",
+        "Panasonic",
+        "Canon",
+        "Nikon"
+      ]
+    },
+    {
+      "topic": "organizations.consumer",
+      "kind": "organization",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "IKEA",
+        "Walmart",
+        "Costco",
+        "Starbucks",
+        "McDonald's",
+        "Nestlé",
+        "Unilever",
+        "Procter & Gamble",
+        "IATA",
+        "Lufthansa",
+        "Air France",
+        "Emirates",
+        "Singapore Airlines",
+        "DHL",
+        "FedEx",
+        "UPS"
+      ]
+    },
+    {
+      "topic": "services.communication",
+      "kind": "service",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "WhatsApp",
+        "Telegram",
+        "Signal",
+        "Discord",
+        "Slack",
+        "Microsoft Teams",
+        "Google Meet",
+        "FaceTime",
+        "Gmail",
+        "Outlook.com",
+        "Instagram",
+        "TikTok",
+        "LinkedIn",
+        "Reddit"
+      ]
+    },
+    {
+      "topic": "services.media",
+      "kind": "service",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "YouTube",
+        "YouTube Music",
+        "Apple Music",
+        "Spotify",
+        "Netflix",
+        "Disney+",
+        "Prime Video",
+        "Hulu",
+        "Twitch",
+        "Steam",
+        "Google Maps",
+        "Apple Maps",
+        "Booking.com",
+        "Airbnb"
+      ]
+    },
+    {
+      "topic": "science.statistics",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Bayesian inference",
+        "hypothesis test",
+        "logistic regression",
+        "randomized controlled trial",
+        "sampling bias"
+      ]
+    },
+    {
+      "topic": "technology.web",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "HTML parser"
+      ]
+    },
+    {
+      "topic": "engineering.embedded",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "I2C",
+        "carrier frequency",
+        "pulse-width modulation",
+        "real-time operating system",
+        "serial communication"
+      ]
+    },
+    {
+      "topic": "engineering.robotics",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "PID controller",
+        "autonomous robot",
+        "closed-loop control",
+        "end effector",
+        "motion planning",
+        "open-loop control",
+        "path planning",
+        "robotic arm",
+        "sensor fusion",
+        "servo motor",
+        "step response"
+      ]
+    },
+    {
+      "topic": "science.medicine",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "adverse reaction",
+        "blood oxygen"
+      ]
+    },
+    {
+      "topic": "media.graphics",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "ambient occlusion",
+        "level of detail",
+        "normal mapping",
+        "physics engine",
+        "skeletal animation"
+      ]
+    },
+    {
+      "topic": "engineering.transport",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "anti-lock braking system",
+        "intermodal transport",
+        "last-mile delivery",
+        "traction control"
+      ]
+    },
+    {
+      "topic": "media.audio",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "audio interface",
+        "balanced audio",
+        "impedance matching",
+        "sample rate"
+      ]
+    },
+    {
+      "topic": "engineering.civil",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "bearing capacity",
+        "construction management",
+        "geotechnical engineering",
+        "load-bearing wall"
+      ]
+    },
+    {
+      "topic": "engineering.mechanical",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "bending moment",
+        "hydraulic pressure",
+        "thermal expansion"
+      ]
+    },
+    {
+      "topic": "media.photography",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "compression artifact",
+        "digital zoom",
+        "image stabilization",
+        "lens aberration",
+        "optical zoom",
+        "video codec"
+      ]
+    },
+    {
+      "topic": "engineering.manufacturing",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "computer-aided manufacturing",
+        "dimensional tolerance",
+        "failure analysis",
+        "finite element analysis",
+        "root cause analysis",
+        "surface roughness"
+      ]
+    },
+    {
+      "topic": "technology.database",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "connection pool"
+      ]
+    },
+    {
+      "topic": "engineering.materials",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "crystal structure",
+        "fracture toughness",
+        "thermal stress"
+      ]
+    },
+    {
+      "topic": "engineering.electronics",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "electromagnetic interference",
+        "operational amplifier"
+      ]
+    },
+    {
+      "topic": "engineering.energy",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "energy storage",
+        "load balancing",
+        "power transmission"
+      ]
+    },
+    {
+      "topic": "engineering.environment",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "environmental impact assessment",
+        "life cycle assessment",
+        "soil contamination",
+        "wastewater treatment",
+        "water purification",
+        "water quality"
+      ]
+    },
+    {
+      "topic": "science.agriculture",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "food preservation",
+        "food safety"
+      ]
+    },
+    {
+      "topic": "technology.os",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "inter-process communication",
+        "standard output"
+      ]
+    },
+    {
+      "topic": "technology.ai",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "large language model",
+        "overfitting",
+        "reinforcement learning",
+        "underfitting"
+      ]
+    },
+    {
+      "topic": "science.physics",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "measurement uncertainty"
+      ]
+    },
+    {
+      "topic": "engineering.chemical",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "reaction rate"
+      ]
+    },
+    {
+      "topic": "daily.home",
+      "kind": "lexical",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "rubbish bin"
+      ]
+    },
+    {
+      "topic": "products.imaging",
+      "kind": "brand",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "GoPro"
+      ]
+    },
+    {
+      "topic": "products.imaging",
+      "kind": "organization",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Sonos"
+      ]
+    },
+    {
+      "topic": "products.home",
+      "kind": "brand",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "KitchenAid"
+      ]
+    },
+    {
+      "topic": "products.home",
+      "kind": "brand",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Nespresso"
+      ]
+    },
+    {
+      "topic": "products.home",
+      "kind": "organization",
+      "tier": "core",
+      "sources": [
+        "wikidata"
+      ],
+      "terms": [
+        "Google Nest"
+      ]
     }
-  ]
+  ],
+  "worldSources": 1,
+  "entityTargets": "world-entities.json"
 }

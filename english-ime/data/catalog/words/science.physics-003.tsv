@@ -1,0 +1,6 @@
+surface	change	kinds
+thermal conductivity	added	lexical
+torque	metadata_only	lexical
+velocity	metadata_only	lexical
+wavelength	metadata_only	lexical
+work	metadata_only	lexical

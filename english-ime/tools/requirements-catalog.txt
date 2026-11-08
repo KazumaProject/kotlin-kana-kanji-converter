@@ -1,0 +1,2 @@
+# Used only when fetching/parsing the QUDT Turtle vocabulary.
+rdflib==7.6.0

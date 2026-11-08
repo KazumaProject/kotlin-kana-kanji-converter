@@ -1,0 +1,175 @@
+surface	change	kinds
+air bearing	added	lexical
+air cell	added	lexical
+air curtain	added	lexical
+air door	added	lexical
+air hose	added	lexical
+axle-hung	added	lexical
+axlebox	added	lexical
+backdrivable	added	lexical
+balance lock	added	lexical
+ball bearing	added	lexical
+ballrace	added	lexical
+barreling	metadata_only	lexical
+bearing	metadata_only	lexical
+bellcrank	added	lexical
+belt drive	added	lexical
+bending moment	added	lexical
+bevel gear	added	lexical
+blastpipe	added	lexical
+blisk	added	lexical
+blucket	added	lexical
+boat lift	added	lexical
+bollarding	added	lexical
+bolt	metadata_only	lexical
+bottom out	added	lexical
+brake	metadata_only	lexical
+brake fade	added	lexical
+brake shoe	added	lexical
+braked	metadata_only	lexical
+brakepipe	added	lexical
+bucket	metadata_only	lexical
+bunker fuel	added	lexical
+bunker oil	added	lexical
+bushing	metadata_only	lexical
+bypass duct	added	lexical
+C-channel	added	lexical
+cambox	added	lexical
+camshaft	metadata_only	lexical
+cannon box	added	lexical
+cardan shaft	added	lexical
+chain drive	added	lexical
+chain-driven	added	lexical
+channel	metadata_only	lexical
+chuck	metadata_only	lexical
+clearance	metadata_only	lexical
+clutch	metadata_only	lexical
+compressorless	added	lexical
+core lock	added	lexical
+core locked	added	lexical
+cotter	metadata_only	lexical
+cotterless	added	lexical
+coupling	metadata_only	lexical
+crank axle	added	lexical
+crankshaft	metadata_only	lexical
+crankweb	added	lexical
+crosshead	added	lexical
+cylinder	metadata_only	lexical
+damper	metadata_only	lexical
+detonation	metadata_only	lexical
+diesel engine	metadata_only	lexical
+diesel-hydraulic	added	lexical
+differential steering	added	lexical
+dipstick	metadata_only	lexical
+documentation	metadata_only	lexical
+driftbolt	added	lexical
+drivetrain	metadata_only	lexical
+drop hammer	added	lexical
+dropping point	added	lexical
+dry heater	added	lexical
+ECTS	added	lexical
+elliptic spring	added	lexical
+equalising beam	added	lexical
+fatigue	metadata_only	lexical
+fitting	metadata_only	lexical
+fluid flywheel	added	lexical
+flywheel	metadata_only	lexical
+forced induction	added	lexical
+free surface effect	added	lexical
+friction	metadata_only	lexical
+friction clutch	added	lexical
+gear	metadata_only	lexical
+gear ratio	added	lexical
+gear train	added	lexical
+gorge	metadata_only	lexical
+gusset	metadata_only	lexical
+handbrake	metadata_only	lexical
+head gasket	added	lexical
+high-time	added	lexical
+hydrostatic lock	added	lexical
+idle	metadata_only	lexical
+ignition	metadata_only	lexical
+index	metadata_only	lexical
+induction	metadata_only	lexical
+interphase	metadata_only	lexical
+journal	metadata_only	lexical
+journal box	added	lexical
+lathe	metadata_only	lexical
+linkage	metadata_only	lexical
+lip seal	added	lexical
+lockup	metadata_only	lexical
+low-powered	added	lexical
+lubrication	metadata_only	lexical
+main frame	added	lexical
+mechanical advantage	added	lexical
+mechanical engineer	added	lexical
+mechanical engineering	added	lexical
+milling cutter	added	lexical
+motion	metadata_only	lexical
+null	metadata_only	lexical
+odontograph	added	lexical
+odontometer	added	lexical
+overshift	added	lexical
+photoelasticity	added	lexical
+pinion	metadata_only	lexical
+piston	metadata_only	lexical
+planer	metadata_only	lexical
+pneumatics	metadata_only	lexical
+pulley	metadata_only	lexical
+pushrod	added	lexical
+quill	metadata_only	lexical
+rack	metadata_only	lexical
+radial shaft seal	added	lexical
+radius arm	added	lexical
+Ramsbottom safety valve	added	lexical
+RCP	metadata_only	lexical
+rechuck	added	lexical
+reduction drive	added	lexical
+retainer	metadata_only	lexical
+retaining valve	added	lexical
+reverse gear	added	lexical
+reversing gear	added	lexical
+rocker arm	added	lexical
+rodding	added	lexical
+runout	metadata_only	lexical
+shaft	metadata_only	lexical
+shaft horsepower	added	lexical
+shear stress	added	lexical
+ship lift	added	lexical
+shock	metadata_only	lexical
+shock absorber	added	lexical
+SI	added	lexical
+side play	added	lexical
+skew bevel gear	added	lexical
+slidebar	added	lexical
+spin	metadata_only	lexical
+spring	metadata_only	lexical
+sprocket	metadata_only	lexical
+spur gear	added	lexical
+steam chest	added	lexical
+stub axle	added	lexical
+T-beam	added	lexical
+tap	metadata_only	lexical
+tappet	added	lexical
+tensile stress	added	lexical
+thermal expansion	added	lexical
+throttleless	added	lexical
+time history	added	lexical
+tolerance	metadata_only	lexical
+torque converter	added	lexical
+trunk piston	added	lexical
+undershift	added	lexical
+unport	added	lexical
+unporting	added	lexical
+utters	metadata_only	lexical
+V16	added	lexical
+V4	added	lexical
+valve gear	added	lexical
+vapor lock	added	lexical
+vibration	metadata_only	lexical
+Vickers hardness	added	lexical
+VSV	added	lexical
+wastegate	added	lexical
+wet heater	added	lexical
+wheel lathe	added	lexical
+zerk	added	lexical

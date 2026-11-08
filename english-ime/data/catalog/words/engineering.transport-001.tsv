@@ -1,0 +1,323 @@
+surface	change	kinds
+12-9	added	lexical
+2-1 road	added	lexical
+AAR	metadata_only	lexical
+accident	metadata_only	lexical
+aerial cableway	added	lexical
+aerial railway	added	lexical
+aerodynamics	metadata_only	lexical
+AEV	added	lexical
+AFC	metadata_only	lexical
+AFCS	added	lexical
+air rage	added	lexical
+air ride	added	lexical
+airbill	added	lexical
+aisle	metadata_only	lexical
+alignment	metadata_only	lexical
+all change	added	lexical
+all-terrain vehicle	added	lexical
+AMT	added	lexical
+ANPR	added	lexical
+anti-lock braking system	added	lexical
+APM	metadata_only	lexical
+APTS	added	lexical
+arkship	added	lexical
+arrester bed	added	lexical
+arterial street	added	lexical
+artery	metadata_only	lexical
+article of extraordinary value	added	lexical
+ASN	metadata_only	lexical
+ATM	added	lexical
+ATP	added	lexical
+ATV	metadata_only	lexical
+Automated Transfer Vehicle	added	lexical
+available ton mile	added	lexical
+AWT	metadata_only	lexical
+axle load	added	lexical
+axle loading	added	lexical
+B-double	added	lexical
+backhaul	metadata_only	lexical
+backload	added	lexical
+backloading	added	lexical
+base tunnel	added	lexical
+big rig	added	lexical
+bird strike	added	lexical
+black box	added	lexical
+black spot	added	lexical
+blind	metadata_only	lexical
+blinded	metadata_only	lexical
+boarding pass	metadata_only	lexical
+boot	metadata_only	lexical
+brake light	added	lexical
+braking distance	added	lexical
+BRS	added	lexical
+BRT	metadata_only	lexical
+bulk	metadata_only	lexical
+bus	metadata_only	lexical
+bus buddy	added	lexical
+bus mile	added	lexical
+bus rapid transit	added	lexical
+bus replacement service	added	lexical
+bus stand	added	lexical
+cableway	added	lexical
+canard	metadata_only	lexical
+car brain	added	lexical
+car jockey	added	lexical
+cargon	added	lexical
+carrying capacity	added	lexical
+catenary	metadata_only	lexical
+CEU	metadata_only	lexical
+checked	metadata_only	lexical
+chicken bus	added	lexical
+circuity	added	lexical
+circulator	metadata_only	lexical
+cliff lift	added	lexical
+cliff railway	added	lexical
+clock-face timetable	added	lexical
+CMAQ	added	lexical
+collector road	added	lexical
+collector street	added	lexical
+common carrier	added	lexical
+commuter	metadata_only	lexical
+conductor	metadata_only	lexical
+congestion charge	added	lexical
+congestion charging	added	lexical
+connection	metadata_only	lexical
+container	metadata_only	lexical
+covered wagon	added	lexical
+cruising	metadata_only	lexical
+crush load	added	lexical
+curtain-sider	added	lexical
+dangleway	added	lexical
+Datex2	added	lexical
+deadhead	metadata_only	lexical
+debendification	added	lexical
+debris response area	added	lexical
+diesel engine	metadata_only	lexical
+differential	metadata_only	lexical
+distributor road	added	lexical
+diversion	metadata_only	lexical
+dog	metadata_only	lexical
+doughnutting	added	lexical
+DRA	metadata_only	lexical
+drag coefficient	added	lexical
+draw into	added	lexical
+drop lot	added	lexical
+drop ship	added	lexical
+drop yard	added	lexical
+ducat	metadata_only	lexical
+dunnage	added	lexical
+dwell time	added	lexical
+EC	metadata_only	lexical
+El	added	lexical
+electric bus	added	lexical
+electric motor	added	lexical
+ERP	metadata_only	lexical
+ERTMS	added	lexical
+ETCS	added	lexical
+first mile	added	lexical
+flat fare	added	lexical
+float	metadata_only	lexical
+float-on float-off	added	lexical
+floating bus stop	added	lexical
+floating car data	added	lexical
+FMCSA	added	lexical
+freight	metadata_only	lexical
+fuel economy	added	lexical
+fuel tank	added	lexical
+gadgetbahn	added	lexical
+gateline	added	lexical
+goods	metadata_only	lexical
+great circle route	added	lexical
+half fare	added	lexical
+hand truck	added	lexical
+handcart	added	lexical
+haul road	added	lexical
+haul truck	added	lexical
+head-on	metadata_only	lexical
+head-on collision	added	lexical
+headway	metadata_only	lexical
+helicopter	metadata_only	lexical
+HFR	added	lexical
+HGV	metadata_only	lexical
+high-occupancy vehicle	added	lexical
+hitchhike	metadata_only	lexical
+HLLV	added	lexical
+horse bus	added	lexical
+horseless carriage	added	lexical
+hotel load	added	lexical
+hoverboard	metadata_only	lexical
+HSR	metadata_only	lexical
+hub-and-spoke	added	lexical
+hybrid vehicle	added	lexical
+hybridization	metadata_only	lexical
+hydrogen station	added	lexical
+IC	metadata_only	lexical
+iceboating	added	lexical
+ICU	metadata_only	lexical
+IHVS	added	lexical
+intelligent transportation system	added	lexical
+interchange	metadata_only	lexical
+interline	added	lexical
+internal combustion engine	added	lexical
+intersection	metadata_only	lexical
+inventory management	added	lexical
+iron horse	added	lexical
+ISA	metadata_only	lexical
+ITS	added	lexical
+jet plane	added	lexical
+KPRA	added	lexical
+last mile	added	lexical
+LEZ	metadata_only	lexical
+lo-lo	added	lexical
+load factor	added	lexical
+local street	added	lexical
+logistics	metadata_only	lexical
+longhaul	added	lexical
+longhauled	added	lexical
+longhauling	added	lexical
+loop	metadata_only	lexical
+LOS	added	lexical
+LPI	metadata_only	lexical
+mainlane	added	lexical
+managed motorway	added	lexical
+manspreading	added	lexical
+MDOT	added	lexical
+means of transportation	added	lexical
+megacarrier	added	lexical
+milk run	added	lexical
+milk truck	added	lexical
+modal shift	added	lexical
+mode	metadata_only	lexical
+Mohring effect	added	lexical
+MRT	metadata_only	lexical
+MTC	metadata_only	lexical
+MUCTC	added	lexical
+nav	metadata_only	lexical
+night fighter	added	lexical
+NTL	metadata_only	lexical
+operator	metadata_only	lexical
+overhead	metadata_only	lexical
+overheight	added	lexical
+overlength	added	lexical
+overweight	metadata_only	lexical
+overwidth	added	lexical
+owl bus	added	lexical
+P2P	metadata_only	lexical
+packing list	added	lexical
+pak pai	added	lexical
+pallet jack	added	lexical
+pallet truck	added	lexical
+panda crossing	added	lexical
+paratransit	metadata_only	lexical
+passenger kilometer	added	lexical
+passive provision	added	lexical
+paternoster	metadata_only	lexical
+pilot vehicle	added	lexical
+Pittsburgh left	added	lexical
+plane mile	added	lexical
+platform	metadata_only	lexical
+PLB	added	lexical
+ply	metadata_only	lexical
+POCC	added	lexical
+point-to-point	added	lexical
+power steering	added	lexical
+power unit	added	lexical
+priority	metadata_only	lexical
+PTI	metadata_only	lexical
+PTV	metadata_only	lexical
+public transport	added	lexical
+pulse	metadata_only	lexical
+pump truck	added	lexical
+rail gauge	added	lexical
+rail replacement service	added	lexical
+railroad	metadata_only	lexical
+railway	metadata_only	lexical
+red rattler	added	lexical
+regenerative braking	added	lexical
+RER	metadata_only	lexical
+reverse	metadata_only	lexical
+RNE	added	lexical
+ro-ro	added	lexical
+road pricing	added	lexical
+road service	added	lexical
+roll-on roll-off	added	lexical
+roller blind	added	lexical
+rolling stock	added	lexical
+RSA	metadata_only	lexical
+RT	added	lexical
+RV	metadata_only	lexical
+salt truck	added	lexical
+seat hogging	added	lexical
+seat-mile	added	lexical
+seatmile	added	lexical
+shield	metadata_only	lexical
+shipping	metadata_only	lexical
+SHLLV	added	lexical
+shuttle driver	added	lexical
+sit-up-and-beg	added	lexical
+skid	metadata_only	lexical
+skylab	metadata_only	lexical
+slip lane	added	lexical
+SLS	metadata_only	lexical
+smart motorway	added	lexical
+snow train	added	lexical
+snowmobilist	added	lexical
+Space Launch System	added	lexical
+Space Launcher System	added	lexical
+SPMT	added	lexical
+spur	metadata_only	lexical
+steering	metadata_only	lexical
+straddling bus	added	lexical
+summit tunnel	added	lexical
+sump buster	added	lexical
+supply chain	added	lexical
+surface mail	added	lexical
+suspension	metadata_only	lexical
+swap body	added	lexical
+SWIFT	added	lexical
+telpher	added	lexical
+telpher line	added	lexical
+telpherage	added	lexical
+terminus	metadata_only	lexical
+TfW	added	lexical
+TNC	added	lexical
+TOD	added	lexical
+traction	metadata_only	lexical
+traction motor	added	lexical
+transfer	metadata_only	lexical
+transmission	metadata_only	lexical
+transmodal	added	lexical
+transport	metadata_only	lexical
+transportation	metadata_only	lexical
+trolley bus	added	lexical
+trolley pole	added	lexical
+TRT	metadata_only	lexical
+trunk	metadata_only	lexical
+trunkline	added	lexical
+TTC	metadata_only	lexical
+tunnel	metadata_only	lexical
+twinning	metadata_only	lexical
+two-second rule	added	lexical
+UDART	added	lexical
+ULEZ	added	lexical
+Underground Railroad	added	lexical
+unentered	added	lexical
+UNISIG	added	lexical
+uplift	metadata_only	lexical
+USMCA	added	lexical
+VCU	metadata_only	lexical
+viaduct	metadata_only	lexical
+VLT	metadata_only	lexical
+warehouse	metadata_only	lexical
+waterage	added	lexical
+WAV	metadata_only	lexical
+WCL	added	lexical
+wetline	added	lexical
+wheelchair	metadata_only	lexical
+width restriction	added	lexical
+WOL	metadata_only	lexical
+womanspreading	added	lexical
+WOTL	added	lexical
+XC	added	lexical
+ZEZ	added	lexical

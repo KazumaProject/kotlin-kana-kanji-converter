@@ -1,0 +1,404 @@
+{
+  "schemaVersion": 1,
+  "pageSize": 500,
+  "description": "Enumerate direct typed/source-category members to source exhaustion. Sitelink breadth filters are explicit extended-tier selection proxies, not IME-frequency measurements. No target-list or adoption-count cap.",
+  "selectors": [
+    {
+      "id": "people-science-Q901",
+      "provider": "wikidata",
+      "topic": "people.science",
+      "kind": "person",
+      "classes": [
+        "Q901"
+      ],
+      "minimumSitelinks": 40
+    },
+    {
+      "id": "people-science-Q169470",
+      "provider": "wikidata",
+      "topic": "people.science",
+      "kind": "person",
+      "classes": [
+        "Q169470"
+      ],
+      "minimumSitelinks": 40
+    },
+    {
+      "id": "people-science-Q593644",
+      "provider": "wikidata",
+      "topic": "people.science",
+      "kind": "person",
+      "classes": [
+        "Q593644"
+      ],
+      "minimumSitelinks": 40
+    },
+    {
+      "id": "people-science-Q864503",
+      "provider": "wikidata",
+      "topic": "people.science",
+      "kind": "person",
+      "classes": [
+        "Q864503"
+      ],
+      "minimumSitelinks": 40
+    },
+    {
+      "id": "people-science-Q170790",
+      "provider": "wikidata",
+      "topic": "people.science",
+      "kind": "person",
+      "classes": [
+        "Q170790"
+      ],
+      "minimumSitelinks": 40
+    },
+    {
+      "id": "people-science-Q81096",
+      "provider": "wikidata",
+      "topic": "people.science",
+      "kind": "person",
+      "classes": [
+        "Q81096"
+      ],
+      "minimumSitelinks": 40
+    },
+    {
+      "id": "people-literature-Q36180",
+      "provider": "wikidata",
+      "topic": "people.literature",
+      "kind": "person",
+      "classes": [
+        "Q36180"
+      ],
+      "minimumSitelinks": 40
+    },
+    {
+      "id": "people-literature-Q49757",
+      "provider": "wikidata",
+      "topic": "people.literature",
+      "kind": "person",
+      "classes": [
+        "Q49757"
+      ],
+      "minimumSitelinks": 40
+    },
+    {
+      "id": "people-literature-Q482980",
+      "provider": "wikidata",
+      "topic": "people.literature",
+      "kind": "person",
+      "classes": [
+        "Q482980"
+      ],
+      "minimumSitelinks": 40
+    },
+    {
+      "id": "people-music-Q639669",
+      "provider": "wikidata",
+      "topic": "people.music",
+      "kind": "person",
+      "classes": [
+        "Q639669"
+      ],
+      "minimumSitelinks": 40
+    },
+    {
+      "id": "people-screen-Q33999",
+      "provider": "wikidata",
+      "topic": "people.screen",
+      "kind": "person",
+      "classes": [
+        "Q33999"
+      ],
+      "minimumSitelinks": 40
+    },
+    {
+      "id": "people-screen-Q2526255",
+      "provider": "wikidata",
+      "topic": "people.screen",
+      "kind": "person",
+      "classes": [
+        "Q2526255"
+      ],
+      "minimumSitelinks": 40
+    },
+    {
+      "id": "people-sports-Q2066131",
+      "provider": "wikidata",
+      "topic": "people.sports",
+      "kind": "person",
+      "classes": [
+        "Q2066131"
+      ],
+      "minimumSitelinks": 40
+    },
+    {
+      "id": "people-public-Q82955",
+      "provider": "wikidata",
+      "topic": "people.public",
+      "kind": "person",
+      "classes": [
+        "Q82955"
+      ],
+      "minimumSitelinks": 50
+    },
+    {
+      "id": "people-business-Q43845",
+      "provider": "wikidata",
+      "topic": "people.business",
+      "kind": "person",
+      "classes": [
+        "Q43845"
+      ],
+      "minimumSitelinks": 40
+    },
+    {
+      "id": "products-computing-Q22645",
+      "provider": "wikidata",
+      "topic": "products.computing",
+      "kind": "product",
+      "classes": [
+        "Q22645"
+      ],
+      "minimumSitelinks": 10
+    },
+    {
+      "id": "products-computing-Q3962",
+      "provider": "wikidata",
+      "topic": "products.computing",
+      "kind": "product",
+      "classes": [
+        "Q3962"
+      ],
+      "minimumSitelinks": 10
+    },
+    {
+      "id": "products-computing-Q155972",
+      "provider": "wikidata",
+      "topic": "products.computing",
+      "kind": "product",
+      "classes": [
+        "Q155972"
+      ],
+      "minimumSitelinks": 10
+    },
+    {
+      "id": "products-computing-Q8076",
+      "provider": "wikidata",
+      "topic": "products.computing",
+      "kind": "product",
+      "classes": [
+        "Q8076"
+      ],
+      "minimumSitelinks": 10
+    },
+    {
+      "id": "products-mobility-Q3231690",
+      "provider": "wikidata",
+      "topic": "products.mobility",
+      "kind": "product",
+      "classes": [
+        "Q3231690"
+      ],
+      "minimumSitelinks": 10
+    },
+    {
+      "id": "products-imaging-Q62927",
+      "provider": "wikidata",
+      "topic": "products.imaging",
+      "kind": "product",
+      "classes": [
+        "Q62927"
+      ],
+      "minimumSitelinks": 10
+    },
+    {
+      "id": "products-software-Q7397",
+      "provider": "wikidata",
+      "topic": "products.software",
+      "kind": "product",
+      "classes": [
+        "Q7397"
+      ],
+      "minimumSitelinks": 15
+    },
+    {
+      "id": "brands-Q431289",
+      "provider": "wikidata",
+      "topic": "products.brands",
+      "kind": "brand",
+      "classes": [
+        "Q431289"
+      ],
+      "minimumSitelinks": 15
+    },
+    {
+      "id": "organizations-Q4830453",
+      "provider": "wikidata",
+      "topic": "organizations.general",
+      "kind": "organization",
+      "classes": [
+        "Q4830453"
+      ],
+      "minimumSitelinks": 40
+    },
+    {
+      "id": "services-Q35127",
+      "provider": "wikidata",
+      "topic": "services.general",
+      "kind": "service",
+      "classes": [
+        "Q35127"
+      ],
+      "minimumSitelinks": 30
+    },
+    {
+      "id": "terms-science-mathematics",
+      "provider": "wiktionary",
+      "topic": "science.mathematics",
+      "kind": "lexical",
+      "category": "Category:en:Mathematics"
+    },
+    {
+      "id": "terms-science-statistics",
+      "provider": "wiktionary",
+      "topic": "science.statistics",
+      "kind": "lexical",
+      "category": "Category:en:Statistics"
+    },
+    {
+      "id": "terms-science-physics",
+      "provider": "wiktionary",
+      "topic": "science.physics",
+      "kind": "lexical",
+      "category": "Category:en:Physics"
+    },
+    {
+      "id": "terms-engineering-electronics",
+      "provider": "wiktionary",
+      "topic": "engineering.electronics",
+      "kind": "lexical",
+      "category": "Category:en:Electronics"
+    },
+    {
+      "id": "terms-engineering-embedded",
+      "provider": "wiktionary",
+      "topic": "engineering.embedded",
+      "kind": "lexical",
+      "category": "Category:en:Telecommunications"
+    },
+    {
+      "id": "terms-engineering-mechanical",
+      "provider": "wiktionary",
+      "topic": "engineering.mechanical",
+      "kind": "lexical",
+      "category": "Category:en:Mechanical engineering"
+    },
+    {
+      "id": "terms-engineering-manufacturing",
+      "provider": "wiktionary",
+      "topic": "engineering.manufacturing",
+      "kind": "lexical",
+      "category": "Category:en:Manufacturing"
+    },
+    {
+      "id": "terms-engineering-robotics",
+      "provider": "wiktionary",
+      "topic": "engineering.robotics",
+      "kind": "lexical",
+      "category": "Category:en:Robotics"
+    },
+    {
+      "id": "terms-engineering-materials",
+      "provider": "wiktionary",
+      "topic": "engineering.materials",
+      "kind": "lexical",
+      "category": "Category:en:Materials science"
+    },
+    {
+      "id": "terms-engineering-chemical",
+      "provider": "wiktionary",
+      "topic": "engineering.chemical",
+      "kind": "lexical",
+      "category": "Category:en:Chemistry"
+    },
+    {
+      "id": "terms-engineering-civil",
+      "provider": "wiktionary",
+      "topic": "engineering.civil",
+      "kind": "lexical",
+      "category": "Category:en:Civil engineering"
+    },
+    {
+      "id": "terms-engineering-energy",
+      "provider": "wiktionary",
+      "topic": "engineering.energy",
+      "kind": "lexical",
+      "category": "Category:en:Energy"
+    },
+    {
+      "id": "terms-engineering-environment",
+      "provider": "wiktionary",
+      "topic": "engineering.environment",
+      "kind": "lexical",
+      "category": "Category:en:Environmental sciences"
+    },
+    {
+      "id": "terms-engineering-transport",
+      "provider": "wiktionary",
+      "topic": "engineering.transport",
+      "kind": "lexical",
+      "category": "Category:en:Transport"
+    },
+    {
+      "id": "terms-engineering-aerospace",
+      "provider": "wiktionary",
+      "topic": "engineering.aerospace",
+      "kind": "lexical",
+      "category": "Category:en:Aeronautics"
+    },
+    {
+      "id": "terms-science-biology",
+      "provider": "wiktionary",
+      "topic": "science.biology",
+      "kind": "lexical",
+      "category": "Category:en:Biology"
+    },
+    {
+      "id": "terms-science-medicine",
+      "provider": "wiktionary",
+      "topic": "science.medicine",
+      "kind": "lexical",
+      "category": "Category:en:Medicine"
+    },
+    {
+      "id": "terms-science-agriculture",
+      "provider": "wiktionary",
+      "topic": "science.agriculture",
+      "kind": "lexical",
+      "category": "Category:en:Agriculture"
+    },
+    {
+      "id": "terms-media-photography",
+      "provider": "wiktionary",
+      "topic": "media.photography",
+      "kind": "lexical",
+      "category": "Category:en:Photography"
+    },
+    {
+      "id": "terms-media-audio",
+      "provider": "wiktionary",
+      "topic": "media.audio",
+      "kind": "lexical",
+      "category": "Category:en:Audio"
+    },
+    {
+      "id": "terms-media-graphics",
+      "provider": "wiktionary",
+      "topic": "media.graphics",
+      "kind": "lexical",
+      "category": "Category:en:Computer graphics"
+    }
+  ]
+}
