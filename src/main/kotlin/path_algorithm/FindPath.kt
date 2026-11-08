@@ -9,6 +9,7 @@ import com.kazumaproject.ngram.EmptySystemUnigramDictionary
 import com.kazumaproject.ngram.SystemNgramDictionary
 import com.kazumaproject.ngram.SystemUnigramDictionary
 import java.util.PriorityQueue
+import java.util.IdentityHashMap
 import kotlin.math.sqrt
 
 class FindPath(
@@ -19,10 +20,21 @@ class FindPath(
 
     private data class PathState(
         val node: Node,
-        val path: List<Node>,
+        val previous: PathState?,
         val cost: Int,
         val endPosition: Int,
-    )
+    ) {
+        fun path(): List<Node> {
+            val nodes = ArrayList<Node>()
+            var state: PathState? = this
+            while (state != null) {
+                if (state.previous != null && state.node.tango != "EOS") nodes.add(state.node)
+                state = state.previous
+            }
+            nodes.reverse()
+            return nodes
+        }
+    }
 
     private data class CandidatePath(
         val value: String,
@@ -81,9 +93,14 @@ class FindPath(
     ): MutableList<String> {
         if (n <= 0) return mutableListOf()
         val outgoing = buildOutgoingNodes(graph, length)
-        val queue = PriorityQueue(compareBy<PathState> { it.cost })
+        val remaining = remainingCosts(graph, outgoing, length, connectionMatrix)
+        val queue = PriorityQueue<PathState> { left, right ->
+            (left.cost.toLong() + (remaining[left.node] ?: 0L)).compareTo(
+                right.cost.toLong() + (remaining[right.node] ?: 0L),
+            )
+        }
         val bos = graph[0].flatten().firstOrNull { it.tango == "BOS" } ?: return mutableListOf()
-        queue.add(PathState(node = bos, path = emptyList(), cost = 0, endPosition = 0))
+        queue.add(PathState(node = bos, previous = null, cost = 0, endPosition = 0))
 
         val canMatchStandalone = input != null && input.length == length &&
             standaloneUnigramDictionary.mayMatchInput(input)
@@ -101,9 +118,10 @@ class FindPath(
         while (queue.isNotEmpty()) {
             val state = queue.poll()
             if (state.node.tango == "EOS") {
-                val value = state.path.joinToString(separator = "") { it.tango }
+                val path = state.path()
+                val value = path.joinToString(separator = "") { it.tango }
                 val standaloneMatch = canMatchStandalone &&
-                    standaloneUnigramDictionary.matches(requireNotNull(input), state.path)
+                    standaloneUnigramDictionary.matches(requireNotNull(input), path)
                 val existingIndex = candidateIndices[value]
                 if (existingIndex == null) {
                     candidateIndices[value] = resultFinal.size
@@ -111,7 +129,7 @@ class FindPath(
                         value = value,
                         cost = state.cost,
                         matchedBySystemDictionary =
-                            pathMatchesSystemNgram(state.path) || pathMatchesSystemUnigram(state.path) ||
+                            pathMatchesSystemNgram(path) || pathMatchesSystemUnigram(path) ||
                                 standaloneMatch,
                     )
                 } else if (standaloneMatch) {
@@ -127,13 +145,13 @@ class FindPath(
             }
 
             for (nextNode in outgoing.getOrElse(state.endPosition) { emptyList() }) {
+                if (remaining.isNotEmpty() && nextNode !in remaining) continue
                 val edgeScore = getEdgeCost(
                     state.node.r.toInt(),
                     nextNode.l.toInt(),
                     connectionMatrix
                 )
                 val nextCost = addCosts(state.cost, edgeScore, nextNode.wcost)
-                val nextPath = if (nextNode.tango == "EOS") state.path else state.path + nextNode
                 val nextEnd = when (nextNode.tango) {
                     "EOS" -> length + 1
                     else -> nextNode.sPos + nextNode.len.toInt()
@@ -141,7 +159,7 @@ class FindPath(
                 queue.add(
                     PathState(
                         node = nextNode,
-                        path = nextPath,
+                        previous = state,
                         cost = nextCost,
                         endPosition = nextEnd,
                     )
@@ -179,6 +197,34 @@ class FindPath(
     // after retaining the first path for each distinct candidate surface.
     private fun pathMatchesSystemUnigram(path: List<Node>): Boolean =
         systemUnigramDictionary.ruleCount > 0 && path.any(systemUnigramDictionary::matches)
+
+    /** Exact minimum suffix costs on the forward-only lattice, including EOS. */
+    private fun remainingCosts(
+        graph: List<MutableList<MutableList<Node>>>,
+        outgoing: List<List<Node>>,
+        length: Int,
+        matrix: ConnectionMatrix,
+    ): Map<Node, Long> {
+        val nodes = graph.flatMap { it.flatten() }
+        val maximumWordCost = nodes.maxOfOrNull { kotlin.math.abs(it.wcost.toLong()) } ?: 0L
+        // Preserve the old saturating-cost behavior when a path can overflow Int.
+        if ((length.toLong() + 2) * (maximumWordCost + 32768L) > Int.MAX_VALUE) return emptyMap()
+        if (nodes.any { it.tango != "BOS" && it.tango != "EOS" &&
+                (it.len <= 0 || it.sPos < 0 || it.sPos + it.len > length) }) return emptyMap()
+        val result = IdentityHashMap<Node, Long>()
+        nodes.filter { it.tango == "EOS" }.forEach { result[it] = 0L }
+        for (node in nodes.sortedByDescending { it.sPos + it.len }) {
+            if (node.tango == "EOS") continue
+            val end = node.sPos + node.len
+            val best = outgoing.getOrElse(end) { emptyList() }.mapNotNull { next ->
+                result[next]?.let { suffix ->
+                    matrix.getCost(node.r, next.l).toLong() + next.wcost + suffix
+                }
+            }.minOrNull()
+            if (best != null) result[node] = best
+        }
+        return result
+    }
 
     private fun buildViterbi(
         graph: List<MutableList<MutableList<Node>>>,

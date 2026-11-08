@@ -56,7 +56,12 @@ def subsequent_reviews(root, current, baseline):
     if not set(original) <= set(selected):
         raise ValueError('Baseline review history is missing')
     added = [path for path in selected if path not in original]
-    entries = reviews.load(root, added)
+    # Later demographic overlays depend on earlier source/origin reviews.
+    # Validate the complete history, then replay only pairs touched after the snapshot.
+    history = reviews.load(root, selected)
+    added_pairs = {(entry['reading'], entry['surface'])
+                   for path in added for entry in jsonl(root / path)}
+    entries = {pair: history[pair] for pair in added_pairs}
     provenance = dict(current['provenance'])
     provenance.pop('lunaReclassification', None)
     if 'reviews' in baseline['provenance']:
@@ -102,6 +107,19 @@ def subsequent_reviews(root, current, baseline):
                      d.EVENT_CLASSIFICATIONS_MANIFEST_PATH):
             if inputs.pop(path, None) != d.sha(root/path):
                 raise ValueError('Event classification input hash mismatch')
+    if 'facilityClassification' in provenance:
+        facility_data = d.facility_classification_data(root)
+        if facility_data is None:
+            raise ValueError('Frozen facility classification input is missing')
+        expected_facility_provenance = {
+            key:value for key,value in facility_data['metadata'].items()
+            if key not in ('schemaVersion', 'taxonomySha256', 'classificationSha256')}
+        if provenance.pop('facilityClassification') != expected_facility_provenance:
+            raise ValueError('Facility classification provenance differs from its frozen input')
+        for path in (d.FACILITY_TAXONOMY_PATH, d.FACILITY_CLASSIFICATIONS_PATH,
+                     d.FACILITY_CLASSIFICATIONS_MANIFEST_PATH):
+            if inputs.pop(path, None) != d.sha(root/path):
+                raise ValueError('Facility classification input hash mismatch')
     for path in added:
         if inputs.pop(path, None) != d.sha(root/path):
             raise ValueError('Subsequent review input hash mismatch')
@@ -116,6 +134,12 @@ def subsequent_reviews(root, current, baseline):
     if demographic_path not in baseline['inputs'] and demographic_path in inputs:
         if inputs.pop(demographic_path) != d.sha(root/demographic_path):
             raise ValueError('Media demographic taxonomy input hash mismatch')
+    demographic_manifest = str(reviews.MEDIA_DEMOGRAPHIC_GEMINI_MANIFEST)
+    if demographic_manifest not in baseline['inputs'] and demographic_manifest in inputs:
+        if (not any(entry.get('evidence', {}).get('kind') == 'media_demographic_gemini'
+                    for entry in history.values())
+                or inputs.pop(demographic_manifest) != d.sha(root/demographic_manifest)):
+            raise ValueError('Media demographic model manifest input hash mismatch')
     if PERSON_SOURCE in baseline['inputs']:
         restored = restore_person_source(root, current, baseline, additions)
         if hashlib.sha256(restored).hexdigest() != baseline['inputs'][PERSON_SOURCE]:
@@ -159,7 +183,9 @@ def person_additions_after_baseline(root, current, baseline):
         entries = d.person_entries(root, root/path)
         added_pairs = [tuple(pair) for pair in batch.get('addedPairs', [])]
         appended_pairs = [tuple(pair) for pair in batch.get('appendedPairs', [])]
-        if (len(entries) != batch.get('reviewedPairs') or not added_pairs
+        # A review/restoration batch may add no new source pairs. Its recorded
+        # rows, hashes and appended-pair subset must still match exactly.
+        if (len(entries) != batch.get('reviewedPairs')
                 or len(added_pairs) != len(set(added_pairs))
                 or not set(added_pairs) <= entries.keys()
                 or len(appended_pairs) != batch.get('addedSourceRows')
@@ -244,7 +270,8 @@ def term_hierarchy_restores_baseline(root, current, baseline):
     collapsed_current['categories'] = collapsed_current_categories
     if d.merged_categories(collapsed_current, term_data if 'term' in replacement_map else None,
                           event_data if 'event' in replacement_map else None, media_data,
-                          facility_data if 'facility' in replacement_map else None) != expanded:
+                          (facility_data['taxonomy'], facility_data['categories'])
+                          if 'facility' in replacement_map else None) != expanded:
         return False
     collapsed_baseline = dict(expanded)
     collapsed_baseline.pop('categoryGroups', None)
@@ -344,8 +371,14 @@ def snapshot(root):
         raise ValueError('Snapshot counts mismatch')
     actual = collections.defaultdict(set)
     for source,row in d.source_rows(root):
+        if source == 'person' and restored_person_source is not None:
+            continue
         pair=row[0],row[4]
         if pair in pairs: actual[pair].add((source,*row))
+    if restored_person_source is not None:
+        for source,row in d.parse_rows(restored_person_source.decode('utf-8').splitlines(), 'person'):
+            pair=row[0],row[4]
+            if pair in pairs: actual[pair].add((source,*row))
     if dict(actual) != dict(variants): raise ValueError('Target source variants mismatch')
     return m, targets, base
 
@@ -446,6 +479,32 @@ def load_results(root, directory, allow_partial=False):
     if not allow_partial and results.keys()!=by_key.keys(): raise ValueError(f'Incomplete results: {len(results)}/{len(by_key)}')
     return m,targets,base,results
 
+def replay_subsequent_reviews(root, base, entries, baseline, person_admissions=None):
+    import classification_reviews as reviews
+    previous = reviews.load(root, baseline.get('provenance', {}).get('reviews', []))
+    covered = previous
+    before = {pair:entry['baseline'] for pair,entry in covered.items()
+              if entry['baseline'] is not None}
+    expected = reviews.apply(before, covered)
+    for pair in covered:
+        if base.get(pair) != expected.get(pair):
+            raise ValueError(f'Baseline reviewed decision differs from snapshot: {pair}')
+    restored = reviews.restore(base, covered)
+    # The canonical freeze layers reviewed person restorations before reviews.
+    # They can replace an older model-only person decision with verified evidence.
+    restored.update(person_admissions or {})
+    pending = {pair:restored[pair] for pair,entry in entries.items()
+               if pair in restored and restored[pair] != entry['baseline']}
+    if pending:
+        migrated = d.apply_term_classifications(root, pending)
+        migrated = d.apply_event_classifications(root, migrated)
+        migrated = d.apply_facility_classifications(root, migrated)
+        for pair,row in migrated.items():
+            if row == entries[pair]['baseline']:
+                restored[pair] = row
+    return reviews.apply(restored, entries)
+
+
 def verify_ledger(root, required=False):
     directory=root/'src/main/classification'
     manifest=json.loads((directory/FILES[2]).read_text())
@@ -459,7 +518,9 @@ def verify_ledger(root, required=False):
     m,targets,base=snapshot(root)
     if record.get('snapshotManifestSha256')!=d.sha(root/REL/'manifest.json'):
         raise ValueError('Snapshot manifest hash mismatch')
-    entries = subsequent_reviews(root, manifest, m['baselineManifest'])
+    subsequent_reviews(root, manifest, m['baselineManifest'])
+    import classification_reviews as reviews
+    entries = reviews.load(root, manifest['provenance'].get('reviews', []))
     if d.sha(path)!=record['sha256']: raise ValueError('Result ledger hash mismatch')
     ledger=jsonl(path)
     by_key={r['candidate_key']:r for r in targets}
@@ -497,13 +558,14 @@ def verify_ledger(root, required=False):
         base[pair]=[*pair,','.join(r['effective_categories']),'manual','classified' if r['effective_action']=='adopt' else 'excluded']
     import classification_reviews as reviews
     before_excluded = sum(r[4]=='excluded' for r in base.values())
-    base = reviews.apply(base, entries)
+    person_admissions = {}
     for batch, person_entries in person_additions_after_baseline(root, manifest, m['baselineManifest']):
         for reading, surface in batch['addedPairs']:
             pair = reading, surface
-            if pair in base or pair not in person_entries:
-                raise ValueError('Person addition conflicts with the pinned decision ledger')
-            base[pair] = [reading, surface, 'person', 'verified', 'classified']
+            if pair not in person_entries:
+                raise ValueError('Person addition is missing its pinned evidence')
+            person_admissions[pair] = [reading, surface, 'person', 'verified', 'classified']
+    base = replay_subsequent_reviews(root, base, entries, m['baselineManifest'], person_admissions)
     base = d.apply_term_classifications(
         root, base, force='termClassification' in manifest['provenance'], reviewed_pairs=entries)
     base = d.apply_event_classifications(

@@ -2,7 +2,7 @@
   "admittedPairsByOrigin": {
     "manual": 378776,
     "gemini": 188636,
-    "verified": 182774
+    "verified": 182840
   },
   "categoryGroups": [
     {
@@ -296,19 +296,19 @@
     "facility/public/judicial": 137,
     "facility/public/postal": 1626,
     "facility/cultural/museum": 1193,
-    "facility/cultural/art_museum": 378,
+    "facility/cultural/art_museum": 380,
     "facility/cultural/library": 750,
-    "facility/cultural/memorial": 1183,
+    "facility/cultural/memorial": 1184,
     "facility/entertainment/theater": 415,
     "facility/entertainment/cinema": 149,
-    "facility/entertainment/live_venue": 148,
-    "facility/entertainment/amusement": 141,
+    "facility/entertainment/live_venue": 149,
+    "facility/entertainment/amusement": 142,
     "facility/sports/stadium": 626,
     "facility/sports/gymnasium": 450,
     "facility/sports/golf": 47,
     "facility/sports/ski": 192,
     "facility/sports/aquatic": 11,
-    "facility/commercial/shopping": 1300,
+    "facility/commercial/shopping": 1302,
     "facility/commercial/restaurant": 542,
     "facility/commercial/market": 158,
     "facility/hospitality/hotel": 803,
@@ -335,15 +335,15 @@
     "facility/heritage/historic_residence": 504,
     "facility/residential/housing_complex": 120,
     "facility/residential/condominium": 409,
-    "facility/residential/mixed_use_building": 94,
+    "facility/residential/mixed_use_building": 95,
     "facility/military/base": 348,
     "facility/military/garrison": 16,
     "facility/military/training_ground": 40,
     "transport_route": 4230,
     "organization": 47519,
     "lineage": 2019,
-    "product": 10168,
-    "vehicle": 2580,
+    "product": 10199,
+    "vehicle": 2581,
     "event/occasion/organized_event": 4440,
     "event/occasion/observance": 903,
     "event/occasion/exam_qualification": 183,
@@ -360,30 +360,30 @@
     "term/general/other_general": 20499,
     "term/specialist/information_communications": 6092,
     "term/specialist/mathematics_physics": 4174,
-    "term/specialist/chemistry_life_sciences": 27570,
+    "term/specialist/chemistry_life_sciences": 27574,
     "term/specialist/engineering_technology": 3525,
-    "term/specialist/earth_environment_resources": 2115,
-    "term/specialist/economics_management": 5909,
-    "term/specialist/law_politics": 5720,
+    "term/specialist/earth_environment_resources": 2117,
+    "term/specialist/economics_management": 5911,
+    "term/specialist/law_politics": 5721,
     "term/specialist/humanities_social_sciences": 17913,
     "term/specialist/culture_arts_sports": 5416,
     "term/specialist/transport_safety_defense": 4064,
     "work_franchise": 851,
-    "work_manga": 5093,
-    "work_anime": 1092,
-    "media_demographic/audience/shonen": 4126,
+    "work_manga": 5095,
+    "work_anime": 1093,
+    "media_demographic/audience/shonen": 4127,
     "media_demographic/audience/seinen": 1737,
-    "media_demographic/audience/shojo": 826,
+    "media_demographic/audience/shojo": 827,
     "media_demographic/audience/josei": 356,
     "media_demographic/audience/kids": 549,
     "media_demographic/audience/mixed": 0,
-    "media_demographic/audience/unspecified": 5105,
+    "media_demographic/audience/unspecified": 5106,
     "media_demographic/resolution/source_unverified": 0,
-    "work_film": 6506,
+    "work_film": 6509,
     "work_program": 9320,
     "work_book": 7664,
-    "work_game": 3169,
-    "work_music": 10354,
+    "work_game": 3179,
+    "work_music": 10355,
     "work_stage": 571,
     "work_periodical": 1811,
     "work_other": 2689
@@ -393,13 +393,13 @@
     "verified_over_gemini": 30,
     "verified_over_manual": 8
   },
-  "dictionaryRows": 779405,
+  "dictionaryRows": 779474,
   "excludedCandidatePairs": 328697,
   "excludedClassifiedPairs": 322972,
   "files": {
     "categories.json": "92001c9850b589869528ccb97994ef4ec907f312a5b17f6710d4655b576c466c",
-    "distribution-candidates.tsv.gz": "891225642ce52cf23ad588bc40f81edceb89238f4597338a821b78e0a8d363d0",
-    "distribution-decisions.tsv.gz": "3ccaa62172ab0c6787ed288a013e72c7221d3e3beb86ee3789188069dfc28003"
+    "distribution-candidates.tsv.gz": "8aa9339e8a4f4fa93e2003a791030be6648b58c3c424254e917ea11b17249b63",
+    "distribution-decisions.tsv.gz": "b07bb1c4a7b7e26ed5162077a0d3b748980c07ab27f7a501aabaddfc28fc3fc5"
   },
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
   "inputs": {
@@ -555,6 +555,8 @@
     "src/main/classification/reviews/2026-11-02-open-candidate-issues.jsonl": "d65b00bde2e70dcc5572d111c043ad9cb6f9c348309e0970184b539aa39939a3",
     "src/main/classification/reviews/2026-11-02-open-candidate-issues_demographics.jsonl": "e15072bc3a06b419b53ad678a83ccfb00f54811cbf77ea7095fdd5f4893d5dfe",
     "src/main/classification/reviews/2026-11-02-person-unit-type-corrections.jsonl": "1dd402f6d208d861da34affa77cd8b4f584b3b69f15061fb2c12aa5bbaff3ef4",
+    "src/main/classification/reviews/2026-11-08-open-candidate-issues.jsonl": "7f3d5e964a451123355610de7b5e291a5db9501b0f743fe13e2fad2c1dd94a00",
+    "src/main/classification/reviews/2026-11-08-open-candidate-issues_demographics.jsonl": "5c5180334c3b13802166054241ac419390998b68415ff70ebfd6c6073c6a7f08",
     "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl": "0b871422af9c55e7d172b5b0bd9efcfcbae45bdcdebce43bfece67875732addb"
   },
   "limitations": [
@@ -74940,6 +74942,8 @@
       "src/main/classification/reviews/2026-11-02-open-candidate-issues.jsonl",
       "src/main/classification/reviews/2026-11-02-open-candidate-issues_demographics.jsonl",
       "src/main/classification/reviews/2026-11-02-person-unit-type-corrections.jsonl",
+      "src/main/classification/reviews/2026-11-08-open-candidate-issues.jsonl",
+      "src/main/classification/reviews/2026-11-08-open-candidate-issues_demographics.jsonl",
       "src/main/classification/reviews/collection-cf7e87c20f1b1c28.jsonl"
     ],
     "termAdditions": [
@@ -75197,5 +75201,5 @@
     "wiki": 150132
   },
   "unclassifiedPairs": 0,
-  "uniqueAdmittedPairs": 750186
+  "uniqueAdmittedPairs": 750252
 }

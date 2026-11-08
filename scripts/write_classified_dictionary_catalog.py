@@ -168,6 +168,10 @@ def generate_excluded(root, output, manifest):
         '不採用は不存在・読み誤りの実証を意味しません。\n\n'
         + links + '\n\n'
         f'判断台帳SHA-256: `{manifest["files"].get("distribution-decisions.tsv.gz", "未記録")}`\n', encoding='utf-8')
+    # Audience indexes link to this maintained report; it is not generated from rows.
+    report = root / 'docs/classified-dictionary-catalog/excluded/media-demographics-2026-10-23.md'
+    if report.is_file() and report.resolve() != (directory / report.name).resolve():
+        shutil.copyfile(report, directory / report.name)
     return dict(pairs=len(excluded), pages=len(pages))
 
 

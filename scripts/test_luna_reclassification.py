@@ -96,6 +96,201 @@ class PipelineTests(unittest.TestCase):
             fcntl.flock(lock,fcntl.LOCK_EX)
             with self.assertRaisesRegex(ValueError,'active'): l.recover(self.root)
 
+class PersonAdditionProvenanceTests(unittest.TestCase):
+    def test_review_baseline_must_match_the_exact_frozen_taxonomy_migration(self):
+        import classification_reviews as reviews
+        pair = ('よみ','字')
+        base = {pair:[*pair,'term','manual','classified']}
+        expected = [*pair,'term/general/other_general','manual','classified']
+        entry = dict(baseline=expected, action='reclassify', categories=['c0'],
+                     evidence=dict(kind='user_confirmation'))
+        identity = lambda root, rows: rows
+        with patch.object(reviews, 'load', return_value={}), \
+             patch.object(l.d, 'apply_term_classifications', return_value={pair:expected}), \
+             patch.object(l.d, 'apply_event_classifications', side_effect=identity), \
+             patch.object(l.d, 'apply_facility_classifications', side_effect=identity):
+            self.assertEqual(l.replay_subsequent_reviews(Path('.'),base,{pair:entry},{})[pair],
+                             [*pair,'c0','manual','classified'])
+            entry['baseline'] = [*pair,'term/specialist/law_politics','manual','classified']
+            with self.assertRaisesRegex(ValueError, 'Review baseline differs'):
+                l.replay_subsequent_reviews(Path('.'),base,{pair:entry},{})
+
+    def test_later_review_replays_over_the_reviewed_snapshot_without_changing_baseline(self):
+        import classification_reviews as reviews
+        pair = ('よみ', '字')
+        original = dict(baseline=[*pair, 'c0', 'manual', 'classified'],
+            action='reclassify', categories=['c1'], evidence=dict(kind='independent_source'))
+        latest = dict(original, categories=['c2'], evidence=dict(kind='user_confirmation'))
+        base = {pair:[*pair,'c1','verified','classified'],
+                ('べつ','別'):['べつ','別','c0','manual','classified']}
+        with patch.object(reviews, 'load', return_value={pair:original}):
+            result = l.replay_subsequent_reviews(Path('.'), base, {pair:latest}, {})
+            self.assertEqual(result[pair], [*pair,'c2','manual','classified'])
+            self.assertEqual(result[('べつ','別')], base[('べつ','別')])
+            self.assertEqual(base[pair], [*pair,'c1','verified','classified'])
+            person = ('ひと', '人')
+            model = {**base, person:[*person,'person','manual','classified']}
+            admission = {person:[*person,'person','verified','classified']}
+            restoration = dict(baseline=admission[person], action='reclassify',
+                categories=['person','c2'], evidence=dict(kind='user_confirmation'))
+            restored = l.replay_subsequent_reviews(Path('.'), model,
+                {pair:latest, person:restoration}, {}, admission)
+            self.assertEqual(restored[person], [*person,'c2,person','manual','classified'])
+            base[pair][2] = 'tampered'
+            with self.assertRaisesRegex(ValueError, 'Baseline reviewed decision'):
+                l.replay_subsequent_reviews(Path('.'), base, {pair:latest}, {})
+
+    def test_snapshot_checks_pinned_person_variants_before_approved_appends(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / 'src/main/classification'
+            source.mkdir(parents=True)
+            resource = root / 'src/main/resources/id.def'
+            resource.parent.mkdir(parents=True)
+            resource.write_text('1 noun\n')
+            l.d.write_json(source / 'categories.json', dict(categories=[dict(id='c0')]))
+            original = 'よみ\t1\t1\t5\t字\n'.encode()
+            names = root / l.PERSON_SOURCE
+            names.parent.mkdir(parents=True)
+            names.write_bytes(original + 'よみ\t1\t1\t9\t字\n'.encode())
+            directory = root / l.REL
+            directory.mkdir()
+            l.d.write_gzip(directory / 'baseline-decisions.tsv.gz',
+                           [('よみ','字','','no_result','no_result')])
+            l.d.write_gzip(directory / 'baseline-candidates.tsv.gz', [])
+            target = dict(reading='よみ', surface='字', candidate_key=l.d.key('よみ','字'),
+                original_status='no_result', original_origin='no_result',
+                source_rows=[['person','よみ','1','1','5','字']])
+            l.write_jsonl(directory / 'targets.jsonl.gz', [target])
+            baseline = dict(provenance=dict(dispositionsSha256='held'),
+                inputs={l.PERSON_SOURCE:l.hashlib.sha256(original).hexdigest()},
+                idDefSha256=l.d.sha(resource), files={
+                    'categories.json':l.d.sha(source / 'categories.json'),
+                    'distribution-decisions.tsv.gz':l.d.sha(directory / 'baseline-decisions.tsv.gz'),
+                    'distribution-candidates.tsv.gz':l.d.sha(directory / 'baseline-candidates.tsv.gz')})
+            manifest = dict(baselineManifest=baseline, heldSourceSha256='held', targetCount=1,
+                targetCounts={'no_result':1}, files={name:l.d.sha(directory / name) for name in
+                    ['targets.jsonl.gz','baseline-decisions.tsv.gz','baseline-candidates.tsv.gz']})
+            l.d.write_json(directory / 'manifest.json', manifest)
+            current = copy.deepcopy(baseline)
+            current['provenance']['lunaReclassification'] = {}
+            l.d.write_json(source / 'distribution-manifest.json', current)
+            with patch.object(l, 'person_additions_after_baseline', return_value=[]), \
+                 patch.object(l, 'restore_person_source', return_value=original), \
+                 patch.object(l, 'subsequent_reviews', return_value={}), \
+                 patch.object(l.d, 'SOURCES', {'person':(l.PERSON_SOURCE,None)}):
+                self.assertEqual(l.snapshot(root)[1], [target])
+                target['source_rows'][0][4] = '99'
+                l.write_jsonl(directory / 'targets.jsonl.gz', [target])
+                manifest['files']['targets.jsonl.gz'] = l.d.sha(directory / 'targets.jsonl.gz')
+                l.d.write_json(directory / 'manifest.json', manifest)
+                with self.assertRaisesRegex(ValueError, 'Target source variants mismatch'):
+                    l.snapshot(root)
+
+    def test_subsequent_demographic_review_retains_original_source_origin(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / 'src/main/classification'
+            source.mkdir(parents=True)
+            resource = root / 'src/main/resources/id.def'
+            resource.parent.mkdir(parents=True)
+            resource.write_text('1 noun\n')
+            category = 'media_demographic/audience/unspecified'
+            l.d.write_json(source / 'categories.json', dict(categories=[
+                dict(id='work_anime'), dict(id=category)]))
+            original_path = 'src/main/classification/reviews/001-source.jsonl'
+            added_path = 'src/main/classification/reviews/002-audience.jsonl'
+            original = dict(action='add', reading='よみ', surface='字',
+                candidate_key=l.d.key('よみ', '字'), baseline=None,
+                added_record=dict(left_id=1, right_id=1, cost=1), categories=['work_anime'],
+                reason='source', evidence=dict(kind='independent_source', reading='よみ',
+                    surface='字', categories=['work_anime'], reference='https://example.org/source'))
+            added = copy.deepcopy(original)
+            added.update(action='reclassify', media_demographic='unspecified',
+                         classification_origin='verified', categories=['work_anime', category])
+            added['evidence'].update(kind='media_demographic_source', categories=added['categories'])
+            l.write_jsonl(root / original_path, [original])
+            l.write_jsonl(root / added_path, [added])
+            baseline = dict(provenance=dict(reviews=[original_path]),
+                inputs={original_path:l.d.sha(root / original_path)}, excludedCandidatePairs=0,
+                idDefSha256=l.d.sha(resource))
+            current = copy.deepcopy(baseline)
+            current['provenance']['reviews'].append(added_path)
+            current['inputs'][added_path] = l.d.sha(root / added_path)
+
+            self.assertEqual(l.subsequent_reviews(root, current, baseline), {('よみ', '字'):added})
+            current['inputs'][original_path] = 'tampered'
+            with self.assertRaisesRegex(ValueError, 'Unrelated distribution provenance'):
+                l.subsequent_reviews(root, current, baseline)
+
+    def test_facility_hierarchy_replay_accepts_saved_classification_record(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / 'src/main/classification'
+            source.mkdir(parents=True)
+            base = dict(version=1, categories=[dict(
+                id='facility', name='施設', definition=l.FACILITY_PARENT_DEFINITION)])
+            taxonomy = dict(id='facility', name='施設辞書', groups=[])
+            leaves = [dict(id='facility/cultural/museum', name='博物館', definition='博物館')]
+            expanded = l.d.merged_categories(base, None, facility_data=(taxonomy, leaves))
+            l.d.write_json(source / 'categories.json', expanded)
+            metadata = dict(schemaVersion=1, taxonomySha256='taxonomy',
+                            classificationSha256='labels', sourceRecords=1)
+            data = dict(taxonomy=taxonomy, categories=leaves, metadata=metadata,
+                        labels={}, source_rows={})
+            paths = [l.d.FACILITY_TAXONOMY_PATH, l.d.FACILITY_CLASSIFICATIONS_PATH,
+                     l.d.FACILITY_CLASSIFICATIONS_MANIFEST_PATH]
+            for path in paths:
+                (root / path).write_text(path)
+            current = dict(provenance=dict(facilityClassification=dict(sourceRecords=1)),
+                           inputs={path:l.d.sha(root / path) for path in paths})
+            baseline = dict(files={'categories.json':l.hashlib.sha256(
+                (json.dumps(base, ensure_ascii=False, indent=2) + '\n').encode()).hexdigest()})
+            resource = root / 'src/main/resources/id.def'
+            resource.parent.mkdir(parents=True)
+            resource.write_text('1 noun\n')
+            baseline.update(provenance={}, inputs={}, excludedCandidatePairs=0, idDefSha256='id')
+            current['idDefSha256'] = 'id'
+            with patch.object(l.d, 'term_taxonomy', return_value=None), \
+                 patch.object(l.d, 'event_taxonomy', return_value=None), \
+                 patch.object(l.d, 'media_demographic_taxonomy', return_value=None), \
+                 patch.object(l.d, 'facility_classification_data', return_value=data):
+                self.assertTrue(l.term_hierarchy_restores_baseline(root, current, baseline))
+                self.assertEqual(l.subsequent_reviews(root, current, baseline), {})
+                edited = copy.deepcopy(current)
+                edited['inputs'][paths[0]] = 'tampered'
+                with self.assertRaisesRegex(ValueError, 'Facility classification input hash'):
+                    l.subsequent_reviews(root, edited, baseline)
+                current['provenance']['facilityClassification']['sourceRecords'] = 2
+                self.assertFalse(l.term_hierarchy_restores_baseline(root, current, baseline))
+                with self.assertRaisesRegex(ValueError, 'Facility classification provenance'):
+                    l.subsequent_reviews(root, current, baseline)
+
+    def test_review_only_batch_requires_no_new_or_appended_source_pairs(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            path = 'src/main/classification/person-additions/review.jsonl'
+            target = root / path
+            target.parent.mkdir(parents=True)
+            target.write_text('{}\n')
+            batch = dict(path=path, sha256=l.d.sha(target), reviewedPairs=1,
+                         addedPairs=[], appendedPairs=[], addedSourceRows=0)
+            current = dict(provenance=dict(personAdditions=[batch]),
+                           inputs={path: batch['sha256']})
+            baseline = dict(provenance=dict(personAdditions=[]))
+            entries = {('よみ', '字'): {'reading': 'よみ', 'surface': '字'}}
+            with patch.object(l.d, 'person_entries', return_value=entries):
+                self.assertEqual(l.person_additions_after_baseline(root, current, baseline),
+                                 [(batch, entries)])
+                for changes in [dict(appendedPairs=[['よみ', '字']], addedSourceRows=1),
+                                dict(reviewedPairs=0), dict(addedSourceRows=1),
+                                dict(addedPairs=[['べつ', '別']])]:
+                    with self.subTest(changes=changes):
+                        edited = copy.deepcopy(current)
+                        edited['provenance']['personAdditions'][0].update(changes)
+                        with self.assertRaisesRegex(ValueError, 'rows differ'):
+                            l.person_additions_after_baseline(root, edited, baseline)
+
 class FixtureTests(unittest.TestCase):
     def test_export_apply_idempotence_and_offline_ledger(self):
         with tempfile.TemporaryDirectory() as temp:
