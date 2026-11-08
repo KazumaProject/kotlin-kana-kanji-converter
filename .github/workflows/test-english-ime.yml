@@ -27,6 +27,8 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+      - name: Install catalog parser
+        run: python3 -m pip install -r english-ime/tools/requirements-catalog.txt
       - name: Test classification and admission rules
         run: python3 -B -m unittest discover -s english-ime/tools -p 'test_*.py'
       - name: Test English lexicon, review gate and binary writers
@@ -46,6 +48,8 @@ jobs:
           python3 -B english-ime/tools/verify_conversion_cli.py \
             --cli english-ime/build/install/english-ime/bin/english-ime \
             --assets "$RUNNER_TEMP/reviewed-english-extended" --supplement
+          python3 -B english-ime/tools/catalog_review.py verify \
+            --assets "$RUNNER_TEMP/reviewed-english-extended"
       - name: Compare packed and full conversion results for both bundles
         run: |
           english-ime/build/install/english-ime/bin/english-ime pack-runtime \

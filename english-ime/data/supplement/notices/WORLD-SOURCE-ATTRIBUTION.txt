@@ -1,0 +1,10 @@
+World vocabulary: project-curated required words and named entities, not frequency-ranked recommendations.
+Wikidata contributors: structured labels, aliases, English sitelink titles and entity identifiers, CC0 1.0.
+https://www.wikidata.org/wiki/Wikidata:Licensing
+Wiktionary contributors: English headword/section attestation, CC BY-SA 4.0.
+https://en.wiktionary.org/wiki/Wiktionary:Copyrights
+QUDT.org contributors: English quantity-kind labels, CC BY 4.0. https://qudt.org/
+ChEBI / EMBL-EBI contributors: curated non-obsolete names and exact synonyms, CC BY 4.0.
+https://www.ebi.ac.uk/chebi/about/
+Changes: select explicitly declared spellings; match ordinary lowercase targets to source heading case; attach project-declared topical memberships. Names retain exact source case.
+No article prose, definitions, quotations, images, identifiers as invented words, or generated inflections are included.

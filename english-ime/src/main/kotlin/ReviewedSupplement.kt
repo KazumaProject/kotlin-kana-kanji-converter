@@ -128,7 +128,7 @@ internal class ReviewedSupplement private constructor(
 }
 
 private val supportedSurface = Regex("[A-Za-z0-9]+(?:[ '’./-][A-Za-z0-9]+)*")
-private val domains = setOf("daily", "business", "technology", "travel")
+private val domains = setOf("daily", "business", "technology", "travel", "science", "medical", "education", "sports", "entertainment", "food")
 private val lexicalRoles = setOf("noun", "verb", "adjective", "adverb", "pronoun", "determiner",
     "preposition", "conjunction", "interjection", "contraction", "abbreviation", "phrase")
 

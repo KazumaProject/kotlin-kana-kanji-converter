@@ -1,0 +1,2010 @@
+{
+  "schemaVersion": 1,
+  "policy": "Project-curated practical requirements. English sitelink and exact source spelling required (English/default label, explicit alias or English article title). Entity existence is not a popularity metric. No person-name combinations or inferred aliases.",
+  "entities": [
+    {
+      "surface": "Albert Einstein",
+      "kind": "person",
+      "title": "Albert Einstein",
+      "reason": "Project-curated practical 科学者・技術者 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Marie Curie",
+      "kind": "person",
+      "title": "Marie Curie",
+      "reason": "Project-curated practical 科学者・技術者 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Isaac Newton",
+      "kind": "person",
+      "title": "Isaac Newton",
+      "reason": "Project-curated practical 科学者・技術者 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Charles Darwin",
+      "kind": "person",
+      "title": "Charles Darwin",
+      "reason": "Project-curated practical 科学者・技術者 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nikola Tesla",
+      "kind": "person",
+      "title": "Nikola Tesla",
+      "reason": "Project-curated practical 科学者・技術者 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Ada Lovelace",
+      "kind": "person",
+      "title": "Ada Lovelace",
+      "reason": "Project-curated practical 科学者・技術者 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Alan Turing",
+      "kind": "person",
+      "title": "Alan Turing",
+      "reason": "Project-curated practical 科学者・技術者 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Grace Hopper",
+      "kind": "person",
+      "title": "Grace Hopper",
+      "reason": "Project-curated practical 科学者・技術者 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Katherine Johnson",
+      "kind": "person",
+      "title": "Katherine Johnson",
+      "reason": "Project-curated practical 科学者・技術者 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Stephen Hawking",
+      "kind": "person",
+      "title": "Stephen Hawking",
+      "reason": "Project-curated practical 科学者・技術者 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Richard Feynman",
+      "kind": "person",
+      "title": "Richard Feynman",
+      "reason": "Project-curated practical 科学者・技術者 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Tu Youyou",
+      "kind": "person",
+      "title": "Tu Youyou",
+      "reason": "Project-curated practical 科学者・技術者 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Katalin Karikó",
+      "kind": "person",
+      "title": "Katalin Karikó",
+      "reason": "Project-curated practical 科学者・技術者 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Tim Berners-Lee",
+      "kind": "person",
+      "title": "Tim Berners-Lee",
+      "reason": "Project-curated practical 科学者・技術者 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "William Shakespeare",
+      "kind": "person",
+      "title": "William Shakespeare",
+      "reason": "Project-curated practical 作家・思想家 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Jane Austen",
+      "kind": "person",
+      "title": "Jane Austen",
+      "reason": "Project-curated practical 作家・思想家 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Charles Dickens",
+      "kind": "person",
+      "title": "Charles Dickens",
+      "reason": "Project-curated practical 作家・思想家 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "George Orwell",
+      "kind": "person",
+      "title": "George Orwell",
+      "reason": "Project-curated practical 作家・思想家 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Agatha Christie",
+      "kind": "person",
+      "title": "Agatha Christie",
+      "reason": "Project-curated practical 作家・思想家 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "J. R. R. Tolkien",
+      "kind": "person",
+      "title": "J. R. R. Tolkien",
+      "reason": "Project-curated practical 作家・思想家 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Virginia Woolf",
+      "kind": "person",
+      "title": "Virginia Woolf",
+      "reason": "Project-curated practical 作家・思想家 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Mark Twain",
+      "kind": "person",
+      "title": "Mark Twain",
+      "reason": "Project-curated practical 作家・思想家 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Toni Morrison",
+      "kind": "person",
+      "title": "Toni Morrison",
+      "reason": "Project-curated practical 作家・思想家 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Haruki Murakami",
+      "kind": "person",
+      "title": "Haruki Murakami",
+      "reason": "Project-curated practical 作家・思想家 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Natsume Sōseki",
+      "kind": "person",
+      "title": "Natsume Sōseki",
+      "reason": "Project-curated practical 作家・思想家 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Chinua Achebe",
+      "kind": "person",
+      "title": "Chinua Achebe",
+      "reason": "Project-curated practical 作家・思想家 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Gabriel García Márquez",
+      "kind": "person",
+      "title": "Gabriel García Márquez",
+      "reason": "Project-curated practical 作家・思想家 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Rabindranath Tagore",
+      "kind": "person",
+      "title": "Rabindranath Tagore",
+      "reason": "Project-curated practical 作家・思想家 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Taylor Swift",
+      "kind": "person",
+      "title": "Taylor Swift",
+      "reason": "Project-curated practical 音楽家・歌手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Michael Jackson",
+      "kind": "person",
+      "title": "Michael Jackson",
+      "reason": "Project-curated practical 音楽家・歌手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Madonna",
+      "kind": "person",
+      "title": "Madonna",
+      "reason": "Project-curated practical 音楽家・歌手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Prince",
+      "kind": "person",
+      "title": "Prince (musician)",
+      "reason": "Project-curated practical 音楽家・歌手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Beyoncé",
+      "kind": "person",
+      "title": "Beyoncé",
+      "reason": "Project-curated practical 音楽家・歌手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Lady Gaga",
+      "kind": "person",
+      "title": "Lady Gaga",
+      "reason": "Project-curated practical 音楽家・歌手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Adele",
+      "kind": "person",
+      "title": "Adele",
+      "reason": "Project-curated practical 音楽家・歌手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Freddie Mercury",
+      "kind": "person",
+      "title": "Freddie Mercury",
+      "reason": "Project-curated practical 音楽家・歌手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "David Bowie",
+      "kind": "person",
+      "title": "David Bowie",
+      "reason": "Project-curated practical 音楽家・歌手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Bob Dylan",
+      "kind": "person",
+      "title": "Bob Dylan",
+      "reason": "Project-curated practical 音楽家・歌手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Ludwig van Beethoven",
+      "kind": "person",
+      "title": "Ludwig van Beethoven",
+      "reason": "Project-curated practical 音楽家・歌手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Wolfgang Amadeus Mozart",
+      "kind": "person",
+      "title": "Wolfgang Amadeus Mozart",
+      "reason": "Project-curated practical 音楽家・歌手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Johann Sebastian Bach",
+      "kind": "person",
+      "title": "Johann Sebastian Bach",
+      "reason": "Project-curated practical 音楽家・歌手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Ryuichi Sakamoto",
+      "kind": "person",
+      "title": "Ryuichi Sakamoto",
+      "reason": "Project-curated practical 音楽家・歌手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Charlie Chaplin",
+      "kind": "person",
+      "title": "Charlie Chaplin",
+      "reason": "Project-curated practical 俳優・映画・舞台 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Audrey Hepburn",
+      "kind": "person",
+      "title": "Audrey Hepburn",
+      "reason": "Project-curated practical 俳優・映画・舞台 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Meryl Streep",
+      "kind": "person",
+      "title": "Meryl Streep",
+      "reason": "Project-curated practical 俳優・映画・舞台 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Tom Hanks",
+      "kind": "person",
+      "title": "Tom Hanks",
+      "reason": "Project-curated practical 俳優・映画・舞台 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Denzel Washington",
+      "kind": "person",
+      "title": "Denzel Washington",
+      "reason": "Project-curated practical 俳優・映画・舞台 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Leonardo DiCaprio",
+      "kind": "person",
+      "title": "Leonardo DiCaprio",
+      "reason": "Project-curated practical 俳優・映画・舞台 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Jackie Chan",
+      "kind": "person",
+      "title": "Jackie Chan",
+      "reason": "Project-curated practical 俳優・映画・舞台 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Bruce Lee",
+      "kind": "person",
+      "title": "Bruce Lee",
+      "reason": "Project-curated practical 俳優・映画・舞台 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Shah Rukh Khan",
+      "kind": "person",
+      "title": "Shah Rukh Khan",
+      "reason": "Project-curated practical 俳優・映画・舞台 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Michelle Yeoh",
+      "kind": "person",
+      "title": "Michelle Yeoh",
+      "reason": "Project-curated practical 俳優・映画・舞台 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Hayao Miyazaki",
+      "kind": "person",
+      "title": "Hayao Miyazaki",
+      "reason": "Project-curated practical 俳優・映画・舞台 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Akira Kurosawa",
+      "kind": "person",
+      "title": "Akira Kurosawa",
+      "reason": "Project-curated practical 俳優・映画・舞台 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Steven Spielberg",
+      "kind": "person",
+      "title": "Steven Spielberg",
+      "reason": "Project-curated practical 俳優・映画・舞台 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Christopher Nolan",
+      "kind": "person",
+      "title": "Christopher Nolan",
+      "reason": "Project-curated practical 俳優・映画・舞台 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Lionel Messi",
+      "kind": "person",
+      "title": "Lionel Messi",
+      "reason": "Project-curated practical スポーツ選手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Cristiano Ronaldo",
+      "kind": "person",
+      "title": "Cristiano Ronaldo",
+      "reason": "Project-curated practical スポーツ選手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Pelé",
+      "kind": "person",
+      "title": "Pelé",
+      "reason": "Project-curated practical スポーツ選手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Diego Maradona",
+      "kind": "person",
+      "title": "Diego Maradona",
+      "reason": "Project-curated practical スポーツ選手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Serena Williams",
+      "kind": "person",
+      "title": "Serena Williams",
+      "reason": "Project-curated practical スポーツ選手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Roger Federer",
+      "kind": "person",
+      "title": "Roger Federer",
+      "reason": "Project-curated practical スポーツ選手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Rafael Nadal",
+      "kind": "person",
+      "title": "Rafael Nadal",
+      "reason": "Project-curated practical スポーツ選手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Naomi Osaka",
+      "kind": "person",
+      "title": "Naomi Osaka",
+      "reason": "Project-curated practical スポーツ選手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Shohei Ohtani",
+      "kind": "person",
+      "title": "Shohei Ohtani",
+      "reason": "Project-curated practical スポーツ選手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Ichiro Suzuki",
+      "kind": "person",
+      "title": "Ichiro Suzuki",
+      "reason": "Project-curated practical スポーツ選手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Michael Jordan",
+      "kind": "person",
+      "title": "Michael Jordan",
+      "reason": "Project-curated practical スポーツ選手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "LeBron James",
+      "kind": "person",
+      "title": "LeBron James",
+      "reason": "Project-curated practical スポーツ選手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Usain Bolt",
+      "kind": "person",
+      "title": "Usain Bolt",
+      "reason": "Project-curated practical スポーツ選手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Simone Biles",
+      "kind": "person",
+      "title": "Simone Biles",
+      "reason": "Project-curated practical スポーツ選手 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nelson Mandela",
+      "kind": "person",
+      "title": "Nelson Mandela",
+      "reason": "Project-curated practical 政治・社会活動 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Mahatma Gandhi",
+      "kind": "person",
+      "title": "Mahatma Gandhi",
+      "reason": "Project-curated practical 政治・社会活動 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Martin Luther King Jr.",
+      "kind": "person",
+      "title": "Martin Luther King Jr.",
+      "reason": "Project-curated practical 政治・社会活動 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Rosa Parks",
+      "kind": "person",
+      "title": "Rosa Parks",
+      "reason": "Project-curated practical 政治・社会活動 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Malala Yousafzai",
+      "kind": "person",
+      "title": "Malala Yousafzai",
+      "reason": "Project-curated practical 政治・社会活動 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Barack Obama",
+      "kind": "person",
+      "title": "Barack Obama",
+      "reason": "Project-curated practical 政治・社会活動 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Abraham Lincoln",
+      "kind": "person",
+      "title": "Abraham Lincoln",
+      "reason": "Project-curated practical 政治・社会活動 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Winston Churchill",
+      "kind": "person",
+      "title": "Winston Churchill",
+      "reason": "Project-curated practical 政治・社会活動 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Angela Merkel",
+      "kind": "person",
+      "title": "Angela Merkel",
+      "reason": "Project-curated practical 政治・社会活動 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Jacinda Ardern",
+      "kind": "person",
+      "title": "Jacinda Ardern",
+      "reason": "Project-curated practical 政治・社会活動 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Shinzo Abe",
+      "kind": "person",
+      "title": "Shinzo Abe",
+      "reason": "Project-curated practical 政治・社会活動 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Lee Kuan Yew",
+      "kind": "person",
+      "title": "Lee Kuan Yew",
+      "reason": "Project-curated practical 政治・社会活動 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Wangari Maathai",
+      "kind": "person",
+      "title": "Wangari Maathai",
+      "reason": "Project-curated practical 政治・社会活動 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Desmond Tutu",
+      "kind": "person",
+      "title": "Desmond Tutu",
+      "reason": "Project-curated practical 政治・社会活動 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Steve Jobs",
+      "kind": "person",
+      "title": "Steve Jobs",
+      "reason": "Project-curated practical 経営・事業・発明 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Bill Gates",
+      "kind": "person",
+      "title": "Bill Gates",
+      "reason": "Project-curated practical 経営・事業・発明 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Warren Buffett",
+      "kind": "person",
+      "title": "Warren Buffett",
+      "reason": "Project-curated practical 経営・事業・発明 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Elon Musk",
+      "kind": "person",
+      "title": "Elon Musk",
+      "reason": "Project-curated practical 経営・事業・発明 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Jeff Bezos",
+      "kind": "person",
+      "title": "Jeff Bezos",
+      "reason": "Project-curated practical 経営・事業・発明 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Tim Cook",
+      "kind": "person",
+      "title": "Tim Cook",
+      "reason": "Project-curated practical 経営・事業・発明 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Satya Nadella",
+      "kind": "person",
+      "title": "Satya Nadella",
+      "reason": "Project-curated practical 経営・事業・発明 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Jensen Huang",
+      "kind": "person",
+      "title": "Jensen Huang",
+      "reason": "Project-curated practical 経営・事業・発明 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Lisa Su",
+      "kind": "person",
+      "title": "Lisa Su",
+      "reason": "Project-curated practical 経営・事業・発明 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Akio Toyoda",
+      "kind": "person",
+      "title": "Akio Toyoda",
+      "reason": "Project-curated practical 経営・事業・発明 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Soichiro Honda",
+      "kind": "person",
+      "title": "Soichiro Honda",
+      "reason": "Project-curated practical 経営・事業・発明 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Masayoshi Son",
+      "kind": "person",
+      "title": "Masayoshi Son",
+      "reason": "Project-curated practical 経営・事業・発明 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Oprah Winfrey",
+      "kind": "person",
+      "title": "Oprah Winfrey",
+      "reason": "Project-curated practical 経営・事業・発明 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Indra Nooyi",
+      "kind": "person",
+      "title": "Indra Nooyi",
+      "reason": "Project-curated practical 経営・事業・発明 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Cleopatra",
+      "kind": "person",
+      "title": "Cleopatra",
+      "reason": "Project-curated practical 歴史上の人物 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Julius Caesar",
+      "kind": "person",
+      "title": "Julius Caesar",
+      "reason": "Project-curated practical 歴史上の人物 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Alexander the Great",
+      "kind": "person",
+      "title": "Alexander the Great",
+      "reason": "Project-curated practical 歴史上の人物 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Napoleon",
+      "kind": "person",
+      "title": "Napoleon",
+      "reason": "Project-curated practical 歴史上の人物 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Joan of Arc",
+      "kind": "person",
+      "title": "Joan of Arc",
+      "reason": "Project-curated practical 歴史上の人物 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Leonardo da Vinci",
+      "kind": "person",
+      "title": "Leonardo da Vinci",
+      "reason": "Project-curated practical 歴史上の人物 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Michelangelo",
+      "kind": "person",
+      "title": "Michelangelo",
+      "reason": "Project-curated practical 歴史上の人物 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Galileo Galilei",
+      "kind": "person",
+      "title": "Galileo Galilei",
+      "reason": "Project-curated practical 歴史上の人物 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Genghis Khan",
+      "kind": "person",
+      "title": "Genghis Khan",
+      "reason": "Project-curated practical 歴史上の人物 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Murasaki Shikibu",
+      "kind": "person",
+      "title": "Murasaki Shikibu",
+      "reason": "Project-curated practical 歴史上の人物 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Sei Shōnagon",
+      "kind": "person",
+      "title": "Sei Shōnagon",
+      "reason": "Project-curated practical 歴史上の人物 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Florence Nightingale",
+      "kind": "person",
+      "title": "Florence Nightingale",
+      "reason": "Project-curated practical 歴史上の人物 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Helen Keller",
+      "kind": "person",
+      "title": "Helen Keller",
+      "reason": "Project-curated practical 歴史上の人物 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Amelia Earhart",
+      "kind": "person",
+      "title": "Amelia Earhart",
+      "reason": "Project-curated practical 歴史上の人物 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "iPhone",
+      "kind": "product",
+      "title": "iPhone",
+      "reason": "Project-curated practical PC・モバイル・ゲーム機 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "iPad",
+      "kind": "product",
+      "title": "iPad",
+      "reason": "Project-curated practical PC・モバイル・ゲーム機 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "MacBook Air",
+      "kind": "product",
+      "title": "MacBook Air",
+      "reason": "Project-curated practical PC・モバイル・ゲーム機 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "MacBook Pro",
+      "kind": "product",
+      "title": "MacBook Pro",
+      "reason": "Project-curated practical PC・モバイル・ゲーム機 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "iMac",
+      "kind": "product",
+      "title": "iMac",
+      "reason": "Project-curated practical PC・モバイル・ゲーム機 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Apple Watch",
+      "kind": "product",
+      "title": "Apple Watch",
+      "reason": "Project-curated practical PC・モバイル・ゲーム機 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "AirPods",
+      "kind": "product",
+      "title": "AirPods",
+      "reason": "Project-curated practical PC・モバイル・ゲーム機 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "ThinkPad",
+      "kind": "product",
+      "title": "ThinkPad",
+      "reason": "Project-curated practical PC・モバイル・ゲーム機 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Raspberry Pi",
+      "kind": "product",
+      "title": "Raspberry Pi",
+      "reason": "Project-curated practical PC・モバイル・ゲーム機 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Steam Deck",
+      "kind": "product",
+      "title": "Steam Deck",
+      "reason": "Project-curated practical PC・モバイル・ゲーム機 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nintendo Switch",
+      "kind": "product",
+      "title": "Nintendo Switch",
+      "reason": "Project-curated practical PC・モバイル・ゲーム機 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "PlayStation 5",
+      "kind": "product",
+      "title": "PlayStation 5",
+      "reason": "Project-curated practical PC・モバイル・ゲーム機 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Xbox Series X and Series S",
+      "kind": "product",
+      "title": "Xbox Series X and Series S",
+      "reason": "Project-curated practical PC・モバイル・ゲーム機 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Kindle",
+      "kind": "product",
+      "title": "Amazon Kindle",
+      "reason": "Project-curated practical PC・モバイル・ゲーム機 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Toyota Corolla",
+      "kind": "product",
+      "title": "Toyota Corolla",
+      "reason": "Project-curated practical 自動車・モビリティ製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Toyota Prius",
+      "kind": "product",
+      "title": "Toyota Prius",
+      "reason": "Project-curated practical 自動車・モビリティ製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Toyota Yaris",
+      "kind": "product",
+      "title": "Toyota Yaris",
+      "reason": "Project-curated practical 自動車・モビリティ製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Toyota Land Cruiser",
+      "kind": "product",
+      "title": "Toyota Land Cruiser",
+      "reason": "Project-curated practical 自動車・モビリティ製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Honda Civic",
+      "kind": "product",
+      "title": "Honda Civic",
+      "reason": "Project-curated practical 自動車・モビリティ製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Honda Accord",
+      "kind": "product",
+      "title": "Honda Accord",
+      "reason": "Project-curated practical 自動車・モビリティ製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nissan Leaf",
+      "kind": "product",
+      "title": "Nissan Leaf",
+      "reason": "Project-curated practical 自動車・モビリティ製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Mazda MX-5",
+      "kind": "product",
+      "title": "Mazda MX-5",
+      "reason": "Project-curated practical 自動車・モビリティ製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Tesla Model 3",
+      "kind": "product",
+      "title": "Tesla Model 3",
+      "reason": "Project-curated practical 自動車・モビリティ製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Tesla Model Y",
+      "kind": "product",
+      "title": "Tesla Model Y",
+      "reason": "Project-curated practical 自動車・モビリティ製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Ford Mustang",
+      "kind": "product",
+      "title": "Ford Mustang",
+      "reason": "Project-curated practical 自動車・モビリティ製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Volkswagen Golf",
+      "kind": "product",
+      "title": "Volkswagen Golf",
+      "reason": "Project-curated practical 自動車・モビリティ製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "BMW 3 Series",
+      "kind": "product",
+      "title": "BMW 3 Series",
+      "reason": "Project-curated practical 自動車・モビリティ製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Boeing 747",
+      "kind": "product",
+      "title": "Boeing 747",
+      "reason": "Project-curated practical 自動車・モビリティ製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Canon EOS R5",
+      "kind": "product",
+      "title": "Canon EOS R5",
+      "reason": "Project-curated practical 写真・音響製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Canon EOS R6",
+      "kind": "product",
+      "title": "Canon EOS R6",
+      "reason": "Project-curated practical 写真・音響製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Canon EOS 5D",
+      "kind": "product",
+      "title": "Canon EOS 5D",
+      "reason": "Project-curated practical 写真・音響製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nikon Z6",
+      "kind": "product",
+      "title": "Nikon Z6",
+      "reason": "Project-curated practical 写真・音響製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nikon Z7",
+      "kind": "product",
+      "title": "Nikon Z7",
+      "reason": "Project-curated practical 写真・音響製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nikon D850",
+      "kind": "product",
+      "title": "Nikon D850",
+      "reason": "Project-curated practical 写真・音響製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Fujifilm X-T5",
+      "kind": "product",
+      "title": "Fujifilm X-T5",
+      "reason": "Project-curated practical 写真・音響製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Fujifilm X100",
+      "kind": "product",
+      "title": "Fujifilm X100",
+      "reason": "Project-curated practical 写真・音響製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "GoPro",
+      "kind": "brand",
+      "title": "GoPro",
+      "reason": "Project-curated practical 写真・音響製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Walkman",
+      "kind": "product",
+      "title": "Walkman",
+      "reason": "Project-curated practical 写真・音響製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "iPod",
+      "kind": "product",
+      "title": "iPod",
+      "reason": "Project-curated practical 写真・音響製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Sonos",
+      "kind": "organization",
+      "title": "Sonos",
+      "reason": "Project-curated practical 写真・音響製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Roomba",
+      "kind": "product",
+      "title": "Roomba",
+      "reason": "Project-curated practical 家電・生活製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Thermomix",
+      "kind": "product",
+      "title": "Thermomix",
+      "reason": "Project-curated practical 家電・生活製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Instant Pot",
+      "kind": "product",
+      "title": "Instant Pot",
+      "reason": "Project-curated practical 家電・生活製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "KitchenAid",
+      "kind": "brand",
+      "title": "KitchenAid",
+      "reason": "Project-curated practical 家電・生活製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nespresso",
+      "kind": "brand",
+      "title": "Nespresso",
+      "reason": "Project-curated practical 家電・生活製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Sodastream",
+      "kind": "product",
+      "title": "SodaStream",
+      "reason": "Project-curated practical 家電・生活製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Dyson Airblade",
+      "kind": "product",
+      "title": "Dyson Airblade",
+      "reason": "Project-curated practical 家電・生活製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Amazon Echo",
+      "kind": "product",
+      "title": "Amazon Echo",
+      "reason": "Project-curated practical 家電・生活製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Google Nest",
+      "kind": "organization",
+      "title": "Google Nest",
+      "reason": "Project-curated practical 家電・生活製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Philips Hue",
+      "kind": "product",
+      "title": "Philips Hue",
+      "reason": "Project-curated practical 家電・生活製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Ring Video Doorbell",
+      "kind": "product",
+      "title": "Ring Video Doorbell",
+      "reason": "Project-curated practical 家電・生活製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nest Learning Thermostat",
+      "kind": "product",
+      "title": "Nest Learning Thermostat",
+      "reason": "Project-curated practical 家電・生活製品 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Microsoft Word",
+      "kind": "product",
+      "title": "Microsoft Word",
+      "reason": "Project-curated practical 制作・仕事・学習ソフト requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Microsoft Excel",
+      "kind": "product",
+      "title": "Microsoft Excel",
+      "reason": "Project-curated practical 制作・仕事・学習ソフト requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Microsoft PowerPoint",
+      "kind": "product",
+      "title": "Microsoft PowerPoint",
+      "reason": "Project-curated practical 制作・仕事・学習ソフト requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Microsoft Outlook",
+      "kind": "product",
+      "title": "Microsoft Outlook",
+      "reason": "Project-curated practical 制作・仕事・学習ソフト requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Adobe Photoshop",
+      "kind": "product",
+      "title": "Adobe Photoshop",
+      "reason": "Project-curated practical 制作・仕事・学習ソフト requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Adobe Illustrator",
+      "kind": "product",
+      "title": "Adobe Illustrator",
+      "reason": "Project-curated practical 制作・仕事・学習ソフト requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Adobe Premiere Pro",
+      "kind": "product",
+      "title": "Adobe Premiere Pro",
+      "reason": "Project-curated practical 制作・仕事・学習ソフト requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Adobe After Effects",
+      "kind": "product",
+      "title": "Adobe After Effects",
+      "reason": "Project-curated practical 制作・仕事・学習ソフト requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Blender",
+      "kind": "product",
+      "title": "Blender (software)",
+      "reason": "Project-curated practical 制作・仕事・学習ソフト requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "AutoCAD",
+      "kind": "product",
+      "title": "AutoCAD",
+      "reason": "Project-curated practical 制作・仕事・学習ソフト requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "SolidWorks",
+      "kind": "product",
+      "title": "SolidWorks",
+      "reason": "Project-curated practical 制作・仕事・学習ソフト requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "MATLAB",
+      "kind": "product",
+      "title": "MATLAB",
+      "reason": "Project-curated practical 制作・仕事・学習ソフト requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Wolfram Mathematica",
+      "kind": "product",
+      "title": "Wolfram Mathematica",
+      "reason": "Project-curated practical 制作・仕事・学習ソフト requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "DaVinci Resolve",
+      "kind": "product",
+      "title": "DaVinci Resolve",
+      "reason": "Project-curated practical 制作・仕事・学習ソフト requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Coca-Cola",
+      "kind": "brand",
+      "title": "Coca-Cola",
+      "reason": "Project-curated practical 食品・日用品・衣料ブランド requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Pepsi",
+      "kind": "brand",
+      "title": "Pepsi",
+      "reason": "Project-curated practical 食品・日用品・衣料ブランド requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Fanta",
+      "kind": "brand",
+      "title": "Fanta",
+      "reason": "Project-curated practical 食品・日用品・衣料ブランド requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Sprite",
+      "kind": "brand",
+      "title": "Sprite (drink)",
+      "reason": "Project-curated practical 食品・日用品・衣料ブランド requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nescafé",
+      "kind": "brand",
+      "title": "Nescafé",
+      "reason": "Project-curated practical 食品・日用品・衣料ブランド requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Kit Kat",
+      "kind": "brand",
+      "title": "Kit Kat",
+      "reason": "Project-curated practical 食品・日用品・衣料ブランド requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Oreo",
+      "kind": "brand",
+      "title": "Oreo",
+      "reason": "Project-curated practical 食品・日用品・衣料ブランド requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nutella",
+      "kind": "brand",
+      "title": "Nutella",
+      "reason": "Project-curated practical 食品・日用品・衣料ブランド requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "LEGO",
+      "kind": "brand",
+      "title": "Lego",
+      "reason": "Project-curated practical 食品・日用品・衣料ブランド requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Uniqlo",
+      "kind": "brand",
+      "title": "Uniqlo",
+      "reason": "Project-curated practical 食品・日用品・衣料ブランド requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Patagonia",
+      "kind": "brand",
+      "title": "Patagonia, Inc.",
+      "reason": "Project-curated practical 食品・日用品・衣料ブランド requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "The North Face",
+      "kind": "brand",
+      "title": "The North Face",
+      "reason": "Project-curated practical 食品・日用品・衣料ブランド requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Adidas",
+      "kind": "brand",
+      "title": "Adidas",
+      "reason": "Project-curated practical 食品・日用品・衣料ブランド requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nike",
+      "kind": "brand",
+      "title": "Nike, Inc.",
+      "reason": "Project-curated practical 食品・日用品・衣料ブランド requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Apple",
+      "kind": "organization",
+      "title": "Apple Inc.",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Microsoft",
+      "kind": "organization",
+      "title": "Microsoft",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Google",
+      "kind": "organization",
+      "title": "Google",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Amazon",
+      "kind": "organization",
+      "title": "Amazon (company)",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Samsung",
+      "kind": "organization",
+      "title": "Samsung",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Sony",
+      "kind": "organization",
+      "title": "Sony",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nintendo",
+      "kind": "organization",
+      "title": "Nintendo",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Intel",
+      "kind": "organization",
+      "title": "Intel",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "AMD",
+      "kind": "organization",
+      "title": "AMD",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nvidia",
+      "kind": "organization",
+      "title": "Nvidia",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "TSMC",
+      "kind": "organization",
+      "title": "TSMC",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Toyota",
+      "kind": "organization",
+      "title": "Toyota",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Honda",
+      "kind": "organization",
+      "title": "Honda",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Panasonic",
+      "kind": "organization",
+      "title": "Panasonic",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Canon",
+      "kind": "organization",
+      "title": "Canon Inc.",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nikon",
+      "kind": "organization",
+      "title": "Nikon",
+      "reason": "Project-curated practical 技術・製造企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "IKEA",
+      "kind": "organization",
+      "title": "IKEA",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Walmart",
+      "kind": "organization",
+      "title": "Walmart",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Costco",
+      "kind": "organization",
+      "title": "Costco",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Starbucks",
+      "kind": "organization",
+      "title": "Starbucks",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "McDonald's",
+      "kind": "organization",
+      "title": "McDonald's",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Nestlé",
+      "kind": "organization",
+      "title": "Nestlé",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Unilever",
+      "kind": "organization",
+      "title": "Unilever",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Procter & Gamble",
+      "kind": "organization",
+      "title": "Procter & Gamble",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "IATA",
+      "kind": "organization",
+      "title": "IATA",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Lufthansa",
+      "kind": "organization",
+      "title": "Lufthansa",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Air France",
+      "kind": "organization",
+      "title": "Air France",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Emirates",
+      "kind": "organization",
+      "title": "Emirates (airline)",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Singapore Airlines",
+      "kind": "organization",
+      "title": "Singapore Airlines",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "DHL",
+      "kind": "organization",
+      "title": "DHL",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "FedEx",
+      "kind": "organization",
+      "title": "FedEx",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "UPS",
+      "kind": "organization",
+      "title": "United Parcel Service",
+      "reason": "Project-curated practical 生活・交通・流通企業 requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "WhatsApp",
+      "kind": "service",
+      "title": "WhatsApp",
+      "reason": "Project-curated practical 連絡・SNS・共同作業サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Telegram",
+      "kind": "service",
+      "title": "Telegram (software)",
+      "reason": "Project-curated practical 連絡・SNS・共同作業サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Signal",
+      "kind": "service",
+      "title": "Signal (software)",
+      "reason": "Project-curated practical 連絡・SNS・共同作業サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Discord",
+      "kind": "service",
+      "title": "Discord",
+      "reason": "Project-curated practical 連絡・SNS・共同作業サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Slack",
+      "kind": "service",
+      "title": "Slack (software)",
+      "reason": "Project-curated practical 連絡・SNS・共同作業サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Microsoft Teams",
+      "kind": "service",
+      "title": "Microsoft Teams",
+      "reason": "Project-curated practical 連絡・SNS・共同作業サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Google Meet",
+      "kind": "service",
+      "title": "Google Meet",
+      "reason": "Project-curated practical 連絡・SNS・共同作業サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "FaceTime",
+      "kind": "service",
+      "title": "FaceTime",
+      "reason": "Project-curated practical 連絡・SNS・共同作業サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Gmail",
+      "kind": "service",
+      "title": "Gmail",
+      "reason": "Project-curated practical 連絡・SNS・共同作業サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Outlook.com",
+      "kind": "service",
+      "title": "Outlook.com",
+      "reason": "Project-curated practical 連絡・SNS・共同作業サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Instagram",
+      "kind": "service",
+      "title": "Instagram",
+      "reason": "Project-curated practical 連絡・SNS・共同作業サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "TikTok",
+      "kind": "service",
+      "title": "TikTok",
+      "reason": "Project-curated practical 連絡・SNS・共同作業サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "LinkedIn",
+      "kind": "service",
+      "title": "LinkedIn",
+      "reason": "Project-curated practical 連絡・SNS・共同作業サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Reddit",
+      "kind": "service",
+      "title": "Reddit",
+      "reason": "Project-curated practical 連絡・SNS・共同作業サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "YouTube",
+      "kind": "service",
+      "title": "YouTube",
+      "reason": "Project-curated practical 動画・音楽・旅行サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "YouTube Music",
+      "kind": "service",
+      "title": "YouTube Music",
+      "reason": "Project-curated practical 動画・音楽・旅行サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Apple Music",
+      "kind": "service",
+      "title": "Apple Music",
+      "reason": "Project-curated practical 動画・音楽・旅行サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Spotify",
+      "kind": "service",
+      "title": "Spotify",
+      "reason": "Project-curated practical 動画・音楽・旅行サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Netflix",
+      "kind": "service",
+      "title": "Netflix",
+      "reason": "Project-curated practical 動画・音楽・旅行サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Disney+",
+      "kind": "service",
+      "title": "Disney+",
+      "reason": "Project-curated practical 動画・音楽・旅行サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Prime Video",
+      "kind": "service",
+      "title": "Prime Video",
+      "reason": "Project-curated practical 動画・音楽・旅行サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Hulu",
+      "kind": "service",
+      "title": "Hulu",
+      "reason": "Project-curated practical 動画・音楽・旅行サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Twitch",
+      "kind": "service",
+      "title": "Twitch (service)",
+      "reason": "Project-curated practical 動画・音楽・旅行サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Steam",
+      "kind": "service",
+      "title": "Steam (service)",
+      "reason": "Project-curated practical 動画・音楽・旅行サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Google Maps",
+      "kind": "service",
+      "title": "Google Maps",
+      "reason": "Project-curated practical 動画・音楽・旅行サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Apple Maps",
+      "kind": "service",
+      "title": "Apple Maps",
+      "reason": "Project-curated practical 動画・音楽・旅行サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Booking.com",
+      "kind": "service",
+      "title": "Booking.com",
+      "reason": "Project-curated practical 動画・音楽・旅行サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Airbnb",
+      "kind": "service",
+      "title": "Airbnb",
+      "reason": "Project-curated practical 動画・音楽・旅行サービス requirement; exact source spelling and English article required."
+    },
+    {
+      "surface": "Bayesian inference",
+      "kind": "lexical",
+      "title": "Bayesian inference",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "hypothesis test",
+      "kind": "lexical",
+      "title": "Hypothesis test",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "logistic regression",
+      "kind": "lexical",
+      "title": "Logistic regression",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "randomized controlled trial",
+      "kind": "lexical",
+      "title": "Randomized controlled trial",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "sampling bias",
+      "kind": "lexical",
+      "title": "Sampling bias",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "HTML parser",
+      "kind": "lexical",
+      "title": "HTML parser",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "I2C",
+      "kind": "lexical",
+      "title": "I2C",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "carrier frequency",
+      "kind": "lexical",
+      "title": "Carrier frequency",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "pulse-width modulation",
+      "kind": "lexical",
+      "title": "Pulse-width modulation",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "real-time operating system",
+      "kind": "lexical",
+      "title": "Real-time operating system",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "serial communication",
+      "kind": "lexical",
+      "title": "Serial communication",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "PID controller",
+      "kind": "lexical",
+      "title": "PID controller",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "autonomous robot",
+      "kind": "lexical",
+      "title": "Autonomous robot",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "closed-loop control",
+      "kind": "lexical",
+      "title": "Closed-loop control",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "end effector",
+      "kind": "lexical",
+      "title": "End effector",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "motion planning",
+      "kind": "lexical",
+      "title": "Motion planning",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "open-loop control",
+      "kind": "lexical",
+      "title": "Open-loop control",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "path planning",
+      "kind": "lexical",
+      "title": "Path planning",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "robotic arm",
+      "kind": "lexical",
+      "title": "Robotic arm",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "sensor fusion",
+      "kind": "lexical",
+      "title": "Sensor fusion",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "servo motor",
+      "kind": "lexical",
+      "title": "Servo motor",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "step response",
+      "kind": "lexical",
+      "title": "Step response",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "adverse reaction",
+      "kind": "lexical",
+      "title": "Adverse reaction",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "blood oxygen",
+      "kind": "lexical",
+      "title": "Blood oxygen",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "ambient occlusion",
+      "kind": "lexical",
+      "title": "Ambient occlusion",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "level of detail",
+      "kind": "lexical",
+      "title": "Level of detail",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "normal mapping",
+      "kind": "lexical",
+      "title": "Normal mapping",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "physics engine",
+      "kind": "lexical",
+      "title": "Physics engine",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "skeletal animation",
+      "kind": "lexical",
+      "title": "Skeletal animation",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "anti-lock braking system",
+      "kind": "lexical",
+      "title": "Anti-lock braking system",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "intermodal transport",
+      "kind": "lexical",
+      "title": "Intermodal transport",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "last-mile delivery",
+      "kind": "lexical",
+      "title": "Last-mile delivery",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "traction control",
+      "kind": "lexical",
+      "title": "Traction control",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "audio interface",
+      "kind": "lexical",
+      "title": "Audio interface",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "balanced audio",
+      "kind": "lexical",
+      "title": "Balanced audio",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "impedance matching",
+      "kind": "lexical",
+      "title": "Impedance matching",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "sample rate",
+      "kind": "lexical",
+      "title": "Sample rate",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "bearing capacity",
+      "kind": "lexical",
+      "title": "Bearing capacity",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "construction management",
+      "kind": "lexical",
+      "title": "Construction management",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "geotechnical engineering",
+      "kind": "lexical",
+      "title": "Geotechnical engineering",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "load-bearing wall",
+      "kind": "lexical",
+      "title": "Load-bearing wall",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "bending moment",
+      "kind": "lexical",
+      "title": "Bending moment",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "hydraulic pressure",
+      "kind": "lexical",
+      "title": "Hydraulic pressure",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "thermal expansion",
+      "kind": "lexical",
+      "title": "Thermal expansion",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "compression artifact",
+      "kind": "lexical",
+      "title": "Compression artifact",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "digital zoom",
+      "kind": "lexical",
+      "title": "Digital zoom",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "image stabilization",
+      "kind": "lexical",
+      "title": "Image stabilization",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "lens aberration",
+      "kind": "lexical",
+      "title": "Lens aberration",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "optical zoom",
+      "kind": "lexical",
+      "title": "Optical zoom",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "video codec",
+      "kind": "lexical",
+      "title": "Video codec",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "computer-aided manufacturing",
+      "kind": "lexical",
+      "title": "Computer-aided manufacturing",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "dimensional tolerance",
+      "kind": "lexical",
+      "title": "Dimensional tolerance",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "failure analysis",
+      "kind": "lexical",
+      "title": "Failure analysis",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "finite element analysis",
+      "kind": "lexical",
+      "title": "Finite element analysis",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "root cause analysis",
+      "kind": "lexical",
+      "title": "Root cause analysis",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "surface roughness",
+      "kind": "lexical",
+      "title": "Surface roughness",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "connection pool",
+      "kind": "lexical",
+      "title": "Connection pool",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "crystal structure",
+      "kind": "lexical",
+      "title": "Crystal structure",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "fracture toughness",
+      "kind": "lexical",
+      "title": "Fracture toughness",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "thermal stress",
+      "kind": "lexical",
+      "title": "Thermal stress",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "electromagnetic interference",
+      "kind": "lexical",
+      "title": "Electromagnetic interference",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "operational amplifier",
+      "kind": "lexical",
+      "title": "Operational amplifier",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "energy storage",
+      "kind": "lexical",
+      "title": "Energy storage",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "load balancing",
+      "kind": "lexical",
+      "title": "Load balancing",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "power transmission",
+      "kind": "lexical",
+      "title": "Power transmission",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "environmental impact assessment",
+      "kind": "lexical",
+      "title": "Environmental impact assessment",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "life cycle assessment",
+      "kind": "lexical",
+      "title": "Life cycle assessment",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "soil contamination",
+      "kind": "lexical",
+      "title": "Soil contamination",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "wastewater treatment",
+      "kind": "lexical",
+      "title": "Wastewater treatment",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "water purification",
+      "kind": "lexical",
+      "title": "Water purification",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "water quality",
+      "kind": "lexical",
+      "title": "Water quality",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "food preservation",
+      "kind": "lexical",
+      "title": "Food preservation",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "food safety",
+      "kind": "lexical",
+      "title": "Food safety",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "inter-process communication",
+      "kind": "lexical",
+      "title": "Inter-process communication",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "standard output",
+      "kind": "lexical",
+      "title": "Standard output",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "large language model",
+      "kind": "lexical",
+      "title": "Large language model",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "overfitting",
+      "kind": "lexical",
+      "title": "Overfitting",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "reinforcement learning",
+      "kind": "lexical",
+      "title": "Reinforcement learning",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "underfitting",
+      "kind": "lexical",
+      "title": "Underfitting",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "measurement uncertainty",
+      "kind": "lexical",
+      "title": "Measurement uncertainty",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "reaction rate",
+      "kind": "lexical",
+      "title": "Reaction rate",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    },
+    {
+      "surface": "rubbish bin",
+      "kind": "lexical",
+      "title": "Rubbish bin",
+      "reason": "Previously declared required technical term; seek exact English concept label or article-title attestation, without removing unresolved targets."
+    }
+  ]
+}

@@ -22,9 +22,11 @@ import vocabulary_harness as h
 import vocabulary_sources as lexical
 from extend_lexicon import categories_for, roles_for
 from prepare_esdb import URL as ESDB_URL
+import world_sources
 
 PROFILE = 'dictionary-target-catalog-v2'
 CATALOG = h.REPO / 'english-ime/data/catalog'
+TOPIC_DOMAINS = lexical.DOMAINS | {'science', 'medical', 'education', 'sports', 'entertainment', 'food'}
 DOCUMENTS = {
     'python': ('python-glossary.rst', 'https://raw.githubusercontent.com/python/cpython/3.14/Doc/glossary.rst',
         'PYTHON-LICENSE.txt', 'https://raw.githubusercontent.com/python/cpython/3.14/LICENSE', 'PSF-2.0', 'Python Software Foundation and contributors'),
@@ -161,11 +163,11 @@ def registry(taxonomy, scopes):
     h.require(len(by_id) == len(topics['topics']) and len({r['category'] for r in by_id.values()}) == len(by_id), 'Duplicate topic')
     for topic in by_id.values():
         h.require(re.fullmatch(r'topic_[a-z0-9_]+', topic['category']) and
-            topic['domain'] in lexical.DOMAINS and all(isinstance(topic[k], str) and topic[k].strip()
+            topic['domain'] in TOPIC_DOMAINS and all(isinstance(topic[k], str) and topic[k].strip()
                 and not any(c in topic[k] for c in '\t\r\n') for k in ['id', 'label', 'definition', 'examples']), 'Invalid topic')
     for scope in config['scopes']:
-        h.require(scope['topic'] in by_id and scope['kind'] in {'lexical', 'person', 'product', 'language'} and
-            scope['tier'] in {'core', 'extended'} and set(scope['sources']) <= {'esdb', 'wordnet', 'mdn', 'homebrew', *DOCUMENTS} and
+        h.require(scope['topic'] in by_id and scope['kind'] in world_sources.KINDS and
+            scope['tier'] in {'core', 'extended'} and set(scope['sources']) <= {'esdb', 'wordnet', 'mdn', 'homebrew', *DOCUMENTS, *world_sources.PROVIDERS} and
             all(isinstance(s, str) and s.strip() for s in scope['terms']), 'Invalid scope')
     return by_id, config
 
@@ -226,6 +228,7 @@ def load_sources(args):
 def compile_targets(args):
     topics, config = registry(args.taxonomy, args.scopes)
     sources = load_sources(args)
+    world_index, world_manifest = world_sources.indices(args.source_dir, args.scopes) if config.get('worldSources') else ({}, None)
     targets = {}
 
     def add(surface, topic, kind, tier, providers, entity=None, form_kind='head'):
@@ -273,7 +276,8 @@ def compile_targets(args):
                     (r['pos_class'] in {'person', 'surname'} and r['pos'] == 'n0' if kind == 'person' else
                      r['pos_class'] in {'', 'upper', 'name', 'name?'})]
                 if eligible:
-                    row = next((r for r in eligible if roles_for(r['base_pos'], r['pos'])), eligible[0])
+                    row = next((r for r in eligible if r['word'] == r['lemma'] and roles_for(r['base_pos'], r['pos'])),
+                        next((r for r in eligible if roles_for(r['base_pos'], r['pos'])), eligible[0]))
                     roles = roles_for(row['base_pos'], row['pos'])
                     role = next(iter(sorted(roles)), None)
                     if role:
@@ -307,6 +311,11 @@ def compile_targets(args):
                 record = sources['documents'][provider]
                 item['proofs'].append(dict(source=provider, url=record['url'], sha256=record['sha256'], license=record['license'],
                     casePolicy='scope-declared-lowercase' if lower_scope and provider != 'linguist' else 'exact'))
+        item['proofs'].extend(world_sources.matching(world_index, surface, kind, item['providers']))
+        noun_head = next((p for p in item['proofs'] if p.get('source') == 'wiktionary' and p.get('headRole') == 'noun'), None)
+        if noun_head and (not item['sourceEntry'] or item['sourceEntry']['lemma'] != surface):
+            item['sourceEntry'] = dict(lemma=surface, categories=['noun'], source_ref='wiktionary:' + str(noun_head['revision']))
+            item['formKind'] = 'head'
         for proof in item['proofs']:
             proof['id'] = identity(proof)
         item['proofs'].sort(key=lambda p: p['id'])
@@ -336,6 +345,10 @@ def compile_targets(args):
     else:
         notice.write_text(expected_notice, encoding='utf-8')
     notices.append(dict(name=notice.name, path=str(notice), sha256=h.replay.sha(notice)))
+    if world_manifest:
+        public['worldSources'] = world_manifest
+        notices.extend(dict(name=name, path=str(args.source_dir.resolve() / name), sha256=record['sha256'])
+            for name, record in world_manifest['files'].items() if name.startswith('WORLD-'))
     return records, topics, dict(catalogV2=public, references=dict(notices=notices))
 
 
@@ -366,7 +379,7 @@ def audit(targets, topics, pairs, analyses, excluded):
         # A real dictionary candidate must exist. Input/ranking behavior belongs to the IME.
         registered = word in surfaces
         proofs = list(target['proofs'])
-        preferred = {'person': {'name_person'}, 'product': {'name_product', 'name_work'},
+        preferred = {'person': {'name_person'}, 'product': {'name_product', 'name_work'}, 'organization': {'name_organization'},
                      'language': {'identifier_computer_language'}}.get(target['kind'], set())
         eligible = sorted(analyses.get(word, []), key=lambda f: (
             bool(preferred) and not bool(f['memberships'] & preferred),
@@ -399,6 +412,10 @@ def audit(targets, topics, pairs, analyses, excluded):
             categories = required | set(source['categories'])
             if target['kind'] in {'person', 'product'}:
                 categories |= {'noun', 'noun_proper', 'name_' + target['kind']}
+            elif target['kind'] == 'organization':
+                categories |= {'noun', 'noun_proper', 'name_organization'}
+            elif target['kind'] in {'brand', 'service'}:
+                categories |= {'noun', 'noun_proper'}
             entry = dict(zip(lexical.FIELDS, ['catalog-' + target['id'], source['lemma'], word,
                 ','.join(sorted(categories)), category.removeprefix('domain_'), proofs[0]['url'], source['source_ref']]))
             # Unspecified lexical roles cannot support a different lemma.
@@ -450,7 +467,7 @@ def prepare(args):
             targetsSha256=h.replay.sha(directory / 'targets.jsonl'), selectedCandidates=len(operations), availableCandidates=len(operations),
             topics=topics, sourcePaths={k: str(getattr(args, k).resolve()) for k in ['source_dir', 'lexical_source_dir', 'esdb_dir', 'taxonomy', 'scopes']},
             additionalCategories=[dict(category=r['category'], definition=r['definition'], examples=r['examples']) for r in topics.values()],
-            codeHashes={name: h.replay.sha(Path(__file__).with_name(name)) for name in ['catalog_harness.py', 'vocabulary_harness.py', 'dictionary_sources.py']},
+            codeHashes={name: h.replay.sha(Path(__file__).with_name(name)) for name in ['catalog_harness.py', 'vocabulary_harness.py', 'dictionary_sources.py', 'world_sources.py']},
             baseRevision=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=h.REPO, text=True).strip())
         h.dump(directory / 'run.json', config)
         return dict(targets=len(targets), plannedOperations=len(operations), changes=dict(Counter(r['status'] for r in results)))
@@ -562,6 +579,9 @@ def main():
     commands = parser.add_subparsers(dest='command', required=True)
     fetcher = commands.add_parser('fetch')
     fetcher.add_argument('--source-dir', type=Path, required=True)
+    world = commands.add_parser('fetch-world')
+    world.add_argument('--source-dir', type=Path, required=True)
+    world.add_argument('--scopes', type=Path, default=CATALOG / 'core-targets.json')
     resolver = commands.add_parser('fetch-references')
     resolver.add_argument('--source-dir', type=Path, required=True)
     resolver.add_argument('--work-dir', type=Path, required=True)
@@ -583,7 +603,11 @@ def main():
         if name == 'report':
             p.add_argument('--assets', type=Path)
     args = parser.parse_args()
-    result = h.build(args) if args.command == 'build' else globals()[args.command.replace('-', '_')](args)
+    if args.command == 'fetch-world':
+        result = world_sources.fetch(args.source_dir, args.scopes)
+        result = dict(files=len(result['files']), batches=len(result['batches']), modelApiCalls=0)
+    else:
+        result = h.build(args) if args.command == 'build' else globals()[args.command.replace('-', '_')](args)
     print(json.dumps(result, ensure_ascii=False, sort_keys=True))
 
 

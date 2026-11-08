@@ -146,13 +146,17 @@ python3 -B english-ime/tools/verify_conversion_cli.py \
 カテゴリの補完率を別々に測定します。対象・保留語も分母に残します。1,000件は採用時の
 チェックポイントの大きさであり、必要語の上限ではありません。
 
-The versioned [taxonomy](data/catalog/taxonomy.json) defines 25 topical categories:
-daily general/time/family/home/food/shopping/money/transport/health/education/work/
-communication; technology development/web/mobile/OS/hardware/network/database/cloud/
-security/AI/languages; and person/product names. The independent
+The versioned [taxonomy](data/catalog/taxonomy.json) defines 64 topical categories.
+Alongside daily/IT vocabulary it covers mathematics, statistics, physics,
+electronics, embedded systems, mechanics, manufacturing, robotics, materials,
+chemistry, civil engineering, energy, environment, transport, aerospace, biology,
+medicine, agriculture, photography, audio and graphics. Personal names, public
+figures by field, products, brands, organizations and services have distinct scopes.
+The independent
 [target declarations](data/catalog/core-targets.json) combine NGSL headwords, explicit
-everyday/technical requirements, attested given names/surnames, and a frozen top-100
-Homebrew catalog selection. Primary product labels are core; explicit additional
+everyday/technical requirements, attested given names/surnames, selected named
+entities and a frozen top-100 Homebrew catalog selection. The latter is one
+software source, not a general product-popularity metric. Primary product labels are core; explicit additional
 labels are extended. These are scoped requirements, not a claim to cover all English.
 
 Topic, lexical role, lemma/form, entity kind and target tier are separate axes.
@@ -165,10 +169,16 @@ membership classifies declared surface vocabulary; it does not disambiguate sens
 
 Use Python 3.11+, the installed JDK 17 CLI, and new external work/output directories.
 First obtain the lexical sources with `dictionary_sources.py fetch` as shown below,
-and build the current full extended dictionary. Then:
+and build the current full extended dictionary. Install the pinned RDF parser in
+an external virtual environment (Python 3.11+) for QUDT, then activate it:
 
 ```sh
+python3 -m venv /tmp/english-catalog-venv
+/tmp/english-catalog-venv/bin/pip install -r english-ime/tools/requirements-catalog.txt
+source /tmp/english-catalog-venv/bin/activate
 python3 -B english-ime/tools/catalog_harness.py fetch \
+  --source-dir /tmp/english-catalog-sources
+python3 -B english-ime/tools/catalog_harness.py fetch-world \
   --source-dir /tmp/english-catalog-sources
 python3 -B english-ime/tools/catalog_harness.py prepare \
   --work-dir /tmp/english-catalog-run --assets /tmp/reviewed-english-extended \
@@ -183,6 +193,9 @@ python3 -B english-ime/tools/catalog_harness.py build \
 python3 -B english-ime/tools/catalog_harness.py report \
   --work-dir /tmp/english-catalog-run --assets /tmp/english-catalog-result/assets \
   --out /tmp/english-catalog-after
+python3 -B english-ime/tools/catalog_review.py export \
+  --work-dir /tmp/english-catalog-run --assets /tmp/english-catalog-result/assets \
+  --out /tmp/english-catalog-review
 ```
 
 `fetch` freezes source/notice bytes, URLs, authors, capture times and hashes; it
@@ -203,6 +216,50 @@ topics is not additive. Reports and all downloaded sources remain outside Git.
 Targets retain kind/entity identity, so a shared display spelling can have several
 targets. Coverage denominators count targets; newly registered spelling totals
 count distinct display strings.
+
+`fetch-world` freezes the Wikimedia API responses, QUDT Turtle and ChEBI OBO data,
+full license texts and attribution, together with both scope hashes. It paces new
+downloads and retries HTTP 429/503 with bounded backoff; cached responses are reused.
+Existing snapshots are verified rather than refreshed. Source APIs are contacted
+only during fetching, and never during adoption, ordinary builds or CI replay.
+
+[Named-entity requirements](data/catalog/world-entities.json) declare the desired
+spelling, kind, English article and selection reason before adoption. Wikidata
+evidence uses exact English/default (`mul`) labels or aliases, or an exactly
+matching English sitelink title. No disambiguation suffix is stripped. A personal
+entity must have a non-deprecated human statement. These are project-curated
+requirements with spelling evidence, not measured input-frequency rankings or a
+claim that all Wikidata items are useful IME entries.
+
+Wiktionary evidence requires an English section. An explicit `en-noun` head can
+establish a nominal lemma; it does not generate inflections. ESDB head records are
+preferred over a different lemma's participle (for example, the noun `kerning`
+does not inherit the verb `kern` merely because its record appears first).
+QUDT contributes English quantity-kind labels; ChEBI contributes non-obsolete
+three-star curated names and exact synonyms only. Definitions, quotations and
+source articles stay outside Git. Unsupported new spellings remain in the audit
+with their original spelling and reason.
+
+`catalog_review.py export` emits an external `adopted.tsv`, unique-spelling counts
+and a ready-to-paste PR word list with expandable per-category sections. It verifies
+every listed candidate and exact lexical/topic binding in the supplied binary
+assets first. [adopted-world.tsv](data/catalog/adopted-world.tsv) is the compact
+public adoption ledger for this expansion: spellings, kinds, categories, change
+types, lexical identities, source links, licenses and entity IDs. This requested
+dictionary data is committed; raw responses and operational reports are external.
+Inspect it directly on GitHub, download it as TSV, or read the full lists in the PR.
+CI verifies the ledger against regenerated assets using:
+
+```sh
+python3 -B english-ime/tools/catalog_review.py verify \
+  --assets /tmp/reviewed-english-extended
+```
+
+Counts distinguish new display spellings (including case variants) from existing
+spellings receiving metadata. Categories overlap and must not be summed. Source
+existence, a Wikipedia article, and popularity are separate signals. The current
+selection uses explicit required lists; it imports no page-view ranking or public
+name-frequency statistics and makes no global coverage claim.
 
 For missing MDN evidence, `fetch-references --work-dir /tmp/english-catalog-run
 --source-dir /tmp/english-catalog-new-sources` can add official glossary pages to a
@@ -228,6 +285,10 @@ Additional source notices accompany the adopted data:
 | [Transformers glossary](https://github.com/huggingface/transformers/blob/main/docs/source/en/glossary.md) | [Apache 2.0](https://github.com/huggingface/transformers/blob/main/LICENSE), Hugging Face and contributors |
 | [Kubernetes glossary](https://kubernetes.io/docs/reference/glossary/) | [CC BY 4.0](https://github.com/kubernetes/website/blob/main/LICENSE), Kubernetes documentation contributors |
 | [Linguist language names](https://github.com/github-linguist/linguist/blob/main/lib/linguist/languages.yml) | [MIT](https://github.com/github-linguist/linguist/blob/main/LICENSE), GitHub and Linguist contributors |
+| [Wikidata structured data](https://www.wikidata.org/wiki/Wikidata:Licensing) | CC0 1.0, Wikidata contributors |
+| [Wiktionary English headwords](https://en.wiktionary.org/wiki/Wiktionary:Copyrights) | CC BY-SA 4.0, Wiktionary contributors; no external quotations imported |
+| [QUDT quantity kinds](https://qudt.org/) | [CC BY 4.0](https://github.com/qudt/qudt-public-repo/blob/main/LICENSE), QUDT.org contributors |
+| [ChEBI names and exact synonyms](https://www.ebi.ac.uk/chebi/about/) | CC BY 4.0, EMBL-EBI / ChEBI contributors |
 
 NGSL, ESDB, WordNet, MDN and Homebrew terms/attribution from the acquisition section
 below are retained. Data licenses apply separately from the program's MIT license.

@@ -1,11 +1,11 @@
 {
   "baseManifestSha256": "3bc919f0deecd9142dfa8ee5059193de22dc553ea467f82a981e3b21b28ad1aa",
   "expectedOutputs": {
-    "grammar/bundle.properties": "7a5eaebb835e7c9ec1e4dc2dd711f57be061d1803aa316b0eaa0ce6324e40355",
-    "grammar/categories.ecat": "7c979389d65d8f08e59d141e7fc332a744b7d9c4b4b7939c8f572c86655b08c9",
-    "grammar/categories.tsv": "059442c5d6a317004bbfd6d167c060ff3697ca4df6207b85994796bd75971cd6",
-    "grammar/forms.tsv": "8520b920ffce0481b0d03eb8097e0df4b31ab905b863dc79c6237d9e5297b666",
-    "grammar/memberships.tsv": "6b0f5704b90ad7e96768e6e05fc451e743b32b247b1435fad1f6d97f72946d62",
+    "grammar/bundle.properties": "62801a0c4fa5ec2cb75f7e3eb4927be8ffddf3eb9585bf31497c541038c695ca",
+    "grammar/categories.ecat": "ec35936795043b5c054a90bc5776d23252abd26bd172b5ef5c1eb9f0c63018cb",
+    "grammar/categories.tsv": "7ff9c68106bfce23a6af0337930a421d92678c8ec697cd0ad7e1c7e0a0abdde5",
+    "grammar/forms.tsv": "d54f05662120809e765c950fb57b4ee3fc2b0defddde407f570e9e40d774fe0f",
+    "grammar/memberships.tsv": "4666d2524ef8e2c0da1203db70d4433f23ec7e9fe7fe85eda1fee0376ea84c27",
     "grammar/notices/CATALOG-DOTNET-LICENSE.txt": "243f341367f0ee35271c8924aaf5d075157c62538042e2f3c11ff9a1fcc5539c",
     "grammar/notices/CATALOG-KUBERNETES-LICENSE.txt": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
     "grammar/notices/CATALOG-LINGUIST-LICENSE.txt": "7717070c5a8c85440ff2312930bb30dd19002ab5bc235c9800042767f6f5242f",
@@ -21,15 +21,20 @@
     "grammar/notices/DICTIONARY-mdn-license.txt": "97a45d9a5c27c90ad7f058b20a870f11a24717f0eb4585f141948d25b74c4d89",
     "grammar/notices/PRACTICAL-ENGLISH-SOURCES.txt": "1f52e7d3b1e88a85aae0c1f56baec58f4f7d6f13f5fa2c49f4bbf342f46a140d",
     "grammar/notices/VOCABULARY-HARNESS-SOURCES.txt": "fe253ab24366a179d0249292ed074445510531ab3ac05b28d2fa45ba9542eada",
-    "qwerty_glide_index.dat": "b10b9dda86156e63e0cb2d2d0fdaea7ac2425aceb00914f969081da06a190b21",
-    "reading.dat": "4da1f1947cead7fe57128424ae8adfd069ec49d93caaf801144b95dbd58e9a73",
-    "token.dat": "9091f723ba41e94a89affc40dce791d90417d13b0c7c560538403d93e1e09f9b",
-    "word.dat": "14c53dd1eee155bb8a816fed87f5fa71da82c2be6b367f0ba7b85e6256460ecd"
+    "grammar/notices/WORLD-CC-BY-4.0.txt": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+    "grammar/notices/WORLD-CC-BY-SA-4.0.txt": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5",
+    "grammar/notices/WORLD-CC0-1.0.txt": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+    "grammar/notices/WORLD-QUDT-LICENSE.txt": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+    "grammar/notices/WORLD-SOURCE-ATTRIBUTION.txt": "88c45d813a7cb0f1c98eba074100e5a33897fdaddc031d1ea6945a43dd6b789b",
+    "qwerty_glide_index.dat": "1f41a6cf26a0f988b9d76c09831288cf0dec05c791b7f090a2c1e3681cb5e05c",
+    "reading.dat": "ca2dd56267489da3d2c73c663aeb1f54ab3ee6bd67bbf16636988f6dc5def62b",
+    "token.dat": "69381611bf894e0fc3c0772086109bfa9aaf14e15eebae3fc757143c7fb71a9c",
+    "word.dat": "250ea35a9c973f417cac9bf13db64d3aaa914b1f80b3fa15c097fb548b8e73a4"
   },
   "files": {
-    "categories.tsv": "4f5bf99dc186833917f0e3d4e7cb32aab609f6a8848eab8546893629e0fc8ff6",
-    "entries.tsv": "ab80adb7e29c6c421bb50700bab449a34d83380bd69173c798bcac045e6de765",
-    "metadata.tsv": "1507562a53c86432de50cab8bf0b672e72d42368233e6c1e4ee18b691fb78e71",
+    "categories.tsv": "faac755a71ab1ec1f9cd877dedcebf2bf204b2954c015002ffce42cf28052096",
+    "entries.tsv": "0a32878bec13954bdd03253d2c0c67518ffd407730b138748da2e5b40d32e82d",
+    "metadata.tsv": "2eb9f74982b37ca47575010d890ce179490bc88ebcd1ab8fd0640b8ed4b33cda",
     "notices/CATALOG-DOTNET-LICENSE.txt": "243f341367f0ee35271c8924aaf5d075157c62538042e2f3c11ff9a1fcc5539c",
     "notices/CATALOG-KUBERNETES-LICENSE.txt": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
     "notices/CATALOG-LINGUIST-LICENSE.txt": "7717070c5a8c85440ff2312930bb30dd19002ab5bc235c9800042767f6f5242f",
@@ -44,7 +49,12 @@
     "notices/DICTIONARY-homebrew-license.txt": "abd8be86c5738400f30c426bc88d90495b2dcfca9fe20b8d9b925599a55528b0",
     "notices/DICTIONARY-mdn-license.txt": "97a45d9a5c27c90ad7f058b20a870f11a24717f0eb4585f141948d25b74c4d89",
     "notices/PRACTICAL-ENGLISH-SOURCES.txt": "1f52e7d3b1e88a85aae0c1f56baec58f4f7d6f13f5fa2c49f4bbf342f46a140d",
-    "notices/VOCABULARY-HARNESS-SOURCES.txt": "fe253ab24366a179d0249292ed074445510531ab3ac05b28d2fa45ba9542eada"
+    "notices/VOCABULARY-HARNESS-SOURCES.txt": "fe253ab24366a179d0249292ed074445510531ab3ac05b28d2fa45ba9542eada",
+    "notices/WORLD-CC-BY-4.0.txt": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+    "notices/WORLD-CC-BY-SA-4.0.txt": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5",
+    "notices/WORLD-CC0-1.0.txt": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+    "notices/WORLD-QUDT-LICENSE.txt": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+    "notices/WORLD-SOURCE-ATTRIBUTION.txt": "88c45d813a7cb0f1c98eba074100e5a33897fdaddc031d1ea6945a43dd6b789b"
   },
   "kind": "reviewed-english-supplement-v2",
   "schemaVersion": 2,
@@ -89,7 +99,7 @@
       "url": "https://www.newgeneralservicelist.com/s/NGSL_12_lemmatized_for_research.csv"
     },
     "vocabularyHarness": {
-      "candidatesSha256": "688b71194c1294e9cd90a84bcdd69e42fa747a191ba12fee33b2fbc95d7974bf",
+      "candidatesSha256": "b92b681ec476ec0f751ee79b8f3dd4a9ca5ca220d31a8dd09dc8e8a197f1cfda",
       "catalogV2": {
         "documents": {
           "kubernetes": {
@@ -348,40 +358,1432 @@
           }
         ],
         "profile": "dictionary-target-catalog-v2",
-        "scopesSha256": "77fc3066d006b20f05be93a384f9edc86b643b2e4b5f074f766208898eba583e",
-        "taxonomySha256": "e7c83e8240b0641f25135306d54ffda27e2acf394ff6af626140b33acd3a7508",
-        "topicClassification": "Project-curated scope declarations; source attestation is spelling evidence, not sense disambiguation."
-      },
-      "decisionsSha256": "0c115ca874fb0d5731bac23c32ce0d56f2ecbd2f1e1033335223f28a7eaaade0",
-      "previous": {
-        "bsl-stats.csv": {
-          "bytes": 59643,
-          "sha256": "45055265eb4e74c65f5d26edabbc1a0da38c45bbb924cd9bd01fd391b74ff157",
-          "url": "https://www.newgeneralservicelist.com/s/BSL_120_stats.csv"
-        },
-        "bsl.csv": {
-          "bytes": 52302,
-          "sha256": "c29d181e7916250d21b5c41d63bdcfa67c992f66ae1dbaa207db82728f16d54d",
-          "url": "https://www.newgeneralservicelist.com/s/BSL_120_lemmatized_for_research.csv"
-        },
-        "candidatesSha256": "6936df3636707d006e91823686b15ba1ff2c2504a2279bb382a22f336a9aadfc",
-        "cmudict.dict": {
-          "bytes": 3618488,
-          "sha256": "81917843c7f44ce2b094ac63873c2c7a4cf802040792c455ba3ca406891c3d22",
-          "url": "https://raw.githubusercontent.com/cmusphinx/cmudict/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict"
-        },
-        "decisionsSha256": "dcbb534a805418488b72e80e55c203c852ee6e004d336ac994a4aed81310543b",
-        "dictionaryCatalog": {
-          "availableFacets": {
-            "basic": 88,
-            "daily": 95,
-            "inflection": 6,
-            "orthography": 1001,
-            "person": 976,
-            "product": 6366,
-            "technology": 6750
+        "scopesSha256": "a556be4b1507a05e60ac7db945d692aa01a1085f0a608a807887a3b1c9666874",
+        "taxonomySha256": "a823b1c2c3a9d6dcd83c4052d00f31b94336afa40da88c4245e9d273c9bd3bce",
+        "topicClassification": "Project-curated scope declarations; source attestation is spelling evidence, not sense disambiguation.",
+        "worldSources": {
+          "batches": [
+            {
+              "file": "wikidata-9f10d96fb63bc9aa820fa81a.json",
+              "provider": "wikidata",
+              "titles": [
+                "AMD",
+                "Abraham Lincoln",
+                "Ada Lovelace",
+                "Adele",
+                "Adidas",
+                "Adobe After Effects",
+                "Adobe Illustrator",
+                "Adobe Photoshop",
+                "Adobe Premiere Pro",
+                "Adverse reaction",
+                "Agatha Christie",
+                "Air France",
+                "AirPods",
+                "Airbnb",
+                "Akio Toyoda",
+                "Akira Kurosawa",
+                "Alan Turing",
+                "Albert Einstein",
+                "Alexander the Great",
+                "Amazon (company)",
+                "Amazon Echo",
+                "Amazon Kindle",
+                "Ambient occlusion",
+                "Amelia Earhart",
+                "Angela Merkel"
+              ]
+            },
+            {
+              "file": "wikidata-9e75d278c2245fd29d816af4.json",
+              "provider": "wikidata",
+              "titles": [
+                "Anti-lock braking system",
+                "Apple Inc.",
+                "Apple Maps",
+                "Apple Music",
+                "Apple Watch",
+                "Audio interface",
+                "Audrey Hepburn",
+                "AutoCAD",
+                "Autonomous robot",
+                "BMW 3 Series",
+                "Balanced audio",
+                "Barack Obama",
+                "Bayesian inference",
+                "Bearing capacity",
+                "Bending moment",
+                "Beyoncé",
+                "Bill Gates",
+                "Blender (software)",
+                "Blood oxygen",
+                "Bob Dylan",
+                "Boeing 747",
+                "Booking.com",
+                "Bruce Lee",
+                "Canon EOS 5D",
+                "Canon EOS R5"
+              ]
+            },
+            {
+              "file": "wikidata-d1d7603f5a1e90c62132fa30.json",
+              "provider": "wikidata",
+              "titles": [
+                "Canon EOS R6",
+                "Canon Inc.",
+                "Carrier frequency",
+                "Charles Darwin",
+                "Charles Dickens",
+                "Charlie Chaplin",
+                "Chinua Achebe",
+                "Christopher Nolan",
+                "Cleopatra",
+                "Closed-loop control",
+                "Coca-Cola",
+                "Compression artifact",
+                "Computer-aided manufacturing",
+                "Connection pool",
+                "Construction management",
+                "Costco",
+                "Cristiano Ronaldo",
+                "Crystal structure",
+                "DHL",
+                "DaVinci Resolve",
+                "David Bowie",
+                "Denzel Washington",
+                "Desmond Tutu",
+                "Diego Maradona",
+                "Digital zoom"
+              ]
+            },
+            {
+              "file": "wikidata-5377951d0487e55c50726677.json",
+              "provider": "wikidata",
+              "titles": [
+                "Dimensional tolerance",
+                "Discord",
+                "Disney+",
+                "Dyson Airblade",
+                "Electromagnetic interference",
+                "Elon Musk",
+                "Emirates (airline)",
+                "End effector",
+                "Energy storage",
+                "Environmental impact assessment",
+                "FaceTime",
+                "Failure analysis",
+                "Fanta",
+                "FedEx",
+                "Finite element analysis",
+                "Florence Nightingale",
+                "Food preservation",
+                "Food safety",
+                "Ford Mustang",
+                "Fracture toughness",
+                "Freddie Mercury",
+                "Fujifilm X-T5",
+                "Fujifilm X100",
+                "Gabriel García Márquez",
+                "Galileo Galilei"
+              ]
+            },
+            {
+              "file": "wikidata-ce8da72b1218be5772d5f5f9.json",
+              "provider": "wikidata",
+              "titles": [
+                "Genghis Khan",
+                "George Orwell",
+                "Geotechnical engineering",
+                "Gmail",
+                "GoPro",
+                "Google",
+                "Google Maps",
+                "Google Meet",
+                "Google Nest",
+                "Grace Hopper",
+                "HTML parser",
+                "Haruki Murakami",
+                "Hayao Miyazaki",
+                "Helen Keller",
+                "Honda",
+                "Honda Accord",
+                "Honda Civic",
+                "Hulu",
+                "Hydraulic pressure",
+                "Hypothesis test",
+                "I2C",
+                "IATA",
+                "IKEA",
+                "Ichiro Suzuki",
+                "Image stabilization"
+              ]
+            },
+            {
+              "file": "wikidata-cc5c19e6b8b6bc01bdc751cb.json",
+              "provider": "wikidata",
+              "titles": [
+                "Impedance matching",
+                "Indra Nooyi",
+                "Instagram",
+                "Instant Pot",
+                "Intel",
+                "Inter-process communication",
+                "Intermodal transport",
+                "Isaac Newton",
+                "J. R. R. Tolkien",
+                "Jacinda Ardern",
+                "Jackie Chan",
+                "Jane Austen",
+                "Jeff Bezos",
+                "Jensen Huang",
+                "Joan of Arc",
+                "Johann Sebastian Bach",
+                "Julius Caesar",
+                "Katalin Karikó",
+                "Katherine Johnson",
+                "Kit Kat",
+                "KitchenAid",
+                "Lady Gaga",
+                "Large language model",
+                "Last-mile delivery",
+                "LeBron James"
+              ]
+            },
+            {
+              "file": "wikidata-834128baaadf4b42ec307dc8.json",
+              "provider": "wikidata",
+              "titles": [
+                "Lee Kuan Yew",
+                "Lego",
+                "Lens aberration",
+                "Leonardo DiCaprio",
+                "Leonardo da Vinci",
+                "Level of detail",
+                "Life cycle assessment",
+                "LinkedIn",
+                "Lionel Messi",
+                "Lisa Su",
+                "Load balancing",
+                "Load-bearing wall",
+                "Logistic regression",
+                "Ludwig van Beethoven",
+                "Lufthansa",
+                "MATLAB",
+                "MacBook Air",
+                "MacBook Pro",
+                "Madonna",
+                "Mahatma Gandhi",
+                "Malala Yousafzai",
+                "Marie Curie",
+                "Mark Twain",
+                "Martin Luther King Jr.",
+                "Masayoshi Son"
+              ]
+            },
+            {
+              "file": "wikidata-1990c9a0d998a2e66aac7639.json",
+              "provider": "wikidata",
+              "titles": [
+                "Mazda MX-5",
+                "McDonald's",
+                "Measurement uncertainty",
+                "Meryl Streep",
+                "Michael Jackson",
+                "Michael Jordan",
+                "Michelangelo",
+                "Michelle Yeoh",
+                "Microsoft",
+                "Microsoft Excel",
+                "Microsoft Outlook",
+                "Microsoft PowerPoint",
+                "Microsoft Teams",
+                "Microsoft Word",
+                "Motion planning",
+                "Murasaki Shikibu",
+                "Naomi Osaka",
+                "Napoleon",
+                "Natsume Sōseki",
+                "Nelson Mandela",
+                "Nescafé",
+                "Nespresso",
+                "Nest Learning Thermostat",
+                "Nestlé",
+                "Netflix"
+              ]
+            },
+            {
+              "file": "wikidata-5eb423bcfaab383e24c60eb0.json",
+              "provider": "wikidata",
+              "titles": [
+                "Nike, Inc.",
+                "Nikola Tesla",
+                "Nikon",
+                "Nikon D850",
+                "Nikon Z6",
+                "Nikon Z7",
+                "Nintendo",
+                "Nintendo Switch",
+                "Nissan Leaf",
+                "Normal mapping",
+                "Nutella",
+                "Nvidia",
+                "Open-loop control",
+                "Operational amplifier",
+                "Oprah Winfrey",
+                "Optical zoom",
+                "Oreo",
+                "Outlook.com",
+                "Overfitting",
+                "PID controller",
+                "Panasonic",
+                "Patagonia, Inc.",
+                "Path planning",
+                "Pelé",
+                "Pepsi"
+              ]
+            },
+            {
+              "file": "wikidata-c69bcf1f4bc978da3ea23331.json",
+              "provider": "wikidata",
+              "titles": [
+                "Philips Hue",
+                "Physics engine",
+                "PlayStation 5",
+                "Power transmission",
+                "Prime Video",
+                "Prince (musician)",
+                "Procter & Gamble",
+                "Pulse-width modulation",
+                "Rabindranath Tagore",
+                "Rafael Nadal",
+                "Randomized controlled trial",
+                "Raspberry Pi",
+                "Reaction rate",
+                "Real-time operating system",
+                "Reddit",
+                "Reinforcement learning",
+                "Richard Feynman",
+                "Ring Video Doorbell",
+                "Robotic arm",
+                "Roger Federer",
+                "Roomba",
+                "Root cause analysis",
+                "Rosa Parks",
+                "Rubbish bin",
+                "Ryuichi Sakamoto"
+              ]
+            },
+            {
+              "file": "wikidata-dded5727b621adf339a3db6f.json",
+              "provider": "wikidata",
+              "titles": [
+                "Sample rate",
+                "Sampling bias",
+                "Samsung",
+                "Satya Nadella",
+                "Sei Shōnagon",
+                "Sensor fusion",
+                "Serena Williams",
+                "Serial communication",
+                "Servo motor",
+                "Shah Rukh Khan",
+                "Shinzo Abe",
+                "Shohei Ohtani",
+                "Signal (software)",
+                "Simone Biles",
+                "Singapore Airlines",
+                "Skeletal animation",
+                "Slack (software)",
+                "SodaStream",
+                "Soichiro Honda",
+                "Soil contamination",
+                "SolidWorks",
+                "Sonos",
+                "Sony",
+                "Spotify",
+                "Sprite (drink)"
+              ]
+            },
+            {
+              "file": "wikidata-7642e57659fcf8b00b9b18b5.json",
+              "provider": "wikidata",
+              "titles": [
+                "Standard output",
+                "Starbucks",
+                "Steam (service)",
+                "Steam Deck",
+                "Step response",
+                "Stephen Hawking",
+                "Steve Jobs",
+                "Steven Spielberg",
+                "Surface roughness",
+                "TSMC",
+                "Taylor Swift",
+                "Telegram (software)",
+                "Tesla Model 3",
+                "Tesla Model Y",
+                "The North Face",
+                "Thermal expansion",
+                "Thermal stress",
+                "Thermomix",
+                "ThinkPad",
+                "TikTok",
+                "Tim Berners-Lee",
+                "Tim Cook",
+                "Tom Hanks",
+                "Toni Morrison",
+                "Toyota"
+              ]
+            },
+            {
+              "file": "wikidata-b6c73765d409f12c8f724b66.json",
+              "provider": "wikidata",
+              "titles": [
+                "Toyota Corolla",
+                "Toyota Land Cruiser",
+                "Toyota Prius",
+                "Toyota Yaris",
+                "Traction control",
+                "Tu Youyou",
+                "Twitch (service)",
+                "Underfitting",
+                "Unilever",
+                "Uniqlo",
+                "United Parcel Service",
+                "Usain Bolt",
+                "Video codec",
+                "Virginia Woolf",
+                "Volkswagen Golf",
+                "Walkman",
+                "Walmart",
+                "Wangari Maathai",
+                "Warren Buffett",
+                "Wastewater treatment",
+                "Water purification",
+                "Water quality",
+                "WhatsApp",
+                "William Shakespeare",
+                "Winston Churchill"
+              ]
+            },
+            {
+              "file": "wikidata-9c562dfbe0f6c467238a06da.json",
+              "provider": "wikidata",
+              "titles": [
+                "Wolfgang Amadeus Mozart",
+                "Wolfram Mathematica",
+                "Xbox Series X and Series S",
+                "YouTube",
+                "YouTube Music",
+                "iMac",
+                "iPad",
+                "iPhone",
+                "iPod"
+              ]
+            },
+            {
+              "file": "wiktionary-c42b75fbd6db7f6bc95a7d1f.json",
+              "provider": "wiktionary",
+              "titles": [
+                "3D printing",
+                "Bayesian inference",
+                "CAD",
+                "CNC",
+                "DNA",
+                "DNA sequencing",
+                "Fourier transform",
+                "I2C",
+                "Kalman filter",
+                "Laplace transform",
+                "MIDI",
+                "PID controller",
+                "Poisson distribution",
+                "RNA",
+                "SPI",
+                "UART",
+                "Young's modulus",
+                "acceleration",
+                "accelerometer",
+                "accuracy",
+                "acid rain",
+                "acidity",
+                "acoustics",
+                "activation energy",
+                "actuator"
+              ]
+            },
+            {
+              "file": "wiktionary-5b506a86d20751375bc3cf84.json",
+              "provider": "wiktionary",
+              "titles": [
+                "additive manufacturing",
+                "adverse reaction",
+                "aerodynamics",
+                "aerospace engineering",
+                "aggregate",
+                "agriculture",
+                "ailerons",
+                "air pollution",
+                "aircraft",
+                "airfoil",
+                "algebra",
+                "alkalinity",
+                "alloy",
+                "alternating current",
+                "aluminium",
+                "aluminum",
+                "ambient occlusion",
+                "amino acid",
+                "amplitude",
+                "analog signal",
+                "analog-to-digital converter",
+                "anatomy",
+                "anesthesia",
+                "angular momentum",
+                "animation"
+              ]
+            },
+            {
+              "file": "wiktionary-ca6489400fcffb4efffe4a8e.json",
+              "provider": "wiktionary",
+              "titles": [
+                "antenna",
+                "anti-aliasing",
+                "anti-lock braking system",
+                "antibody",
+                "antigen",
+                "aperture",
+                "aquaculture",
+                "architecture",
+                "arithmetic",
+                "ascorbic acid",
+                "aspect ratio",
+                "asphalt",
+                "atom",
+                "audio interface",
+                "autofocus",
+                "autonomous robot",
+                "bacteria",
+                "balanced audio",
+                "battery capacity",
+                "baud rate",
+                "beam",
+                "bearing",
+                "bearing capacity",
+                "belt drive",
+                "bending moment"
+              ]
+            },
+            {
+              "file": "wiktionary-e353dc5b32d75a2e0445a59e.json",
+              "provider": "wiktionary",
+              "titles": [
+                "binomial distribution",
+                "biodegradable",
+                "biodiversity",
+                "biopsy",
+                "bit depth",
+                "bitrate",
+                "blood glucose",
+                "blood oxygen",
+                "bootloader",
+                "brake",
+                "brazing",
+                "brittleness",
+                "building code",
+                "building envelope",
+                "caffeine",
+                "calcium carbonate",
+                "calculus",
+                "calibration",
+                "camshaft",
+                "cantilever",
+                "capacitance",
+                "capacitor",
+                "carbon capture",
+                "carbon dioxide",
+                "carbon fiber"
+              ]
+            },
+            {
+              "file": "wiktionary-5e7756c6616b5ee1bd66450d.json",
+              "provider": "wiktionary",
+              "titles": [
+                "carbon fibre",
+                "carbon footprint",
+                "carbon neutrality",
+                "carrier frequency",
+                "casting",
+                "catalyst",
+                "catheter",
+                "cell",
+                "cell division",
+                "cell membrane",
+                "ceramic",
+                "chain drive",
+                "charging station",
+                "chemical bond",
+                "chemical reactor",
+                "chromatic aberration",
+                "chromosome",
+                "circular economy",
+                "citric acid",
+                "civil engineering",
+                "clearance",
+                "climate change",
+                "clinical trial",
+                "closed-loop control",
+                "clutch"
+              ]
+            },
+            {
+              "file": "wiktionary-1265d9621150d1d9d7b9d32b.json",
+              "provider": "wiktionary",
+              "titles": [
+                "coefficient",
+                "cold chain",
+                "collision detection",
+                "color grading",
+                "color space",
+                "colour space",
+                "column",
+                "combustion chamber",
+                "complex number",
+                "composite material",
+                "composting",
+                "compression artifact",
+                "compressor",
+                "computed tomography",
+                "computer graphics",
+                "computer-aided design",
+                "computer-aided manufacturing",
+                "concentration",
+                "conductance",
+                "confidence interval",
+                "construction management",
+                "contour line",
+                "contraindication",
+                "control group",
+                "control system"
+              ]
+            },
+            {
+              "file": "wiktionary-7c39d9f14efd6137a2fb10dd.json",
+              "provider": "wiktionary",
+              "titles": [
+                "copper",
+                "correlation",
+                "corrosion",
+                "coupling",
+                "covariance",
+                "crankshaft",
+                "creep",
+                "crop rotation",
+                "crystal structure",
+                "crystallization",
+                "cultivar",
+                "current",
+                "cylinder",
+                "damper",
+                "decibel",
+                "decimal",
+                "defibrillator",
+                "degrees of freedom",
+                "demodulation",
+                "density",
+                "depth of field",
+                "derivative",
+                "desalination",
+                "device driver",
+                "diagnosis"
+              ]
+            },
+            {
+              "file": "wiktionary-b4daeb9e942351ff2a40e627.json",
+              "provider": "wiktionary",
+              "titles": [
+                "differential",
+                "differential equation",
+                "diffraction",
+                "digital audio workstation",
+                "digital signal",
+                "digital zoom",
+                "digital-to-analog converter",
+                "dimensional tolerance",
+                "diode",
+                "direct current",
+                "distillation",
+                "dosage",
+                "drag",
+                "drag coefficient",
+                "drainage",
+                "drilling",
+                "ductility",
+                "dynamic range",
+                "echo",
+                "ecosystem",
+                "efficiency",
+                "eigenvalue",
+                "eigenvector",
+                "elasticity",
+                "electric field"
+              ]
+            },
+            {
+              "file": "wiktionary-75d56caa663d44fb719e0846.json",
+              "provider": "wiktionary",
+              "titles": [
+                "electric motor",
+                "electric vehicle",
+                "electrocardiogram",
+                "electrolysis",
+                "electromagnetic interference",
+                "elevation",
+                "elevator",
+                "embedded system",
+                "encoder",
+                "end effector",
+                "endoscope",
+                "energy",
+                "energy density",
+                "energy storage",
+                "entropy",
+                "environmental impact assessment",
+                "enzyme",
+                "equalizer",
+                "equation",
+                "escape velocity",
+                "estimator",
+                "ethanol",
+                "exponent",
+                "exposure",
+                "extrusion"
+              ]
+            },
+            {
+              "file": "wiktionary-d48c628ff17c7e7751f0a696.json",
+              "provider": "wiktionary",
+              "titles": [
+                "failure analysis",
+                "fatigue",
+                "feed",
+                "feedback",
+                "feedforward",
+                "fermentation",
+                "fertilizer",
+                "filtration",
+                "finite element analysis",
+                "firmware",
+                "flywheel",
+                "focal length",
+                "food additive",
+                "food preservation",
+                "food safety",
+                "force",
+                "forging",
+                "foundation",
+                "fraction",
+                "fracture toughness",
+                "frame rate",
+                "freight",
+                "frequency",
+                "friction",
+                "fuel cell"
+              ]
+            },
+            {
+              "file": "wiktionary-0aeae2ffbca21fec7c15403d.json",
+              "provider": "wiktionary",
+              "titles": [
+                "fuel economy",
+                "fuselage",
+                "game engine",
+                "gear",
+                "gear ratio",
+                "gene",
+                "gene expression",
+                "generator",
+                "genetic engineering",
+                "genome",
+                "geometry",
+                "geostationary orbit",
+                "geotechnical engineering",
+                "geothermal energy",
+                "germination",
+                "global illumination",
+                "global warming",
+                "glucose",
+                "grain boundary",
+                "graphene",
+                "greenhouse",
+                "greenhouse gas",
+                "grinding",
+                "ground loop",
+                "gyroscope"
+              ]
+            },
+            {
+              "file": "wiktionary-314fb12da8aa170c82c297c1.json",
+              "provider": "wiktionary",
+              "titles": [
+                "hardness",
+                "harmonics",
+                "harvest",
+                "headphone",
+                "heart rate",
+                "heat",
+                "heat exchanger",
+                "heat pump",
+                "heat treatment",
+                "herbicide",
+                "horticulture",
+                "hybrid vehicle",
+                "hydraulic pressure",
+                "hydrogen peroxide",
+                "hydroponics",
+                "hydropower",
+                "hypothesis test",
+                "image sensor",
+                "image stabilization",
+                "impedance",
+                "impedance matching",
+                "inductance",
+                "inductor",
+                "inequality",
+                "injection molding"
+              ]
+            },
+            {
+              "file": "wiktionary-04c95e084b0443ffa9a0324c.json",
+              "provider": "wiktionary",
+              "titles": [
+                "integer",
+                "integral",
+                "integrated circuit",
+                "intermodal transport",
+                "internal combustion engine",
+                "interrupt",
+                "inventory management",
+                "inverse kinematics",
+                "inverter",
+                "ion",
+                "irrigation",
+                "isotope",
+                "jet engine",
+                "kerning",
+                "keyframe",
+                "kinematics",
+                "kinetic energy",
+                "lactic acid",
+                "landfill",
+                "last-mile delivery",
+                "launch vehicle",
+                "lead-acid battery",
+                "lens aberration",
+                "level of detail",
+                "life cycle assessment"
+              ]
+            },
+            {
+              "file": "wiktionary-1378d1f74078c0198032fd8e.json",
+              "provider": "wiktionary",
+              "titles": [
+                "lift",
+                "likelihood",
+                "limiter",
+                "linear algebra",
+                "linear regression",
+                "lithium-ion battery",
+                "livestock",
+                "load balancing",
+                "load-bearing wall",
+                "localization",
+                "logarithm",
+                "logic analyzer",
+                "logic gate",
+                "logistic regression",
+                "logistics",
+                "loudspeaker",
+                "low Earth orbit",
+                "lubrication",
+                "machining",
+                "magnetic field",
+                "magnetic resonance imaging",
+                "manipulator",
+                "manufacturing",
+                "mass",
+                "matrix"
+              ]
+            },
+            {
+              "file": "wiktionary-7f369839c496a11ff026716d.json",
+              "provider": "wiktionary",
+              "titles": [
+                "mean",
+                "measurement uncertainty",
+                "mechanical advantage",
+                "median",
+                "metabolism",
+                "microcontroller",
+                "microorganism",
+                "microphone",
+                "milling",
+                "mode",
+                "modulation",
+                "molar mass",
+                "molarity",
+                "molecule",
+                "moment of inertia",
+                "momentum",
+                "motion capture",
+                "motion planning",
+                "multimeter",
+                "noise gate",
+                "normal distribution",
+                "normal mapping",
+                "nozzle",
+                "nuclear power",
+                "numerical analysis"
+              ]
+            },
+            {
+              "file": "wiktionary-5ad30ecc488a819bcc16f7c6.json",
+              "provider": "wiktionary",
+              "titles": [
+                "open circuit",
+                "open-loop control",
+                "operational amplifier",
+                "optical zoom",
+                "optimization",
+                "orbital mechanics",
+                "orbital velocity",
+                "organ",
+                "oscillator",
+                "oscilloscope",
+                "outlier",
+                "overshoot",
+                "overtone",
+                "oxidation",
+                "ozone layer",
+                "p-value",
+                "pacemaker",
+                "particulate matter",
+                "pasteurization",
+                "path planning",
+                "payload",
+                "pesticide",
+                "phantom power",
+                "phase diagram",
+                "photodiode"
+              ]
+            },
+            {
+              "file": "wiktionary-c93a2216d46db6d767039727.json",
+              "provider": "wiktionary",
+              "titles": [
+                "photosynthesis",
+                "photovoltaic cell",
+                "physics engine",
+                "physiology",
+                "piston",
+                "pitch",
+                "placebo",
+                "plasticity",
+                "pneumatics",
+                "polarization",
+                "pollination",
+                "polygon mesh",
+                "polymer",
+                "polymerase chain reaction",
+                "polymerization",
+                "polynomial",
+                "population",
+                "potential energy",
+                "power",
+                "power factor",
+                "power grid",
+                "power steering",
+                "power supply",
+                "power transmission",
+                "precision"
+              ]
+            },
+            {
+              "file": "wiktionary-7a3b3e60f17c3fda14e55e4b.json",
+              "provider": "wiktionary",
+              "titles": [
+                "pressure",
+                "prestressed concrete",
+                "prime number",
+                "printed circuit board",
+                "probability",
+                "prognosis",
+                "propeller",
+                "protein",
+                "pulley",
+                "pulse oximeter",
+                "pulse-width modulation",
+                "quality assurance",
+                "quality control",
+                "radio frequency",
+                "rail gauge",
+                "railroad",
+                "railway",
+                "random variable",
+                "randomized controlled trial",
+                "raster graphics",
+                "rasterization",
+                "rational number",
+                "ray tracing",
+                "reaction rate",
+                "real number"
+              ]
+            },
+            {
+              "file": "wiktionary-771d51e5a83a6fa6c799371b.json",
+              "provider": "wiktionary",
+              "titles": [
+                "real-time operating system",
+                "receiver",
+                "rectifier",
+                "recycling",
+                "reentry",
+                "refraction",
+                "regenerative braking",
+                "rehabilitation",
+                "reinforced concrete",
+                "rendering",
+                "renewable energy",
+                "resistance",
+                "resistor",
+                "resonance",
+                "respiratory rate",
+                "retaining wall",
+                "reverberation",
+                "rigging",
+                "robotic arm",
+                "rocket engine",
+                "rolling stock",
+                "root cause analysis",
+                "rudder",
+                "sample",
+                "sample rate"
+              ]
+            },
+            {
+              "file": "wiktionary-1d40e9ffc9169ab947ad61bd.json",
+              "provider": "wiktionary",
+              "titles": [
+                "sample size",
+                "sampling bias",
+                "sampling rate",
+                "satellite",
+                "seismic design",
+                "semiconductor",
+                "sensor fusion",
+                "serial communication",
+                "servo motor",
+                "setpoint",
+                "settling time",
+                "sewage",
+                "shader",
+                "shaft",
+                "shear stress",
+                "shear wall",
+                "sheet metal",
+                "shelf life",
+                "short circuit",
+                "shutter speed",
+                "signal processing",
+                "skeletal animation",
+                "slope",
+                "smart grid",
+                "sodium bicarbonate"
+              ]
+            },
+            {
+              "file": "wiktionary-6394f07233f616280fc50704.json",
+              "provider": "wiktionary",
+              "titles": [
+                "sodium chloride",
+                "soil contamination",
+                "soil fertility",
+                "soil mechanics",
+                "solar panel",
+                "solar power",
+                "soldering",
+                "solute",
+                "solution",
+                "solvent",
+                "sound pressure",
+                "sound pressure level",
+                "spacecraft",
+                "specific heat",
+                "sphygmomanometer",
+                "spring",
+                "stability",
+                "stainless steel",
+                "standard deviation",
+                "state space",
+                "statistical process control",
+                "statistical significance",
+                "statistics",
+                "steel",
+                "steering"
+              ]
+            },
+            {
+              "file": "wiktionary-7fc1cbc3b4dd03c1ba33010b.json",
+              "provider": "wiktionary",
+              "titles": [
+                "stem cell",
+                "step response",
+                "stepper motor",
+                "sterilization",
+                "stethoscope",
+                "structural engineering",
+                "sucrose",
+                "supply chain",
+                "surface finish",
+                "surface roughness",
+                "surveying",
+                "suspension",
+                "sustainability",
+                "syringe",
+                "temperature",
+                "tensile strength",
+                "tensile stress",
+                "tensor",
+                "texture mapping",
+                "thermal conductivity",
+                "thermal energy",
+                "thermal expansion",
+                "thermal insulation",
+                "thermal stress",
+                "thermocouple"
+              ]
+            },
+            {
+              "file": "wiktionary-413ad8acd1dca43964a09cf2.json",
+              "provider": "wiktionary",
+              "titles": [
+                "thrust",
+                "timbre",
+                "time series",
+                "tissue",
+                "titanium",
+                "tolerance",
+                "torque",
+                "toughness",
+                "traction control",
+                "trajectory",
+                "transducer",
+                "transfer function",
+                "transformer",
+                "transistor",
+                "transmission",
+                "transmitter",
+                "truss",
+                "turbine",
+                "turbofan",
+                "turning",
+                "typography",
+                "ultrasound",
+                "variance",
+                "vector",
+                "vector graphics"
+              ]
+            },
+            {
+              "file": "wiktionary-9111210798a0b6897977f73e.json",
+              "provider": "wiktionary",
+              "titles": [
+                "velocity",
+                "ventilator",
+                "vertex",
+                "vibration",
+                "video codec",
+                "virus",
+                "voltage",
+                "voltage regulator",
+                "warehouse",
+                "wastewater treatment",
+                "watchdog timer",
+                "water purification",
+                "water quality",
+                "waterproofing",
+                "wavelength",
+                "welding",
+                "white balance",
+                "wind power",
+                "work",
+                "yield",
+                "yield strength"
+              ]
+            }
+          ],
+          "files": {
+            "WORLD-CC-BY-4.0.txt": {
+              "sha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+              "url": "https://creativecommons.org/licenses/by/4.0/legalcode.txt"
+            },
+            "WORLD-CC-BY-SA-4.0.txt": {
+              "sha256": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5",
+              "url": "https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt"
+            },
+            "WORLD-CC0-1.0.txt": {
+              "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+              "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt"
+            },
+            "WORLD-QUDT-LICENSE.txt": {
+              "sha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+              "url": "https://raw.githubusercontent.com/qudt/qudt-public-repo/main/LICENSE"
+            },
+            "WORLD-SOURCE-ATTRIBUTION.txt": {
+              "sha256": "88c45d813a7cb0f1c98eba074100e5a33897fdaddc031d1ea6945a43dd6b789b"
+            },
+            "chebi.obo": {
+              "sha256": "7ff868c74210e884094de3b8883e50b291cf9978940afece20f1fa529fd0f712",
+              "url": "https://ftp.ebi.ac.uk/pub/databases/chebi/ontology/chebi_lite.obo"
+            },
+            "qudt.ttl": {
+              "sha256": "424daa03c32aca7074512b5218062c1690b884100fe05fd3c8ad4d25c925304a",
+              "url": "https://raw.githubusercontent.com/qudt/qudt-public-repo/main/src/main/rdf/vocab/quantitykinds/VOCAB_QUDT-QUANTITY-KINDS-ALL.ttl"
+            },
+            "wikidata-1990c9a0d998a2e66aac7639.json": {
+              "sha256": "3d4043acbf0b9d4e04857b2e618bd8f0ebf43bdc6926831ceb3640d2fb8e834d",
+              "url": "https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=Mazda+MX-5%7CMcDonald%27s%7CMeasurement+uncertainty%7CMeryl+Streep%7CMichael+Jackson%7CMichael+Jordan%7CMichelangelo%7CMichelle+Yeoh%7CMicrosoft%7CMicrosoft+Excel%7CMicrosoft+Outlook%7CMicrosoft+PowerPoint%7CMicrosoft+Teams%7CMicrosoft+Word%7CMotion+planning%7CMurasaki+Shikibu%7CNaomi+Osaka%7CNapoleon%7CNatsume+S%C5%8Dseki%7CNelson+Mandela%7CNescaf%C3%A9%7CNespresso%7CNest+Learning+Thermostat%7CNestl%C3%A9%7CNetflix&props=info%7Clabels%7Caliases%7Cclaims%7Csitelinks%2Furls&languages=en%7Cmul&format=json"
+            },
+            "wikidata-5377951d0487e55c50726677.json": {
+              "sha256": "896f8c6bf9e412aa129d9ad2e150d6bd84fb69736ea77916d33e7c02b9778331",
+              "url": "https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=Dimensional+tolerance%7CDiscord%7CDisney%2B%7CDyson+Airblade%7CElectromagnetic+interference%7CElon+Musk%7CEmirates+%28airline%29%7CEnd+effector%7CEnergy+storage%7CEnvironmental+impact+assessment%7CFaceTime%7CFailure+analysis%7CFanta%7CFedEx%7CFinite+element+analysis%7CFlorence+Nightingale%7CFood+preservation%7CFood+safety%7CFord+Mustang%7CFracture+toughness%7CFreddie+Mercury%7CFujifilm+X-T5%7CFujifilm+X100%7CGabriel+Garc%C3%ADa+M%C3%A1rquez%7CGalileo+Galilei&props=info%7Clabels%7Caliases%7Cclaims%7Csitelinks%2Furls&languages=en%7Cmul&format=json"
+            },
+            "wikidata-5eb423bcfaab383e24c60eb0.json": {
+              "sha256": "089d3c0a23e536dec3c3ad04f31664bde2f686366b3c9265d11c990b18c910d4",
+              "url": "https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=Nike%2C+Inc.%7CNikola+Tesla%7CNikon%7CNikon+D850%7CNikon+Z6%7CNikon+Z7%7CNintendo%7CNintendo+Switch%7CNissan+Leaf%7CNormal+mapping%7CNutella%7CNvidia%7COpen-loop+control%7COperational+amplifier%7COprah+Winfrey%7COptical+zoom%7COreo%7COutlook.com%7COverfitting%7CPID+controller%7CPanasonic%7CPatagonia%2C+Inc.%7CPath+planning%7CPel%C3%A9%7CPepsi&props=info%7Clabels%7Caliases%7Cclaims%7Csitelinks%2Furls&languages=en%7Cmul&format=json"
+            },
+            "wikidata-7642e57659fcf8b00b9b18b5.json": {
+              "sha256": "57594f1bcf13c717aa0944b7a73fff5e138b5ab97c6e954ba43760e6dc34a35c",
+              "url": "https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=Standard+output%7CStarbucks%7CSteam+%28service%29%7CSteam+Deck%7CStep+response%7CStephen+Hawking%7CSteve+Jobs%7CSteven+Spielberg%7CSurface+roughness%7CTSMC%7CTaylor+Swift%7CTelegram+%28software%29%7CTesla+Model+3%7CTesla+Model+Y%7CThe+North+Face%7CThermal+expansion%7CThermal+stress%7CThermomix%7CThinkPad%7CTikTok%7CTim+Berners-Lee%7CTim+Cook%7CTom+Hanks%7CToni+Morrison%7CToyota&props=info%7Clabels%7Caliases%7Cclaims%7Csitelinks%2Furls&languages=en%7Cmul&format=json"
+            },
+            "wikidata-834128baaadf4b42ec307dc8.json": {
+              "sha256": "cfbfff9311e8ceaf87b61fd796cb46981083beb246645e5256a3b091c0035db9",
+              "url": "https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=Lee+Kuan+Yew%7CLego%7CLens+aberration%7CLeonardo+DiCaprio%7CLeonardo+da+Vinci%7CLevel+of+detail%7CLife+cycle+assessment%7CLinkedIn%7CLionel+Messi%7CLisa+Su%7CLoad+balancing%7CLoad-bearing+wall%7CLogistic+regression%7CLudwig+van+Beethoven%7CLufthansa%7CMATLAB%7CMacBook+Air%7CMacBook+Pro%7CMadonna%7CMahatma+Gandhi%7CMalala+Yousafzai%7CMarie+Curie%7CMark+Twain%7CMartin+Luther+King+Jr.%7CMasayoshi+Son&props=info%7Clabels%7Caliases%7Cclaims%7Csitelinks%2Furls&languages=en%7Cmul&format=json"
+            },
+            "wikidata-9c562dfbe0f6c467238a06da.json": {
+              "sha256": "93ea8281556880a7969bf7855c7475366b26305b86433b8714ea42b2deb01a5b",
+              "url": "https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=Wolfgang+Amadeus+Mozart%7CWolfram+Mathematica%7CXbox+Series+X+and+Series+S%7CYouTube%7CYouTube+Music%7CiMac%7CiPad%7CiPhone%7CiPod&props=info%7Clabels%7Caliases%7Cclaims%7Csitelinks%2Furls&languages=en%7Cmul&format=json"
+            },
+            "wikidata-9e75d278c2245fd29d816af4.json": {
+              "sha256": "4e4b9c926955b1bb2cc5520b1754c33c60e196c3b342abf957e9dcbb3cb4e72e",
+              "url": "https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=Anti-lock+braking+system%7CApple+Inc.%7CApple+Maps%7CApple+Music%7CApple+Watch%7CAudio+interface%7CAudrey+Hepburn%7CAutoCAD%7CAutonomous+robot%7CBMW+3+Series%7CBalanced+audio%7CBarack+Obama%7CBayesian+inference%7CBearing+capacity%7CBending+moment%7CBeyonc%C3%A9%7CBill+Gates%7CBlender+%28software%29%7CBlood+oxygen%7CBob+Dylan%7CBoeing+747%7CBooking.com%7CBruce+Lee%7CCanon+EOS+5D%7CCanon+EOS+R5&props=info%7Clabels%7Caliases%7Cclaims%7Csitelinks%2Furls&languages=en%7Cmul&format=json"
+            },
+            "wikidata-9f10d96fb63bc9aa820fa81a.json": {
+              "sha256": "bd64edcb68685e557b991ff869ce6f1c477fedee48271052917d39fc42821d3d",
+              "url": "https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=AMD%7CAbraham+Lincoln%7CAda+Lovelace%7CAdele%7CAdidas%7CAdobe+After+Effects%7CAdobe+Illustrator%7CAdobe+Photoshop%7CAdobe+Premiere+Pro%7CAdverse+reaction%7CAgatha+Christie%7CAir+France%7CAirPods%7CAirbnb%7CAkio+Toyoda%7CAkira+Kurosawa%7CAlan+Turing%7CAlbert+Einstein%7CAlexander+the+Great%7CAmazon+%28company%29%7CAmazon+Echo%7CAmazon+Kindle%7CAmbient+occlusion%7CAmelia+Earhart%7CAngela+Merkel&props=info%7Clabels%7Caliases%7Cclaims%7Csitelinks%2Furls&languages=en%7Cmul&format=json"
+            },
+            "wikidata-b6c73765d409f12c8f724b66.json": {
+              "sha256": "c39d8c4556e84fd3acd82141ef14e49fa34acfb382cc0f9e4f7f93930dfaaf24",
+              "url": "https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=Toyota+Corolla%7CToyota+Land+Cruiser%7CToyota+Prius%7CToyota+Yaris%7CTraction+control%7CTu+Youyou%7CTwitch+%28service%29%7CUnderfitting%7CUnilever%7CUniqlo%7CUnited+Parcel+Service%7CUsain+Bolt%7CVideo+codec%7CVirginia+Woolf%7CVolkswagen+Golf%7CWalkman%7CWalmart%7CWangari+Maathai%7CWarren+Buffett%7CWastewater+treatment%7CWater+purification%7CWater+quality%7CWhatsApp%7CWilliam+Shakespeare%7CWinston+Churchill&props=info%7Clabels%7Caliases%7Cclaims%7Csitelinks%2Furls&languages=en%7Cmul&format=json"
+            },
+            "wikidata-c69bcf1f4bc978da3ea23331.json": {
+              "sha256": "59a4f18b00e6eaef54853aee231b26f52f132a0c4bbabc2837dabbcf96faf57a",
+              "url": "https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=Philips+Hue%7CPhysics+engine%7CPlayStation+5%7CPower+transmission%7CPrime+Video%7CPrince+%28musician%29%7CProcter+%26+Gamble%7CPulse-width+modulation%7CRabindranath+Tagore%7CRafael+Nadal%7CRandomized+controlled+trial%7CRaspberry+Pi%7CReaction+rate%7CReal-time+operating+system%7CReddit%7CReinforcement+learning%7CRichard+Feynman%7CRing+Video+Doorbell%7CRobotic+arm%7CRoger+Federer%7CRoomba%7CRoot+cause+analysis%7CRosa+Parks%7CRubbish+bin%7CRyuichi+Sakamoto&props=info%7Clabels%7Caliases%7Cclaims%7Csitelinks%2Furls&languages=en%7Cmul&format=json"
+            },
+            "wikidata-cc5c19e6b8b6bc01bdc751cb.json": {
+              "sha256": "c51f8b5d6ed06dbf6c176c9c2ae1b6aa862cd307c06f124e7526f81e1c4aba81",
+              "url": "https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=Impedance+matching%7CIndra+Nooyi%7CInstagram%7CInstant+Pot%7CIntel%7CInter-process+communication%7CIntermodal+transport%7CIsaac+Newton%7CJ.+R.+R.+Tolkien%7CJacinda+Ardern%7CJackie+Chan%7CJane+Austen%7CJeff+Bezos%7CJensen+Huang%7CJoan+of+Arc%7CJohann+Sebastian+Bach%7CJulius+Caesar%7CKatalin+Karik%C3%B3%7CKatherine+Johnson%7CKit+Kat%7CKitchenAid%7CLady+Gaga%7CLarge+language+model%7CLast-mile+delivery%7CLeBron+James&props=info%7Clabels%7Caliases%7Cclaims%7Csitelinks%2Furls&languages=en%7Cmul&format=json"
+            },
+            "wikidata-ce8da72b1218be5772d5f5f9.json": {
+              "sha256": "08ed8c7ebc029171b308e571c50f5e7e2b12620662d4e42da237cbeef659f5a3",
+              "url": "https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=Genghis+Khan%7CGeorge+Orwell%7CGeotechnical+engineering%7CGmail%7CGoPro%7CGoogle%7CGoogle+Maps%7CGoogle+Meet%7CGoogle+Nest%7CGrace+Hopper%7CHTML+parser%7CHaruki+Murakami%7CHayao+Miyazaki%7CHelen+Keller%7CHonda%7CHonda+Accord%7CHonda+Civic%7CHulu%7CHydraulic+pressure%7CHypothesis+test%7CI2C%7CIATA%7CIKEA%7CIchiro+Suzuki%7CImage+stabilization&props=info%7Clabels%7Caliases%7Cclaims%7Csitelinks%2Furls&languages=en%7Cmul&format=json"
+            },
+            "wikidata-d1d7603f5a1e90c62132fa30.json": {
+              "sha256": "10c9475b8f55c60c824f817a98afc072b4980dc040f53f315dab866fb078e31e",
+              "url": "https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=Canon+EOS+R6%7CCanon+Inc.%7CCarrier+frequency%7CCharles+Darwin%7CCharles+Dickens%7CCharlie+Chaplin%7CChinua+Achebe%7CChristopher+Nolan%7CCleopatra%7CClosed-loop+control%7CCoca-Cola%7CCompression+artifact%7CComputer-aided+manufacturing%7CConnection+pool%7CConstruction+management%7CCostco%7CCristiano+Ronaldo%7CCrystal+structure%7CDHL%7CDaVinci+Resolve%7CDavid+Bowie%7CDenzel+Washington%7CDesmond+Tutu%7CDiego+Maradona%7CDigital+zoom&props=info%7Clabels%7Caliases%7Cclaims%7Csitelinks%2Furls&languages=en%7Cmul&format=json"
+            },
+            "wikidata-dded5727b621adf339a3db6f.json": {
+              "sha256": "754f845db1cd60a3fe5831f7e5068ab3b1b6535d33266b249ea25f6279a2703a",
+              "url": "https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=Sample+rate%7CSampling+bias%7CSamsung%7CSatya+Nadella%7CSei+Sh%C5%8Dnagon%7CSensor+fusion%7CSerena+Williams%7CSerial+communication%7CServo+motor%7CShah+Rukh+Khan%7CShinzo+Abe%7CShohei+Ohtani%7CSignal+%28software%29%7CSimone+Biles%7CSingapore+Airlines%7CSkeletal+animation%7CSlack+%28software%29%7CSodaStream%7CSoichiro+Honda%7CSoil+contamination%7CSolidWorks%7CSonos%7CSony%7CSpotify%7CSprite+%28drink%29&props=info%7Clabels%7Caliases%7Cclaims%7Csitelinks%2Furls&languages=en%7Cmul&format=json"
+            },
+            "wiktionary-04c95e084b0443ffa9a0324c.json": {
+              "sha256": "31f31658e4560af3a892f16fc2876d90e67e34c400666bbf898539fe63b5a392",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=integer%7Cintegral%7Cintegrated+circuit%7Cintermodal+transport%7Cinternal+combustion+engine%7Cinterrupt%7Cinventory+management%7Cinverse+kinematics%7Cinverter%7Cion%7Cirrigation%7Cisotope%7Cjet+engine%7Ckerning%7Ckeyframe%7Ckinematics%7Ckinetic+energy%7Clactic+acid%7Clandfill%7Clast-mile+delivery%7Claunch+vehicle%7Clead-acid+battery%7Clens+aberration%7Clevel+of+detail%7Clife+cycle+assessment&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-0aeae2ffbca21fec7c15403d.json": {
+              "sha256": "548786bc9cde92360d0f1b45570f46505e615e834c2c71789858a1a1d6df19e6",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=fuel+economy%7Cfuselage%7Cgame+engine%7Cgear%7Cgear+ratio%7Cgene%7Cgene+expression%7Cgenerator%7Cgenetic+engineering%7Cgenome%7Cgeometry%7Cgeostationary+orbit%7Cgeotechnical+engineering%7Cgeothermal+energy%7Cgermination%7Cglobal+illumination%7Cglobal+warming%7Cglucose%7Cgrain+boundary%7Cgraphene%7Cgreenhouse%7Cgreenhouse+gas%7Cgrinding%7Cground+loop%7Cgyroscope&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-1265d9621150d1d9d7b9d32b.json": {
+              "sha256": "fd68996dc59eb5b95336a498e46e235b410f0f427add35566113f91147a6999b",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=coefficient%7Ccold+chain%7Ccollision+detection%7Ccolor+grading%7Ccolor+space%7Ccolour+space%7Ccolumn%7Ccombustion+chamber%7Ccomplex+number%7Ccomposite+material%7Ccomposting%7Ccompression+artifact%7Ccompressor%7Ccomputed+tomography%7Ccomputer+graphics%7Ccomputer-aided+design%7Ccomputer-aided+manufacturing%7Cconcentration%7Cconductance%7Cconfidence+interval%7Cconstruction+management%7Ccontour+line%7Ccontraindication%7Ccontrol+group%7Ccontrol+system&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-1378d1f74078c0198032fd8e.json": {
+              "sha256": "d5181cdd095a7384c87776035219bee55e7f988efe326ab669ea374b69c44035",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=lift%7Clikelihood%7Climiter%7Clinear+algebra%7Clinear+regression%7Clithium-ion+battery%7Clivestock%7Cload+balancing%7Cload-bearing+wall%7Clocalization%7Clogarithm%7Clogic+analyzer%7Clogic+gate%7Clogistic+regression%7Clogistics%7Cloudspeaker%7Clow+Earth+orbit%7Clubrication%7Cmachining%7Cmagnetic+field%7Cmagnetic+resonance+imaging%7Cmanipulator%7Cmanufacturing%7Cmass%7Cmatrix&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-1d40e9ffc9169ab947ad61bd.json": {
+              "sha256": "65915e65d8e3377e0721e909dbd57efaf4a8a63bdeefc5cb62c2a8b105d9f5e6",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=sample+size%7Csampling+bias%7Csampling+rate%7Csatellite%7Cseismic+design%7Csemiconductor%7Csensor+fusion%7Cserial+communication%7Cservo+motor%7Csetpoint%7Csettling+time%7Csewage%7Cshader%7Cshaft%7Cshear+stress%7Cshear+wall%7Csheet+metal%7Cshelf+life%7Cshort+circuit%7Cshutter+speed%7Csignal+processing%7Cskeletal+animation%7Cslope%7Csmart+grid%7Csodium+bicarbonate&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-314fb12da8aa170c82c297c1.json": {
+              "sha256": "72acaf06ac6d8592c74c8c92cd52f99e087dc235fac728cd9eea076e0c4fc7e0",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=hardness%7Charmonics%7Charvest%7Cheadphone%7Cheart+rate%7Cheat%7Cheat+exchanger%7Cheat+pump%7Cheat+treatment%7Cherbicide%7Chorticulture%7Chybrid+vehicle%7Chydraulic+pressure%7Chydrogen+peroxide%7Chydroponics%7Chydropower%7Chypothesis+test%7Cimage+sensor%7Cimage+stabilization%7Cimpedance%7Cimpedance+matching%7Cinductance%7Cinductor%7Cinequality%7Cinjection+molding&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-413ad8acd1dca43964a09cf2.json": {
+              "sha256": "008925ea2066438dad937705c6034adf9421752e76ae7265bb7472737ff54205",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=thrust%7Ctimbre%7Ctime+series%7Ctissue%7Ctitanium%7Ctolerance%7Ctorque%7Ctoughness%7Ctraction+control%7Ctrajectory%7Ctransducer%7Ctransfer+function%7Ctransformer%7Ctransistor%7Ctransmission%7Ctransmitter%7Ctruss%7Cturbine%7Cturbofan%7Cturning%7Ctypography%7Cultrasound%7Cvariance%7Cvector%7Cvector+graphics&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-5ad30ecc488a819bcc16f7c6.json": {
+              "sha256": "5224a09f5527e9868781f73055bf1fc6d5010a54993dfd51bb53fe8e6c972b76",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=open+circuit%7Copen-loop+control%7Coperational+amplifier%7Coptical+zoom%7Coptimization%7Corbital+mechanics%7Corbital+velocity%7Corgan%7Coscillator%7Coscilloscope%7Coutlier%7Covershoot%7Covertone%7Coxidation%7Cozone+layer%7Cp-value%7Cpacemaker%7Cparticulate+matter%7Cpasteurization%7Cpath+planning%7Cpayload%7Cpesticide%7Cphantom+power%7Cphase+diagram%7Cphotodiode&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-5b506a86d20751375bc3cf84.json": {
+              "sha256": "ff5d21c5731e1a10f9d2e0e48b02c14b42a7de504d1b848c2bfae9d3056229da",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=additive+manufacturing%7Cadverse+reaction%7Caerodynamics%7Caerospace+engineering%7Caggregate%7Cagriculture%7Cailerons%7Cair+pollution%7Caircraft%7Cairfoil%7Calgebra%7Calkalinity%7Calloy%7Calternating+current%7Caluminium%7Caluminum%7Cambient+occlusion%7Camino+acid%7Camplitude%7Canalog+signal%7Canalog-to-digital+converter%7Canatomy%7Canesthesia%7Cangular+momentum%7Canimation&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-5e7756c6616b5ee1bd66450d.json": {
+              "sha256": "a86bcd48d447a36d84c078450bb3d7dcad09b7377394afd7add8c7a8dc7e943a",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=carbon+fibre%7Ccarbon+footprint%7Ccarbon+neutrality%7Ccarrier+frequency%7Ccasting%7Ccatalyst%7Ccatheter%7Ccell%7Ccell+division%7Ccell+membrane%7Cceramic%7Cchain+drive%7Ccharging+station%7Cchemical+bond%7Cchemical+reactor%7Cchromatic+aberration%7Cchromosome%7Ccircular+economy%7Ccitric+acid%7Ccivil+engineering%7Cclearance%7Cclimate+change%7Cclinical+trial%7Cclosed-loop+control%7Cclutch&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-6394f07233f616280fc50704.json": {
+              "sha256": "58f692d93e856b242b17d4b1e39c323a1138dc65be0faa0fbd29ee4f8362bb11",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=sodium+chloride%7Csoil+contamination%7Csoil+fertility%7Csoil+mechanics%7Csolar+panel%7Csolar+power%7Csoldering%7Csolute%7Csolution%7Csolvent%7Csound+pressure%7Csound+pressure+level%7Cspacecraft%7Cspecific+heat%7Csphygmomanometer%7Cspring%7Cstability%7Cstainless+steel%7Cstandard+deviation%7Cstate+space%7Cstatistical+process+control%7Cstatistical+significance%7Cstatistics%7Csteel%7Csteering&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-75d56caa663d44fb719e0846.json": {
+              "sha256": "d6cef6181fa82c9c94a394585de09fe4101a6ab72d0a82ca691ca969389a1304",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=electric+motor%7Celectric+vehicle%7Celectrocardiogram%7Celectrolysis%7Celectromagnetic+interference%7Celevation%7Celevator%7Cembedded+system%7Cencoder%7Cend+effector%7Cendoscope%7Cenergy%7Cenergy+density%7Cenergy+storage%7Centropy%7Cenvironmental+impact+assessment%7Cenzyme%7Cequalizer%7Cequation%7Cescape+velocity%7Cestimator%7Cethanol%7Cexponent%7Cexposure%7Cextrusion&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-771d51e5a83a6fa6c799371b.json": {
+              "sha256": "a58bd5f2d165a852cb4a0d8e5f7d482168d9d117c9259dbd570390764e233e5d",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=real-time+operating+system%7Creceiver%7Crectifier%7Crecycling%7Creentry%7Crefraction%7Cregenerative+braking%7Crehabilitation%7Creinforced+concrete%7Crendering%7Crenewable+energy%7Cresistance%7Cresistor%7Cresonance%7Crespiratory+rate%7Cretaining+wall%7Creverberation%7Crigging%7Crobotic+arm%7Crocket+engine%7Crolling+stock%7Croot+cause+analysis%7Crudder%7Csample%7Csample+rate&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-7a3b3e60f17c3fda14e55e4b.json": {
+              "sha256": "bc1420db207b36d8638cc02acace1a884b82d7b8f4c1500cdaeb13983200c016",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=pressure%7Cprestressed+concrete%7Cprime+number%7Cprinted+circuit+board%7Cprobability%7Cprognosis%7Cpropeller%7Cprotein%7Cpulley%7Cpulse+oximeter%7Cpulse-width+modulation%7Cquality+assurance%7Cquality+control%7Cradio+frequency%7Crail+gauge%7Crailroad%7Crailway%7Crandom+variable%7Crandomized+controlled+trial%7Craster+graphics%7Crasterization%7Crational+number%7Cray+tracing%7Creaction+rate%7Creal+number&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-7c39d9f14efd6137a2fb10dd.json": {
+              "sha256": "238e5425c318e7931d927efd172de50a450444363f34b21b11beb68e90fae99c",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=copper%7Ccorrelation%7Ccorrosion%7Ccoupling%7Ccovariance%7Ccrankshaft%7Ccreep%7Ccrop+rotation%7Ccrystal+structure%7Ccrystallization%7Ccultivar%7Ccurrent%7Ccylinder%7Cdamper%7Cdecibel%7Cdecimal%7Cdefibrillator%7Cdegrees+of+freedom%7Cdemodulation%7Cdensity%7Cdepth+of+field%7Cderivative%7Cdesalination%7Cdevice+driver%7Cdiagnosis&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-7f369839c496a11ff026716d.json": {
+              "sha256": "20418e21dabe2502c6fd6efd4765c926d35a0be49d9d87ab4a608b5e16785ffb",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=mean%7Cmeasurement+uncertainty%7Cmechanical+advantage%7Cmedian%7Cmetabolism%7Cmicrocontroller%7Cmicroorganism%7Cmicrophone%7Cmilling%7Cmode%7Cmodulation%7Cmolar+mass%7Cmolarity%7Cmolecule%7Cmoment+of+inertia%7Cmomentum%7Cmotion+capture%7Cmotion+planning%7Cmultimeter%7Cnoise+gate%7Cnormal+distribution%7Cnormal+mapping%7Cnozzle%7Cnuclear+power%7Cnumerical+analysis&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-7fc1cbc3b4dd03c1ba33010b.json": {
+              "sha256": "0021cf8398781b58a26fdc1c6bda16c166569c025c7f20bd6b303806cde9cf7d",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=stem+cell%7Cstep+response%7Cstepper+motor%7Csterilization%7Cstethoscope%7Cstructural+engineering%7Csucrose%7Csupply+chain%7Csurface+finish%7Csurface+roughness%7Csurveying%7Csuspension%7Csustainability%7Csyringe%7Ctemperature%7Ctensile+strength%7Ctensile+stress%7Ctensor%7Ctexture+mapping%7Cthermal+conductivity%7Cthermal+energy%7Cthermal+expansion%7Cthermal+insulation%7Cthermal+stress%7Cthermocouple&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-9111210798a0b6897977f73e.json": {
+              "sha256": "aa60ede21a91230a679a9855f34025b27d9fd702071b837c146981fbf52ca3af",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=velocity%7Cventilator%7Cvertex%7Cvibration%7Cvideo+codec%7Cvirus%7Cvoltage%7Cvoltage+regulator%7Cwarehouse%7Cwastewater+treatment%7Cwatchdog+timer%7Cwater+purification%7Cwater+quality%7Cwaterproofing%7Cwavelength%7Cwelding%7Cwhite+balance%7Cwind+power%7Cwork%7Cyield%7Cyield+strength&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-b4daeb9e942351ff2a40e627.json": {
+              "sha256": "1f3a7d9191461a16d73f4cee6d0cb173fe5ca0654ee9c6ed7b08b79930ca92ea",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=differential%7Cdifferential+equation%7Cdiffraction%7Cdigital+audio+workstation%7Cdigital+signal%7Cdigital+zoom%7Cdigital-to-analog+converter%7Cdimensional+tolerance%7Cdiode%7Cdirect+current%7Cdistillation%7Cdosage%7Cdrag%7Cdrag+coefficient%7Cdrainage%7Cdrilling%7Cductility%7Cdynamic+range%7Cecho%7Cecosystem%7Cefficiency%7Ceigenvalue%7Ceigenvector%7Celasticity%7Celectric+field&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-c42b75fbd6db7f6bc95a7d1f.json": {
+              "sha256": "579da1da81ca1749d255b33c2ca78ea8ddddfe3001f1b4a7072ddf9396397f64",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=3D+printing%7CBayesian+inference%7CCAD%7CCNC%7CDNA%7CDNA+sequencing%7CFourier+transform%7CI2C%7CKalman+filter%7CLaplace+transform%7CMIDI%7CPID+controller%7CPoisson+distribution%7CRNA%7CSPI%7CUART%7CYoung%27s+modulus%7Cacceleration%7Caccelerometer%7Caccuracy%7Cacid+rain%7Cacidity%7Cacoustics%7Cactivation+energy%7Cactuator&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-c93a2216d46db6d767039727.json": {
+              "sha256": "3d02817caacab3ea6fbc570a0a2918a497c86299b9cd5130c8120a7d611e0d67",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=photosynthesis%7Cphotovoltaic+cell%7Cphysics+engine%7Cphysiology%7Cpiston%7Cpitch%7Cplacebo%7Cplasticity%7Cpneumatics%7Cpolarization%7Cpollination%7Cpolygon+mesh%7Cpolymer%7Cpolymerase+chain+reaction%7Cpolymerization%7Cpolynomial%7Cpopulation%7Cpotential+energy%7Cpower%7Cpower+factor%7Cpower+grid%7Cpower+steering%7Cpower+supply%7Cpower+transmission%7Cprecision&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-ca6489400fcffb4efffe4a8e.json": {
+              "sha256": "4d0bae45bc6fd84e13a746d8c08e278da88c358a031b2e8a3e8d05b693af2db9",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=antenna%7Canti-aliasing%7Canti-lock+braking+system%7Cantibody%7Cantigen%7Caperture%7Caquaculture%7Carchitecture%7Carithmetic%7Cascorbic+acid%7Caspect+ratio%7Casphalt%7Catom%7Caudio+interface%7Cautofocus%7Cautonomous+robot%7Cbacteria%7Cbalanced+audio%7Cbattery+capacity%7Cbaud+rate%7Cbeam%7Cbearing%7Cbearing+capacity%7Cbelt+drive%7Cbending+moment&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-d48c628ff17c7e7751f0a696.json": {
+              "sha256": "aba921afc611595ac619fc70aee025ae532d0488b4a0d79beb6451179eecce97",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=failure+analysis%7Cfatigue%7Cfeed%7Cfeedback%7Cfeedforward%7Cfermentation%7Cfertilizer%7Cfiltration%7Cfinite+element+analysis%7Cfirmware%7Cflywheel%7Cfocal+length%7Cfood+additive%7Cfood+preservation%7Cfood+safety%7Cforce%7Cforging%7Cfoundation%7Cfraction%7Cfracture+toughness%7Cframe+rate%7Cfreight%7Cfrequency%7Cfriction%7Cfuel+cell&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            },
+            "wiktionary-e353dc5b32d75a2e0445a59e.json": {
+              "sha256": "8c9286784e81281a60fabd5b13bceee742bbeb88771587189befdbb4a2b67481",
+              "url": "https://en.wiktionary.org/w/api.php?action=query&titles=binomial+distribution%7Cbiodegradable%7Cbiodiversity%7Cbiopsy%7Cbit+depth%7Cbitrate%7Cblood+glucose%7Cblood+oxygen%7Cbootloader%7Cbrake%7Cbrazing%7Cbrittleness%7Cbuilding+code%7Cbuilding+envelope%7Ccaffeine%7Ccalcium+carbonate%7Ccalculus%7Ccalibration%7Ccamshaft%7Ccantilever%7Ccapacitance%7Ccapacitor%7Ccarbon+capture%7Ccarbon+dioxide%7Ccarbon+fiber&prop=revisions&rvprop=ids%7Ctimestamp%7Ccontent&rvslots=main&format=json"
+            }
           },
-          "manifest": {
+          "pins": {
+            "entitiesSha256": "9e8acdf4d5fea1c59b4b38903df017404b11b1ba164f7ff258e40a80b5c416bc",
+            "scopesSha256": "a556be4b1507a05e60ac7db945d692aa01a1085f0a608a807887a3b1c9666874"
+          },
+          "recordedAt": "2026-11-08T03:30:36.652326+00:00",
+          "schemaVersion": 1
+        }
+      },
+      "decisionsSha256": "e9f7c6a2af34e202dbff81b35e812b41d36daec686552e925e8f99dc8327f034",
+      "previous": {
+        "candidatesSha256": "688b71194c1294e9cd90a84bcdd69e42fa747a191ba12fee33b2fbc95d7974bf",
+        "catalogV2": {
+          "documents": {
+            "kubernetes": {
+              "attribution": "Kubernetes documentation contributors",
+              "file": "kubernetes-glossary.html",
+              "license": "CC-BY-4.0",
+              "notice": "KUBERNETES-LICENSE.txt",
+              "noticeSha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+              "noticeUrl": "https://raw.githubusercontent.com/kubernetes/website/main/LICENSE",
+              "recordedAt": "2026-11-08T01:33:08.011646+00:00",
+              "sha256": "a27090427012129ec8a2e376554c825356409e3dcd841a378b9edfdc0e3bf340",
+              "url": "https://kubernetes.io/docs/reference/glossary/"
+            },
+            "linguist": {
+              "attribution": "GitHub and Linguist contributors",
+              "file": "languages.yml",
+              "license": "MIT",
+              "notice": "LINGUIST-LICENSE.txt",
+              "noticeSha256": "7717070c5a8c85440ff2312930bb30dd19002ab5bc235c9800042767f6f5242f",
+              "noticeUrl": "https://raw.githubusercontent.com/github-linguist/linguist/main/LICENSE",
+              "recordedAt": "2026-11-08T01:33:08.012139+00:00",
+              "sha256": "09c13db185b6f9b8f64b932dcd79815fef4a67624ab2dade9c194388d1dbe29d",
+              "url": "https://raw.githubusercontent.com/github-linguist/linguist/main/lib/linguist/languages.yml"
+            },
+            "ml": {
+              "attribution": "Microsoft and .NET documentation contributors",
+              "file": "ml-glossary.md",
+              "license": "CC-BY-4.0",
+              "notice": "DOTNET-LICENSE.txt",
+              "noticeSha256": "243f341367f0ee35271c8924aaf5d075157c62538042e2f3c11ff9a1fcc5539c",
+              "noticeUrl": "https://raw.githubusercontent.com/dotnet/docs/main/LICENSE",
+              "recordedAt": "2026-11-08T01:33:08.009690+00:00",
+              "sha256": "30303111eca9b72f9a4c11a02fbc2b8c48ee9abbfeccd492684bc2c4fa3c1762",
+              "url": "https://raw.githubusercontent.com/dotnet/docs/main/docs/machine-learning/resources/glossary.md"
+            },
+            "postgres": {
+              "attribution": "PostgreSQL Global Development Group; University of California",
+              "file": "postgres-glossary.sgml",
+              "license": "PostgreSQL",
+              "notice": "POSTGRES-LICENSE.txt",
+              "noticeSha256": "3d6af92ff8a4c2cdf69afb1cf44edea727922f5cd0cf8b5f72b11cdecac8fdfd",
+              "noticeUrl": "https://raw.githubusercontent.com/postgres/postgres/REL_18_STABLE/COPYRIGHT",
+              "recordedAt": "2026-11-08T01:33:08.009328+00:00",
+              "sha256": "17b38c7a0a0673fc0ef0bb8b0f9a4e759b3384ca4dce151cf341c6aba7c6dc12",
+              "url": "https://raw.githubusercontent.com/postgres/postgres/REL_18_STABLE/doc/src/sgml/glossary.sgml"
+            },
+            "python": {
+              "attribution": "Python Software Foundation and contributors",
+              "file": "python-glossary.rst",
+              "license": "PSF-2.0",
+              "notice": "PYTHON-LICENSE.txt",
+              "noticeSha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
+              "noticeUrl": "https://raw.githubusercontent.com/python/cpython/3.14/LICENSE",
+              "recordedAt": "2026-11-08T01:33:08.008407+00:00",
+              "sha256": "6c8970d3b96a4eb842de64d0d0cad373d8586e320f3aaca7017763aba772af9f",
+              "url": "https://raw.githubusercontent.com/python/cpython/3.14/Doc/glossary.rst"
+            },
+            "transformers": {
+              "attribution": "Hugging Face and Transformers contributors",
+              "file": "transformers-glossary.md",
+              "license": "Apache-2.0",
+              "notice": "TRANSFORMERS-LICENSE.txt",
+              "noticeSha256": "77fd4710def9ec3c0f6225800e0235f15a425abd4a8b03559127fcd782612049",
+              "noticeUrl": "https://raw.githubusercontent.com/huggingface/transformers/main/LICENSE",
+              "recordedAt": "2026-11-08T01:33:08.010460+00:00",
+              "sha256": "37a863807ea204b5e5821af8f4da1e00270c4e24a15dafa2d31c2a9affc96448",
+              "url": "https://raw.githubusercontent.com/huggingface/transformers/main/docs/source/en/glossary.md"
+            }
+          },
+          "legacyManifest": {
             "basicPins": {
               "ngsl-spoken-stats.csv": "07708940c50a07cac4f507fd1e87bdd50081d7b87713a66a99beb3c8c4d11ac8",
               "ngsl-stats.csv": "2098bab8955a120a9766c6282a51d7d578c6cb0a7d946600d2ffb73ba25a0b44",
@@ -458,71 +1860,326 @@
             "profile": "dictionary-catalog-v1",
             "schemaVersion": 1
           },
-          "manifestSha256": "6781b7ea1a58942f1421b907f4daab0773a2b91d028c97e546320b93bc4e176f",
-          "observedFacetRows": {
-            "basic": 6599,
-            "daily": 3277,
-            "inflection": 2252,
-            "orthography": 2820,
-            "person": 2695,
-            "product": 7110,
-            "technology": 7743
+          "legacyManifestSha256": "6781b7ea1a58942f1421b907f4daab0773a2b91d028c97e546320b93bc4e176f",
+          "lexicalSources": {
+            "bsl-stats.csv": {
+              "bytes": 59643,
+              "sha256": "45055265eb4e74c65f5d26edabbc1a0da38c45bbb924cd9bd01fd391b74ff157",
+              "url": "https://www.newgeneralservicelist.com/s/BSL_120_stats.csv"
+            },
+            "bsl.csv": {
+              "bytes": 52302,
+              "sha256": "c29d181e7916250d21b5c41d63bdcfa67c992f66ae1dbaa207db82728f16d54d",
+              "url": "https://www.newgeneralservicelist.com/s/BSL_120_lemmatized_for_research.csv"
+            },
+            "cmudict.dict": {
+              "bytes": 3618488,
+              "sha256": "81917843c7f44ce2b094ac63873c2c7a4cf802040792c455ba3ca406891c3d22",
+              "url": "https://raw.githubusercontent.com/cmusphinx/cmudict/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict"
+            },
+            "esdb": {
+              "databaseSha256": "83dc3c111e573667e7c12b607bb5e2fa5596fa452ecdc3123b3b12e0e0725140",
+              "recipe": "combine.py create-db --raw; omit data/coca_llm merge",
+              "revision": "1e5b7d3a72f47a71da5d28686c1dd4b397178485"
+            },
+            "ewt-train.conllu": {
+              "bytes": 15034493,
+              "sha256": "d68e06122a702464c613076523d56740f047e5bbe89dd90ec32737e04d952143",
+              "url": "https://raw.githubusercontent.com/UniversalDependencies/UD_English-EWT/b7711cce01cdd4f5fcc0a8199b8a50d951b16c0c/en_ewt-ud-train.conllu"
+            },
+            "gum-train.conllu": {
+              "bytes": 20996445,
+              "sha256": "88c410ca6a51ccc79f9536d75feb1633421691165cd191f8137f8b37569a0329",
+              "url": "https://raw.githubusercontent.com/UniversalDependencies/UD_English-GUM/b58e74bc22d17220c9198864c253a50a897bf27f/en_gum-ud-train.conllu"
+            },
+            "ngsl.csv": {
+              "bytes": 89485,
+              "sha256": "d814f2a0a3c61479a2c5ad037661719a0cc6e7dbcde31f181b54f12d0f1e11a4",
+              "url": "https://www.newgeneralservicelist.com/s/NGSL_12_lemmatized_for_research.csv"
+            },
+            "wordnet.tar.gz": {
+              "bytes": 11537239,
+              "sha256": "640db279c949a88f61f851dd54ebbb22d003f8b90b85267042ef85a3781d3a52",
+              "url": "https://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.gz"
+            }
           },
-          "scope": "Exact source spellings and ESDB paradigms only; no typo/ranking behavior, generated morphology, or current product availability claim",
-          "withheldReasons": {
-            "already-registered-spelling": 11874,
-            "inflection-needs-usage-review": 6620,
-            "unsupported-format": 351
+          "mdnPages": [
+            {
+              "file": "mdn-e8e0940dcf22ff31c69f22f2.html",
+              "license": "CC-BY-SA-2.5-or-later",
+              "sha256": "274b0bffa299ac3a9ce5bb0ae4b7065bd2053e4310dc21e2ec6a43cdc1213d98",
+              "url": "https://developer.mozilla.org/en-US/docs/Glossary/CSP"
+            },
+            {
+              "file": "mdn-3625c8146548e1ce2d20d101.html",
+              "license": "CC-BY-SA-2.5-or-later",
+              "sha256": "66cee393f1d7ae77404870313c4ae4fc2696bbbcb317b79dbc33e829814cd758",
+              "url": "https://developer.mozilla.org/en-US/docs/Glossary/Content_header"
+            },
+            {
+              "file": "mdn-c828cbd6f92189cb394f1119.html",
+              "license": "CC-BY-SA-2.5-or-later",
+              "sha256": "cdafdc9c6a821562e643239626d4578f531d12a863ca6fa38b004974c6d7b501",
+              "url": "https://developer.mozilla.org/en-US/docs/Glossary/DOM"
+            },
+            {
+              "file": "mdn-72f694e1aac7b90e3f8137b9.html",
+              "license": "CC-BY-SA-2.5-or-later",
+              "sha256": "d86dd27d991c17fc4f360912a5a66efb4275b6750cbc786d101efea47e7f8923",
+              "url": "https://developer.mozilla.org/en-US/docs/Glossary/Dynamic_typing"
+            },
+            {
+              "file": "mdn-1a45c597d0a120e5cb3566ea.html",
+              "license": "CC-BY-SA-2.5-or-later",
+              "sha256": "dcd405703af346f63cda5175fec5049b51b3203fa55c1de047550e17c765fa07",
+              "url": "https://developer.mozilla.org/en-US/docs/Glossary/First-class_Function"
+            },
+            {
+              "file": "mdn-25defa557e6ae8178d2733a9.html",
+              "license": "CC-BY-SA-2.5-or-later",
+              "sha256": "9462dcbdf85ce0739176d2222b42df45c37469103d1a1403d3812661ccc22fdf",
+              "url": "https://developer.mozilla.org/en-US/docs/Glossary/Input_method_editor"
+            },
+            {
+              "file": "mdn-57744bc14c4bb570f13ab4ef.html",
+              "license": "CC-BY-SA-2.5-or-later",
+              "sha256": "407a130e53e4de56983a19473e9c9388db47f5a7c14104c84ff0d69c7827de7a",
+              "url": "https://developer.mozilla.org/en-US/docs/Glossary/Node/DOM"
+            },
+            {
+              "file": "mdn-cc386d27abe9a170a1878c83.html",
+              "license": "CC-BY-SA-2.5-or-later",
+              "sha256": "4b71eff08db68cd36617c38afabd0694814845ab40e6705b2dc6a99afb8ba415",
+              "url": "https://developer.mozilla.org/en-US/docs/Glossary/Public-key_cryptography"
+            },
+            {
+              "file": "mdn-26658a610e220f5aa5c7514b.html",
+              "license": "CC-BY-SA-2.5-or-later",
+              "sha256": "a712ccfba1c205bd2e5d1d7039c76fc377313c6ca952ab008666f397da524093",
+              "url": "https://developer.mozilla.org/en-US/docs/Glossary/Rate_limit"
+            },
+            {
+              "file": "mdn-dbd3975963b27c4b9d2fb83e.html",
+              "license": "CC-BY-SA-2.5-or-later",
+              "sha256": "e3afe6b45274f82794205b8d24be04a6f2100d8fc6b4435790d727b70b088384",
+              "url": "https://developer.mozilla.org/en-US/docs/Glossary/Regular_expression"
+            },
+            {
+              "file": "mdn-9fad2cb03786dc82556b691b.html",
+              "license": "CC-BY-SA-2.5-or-later",
+              "sha256": "e09c0a601d8c251fa2c44dbd7505ba211b0b3474a0da91f558f2e07b97fa51b3",
+              "url": "https://developer.mozilla.org/en-US/docs/Glossary/Static_typing"
+            }
+          ],
+          "profile": "dictionary-target-catalog-v2",
+          "scopesSha256": "77fc3066d006b20f05be93a384f9edc86b643b2e4b5f074f766208898eba583e",
+          "taxonomySha256": "e7c83e8240b0641f25135306d54ffda27e2acf394ff6af626140b33acd3a7508",
+          "topicClassification": "Project-curated scope declarations; source attestation is spelling evidence, not sense disambiguation."
+        },
+        "decisionsSha256": "0c115ca874fb0d5731bac23c32ce0d56f2ecbd2f1e1033335223f28a7eaaade0",
+        "previous": {
+          "bsl-stats.csv": {
+            "bytes": 59643,
+            "sha256": "45055265eb4e74c65f5d26edabbc1a0da38c45bbb924cd9bd01fd391b74ff157",
+            "url": "https://www.newgeneralservicelist.com/s/BSL_120_stats.csv"
+          },
+          "bsl.csv": {
+            "bytes": 52302,
+            "sha256": "c29d181e7916250d21b5c41d63bdcfa67c992f66ae1dbaa207db82728f16d54d",
+            "url": "https://www.newgeneralservicelist.com/s/BSL_120_lemmatized_for_research.csv"
+          },
+          "candidatesSha256": "6936df3636707d006e91823686b15ba1ff2c2504a2279bb382a22f336a9aadfc",
+          "cmudict.dict": {
+            "bytes": 3618488,
+            "sha256": "81917843c7f44ce2b094ac63873c2c7a4cf802040792c455ba3ca406891c3d22",
+            "url": "https://raw.githubusercontent.com/cmusphinx/cmudict/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict"
+          },
+          "decisionsSha256": "dcbb534a805418488b72e80e55c203c852ee6e004d336ac994a4aed81310543b",
+          "dictionaryCatalog": {
+            "availableFacets": {
+              "basic": 88,
+              "daily": 95,
+              "inflection": 6,
+              "orthography": 1001,
+              "person": 976,
+              "product": 6366,
+              "technology": 6750
+            },
+            "manifest": {
+              "basicPins": {
+                "ngsl-spoken-stats.csv": "07708940c50a07cac4f507fd1e87bdd50081d7b87713a66a99beb3c8c4d11ac8",
+                "ngsl-stats.csv": "2098bab8955a120a9766c6282a51d7d578c6cb0a7d946600d2ffb73ba25a0b44",
+                "ngsl-supplementary.csv": "7bb4c76cbe43ae87240be4ac7ada370b9e1a0d9d631d8c4430138646965d03f6"
+              },
+              "capturedAt": "2026-11-08T00:32:55.626200+00:00",
+              "files": {
+                "MDN-DICTIONARY-NOTICE.txt": {
+                  "bytes": 312,
+                  "sha256": "dc332480eca19e707322cb9c2a4c3e974e7929999b1393131472f703527a70a8"
+                },
+                "NGSL-DICTIONARY-NOTICE.txt": {
+                  "bytes": 456,
+                  "sha256": "100c5b1f036e7ef9156bcf71939ccca7681aba59533c124650f57c5cd6785216"
+                },
+                "cask-analytics.json": {
+                  "bytes": 1466222,
+                  "sha256": "145c66cc0ed7c8454e987edbb819e2eab03c3c49346876893a8b6c23588df8c0",
+                  "url": "https://formulae.brew.sh/api/analytics/cask-install/90d.json"
+                },
+                "cask.json": {
+                  "bytes": 19388682,
+                  "sha256": "97328b5a4ea28ee119751c9567d369a146acef789679e8fe17330dc72099d39c",
+                  "url": "https://formulae.brew.sh/api/cask.json"
+                },
+                "homebrew-analytics-license.txt": {
+                  "bytes": 1334,
+                  "sha256": "f80329e58613ad669c0e73cb132d8060b9b2c55e339c73848068e4d1567f4627",
+                  "url": "https://raw.githubusercontent.com/Homebrew/formulae.brew.sh/main/LICENSE.txt"
+                },
+                "homebrew-license.txt": {
+                  "bytes": 1334,
+                  "sha256": "abd8be86c5738400f30c426bc88d90495b2dcfca9fe20b8d9b925599a55528b0",
+                  "url": "https://raw.githubusercontent.com/Homebrew/homebrew-cask/0c830359022240eec6b89d6fd598eb451b8b7dd2/LICENSE"
+                },
+                "mdn-glossary.html": {
+                  "bytes": 183763,
+                  "sha256": "78ec5b149fc5fead41cd09b5db60c64b2981df7d2f2f5b76fd8203b010bcdc0a",
+                  "url": "https://developer.mozilla.org/en-US/docs/Glossary"
+                },
+                "mdn-license.md": {
+                  "bytes": 23775,
+                  "sha256": "97a45d9a5c27c90ad7f058b20a870f11a24717f0eb4585f141948d25b74c4d89",
+                  "url": "https://raw.githubusercontent.com/mdn/content/main/LICENSE.md"
+                }
+              },
+              "licenses": {
+                "esdb": {
+                  "attribution": "ESDB and component word-list contributors; retain complete Copyright and sources notices",
+                  "id": "LicenseRef-ESDB",
+                  "url": "https://github.com/en-wl/wordlist/blob/1e5b7d3a72f47a71da5d28686c1dd4b397178485/Copyright"
+                },
+                "homebrew": {
+                  "attribution": "Homebrew contributors",
+                  "id": "BSD-2-Clause",
+                  "url": "https://raw.githubusercontent.com/Homebrew/homebrew-cask/0c830359022240eec6b89d6fd598eb451b8b7dd2/LICENSE"
+                },
+                "homebrew_analytics": {
+                  "attribution": "Homebrew contributors",
+                  "id": "BSD-2-Clause",
+                  "url": "https://github.com/Homebrew/formulae.brew.sh/blob/main/LICENSE.txt"
+                },
+                "mdn": {
+                  "attribution": "MDN Web Docs contributors",
+                  "id": "CC-BY-SA-2.5-or-later",
+                  "url": "https://creativecommons.org/licenses/by-sa/2.5/"
+                },
+                "ngsl": {
+                  "attribution": "Browne, Culligan, Phillips; see NGSL notice",
+                  "id": "CC-BY-SA-4.0",
+                  "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+                }
+              },
+              "profile": "dictionary-catalog-v1",
+              "schemaVersion": 1
+            },
+            "manifestSha256": "6781b7ea1a58942f1421b907f4daab0773a2b91d028c97e546320b93bc4e176f",
+            "observedFacetRows": {
+              "basic": 6599,
+              "daily": 3277,
+              "inflection": 2252,
+              "orthography": 2820,
+              "person": 2695,
+              "product": 7110,
+              "technology": 7743
+            },
+            "scope": "Exact source spellings and ESDB paradigms only; no typo/ranking behavior, generated morphology, or current product availability claim",
+            "withheldReasons": {
+              "already-registered-spelling": 11874,
+              "inflection-needs-usage-review": 6620,
+              "unsupported-format": 351
+            }
+          },
+          "esdb": {
+            "databaseSha256": "83dc3c111e573667e7c12b607bb5e2fa5596fa452ecdc3123b3b12e0e0725140",
+            "recipe": "combine.py create-db --raw; omit data/coca_llm merge",
+            "revision": "1e5b7d3a72f47a71da5d28686c1dd4b397178485"
+          },
+          "ewt-train.conllu": {
+            "bytes": 15034493,
+            "sha256": "d68e06122a702464c613076523d56740f047e5bbe89dd90ec32737e04d952143",
+            "url": "https://raw.githubusercontent.com/UniversalDependencies/UD_English-EWT/b7711cce01cdd4f5fcc0a8199b8a50d951b16c0c/en_ewt-ud-train.conllu"
+          },
+          "gum-train.conllu": {
+            "bytes": 20996445,
+            "sha256": "88c410ca6a51ccc79f9536d75feb1633421691165cd191f8137f8b37569a0329",
+            "url": "https://raw.githubusercontent.com/UniversalDependencies/UD_English-GUM/b58e74bc22d17220c9198864c253a50a897bf27f/en_gum-ud-train.conllu"
+          },
+          "ngsl.csv": {
+            "bytes": 89485,
+            "sha256": "d814f2a0a3c61479a2c5ad037661719a0cc6e7dbcde31f181b54f12d0f1e11a4",
+            "url": "https://www.newgeneralservicelist.com/s/NGSL_12_lemmatized_for_research.csv"
+          },
+          "references": {
+            "notices": [
+              {
+                "name": "DICTIONARY-mdn-license.txt",
+                "sha256": "97a45d9a5c27c90ad7f058b20a870f11a24717f0eb4585f141948d25b74c4d89"
+              },
+              {
+                "name": "DICTIONARY-homebrew-license.txt",
+                "sha256": "abd8be86c5738400f30c426bc88d90495b2dcfca9fe20b8d9b925599a55528b0"
+              },
+              {
+                "name": "DICTIONARY-homebrew-analytics-license.txt",
+                "sha256": "f80329e58613ad669c0e73cb132d8060b9b2c55e339c73848068e4d1567f4627"
+              },
+              {
+                "name": "DICTIONARY-NGSL-DICTIONARY-NOTICE.txt",
+                "sha256": "100c5b1f036e7ef9156bcf71939ccca7681aba59533c124650f57c5cd6785216"
+              },
+              {
+                "name": "DICTIONARY-MDN-DICTIONARY-NOTICE.txt",
+                "sha256": "dc332480eca19e707322cb9c2a4c3e974e7929999b1393131472f703527a70a8"
+              }
+            ]
+          },
+          "wordnet.tar.gz": {
+            "bytes": 11537239,
+            "sha256": "640db279c949a88f61f851dd54ebbb22d003f8b90b85267042ef85a3781d3a52",
+            "url": "https://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.gz"
           }
-        },
-        "esdb": {
-          "databaseSha256": "83dc3c111e573667e7c12b607bb5e2fa5596fa452ecdc3123b3b12e0e0725140",
-          "recipe": "combine.py create-db --raw; omit data/coca_llm merge",
-          "revision": "1e5b7d3a72f47a71da5d28686c1dd4b397178485"
-        },
-        "ewt-train.conllu": {
-          "bytes": 15034493,
-          "sha256": "d68e06122a702464c613076523d56740f047e5bbe89dd90ec32737e04d952143",
-          "url": "https://raw.githubusercontent.com/UniversalDependencies/UD_English-EWT/b7711cce01cdd4f5fcc0a8199b8a50d951b16c0c/en_ewt-ud-train.conllu"
-        },
-        "gum-train.conllu": {
-          "bytes": 20996445,
-          "sha256": "88c410ca6a51ccc79f9536d75feb1633421691165cd191f8137f8b37569a0329",
-          "url": "https://raw.githubusercontent.com/UniversalDependencies/UD_English-GUM/b58e74bc22d17220c9198864c253a50a897bf27f/en_gum-ud-train.conllu"
-        },
-        "ngsl.csv": {
-          "bytes": 89485,
-          "sha256": "d814f2a0a3c61479a2c5ad037661719a0cc6e7dbcde31f181b54f12d0f1e11a4",
-          "url": "https://www.newgeneralservicelist.com/s/NGSL_12_lemmatized_for_research.csv"
         },
         "references": {
           "notices": [
             {
-              "name": "DICTIONARY-mdn-license.txt",
-              "sha256": "97a45d9a5c27c90ad7f058b20a870f11a24717f0eb4585f141948d25b74c4d89"
+              "name": "CATALOG-KUBERNETES-LICENSE.txt",
+              "sha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411"
             },
             {
-              "name": "DICTIONARY-homebrew-license.txt",
-              "sha256": "abd8be86c5738400f30c426bc88d90495b2dcfca9fe20b8d9b925599a55528b0"
+              "name": "CATALOG-LINGUIST-LICENSE.txt",
+              "sha256": "7717070c5a8c85440ff2312930bb30dd19002ab5bc235c9800042767f6f5242f"
             },
             {
-              "name": "DICTIONARY-homebrew-analytics-license.txt",
-              "sha256": "f80329e58613ad669c0e73cb132d8060b9b2c55e339c73848068e4d1567f4627"
+              "name": "CATALOG-DOTNET-LICENSE.txt",
+              "sha256": "243f341367f0ee35271c8924aaf5d075157c62538042e2f3c11ff9a1fcc5539c"
             },
             {
-              "name": "DICTIONARY-NGSL-DICTIONARY-NOTICE.txt",
-              "sha256": "100c5b1f036e7ef9156bcf71939ccca7681aba59533c124650f57c5cd6785216"
+              "name": "CATALOG-POSTGRES-LICENSE.txt",
+              "sha256": "3d6af92ff8a4c2cdf69afb1cf44edea727922f5cd0cf8b5f72b11cdecac8fdfd"
             },
             {
-              "name": "DICTIONARY-MDN-DICTIONARY-NOTICE.txt",
-              "sha256": "dc332480eca19e707322cb9c2a4c3e974e7929999b1393131472f703527a70a8"
+              "name": "CATALOG-PYTHON-LICENSE.txt",
+              "sha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231"
+            },
+            {
+              "name": "CATALOG-TRANSFORMERS-LICENSE.txt",
+              "sha256": "77fd4710def9ec3c0f6225800e0235f15a425abd4a8b03559127fcd782612049"
+            },
+            {
+              "name": "CATALOG-SOURCE-ATTRIBUTION.txt",
+              "sha256": "c2f0fce2a34354133d8c0f82a27008dbf9c162066cb26530fbd292b51553eb82"
             }
           ]
-        },
-        "wordnet.tar.gz": {
-          "bytes": 11537239,
-          "sha256": "640db279c949a88f61f851dd54ebbb22d003f8b90b85267042ef85a3781d3a52",
-          "url": "https://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.gz"
         }
       },
       "references": {
@@ -554,6 +2211,26 @@
           {
             "name": "CATALOG-SOURCE-ATTRIBUTION.txt",
             "sha256": "c2f0fce2a34354133d8c0f82a27008dbf9c162066cb26530fbd292b51553eb82"
+          },
+          {
+            "name": "WORLD-CC-BY-4.0.txt",
+            "sha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411"
+          },
+          {
+            "name": "WORLD-CC-BY-SA-4.0.txt",
+            "sha256": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5"
+          },
+          {
+            "name": "WORLD-CC0-1.0.txt",
+            "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+          },
+          {
+            "name": "WORLD-QUDT-LICENSE.txt",
+            "sha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411"
+          },
+          {
+            "name": "WORLD-SOURCE-ATTRIBUTION.txt",
+            "sha256": "88c45d813a7cb0f1c98eba074100e5a33897fdaddc031d1ea6945a43dd6b789b"
           }
         ]
       }

@@ -11,8 +11,47 @@ topic_daily_shopping	買い物 / Source-attested vocabulary in daily.shopping; n
 topic_daily_time	日時 / Source-attested vocabulary in daily.time; not a sense-disambiguation rule.	today, tomorrow, yesterday
 topic_daily_transport	移動・旅行 / Source-attested vocabulary in daily.transport; not a sense-disambiguation rule.	travel, trip, train
 topic_daily_work	仕事・連絡 / Source-attested vocabulary in daily.work; not a sense-disambiguation rule.	work, job, office
+topic_engineering_aerospace	航空・宇宙 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	aerospace engineering, aircraft, airfoil
+topic_engineering_chemical	化学・化学工学 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	atom, molecule, ion
+topic_engineering_civil	土木・建築・測量 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	civil engineering, structural engineering, architecture
+topic_engineering_electronics	電気・電子・半導体 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	voltage, current, resistance
+topic_engineering_embedded	組み込み・通信・計装 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	embedded system, real-time operating system, interrupt
+topic_engineering_energy	エネルギー・電力 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	renewable energy, solar power, wind power
+topic_engineering_environment	環境・資源 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	greenhouse gas, carbon footprint, carbon neutrality
+topic_engineering_manufacturing	製造・加工・品質 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	manufacturing, machining, milling
+topic_engineering_materials	材料・物性 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	alloy, steel, stainless steel
+topic_engineering_mechanical	機械・機械要素 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	bearing, gear, shaft
+topic_engineering_robotics	制御・ロボット / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	control system, feedback, feedforward
+topic_engineering_transport	自動車・鉄道・物流 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	internal combustion engine, electric motor, transmission
+topic_media_audio	音響・音楽制作 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	sound pressure, sound pressure level, decibel
+topic_media_graphics	CG・デザイン・ゲーム制作 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	computer graphics, raster graphics, vector graphics
+topic_media_photography	写真・光学・映像 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	aperture, shutter speed, focal length
 topic_names_person	名・姓 / Source-attested vocabulary in names.person; not a sense-disambiguation rule.	John, Mary, James
 topic_names_product	商品・ソフトウェア名 / Source-attested vocabulary in names.product; not a sense-disambiguation rule.	published product names
+topic_organizations_consumer	生活・交通・流通企業 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	IKEA, Walmart, Costco
+topic_organizations_technology	技術・製造企業 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Apple, Microsoft, Google
+topic_people_business	経営・事業・発明 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Steve Jobs, Bill Gates, Warren Buffett
+topic_people_history	歴史上の人物 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Cleopatra, Julius Caesar, Alexander the Great
+topic_people_literature	作家・思想家 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	William Shakespeare, Jane Austen, Charles Dickens
+topic_people_music	音楽家・歌手 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Taylor Swift, Michael Jackson, Madonna
+topic_people_public	政治・社会活動 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Nelson Mandela, Mahatma Gandhi, Martin Luther King Jr.
+topic_people_science	科学者・技術者 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Albert Einstein, Marie Curie, Isaac Newton
+topic_people_screen	俳優・映画・舞台 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Charlie Chaplin, Audrey Hepburn, Meryl Streep
+topic_people_sports	スポーツ選手 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Lionel Messi, Cristiano Ronaldo, Pelé
+topic_products_computing	PC・モバイル・ゲーム機 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	iPhone, iPad, MacBook Air
+topic_products_home	家電・生活関連名 / Source-attested product, brand and organization spellings; kind is recorded separately.	Roomba, Thermomix, Instant Pot
+topic_products_imaging	写真・音響関連名 / Source-attested product, brand and organization spellings; kind is recorded separately.	Canon EOS R5, Canon EOS R6, Canon EOS 5D
+topic_products_lifestyle	食品・日用品・衣料ブランド / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Coca-Cola, Pepsi, Fanta
+topic_products_mobility	自動車・モビリティ製品 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Toyota Corolla, Toyota Prius, Toyota Yaris
+topic_products_software	制作・仕事・学習ソフト / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	Microsoft Word, Microsoft Excel, Microsoft PowerPoint
+topic_science_agriculture	農業・食品技術 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	agriculture, horticulture, irrigation
+topic_science_biology	生命科学・バイオ / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	cell, tissue, organ
+topic_science_mathematics	数学・数値計算 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	algebra, geometry, calculus
+topic_science_medicine	医療・医療機器 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	anatomy, physiology, diagnosis
+topic_science_physics	物理・計測 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	force, mass, acceleration
+topic_science_statistics	統計・実験計画 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	probability, statistics, sample
+topic_services_communication	連絡・SNS・共同作業サービス / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	WhatsApp, Telegram, Signal
+topic_services_media	動画・音楽・旅行サービス / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.	YouTube, YouTube Music, Apple Music
 topic_technology_ai	AI・機械学習 / Source-attested vocabulary in technology.ai; not a sense-disambiguation rule.	machine learning, artificial intelligence, neural network
 topic_technology_cloud	クラウド・コンテナ / Source-attested vocabulary in technology.cloud; not a sense-disambiguation rule.	cloud, container, image
 topic_technology_database	データベース / Source-attested vocabulary in technology.database; not a sense-disambiguation rule.	database, SQL, query

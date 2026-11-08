@@ -200,6 +200,318 @@
       "label": "コンピューター言語",
       "definition": "コンピューター言語 / Source-attested vocabulary in technology.languages; not a sense-disambiguation rule.",
       "examples": "Python, Kotlin, Java"
+    },
+    {
+      "id": "science.mathematics",
+      "category": "topic_science_mathematics",
+      "domain": "science",
+      "label": "数学・数値計算",
+      "definition": "数学・数値計算 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "algebra, geometry, calculus"
+    },
+    {
+      "id": "science.statistics",
+      "category": "topic_science_statistics",
+      "domain": "science",
+      "label": "統計・実験計画",
+      "definition": "統計・実験計画 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "probability, statistics, sample"
+    },
+    {
+      "id": "science.physics",
+      "category": "topic_science_physics",
+      "domain": "science",
+      "label": "物理・計測",
+      "definition": "物理・計測 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "force, mass, acceleration"
+    },
+    {
+      "id": "engineering.electronics",
+      "category": "topic_engineering_electronics",
+      "domain": "science",
+      "label": "電気・電子・半導体",
+      "definition": "電気・電子・半導体 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "voltage, current, resistance"
+    },
+    {
+      "id": "engineering.embedded",
+      "category": "topic_engineering_embedded",
+      "domain": "science",
+      "label": "組み込み・通信・計装",
+      "definition": "組み込み・通信・計装 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "embedded system, real-time operating system, interrupt"
+    },
+    {
+      "id": "engineering.mechanical",
+      "category": "topic_engineering_mechanical",
+      "domain": "science",
+      "label": "機械・機械要素",
+      "definition": "機械・機械要素 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "bearing, gear, shaft"
+    },
+    {
+      "id": "engineering.manufacturing",
+      "category": "topic_engineering_manufacturing",
+      "domain": "science",
+      "label": "製造・加工・品質",
+      "definition": "製造・加工・品質 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "manufacturing, machining, milling"
+    },
+    {
+      "id": "engineering.robotics",
+      "category": "topic_engineering_robotics",
+      "domain": "science",
+      "label": "制御・ロボット",
+      "definition": "制御・ロボット / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "control system, feedback, feedforward"
+    },
+    {
+      "id": "engineering.materials",
+      "category": "topic_engineering_materials",
+      "domain": "science",
+      "label": "材料・物性",
+      "definition": "材料・物性 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "alloy, steel, stainless steel"
+    },
+    {
+      "id": "engineering.chemical",
+      "category": "topic_engineering_chemical",
+      "domain": "science",
+      "label": "化学・化学工学",
+      "definition": "化学・化学工学 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "atom, molecule, ion"
+    },
+    {
+      "id": "engineering.civil",
+      "category": "topic_engineering_civil",
+      "domain": "science",
+      "label": "土木・建築・測量",
+      "definition": "土木・建築・測量 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "civil engineering, structural engineering, architecture"
+    },
+    {
+      "id": "engineering.energy",
+      "category": "topic_engineering_energy",
+      "domain": "science",
+      "label": "エネルギー・電力",
+      "definition": "エネルギー・電力 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "renewable energy, solar power, wind power"
+    },
+    {
+      "id": "engineering.environment",
+      "category": "topic_engineering_environment",
+      "domain": "science",
+      "label": "環境・資源",
+      "definition": "環境・資源 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "greenhouse gas, carbon footprint, carbon neutrality"
+    },
+    {
+      "id": "engineering.transport",
+      "category": "topic_engineering_transport",
+      "domain": "travel",
+      "label": "自動車・鉄道・物流",
+      "definition": "自動車・鉄道・物流 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "internal combustion engine, electric motor, transmission"
+    },
+    {
+      "id": "engineering.aerospace",
+      "category": "topic_engineering_aerospace",
+      "domain": "science",
+      "label": "航空・宇宙",
+      "definition": "航空・宇宙 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "aerospace engineering, aircraft, airfoil"
+    },
+    {
+      "id": "science.biology",
+      "category": "topic_science_biology",
+      "domain": "science",
+      "label": "生命科学・バイオ",
+      "definition": "生命科学・バイオ / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "cell, tissue, organ"
+    },
+    {
+      "id": "science.medicine",
+      "category": "topic_science_medicine",
+      "domain": "medical",
+      "label": "医療・医療機器",
+      "definition": "医療・医療機器 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "anatomy, physiology, diagnosis"
+    },
+    {
+      "id": "science.agriculture",
+      "category": "topic_science_agriculture",
+      "domain": "food",
+      "label": "農業・食品技術",
+      "definition": "農業・食品技術 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "agriculture, horticulture, irrigation"
+    },
+    {
+      "id": "media.photography",
+      "category": "topic_media_photography",
+      "domain": "science",
+      "label": "写真・光学・映像",
+      "definition": "写真・光学・映像 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "aperture, shutter speed, focal length"
+    },
+    {
+      "id": "media.audio",
+      "category": "topic_media_audio",
+      "domain": "entertainment",
+      "label": "音響・音楽制作",
+      "definition": "音響・音楽制作 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "sound pressure, sound pressure level, decibel"
+    },
+    {
+      "id": "media.graphics",
+      "category": "topic_media_graphics",
+      "domain": "technology",
+      "label": "CG・デザイン・ゲーム制作",
+      "definition": "CG・デザイン・ゲーム制作 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "computer graphics, raster graphics, vector graphics"
+    },
+    {
+      "id": "people.science",
+      "category": "topic_people_science",
+      "domain": "education",
+      "label": "科学者・技術者",
+      "definition": "科学者・技術者 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "Albert Einstein, Marie Curie, Isaac Newton"
+    },
+    {
+      "id": "people.literature",
+      "category": "topic_people_literature",
+      "domain": "education",
+      "label": "作家・思想家",
+      "definition": "作家・思想家 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "William Shakespeare, Jane Austen, Charles Dickens"
+    },
+    {
+      "id": "people.music",
+      "category": "topic_people_music",
+      "domain": "entertainment",
+      "label": "音楽家・歌手",
+      "definition": "音楽家・歌手 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "Taylor Swift, Michael Jackson, Madonna"
+    },
+    {
+      "id": "people.screen",
+      "category": "topic_people_screen",
+      "domain": "entertainment",
+      "label": "俳優・映画・舞台",
+      "definition": "俳優・映画・舞台 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "Charlie Chaplin, Audrey Hepburn, Meryl Streep"
+    },
+    {
+      "id": "people.sports",
+      "category": "topic_people_sports",
+      "domain": "sports",
+      "label": "スポーツ選手",
+      "definition": "スポーツ選手 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "Lionel Messi, Cristiano Ronaldo, Pelé"
+    },
+    {
+      "id": "people.public",
+      "category": "topic_people_public",
+      "domain": "daily",
+      "label": "政治・社会活動",
+      "definition": "政治・社会活動 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "Nelson Mandela, Mahatma Gandhi, Martin Luther King Jr."
+    },
+    {
+      "id": "people.business",
+      "category": "topic_people_business",
+      "domain": "business",
+      "label": "経営・事業・発明",
+      "definition": "経営・事業・発明 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "Steve Jobs, Bill Gates, Warren Buffett"
+    },
+    {
+      "id": "people.history",
+      "category": "topic_people_history",
+      "domain": "education",
+      "label": "歴史上の人物",
+      "definition": "歴史上の人物 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "Cleopatra, Julius Caesar, Alexander the Great"
+    },
+    {
+      "id": "products.computing",
+      "category": "topic_products_computing",
+      "domain": "technology",
+      "label": "PC・モバイル・ゲーム機",
+      "definition": "PC・モバイル・ゲーム機 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "iPhone, iPad, MacBook Air"
+    },
+    {
+      "id": "products.mobility",
+      "category": "topic_products_mobility",
+      "domain": "travel",
+      "label": "自動車・モビリティ製品",
+      "definition": "自動車・モビリティ製品 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "Toyota Corolla, Toyota Prius, Toyota Yaris"
+    },
+    {
+      "id": "products.imaging",
+      "category": "topic_products_imaging",
+      "domain": "entertainment",
+      "label": "写真・音響関連名",
+      "definition": "写真・音響関連名 / Source-attested product, brand and organization spellings; kind is recorded separately.",
+      "examples": "Canon EOS R5, Canon EOS R6, Canon EOS 5D"
+    },
+    {
+      "id": "products.home",
+      "category": "topic_products_home",
+      "domain": "daily",
+      "label": "家電・生活関連名",
+      "definition": "家電・生活関連名 / Source-attested product, brand and organization spellings; kind is recorded separately.",
+      "examples": "Roomba, Thermomix, Instant Pot"
+    },
+    {
+      "id": "products.software",
+      "category": "topic_products_software",
+      "domain": "business",
+      "label": "制作・仕事・学習ソフト",
+      "definition": "制作・仕事・学習ソフト / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "Microsoft Word, Microsoft Excel, Microsoft PowerPoint"
+    },
+    {
+      "id": "products.lifestyle",
+      "category": "topic_products_lifestyle",
+      "domain": "daily",
+      "label": "食品・日用品・衣料ブランド",
+      "definition": "食品・日用品・衣料ブランド / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "Coca-Cola, Pepsi, Fanta"
+    },
+    {
+      "id": "organizations.technology",
+      "category": "topic_organizations_technology",
+      "domain": "business",
+      "label": "技術・製造企業",
+      "definition": "技術・製造企業 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "Apple, Microsoft, Google"
+    },
+    {
+      "id": "organizations.consumer",
+      "category": "topic_organizations_consumer",
+      "domain": "business",
+      "label": "生活・交通・流通企業",
+      "definition": "生活・交通・流通企業 / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "IKEA, Walmart, Costco"
+    },
+    {
+      "id": "services.communication",
+      "category": "topic_services_communication",
+      "domain": "daily",
+      "label": "連絡・SNS・共同作業サービス",
+      "definition": "連絡・SNS・共同作業サービス / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "WhatsApp, Telegram, Signal"
+    },
+    {
+      "id": "services.media",
+      "category": "topic_services_media",
+      "domain": "entertainment",
+      "label": "動画・音楽・旅行サービス",
+      "definition": "動画・音楽・旅行サービス / Project-declared, source-attested topical surface vocabulary; not sense disambiguation.",
+      "examples": "YouTube, YouTube Music, Apple Music"
     }
   ]
 }

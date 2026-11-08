@@ -77,7 +77,7 @@ class ReviewedSupplementTest {
             val sourceManifest = root.resolve("base.json").apply { writeText("{}") }
             val supp = root.resolve("supplement").apply { mkdir() }
             supp.resolve("entries.tsv").writeText(header +
-                "topic-gap\tsample gap\tsample gap\tnoun,domain_technology,topic_fixture\ttechnology\thttps://example.org/gap\tfixture:gap\n")
+                "topic-gap\tsample gap\tsample gap\tnoun,domain_science,topic_fixture\tscience\thttps://example.org/gap\tfixture:gap\n")
             supp.resolve("metadata.tsv").writeText(header +
                 "adj-fast\tfast\tfast\tdomain_technology,topic_fixture\ttechnology\thttps://example.org/fast\tfixture:fast\n")
             supp.resolve("categories.tsv").writeText("category\tdefinition\texamples\n" +
@@ -102,6 +102,7 @@ class ReviewedSupplementTest {
             val dictionary = conversion.ReviewedDictionary.load(assets)
             assertEquals(123, dictionary.allCandidates().single { it.surface == "fast" }.cost)
             assertTrue("topic_fixture" in dictionary.grammarRoles.lookup("fast", "fast"))
+            assertTrue("domain_science" in dictionary.grammarRoles.lookup("sample gap", "sample gap"))
             val lexicon = Lexicon.load(assets.resolve("grammar"))
             val fast = lexicon.forms.single { it.key.lexemeId == "adj-fast" && it.key.surface == "fast" }
             assertTrue(fast.dictionaries.containsAll(base.lookup("fast").first { it.key.lexemeId == "adj-fast" }.dictionaries))
