@@ -60,6 +60,16 @@ class CatalogTest(unittest.TestCase):
         path.write_text(json.dumps(manifest))
         with self.assertRaisesRegex(ValueError,'Catalog count differs'):catalog.generate(self.root,self.root/'bad')
 
+    def test_regeneration_preserves_the_report_linked_from_audience_indexes(self):
+        report = self.root / 'docs/classified-dictionary-catalog/excluded/media-demographics-2026-10-23.md'
+        report.parent.mkdir(parents=True)
+        report.write_text('保存済み対象層レポート\n', encoding='utf-8')
+        output = self.root / 'catalog'
+
+        catalog.generate(self.root, output)
+
+        self.assertEqual((output / 'excluded' / report.name).read_bytes(), report.read_bytes())
+
     def test_term_hierarchy_writes_parent_group_and_leaf_indexes(self):
         source = self.root / 'src/main/classification'
         base = json.loads((source / 'categories.json').read_text(encoding='utf-8'))
