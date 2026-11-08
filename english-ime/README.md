@@ -140,6 +140,304 @@ python3 -B english-ime/tools/verify_conversion_cli.py \
   --inputs /tmp/english-inputs.json
 ```
 
+## 対象を固定して収録率を改善する / Operate the target catalog
+
+`catalog_harness.py` は、既存辞書を調べる前に必要語の集合を固定し、表記の収録率と
+カテゴリの補完率を別々に測定します。対象・保留語も分母に残します。1,000件は採用時の
+チェックポイントの大きさであり、必要語の上限ではありません。
+
+The versioned [taxonomy](data/catalog/taxonomy.json) defines 25 topical categories:
+daily general/time/family/home/food/shopping/money/transport/health/education/work/
+communication; technology development/web/mobile/OS/hardware/network/database/cloud/
+security/AI/languages; and person/product names. The independent
+[target declarations](data/catalog/core-targets.json) combine NGSL headwords, explicit
+everyday/technical requirements, attested given names/surnames, and a frozen top-100
+Homebrew catalog selection. Primary product labels are core; explicit additional
+labels are extended. These are scoped requirements, not a claim to cover all English.
+
+Topic, lexical role, lemma/form, entity kind and target tier are separate axes.
+Existing reviewed lexical analyses can support topic-only enrichment. Their lemma,
+POS, readings and costs are retained; annotations cannot invent grammatical roles or
+new candidates. New spellings require independent source evidence. Ordinary lowercase
+terms are declared explicitly and may match source heading case; names, acronyms and
+language labels require exact case. No suffix/plural derivation is performed. Topic
+membership classifies declared surface vocabulary; it does not disambiguate senses.
+
+Use Python 3.11+, the installed JDK 17 CLI, and new external work/output directories.
+First obtain the lexical sources with `dictionary_sources.py fetch` as shown below,
+and build the current full extended dictionary. Then:
+
+```sh
+python3 -B english-ime/tools/catalog_harness.py fetch \
+  --source-dir /tmp/english-catalog-sources
+python3 -B english-ime/tools/catalog_harness.py prepare \
+  --work-dir /tmp/english-catalog-run --assets /tmp/reviewed-english-extended \
+  --source-dir /tmp/english-catalog-sources \
+  --lexical-source-dir /tmp/english-dictionary-sources --esdb-dir /tmp/english-esdb
+python3 -B english-ime/tools/catalog_harness.py report \
+  --work-dir /tmp/english-catalog-run --out /tmp/english-catalog-before
+python3 -B english-ime/tools/catalog_harness.py adopt \
+  --work-dir /tmp/english-catalog-run --batch-size 1000
+python3 -B english-ime/tools/catalog_harness.py build \
+  --work-dir /tmp/english-catalog-run --out /tmp/english-catalog-result
+python3 -B english-ime/tools/catalog_harness.py report \
+  --work-dir /tmp/english-catalog-run --assets /tmp/english-catalog-result/assets \
+  --out /tmp/english-catalog-after
+```
+
+`fetch` freezes source/notice bytes, URLs, authors, capture times and hashes; it
+verifies an existing snapshot instead of refreshing it. `prepare` seals the complete
+targets, source proofs, decoded baseline inventory and planned changes.
+`adopt` re-extracts source evidence and dictionary bindings, then commits decisions
+in resumable batches with an immutable journal. Repetition does not double-adopt.
+Optional previous model vetoes remain vetoes; no model output establishes a word.
+If `prepare` reports zero planned operations, no build is needed; retain the
+baseline report as the result and inspect its unresolved targets.
+
+`report.json`, `coverage.tsv` and `unresolved.jsonl` distinguish existing spellings,
+new normalized spellings, case variants, metadata-only operations and blocked
+evidence/format/binding cases, with core/extended and per-topic denominators. A
+registered spelling means an actual decoded candidate under some real reading; it
+does not assert typing, completion or ranking behavior. Coverage of overlapping
+topics is not additive. Reports and all downloaded sources remain outside Git.
+Targets retain kind/entity identity, so a shared display spelling can have several
+targets. Coverage denominators count targets; newly registered spelling totals
+count distinct display strings.
+
+For missing MDN evidence, `fetch-references --work-dir /tmp/english-catalog-run
+--source-dir /tmp/english-catalog-new-sources` can add official glossary pages to a
+copy of a source snapshot. It records download failures. Prepare a **new** run from
+the enriched snapshot; a sealed run never changes its target/evidence inputs.
+
+Supplement schema v2 adds `categories.tsv` (topic definitions) and `metadata.tsv`
+(topic/domain memberships attached to exact existing lexical identities), with
+manifest checksums. Schema v1 replay remains supported. Existing punctuation such
+as an already encoded `C++` can receive metadata without new readings; unsupported
+**new** labels remain blocked. The binary category format remains ECAT1. Build
+replays fresh inputs and verifies all previous reading/surface/cost pairs, lexical
+analyses and memberships, plus full/runtime parity. These are JVM checks; Android
+IME compatibility remains unverified for these additions.
+
+Additional source notices accompany the adopted data:
+
+| Source | License / attribution |
+| --- | --- |
+| [Python glossary](https://github.com/python/cpython/blob/3.14/Doc/glossary.rst) | [PSF 2.0 and bundled terms](https://github.com/python/cpython/blob/3.14/LICENSE), Python Software Foundation and contributors |
+| [PostgreSQL glossary](https://github.com/postgres/postgres/blob/REL_18_STABLE/doc/src/sgml/glossary.sgml) | [PostgreSQL](https://github.com/postgres/postgres/blob/REL_18_STABLE/COPYRIGHT), PostgreSQL Global Development Group / University of California |
+| [.NET ML glossary](https://github.com/dotnet/docs/blob/main/docs/machine-learning/resources/glossary.md) | [CC BY 4.0](https://github.com/dotnet/docs/blob/main/LICENSE), Microsoft and .NET documentation contributors |
+| [Transformers glossary](https://github.com/huggingface/transformers/blob/main/docs/source/en/glossary.md) | [Apache 2.0](https://github.com/huggingface/transformers/blob/main/LICENSE), Hugging Face and contributors |
+| [Kubernetes glossary](https://kubernetes.io/docs/reference/glossary/) | [CC BY 4.0](https://github.com/kubernetes/website/blob/main/LICENSE), Kubernetes documentation contributors |
+| [Linguist language names](https://github.com/github-linguist/linguist/blob/main/lib/linguist/languages.yml) | [MIT](https://github.com/github-linguist/linguist/blob/main/LICENSE), GitHub and Linguist contributors |
+
+NGSL, ESDB, WordNet, MDN and Homebrew terms/attribution from the acquisition section
+below are retained. Data licenses apply separately from the program's MIT license.
+This workflow makes **zero external AI API calls**, has no paid fallback and does
+not install a schedule. It can be operated manually using public sources.
+
+## Grow the vocabulary with a resumable review harness
+
+For category-balanced dictionary acquisition, use `--profile dictionary` in the
+section below. The default `vocabulary` profile retains the earlier lexical-only
+mining policy; `dictionary_sources.py adopt` is the adoption command for the new profile.
+
+The Python 3.11+ harness mines missing spellings from pinned public lexical sources.
+It compares them to **decoded runtime binary candidates**, not a similarly named
+text dictionary. It prioritizes missing headwords and observed training-corpus
+forms before possessives of already covered heads. Existing excluded spellings
+remain excluded. This workflow does not change the converter's grammar or costs.
+
+Keep all work outside the checkout, including ignored build directories. Start
+with the full extended bundle produced by the replay command above:
+
+```sh
+python3 -B english-ime/tools/vocabulary_harness.py prepare \
+  --work-dir /tmp/english-vocabulary-run \
+  --assets /tmp/reviewed-english-extended \
+  --source-dir /tmp/english-lexical-sources --esdb-dir /tmp/english-esdb \
+  --fetch-sources --max-candidates 1000
+python3 -B english-ime/tools/vocabulary_harness.py status \
+  --work-dir /tmp/english-vocabulary-run
+```
+
+`--fetch-sources` downloads inputs pinned by the current supplement manifest and
+prepares the pinned raw ESDB database without its LLM-assisted merge. Omit it to
+use an existing verified cache. Source changes fail verification. Additional
+explicitly reviewed reference documents can be supplied through `--references`:
+an external JSON manifest with `documents`, each containing `file`, `url`,
+`sha256`, `entries` using the seven supplement TSV fields, and `notices` with
+`file`, `name`, and `sha256`. Exact spellings must occur in the document; lexical
+roles require source review. Definitions and source prose stay outside Git.
+
+### Optional Gemini proposals, within a verified free project
+
+Gemini use is separate from signed-in Codex subscription usage. No API runs during
+ordinary builds or CI. Before each day's API work, check the project's Free tier,
+absence of billing, the key's project, and the actual model RPM/TPM/RPD in AI Studio.
+Save this operator confirmation outside the repository as `free-tier-proof.json`:
+
+```json
+{"project_id":"your-project-id","model":"gemini-3.5-flash-lite","free_tier":true,
+ "billing_enabled":false,"api_project_verified":true,"api_quota_verified":true,
+ "rpm":15,"tpm":250000,"rpd":500,"verified_at":"2026-11-07T12:00:00+00:00"}
+```
+
+The numbers above illustrate the format; use the limits actually displayed for
+your project. Confirmations expire after 24 hours. A key or a local confirmation
+file alone cannot prove Google's current billing state or the key's project.
+The harness does not enable billing, switch models, or use paid fallback tools.
+Set `GEMINI_API_KEY` or provide a protected external key file; never commit it.
+
+```sh
+python3 -B english-ime/tools/vocabulary_harness.py review \
+  --work-dir /tmp/english-vocabulary-run \
+  --free-proof /private/path/free-tier-proof.json \
+  --api-key-file /private/path/gemini-key --max-requests 1
+```
+
+Defaults are at most 20 candidates/request, one request/minute and 20 attempted
+requests/day, with smaller batches for the input budget. The daily counter is
+shared by project across runs in `~/.cache/english-vocabulary-harness/quota` and
+resets at midnight Pacific time. Failed/unknown requests count locally too.
+Other tools using the same Google project are outside this local counter.
+`--wait` paces additional calls; without it, rerun after `minute_limit`.
+Quota, transport and invalid-output errors save progress and stop. An interrupted
+inflight request may have reached Google; its reservation is retained on retry.
+Never change quota directories to evade limits.
+
+### Source review, reproducible build and evaluation
+
+`status` writes external `proposals.jsonl`. Gemini proposals alone cannot enter
+the dictionary. A Codex/operator source review supplies an external JSONL file
+with one record per reviewed candidate:
+
+```json
+{"id":"candidate ID","decision":"include","reason":"Source-backed review reason","proofIds":["supplied proof ID"]}
+```
+
+Decisions are `include`, `defer` or `exclude`; IDs and proof IDs must come from the
+sealed candidate snapshot. Source review also works without Gemini. Final
+decisions are immutable and idempotent; use a new run to revise them. This is
+not a claim of human review or that every candidate was assessed by Gemini.
+
+```sh
+python3 -B english-ime/tools/vocabulary_harness.py review \
+  --work-dir /tmp/english-vocabulary-run --decisions /tmp/source-review.jsonl
+python3 -B english-ime/tools/vocabulary_harness.py build \
+  --work-dir /tmp/english-vocabulary-run --out /tmp/english-vocabulary-result
+python3 -B english-ime/tools/vocabulary_harness.py evaluate \
+  --work-dir /tmp/english-vocabulary-run --assets /tmp/english-vocabulary-result/assets \
+  --cases /tmp/heldout-cases.jsonl
+```
+
+The build merges reviewed entries with the current supplement, preserves notices,
+freezes output hashes, replays from the original source bundle, audits every old
+and new binary pair/category, and compares full/runtime conversion results. It
+publishes `supplement`, `assets`, `runtime` and `verification.json` only on success.
+For a custom supplement, the binary audit accepts `-PenglishSupplementEntries`;
+`-PenglishRuntimeAssets` also audits every packed candidate and lexical surface role.
+Only adopted `supplement/entries.tsv`, optional v2 `metadata.tsv`/`categories.tsv`,
+its manifest and required notices belong in the data change; the generated binaries
+and verification report do not.
+
+Evaluation cases are frozen external JSONL records with exactly `id`, `input`,
+`expected`, `mode` (`exact`/`prefix`), `domain` and an HTTPS `source`. Use a pinned
+held-out corpus, not the training sources used for candidate selection. Coverage
+includes all cases, including missing words. Ranking uses a deterministic sample
+of at most 200 cases, balanced across available domains and ordered by hashed ID,
+configurable with `--sample-size`. Reports keep
+separate denominators and domain counts; literal input echo, including partially copied words, is never a dictionary
+hit. A report records case and asset hashes and cannot overwrite an earlier run.
+The evaluation is JVM CLI evidence, not verification of an Android IME.
+
+## 辞書を充実させる / Acquire dictionary vocabulary
+
+辞書向けの `--profile dictionary` は、基本語・日常語・表記・活用形・技術語・商品名・人名を
+出典から収集し、既存の実バイナリと表記単位で比較します。誤字訂正・候補順位はIME側の仕事であり、
+この収集・採用ハーネスの評価対象には含めません。定期実行は設定しません。
+
+The dictionary profile acquires attested words and forms; it does not generate typo
+cases or evaluate IME ranking. It uses the existing prepare/review/build/status
+checkpoints and binary audits. All acquisition data and work files stay outside Git.
+
+```sh
+python3 -B english-ime/tools/dictionary_sources.py fetch \
+  --source-dir /tmp/english-dictionary-sources --esdb-dir /tmp/english-esdb
+python3 -B english-ime/tools/vocabulary_harness.py prepare --profile dictionary \
+  --work-dir /tmp/english-dictionary-run --assets /tmp/reviewed-english-extended \
+  --source-dir /tmp/english-dictionary-sources --esdb-dir /tmp/english-esdb \
+  --max-candidates 1000
+python3 -B english-ime/tools/dictionary_sources.py adopt \
+  --work-dir /tmp/english-dictionary-run \
+  --source-dir /tmp/english-dictionary-sources --esdb-dir /tmp/english-esdb
+python3 -B english-ime/tools/vocabulary_harness.py status \
+  --work-dir /tmp/english-dictionary-run
+python3 -B english-ime/tools/vocabulary_harness.py build \
+  --work-dir /tmp/english-dictionary-run --out /tmp/english-dictionary-result
+```
+
+| 対象 / Facet | 取得・確認方法 / Evidence | License |
+| --- | --- | --- |
+| 基本語 / basic | NGSL 1.2・Spoken・補助語の見出しからESDBの実在語形を選ぶ / basic-list headwords select attested ESDB forms | NGSL: CC BY-SA 4.0; ESDB: component notices |
+| 日常語 / daily | ESDB、WordNetとEWT trainの観測語形 / lexical records and observed training forms | Existing pinned source notices |
+| 活用形 / inflection | ESDBのlemma・品詞・語形コード / source paradigms, including irregular forms | ESDB Copyright and Sources |
+| 表記 / orthography | 同じ読みの大文字・小文字違いも正確な出典表記で保持 / exact source display case | Respective source license |
+| 技術語 / technology | MDN Glossaryのリンク名と参照先 / glossary labels and URLs | CC BY-SA 2.5 or later |
+| 商品名 / product | Homebrew Caskのname欄 / published product display labels | BSD 2-Clause |
+| 人名 / person | ESDBでperson・surnameとされた見出し / attested given-name/surname spellings | ESDB component notices |
+
+Source lists do not authorize mechanically generating inflections or treating source
+capitalization as a canonical spelling. Each adopted form comes from an ESDB record
+with lemma/POS, or a literal named catalog label. The source-list `TRUE/FALSE`
+spellings do not manufacture uppercase dictionary entries. Names are collected as
+heads without generating possessives; technical labels receive a technology domain
+without guessing English POS. Product display names are not package tokens, and
+product names receive no inferred inflections. Disabled/deprecated casks are skipped.
+An inflection additionally needs two observed whole-form witnesses with its source
+lemma and matching POS in the pinned EWT training data. Common lemma/POS usage alone
+does not license an unobserved secondary paradigm (for example, `hide` does not
+automatically promote `hided`). Insufficient usage evidence defers a source-attested form for review;
+it does not declare the word invalid or the corpus exhaustive.
+This is a given-name/surname source, not a catalog of full names of famous people.
+
+Selection cycles across seven facets, with a per-facet ceiling of
+`ceil(max-candidates / 7)`, and removes duplicate display spellings. Facets overlap:
+one spelling can be a person, a product, and an orthographic addition. Counts must
+not be summed as unique words. The ceiling limits draws from a bucket; overlapping
+membership counts can exceed it. A cap of 1,000 can yield fewer than 1,000 selected
+spellings while other categories still have candidates. Missing categories are not
+filled with extra names. Products use a frozen 90-day Homebrew installation-rank
+snapshot as a catalog-specific priority signal, not general language frequency or
+a product recommendation. Each facet retains its own priority when spellings overlap.
+
+`dictionary-withheld.jsonl` records already registered spellings, base exclusions,
+unsupported format and category failures. The present supplement format accepts
+ASCII letters/digits, spaces, apostrophes, dots, slashes and hyphens, up to 64
+characters. Labels containing `+`, `#`, or unsupported Unicode are withheld with
+the exact original label; they are never rewritten to a different name. Supporting
+more such labels requires a separately verified dictionary-format change.
+
+`adopt` re-extracts every selected candidate from the frozen inputs, verifies the
+snapshot and notices, and records source-based decisions. It makes no model/API
+calls and is not a human-review claim. Optional existing Gemini review can veto a
+candidate; model output alone supplies neither a spelling nor an inflection.
+Repeated adoption is idempotent. Build requires final source decisions, preserves
+all previous reading/surface/cost pairs, and audits added pairs and lexical roles
+in both full and packed binaries. Case variants such as `May` alongside `may` are
+allowed; identical existing display spellings and base exclusions remain blocked.
+No change to IME search, typo correction or ranking is part of this profile.
+
+The external source manifest records snapshot dates/hashes, source URLs, license
+identifiers, authors and full notice files. The resulting supplement manifest and
+notices retain these records and transformation descriptions for redistribution.
+The code's MIT license does not replace the data licenses. No definitions, source
+articles, software installers, program code, logos or images are imported.
+
+- [NGSL licensing](https://www.newgeneralservicelist.com/new-general-service-list)
+- [NGSL-Spoken licensing](https://www.newgeneralservicelist.com/ngsl-spoken)
+- [ESDB Copyright](https://github.com/en-wl/wordlist/blob/1e5b7d3a72f47a71da5d28686c1dd4b397178485/Copyright)
+- [MDN licensing](https://developer.mozilla.org/en-US/docs/MDN/Writing_guidelines/Attrib_copyright_license)
+- [Homebrew Cask license](https://github.com/Homebrew/homebrew-cask/blob/main/LICENSE)
+
 ## Legacy compatibility
 
 ```sh
@@ -232,3 +530,32 @@ and three end-to-end repetitions per mode measured medians of 3.995 s vs 0.177 s
 for counting, and 72.62 s vs 60.38 s for the extension. The category calculation
 was observed three times per extension. These are host Python measurements, not
 smartphone timings. Run again for your interpreter and data.
+
+## Unattended adoption and daily execution
+
+`vocabulary_auto.py adopt` re-extracts candidates from checksum-verified sources
+and automatically adopts only multi-character spellings backed by ESDB size <=60,
+an eligible WordNet role, and CMU spelling, observed training usage, or a listed
+headword. Gemini defer/exclude proposals veto automatic adoption. Unsupported
+sources or insufficient evidence are deferred. These are automated source-policy
+decisions, not human reviews. The immutable candidate must match the new extraction.
+
+```sh
+python3 -B english-ime/tools/vocabulary_auto.py daily \
+  --work-dir /tmp/english-daily --timezone America/Toronto \
+  --assets /tmp/reviewed-english-extended \
+  --source-dir /tmp/english-lexical-sources --esdb-dir /tmp/english-esdb \
+  --max-candidates 1000
+```
+
+`daily` checkpoints one run per calendar day, resumes it after failure and builds
+only approved entries through the existing binary/replay/runtime validation gates.
+Outputs remain external. It makes zero implicit API calls. To use optional Gemini
+proposals, run `prepare` and `review` for that day's run before `daily` or `adopt`.
+Expired free-project confirmations must never be renewed just by changing their
+timestamp: recheck AI Studio, or continue with the source-only policy and report it.
+Scheduling is configured separately in the Codex app; local runs require the
+computer and app to be running. Verified dictionary changes can be copied to the
+working branch and published through a PR; no automatic main merge or app release
+is implemented. Use the newly adopted supplement's assets as the next day's
+baseline, so already adopted spellings are not selected again.

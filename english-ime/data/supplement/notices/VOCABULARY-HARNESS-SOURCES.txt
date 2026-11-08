@@ -1,0 +1,5 @@
+English vocabulary supplement: selected attested spellings and lexical roles from the pinned
+lexical sources and catalogs identified in entries.tsv and manifest.json.
+No source definitions or corpus text are redistributed. Preserve all base and supplement notices,
+including ESDB copyright/source notices, WordNet terms and applicable share-alike attribution.
+AI proposals are not human review. Final source decisions are recorded separately by the harness.

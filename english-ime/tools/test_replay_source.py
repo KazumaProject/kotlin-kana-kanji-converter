@@ -141,6 +141,21 @@ class ReplayContractTest(unittest.TestCase):
             self.unpack()
         self.assertFalse((self.root / 'unpacked').exists())
 
+    def test_v2_categories_and_metadata_have_an_explicit_output_contract(self):
+        directory = self.root / 'supplement-v2'
+        directory.mkdir()
+        manifest = dict(kind='reviewed-english-supplement-v2', schemaVersion=2,
+            baseManifestSha256=replay.sha(self.bundle / 'manifest.json'),
+            files={name: '1' * 64 for name in ['entries.tsv', 'metadata.tsv', 'categories.tsv', 'notices/LICENSE.txt']})
+        manifest['expectedOutputs'] = {name: '2' * 64 for name in replay.supplement_output_names(manifest)}
+        path = directory / 'manifest.json'
+        path.write_text(json.dumps(manifest))
+        self.assertIn('grammar/categories.tsv', replay.supplement_outputs(directory, self.bundle / 'manifest.json'))
+        manifest.update(kind='reviewed-english-supplement-v1', schemaVersion=1)
+        path.write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(ValueError, 'Invalid supplement input paths'):
+            replay.supplement_outputs(directory, self.bundle / 'manifest.json')
+
     def test_boolean_count_is_not_zero(self):
         self.manifest['review']['pendingRows'] = False
         with self.assertRaises(ValueError):

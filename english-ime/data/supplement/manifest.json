@@ -1,24 +1,53 @@
 {
   "baseManifestSha256": "3bc919f0deecd9142dfa8ee5059193de22dc553ea467f82a981e3b21b28ad1aa",
   "expectedOutputs": {
-    "grammar/bundle.properties": "8d7948dba98af2eb07b3df8abc2d1ad60f8a245dbbb28a10bc74e2b88b9d2a50",
-    "grammar/categories.ecat": "443f284da4af693528ef51c6f560ef162851090161598e98133ae5abf77c3dc5",
-    "grammar/forms.tsv": "91c2da0d0484fc8dadbb7b38c0f7d525e68cb820cf900958f2c462133887b45b",
-    "grammar/memberships.tsv": "54a0ba39ecad83c26d9dc7fd21c8d09627ae7b85d2e45ba76e1e361f1e35bd2a",
+    "grammar/bundle.properties": "7a5eaebb835e7c9ec1e4dc2dd711f57be061d1803aa316b0eaa0ce6324e40355",
+    "grammar/categories.ecat": "7c979389d65d8f08e59d141e7fc332a744b7d9c4b4b7939c8f572c86655b08c9",
+    "grammar/categories.tsv": "059442c5d6a317004bbfd6d167c060ff3697ca4df6207b85994796bd75971cd6",
+    "grammar/forms.tsv": "8520b920ffce0481b0d03eb8097e0df4b31ab905b863dc79c6237d9e5297b666",
+    "grammar/memberships.tsv": "6b0f5704b90ad7e96768e6e05fc451e743b32b247b1435fad1f6d97f72946d62",
+    "grammar/notices/CATALOG-DOTNET-LICENSE.txt": "243f341367f0ee35271c8924aaf5d075157c62538042e2f3c11ff9a1fcc5539c",
+    "grammar/notices/CATALOG-KUBERNETES-LICENSE.txt": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+    "grammar/notices/CATALOG-LINGUIST-LICENSE.txt": "7717070c5a8c85440ff2312930bb30dd19002ab5bc235c9800042767f6f5242f",
+    "grammar/notices/CATALOG-POSTGRES-LICENSE.txt": "3d6af92ff8a4c2cdf69afb1cf44edea727922f5cd0cf8b5f72b11cdecac8fdfd",
+    "grammar/notices/CATALOG-PYTHON-LICENSE.txt": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
+    "grammar/notices/CATALOG-SOURCE-ATTRIBUTION.txt": "c2f0fce2a34354133d8c0f82a27008dbf9c162066cb26530fbd292b51553eb82",
+    "grammar/notices/CATALOG-TRANSFORMERS-LICENSE.txt": "77fd4710def9ec3c0f6225800e0235f15a425abd4a8b03559127fcd782612049",
     "grammar/notices/CMUDICT-LICENSE.txt": "bd4ce8e44170a5f9f481310ca85c51de3c4f851a65e679b40e603b143bd3542a",
+    "grammar/notices/DICTIONARY-MDN-DICTIONARY-NOTICE.txt": "dc332480eca19e707322cb9c2a4c3e974e7929999b1393131472f703527a70a8",
+    "grammar/notices/DICTIONARY-NGSL-DICTIONARY-NOTICE.txt": "100c5b1f036e7ef9156bcf71939ccca7681aba59533c124650f57c5cd6785216",
+    "grammar/notices/DICTIONARY-homebrew-analytics-license.txt": "f80329e58613ad669c0e73cb132d8060b9b2c55e339c73848068e4d1567f4627",
+    "grammar/notices/DICTIONARY-homebrew-license.txt": "abd8be86c5738400f30c426bc88d90495b2dcfca9fe20b8d9b925599a55528b0",
+    "grammar/notices/DICTIONARY-mdn-license.txt": "97a45d9a5c27c90ad7f058b20a870f11a24717f0eb4585f141948d25b74c4d89",
     "grammar/notices/PRACTICAL-ENGLISH-SOURCES.txt": "1f52e7d3b1e88a85aae0c1f56baec58f4f7d6f13f5fa2c49f4bbf342f46a140d",
-    "qwerty_glide_index.dat": "54a332d4bbac08f58481b86ed8a37cc6a76957d219ab0e4687a5c46305cb7ee3",
-    "reading.dat": "d8aa6a09e1f51deb9bed30bc73cb86a6fb655294838b7d9aa4413f25be3c92a5",
-    "token.dat": "c7c6f213b995d68cb6abf9416dd20e261262b6cfd7e67e48d6ea5273684bc7e6",
-    "word.dat": "6008c66d95f74c215b2c3bd0a2d124d60323cdfeedc66abb3e8d2364883dc52e"
+    "grammar/notices/VOCABULARY-HARNESS-SOURCES.txt": "fe253ab24366a179d0249292ed074445510531ab3ac05b28d2fa45ba9542eada",
+    "qwerty_glide_index.dat": "b10b9dda86156e63e0cb2d2d0fdaea7ac2425aceb00914f969081da06a190b21",
+    "reading.dat": "4da1f1947cead7fe57128424ae8adfd069ec49d93caaf801144b95dbd58e9a73",
+    "token.dat": "9091f723ba41e94a89affc40dce791d90417d13b0c7c560538403d93e1e09f9b",
+    "word.dat": "14c53dd1eee155bb8a816fed87f5fa71da82c2be6b367f0ba7b85e6256460ecd"
   },
   "files": {
-    "entries.tsv": "fce8a11125f62a2ba02ddc5033f908064c89cab86d1bc7d07e4569b85c67a158",
+    "categories.tsv": "4f5bf99dc186833917f0e3d4e7cb32aab609f6a8848eab8546893629e0fc8ff6",
+    "entries.tsv": "ab80adb7e29c6c421bb50700bab449a34d83380bd69173c798bcac045e6de765",
+    "metadata.tsv": "1507562a53c86432de50cab8bf0b672e72d42368233e6c1e4ee18b691fb78e71",
+    "notices/CATALOG-DOTNET-LICENSE.txt": "243f341367f0ee35271c8924aaf5d075157c62538042e2f3c11ff9a1fcc5539c",
+    "notices/CATALOG-KUBERNETES-LICENSE.txt": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+    "notices/CATALOG-LINGUIST-LICENSE.txt": "7717070c5a8c85440ff2312930bb30dd19002ab5bc235c9800042767f6f5242f",
+    "notices/CATALOG-POSTGRES-LICENSE.txt": "3d6af92ff8a4c2cdf69afb1cf44edea727922f5cd0cf8b5f72b11cdecac8fdfd",
+    "notices/CATALOG-PYTHON-LICENSE.txt": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
+    "notices/CATALOG-SOURCE-ATTRIBUTION.txt": "c2f0fce2a34354133d8c0f82a27008dbf9c162066cb26530fbd292b51553eb82",
+    "notices/CATALOG-TRANSFORMERS-LICENSE.txt": "77fd4710def9ec3c0f6225800e0235f15a425abd4a8b03559127fcd782612049",
     "notices/CMUDICT-LICENSE.txt": "bd4ce8e44170a5f9f481310ca85c51de3c4f851a65e679b40e603b143bd3542a",
-    "notices/PRACTICAL-ENGLISH-SOURCES.txt": "1f52e7d3b1e88a85aae0c1f56baec58f4f7d6f13f5fa2c49f4bbf342f46a140d"
+    "notices/DICTIONARY-MDN-DICTIONARY-NOTICE.txt": "dc332480eca19e707322cb9c2a4c3e974e7929999b1393131472f703527a70a8",
+    "notices/DICTIONARY-NGSL-DICTIONARY-NOTICE.txt": "100c5b1f036e7ef9156bcf71939ccca7681aba59533c124650f57c5cd6785216",
+    "notices/DICTIONARY-homebrew-analytics-license.txt": "f80329e58613ad669c0e73cb132d8060b9b2c55e339c73848068e4d1567f4627",
+    "notices/DICTIONARY-homebrew-license.txt": "abd8be86c5738400f30c426bc88d90495b2dcfca9fe20b8d9b925599a55528b0",
+    "notices/DICTIONARY-mdn-license.txt": "97a45d9a5c27c90ad7f058b20a870f11a24717f0eb4585f141948d25b74c4d89",
+    "notices/PRACTICAL-ENGLISH-SOURCES.txt": "1f52e7d3b1e88a85aae0c1f56baec58f4f7d6f13f5fa2c49f4bbf342f46a140d",
+    "notices/VOCABULARY-HARNESS-SOURCES.txt": "fe253ab24366a179d0249292ed074445510531ab3ac05b28d2fa45ba9542eada"
   },
-  "kind": "reviewed-english-supplement-v1",
-  "schemaVersion": 1,
+  "kind": "reviewed-english-supplement-v2",
+  "schemaVersion": 2,
   "sources": {
     "bsl-stats.csv": {
       "bytes": 59643,
@@ -58,6 +87,476 @@
       "bytes": 89485,
       "sha256": "d814f2a0a3c61479a2c5ad037661719a0cc6e7dbcde31f181b54f12d0f1e11a4",
       "url": "https://www.newgeneralservicelist.com/s/NGSL_12_lemmatized_for_research.csv"
+    },
+    "vocabularyHarness": {
+      "candidatesSha256": "688b71194c1294e9cd90a84bcdd69e42fa747a191ba12fee33b2fbc95d7974bf",
+      "catalogV2": {
+        "documents": {
+          "kubernetes": {
+            "attribution": "Kubernetes documentation contributors",
+            "file": "kubernetes-glossary.html",
+            "license": "CC-BY-4.0",
+            "notice": "KUBERNETES-LICENSE.txt",
+            "noticeSha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+            "noticeUrl": "https://raw.githubusercontent.com/kubernetes/website/main/LICENSE",
+            "recordedAt": "2026-11-08T01:33:08.011646+00:00",
+            "sha256": "a27090427012129ec8a2e376554c825356409e3dcd841a378b9edfdc0e3bf340",
+            "url": "https://kubernetes.io/docs/reference/glossary/"
+          },
+          "linguist": {
+            "attribution": "GitHub and Linguist contributors",
+            "file": "languages.yml",
+            "license": "MIT",
+            "notice": "LINGUIST-LICENSE.txt",
+            "noticeSha256": "7717070c5a8c85440ff2312930bb30dd19002ab5bc235c9800042767f6f5242f",
+            "noticeUrl": "https://raw.githubusercontent.com/github-linguist/linguist/main/LICENSE",
+            "recordedAt": "2026-11-08T01:33:08.012139+00:00",
+            "sha256": "09c13db185b6f9b8f64b932dcd79815fef4a67624ab2dade9c194388d1dbe29d",
+            "url": "https://raw.githubusercontent.com/github-linguist/linguist/main/lib/linguist/languages.yml"
+          },
+          "ml": {
+            "attribution": "Microsoft and .NET documentation contributors",
+            "file": "ml-glossary.md",
+            "license": "CC-BY-4.0",
+            "notice": "DOTNET-LICENSE.txt",
+            "noticeSha256": "243f341367f0ee35271c8924aaf5d075157c62538042e2f3c11ff9a1fcc5539c",
+            "noticeUrl": "https://raw.githubusercontent.com/dotnet/docs/main/LICENSE",
+            "recordedAt": "2026-11-08T01:33:08.009690+00:00",
+            "sha256": "30303111eca9b72f9a4c11a02fbc2b8c48ee9abbfeccd492684bc2c4fa3c1762",
+            "url": "https://raw.githubusercontent.com/dotnet/docs/main/docs/machine-learning/resources/glossary.md"
+          },
+          "postgres": {
+            "attribution": "PostgreSQL Global Development Group; University of California",
+            "file": "postgres-glossary.sgml",
+            "license": "PostgreSQL",
+            "notice": "POSTGRES-LICENSE.txt",
+            "noticeSha256": "3d6af92ff8a4c2cdf69afb1cf44edea727922f5cd0cf8b5f72b11cdecac8fdfd",
+            "noticeUrl": "https://raw.githubusercontent.com/postgres/postgres/REL_18_STABLE/COPYRIGHT",
+            "recordedAt": "2026-11-08T01:33:08.009328+00:00",
+            "sha256": "17b38c7a0a0673fc0ef0bb8b0f9a4e759b3384ca4dce151cf341c6aba7c6dc12",
+            "url": "https://raw.githubusercontent.com/postgres/postgres/REL_18_STABLE/doc/src/sgml/glossary.sgml"
+          },
+          "python": {
+            "attribution": "Python Software Foundation and contributors",
+            "file": "python-glossary.rst",
+            "license": "PSF-2.0",
+            "notice": "PYTHON-LICENSE.txt",
+            "noticeSha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
+            "noticeUrl": "https://raw.githubusercontent.com/python/cpython/3.14/LICENSE",
+            "recordedAt": "2026-11-08T01:33:08.008407+00:00",
+            "sha256": "6c8970d3b96a4eb842de64d0d0cad373d8586e320f3aaca7017763aba772af9f",
+            "url": "https://raw.githubusercontent.com/python/cpython/3.14/Doc/glossary.rst"
+          },
+          "transformers": {
+            "attribution": "Hugging Face and Transformers contributors",
+            "file": "transformers-glossary.md",
+            "license": "Apache-2.0",
+            "notice": "TRANSFORMERS-LICENSE.txt",
+            "noticeSha256": "77fd4710def9ec3c0f6225800e0235f15a425abd4a8b03559127fcd782612049",
+            "noticeUrl": "https://raw.githubusercontent.com/huggingface/transformers/main/LICENSE",
+            "recordedAt": "2026-11-08T01:33:08.010460+00:00",
+            "sha256": "37a863807ea204b5e5821af8f4da1e00270c4e24a15dafa2d31c2a9affc96448",
+            "url": "https://raw.githubusercontent.com/huggingface/transformers/main/docs/source/en/glossary.md"
+          }
+        },
+        "legacyManifest": {
+          "basicPins": {
+            "ngsl-spoken-stats.csv": "07708940c50a07cac4f507fd1e87bdd50081d7b87713a66a99beb3c8c4d11ac8",
+            "ngsl-stats.csv": "2098bab8955a120a9766c6282a51d7d578c6cb0a7d946600d2ffb73ba25a0b44",
+            "ngsl-supplementary.csv": "7bb4c76cbe43ae87240be4ac7ada370b9e1a0d9d631d8c4430138646965d03f6"
+          },
+          "capturedAt": "2026-11-08T00:32:55.626200+00:00",
+          "files": {
+            "MDN-DICTIONARY-NOTICE.txt": {
+              "bytes": 312,
+              "sha256": "dc332480eca19e707322cb9c2a4c3e974e7929999b1393131472f703527a70a8"
+            },
+            "NGSL-DICTIONARY-NOTICE.txt": {
+              "bytes": 456,
+              "sha256": "100c5b1f036e7ef9156bcf71939ccca7681aba59533c124650f57c5cd6785216"
+            },
+            "cask-analytics.json": {
+              "bytes": 1466222,
+              "sha256": "145c66cc0ed7c8454e987edbb819e2eab03c3c49346876893a8b6c23588df8c0",
+              "url": "https://formulae.brew.sh/api/analytics/cask-install/90d.json"
+            },
+            "cask.json": {
+              "bytes": 19388682,
+              "sha256": "97328b5a4ea28ee119751c9567d369a146acef789679e8fe17330dc72099d39c",
+              "url": "https://formulae.brew.sh/api/cask.json"
+            },
+            "homebrew-analytics-license.txt": {
+              "bytes": 1334,
+              "sha256": "f80329e58613ad669c0e73cb132d8060b9b2c55e339c73848068e4d1567f4627",
+              "url": "https://raw.githubusercontent.com/Homebrew/formulae.brew.sh/main/LICENSE.txt"
+            },
+            "homebrew-license.txt": {
+              "bytes": 1334,
+              "sha256": "abd8be86c5738400f30c426bc88d90495b2dcfca9fe20b8d9b925599a55528b0",
+              "url": "https://raw.githubusercontent.com/Homebrew/homebrew-cask/0c830359022240eec6b89d6fd598eb451b8b7dd2/LICENSE"
+            },
+            "mdn-glossary.html": {
+              "bytes": 183763,
+              "sha256": "78ec5b149fc5fead41cd09b5db60c64b2981df7d2f2f5b76fd8203b010bcdc0a",
+              "url": "https://developer.mozilla.org/en-US/docs/Glossary"
+            },
+            "mdn-license.md": {
+              "bytes": 23775,
+              "sha256": "97a45d9a5c27c90ad7f058b20a870f11a24717f0eb4585f141948d25b74c4d89",
+              "url": "https://raw.githubusercontent.com/mdn/content/main/LICENSE.md"
+            }
+          },
+          "licenses": {
+            "esdb": {
+              "attribution": "ESDB and component word-list contributors; retain complete Copyright and sources notices",
+              "id": "LicenseRef-ESDB",
+              "url": "https://github.com/en-wl/wordlist/blob/1e5b7d3a72f47a71da5d28686c1dd4b397178485/Copyright"
+            },
+            "homebrew": {
+              "attribution": "Homebrew contributors",
+              "id": "BSD-2-Clause",
+              "url": "https://raw.githubusercontent.com/Homebrew/homebrew-cask/0c830359022240eec6b89d6fd598eb451b8b7dd2/LICENSE"
+            },
+            "homebrew_analytics": {
+              "attribution": "Homebrew contributors",
+              "id": "BSD-2-Clause",
+              "url": "https://github.com/Homebrew/formulae.brew.sh/blob/main/LICENSE.txt"
+            },
+            "mdn": {
+              "attribution": "MDN Web Docs contributors",
+              "id": "CC-BY-SA-2.5-or-later",
+              "url": "https://creativecommons.org/licenses/by-sa/2.5/"
+            },
+            "ngsl": {
+              "attribution": "Browne, Culligan, Phillips; see NGSL notice",
+              "id": "CC-BY-SA-4.0",
+              "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+            }
+          },
+          "profile": "dictionary-catalog-v1",
+          "schemaVersion": 1
+        },
+        "legacyManifestSha256": "6781b7ea1a58942f1421b907f4daab0773a2b91d028c97e546320b93bc4e176f",
+        "lexicalSources": {
+          "bsl-stats.csv": {
+            "bytes": 59643,
+            "sha256": "45055265eb4e74c65f5d26edabbc1a0da38c45bbb924cd9bd01fd391b74ff157",
+            "url": "https://www.newgeneralservicelist.com/s/BSL_120_stats.csv"
+          },
+          "bsl.csv": {
+            "bytes": 52302,
+            "sha256": "c29d181e7916250d21b5c41d63bdcfa67c992f66ae1dbaa207db82728f16d54d",
+            "url": "https://www.newgeneralservicelist.com/s/BSL_120_lemmatized_for_research.csv"
+          },
+          "cmudict.dict": {
+            "bytes": 3618488,
+            "sha256": "81917843c7f44ce2b094ac63873c2c7a4cf802040792c455ba3ca406891c3d22",
+            "url": "https://raw.githubusercontent.com/cmusphinx/cmudict/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict"
+          },
+          "esdb": {
+            "databaseSha256": "83dc3c111e573667e7c12b607bb5e2fa5596fa452ecdc3123b3b12e0e0725140",
+            "recipe": "combine.py create-db --raw; omit data/coca_llm merge",
+            "revision": "1e5b7d3a72f47a71da5d28686c1dd4b397178485"
+          },
+          "ewt-train.conllu": {
+            "bytes": 15034493,
+            "sha256": "d68e06122a702464c613076523d56740f047e5bbe89dd90ec32737e04d952143",
+            "url": "https://raw.githubusercontent.com/UniversalDependencies/UD_English-EWT/b7711cce01cdd4f5fcc0a8199b8a50d951b16c0c/en_ewt-ud-train.conllu"
+          },
+          "gum-train.conllu": {
+            "bytes": 20996445,
+            "sha256": "88c410ca6a51ccc79f9536d75feb1633421691165cd191f8137f8b37569a0329",
+            "url": "https://raw.githubusercontent.com/UniversalDependencies/UD_English-GUM/b58e74bc22d17220c9198864c253a50a897bf27f/en_gum-ud-train.conllu"
+          },
+          "ngsl.csv": {
+            "bytes": 89485,
+            "sha256": "d814f2a0a3c61479a2c5ad037661719a0cc6e7dbcde31f181b54f12d0f1e11a4",
+            "url": "https://www.newgeneralservicelist.com/s/NGSL_12_lemmatized_for_research.csv"
+          },
+          "wordnet.tar.gz": {
+            "bytes": 11537239,
+            "sha256": "640db279c949a88f61f851dd54ebbb22d003f8b90b85267042ef85a3781d3a52",
+            "url": "https://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.gz"
+          }
+        },
+        "mdnPages": [
+          {
+            "file": "mdn-e8e0940dcf22ff31c69f22f2.html",
+            "license": "CC-BY-SA-2.5-or-later",
+            "sha256": "274b0bffa299ac3a9ce5bb0ae4b7065bd2053e4310dc21e2ec6a43cdc1213d98",
+            "url": "https://developer.mozilla.org/en-US/docs/Glossary/CSP"
+          },
+          {
+            "file": "mdn-3625c8146548e1ce2d20d101.html",
+            "license": "CC-BY-SA-2.5-or-later",
+            "sha256": "66cee393f1d7ae77404870313c4ae4fc2696bbbcb317b79dbc33e829814cd758",
+            "url": "https://developer.mozilla.org/en-US/docs/Glossary/Content_header"
+          },
+          {
+            "file": "mdn-c828cbd6f92189cb394f1119.html",
+            "license": "CC-BY-SA-2.5-or-later",
+            "sha256": "cdafdc9c6a821562e643239626d4578f531d12a863ca6fa38b004974c6d7b501",
+            "url": "https://developer.mozilla.org/en-US/docs/Glossary/DOM"
+          },
+          {
+            "file": "mdn-72f694e1aac7b90e3f8137b9.html",
+            "license": "CC-BY-SA-2.5-or-later",
+            "sha256": "d86dd27d991c17fc4f360912a5a66efb4275b6750cbc786d101efea47e7f8923",
+            "url": "https://developer.mozilla.org/en-US/docs/Glossary/Dynamic_typing"
+          },
+          {
+            "file": "mdn-1a45c597d0a120e5cb3566ea.html",
+            "license": "CC-BY-SA-2.5-or-later",
+            "sha256": "dcd405703af346f63cda5175fec5049b51b3203fa55c1de047550e17c765fa07",
+            "url": "https://developer.mozilla.org/en-US/docs/Glossary/First-class_Function"
+          },
+          {
+            "file": "mdn-25defa557e6ae8178d2733a9.html",
+            "license": "CC-BY-SA-2.5-or-later",
+            "sha256": "9462dcbdf85ce0739176d2222b42df45c37469103d1a1403d3812661ccc22fdf",
+            "url": "https://developer.mozilla.org/en-US/docs/Glossary/Input_method_editor"
+          },
+          {
+            "file": "mdn-57744bc14c4bb570f13ab4ef.html",
+            "license": "CC-BY-SA-2.5-or-later",
+            "sha256": "407a130e53e4de56983a19473e9c9388db47f5a7c14104c84ff0d69c7827de7a",
+            "url": "https://developer.mozilla.org/en-US/docs/Glossary/Node/DOM"
+          },
+          {
+            "file": "mdn-cc386d27abe9a170a1878c83.html",
+            "license": "CC-BY-SA-2.5-or-later",
+            "sha256": "4b71eff08db68cd36617c38afabd0694814845ab40e6705b2dc6a99afb8ba415",
+            "url": "https://developer.mozilla.org/en-US/docs/Glossary/Public-key_cryptography"
+          },
+          {
+            "file": "mdn-26658a610e220f5aa5c7514b.html",
+            "license": "CC-BY-SA-2.5-or-later",
+            "sha256": "a712ccfba1c205bd2e5d1d7039c76fc377313c6ca952ab008666f397da524093",
+            "url": "https://developer.mozilla.org/en-US/docs/Glossary/Rate_limit"
+          },
+          {
+            "file": "mdn-dbd3975963b27c4b9d2fb83e.html",
+            "license": "CC-BY-SA-2.5-or-later",
+            "sha256": "e3afe6b45274f82794205b8d24be04a6f2100d8fc6b4435790d727b70b088384",
+            "url": "https://developer.mozilla.org/en-US/docs/Glossary/Regular_expression"
+          },
+          {
+            "file": "mdn-9fad2cb03786dc82556b691b.html",
+            "license": "CC-BY-SA-2.5-or-later",
+            "sha256": "e09c0a601d8c251fa2c44dbd7505ba211b0b3474a0da91f558f2e07b97fa51b3",
+            "url": "https://developer.mozilla.org/en-US/docs/Glossary/Static_typing"
+          }
+        ],
+        "profile": "dictionary-target-catalog-v2",
+        "scopesSha256": "77fc3066d006b20f05be93a384f9edc86b643b2e4b5f074f766208898eba583e",
+        "taxonomySha256": "e7c83e8240b0641f25135306d54ffda27e2acf394ff6af626140b33acd3a7508",
+        "topicClassification": "Project-curated scope declarations; source attestation is spelling evidence, not sense disambiguation."
+      },
+      "decisionsSha256": "0c115ca874fb0d5731bac23c32ce0d56f2ecbd2f1e1033335223f28a7eaaade0",
+      "previous": {
+        "bsl-stats.csv": {
+          "bytes": 59643,
+          "sha256": "45055265eb4e74c65f5d26edabbc1a0da38c45bbb924cd9bd01fd391b74ff157",
+          "url": "https://www.newgeneralservicelist.com/s/BSL_120_stats.csv"
+        },
+        "bsl.csv": {
+          "bytes": 52302,
+          "sha256": "c29d181e7916250d21b5c41d63bdcfa67c992f66ae1dbaa207db82728f16d54d",
+          "url": "https://www.newgeneralservicelist.com/s/BSL_120_lemmatized_for_research.csv"
+        },
+        "candidatesSha256": "6936df3636707d006e91823686b15ba1ff2c2504a2279bb382a22f336a9aadfc",
+        "cmudict.dict": {
+          "bytes": 3618488,
+          "sha256": "81917843c7f44ce2b094ac63873c2c7a4cf802040792c455ba3ca406891c3d22",
+          "url": "https://raw.githubusercontent.com/cmusphinx/cmudict/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict"
+        },
+        "decisionsSha256": "dcbb534a805418488b72e80e55c203c852ee6e004d336ac994a4aed81310543b",
+        "dictionaryCatalog": {
+          "availableFacets": {
+            "basic": 88,
+            "daily": 95,
+            "inflection": 6,
+            "orthography": 1001,
+            "person": 976,
+            "product": 6366,
+            "technology": 6750
+          },
+          "manifest": {
+            "basicPins": {
+              "ngsl-spoken-stats.csv": "07708940c50a07cac4f507fd1e87bdd50081d7b87713a66a99beb3c8c4d11ac8",
+              "ngsl-stats.csv": "2098bab8955a120a9766c6282a51d7d578c6cb0a7d946600d2ffb73ba25a0b44",
+              "ngsl-supplementary.csv": "7bb4c76cbe43ae87240be4ac7ada370b9e1a0d9d631d8c4430138646965d03f6"
+            },
+            "capturedAt": "2026-11-08T00:32:55.626200+00:00",
+            "files": {
+              "MDN-DICTIONARY-NOTICE.txt": {
+                "bytes": 312,
+                "sha256": "dc332480eca19e707322cb9c2a4c3e974e7929999b1393131472f703527a70a8"
+              },
+              "NGSL-DICTIONARY-NOTICE.txt": {
+                "bytes": 456,
+                "sha256": "100c5b1f036e7ef9156bcf71939ccca7681aba59533c124650f57c5cd6785216"
+              },
+              "cask-analytics.json": {
+                "bytes": 1466222,
+                "sha256": "145c66cc0ed7c8454e987edbb819e2eab03c3c49346876893a8b6c23588df8c0",
+                "url": "https://formulae.brew.sh/api/analytics/cask-install/90d.json"
+              },
+              "cask.json": {
+                "bytes": 19388682,
+                "sha256": "97328b5a4ea28ee119751c9567d369a146acef789679e8fe17330dc72099d39c",
+                "url": "https://formulae.brew.sh/api/cask.json"
+              },
+              "homebrew-analytics-license.txt": {
+                "bytes": 1334,
+                "sha256": "f80329e58613ad669c0e73cb132d8060b9b2c55e339c73848068e4d1567f4627",
+                "url": "https://raw.githubusercontent.com/Homebrew/formulae.brew.sh/main/LICENSE.txt"
+              },
+              "homebrew-license.txt": {
+                "bytes": 1334,
+                "sha256": "abd8be86c5738400f30c426bc88d90495b2dcfca9fe20b8d9b925599a55528b0",
+                "url": "https://raw.githubusercontent.com/Homebrew/homebrew-cask/0c830359022240eec6b89d6fd598eb451b8b7dd2/LICENSE"
+              },
+              "mdn-glossary.html": {
+                "bytes": 183763,
+                "sha256": "78ec5b149fc5fead41cd09b5db60c64b2981df7d2f2f5b76fd8203b010bcdc0a",
+                "url": "https://developer.mozilla.org/en-US/docs/Glossary"
+              },
+              "mdn-license.md": {
+                "bytes": 23775,
+                "sha256": "97a45d9a5c27c90ad7f058b20a870f11a24717f0eb4585f141948d25b74c4d89",
+                "url": "https://raw.githubusercontent.com/mdn/content/main/LICENSE.md"
+              }
+            },
+            "licenses": {
+              "esdb": {
+                "attribution": "ESDB and component word-list contributors; retain complete Copyright and sources notices",
+                "id": "LicenseRef-ESDB",
+                "url": "https://github.com/en-wl/wordlist/blob/1e5b7d3a72f47a71da5d28686c1dd4b397178485/Copyright"
+              },
+              "homebrew": {
+                "attribution": "Homebrew contributors",
+                "id": "BSD-2-Clause",
+                "url": "https://raw.githubusercontent.com/Homebrew/homebrew-cask/0c830359022240eec6b89d6fd598eb451b8b7dd2/LICENSE"
+              },
+              "homebrew_analytics": {
+                "attribution": "Homebrew contributors",
+                "id": "BSD-2-Clause",
+                "url": "https://github.com/Homebrew/formulae.brew.sh/blob/main/LICENSE.txt"
+              },
+              "mdn": {
+                "attribution": "MDN Web Docs contributors",
+                "id": "CC-BY-SA-2.5-or-later",
+                "url": "https://creativecommons.org/licenses/by-sa/2.5/"
+              },
+              "ngsl": {
+                "attribution": "Browne, Culligan, Phillips; see NGSL notice",
+                "id": "CC-BY-SA-4.0",
+                "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+              }
+            },
+            "profile": "dictionary-catalog-v1",
+            "schemaVersion": 1
+          },
+          "manifestSha256": "6781b7ea1a58942f1421b907f4daab0773a2b91d028c97e546320b93bc4e176f",
+          "observedFacetRows": {
+            "basic": 6599,
+            "daily": 3277,
+            "inflection": 2252,
+            "orthography": 2820,
+            "person": 2695,
+            "product": 7110,
+            "technology": 7743
+          },
+          "scope": "Exact source spellings and ESDB paradigms only; no typo/ranking behavior, generated morphology, or current product availability claim",
+          "withheldReasons": {
+            "already-registered-spelling": 11874,
+            "inflection-needs-usage-review": 6620,
+            "unsupported-format": 351
+          }
+        },
+        "esdb": {
+          "databaseSha256": "83dc3c111e573667e7c12b607bb5e2fa5596fa452ecdc3123b3b12e0e0725140",
+          "recipe": "combine.py create-db --raw; omit data/coca_llm merge",
+          "revision": "1e5b7d3a72f47a71da5d28686c1dd4b397178485"
+        },
+        "ewt-train.conllu": {
+          "bytes": 15034493,
+          "sha256": "d68e06122a702464c613076523d56740f047e5bbe89dd90ec32737e04d952143",
+          "url": "https://raw.githubusercontent.com/UniversalDependencies/UD_English-EWT/b7711cce01cdd4f5fcc0a8199b8a50d951b16c0c/en_ewt-ud-train.conllu"
+        },
+        "gum-train.conllu": {
+          "bytes": 20996445,
+          "sha256": "88c410ca6a51ccc79f9536d75feb1633421691165cd191f8137f8b37569a0329",
+          "url": "https://raw.githubusercontent.com/UniversalDependencies/UD_English-GUM/b58e74bc22d17220c9198864c253a50a897bf27f/en_gum-ud-train.conllu"
+        },
+        "ngsl.csv": {
+          "bytes": 89485,
+          "sha256": "d814f2a0a3c61479a2c5ad037661719a0cc6e7dbcde31f181b54f12d0f1e11a4",
+          "url": "https://www.newgeneralservicelist.com/s/NGSL_12_lemmatized_for_research.csv"
+        },
+        "references": {
+          "notices": [
+            {
+              "name": "DICTIONARY-mdn-license.txt",
+              "sha256": "97a45d9a5c27c90ad7f058b20a870f11a24717f0eb4585f141948d25b74c4d89"
+            },
+            {
+              "name": "DICTIONARY-homebrew-license.txt",
+              "sha256": "abd8be86c5738400f30c426bc88d90495b2dcfca9fe20b8d9b925599a55528b0"
+            },
+            {
+              "name": "DICTIONARY-homebrew-analytics-license.txt",
+              "sha256": "f80329e58613ad669c0e73cb132d8060b9b2c55e339c73848068e4d1567f4627"
+            },
+            {
+              "name": "DICTIONARY-NGSL-DICTIONARY-NOTICE.txt",
+              "sha256": "100c5b1f036e7ef9156bcf71939ccca7681aba59533c124650f57c5cd6785216"
+            },
+            {
+              "name": "DICTIONARY-MDN-DICTIONARY-NOTICE.txt",
+              "sha256": "dc332480eca19e707322cb9c2a4c3e974e7929999b1393131472f703527a70a8"
+            }
+          ]
+        },
+        "wordnet.tar.gz": {
+          "bytes": 11537239,
+          "sha256": "640db279c949a88f61f851dd54ebbb22d003f8b90b85267042ef85a3781d3a52",
+          "url": "https://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.gz"
+        }
+      },
+      "references": {
+        "notices": [
+          {
+            "name": "CATALOG-KUBERNETES-LICENSE.txt",
+            "sha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411"
+          },
+          {
+            "name": "CATALOG-LINGUIST-LICENSE.txt",
+            "sha256": "7717070c5a8c85440ff2312930bb30dd19002ab5bc235c9800042767f6f5242f"
+          },
+          {
+            "name": "CATALOG-DOTNET-LICENSE.txt",
+            "sha256": "243f341367f0ee35271c8924aaf5d075157c62538042e2f3c11ff9a1fcc5539c"
+          },
+          {
+            "name": "CATALOG-POSTGRES-LICENSE.txt",
+            "sha256": "3d6af92ff8a4c2cdf69afb1cf44edea727922f5cd0cf8b5f72b11cdecac8fdfd"
+          },
+          {
+            "name": "CATALOG-PYTHON-LICENSE.txt",
+            "sha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231"
+          },
+          {
+            "name": "CATALOG-TRANSFORMERS-LICENSE.txt",
+            "sha256": "77fd4710def9ec3c0f6225800e0235f15a425abd4a8b03559127fcd782612049"
+          },
+          {
+            "name": "CATALOG-SOURCE-ATTRIBUTION.txt",
+            "sha256": "c2f0fce2a34354133d8c0f82a27008dbf9c162066cb26530fbd292b51553eb82"
+          }
+        ]
+      }
     },
     "wordnet.tar.gz": {
       "bytes": 11537239,

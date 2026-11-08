@@ -1,0 +1,5 @@
+Basic-word selection: NGSL and NGSL-Spoken, Browne, Culligan and Phillips (NGSL); Browne and Culligan (Spoken). CC BY-SA 4.0.
+https://www.newgeneralservicelist.com/new-general-service-list
+https://www.newgeneralservicelist.com/ngsl-spoken
+https://creativecommons.org/licenses/by-sa/4.0/
+Changes: first-column headwords select independently attested ESDB spellings and paradigms. List family members and source capitalization are not automatically adopted.

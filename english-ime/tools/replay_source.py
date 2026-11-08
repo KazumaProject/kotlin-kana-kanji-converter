@@ -245,16 +245,21 @@ def run_cli(args):
                    cwd=REPO, check=True)
 
 
+def supplement_output_names(manifest):
+    return SUPPLEMENT_OUTPUTS | ({'grammar/categories.tsv'} if 'categories.tsv' in manifest['files'] else set()) | {
+        'grammar/' + name for name in manifest['files'] if name.startswith('notices/')}
+
+
 def supplement_outputs(directory, base_manifest):
     manifest = read_json(directory / 'manifest.json')
-    require(manifest.get('kind') == 'reviewed-english-supplement-v1' and manifest.get('schemaVersion') == 1 and
+    version = manifest.get('schemaVersion')
+    require(version in {1, 2} and manifest.get('kind') == f'reviewed-english-supplement-v{version}' and
             manifest.get('baseManifestSha256') == sha(base_manifest), 'Invalid supplement or base manifest')
     files = manifest['files']
-    require('entries.tsv' in files and all(name == 'entries.tsv' or
+    require('entries.tsv' in files and all(name == 'entries.tsv' or version == 2 and name in {'categories.tsv', 'metadata.tsv'} or
             re.fullmatch(r'notices/[A-Za-z0-9_.-]+', name) for name in files), 'Invalid supplement input paths')
-    notices = {'grammar/' + name for name in files if name.startswith('notices/')}
     expected = manifest['expectedOutputs']
-    require(set(expected) == SUPPLEMENT_OUTPUTS | notices and
+    require(set(expected) == supplement_output_names(manifest) and
             all(re.fullmatch('[0-9a-f]{64}', value) for value in expected.values()),
             'Invalid supplement output hashes')
     return expected
