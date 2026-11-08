@@ -1,4 +1,4 @@
-"""Enrich the complete notable-sports population through bounded identity lookups."""
+"""Enrich all published notable people through bounded, exact-identity lookups."""
 import argparse
 import hashlib
 import json
@@ -83,10 +83,10 @@ def fetch(directory,pantheon_dir,policy_path=POLICY,cache_from=None):
             cache_from=h.external(cache_from);old=h.replay.read_json(cache_from/'enrichment.json')
             h.require(old['pantheonManifestSha256']==h.replay.sha(pantheon_dir/'pantheon.json'),'Changed enrichment cache population')
             for page in old['pages']:
-                path=cache_from/page['file'];db.complete_headers(page['headers'])
+                cached_file=cache_from/page['file'];db.complete_headers(page['headers'])
                 h.require(page['method']=='POST' and page['file']=='people-'+hashlib.sha256(page['url'].encode()).hexdigest()+'.json' and
-                    not path.is_symlink() and h.replay.sha(path)==page['sha256'],'Changed enrichment cache')
-                cache[page['url']]=(path,page['headers'])
+                    not cached_file.is_symlink() and h.replay.sha(cached_file)==page['sha256'],'Changed enrichment cache')
+                cache[page['url']]=(cached_file,page['headers'])
             manifest['cacheSourceManifestSha256']=h.replay.sha(cache_from/'enrichment.json')
         for start,batch in batches(records,rule):
             if any(p['start']==start for p in manifest['pages']):continue
@@ -95,7 +95,7 @@ def fetch(directory,pantheon_dir,policy_path=POLICY,cache_from=None):
                 manifest['attempts'].append(dict(start=start,status='inflight'));h.dump(path,manifest)
                 try:
                     if url in cache:
-                        path,headers=cache[url];shutil.copyfile(path,directory/name)
+                        cached_file,headers=cache[url];shutil.copyfile(cached_file,directory/name)
                     else:headers=download(url,directory/name)
                     manifest['pages'].append(dict(start=start,count=len(batch),url=url,file=name,
                         sha256=h.replay.sha(directory/name),headers=headers,method='POST'))

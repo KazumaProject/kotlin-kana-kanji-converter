@@ -63,7 +63,8 @@ jobs:
           python3 -B english-ime/tools/catalog_review.py verify \
             --assets "$RUNNER_TEMP/reviewed-english-extended" \
             --ledger english-ime/data/catalog/adopted-named \
-            --word-lists english-ime/data/catalog/words-named
+            --word-lists english-ime/data/catalog/words-named \
+            --goals english-ime/data/catalog/named-goals.json
       - name: Compare packed and full conversion results for both bundles
         run: |
           english-ime/build/install/english-ime/bin/english-ime pack-runtime \

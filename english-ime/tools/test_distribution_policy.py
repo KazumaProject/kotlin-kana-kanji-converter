@@ -8,6 +8,18 @@ import catalog_review as review
 
 
 class DistributionPolicyTest(unittest.TestCase):
+    def test_public_artifact_gate_rejects_missing_topics_and_missing_exclusion_rules(self):
+        topics={'sport':{'category':'topic_sport'}}
+        goals=dict(requiredSpellings={'sport':['Example Athlete']},preserveMedicalSpellings=['clinical'],
+            requiredExclusionSpellings=['blocked'],requireNonemptyTopics=True)
+        pairs={('exampleathlete','Example Athlete'),('clinical','clinical')}
+        analyses={'Example Athlete':[dict(memberships={'topic_sport'})]}
+        review.verify_goals(goals,topics,pairs,analyses,{'fold:blocked'})
+        with self.assertRaisesRegex(ValueError,'exclusion'):review.verify_goals(goals,topics,pairs,analyses,set())
+        with self.assertRaisesRegex(ValueError,'spelling/topic'):review.verify_goals(goals,topics,pairs,{}, {'fold:blocked'})
+        with self.assertRaisesRegex(ValueError,'Empty declared'):
+            review.verify_goals(dict(goals,requiredSpellings={}),topics,pairs,{}, {'fold:blocked'})
+
     def test_removed_named_analysis_can_leave_an_independent_ordinary_homonym(self):
         row=dict(target_id='r',lexeme_id='restricted-name',surface='python',lemma='Python',kind='person')
         normal=dict(lexeme_id='ordinary-word',lemma='python')

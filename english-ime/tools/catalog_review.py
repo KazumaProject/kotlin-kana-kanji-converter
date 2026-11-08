@@ -141,9 +141,28 @@ def verify(args):
     topics, _ = c.registry(args.taxonomy, args.scopes)
     with tempfile.TemporaryDirectory() as temp:
         pairs, analyses = c.inventory(args.assets.resolve(), args.cli.resolve(), Path(temp) / 'inventory.jsonl')
-    verify_rows(rows, topics, pairs, analyses, distribution_policy.for_assets(args.assets.resolve()))
+    blocked=distribution_policy.for_assets(args.assets.resolve())
+    verify_rows(rows, topics, pairs, analyses, blocked)
     verify_pages(args.word_lists, rows, topics)
+    if getattr(args,'goals',None):verify_goals(h.replay.read_json(args.goals),topics,pairs,analyses,blocked)
     return summary(rows, topics)
+
+
+def verify_goals(goals,topics,pairs,analyses,blocked):
+    """Public artifact gates; source exhaustion remains a separate capture audit."""
+    surfaces={s for _,s in pairs}
+    for topic,words in goals['requiredSpellings'].items():
+        category=topics[topic]['category']
+        for word in words:
+            h.require(word in surfaces and any(category in f['memberships'] for f in analyses.get(word,[])),
+                'Missing required spelling/topic: '+topic+'/'+word)
+    h.require(set(goals['preserveMedicalSpellings'])<=surfaces,'Missing protected ordinary/medical vocabulary')
+    h.require(all(distribution_policy.excluded(s,s,blocked) for s in goals.get('requiredExclusionSpellings',[])),
+        'Missing required distribution exclusion')
+    h.require(not any(distribution_policy.excluded(s,s,blocked) for s in surfaces),'Restricted candidate leaked')
+    if goals.get('requireNonemptyTopics'):
+        represented={m for s,forms in analyses.items() if s in surfaces for f in forms for m in f['memberships']}
+        h.require(all(v['category'] in represented for v in topics.values()),'Empty declared vocabulary topic')
 
 
 def word_pages(rows, topics):
@@ -248,6 +267,7 @@ def main():
                 parser.add_argument('--out', type=Path, required=True)
             else:
                 parser.add_argument('--word-lists', type=Path, default=c.CATALOG / 'words')
+                parser.add_argument('--goals',type=Path,help='Verify the public mandatory spellings, exclusions and topic gates')
     args = p.parse_args()
     print(json.dumps(globals()[args.command](args), ensure_ascii=False, sort_keys=True))
 

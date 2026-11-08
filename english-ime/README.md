@@ -179,6 +179,13 @@ discipline: exact identity joins provide independent class/category evidence.
 An upstream class/category remains evidence rather than an independent career
 audit. Company names are not counted as product models. Inflections require an
 explicit lexical source; full names and middle names are not synthesized.
+Sports lookup covers every published Pantheon individual, including people whose
+provider primary occupation is actor, politician or musician. A primary-occupation
+filter would miss cross-career athletes. Expand an older sports-only capture into
+a new immutable directory with `people_enrichment.py --cache-from`; unchanged
+sports query batches are verified and reused. Adopted data also has offline CI
+gates for mandatory spellings, source-backed exclusions and nonempty declared
+topics, without needing the raw source cache or API credentials.
 
 Run the existing source-fetch commands below for the catalog/lexical sources,
 then collect into an external directory. The raw archive is large (about 3 GB

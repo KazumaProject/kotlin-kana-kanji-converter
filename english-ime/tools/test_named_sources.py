@@ -19,6 +19,26 @@ import coverage_sources as coverage
 
 
 class NamedSourcesTest(unittest.TestCase):
+    def test_expanding_capture_never_writes_checkpoints_into_immutable_cache(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);old=root/'old';old.mkdir();pantheon_dir=root/'pantheon';pantheon_dir.mkdir()
+            (pantheon_dir/'pantheon.json').write_text('{}\n')
+            rule=dict(schemaVersion=1,batchSize=1,httpMethod='POST',allPeople=True)
+            policy=root/'policy.json';enrichment.h.dump(policy,rule)
+            records=[dict(entity='wikidata:Q1',topics=['people.sports']),dict(entity='wikidata:Q2',topics=['people.actors'])]
+            def payload(qid):return dict(results={'bindings':[dict(entity={'value':'http://www.wikidata.org/entity/'+qid},
+                item={'value':'http://dbpedia.org/resource/'+qid},types={'value':'http://dbpedia.org/ontology/Athlete'},categories={'value':''})]})
+            url=enrichment.address(['Q1']);name='people-'+hashlib.sha256(url.encode()).hexdigest()+'.json'
+            enrichment.h.dump(old/name,payload('Q1'));original=(old/name).read_bytes()
+            enrichment.h.dump(old/'enrichment.json',dict(pantheonManifestSha256=enrichment.h.replay.sha(pantheon_dir/'pantheon.json'),
+                pages=[dict(start=0,count=1,url=url,file=name,sha256=enrichment.h.replay.sha(old/name),headers={},method='POST')]))
+            def download(url,path):enrichment.h.dump(path,payload('Q2'));return {}
+            with patch.object(enrichment,'population',return_value=(records,{})),patch.object(enrichment,'download',side_effect=download) as fetch,patch.object(enrichment.time,'sleep'):
+                result=enrichment.fetch(root/'new',pantheon_dir,policy,old)
+            self.assertTrue(result['complete']);self.assertEqual(1,fetch.call_count)
+            self.assertEqual(original,(old/name).read_bytes())
+            self.assertTrue((root/'new/checkpoint.json').exists())
+
     def test_all_people_lookup_preserves_sports_batches_and_includes_actor_crossovers(self):
         sports=[dict(entity='wikidata:Q'+str(i),topics=['people.sports']) for i in range(1,6)]
         actors=[dict(entity='wikidata:Q'+str(i),topics=['people.actors']) for i in range(6,9)]
