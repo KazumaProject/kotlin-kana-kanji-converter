@@ -1,0 +1,187 @@
+{
+  "version": 1,
+  "status": "proposal",
+  "source_taxonomy_revision": "e0b4d0307be3d6a9e97bc2c82c5918f6c968f463",
+  "domains": [
+    {
+      "id": "term_general",
+      "name": "一般語・日常表現",
+      "definition": "特定の専門分野を主としない語・定型表現。生活用品、衣服、住居、日常行為を含む。意味未特定の語の受け皿にしない。使用領域とは独立に判断する。"
+    },
+    {
+      "id": "term_animals",
+      "name": "動物・古生物",
+      "definition": "動物名、動物分類群、絶滅動物・古生物と動物に固有の用語。"
+    },
+    {
+      "id": "term_plants",
+      "name": "植物・菌類",
+      "definition": "植物・菌類・藻類の名前、分類群と植物に固有の用語。"
+    },
+    {
+      "id": "term_biology",
+      "name": "生物学・生態学",
+      "definition": "細胞・分子生物学、遺伝、一般生理、生態系、分類・進化の一般概念。"
+    },
+    {
+      "id": "term_medicine",
+      "name": "医学・医療",
+      "definition": "人体解剖、疾患・外傷、検査、診断、治療、手術、看護・医療実務。"
+    },
+    {
+      "id": "term_pharmacy",
+      "name": "薬学・医薬品・漢方",
+      "definition": "医薬品名、薬理、製剤、服薬、漢方処方、生薬利用に関する語。"
+    },
+    {
+      "id": "term_chemistry",
+      "name": "化学・物質",
+      "definition": "化学物質、元素、化合物、反応、分析、物質構造に関する語。"
+    },
+    {
+      "id": "term_mathematics",
+      "name": "数学・統計",
+      "definition": "数学の対象・理論・計算法、確率、統計と推定・検定。"
+    },
+    {
+      "id": "term_physics",
+      "name": "物理学",
+      "definition": "物理現象・理論・物性、力学、電磁気、熱、光、量子に関する語。"
+    },
+    {
+      "id": "term_computing",
+      "name": "情報技術・通信",
+      "definition": "計算機、ソフトウェア、データ処理、プログラミング、通信・放送技術。"
+    },
+    {
+      "id": "term_engineering",
+      "name": "工学・機械・製造",
+      "definition": "機械、電気・電子機器、計測・制御、生産工程、加工・製造技術。"
+    },
+    {
+      "id": "term_construction",
+      "name": "建築・土木・防災",
+      "definition": "建築様式・構造、土木工事、建設材料、都市計画、防災・防火設備。"
+    },
+    {
+      "id": "term_transport",
+      "name": "交通・物流",
+      "definition": "鉄道・航空・海運・道路の運行・運航、輸送、物流、郵便に関する語。"
+    },
+    {
+      "id": "term_astronomy",
+      "name": "天文・宇宙",
+      "definition": "天体名・分類、天文現象、宇宙観測、宇宙探査、宇宙論。"
+    },
+    {
+      "id": "term_earth_environment",
+      "name": "地学・気象・環境",
+      "definition": "地質・鉱物・地形、地球科学、気象・気候、環境問題。"
+    },
+    {
+      "id": "term_economics",
+      "name": "経済・金融・会計",
+      "definition": "経済、金融市場、企業経営、財務・会計、所得・税務・貿易。"
+    },
+    {
+      "id": "term_law_politics",
+      "name": "法律・政治・行政",
+      "definition": "法律・訴訟、政治制度・政策、行政、外交、公的制度・役職。"
+    },
+    {
+      "id": "term_education_society",
+      "name": "教育・心理・社会",
+      "definition": "教育、学習、心理、社会現象、家族・人間関係、労働・地域社会。"
+    },
+    {
+      "id": "term_language_literature",
+      "name": "言語・文学",
+      "definition": "言語名・語族、音声・文法・表記、翻訳、文学の様式・技法。"
+    },
+    {
+      "id": "term_history",
+      "name": "歴史・考古",
+      "definition": "歴史上の制度・時代・役職、史学、考古資料・遺跡・遺物。"
+    },
+    {
+      "id": "term_religion_philosophy",
+      "name": "宗教・哲学・民俗",
+      "definition": "宗教・信仰・儀礼、哲学・思想、神話・伝承・民俗。"
+    },
+    {
+      "id": "term_arts",
+      "name": "芸術・音楽・工芸",
+      "definition": "美術、音楽・楽器・演奏、工芸、演劇、芸能、映像・写真表現。"
+    },
+    {
+      "id": "term_sports_games",
+      "name": "スポーツ・ゲーム",
+      "definition": "スポーツ、武道・競技技法、盤上・カード・コンピュータゲームと遊戯。"
+    },
+    {
+      "id": "term_food",
+      "name": "食品・料理・飲料",
+      "definition": "食品名、料理・調理、調味料、菓子、飲料、酒類。"
+    },
+    {
+      "id": "term_agriculture",
+      "name": "農林水産",
+      "definition": "農業、園芸、林業、畜産、水産・養殖、漁法と生産実務。"
+    },
+    {
+      "id": "term_military",
+      "name": "軍事・安全保障",
+      "definition": "軍事組織・戦術・兵器・装備、国防・安全保障・軍縮。"
+    }
+  ],
+  "tags": [
+    {
+      "id": "term_tag_yojijukugo",
+      "name": "四字熟語",
+      "definition": "四字熟語を示すタグ。漢字4字であるだけでは付けない。"
+    },
+    {
+      "id": "term_tag_idioms",
+      "name": "ことわざ・慣用句",
+      "definition": "ことわざ、慣用句、固定的な言い回し。"
+    },
+    {
+      "id": "term_tag_slang",
+      "name": "俗語・ネット用語",
+      "definition": "俗語・ネットスラング等の使用域。口語全般とは区別する。"
+    },
+    {
+      "id": "term_tag_abbreviations",
+      "name": "略語・英字表記",
+      "definition": "略語または英字のみの表記。英字表記は略語でない語も含む。"
+    },
+    {
+      "id": "term_tag_quantities",
+      "name": "数量・日付・時刻",
+      "definition": "数と助数詞、日付、年号、時刻等の所定の表現パターン。"
+    }
+  ],
+  "usage_classes": {
+    "general": "日常的な一般用法が中心。分野が特定できても専門語とは限らない。",
+    "technical": "特定分野の知識・実務で用いられる専門用法が中心。",
+    "mixed": "一般用法と専門用法の両方が広く成立する。単に判断できない場合には使わない。",
+    "uncertain": "意味または使用領域の情報が不足し、判定できない。"
+  },
+  "additional_categories": [
+    {
+      "id": "term_multidomain",
+      "name": "複数分野・文脈依存",
+      "definition": "語義を複数特定できるが文脈なしで主分野を選べない。候補分野を記録する。"
+    },
+    {
+      "id": "term_unknown",
+      "name": "意味未特定",
+      "definition": "独立分類・Reviewer・Sol裁定を経ても意味を特定できない。一般語への代替ではない。"
+    },
+    {
+      "id": "term_unresolved_abbreviation",
+      "name": "略語・展開不明",
+      "definition": "略語であることは判断できるが、読み・表記から展開や意味を特定できない。Sol裁定必須。"
+    }
+  ]
+}
