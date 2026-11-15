@@ -39,7 +39,7 @@
   },
   "classificationExclusionsSha256": "817c83f5354730c9e1f8a2c327a8e724f20a4f96928aacc4ffb690c09eea0e83",
   "idDefSha256": "07a05a268c3783b7e02b36e4aa591555a2dd19a1f3c93891576740761c154f2d",
-  "existingInventorySha256": "fc3f6a268c4ee758a780805c0411f9cfe5ad372baa4d362f2b0e7ab731ba376a",
+  "existingInventorySha256": "09e4c47862a09c1571852914c202f5c7b6fd3859e9c9f910eda36d38296e5cd0",
   "existingDictionaryIds": [
     "categories/address",
     "categories/agreement",
@@ -161,7 +161,7 @@
     "symbol",
     "system"
   ],
-  "existingUniquePairs": 1866073,
+  "existingUniquePairs": 1866132,
   "sourceRows": {
     "collected/collected-terms/cf7e87c20f1b1c28.jsonl": {
       "rows": 2,

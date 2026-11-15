@@ -56,6 +56,12 @@ cd kotlin-kana-kanji-converter
 {"input":"しろ","candidates":[{"rank":1,"text":"しろ"},{"rank":2,"text":"白"}]}
 ```
 
+配布 ZIP の通常辞書とすべての分類カテゴリ辞書を同じ探索グラフで確認するには、`--archive ZIP --category all` を指定します。`--category system` は通常辞書のみ、カテゴリIDは指定辞書のみを読み込みます。学習・予測・省略検索・実アプリの表示処理は再現しません。
+
+```bash
+./gradlew --quiet convertCandidates --args='--archive release_zips/japanese_keyboard_dictionary_assets.zip --category all --count 5 すわいぷ'
+```
+
 `--count` を省略すると候補を10件まで返します。生成済みの変換辞書がない環境では、Mozc辞書リソースを準備したうえで先に `./gradlew :run` を実行してください。使い方は `./gradlew --quiet convertCandidates --args='--help'` で確認できます。
 
 `src/main/resources/ngram` に生成済みの `system_ngram.dat` と `system_ngram_unigram.dat` がある場合は、それぞれ候補の再順位付けに使います。生成するには `./gradlew buildSystemNgramDictionary buildSystemUnigramDictionary` を実行してください。
@@ -128,6 +134,8 @@ To inspect ranked candidates from a terminal, pass one or more readings:
 ./gradlew buildStandaloneUnigramDictionary
 ./gradlew --quiet convertCandidates --args='--count 5 なのか しろ'
 ```
+
+Use `--archive ZIP --category all` to search the system dictionary and every packaged classified category in one lattice. `system` loads only the system dictionary; a category ID loads only that category. This does not reproduce learned entries, predictions, omission search, or app UI ranking.
 
 The command prints one JSON object per reading, with one-based candidate ranks. The default limit is 10 candidates. If generated conversion dictionaries are missing, prepare the Mozc dictionary resources and run `./gradlew :run` first. Use `./gradlew --quiet convertCandidates --args='--help'` for usage.
 

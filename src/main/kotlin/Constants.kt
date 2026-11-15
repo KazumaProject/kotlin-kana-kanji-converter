@@ -3354,6 +3354,14 @@ object Constants {
     )
 
     val RESCORE_WORDS = listOf(
+        // Keep the common touch gesture ahead of optional names such as Swip/Swipe.
+        Dictionary(
+            yomi = "すわいぷ",
+            leftId = `名詞,一般,*,*,*,*,*`,
+            rightId = `名詞,一般,*,*,*,*,*`,
+            cost = 7000,
+            tango = "スワイプ"
+        ),
         // Preserve the literal kana and prefer 品詞 over the homophone 瀕死.
         Dictionary(
             yomi = "ぺ",

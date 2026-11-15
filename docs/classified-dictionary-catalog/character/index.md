@@ -2,7 +2,7 @@
 
 [全カテゴリ](../index.md) · [品詞名](../pos.md)
 
-読み・表記の組: **6,784**、読み: **6,713**、レコード: **6,856**。
+読み・表記の組: **6,786**、読み: **6,715**、レコード: **6,858**。
 
 ## 対象層別の収録語
 
@@ -15,7 +15,7 @@
 | [少女向け](audience/shojo/index.md) | 185 | 189 | [単語一覧](audience/shojo/index.md) |
 | [女性向け（Josei）](audience/josei/index.md) | 81 | 87 | [単語一覧](audience/josei/index.md) |
 | [子ども向け（Kids）](audience/kids/index.md) | 395 | 398 | [単語一覧](audience/kids/index.md) |
-| [対象層の指定なし・一般向け](audience/unspecified/index.md) | 3,429 | 3,477 | [単語一覧](audience/unspecified/index.md) |
+| [対象層の指定なし・一般向け](audience/unspecified/index.md) | 3,431 | 3,479 | [単語一覧](audience/unspecified/index.md) |
 
 ## 全レコード一覧
 

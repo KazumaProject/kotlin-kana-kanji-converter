@@ -608,4 +608,4 @@ PR #141・#142の不採用判断を含みます。古い処理で除外され、
 - [600ページ](page-0600.md): <code>わたにし</code> ～ <code>わへいさん</code>
 - [601ページ](page-0601.md): <code>わへんしょう</code> ～ <code>ゔぉーはん</code>
 
-判断台帳SHA-256: `b07bb1c4a7b7e26ed5162077a0d3b748980c07ab27f7a501aabaddfc28fc3fc5`
+判断台帳SHA-256: `c60ce7a585fda6cbf02ac5c87467d9807fccb60864c8f673943b704b80e03e6e`

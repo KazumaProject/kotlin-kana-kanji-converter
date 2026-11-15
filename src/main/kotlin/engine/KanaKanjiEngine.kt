@@ -30,6 +30,17 @@ class KanaKanjiEngine(
     private lateinit var connectionMatrix: ConnectionMatrix
     private lateinit var findPath: FindPath
     private lateinit var tokenArray: TokenArray
+    private data class LoadedDictionary(val yomi: LOUDSWithTermId, val tango: LOUDS, val tokens: TokenArray)
+    private var additionalDictionaries: List<LoadedDictionary> = emptyList()
+
+    private fun constructGraph(input: String) =
+        graphBuilder.constructGraph(input, yomiTrie, tangoTrie, tokenArray).also { graph ->
+            additionalDictionaries.forEach { dictionary ->
+                val extra = graphBuilder.constructGraph(input, dictionary.yomi, dictionary.tango, dictionary.tokens)
+                // Share BOS/EOS and the connection matrix across all dictionary nodes.
+                for (position in 1..input.length) graph[position].addAll(extra[position])
+            }
+        }
 
     fun buildEngine(){
         buildEngineFromResourceDirectory("src/main/resources", mode = 1)
@@ -55,12 +66,7 @@ class KanaKanjiEngine(
         input: String,
         n: Int
     ): List<String>{
-        val graph = graphBuilder.constructGraph(
-            input,
-            yomiTrie,
-            tangoTrie,
-            tokenArray,
-        )
+        val graph = constructGraph(input)
         val result = findPath.backwardAStar(graph, input.length, connectionMatrix, n, input)
         return result
     }
@@ -68,12 +74,7 @@ class KanaKanjiEngine(
     fun convert(
         input: String
     ): ConversionResult {
-        val graph = graphBuilder.constructGraph(
-            input,
-            yomiTrie,
-            tangoTrie,
-            tokenArray,
-        )
+        val graph = constructGraph(input)
         val bestPath = findPath.findBestPath(graph, input.length, connectionMatrix)
         return ConversionResult(
             input = input,
@@ -90,6 +91,7 @@ class KanaKanjiEngine(
     fun buildEngineFromResourceDirectory(
         resourceDirectory: String,
         mode: Int,
+        additionalResourceDirectories: List<String> = emptyList(),
     ) {
         val objectInputYomi = ObjectInputStream(BufferedInputStream(FileInputStream("$resourceDirectory/yomi.dat")))
         val objectInputTango = ObjectInputStream(BufferedInputStream(FileInputStream("$resourceDirectory/tango.dat")))
@@ -105,6 +107,21 @@ class KanaKanjiEngine(
         tokenArray.readPOSTable(mode, "$resourceDirectory/pos_table.dat")
         connectionMatrix = ConnectionIdBuilder().readMatrix(objectInputConnectionId, "$resourceDirectory/connectionId.dat")
         findPath = FindPath(systemNgramDictionary, systemUnigramDictionary, standaloneUnigramDictionary)
+        additionalDictionaries = additionalResourceDirectories.map { directory ->
+            val yomi = ObjectInputStream(BufferedInputStream(FileInputStream("$directory/yomi.dat"))).use {
+                LOUDSWithTermId().readExternalNotCompress(it)
+            }
+            val tango = ObjectInputStream(BufferedInputStream(FileInputStream("$directory/tango.dat"))).use {
+                LOUDS().readExternalNotCompress(it)
+            }
+            val tokens = TokenArray().apply {
+                ObjectInputStream(BufferedInputStream(FileInputStream("$directory/token.dat"))).use {
+                    readExternalNotCompress(it)
+                }
+                readPOSTable(mode, "$resourceDirectory/pos_table.dat")
+            }
+            LoadedDictionary(yomi, tango, tokens)
+        }
     }
 
 }

@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "inputSha256": "8aa9339e8a4f4fa93e2003a791030be6648b58c3c424254e917ea11b17249b63",
-  "uniquePairs": 838609,
-  "records": 867754,
+  "inputSha256": "a28cd1d9cd8b9f88ee98c45f46fb74a45d7595bfd593faae500382a6fda8636a",
+  "uniquePairs": 838667,
+  "records": 867815,
   "categories": [
     {
       "id": "character",
       "name": "架空キャラクター",
-      "pairs": 6784,
-      "readings": 6713,
-      "records": 6856,
+      "pairs": 6786,
+      "readings": 6715,
+      "records": 6858,
       "pages": 6,
       "recordsByOrigin": {
         "gemini": 6269,
         "manual": 583,
-        "verified": 4
+        "verified": 6
       }
     },
     {
@@ -33,14 +33,14 @@
     {
       "id": "place",
       "name": "地名",
-      "pairs": 43380,
-      "readings": 41368,
-      "records": 45092,
+      "pairs": 43382,
+      "readings": 41370,
+      "records": 45094,
       "pages": 31,
       "recordsByOrigin": {
         "gemini": 15895,
         "manual": 13088,
-        "verified": 16109
+        "verified": 16111
       }
     },
     {
@@ -294,12 +294,12 @@
     {
       "id": "facility/cultural/art_museum",
       "name": "美術館・ギャラリー",
-      "pairs": 380,
-      "readings": 378,
-      "records": 380,
+      "pairs": 381,
+      "readings": 379,
+      "records": 381,
       "pages": 1,
       "recordsByOrigin": {
-        "verified": 19,
+        "verified": 20,
         "gemini": 82,
         "manual": 279
       },
@@ -458,13 +458,13 @@
     {
       "id": "facility/commercial/shopping",
       "name": "商業施設・百貨店",
-      "pairs": 1302,
-      "readings": 1290,
-      "records": 1302,
+      "pairs": 1303,
+      "readings": 1291,
+      "records": 1303,
       "pages": 1,
       "recordsByOrigin": {
         "gemini": 911,
-        "verified": 26,
+        "verified": 27,
         "manual": 365
       },
       "definition": "ショッピングモール、百貨店、商店街、専門店ビルなど買物を主目的とする施設。"
@@ -829,14 +829,14 @@
     {
       "id": "facility/residential/mixed_use_building",
       "name": "複合建築物",
-      "pairs": 95,
-      "readings": 95,
-      "records": 95,
+      "pairs": 98,
+      "readings": 98,
+      "records": 98,
       "pages": 1,
       "recordsByOrigin": {
         "gemini": 53,
         "manual": 36,
-        "verified": 6
+        "verified": 9
       },
       "definition": "住宅・商業・業務等の用途が混在し、単一用途が主目的と判断できない複合建築物。"
     },
@@ -896,14 +896,14 @@
     {
       "id": "organization",
       "name": "組織",
-      "pairs": 47440,
-      "readings": 46669,
-      "records": 47519,
+      "pairs": 47446,
+      "readings": 46675,
+      "records": 47525,
       "pages": 35,
       "recordsByOrigin": {
         "gemini": 24629,
         "manual": 21392,
-        "verified": 1498
+        "verified": 1504
       }
     },
     {
@@ -922,14 +922,14 @@
     {
       "id": "product",
       "name": "商品・サービス",
-      "pairs": 10197,
-      "readings": 9971,
-      "records": 10199,
+      "pairs": 10219,
+      "readings": 9992,
+      "records": 10221,
       "pages": 7,
       "recordsByOrigin": {
         "gemini": 5941,
-        "manual": 3917,
-        "verified": 341
+        "verified": 363,
+        "manual": 3917
       }
     },
     {
@@ -1091,14 +1091,14 @@
     {
       "id": "term/general/internet_slang_culture",
       "name": "ネットスラング・ネット文化",
-      "pairs": 577,
-      "readings": 556,
-      "records": 579,
+      "pairs": 578,
+      "readings": 557,
+      "records": 580,
       "pages": 1,
       "recordsByOrigin": {
         "manual": 218,
         "gemini": 318,
-        "verified": 43
+        "verified": 44
       }
     },
     {
@@ -1130,14 +1130,14 @@
     {
       "id": "term/specialist/information_communications",
       "name": "情報・通信",
-      "pairs": 6091,
-      "readings": 6024,
-      "records": 6092,
+      "pairs": 6094,
+      "readings": 6027,
+      "records": 6095,
       "pages": 5,
       "recordsByOrigin": {
         "gemini": 3930,
         "manual": 1723,
-        "verified": 439
+        "verified": 442
       }
     },
     {
@@ -1156,13 +1156,13 @@
     {
       "id": "term/specialist/chemistry_life_sciences",
       "name": "化学・生命科学",
-      "pairs": 27571,
-      "readings": 26089,
-      "records": 27574,
+      "pairs": 27574,
+      "readings": 26092,
+      "records": 27577,
       "pages": 19,
       "recordsByOrigin": {
         "gemini": 18977,
-        "verified": 3495,
+        "verified": 3498,
         "manual": 5102
       }
     },
@@ -1182,40 +1182,40 @@
     {
       "id": "term/specialist/earth_environment_resources",
       "name": "地球・環境・資源",
-      "pairs": 2117,
-      "readings": 2082,
-      "records": 2117,
+      "pairs": 2118,
+      "readings": 2083,
+      "records": 2118,
       "pages": 2,
       "recordsByOrigin": {
         "manual": 493,
         "gemini": 1255,
-        "verified": 369
+        "verified": 370
       }
     },
     {
       "id": "term/specialist/economics_management",
       "name": "経済・経営",
-      "pairs": 5911,
-      "readings": 5835,
-      "records": 5911,
+      "pairs": 5913,
+      "readings": 5837,
+      "records": 5913,
       "pages": 4,
       "recordsByOrigin": {
         "manual": 1319,
         "gemini": 3606,
-        "verified": 986
+        "verified": 988
       }
     },
     {
       "id": "term/specialist/law_politics",
       "name": "法律・政治",
-      "pairs": 5720,
-      "readings": 5645,
-      "records": 5721,
+      "pairs": 5725,
+      "readings": 5650,
+      "records": 5726,
       "pages": 4,
       "recordsByOrigin": {
         "manual": 1399,
         "gemini": 3011,
-        "verified": 1311
+        "verified": 1316
       }
     },
     {
@@ -1286,14 +1286,14 @@
     {
       "id": "work_anime",
       "name": "アニメ作品",
-      "pairs": 1093,
-      "readings": 1077,
-      "records": 1093,
+      "pairs": 1094,
+      "readings": 1078,
+      "records": 1094,
       "pages": 1,
       "recordsByOrigin": {
         "manual": 587,
         "gemini": 495,
-        "verified": 11
+        "verified": 12
       }
     },
     {
@@ -1373,14 +1373,14 @@
     {
       "id": "media_demographic/audience/unspecified",
       "name": "対象層の指定なし・一般向け",
-      "pairs": 5058,
-      "readings": 5007,
-      "records": 5106,
+      "pairs": 5061,
+      "readings": 5010,
+      "records": 5109,
       "pages": 4,
       "recordsByOrigin": {
         "gemini": 3827,
         "manual": 1261,
-        "verified": 18
+        "verified": 21
       }
     },
     {
@@ -1434,27 +1434,27 @@
     {
       "id": "work_game",
       "name": "ゲーム作品",
-      "pairs": 3179,
-      "readings": 3089,
-      "records": 3179,
+      "pairs": 3182,
+      "readings": 3092,
+      "records": 3182,
       "pages": 3,
       "recordsByOrigin": {
         "manual": 2097,
         "gemini": 1012,
-        "verified": 70
+        "verified": 73
       }
     },
     {
       "id": "work_music",
       "name": "音楽作品",
-      "pairs": 10352,
-      "readings": 10219,
-      "records": 10355,
+      "pairs": 10354,
+      "readings": 10221,
+      "records": 10357,
       "pages": 8,
       "recordsByOrigin": {
         "manual": 8786,
         "gemini": 1394,
-        "verified": 175
+        "verified": 177
       }
     },
     {

@@ -189,10 +189,22 @@ private fun createCandidateCliEngineFromArchive(archive: File, category: String)
     try {
         ZipFile(archive).use { zip ->
             val assetRoot = "app/src/main/assets"
-            val categoryPath = if (category == "system") "system" else "categories/$category"
+            val categoryPath = if (category == "system" || category == "all") "system" else "categories/$category"
             listOf("yomi.dat", "tango.dat", "token.dat").forEach { fileName ->
                 val asset = "$assetRoot/$categoryPath/$fileName.zip"
                 extractSingleFile(zip, asset, fileName, File(directory, fileName))
+            }
+            if (category == "all") {
+                zip.entries().asSequence().map { it.name }
+                    .filter { it.startsWith("$assetRoot/categories/") && it.endsWith("/yomi.dat.zip") }
+                    .map { it.removePrefix("$assetRoot/categories/").removeSuffix("/yomi.dat.zip") }
+                    .sorted().forEach { id ->
+                        require(id.matches(Regex("[a-z_]+(/[a-z_]+)*"))) { "Invalid category in archive: $id" }
+                        val target = File(directory, "categories/$id").apply { mkdirs() }
+                        listOf("yomi.dat", "tango.dat", "token.dat").forEach { name ->
+                            extractSingleFile(zip, "$assetRoot/categories/$id/$name.zip", name, File(target, name))
+                        }
+                    }
             }
             extractSingleFile(
                 zip,
@@ -213,7 +225,11 @@ private fun createCandidateCliEngineFromArchive(archive: File, category: String)
             PackedSystemNgramDictionary.fromFile(File(directory, "system_ngram.dat")),
             PackedSystemUnigramDictionary.fromFile(File(directory, "system_ngram_unigram.dat")),
             PackedStandaloneUnigramDictionary.fromFile(File(directory, "system_ngram_standalone_unigram.dat")),
-        ).apply { buildEngineFromResourceDirectory(directory.path, mode = 1) }
+        ).apply {
+            val additional = File(directory, "categories").walkTopDown()
+                .filter { it.isDirectory && File(it, "yomi.dat").isFile }.map { it.path }.sorted().toList()
+            buildEngineFromResourceDirectory(directory.path, mode = 1, additionalResourceDirectories = additional)
+        }
         return CandidateCliRuntime(engine, directory)
     } catch (exception: Exception) {
         directory.deleteRecursively()
@@ -240,7 +256,7 @@ private fun extractSingleFile(zip: ZipFile, assetPath: String, expectedName: Str
 }
 
 private fun candidateCliUsage(): String =
-    "Usage: ./gradlew convertCandidates --args='[--archive ZIP] [--category system|<category-id>] " +
+    "Usage: ./gradlew convertCandidates --args='[--archive ZIP] [--category system|all|<category-id>] " +
         "[--count N] [--expect-conversion reading=surface] <reading> [<reading> ...]'\n" +
         "Loads packaged assets from the release ZIP when --archive is set, then prints one JSON object per reading."
 

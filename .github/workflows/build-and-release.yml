@@ -446,6 +446,40 @@ jobs:
           ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/specialist/earth_environment_resources --count 50 --expect-conversion しーしーえす=CCS しーしーえす"
           ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category facility/sports/stadium --count 50 --expect-conversion じーえむおーありーなさいたま=GMOアリーナさいたま --expect-conversion 'やんまーはなさかすたじあむ=YANMAR HANASAKA STADIUM' じーえむおーありーなさいたま やんまーはなさかすたじあむ"
 
+      - name: Verify new issue terms and swipe with all classified categories
+        run: |
+          python3 - <<'PY_VERIFY'
+          import json
+          import shlex
+          import subprocess
+          from pathlib import Path
+
+          archive = 'release_zips/japanese_keyboard_dictionary_assets.zip'
+          entries = [json.loads(line) for line in Path(
+              'src/main/classification/reviews/2026-11-14-open-candidate-issues.jsonl'
+          ).read_text().splitlines()]
+          entries += [{'reading': 'とよおかだるまえき', 'surface': '豊岡だるま駅'},
+                      {'reading': 'でーたれじでんしー', 'surface': 'データレジデンシー'}]
+          args = ['--archive', archive, '--category', 'all', '--count', '50']
+          for entry in entries:
+              args += ['--expect-conversion', entry['reading'] + '=' + entry['surface']]
+          args += ['--expect-conversion', 'すわいぷ=Swip', '--expect-conversion', 'すわいぷ=Swipe']
+          args += ['すわいぷ'] + [entry['reading'] for entry in entries]
+          subprocess.run(['./gradlew', '--quiet', 'convertCandidates', '--no-daemon',
+                          '--args=' + shlex.join(args)], check=True)
+          args = ['--archive', archive, '--category', 'all', '--count', '1']
+          expected = {'すわいぷ': 'スワイプ', 'すわいぷする': 'スワイプする',
+                      'すわいぷあっぷ': 'スワイプアップ', 'ますます': 'ますます',
+                      'のる': '乗る', 'あくせる': 'アクセル', 'ふぇねっく': 'フェネック',
+                      'ぺいん': 'ペイン', 'ねき': 'ネキ', 'しろ': 'しろ',
+                      'しろい': '白い', 'しろくろ': '白黒', 'しろあり': 'シロアリ'}
+          for reading, surface in expected.items():
+              args += ['--expect-conversion', reading + '=' + surface]
+          args += list(expected)
+          subprocess.run(['./gradlew', '--quiet', 'convertCandidates', '--no-daemon',
+                          '--args=' + shlex.join(args)], check=True)
+          PY_VERIFY
+
       - name: Upload verified dictionary distribution
         if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
@@ -477,15 +511,17 @@ jobs:
           body: |
             ## 日本語
 
-            - 新語候補 Issue #277、#278、#279、#280、#281、#284、#286、#287 の16語を精査し、出典を確認した14語を既存カテゴリへ追加しました。
-            - 「レイリア春日原」と「クライオ生検」はv1.7.283の簡易CLIで正確な表記が候補に出るため追加を保留しました。CLI順位は実アプリ順位や一ノード経路を示すものではありません。
-            - Echo Time（#257）はAmazon公式資料で商品名を確認しましたが、公式の日本語読みを再確認できず保留を継続します。
+            - 辞書追加候補 Issue #335〜#365 の60候補を照合し、58語を既存カテゴリへ追加しました。「豊岡だるま駅」「データレジデンシー」は既収録です。
+            - 通常辞書に「スワイプ」を追加し、全分類カテゴリを有効にしたCLI検証で「すわいぷ」の1位を「Swip」から「スワイプ」に改善しました。Swip・Swipeも候補として維持しています。
+            - 一般語と競合する新語と「しろ」の単体・複合入力を配布ZIPで検証しています。MASS MASSは低優先コストに設定しました。
+            - 検証は配布バイナリと簡易CLIによるものです。実アプリの学習・予測・表示順位は未確認です。AlphaGenome 2の読みは明示された二次資料に基づき、開発元の公式日本語読みは未確認です。
 
             ## English
 
-            - Reviewed 16 candidates in Issues #277, #278, #279, #280, #281, #284, #286, and #287; added 14 source-backed terms to existing categories.
-            - Deferred レイリア春日原 and クライオ生検 because the exact surfaces already appeared in the v1.7.283 CLI results. CLI rank does not establish app rank or a one-node path.
-            - Kept Echo Time from Issue #257 on hold because its official Japanese reading could not be reconfirmed.
+            - Checked 60 candidates from Issues #335–#365 and added 58 terms to existing categories. 豊岡だるま駅 and データレジデンシー were already included.
+            - Added スワイプ to the system dictionary. With all classified categories loaded, packaged-asset CLI checks now rank スワイプ first for すわいぷ while retaining Swip and Swipe.
+            - Verified common-word collisions and standalone/compound しろ inputs against the packaged ZIP. MASS MASS uses a lower-priority word cost.
+            - Verification covers packaged binaries and the simplified CLI. App learning, predictions, and UI ranking remain unverified. AlphaGenome 2 uses an explicit secondary-source reading; an official Japanese reading from its developer remains unconfirmed.
           prerelease: false
           makeLatest: true
           artifacts: ./release_zips/japanese_keyboard_dictionary_assets.zip,./release_zips/dictionary-distribution-manifest.json,./release_zips/DICTIONARY-SHA256SUMS,./release_zips/DICTIONARY-LICENSES.txt
