@@ -172,6 +172,40 @@ jobs:
           ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category term/specialist/earth_environment_resources --count 50 --expect-conversion しーしーえす=CCS しーしーえす"
           ./gradlew --quiet convertCandidates --no-daemon --args="--archive ${ARCHIVE} --category facility/sports/stadium --count 50 --expect-conversion じーえむおーありーなさいたま=GMOアリーナさいたま --expect-conversion 'やんまーはなさかすたじあむ=YANMAR HANASAKA STADIUM' じーえむおーありーなさいたま やんまーはなさかすたじあむ"
 
+      - name: Verify new issue terms and swipe with all classified categories
+        run: |
+          python3 - <<'PY_VERIFY'
+          import json
+          import shlex
+          import subprocess
+          from pathlib import Path
+
+          archive = 'release_zips/japanese_keyboard_dictionary_assets.zip'
+          entries = [json.loads(line) for line in Path(
+              'src/main/classification/reviews/2026-11-14-open-candidate-issues.jsonl'
+          ).read_text().splitlines()]
+          entries += [{'reading': 'とよおかだるまえき', 'surface': '豊岡だるま駅'},
+                      {'reading': 'でーたれじでんしー', 'surface': 'データレジデンシー'}]
+          args = ['--archive', archive, '--category', 'all', '--count', '50']
+          for entry in entries:
+              args += ['--expect-conversion', entry['reading'] + '=' + entry['surface']]
+          args += ['--expect-conversion', 'すわいぷ=Swip', '--expect-conversion', 'すわいぷ=Swipe']
+          args += ['すわいぷ'] + [entry['reading'] for entry in entries]
+          subprocess.run(['./gradlew', '--quiet', 'convertCandidates', '--no-daemon',
+                          '--args=' + shlex.join(args)], check=True)
+          args = ['--archive', archive, '--category', 'all', '--count', '1']
+          expected = {'すわいぷ': 'スワイプ', 'すわいぷする': 'スワイプする',
+                      'すわいぷあっぷ': 'スワイプアップ', 'ますます': 'ますます',
+                      'のる': '乗る', 'あくせる': 'アクセル', 'ふぇねっく': 'フェネック',
+                      'ぺいん': 'ペイン', 'ねき': 'ネキ', 'しろ': 'しろ',
+                      'しろい': '白い', 'しろくろ': '白黒', 'しろあり': 'シロアリ'}
+          for reading, surface in expected.items():
+              args += ['--expect-conversion', reading + '=' + surface]
+          args += list(expected)
+          subprocess.run(['./gradlew', '--quiet', 'convertCandidates', '--no-daemon',
+                          '--args=' + shlex.join(args)], check=True)
+          PY_VERIFY
+
       - name: Upload the classified dictionary
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/upload-artifact@v4
