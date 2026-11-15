@@ -3359,7 +3359,7 @@ object Constants {
             yomi = "すわいぷ",
             leftId = `名詞,一般,*,*,*,*,*`,
             rightId = `名詞,一般,*,*,*,*,*`,
-            cost = 8400,
+            cost = 7000,
             tango = "スワイプ"
         ),
         // Preserve the literal kana and prefer 品詞 over the homophone 瀕死.
