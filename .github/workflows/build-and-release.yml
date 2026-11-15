@@ -337,7 +337,7 @@ jobs:
         run: |
           ./gradlew \
             buildSystemNgramDictionary \
-            test \
+            :test \
             --tests 'com.kazumaproject.ngram.SystemNgramBinaryTest'
 
       - name: Upload n-gram build report
