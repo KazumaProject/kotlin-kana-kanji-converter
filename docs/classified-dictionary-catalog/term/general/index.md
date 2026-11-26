@@ -2,10 +2,10 @@
 
 [一般語・専門用語](../index.md) · [全カテゴリ](../../index.md)
 
-読み・表記の組: **26,786**、レコード: **26,800**。
+読み・表記の組: **26,787**、レコード: **26,801**。
 
 - [商品・日用品（一般名称）](products_daily_goods/index.md) — 1,157組、1,157レコード
 - [食品・飲料・料理](food_drink_cooking/index.md) — 4,076組、4,077レコード
 - [ネットスラング・ネット文化](internet_slang_culture/index.md) — 578組、580レコード
-- [新語・流行語・若者言葉](neologisms_trends_youth_language/index.md) — 487組、487レコード
+- [新語・流行語・若者言葉](neologisms_trends_youth_language/index.md) — 488組、488レコード
 - [その他の一般語](other_general/index.md) — 20,488組、20,499レコード

@@ -1,6 +1,6 @@
 # 単体入力用 unigram 辞書
 
-`src/main/ngram-standalone-unigram/preferences.ngram` に「しろ」「ごと」「したい」「はいる」「みた」「なにか」「なら」「なのか」の8語を登録します。既存の各ノード用 unigram（v4）とは別の、入力全体用の辞書です。通常辞書の語・品詞・コストは変更しません。
+`src/main/ngram-standalone-unigram/preferences.ngram` に「しろ」「ごと」「したい」「はいる」「みた」「なにか」「なら」「なのか」「のみに」を登録します。入力全体が登録語に一致した場合に、そのひらがな表記を優先します。
 
 ## 生成・配布
 
@@ -8,7 +8,7 @@ Mozc の資源を通常の手順で準備してから実行します。
 
 ```sh
 ./gradlew buildStandaloneUnigramDictionary
-./gradlew --quiet convertCandidates --args='--count 5 しろ ごと したい はいる みた なにか なら なのか ばかなのかな しろい しろくろ しろあり こと しごと'
+./gradlew --quiet convertCandidates --args='--count 5 しろ ごと したい はいる みた なにか なら なのか のみに のみにいく かいいんのみに ばかなのかな しろい しろくろ しろあり こと しごと'
 ```
 
 生成先は `src/main/resources/ngram/system_ngram_standalone_unigram.dat`、レポートは `build/reports/ngram/standalone-unigram-build.txt` です。配布タスクにも生成を接続し、ZIP 内の `app/src/main/assets/ngram/system_ngram_standalone_unigram.dat` に追加します。既存の `system_ngram_unigram.dat` は置き換えません。生成済みバイナリは既存辞書と同様に Git 管理外です。
@@ -34,7 +34,7 @@ Mozc の資源を通常の手順で準備してから実行します。
 
 辞書バイナリ自体は利用側の照合範囲を強制できません。JapaneseKeyboard でこの仕様を使うには、別アセットのロード、元の入力と候補全体を渡す照合、v5 の重複候補処理を利用側にも実装する必要があります。v4 としてロードしたり、既存の各ノード用照合へ渡したりしないでください。
 
-今回の変更対象はこのリポジトリだけです。JapaneseKeyboard の実際の checkout・リビジョン・実行経路・アセットハッシュとの照合、および実アプリでの動作は未確認です。配布 ZIP 全体の生成・検証も今回の単体辞書テストとは別です。
+JapaneseKeyboard では、対応版のシステム n-gram 辞書を有効にすると、この別アセットを読み込みます。
 
 ## 検証
 
@@ -46,4 +46,4 @@ Mozc の資源を通常の手順で準備してから実行します。
   --tests '*SystemNgramRuntimeTest'
 ```
 
-バイナリの再現性・8語の一致・バージョンの相互拒否、合成グラフでの「しろ＋医」等の除外と重複候補処理を検証します。ローカルの生成済み通常辞書を使ったエンジンテストでは8語の優先と、複合入力の候補順を単体用辞書なしの場合と比較します（候補数1・4・10）。この比較はここで実行した簡易エンジンの範囲の検証です。
+バイナリの再現性、登録語の一致、バージョンの相互拒否を検証します。合成グラフでは「しろ＋医」の順位と、単体の「のみに」「飲みに」および複合入力「のみにいく」の順位を確認します。生成済み通常辞書を使ったテストでは、登録語の優先と前後に語がある場合の候補順を確認します（候補数1・4・10）。
