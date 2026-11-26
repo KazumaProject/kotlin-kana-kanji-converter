@@ -104,14 +104,7 @@ class FindPath(
 
         val canMatchStandalone = input != null && input.length == length &&
             standaloneUnigramDictionary.mayMatchInput(input)
-        val hasSystemRules =
-            systemNgramDictionary.ruleCount > 0 || systemUnigramDictionary.ruleCount > 0 ||
-                canMatchStandalone
-        val internalCandidateCount = if (hasSystemRules) {
-            maxOf(n, n.saturatingMultiply(4).coerceAtMost(64), 32)
-        } else {
-            n
-        }
+        val internalCandidateCount = rankingCandidateLimit(n, canMatchStandalone)
         val resultFinal = mutableListOf<CandidatePath>()
         val candidateIndices = HashMap<String, Int>()
 
@@ -175,7 +168,19 @@ class FindPath(
             .mapTo(mutableListOf()) { it.value }
     }
 
-    private fun pathMatchesSystemNgram(path: List<Node>): Boolean {
+    internal fun canMatchStandalone(input: String): Boolean = standaloneUnigramDictionary.mayMatchInput(input)
+
+    internal fun matchesStandalone(input: String, path: List<Node>): Boolean =
+        standaloneUnigramDictionary.matches(input, path)
+
+    internal fun rankingCandidateLimit(n: Int, canMatchStandalone: Boolean): Int =
+        if (systemNgramDictionary.ruleCount > 0 || systemUnigramDictionary.ruleCount > 0 || canMatchStandalone) {
+            maxOf(n, n.saturatingMultiply(4).coerceAtMost(64), 32)
+        } else {
+            n
+        }
+
+    internal fun pathMatchesSystemNgram(path: List<Node>): Boolean {
         if (systemNgramDictionary.ruleCount == 0) return false
         for (start in path.indices) {
             val secondIndex = start + 1
@@ -195,7 +200,7 @@ class FindPath(
 
     // JapaneseKeyboard checks matchesSingleNode at every node in the path,
     // after retaining the first path for each distinct candidate surface.
-    private fun pathMatchesSystemUnigram(path: List<Node>): Boolean =
+    internal fun pathMatchesSystemUnigram(path: List<Node>): Boolean =
         systemUnigramDictionary.ruleCount > 0 && path.any(systemUnigramDictionary::matches)
 
     /** Exact minimum suffix costs on the forward-only lattice, including EOS. */

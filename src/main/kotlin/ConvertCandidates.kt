@@ -152,16 +152,19 @@ private fun addExpectedConversion(expected: MutableMap<String, MutableSet<String
     expected.getOrPut(reading) { linkedSetOf() }.add(surface)
 }
 
-private fun createCandidateCliEngineFromResources(): KanaKanjiEngine {
+internal fun createCandidateCliEngineFromResources(
+    directory: File = File("src/main/resources"),
+    additionalDirectories: List<String> = emptyList(),
+): KanaKanjiEngine {
     val requiredFiles = listOf("yomi.dat", "tango.dat", "token.dat", "connectionId.dat", "pos_table.dat")
-    val missingFiles = requiredFiles.filterNot { File("src/main/resources/$it").isFile }
+    val missingFiles = requiredFiles.filterNot { directory.resolve(it).isFile }
     check(missingFiles.isEmpty()) {
         "Generated conversion dictionaries are missing: ${missingFiles.joinToString()}. " +
             "Prepare the Mozc dictionary resources and run ./gradlew run first."
     }
 
-    val ngramFile = File("src/main/resources/ngram/system_ngram.dat")
-    val unigramFile = File("src/main/resources/ngram/system_ngram_unigram.dat")
+    val ngramFile = directory.resolve("ngram/system_ngram.dat")
+    val unigramFile = directory.resolve("ngram/system_ngram_unigram.dat")
     val ngram = if (ngramFile.isFile) {
         PackedSystemNgramDictionary.fromFile(ngramFile)
     } else {
@@ -172,13 +175,15 @@ private fun createCandidateCliEngineFromResources(): KanaKanjiEngine {
     } else {
         EmptySystemUnigramDictionary
     }
-    val standaloneFile = File("src/main/resources/ngram/system_ngram_standalone_unigram.dat")
+    val standaloneFile = directory.resolve("ngram/system_ngram_standalone_unigram.dat")
     val standalone = if (standaloneFile.isFile) {
         PackedStandaloneUnigramDictionary.fromFile(standaloneFile)
     } else {
         EmptyStandaloneUnigramDictionary
     }
-    return KanaKanjiEngine(ngram, packedUnigram, standalone).apply { buildEngine() }
+    return KanaKanjiEngine(ngram, packedUnigram, standalone).apply {
+        buildEngineFromResourceDirectory(directory.path, mode = 1, additionalResourceDirectories = additionalDirectories)
+    }
 }
 
 private fun createCandidateCliEngineFromArchive(archive: File, category: String): CandidateCliRuntime {

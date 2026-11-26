@@ -4,7 +4,10 @@ import com.kazumaproject.Louds.LOUDS
 import com.kazumaproject.Louds.with_term_id.LOUDSWithTermId
 import com.kazumaproject.connection_id.ConnectionIdBuilder
 import com.kazumaproject.dictionary.TokenArray
+import com.kazumaproject.grammar.GrammarConversion
+import com.kazumaproject.grammar.GrammarMetadata
 import com.kazumaproject.graph.GraphBuilder
+import com.kazumaproject.graph.Node
 import com.kazumaproject.mozc.ConnectionMatrix
 import com.kazumaproject.ngram.EmptyStandaloneUnigramDictionary
 import com.kazumaproject.ngram.StandaloneUnigramDictionary
@@ -34,13 +37,33 @@ class KanaKanjiEngine(
     private var additionalDictionaries: List<LoadedDictionary> = emptyList()
 
     private fun constructGraph(input: String) =
-        graphBuilder.constructGraph(input, yomiTrie, tangoTrie, tokenArray).also { graph ->
-            additionalDictionaries.forEach { dictionary ->
-                val extra = graphBuilder.constructGraph(input, dictionary.yomi, dictionary.tango, dictionary.tokens)
-                // Share BOS/EOS and the connection matrix across all dictionary nodes.
-                for (position in 1..input.length) graph[position].addAll(extra[position])
-            }
+        appendDictionaries(input, graphBuilder, graphBuilder.constructGraph(input, yomiTrie, tangoTrie, tokenArray),
+            additionalDictionaries)
+
+    private fun appendDictionaries(
+        input: String, builder: GraphBuilder,
+        graph: List<MutableList<MutableList<Node>>>,
+        additional: List<LoadedDictionary>,
+    ) = graph.also {
+        additional.forEach { dictionary ->
+            val extra = builder.constructGraph(input, dictionary.yomi, dictionary.tango, dictionary.tokens)
+            // Share BOS/EOS and the connection matrix across all dictionary nodes.
+            for (position in 1..input.length) graph[position].addAll(extra[position])
         }
+    }
+
+    /** Opens a grammar session over the currently loaded dictionaries. */
+    fun grammar(metadata: File): GrammarConversion {
+        val matrix = connectionMatrix
+        val table = GrammarMetadata.read(metadata, matrix, tokenArray)
+        val builder = graphBuilder
+        val primary = LoadedDictionary(yomiTrie, tangoTrie, tokenArray)
+        val additional = additionalDictionaries
+        return GrammarConversion(table, matrix, findPath) { input ->
+            appendDictionaries(input, builder, builder.constructGraph(input, primary.yomi, primary.tango, primary.tokens),
+                additional)
+        }
+    }
 
     fun buildEngine(){
         buildEngineFromResourceDirectory("src/main/resources", mode = 1)

@@ -72,6 +72,8 @@ v4 から「しろ」「したい」「なら」「ごと」「なのか」の�
 
 CLIはunigramの照合範囲・表記の重複排除・一致候補を優先してからコスト順にする処理をJapaneseKeyboardに合わせています。JapaneseKeyboardの文節判定、ビーム探索、学習辞書、予測候補、UI全体の表示順位まで同一とは保証しません。利用側を確認するときは実際のcheckoutと配布されたバイナリを使って検証してください。
 
+文法制約付き変換、詳細な変換経路、活用生成、助詞の接続は JVM の `grammarCandidates` CLI と公開 API で検証できます。[文法変換の仕様とコマンド](docs/grammar-conversion/API_SPECIFICATION.md)を参照してください。
+
 漢方・商品名を追加収集する場合は、[再利用可能な収集・差分取り込み手順](docs/dictionary-term-collection.md)を参照してください。
 
 ## ライセンス
@@ -138,6 +140,8 @@ To inspect ranked candidates from a terminal, pass one or more readings:
 Use `--archive ZIP --category all` to search the system dictionary and every packaged classified category in one lattice. `system` loads only the system dictionary; a category ID loads only that category. This does not reproduce learned entries, predictions, omission search, or app UI ranking.
 
 The command prints one JSON object per reading, with one-based candidate ranks. The default limit is 10 candidates. If generated conversion dictionaries are missing, prepare the Mozc dictionary resources and run `./gradlew :run` first. Use `./gradlew --quiet convertCandidates --args='--help'` for usage.
+
+Use the JVM `grammarCandidates` CLI and API to inspect conversion paths, enforce explicit grammar constraints, generate inflections, and evaluate particle connections. See the [grammar conversion API and commands](docs/grammar-conversion/API_SPECIFICATION.md).
 
 Generated `system_ngram.dat` and `system_ngram_unigram.dat` files under `src/main/resources/ngram` are loaded when present for candidate reranking. Generate them with `./gradlew buildSystemNgramDictionary buildSystemUnigramDictionary`.
 

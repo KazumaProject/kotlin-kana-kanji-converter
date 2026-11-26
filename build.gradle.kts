@@ -1296,3 +1296,28 @@ val testLunaReclassification = tasks.register<Exec>("testLunaReclassification") 
         "scripts/finish_luna_reclassification.py", "scripts/test_finish_luna_reclassification.py")
 }
 tasks.named("check") { dependsOn(testLunaReclassification) }
+
+val grammarResourceDirectory = providers.gradleProperty("grammarResourceDirectory")
+    .map { layout.projectDirectory.dir(it) }
+    .orElse(dictionaryResourcesDir)
+val generatedGrammarMetadata = layout.buildDirectory.file("grammar/metadata.dat")
+tasks.register<JavaExec>("generateGrammarMetadata") {
+    group = "distribution"
+    description = "Builds optional grammar metadata for a matching Mozc dictionary bundle."
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.kazumaproject.grammar.GrammarMetadataKt")
+    inputs.file(mozcIdDefFileProvider)
+    inputs.files(grammarResourceDirectory.map { listOf(it.file("connectionId.dat"), it.file("pos_table.dat")) })
+    outputs.file(generatedGrammarMetadata)
+    doFirst {
+        args(mozcIdDefFileProvider.get().asFile, grammarResourceDirectory.get().asFile,
+            generatedGrammarMetadata.get().asFile)
+    }
+}
+
+tasks.register<JavaExec>("grammarCandidates") {
+    group = "application"
+    description = "Runs grammar-aware conversion, diagnostics and benchmarks on the JVM."
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("GrammarCandidatesKt")
+}
