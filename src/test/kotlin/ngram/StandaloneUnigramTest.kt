@@ -14,7 +14,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class StandaloneUnigramTest {
-    private val words = listOf("しろ", "ごと", "したい", "はいる", "みた", "なにか", "なら", "なのか")
+    private val words = listOf("しろ", "ごと", "したい", "はいる", "みた", "なにか", "なら", "なのか", "のみに")
     private val rules = NgramSourceParser.parseUnigramDirectory(File("src/main/ngram-standalone-unigram"))
 
     private fun binary(version: Int = NgramEncoding.STANDALONE_UNIGRAM_VERSION): ByteArray {
@@ -29,13 +29,13 @@ class StandaloneUnigramTest {
     }
 
     @Test
-    fun separateAssetContainsExactlyTheEightRequestedWordsAndBuildsDeterministically() {
+    fun separateAssetContainsExactlyTheRequestedWordsAndBuildsDeterministically() {
         assertEquals(words.toSet(), rules.map { (it.features.single() as NgramFeature.Word).value }.toSet())
         val bytes = binary()
         assertContentEquals(bytes, binary())
         SystemNgramBinaryReader(bytes).verify()
         val dictionary = PackedStandaloneUnigramDictionary.read(bytes)
-        assertEquals(8, dictionary.ruleCount)
+        assertEquals(words.size, dictionary.ruleCount)
         words.forEach {
             assertTrue(dictionary.mayMatchInput(it), it)
             assertTrue(dictionary.matches(it, listOf(node(it))), it)
@@ -94,6 +94,18 @@ class StandaloneUnigramTest {
     }
 
     @Test
+    fun nominiPromotesTheParticleOnlyForTheStandaloneInput() {
+        val dictionary = PackedStandaloneUnigramDictionary.read(binary())
+        val particle = node("のみに", cost = 100)
+        val verb = node("飲み", reading = "のみ", cost = 0)
+        val ni = node("に", start = 2, cost = 0)
+        val iku = node("行く", start = 3, reading = "いく", cost = 0)
+
+        assertEquals(listOf("のみに", "飲みに"), candidates("のみに", dictionary, particle, verb, ni))
+        assertEquals(listOf("飲みに行く", "のみに行く"), candidates("のみにいく", dictionary, particle, verb, ni, iku))
+    }
+
+    @Test
     fun enginePromotesConfiguredWordsAndPreservesCompoundResults() {
         val dictionary = PackedStandaloneUnigramDictionary.read(binary())
         val engine = KanaKanjiEngine(standaloneUnigramDictionary = dictionary).apply { buildEngine() }
@@ -107,7 +119,7 @@ class StandaloneUnigramTest {
         }
         listOf("しろい", "しろくろ", "しろあり", "しろのなか", "しごと", "ものごと", "ばかなのかな",
             "したいです", "べんきょうしたい", "はいると", "みたい", "こと",
-            "なにかある", "なにかを").forEach { input ->
+            "なにかある", "なにかを", "のみ", "のみにいく", "のみにいった", "かいいんのみに").forEach { input ->
             listOf(1, 4, 10).forEach { count ->
                 assertEquals(baseline.nBestPath(input, count), engine.nBestPath(input, count), "$input count=$count")
             }
