@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Semantic classification result (one JSONL object per input)",
+  "type": "object",
+  "required": [
+    "stable_id",
+    "reading",
+    "surface",
+    "usage_class",
+    "primary_domain",
+    "alternative_domains",
+    "tags",
+    "ambiguous",
+    "needs_review",
+    "short_reason",
+    "final_category",
+    "uncertain_tags",
+    "ambiguity_types",
+    "context_required"
+  ],
+  "properties": {
+    "stable_id": {
+      "type": "string"
+    },
+    "reading": {
+      "type": "string"
+    },
+    "surface": {
+      "type": "string"
+    },
+    "short_reason": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "usage_class": {
+      "enum": [
+        "general",
+        "technical",
+        "mixed",
+        "uncertain"
+      ]
+    },
+    "primary_domain": {
+      "enum": [
+        "term_general",
+        "term_animals",
+        "term_plants",
+        "term_biology",
+        "term_medicine",
+        "term_pharmacy",
+        "term_chemistry",
+        "term_mathematics",
+        "term_physics",
+        "term_computing",
+        "term_engineering",
+        "term_construction",
+        "term_transport",
+        "term_astronomy",
+        "term_earth_environment",
+        "term_economics",
+        "term_law_politics",
+        "term_education_society",
+        "term_language_literature",
+        "term_history",
+        "term_religion_philosophy",
+        "term_arts",
+        "term_sports_games",
+        "term_food",
+        "term_agriculture",
+        "term_military",
+        null
+      ]
+    },
+    "final_category": {
+      "enum": [
+        "term_general",
+        "term_animals",
+        "term_plants",
+        "term_biology",
+        "term_medicine",
+        "term_pharmacy",
+        "term_chemistry",
+        "term_mathematics",
+        "term_physics",
+        "term_computing",
+        "term_engineering",
+        "term_construction",
+        "term_transport",
+        "term_astronomy",
+        "term_earth_environment",
+        "term_economics",
+        "term_law_politics",
+        "term_education_society",
+        "term_language_literature",
+        "term_history",
+        "term_religion_philosophy",
+        "term_arts",
+        "term_sports_games",
+        "term_food",
+        "term_agriculture",
+        "term_military",
+        "term_multidomain",
+        "term_unknown",
+        "term_unresolved_abbreviation"
+      ]
+    },
+    "alternative_domains": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "term_general",
+          "term_animals",
+          "term_plants",
+          "term_biology",
+          "term_medicine",
+          "term_pharmacy",
+          "term_chemistry",
+          "term_mathematics",
+          "term_physics",
+          "term_computing",
+          "term_engineering",
+          "term_construction",
+          "term_transport",
+          "term_astronomy",
+          "term_earth_environment",
+          "term_economics",
+          "term_law_politics",
+          "term_education_society",
+          "term_language_literature",
+          "term_history",
+          "term_religion_philosophy",
+          "term_arts",
+          "term_sports_games",
+          "term_food",
+          "term_agriculture",
+          "term_military"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "term_tag_yojijukugo",
+          "term_tag_idioms",
+          "term_tag_slang",
+          "term_tag_abbreviations",
+          "term_tag_quantities"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "uncertain_tags": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "term_tag_yojijukugo",
+          "term_tag_idioms",
+          "term_tag_slang",
+          "term_tag_abbreviations",
+          "term_tag_quantities"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "ambiguity_types": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "polysemy",
+          "unresolved_abbreviation",
+          "reading_surface_mismatch",
+          "unknown_meaning",
+          "domain_boundary"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "ambiguous": {
+      "type": "boolean"
+    },
+    "needs_review": {
+      "type": "boolean"
+    },
+    "context_required": {
+      "type": "boolean"
+    },
+    "model": {
+      "type": "string"
+    },
+    "prompt_version": {
+      "type": "string"
+    },
+    "classification_pass": {
+      "type": "string"
+    },
+    "batch_id": {
+      "type": "string"
+    },
+    "agreement_status": {
+      "type": "string"
+    },
+    "agent_id": {
+      "type": "string"
+    },
+    "call_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}
